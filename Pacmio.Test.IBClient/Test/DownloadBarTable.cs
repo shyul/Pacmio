@@ -30,8 +30,8 @@ namespace TestClient
         public static void Worker()
         {
             //var list = ContractList.Values.Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == "US" && SymbolList.Contains(n.Name));
-            //var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
-            var list = ContractList.GetOrFetch(SymbolList, "US", DownloadCancellationTokenSource, DetailedProgress);
+            var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
+            //var list = ContractList.GetOrFetch(SymbolList, "US", DownloadCancellationTokenSource, DetailedProgress);
 
             Console.WriteLine("list.Count() = " + list.Count());
             int total_downloads = BarFreqs.Count * list.Count();

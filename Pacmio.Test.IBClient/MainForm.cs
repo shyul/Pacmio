@@ -752,22 +752,6 @@ namespace TestClient
             DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
-            //DownloadBarTable.Period = new Period(new DateTime(2020, 04, 20), DateTime.Now);
-
-            /*
-            DownloadBarTable.SymbolList.AddRange(new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "T", "PFE", "MRK", "NVS", "XOM", "ET", "CSCO", "NVDA", "ORCL", "ABT", "CHK",
-                                                                "ADBE", "CVX", "CHL", "LLY", "PYPL", "BMY", "AMGN", "CRM", "SAP", "MDT", "AZN", "AMZN", "TSLA", "TMO", "ABBV",
-                                                                "NVO", "DHR", "TMUS", "ACN", "IBM", "AVGO", "ADI", "GSK", "NATI", "TXN", "GILD", "TOT", "QCOM", "MSFT", "BP", "BYND",
-                                                                "FIS", "BA", "SYK", "CI", "AMD", "FISV", "AGN", "ADP", "ZTS", "RTX", "BSX", "UBER", "MU", "CEO", "BAX", "SNAP",
-                                                                "TQQQ", "QQQ", "SPY", "UPRO", "UGAZ", "COP", "SQ", "PSX", "A", "SNAP", "TWTR", "STM", "EOG", "HPQ", "INTC", "MRVL",
-                                                                "TU", "RCI", "GLW", "NLOK", "SNN", "PINS", "PENN", "OXY", "MYL", "JNPR", "ON", "MPC", "SE", "TEVA", "IQ", "BHC", 
-                                                                "VXX", "UVXY", "VIXY", "VIXM", "EWZ", "EEM", "GDX", "NUGT", "GLD", "GOLD", "XLE", "XLF", "IBB", "TNA", "UNH", "MRNA"
-                                                            });*/
-
-            //DownloadBarTable.SymbolList.AddRange(new string[] { "XLNX", "LULU","CCL", "NATI","DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
-            //                                                   "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS","NVDA","AMGN","UPRO","ALXN"
-            //});
-
             string symbolText = TextBoxSymbols.Text;
             DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
             TextBoxSymbols.Text = symbolText;
@@ -784,8 +768,31 @@ namespace TestClient
         private void BtnTestSymbolsToCheck_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxSymbols.Text;
-            ContractTools.GetSymbolList(ref symbolText);
+            var SymbolList = ContractTools.GetSymbolList(ref symbolText);
             TextBoxSymbols.Text = symbolText;
+            Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
+            var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
+
+            HashSet<string> existingSymbols = new HashSet<string>();
+            var existingSymbolsArray = list.Select(n => n.Name);
+
+            foreach(string symbol in existingSymbolsArray) 
+            {
+                existingSymbols.CheckAdd(symbol);
+            }
+
+            var non_existing_symbols = SymbolList.Where(n => !existingSymbols.Contains(n));
+
+            foreach(string s in non_existing_symbols) 
+            {
+                Console.WriteLine("Can't find: " + s);
+            }
+
+            //var list = ContractList.Values.Where(n => SymbolList.Contains(n.Name));
+            //var list = ContractList.Values.Where(n => n.Name == "AAPL");
+            Console.WriteLine("ContractList.Values.Count() = " + ContractList.Values.Count());
+            Console.WriteLine("list.Count() = " + list.Count());
+
             /*
             string[] symbolString = TextBoxSymbols.Text.CsvReadFields();
             HashSet<string> symbols = new HashSet<string>();

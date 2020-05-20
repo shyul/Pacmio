@@ -23,6 +23,7 @@ namespace Pacmio
         public static HashSet<string> GetSymbolList(ref string text)
         {
             string[] symbolFields = text.CsvReadFields();
+            HashSet<string> symbolItemList = new HashSet<string>();
             HashSet<string> symbolList = new HashSet<string>();
             foreach (string field in symbolFields)
             {
@@ -30,11 +31,12 @@ namespace Pacmio
 
                 if (!string.IsNullOrWhiteSpace(symbol))
                 {
-                    symbolList.CheckAdd("\"" + symbol + "\"");
+                    symbolItemList.CheckAdd("\"" + symbol + "\"");
+                    symbolList.CheckAdd(symbol);
                 }
 
             }
-            text = symbolList.ToString(", ");
+            text = symbolItemList.ToString(", ");
             return symbolList;
         }
     }
