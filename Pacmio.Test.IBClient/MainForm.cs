@@ -1,0 +1,816 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Forms;
+using Xu;
+using Xu.Chart;
+using Pacmio;
+using Pacmio.IB;
+using System.Net.Http.Headers;
+using System.IO;
+
+namespace TestClient
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+
+            OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
+
+            ContractTest.InitializeTable(GridViewContractList);
+            MarketDataTest.InitializeTable(GridViewMarketQuote);
+            OrderTest.InitializeTable(GridViewAllOrders);
+            TradeTest.InitializeTable(GridViewTradeTable);
+
+            TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
+            UpdateAccountList();
+            ToggleConnect();
+
+            Root.IBClient.OnConnectedHandler += IBClientOnConnectedHandler;
+            AccountManager.UpdatedHandler += AccountUpdatedHandler;
+            AccountManager.UpdatedHandler += PositionUpdatedHandler;
+            MarketData.UpdatedHandler += MarketQuoteHandler;
+            OrderManager.UpdatedHandler += OrderTableHandler;
+            TradeLogManager.UpdatedHandler += TradeTableHandler;
+
+            Progress = new Progress<int>(percent =>
+            {
+                MainProgBar.Value = percent;
+            });
+
+            Detailed_Progress = new Progress<float>(p => {
+                int val = p.ToInt32();
+                if (val > 100) val = 100;
+                else if (val < 0) val = 0;
+                DownloadBarTableDetialedProgressBar.Value = val;
+            });
+
+            SelectExchange.Items.Add<Exchange>();
+            //SelectSecurityType.Items.Add<ContractType>();
+            SelectHistoricalDataBarFreq.Items.Add<BarFreq>();
+            SelectHistoricalDataBarType.Items.Add<BarType>();
+
+            ComboxBoxOrderType.Items.Add<OrderType>();
+            ComboBoxOrderTimeInForce.Items.Add<OrderTimeInForce>();
+
+            if (CheckBoxChartToCurrent.Checked)
+            {
+                DateTimePickerHistoricalDataStop.Enabled = false;
+                DateTimePickerHistoricalDataStop.Value = DateTime.Now;
+            }
+            else
+                DateTimePickerHistoricalDataStop.Enabled = true;
+
+            DateTimePickerHistoricalDataStop.Value = DateTime.Now.AddHours(3);
+            DateTimePickerHistoricalDataStart.Value = DateTimePickerHistoricalDataStop.Value.Date;//   .AddDays(-);
+
+            TestFreqAlign tfa = new TestFreqAlign();
+            TestMultiPeriodDataSource tmpds = new TestMultiPeriodDataSource();
+            //tfa.Show();
+            //tmpds.Show();
+
+            //if (DateTime.Now.Hour > 17)
+            //LoadValidSymbolHistoricalDataChart();
+        }
+
+        private void BtnMasterCancel_Click(object sender, EventArgs e)
+        {
+            if (!(Cts is null))
+                Cts.Cancel();
+        }
+
+        private void BtnConnect_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null) return;
+
+            Root.Settings.IBServerAddress = TextBoxIPAddress.Text;
+
+            btnConnect.Enabled = false;
+            if (Root.IBClient.Connected)
+            {
+                Root.IBClientStop();
+            }
+            else
+            {
+                Root.IBClientStart();
+
+            }
+            Thread.Sleep(100);
+            btnConnect.Enabled = true;
+        }
+
+        #region Symbols
+
+        private void TbSymbolName_TextChanged(object sender, EventArgs e) => TbSymbolName.ForeColor = Color.Orange;
+        private void BtnValidUSSymbol_Click(object sender, EventArgs e)
+        {
+            ValidateSymbol();
+        }
+        private void BtnGetContractInfo_Click(object sender, EventArgs e)
+        {
+            string symbol = TbSymbolName.Text.ToUpper();
+            ContractList.GetOrFetch(symbol, "US");
+        }
+
+        #endregion Symbols
+
+        private void BtnAddMarketQuote_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !ValidateSymbol()) return;
+            ContractTest.ActiveContract.RequestQuote("236,375");
+        }
+
+        private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !ValidateSymbol()) return;
+            Console.WriteLine("MarketDepth: " + Root.IBClient.SendRequest_MarketDepth(ContractTest.ActiveContract));
+        }
+
+        private void BtnAccountSummary_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null) return;
+            Root.IBClient.SendRequest_AccountSummary();
+        }
+
+        private void BtnOrder_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && ValidateSymbol())
+            {
+                OrderType orderType = ComboxBoxOrderType.Text.ParseEnum<OrderType>();
+                OrderTimeInForce tif = ComboBoxOrderTimeInForce.Text.ParseEnum<OrderTimeInForce>();
+
+                OrderInfo od = new OrderInfo()
+                {
+                    Contract = ContractTest.ActiveContract,
+                    Quantity = TextBoxOrderQuantity.Text.ToInt32(0),
+                    Type = orderType,
+                    LimitPrice = TextBoxOrderLimitPrice.Text.ToDouble(0),
+                    AuxPrice = TextBoxOrderStopPrice.Text.ToDouble(0),
+                    TimeInForce = tif,
+                    Account = "DU332281",
+                    OutsideRegularTradeHours = true,
+                };
+
+                if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
+                {
+                    od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
+                    DateTimePickerOrderDate.Value = od.EffectiveDateTime;
+                }
+
+                Root.IBClient.PlaceOrder(od, CheckBoxOrderWhatIf.Checked);
+            }
+        }
+
+        private void BtnOrderBraket_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && ValidateSymbol())
+            {
+                InteractiveBrokersAccount iba = OrderTest.LiveAccount;
+
+                iba.EntryBraket(
+                    ContractTest.ActiveContract,
+                    TextBoxOrderQuantity.Text.ToInt32(0),
+                    TextBoxOrderStopPrice.Text.ToDouble(0),
+                    TextBoxOrderLimitPrice.Text.ToDouble(0)
+                );
+            }
+        }
+
+        private void GridViewAllOrders_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            int selectedRowCount = GridViewAllOrders.Rows.GetRowCount(DataGridViewElementStates.Selected);
+            if (selectedRowCount > 0)
+                for (int i = 0; i < selectedRowCount; i++)
+                {
+                    DataGridViewRow row = GridViewAllOrders.SelectedRows[i];
+                    int orderId = (int)row.Cells.GetCellValueFromColumnHeader("PermId");
+                    TextBoxOrderId.Text = orderId.ToString(); //Console.WriteLine("Row Selected: " + (int)orderId);
+
+                    OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
+
+
+                    TextBoxOrderQuantity.Text = od.Quantity.ToString();
+                    TextBoxOrderStopPrice.Text = od.AuxPrice.ToString();
+                    TextBoxOrderLimitPrice.Text = od.LimitPrice.ToString();
+                }
+        }
+
+        private void BtnModifyOrder_Click(object sender, EventArgs e)
+        {
+            OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
+            if (od is OrderInfo)
+            {
+                od.Quantity = TextBoxOrderQuantity.Text.ToInt32();
+
+                if (od.Type == OrderType.Stop)
+                {
+                    od.AuxPrice = TextBoxOrderStopPrice.Text.ToInt32();
+                }
+
+                if (od.Type == OrderType.Limit)
+                {
+                    od.AuxPrice = TextBoxOrderLimitPrice.Text.ToInt32();
+                }
+
+                Root.IBClient.PlaceOrder(od, false, true);
+            }
+        }
+
+        private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && Root.IBClient.IsReady_CompletedOrder)
+                Root.IBClient.SendRequest_CompletedOrders(false);
+        }
+
+
+
+        private void BtnRequestPostion_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null) return;
+            Root.IBClient.SendRequest_Postion();
+        }
+
+        private void BtnGetOpenOrders_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null) return;
+            Root.IBClient.SendRequest_AllOpenOrders();
+        }
+
+        private void CheckBoxChartToCurrent_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxChartToCurrent.Checked)
+            {
+                DateTimePickerHistoricalDataStop.Enabled = false;
+                DateTimePickerHistoricalDataStop.Value = DateTime.Now.AddHours(10);
+            }
+            else
+                DateTimePickerHistoricalDataStop.Enabled = true;
+        }
+        private void BtnRequestHistoricalData_Click(object sender, EventArgs e)
+        {
+            LoadValidSymbolHistoricalDataChart();
+        }
+
+
+
+        public void LoadValidSymbolHistoricalDataChart()
+        {
+            if (ValidateSymbol())
+            {
+                //if (CheckBoxChartToCurrent.Checked && Root.IBClient.Connected)
+                // ContractTest.ActiveContract.RequestQuote("236,375");
+
+                BarFreq barFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
+                BarType barType = SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
+
+                Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                    new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+                BarTable bt = ContractTest.ActiveContract.GetTable(barFreq, barType);//, pd);
+
+
+
+
+                //BarChartForm bcf = ChartTest.ConfigChart(bt); // Added calculation
+                //BarChartManager.AddForm(bcf);
+
+                bt.Reset(pd, null, null);
+                ChartList.GetForm(bt, ChartList.SampleChartConfig());
+
+                //ChartTest.Ctf.AddForm(DockStyle.Fill, 0, bcf);
+                Root.Form.Show();
+            }
+
+        }
+
+
+        private void BtnTestScalping_Click(object sender, EventArgs e)
+        {
+            StrategyMaster.SimulatePeriod = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+             new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+            BarFreq barFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
+            Scalping scp = new Scalping()
+            {
+                PrimaryBarFreq = barFreq,
+                LiveTradeAccount = OrderTest.LiveAccount
+            };
+
+            scp.PrimaryBarFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
+
+            StrategyMaster.WatchList.Add(scp, new List<Contract>()); ;
+            StrategyMaster.BuildList();
+            /*
+            foreach (var bcf in BarChartManager.List.Values)
+                ChartTest.Ctf.AddForm(DockStyle.Fill, 0, bcf);
+                
+            ChartTest.Ctf.Show();*/
+            Root.Form.Show();
+        }
+
+        private void BtnRunAllSimulation_Click(object sender, EventArgs e)
+        {
+            StrategyMaster.SimulatePeriod = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+            StrategyMaster.Simulate(TextBoxRunAllSimulationInitialAccountValue.Text.ToDouble(0));
+        }
+
+        private void BtnRequestHistoricalTicks_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !Root.IBClient.Connected || !ValidateSymbol()) return;
+
+            Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+
+            Root.IBClient.Request_HistoricalTick(ContractTest.ActiveContract, pd);
+            //Root.IBClient.SendRequest_HistoricalTick(ContractTest.ActiveContract, DateTime.Now.AddHours(-6));
+        }
+
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => ChartList.ResetAllChartsPointer();
+
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
+        {
+            Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+            ChartList.UpdateAllCharts(pd, Cts = new CancellationTokenSource(), null);
+        }
+
+        private void BtnImportSymbols_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                Task m = new Task(() => { ContractList.ImportCSV(Root.OpenFile.FileName, Progress); });
+                m.Start();
+            }
+        }
+
+        private void BtnExportSymbols_Click(object sender, EventArgs e)
+        {
+            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+            {
+                Task m = new Task(() => { ContractList.ExportCSV(Root.SaveFile.FileName, Progress); });
+                m.Start();
+            }
+        }
+
+
+        private void BtmImportQuandlBlob_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+
+                Cts = new CancellationTokenSource();
+                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
+                m.Start();
+            }
+        }
+
+
+
+
+
+        private void BtnSearchSymbol_Click(object sender, EventArgs e)
+        {
+            ContractTest.UpdateSymbolInfoTable(TextBoxSearchSymbol.Text);
+        }
+
+        private void BtnAddMarketQuoteTest_Click(object sender, EventArgs e)
+        {
+            //string tickList = "236,mdoff,292";
+            string tickList = "236,375";
+            /*
+            string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
+                                            "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
+                                            "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
+                                            "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN" };*/
+
+            string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
+            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };
+
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+
+            foreach (Contract c in cList)
+            {
+                Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
+            }
+        }
+
+
+
+
+
+        private void BtnRequestScanner_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !Root.IBClient.Connected) return;
+            ScannerInfo info_MOST_ACTIVE = new ScannerInfo()
+            {
+                //Code = "MOST_ACTIVE",
+                Code = "MOST_ACTIVE",
+                //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+                //FilterOptions = "priceAbove=5;priceBelow=300;avgVolumeAbove=10000000;marketCapAbove1e6=10000;stkTypes=inc:CORP;"
+                FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
+            };
+            /*
+            ScannerInfo info_TOP_OPEN_PERC_GAIN = new ScannerInfo()
+            {
+                //Code = "MOST_ACTIVE",
+                Code = "TOP_OPEN_PERC_GAIN",
+                FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+            };
+            ScannerInfo info_TOP_OPEN_PERC_LOSE = new ScannerInfo()
+            {
+                //Code = "MOST_ACTIVE",
+                Code = "TOP_OPEN_PERC_LOSE",
+                FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+            };*/
+
+            ScannerManager.GetOrAdd(info_MOST_ACTIVE);
+            //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_GAIN);
+            //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_LOSE);
+        }
+
+        private void BtnCancelAllScanner_Click(object sender, EventArgs e)
+        {
+            ScannerManager.CancelAll();
+        }
+
+        private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null) return;
+            Root.IBClient.RequestScannerParameters();
+        }
+
+
+
+        private void BtnTestMassiveSamples_Click(object sender, EventArgs e)
+        {
+            string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
+                                            "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
+                                            "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
+                                            "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN", "IBM" };
+
+            foreach (Contract c in ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null))
+            {
+                Console.WriteLine("Request Realtime Bars: " + c.ToString());
+                Root.IBClient.SendRequest_RealTimeBars(c);
+            }
+        }
+
+        private void BtnTestRealTimeBars_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !ValidateSymbol()) return;
+            Root.IBClient.SendRequest_RealTimeBars(ContractTest.ActiveContract);
+        }
+
+        private void BtnRequestPnL_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnSubscribePnL_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+        private void TestMassOrder_Click(object sender, EventArgs e)
+        {
+            if (!Root.IBConnected) return;
+            Root.IBClient.SendRequest_AccountSummary();
+
+            string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
+            var list = ContractList.GetOrFetch(symbols, "US", null, null);
+            string tickList = "236,375";
+            foreach (Contract c in list)
+            {
+                c.RequestQuote(tickList);
+            }
+
+        }
+
+        private void BtnGlobalCancel_Click(object sender, EventArgs e)
+        {
+            if (!Root.IBConnected) return;
+            Root.IBClient.SendRequest_GlobalCancel();
+        }
+
+        private void BtnRequestExecData_Click(object sender, EventArgs e)
+        {
+            if (!Root.IBConnected) return;
+            Root.IBClient.SendRequest_ExecutionData();
+        }
+
+        private void BtnCloseAllPosition_Click(object sender, EventArgs e)
+        {
+            if (!Root.IBConnected) return;
+            AccountManager.CloseAllPositions();
+        }
+
+        private void BtnArmLiveTrade_Click(object sender, EventArgs e)
+        {
+            if (StrategyMaster.Enabled) StrategyMaster.Enabled = false;
+            else StrategyMaster.Enabled = true;
+
+            if (StrategyMaster.Enabled)
+            {
+                BtnArmLiveTrade.BackColor = Color.Green;
+            }
+            else
+            {
+                BtnArmLiveTrade.BackColor = Color.Red;
+            }
+        }
+
+        private void BtnExportExecTradeLog_Click(object sender, EventArgs e)
+        {
+            Root.SaveFile.Filter = "Transaction Log file (*.tlg) | *.tlg";
+
+            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+            {
+                TradeLogManager.ExportTradeLog(Root.SaveFile.FileName);
+            }
+        }
+
+        private void BtnApplyTradeLogToChart_Click(object sender, EventArgs e)
+        {
+            foreach (BarTable bt in ChartList.List.Select(n => n.BarTable))
+            {
+                Contract c = bt.Contract;
+                var trades = TradeLogManager.Get(c);
+
+                for (int i = 0; i < bt.Count; i++)
+                {
+                    Bar b = bt[i];
+                    b.ResetPositionTrackingInfo();
+
+                    if (i > 0)
+                    {
+                        Bar b_1 = bt[i - 1];
+                        b.PositionQuantity = b_1.PositionQuantity;
+                        b.PositionCostBasis = b_1.PositionCostBasis;
+
+                        if (b.PositionQuantity > 0)
+                        {
+                            b.ActionType = TradeActionType.LongHold;
+                        }
+                        else if (b.PositionQuantity < 0)
+                        {
+                            b.ActionType = TradeActionType.ShortHold;
+                        }
+                        else
+                        {
+                            b.ActionType = TradeActionType.None;
+                            b.PositionCostBasis = double.NaN;
+                        }
+
+                    }
+
+
+                    var selectedTrades = trades.Where(ti => b.Period.Contains(ti.ExecuteTime)).OrderBy(ti => ti.ExecuteTime);
+
+                    if (selectedTrades.Count() > 0)
+                    {
+                        double totalQuantity = selectedTrades.Select(n => n.Quantity).Sum();
+                        double totalProceeds = selectedTrades.Select(n => n.Quantity * n.Price).Sum();
+                        double averagePrice = totalProceeds / totalQuantity;
+
+                        TradeInfo lastTrade = selectedTrades.Last();
+                        if (lastTrade.LastLiquidity == LiquidityType.Added)
+                        {
+                            if (lastTrade.Quantity > 0) b.ActionType = TradeActionType.Long;
+                            else if (lastTrade.Quantity < 0) b.ActionType = TradeActionType.Short;
+                        }
+                        else if (lastTrade.LastLiquidity == LiquidityType.Removed)
+                        {
+                            if (lastTrade.Quantity > 0) b.ActionType = TradeActionType.Cover;
+                            else if (lastTrade.Quantity < 0) b.ActionType = TradeActionType.Sell;
+                        }
+
+                        b.PositionQuantity += totalQuantity;
+                        b.PositionCostBasis = averagePrice;
+
+
+                    }
+
+
+                }
+
+
+
+            }
+
+        }
+
+        private Dictionary<string, DateTime> MergeEODFiles { get; } = new Dictionary<string, DateTime>();
+
+        private void BtnAddQuandlFile_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = Root.OpenFile.FileName;
+                ListViewQuandlFileMerge.Items.Add(fileName);
+                MergeEODFiles.CheckAdd(fileName, File.GetLastWriteTime(fileName));
+                /*
+                Cts = new CancellationTokenSource();
+                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
+                m.Start();*/
+            }
+        }
+
+        private void BtnMergeQuandlFile_Click(object sender, EventArgs e)
+        {
+            var list = MergeEODFiles.OrderByDescending(n => n.Value).Select(n => n.Key);
+
+            Cts = new CancellationTokenSource();
+            Task m = new Task(() => { Quandl.MergeEODFiles(list, "D:\\EOD_Merged.csv", Progress, Cts); });
+            m.Start();
+
+
+
+            /*
+            foreach(string fileName in list)
+            {
+                Console.WriteLine(fileName);
+            }
+            */
+            /*
+            List<string> files = new List<string>();
+            foreach(var item in ListViewQuandlFileMerge.Items) 
+            {
+                if(item is ListViewItem s) 
+                {
+                    files.CheckAdd(s.Text);
+                    Console.WriteLine(s.Text);
+                }
+
+                //ListViewItem n = (ListViewItem)
+                //files.CheckAdd(item.T)
+            }*/
+
+            //var list = ListViewQuandlFileMerge.Items
+        }
+
+        private void BtnExtractSymbols_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = Root.OpenFile.FileName;
+                Cts = new CancellationTokenSource();
+                Task m = new Task(() =>
+                {
+                    var list = Quandl.ImportSymbols(fileName, Progress, Cts);
+                    /*
+                    foreach (var symbol in list)
+                    {
+                        ContractList.GetOrFetch(symbol, "US");
+                    }*/
+
+                    /*
+                    using (var fs = new FileStream("D:\\EOD_symbols.txt", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                    using (StreamWriter file = new StreamWriter(fs))
+                    {
+                        foreach (var symbol in list)
+                        {
+ 
+                            file.WriteLine(symbol);
+                        }
+                    }*/
+                });
+                m.Start();
+            }
+        }
+
+        private void BtnMatchSymbols_Click(object sender, EventArgs e)
+        {
+            Cts = new CancellationTokenSource();
+            Task m = new Task(() => { ContractList.MakeUp(Cts, Progress); });
+            m.Start();
+        }
+
+        private void BtnFindDuplicate_Click(object sender, EventArgs e)
+        {
+            IEnumerable<Contract> cList = ContractList.Values.AsParallel().Where(n => n is Stock s && s.Country == "US"); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
+
+            Dictionary<string, int> duplicate = new Dictionary<string, int>();
+
+            foreach (Contract c in cList)
+            {
+                string name = c.Name;
+
+                if (!duplicate.ContainsKey(name))
+                    duplicate.Add(name, 1);
+                else
+                    duplicate[name]++;
+            }
+
+            var result = duplicate.Where(n => n.Value > 1).SelectMany(n => cList.Where(c => c.Name == n.Key));
+            /*
+            List<Contract> toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
+
+            foreach(Contract c in toDelete) 
+            {
+                ContractList.Remove(c.Info);
+                Console.WriteLine("Removing: " + c.Status + " | " + c.ToString());
+            }*/
+
+            
+            foreach (Contract c in result)
+            {
+                Console.WriteLine(c.Status + " | " + c.ToString());
+            }
+        }
+
+        private void BtnDownloadTables_Click(object sender, EventArgs e)
+        {
+            DownloadBarTable.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
+            DownloadBarTable.DownloadProgress = Progress;
+            DownloadBarTable.DetailedProgress = Detailed_Progress;
+
+            DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+            //DownloadBarTable.Period = new Period(new DateTime(2020, 04, 20), DateTime.Now);
+
+            /*
+            DownloadBarTable.SymbolList.AddRange(new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "T", "PFE", "MRK", "NVS", "XOM", "ET", "CSCO", "NVDA", "ORCL", "ABT", "CHK",
+                                                                "ADBE", "CVX", "CHL", "LLY", "PYPL", "BMY", "AMGN", "CRM", "SAP", "MDT", "AZN", "AMZN", "TSLA", "TMO", "ABBV",
+                                                                "NVO", "DHR", "TMUS", "ACN", "IBM", "AVGO", "ADI", "GSK", "NATI", "TXN", "GILD", "TOT", "QCOM", "MSFT", "BP", "BYND",
+                                                                "FIS", "BA", "SYK", "CI", "AMD", "FISV", "AGN", "ADP", "ZTS", "RTX", "BSX", "UBER", "MU", "CEO", "BAX", "SNAP",
+                                                                "TQQQ", "QQQ", "SPY", "UPRO", "UGAZ", "COP", "SQ", "PSX", "A", "SNAP", "TWTR", "STM", "EOG", "HPQ", "INTC", "MRVL",
+                                                                "TU", "RCI", "GLW", "NLOK", "SNN", "PINS", "PENN", "OXY", "MYL", "JNPR", "ON", "MPC", "SE", "TEVA", "IQ", "BHC", 
+                                                                "VXX", "UVXY", "VIXY", "VIXM", "EWZ", "EEM", "GDX", "NUGT", "GLD", "GOLD", "XLE", "XLF", "IBB", "TNA", "UNH", "MRNA"
+                                                            });*/
+
+            //DownloadBarTable.SymbolList.AddRange(new string[] { "XLNX", "LULU","CCL", "NATI","DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
+            //                                                   "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS","NVDA","AMGN","UPRO","ALXN"
+            //});
+
+            string symbolText = TextBoxSymbols.Text;
+            DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
+            TextBoxSymbols.Text = symbolText;
+
+            DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
+            DownloadBarTable.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
+            //DownloadBarTable.BarFreqs.Add(BarFreq.HalfMinute);
+
+            Task.Run(() => { DownloadBarTable.Worker(); });
+        }
+
+        public static Progress<float> Detailed_Progress;
+
+        private void BtnTestSymbolsToCheck_Click(object sender, EventArgs e)
+        {
+            string symbolText = TextBoxSymbols.Text;
+            ContractTools.GetSymbolList(ref symbolText);
+            TextBoxSymbols.Text = symbolText;
+            /*
+            string[] symbolString = TextBoxSymbols.Text.CsvReadFields();
+            HashSet<string> symbols = new HashSet<string>();
+
+            foreach(string s in symbolString) 
+            {
+                string st = s.TrimCsvValueField();
+
+                if (!string.IsNullOrWhiteSpace(st)) 
+                {
+                    symbols.CheckAdd("\"" + st + "\"");
+                }
+           
+            }
+
+            string rectified = symbols.ToString(", ");
+
+            TextBoxSymbols.Text = rectified;*/
+        }
+    }
+    public static class DataGridHelper
+    {
+        public static object GetCellValueFromColumnHeader(this DataGridViewCellCollection CellCollection, string HeaderText)
+        {
+            return CellCollection.Cast<DataGridViewCell>().First(c => c.OwningColumn.HeaderText == HeaderText).Value;
+        }
+    }
+}

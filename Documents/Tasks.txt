@@ -1,0 +1,185 @@
+Important Topic:
+===================
+1. Condition: (Clear) Direction, (High) Volatility, TA From Higher Time Frame
+2. Indication, (Elevation Factors): Short (), Long, by local TA numbers, VWAP
+3. Confirmation / Signal: Cross, Candle, Price cross pivots and so on
+4. Validation, Exit Point
+
+A. Current Index - Entry Index = Holding Period;
+
+Per Contract Trading Parameters
+==================================
+A. Time of Day (3PM ~ 4PM Power Hour)
+B. BarSize
+c. Stop Margin
+d. Holding Period / Current Index - Entry Index = Holding Period;
+
+
+
+1. Parallel Calculation for BarTables
+2. UI update for charts
+3. Buy, sell, profit taking, stop loss overlays
+4. Master progress, message, cancellation token.
+5. Independant 3-Bar 4-Bar Testing system 
+6. Accumulation Chart: Overall strategy Back testing accumulation chart 
+7. Per Contract Strategy Parameter yielded by the massive emulation
+    a. Trading BarFreq
+    b. Trading Hours (if it is Intraday)
+
+8. Label for signal area
+9. DataSource Partial vs Realtime.
+10. Order Emulator Slippage
+
+11. Simplify PlaceOrder array construction;
+12. Modify and Test Stop, Limit, Market Limit Orders
+
+
+Startup
+==============================
+Reset the request Valid Id system
+
+A. Request Account
+B. Request Positions
+C. Request openOrders
+D. Prepare all of the BarTables
+
+13. The Calculation is triggered twice when Fetch Bars with connected IB. Need to fix
+
+1. When Market Tick is feeding and start a new BarChart form, it won't align itself, and need me to manually click align all charts button to fix it.
+2. If the BarTable is downloading from IB, which take a long time for multi sections of data, when accepting new ticks, please do not run calculation until all bars are downloaded.
+
+
+1. Streamline TimeZone in Contracts: DateTime.Now.ToDestination(Contract.TimeZone), Time offset calculation!!!
+2. Add Chart BarAnalysis for BarTableList...
+3. BarTable status: ReadyToShow and Loading and Parital Calculating (Ticking) 
+4. Enable non RTH option (identification...) loading... After Hour Chart, After Hour should be a parameter to the Fetching. and after hour bars are all should be loaded by IB API.
+5. When programming is ending, I want the symbol saving and BarTable saving to be in the Task queue, instead of freezing the program during the last moment.
+6. PSAR's last bar calculation has to reset the StartPt way back. Also missing PSAR value for the transistion Bar
+7. Fresh by periodical keep up to date the table. ** HistoricalDataUpdate --- Need to test tomorrow.
+8. Daily BarTable Fetch: Enfore the date range specified in the function
+9. Is "LastDownloadRequestTime" really neccessary?
+10. BarTable: LastTimeBound needs to point to DataSourcePeriod not bt.Period ???
+11. Local Time error 
+12. IB API Server down time 9:30 PM ~ 10:10 PM  IBConnected => Time is not between 8PM ~ 10PM
+12. Status System
+
+
+
+
+
+
+One solution is here:
+
+1. Use IB's system time.
+1. Use NTP
+using System;
+using System.Runtime.InteropServices;
+
+
+Momentum Scanner:
+
+Close: $1 ~ $30
+Volume: 150,000 min
+% Change: 3%
+
+Price Direction: 3 bars up / 1 minutes
+
+
+
+
+
+Send ReqTickByTickData: (0)".97"-(1)"0"-(2)"0"-(3)"SPY"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"Last"-(15)"1"-(16)"0"
+Send ReqHistoricalTicks: (0)"b96"-(1)"1325980558"-(2)"0"-(3)"SPY"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20130808 23:59:59"-(16)"20140808 23:59:59"-(17)"1"-(18)"TRADES"-(19)"0"-(20)"0"
+
+
+The GUI entry boxes is presenting California Time
+
+
+
+
+
+
+Trailing stop
+Market Spread: Scalping, lower stop losses, aiming for lower profit. The higher spread, the lower (tighter) stop loss will become. 2% spread -> Risk vs reward ratio
+Move stop loss to break even asap!!
+Scaling Target
+
+IMMU halt causing issues?
+
+
+
+Condition: Divergence
+Condition: Level, Pivot, Fibonacci
+VWAP
+
+5 seconds and 15 seconds stopped calculating after a few (4 bars) bars
+
+Calculate the total potential
+
+Sizing Risk: 0.5% of the account = $500, which is pretty huge! 
+
+Downside Tasuki Gap has to be a "long" black body followed by a gap
+This error was detected QQQ 1min Mar-2-2020, 19:09
+
+
+
+
+
+namespace ClockResync
+{
+    class Program
+    {
+        [DllImport("w32time.dll")]
+        public static extern uint W32TimeSyncNow([MarshalAs(UnmanagedType.LPWStr)]String computername, bool wait, uint flag);
+        static void Main(string[] args)
+        {
+            Console.WriteLine(W32TimeSyncNow("computername", true, 8).ToString());
+            Console.ReadLine();
+        }
+    }
+}
+
+All you need to know is the ID of the Time Zone you want to convert to.
+
+An example (taken from the site):
+
+DateTimeOffset nowDateTime = DateTimeOffset.Now;
+DateTimeOffset newDateTime = TimeZoneInfo.ConvertTime(
+    nowDateTime,
+    TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
+
+Console.WriteLine("Now: {0}", nowDateTime);
+Console.WriteLine("Now in Hawaii: {0}", newDateTime);
+prints
+
+Now: 3/5/2011 6:30:48 PM -08:00
+Now in Hawaii: 3/5/2011 4:30:48 PM -10:00
+
+To obtain a list of all the IDs, you can:
+
+Check on HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones
+Query TimeZoneInfo.GetSystemTimeZones();
+
+b) Selectable different update resources (mostly volume): Market Data / RTVolume / Realtime Bars
+c) Refresh the BarTable with historical bars and override the realtime bars
+d) Redo the calculation backward based on the updated bars (Get information from LatestCalculatePonter?, Index of b.Time)
+e) Redo simulation periodically to determine the optimal strategy
+
+RequestHistoricalData | Initial Request: 04-10-2020 20:09:24|04-17-2020 20:09:24
+RequestHistoricalData | Already Existing: 04-09-2020 00:00:00|04-16-2020 00:00:00
+RequestHistoricalData | This is what we miss: 04-16-2020 00:00:00|04-17-2020 20:09:24
+RequestHistoricalData: | Sending Api Request: 04-15-2020 00:00:00|04-16-2020 00:00:00
+RequestHistoricalData: | Sending Api Request: 04-16-2020 00:00:00|04-17-2020 00:00:00
+RequestHistoricalData: | Sending Api Request: 04-17-2020 00:00:00|04-18-2020 00:00:00
+
+3. UI: Add one click load a default set of the tests
+3. Empty Chart UI (BarChart) during chart loading, it has to be showing progress bar. 
+4. Error causing disconnect: RequestRealTimeBars returned with errors: (0)"4"-(1)"2"-(2)"6"-(3)"320"-(4)"Error reading request:Message id 6.  Unable to parse data. java.lang.NumberFormatException: For input string: "1 min""
+
+
+ChartWidget: public virtual void ShiftPt(int num, int limit): Locked when zooming a shifted chart with empty slots.
+
+Chart in the ChartForm, the problem is it does not do well with coordination when the tab is click activated.
+
+
+    a. Thread racing issue found it is calculating and the new bars are added in Candlestick Anlysis: (Line 303, Condition) double avg_candle_length = bars.Take(bars.Count() - 1).Select(n => ((CandleStickConditionDatum)n[this]).CandleLength).Sum() / (bars.Count() - 1);// avgLength;

@@ -1,0 +1,156 @@
+How to cancel a historical data request
+
+RequestHistoricalData: | Sending Api Request: 12-31-2019 00:00:00|01-02-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2189"-(2)"269315"-(3)"FISV"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200101 21:00:00"-(16)"30 secs"-(17)"2 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+
+>> Cancelling Here
+
+08:36:30 Removing RequestHistoricalDataRequest >> 2189
+
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2189"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 2189"
+Sorted Table STOCK: FISV (NASDAQ NMS / $USD / 30 Seconds) | Count: 60449 | Period: 10-24-2019 09:30:00|12-30-2019 20:00:00
+
+>> Stop repeating if IB tells you no! Actually, it is not repeating, ithe time is still ticking.
+
+Send RequestHistoricalData: (0)"20"-(1)"145"-(2)"255843273"-(3)"OIL"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191125 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Historical Data Error !!!!!!!!!!!!! 145: No security definition has been found for the request
+09:25:59 Removing RequestHistoricalDataRequest >> 145
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"145"-(3)"366"-(4)"No historical data query found for ticker id:145"
+
+RequestHistoricalData: | Sending Api Request: 11-26-2019 00:00:00|12-01-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"146"-(2)"255843273"-(3)"OIL"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191130 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Historical Data Error !!!!!!!!!!!!! 146: No security definition has been found for the request
+09:26:02 Removing RequestHistoricalDataRequest >> 146
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"146"-(3)"366"-(4)"No historical data query found for ticker id:146"
+
+
+RequestHistoricalData: | Sending Api Request: 12-01-2019 00:00:00|12-06-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"147"-(2)"255843273"-(3)"OIL"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191205 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Historical Data Error !!!!!!!!!!!!! 147: No security definition has been found for the request
+09:26:05 Removing RequestHistoricalDataRequest >> 147
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+
+Parse Errors: (0)"4"-(1)"2"-(2)"147"-(3)"366"-(4)"No historical data query found for ticker id:147"
+
+RequestHistoricalData: | Sending Api Request: 12-06-2019 00:00:00|12-11-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"148"-(2)"255843273"-(3)"OIL"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ARCA"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191210 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+09:26:08 Removing RequestHistoricalDataRequest >> 148
+Sorted Table STOCK: OIL (ARCA / $USD / 1 Minute) | Count: 0 | Period: 01-01-0501 00:00:00|04-25-2020 09:26:08
+
+==================
+OIL: OPEN | Count: 0 | (0->0) | Time 0ms
+OIL: HIGH | Count: 0 | (0->0) | Time 0ms
+OIL: LOW | Count: 0 | (0->0) | Time 0ms
+OIL: CLOSE | Count: 0 | (0->0) | Time 0ms
+OIL: VOLUME | Count: 0 | (0->0) | Time 0ms
+OIL: CandleStickShape_(OPEN,HIGH,LOW,CLOSE) | Count: 0 | (0->0) | Time 0ms
+OIL: Profit Change | Count: 0 | (0->0) | Time 0ms
+------------------
+STOCK: OIL (ARCA / $USD / 1 Minute) | Calculate(): 3.9893ms | Stopped at: 0
+==================
+
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"148"-(3)"200"-(4)"No security definition has been found for the request"
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"148"-(3)"366"-(4)"No historical data query found for ticker id:148"
+
+RequestHistoricalData: | Sending Api Request: 03-30-2020 00:00:00|04-04-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2663"-(2)"70101545"-(3)"MRK"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"NYSE"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200403 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 03-30-2020 00:00:00|04-04-2020 00:00:00, num: 4020
+21:32:34 Removing RequestHistoricalDataRequest >> 2663
+RequestHistoricalData: | Sending Api Request: 04-04-2020 00:00:00|04-09-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2664"-(2)"70101545"-(3)"MRK"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"NYSE"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200408 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 04-04-2020 00:00:00|04-09-2020 00:00:00, num: 3956
+21:32:46 Removing RequestHistoricalDataRequest >> 2664
+RequestHistoricalData: | Sending Api Request: 04-09-2020 00:00:00|04-14-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2665"-(2)"70101545"-(3)"MRK"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"NYSE"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200413 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+System Info: (0)"4"-(1)"2"-(2)"-1"-(3)"1100"-(4)"Connectivity between IB and Trader Workstation has been lost."
+System Info: (0)"4"-(1)"2"-(2)"-1"-(3)"1100"-(4)"Connectivity between IB and Trader Workstation has been lost."
+21:32:58 Removing RequestHistoricalDataRequest >> 2665
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2665"-(3)"366"-(4)"No historical data query found for ticker id:2665"
+Sorted Table STOCK: MRK (NYSE / $USD / 1 Minute) | Count: 101849 | Period: 10-07-2019 04:00:00|04-08-2020 20:00:00
+
+Send RequestHistoricalData: (0)"20"-(1)"2549"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191031 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 10-27-2019 00:00:00|11-01-2019 00:00:00, num: 4431
+20:58:25 Removing RequestHistoricalDataRequest >> 2549
+RequestHistoricalData: | Sending Api Request: 11-01-2019 00:00:00|11-06-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2550"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191105 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-01-2019 00:00:00|11-06-2019 00:00:00, num: 4430
+20:58:37 Removing RequestHistoricalDataRequest >> 2550
+RequestHistoricalData: | Sending Api Request: 11-06-2019 00:00:00|11-11-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2551"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191110 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-06-2019 00:00:00|11-11-2019 00:00:00, num: 4415
+20:59:13 Removing RequestHistoricalDataRequest >> 2551
+RequestHistoricalData: | Sending Api Request: 11-11-2019 00:00:00|11-16-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2552"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191115 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-11-2019 00:00:00|11-16-2019 00:00:00, num: 4764
+20:59:19 Removing RequestHistoricalDataRequest >> 2552
+RequestHistoricalData: | Sending Api Request: 11-16-2019 00:00:00|11-21-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2553"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191120 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-16-2019 00:00:00|11-21-2019 00:00:00, num: 4797
+20:59:26 Removing RequestHistoricalDataRequest >> 2553
+RequestHistoricalData: | Sending Api Request: 11-21-2019 00:00:00|11-26-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2554"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191125 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-21-2019 00:00:00|11-26-2019 00:00:00, num: 4760
+20:59:49 Removing RequestHistoricalDataRequest >> 2554
+RequestHistoricalData: | Sending Api Request: 11-26-2019 00:00:00|12-01-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2555"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191130 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 11-26-2019 00:00:00|12-01-2019 00:00:00, num: 4420
+21:00:41 Removing RequestHistoricalDataRequest >> 2555
+RequestHistoricalData: | Sending Api Request: 12-01-2019 00:00:00|12-06-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2556"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191205 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+21:01:17 Removing RequestHistoricalDataRequest >> 2556
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2556"-(3)"165"-(4)"Historical Market Data Service query message:HMDS server disconnect occurred.  Attempting reconnection..."
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2556"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 2556"
+RequestHistoricalData: | Sending Api Request: 12-06-2019 00:00:00|12-11-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2557"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191210 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+21:03:02 Removing RequestHistoricalDataRequest >> 2557
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2557"-(3)"165"-(4)"Historical Market Data Service query message:HMDS server disconnect occurred.  Attempting reconnection..."
+Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
+Parse Errors: (0)"4"-(1)"2"-(2)"2557"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 2557"
+RequestHistoricalData: | Sending Api Request: 12-11-2019 00:00:00|12-16-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2558"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191215 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 12-11-2019 00:00:00|12-16-2019 00:00:00, num: 4800
+21:03:23 Removing RequestHistoricalDataRequest >> 2558
+RequestHistoricalData: | Sending Api Request: 12-16-2019 00:00:00|12-21-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2559"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191220 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 12-16-2019 00:00:00|12-21-2019 00:00:00, num: 4668
+21:03:28 Removing RequestHistoricalDataRequest >> 2559
+RequestHistoricalData: | Sending Api Request: 12-21-2019 00:00:00|12-26-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2560"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191225 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 12-21-2019 00:00:00|12-26-2019 00:00:00, num: 4341
+21:03:35 Removing RequestHistoricalDataRequest >> 2560
+RequestHistoricalData: | Sending Api Request: 12-26-2019 00:00:00|12-31-2019 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2561"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20191230 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 12-26-2019 00:00:00|12-31-2019 00:00:00, num: 3983
+21:03:49 Removing RequestHistoricalDataRequest >> 2561
+RequestHistoricalData: | Sending Api Request: 12-31-2019 00:00:00|01-05-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2562"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200104 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 12-31-2019 00:00:00|01-05-2020 00:00:00, num: 4432
+21:03:57 Removing RequestHistoricalDataRequest >> 2562
+RequestHistoricalData: | Sending Api Request: 01-05-2020 00:00:00|01-10-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2563"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200109 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 01-05-2020 00:00:00|01-10-2020 00:00:00, num: 4643
+21:04:09 Removing RequestHistoricalDataRequest >> 2563
+RequestHistoricalData: | Sending Api Request: 01-10-2020 00:00:00|01-15-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2564"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200114 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 01-10-2020 00:00:00|01-15-2020 00:00:00, num: 4736
+21:04:34 Removing RequestHistoricalDataRequest >> 2564
+RequestHistoricalData: | Sending Api Request: 01-15-2020 00:00:00|01-20-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2565"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200119 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 01-15-2020 00:00:00|01-20-2020 00:00:00, num: 4579
+21:04:49 Removing RequestHistoricalDataRequest >> 2565
+RequestHistoricalData: | Sending Api Request: 01-20-2020 00:00:00|01-25-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2566"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200124 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 01-20-2020 00:00:00|01-25-2020 00:00:00, num: 4444
+21:05:02 Removing RequestHistoricalDataRequest >> 2566
+RequestHistoricalData: | Sending Api Request: 01-25-2020 00:00:00|01-30-2020 00:00:00
+Send RequestHistoricalData: (0)"20"-(1)"2567"-(2)"268084"-(3)"CSCO"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"20200129 21:00:00"-(16)"1 min"-(17)"5 D"-(18)"0"-(19)"TRADES"-(20)"1"-(21)"0"-(22)""
+Start Parsing Historical Data... 01-25-2020 00:00:00|01-30-2020 00:00:00, num: 4572
