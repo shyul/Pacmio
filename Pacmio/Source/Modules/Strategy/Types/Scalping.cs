@@ -77,7 +77,8 @@ namespace Pacmio
 
 
             //var list = ContractList.GetOrFetch(new List<string>() { "USO", "TQQQ", "UBER", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS", "C", "SIRI", "T", "PFE", "FCX", "TWTR", "JPM", "GM", "GOLD", "CARR", "SLB", "CSCO", "GILD", "KMI", "CVX", "V", "MPC", "KO", "BMY", "SBUX", "RTX", "WMB", "EBAY", "SQ", "ABBV", "VZ", "HPQ", "CTL", "EBD", "COP" }, "US", null, null); //, "ET"
-            var list = ContractList.GetOrFetch(new List<string>() { "VXX", "UGAZ", "FB", "AMD", "GOOGL", "AAPL", "GILD", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS", "C", "SIRI", "T", "PFE", "FCX", }, "US", null, null);
+            //var list = ContractList.GetOrFetch(new List<string>() { "VXX", "UGAZ", "FB", "AMD", "GILD", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS" }, "US", null, null);
+            var list = ContractList.GetOrFetch(new List<string>() { "FB", "AMD", "GILD", "TQQQ" }, "US", null, null);
 
             foreach (Contract c in list) 
             {
@@ -344,10 +345,10 @@ namespace Pacmio
             double vol_avg = b_1[MA_Volume.Result_Column];
             double vol = b_1.Volume;
 
-            bool vol_good = vol > vol_avg;
+            bool vol_good =  vol > vol_avg;
 
             // Entry Strategies, and the time effective should be set separately, however, I will let it go this time.
-            if (ps.Quantity == 0 && vol_good && !b.PositionHasAnalyzed && !b.PositionHasExited && (b.Time.Hour > 9 || (b.Time.Hour == 9 && b.Time.Minute > 29)) && b.Time.Hour < 12)
+            if (ps.Quantity == 0 && vol_good && !b.PositionHasAnalyzed && !b.PositionHasExited && (b.Time.Hour > 9 || (b.Time.Hour == 9 && b.Time.Minute > 29)) && b.Time.Hour < 16)
             //if (ps.Quantity == 0 && vol_good && !b.PositionHasAnalyzed && !b.PositionHasExited && b.Time.Hour > 9 && b.Time.Hour < 12)
             {
                 if (indicator_csd.Type == ConstantDataType.CrossUp || indicator_csd.Type == ConstantDataType.ExitAbove)

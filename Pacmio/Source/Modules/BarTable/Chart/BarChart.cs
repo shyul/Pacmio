@@ -42,7 +42,8 @@ namespace Pacmio
             Style[Importance.Minor].HasLine = true;
             Style[Importance.Minor].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
 
-            AddArea(SignalArea = new SignalArea(this, "Signal", 10));
+            AddArea(PositionArea = new PositionArea(this));
+            AddArea(SignalArea = new SignalArea(this));
             AddArea(MainArea = new MainArea(this, MainArea.DefaultName, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
@@ -92,11 +93,12 @@ namespace Pacmio
 
         public readonly MainArea MainArea;
         public readonly SignalArea SignalArea;
+        public readonly PositionArea PositionArea;
 
         public void Config(IEnumerable<IChartSeries> ics)
         {
             // Remove all areas and series.
-            List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea).ToList();
+            List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
             foreach (var ic in ics)
                 ic.ConfigChart(this);
@@ -185,11 +187,14 @@ namespace Pacmio
             ResumeLayout(true);
             if (IsActive && ReadyToShow && m_barTable is BarTable bt)
             {
-                //BarTable bt = m_barTable;
+                SignalArea.Visible = BarTable.HasSignalAnalysis;
+                PositionArea.Visible = true;
+                //BarTable.HasSignalAnalysis;
+
                 lock (bt.DataObjectLock)
                     lock (GraphicsObjectLock)
                     {
-                        SignalArea.Visible = BarTable.HasSignalAnalysis;
+
 
                         AxisX.TickList.Clear();
 
