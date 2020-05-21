@@ -107,6 +107,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Datums\SupportResistancePatternDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Signals.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
@@ -131,7 +132,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Pivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\CandleStick.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\DualData.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\ISignalDatum.cs" />
