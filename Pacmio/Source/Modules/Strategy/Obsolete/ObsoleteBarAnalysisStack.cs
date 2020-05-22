@@ -22,7 +22,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class BarAnalysisStack
+    public sealed class ObsoleteBarAnalysisStack
     {
         private readonly List<BarAnalysis> List = new List<BarAnalysis>();
 

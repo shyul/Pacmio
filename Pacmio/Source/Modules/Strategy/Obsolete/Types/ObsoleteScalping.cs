@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class Scalping : Strategy
+    public class ObsoleteScalping : ObsoleteStrategy
     {
-        public Scalping() 
+        public ObsoleteScalping() 
         {
             MA_Volume = new EMA(TableList.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 1 };
             MA_Volume.LineSeries.Side = AlignType.Left;
@@ -151,7 +151,7 @@ namespace Pacmio
             BarTable bt = TableList.GetTable(c, PrimaryBarFreq, BarType.Trades);
             var bas = BarAnalysisConfig();
             ChartList.GetForm(bt, bas);
-            if (bt.IsEmpty) { bt.Reset(StrategyMaster.SimulatePeriod, null, null); }
+            if (bt.IsEmpty) { bt.Reset(ObsoleteStrategyMaster.SimulatePeriod, null, null); }
         }
 
         public double MaxPositionValue { get; set; } = 12000;
@@ -189,8 +189,8 @@ namespace Pacmio
         {
             BarTable bt = TableList.GetTable(c, PrimaryBarFreq, BarType.Trades);
 
-            DateTime startTime = StrategyMaster.SimulatePeriod.Start;
-            DateTime stopTime = StrategyMaster.SimulatePeriod.Stop;
+            DateTime startTime = ObsoleteStrategyMaster.SimulatePeriod.Start;
+            DateTime stopTime = ObsoleteStrategyMaster.SimulatePeriod.Stop;
 
             int StartPt = bt.IndexOf(ref startTime);
             int StopPt = bt.IndexOf(ref stopTime);
@@ -370,8 +370,8 @@ namespace Pacmio
                             if (risk < 0.01)
                             {
                                 double limit = b.Open + delta * 1.2; // 1:2 R/R
-                                double size = Math.Min(ac.TotalValue * StrategyMaster.MaximumRiskPercentPerContract / risk,
-                                                       ac.TotalValue * StrategyMaster.MaximumPositionSizePercent);
+                                double size = Math.Min(ac.TotalValue * ObsoleteStrategyMaster.MaximumRiskPercentPerContract / risk,
+                                                       ac.TotalValue * ObsoleteStrategyMaster.MaximumPositionSizePercent);
 
                                 size = Math.Min(size, MaxPositionValue);
                                 double quantity = size / b.Open;
@@ -407,8 +407,8 @@ namespace Pacmio
                             if (risk < 0.01)
                             {
                                 double limit = b.Open + delta * 1.2; // 1:2 R/R
-                                double size = Math.Min(ac.TotalValue * StrategyMaster.MaximumRiskPercentPerContract / risk,
-                                                       ac.TotalValue * StrategyMaster.MaximumPositionSizePercent);
+                                double size = Math.Min(ac.TotalValue * ObsoleteStrategyMaster.MaximumRiskPercentPerContract / risk,
+                                                       ac.TotalValue * ObsoleteStrategyMaster.MaximumPositionSizePercent);
 
                                 size = Math.Min(size, MaxPositionValue);
 
@@ -442,8 +442,8 @@ namespace Pacmio
                             if (risk < 0.01)
                             {
                                 double limit = b.Open - delta * 1.2; // 1:2 R/R
-                                double size = Math.Min(ac.TotalValue * StrategyMaster.MaximumRiskPercentPerContract / risk,
-                                                       ac.TotalValue * StrategyMaster.MaximumPositionSizePercent);
+                                double size = Math.Min(ac.TotalValue * ObsoleteStrategyMaster.MaximumRiskPercentPerContract / risk,
+                                                       ac.TotalValue * ObsoleteStrategyMaster.MaximumPositionSizePercent);
 
                                 size = Math.Min(size, MaxPositionValue);
 
@@ -483,8 +483,8 @@ namespace Pacmio
                             if (risk < 0.01)
                             {
                                 double limit = b.Open - delta * 1.2; // 1:2 R/R
-                                double size = Math.Min(ac.TotalValue * StrategyMaster.MaximumRiskPercentPerContract / risk,
-                                                       ac.TotalValue * StrategyMaster.MaximumPositionSizePercent);
+                                double size = Math.Min(ac.TotalValue * ObsoleteStrategyMaster.MaximumRiskPercentPerContract / risk,
+                                                       ac.TotalValue * ObsoleteStrategyMaster.MaximumPositionSizePercent);
 
                                 size = Math.Min(size, MaxPositionValue);
 

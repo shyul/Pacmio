@@ -19,13 +19,20 @@ namespace Pacmio
         /// </summary>
         public string Name { get; set; }
 
-        public List<double> Score { get; } = new List<double>();
+        public double Score => ScoreList[ScorePt];
+
+        /// <summary>
+        /// Score with lasting effect
+        /// </summary>
+        public List<double> ScoreList { get; } = new List<double>();
 
         public int ScorePt { get; set; } = 0;
 
         #region Graphics Properties
 
         public Color Color { get; set; }
+
+        // Custom Graphics Shapes can be drawn from here.
 
         #endregion Graphics Properties
     }

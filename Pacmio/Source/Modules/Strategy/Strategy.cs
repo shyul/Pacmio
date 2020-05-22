@@ -14,50 +14,39 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    /// <summary>
-    /// All static alike functions!!
-    /// </summary>
-    public abstract class Strategy : IEquatable<Strategy>
+    public class Strategy
     {
-        public virtual string Name { get; }
+        public Strategy() 
+        {
+        
+        }
 
-        /// <summary>
-        /// Smallest Bar Frequency as the primary trading length.
-        /// </summary>
-        public BarFreq PrimaryBarFreq { get; set; } = BarFreq.Minute;
+        public string Name { get; }
 
+        // Condition
+        // --------------------
+        // Result: List of symbol matching the condition
 
-        #region Order Sizing
+        // Indication
+        // --------------------
+        // Elevation Factors
+        // Deprication Factors
+        // Signals
+        // Result: Signals list, sum of all signals at the close of a Bar
 
-        public double MaximumPositionPercent { get; set; } = 0.05;
+        // Confirmation
+        // --------------------
+        // 1. Signal reseaches a certain level for the last Bar
+        // 2. Match time frame
+        // 3. One technical situation is met for current Bar.
+        // Buy Limit, Buy Stop Limit
+        // Result: Long / Short. Scale in??? Most unlikely.
 
-        /// <summary>
-        /// Tradelist also defines the risk percent for the whole account
-        /// We define the maximum risk here
-        /// will pick up which ever comes tighter.
-        /// </summary>
-        public double MaximumRiskPercent { get; set; } = 0.05;
-
-        #endregion
-
-        public abstract IEnumerable<Contract> GetWatchList();
-
-
-        public readonly BarAnalysisStack BarAnalysisStack = new BarAnalysisStack();
-
-
-        // Initialize. and guarantee all basic elements are met.
-        public abstract void Setup(Contract c);
-
-        public abstract void RunLiveTrade(Contract c);
-
-        public abstract void Simulate(Contract c, SimulationAccount ac);
-
-
-
-        public bool Equals(Strategy other) => Name == other.Name;
+        // Validation
+        // --------------------
+        // 1. Entry Stop is met
+        // 2. Breakeven Stop is met
+        // 3. Profit taking limit is met
+        // Result: Remove liquidation, scale out, Sell / Cover
     }
-
-
-
 }

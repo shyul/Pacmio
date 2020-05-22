@@ -16,15 +16,15 @@ using System.Threading.Tasks;
 
 namespace Pacmio
 {
-    public static class StrategyMaster
+    public static class ObsoleteStrategyMaster
     {
         public static bool Enabled { get; set; } = false;
         /// <summary>
         /// Activated Strategies
         /// </summary>
-        public static readonly Dictionary<Strategy, List<Contract>> WatchList = new Dictionary<Strategy, List<Contract>>();
+        public static readonly Dictionary<ObsoleteStrategy, List<Contract>> WatchList = new Dictionary<ObsoleteStrategy, List<Contract>>();
 
-        public static readonly Dictionary<Contract, List<Strategy>> TradeContract = new Dictionary<Contract, List<Strategy>>();
+        public static readonly Dictionary<Contract, List<ObsoleteStrategy>> TradeContract = new Dictionary<Contract, List<ObsoleteStrategy>>();
 
         /// <summary>
         /// Has to stop the strategy
@@ -42,7 +42,7 @@ namespace Pacmio
                 foreach (Contract c in WatchList[s.Key])
                 {
                     if (!TradeContract.ContainsKey(c))
-                        TradeContract.Add(c, new List<Strategy>());
+                        TradeContract.Add(c, new List<ObsoleteStrategy>());
 
                     TradeContract[c].CheckAdd(s.Key);
                 }
@@ -97,7 +97,7 @@ namespace Pacmio
 
             //Parallel.ForEach(WatchList.Keys, s => Simulate(s, sac));
             
-            foreach (Strategy s in WatchList.Keys)
+            foreach (ObsoleteStrategy s in WatchList.Keys)
             {
                 Simulate(s, sac);
             }
@@ -131,7 +131,7 @@ namespace Pacmio
             sac.TradeLog.ExportTradeLog("D:\\sim.tlg");
         }
 
-        public static void Simulate(Strategy s, SimulationAccount sac)
+        public static void Simulate(ObsoleteStrategy s, SimulationAccount sac)
         {
             //Parallel.ForEach(WatchList[s], c => s.Simulate(c, sac));
             

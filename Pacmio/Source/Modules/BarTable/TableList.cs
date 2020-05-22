@@ -543,12 +543,12 @@ namespace Pacmio
                                             bt.SetCalculationPointer(bt.LatestCalculatePointer - 3); // This is to set the analysis pointer at least 2 Bars behind.
                                             bt.CalculateOnly();
 
-                                            if (StrategyMaster.Enabled)
+                                            if (ObsoleteStrategyMaster.Enabled)
                                             {
                                                 Contract c = bt.Contract;
-                                                if (StrategyMaster.TradeContract.ContainsKey(c))
+                                                if (ObsoleteStrategyMaster.TradeContract.ContainsKey(c))
                                                 {
-                                                    foreach (Strategy s in StrategyMaster.TradeContract[c])
+                                                    foreach (ObsoleteStrategy s in ObsoleteStrategyMaster.TradeContract[c])
                                                     {
                                                         s.RunLiveTrade(c);
                                                     }
