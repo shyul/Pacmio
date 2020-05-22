@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public static class Signals
+    public static class SignalTool
     {
         #region Singal Data
 
@@ -224,12 +224,34 @@ namespace Pacmio
 
         #region Divergence
 
+        public static void Divergence(this BarTable bt, int i, int minimumPeakMargin) 
+        {
+        
+        }
+
+
 
         #endregion Divergence
 
 
     }
 
+    public struct DivergenceInfo 
+    {
+        public DivergenceType Type { get; }
 
+        public (int index, double peak, double value, double indicator_value) Point1 { get; set; } 
+
+        public (int index, double peak, double value, double indicator_value) Point2 { get; set; } 
+
+
+        public override bool Equals(object obj) => false;
+
+        public override int GetHashCode() => Type.GetHashCode();
+
+        public static bool operator ==(DivergenceInfo left, DivergenceInfo right) => false;
+
+        public static bool operator !=(DivergenceInfo left, DivergenceInfo right) => true;
+    }
 
 }
