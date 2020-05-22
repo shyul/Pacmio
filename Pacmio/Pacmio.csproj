@@ -140,7 +140,7 @@
     <Compile Include="Source\Modules\Contract\ContractTools.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
-    <Compile Include="Source\Modules\Strategy\BarAnalysisStack.cs" />
+    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteBarAnalysisStack.cs" />
     <Compile Include="Source\Modules\BarTable\TableList.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
@@ -153,13 +153,14 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Strategy\Types\Scalping.cs" />
+    <Compile Include="Source\Modules\Strategy\Obsolete\Types\ObsoleteScalping.cs" />
+    <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\TradeLogManager.cs" />
     <Compile Include="Source\Modules\Trade\Types\PositionStatus.cs" />
     <Compile Include="Source\Modules\Trade\Account\SimulationAccount.cs" />
-    <Compile Include="Source\Modules\Strategy\StrategyMaster.cs" />
-    <Compile Include="Source\Modules\Strategy\Strategy.cs" />
+    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteStrategyMaster.cs" />
+    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteStrategy.cs" />
     <Compile Include="Source\Modules\Trade\Types\LiquidityType.cs" />
     <Compile Include="Source\Modules\Trade\Types\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />

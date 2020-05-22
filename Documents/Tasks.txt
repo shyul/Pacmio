@@ -1,3 +1,13 @@
+New Types for Bar
+===================
+1. TrendLine Type
+2. Signal Type
+3. Pattern Type
+4. Position Status
+5. Better Tags
+
+
+
 Important Topic:
 ===================
 1. Condition: (Clear) Direction, (High) Volatility, TA From Higher Time Frame
