@@ -211,6 +211,9 @@ namespace Pacmio
         /// </summary>
         public TradeActionType ActionType { get; set; } = TradeActionType.None;
 
+        // Preliminary
+        public readonly List<TradeActionType> TradeActions = new List<TradeActionType>();
+
         public double PositionQuantity { get; set; } = 0;
 
         public double PositionCostBasis { get; set; } = double.NaN;

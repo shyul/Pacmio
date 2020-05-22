@@ -52,6 +52,10 @@ namespace Pacmio
 
         public double CostBasis { get; private set; } = double.NaN;
 
+        public double Commission { get; private set; } = double.NaN;
+
+        public double BreakEvenPrice => (Quantity * CostBasis + Commission) / Quantity;
+
         public double Value => double.IsNaN(CostBasis) ? 0 : Math.Abs(Quantity * CostBasis);
 
         public void Reset() 
@@ -61,7 +65,7 @@ namespace Pacmio
             PendingExit = false;
         }
 
-        public void Set(double qty, double price)
+        public void Set(double qty, double price, double commission)
         {
             if (Quantity == qty)
             {
@@ -78,9 +82,14 @@ namespace Pacmio
             CostBasis = (Quantity == 0) ? double.NaN : price;
         }
 
+        /// <summary>
+        /// Remove all existing position
+        /// </summary>
+        /// <param name="price"></param>
+        /// <returns></returns>
         public (double Proceeds, double PnL, LiquidityType LiquidityType) Close(double price) => Add(-Quantity, price);
 
-        public (double Proceeds, double PnL, LiquidityType LiquidityType) Add(double qty, double price)
+        public (double Proceeds, double PnL, LiquidityType LiquidityType) Add(double qty, double price, double commission = 0)
         {
             double proceeds = 0; // Cash out flows
             double pnl = 0;
@@ -90,13 +99,14 @@ namespace Pacmio
 
             if (qty != 0)
             {
-                double order_value = price * qty;
+                double order_value = price * qty + commission * 2; // add round trip commission here.
+                double average_price = order_value / qty;
 
                 if (Quantity == 0)
                 {
                     ActionType = (qty > 0) ? TradeActionType.Long : TradeActionType.Short;
                     liquidityType = LiquidityType.Added;
-                    Set(qty, price);
+                    Set(qty, average_price);
                     proceeds = Math.Abs(order_value); // A position add proceeds is always positive, money out of cash.
                 }
                 else if (Quantity > 0) // Long position here.
@@ -116,16 +126,16 @@ namespace Pacmio
                         {
                             ActionType = TradeActionType.Sell;
                             liquidityType = LiquidityType.Removed;
-                            pnl = (CostBasis - price) * qty; // qty is negative
+                            pnl = (CostBasis - average_price) * qty; // qty is negative
                             proceeds = order_value; // Negative Proceeds. Since qty < 0, so the cost is negative here, and proceeds is negative
                         }
                         else
                         {
                             ActionType = TradeActionType.Short;
                             liquidityType = LiquidityType.Added;
-                            pnl = (price - CostBasis) * Quantity; // Sell will generate pnl here
-                            proceeds = -(Quantity + new_qty) * price;
-                            CostBasis = price;
+                            pnl = (average_price - CostBasis) * Quantity; // Sell will generate pnl here
+                            proceeds = -(Quantity + new_qty) * average_price;
+                            CostBasis = average_price;
                             throw new Exception("Sell long into short is not supported so far");
                         }
                     }
@@ -148,16 +158,16 @@ namespace Pacmio
                         {
                             ActionType = TradeActionType.Cover;
                             liquidityType = LiquidityType.Removed;
-                            pnl = (CostBasis - price) * qty;
+                            pnl = (CostBasis - average_price) * qty;
                             proceeds = -Value - pnl;// -order_value; // Negative Proceeds. Since qty > 0, so the cost is positive here, so we need to add negative to it.
                         }
                         else
                         {
                             ActionType = TradeActionType.Long;
                             liquidityType = LiquidityType.Added; // Positive proceeds
-                            pnl = (CostBasis - price) * Quantity; // Sell will generate pnl here
-                            proceeds = new_qty * price - Value - pnl;//   (Quantity + new_qty) * price; // Negative if new_qty is smaller than abs Quantity, which means new_qty value is smaller, so we have money flow back to the pool.
-                            CostBasis = price;
+                            pnl = (CostBasis - average_price) * Quantity; // Sell will generate pnl here
+                            proceeds = new_qty * average_price - Value - pnl;//   (Quantity + new_qty) * price; // Negative if new_qty is smaller than abs Quantity, which means new_qty value is smaller, so we have money flow back to the pool.
+                            CostBasis = average_price;
                             throw new Exception("Cover short into long is not supported so far");
                         }
                     }

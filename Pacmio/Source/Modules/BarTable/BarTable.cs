@@ -809,7 +809,11 @@ namespace Pacmio
 
         #region Trend Lines
 
-        public List<TrendLineInfo> TrendLines { get; } = new List<TrendLineInfo>();
+        public readonly List<TrendLineInfo> CurrentTrendLines = new List<TrendLineInfo>();
+
+        public readonly List<SignalDatum> CurrentSignal = new List<SignalDatum>();
+
+        //public 
 
         #endregion Trend Lines
 

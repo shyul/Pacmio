@@ -163,7 +163,7 @@ namespace Pacmio
                         b[Pattern_Column] = datum;
 
                         // Check add...
-                        bt.TrendLines.AddRange(datum.TrendLines);
+                        bt.CurrentTrendLines.AddRange(datum.TrendLines);
 
                         base_time = time;
                     }
