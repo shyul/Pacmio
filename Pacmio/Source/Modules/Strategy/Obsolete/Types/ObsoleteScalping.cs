@@ -16,14 +16,14 @@ namespace Pacmio
 {
     public class ObsoleteScalping : ObsoleteStrategy
     {
-        public ObsoleteScalping() 
+        public ObsoleteScalping()
         {
             MA_Volume = new EMA(TableList.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 1 };
             MA_Volume.LineSeries.Side = AlignType.Left;
 
             VWAP = new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.HotPink };
             ADX = new ADX(14) { Order = 100, HasXAxisBar = true };
-            
+
             MA_Fast = new EMA(5) { Color = Color.Teal };
             MA_Slow = new EMA(13) { Color = Color.Peru };
             MA_Cross = new DualData(MA_Fast, MA_Slow);
@@ -77,10 +77,10 @@ namespace Pacmio
 
 
             //var list = ContractList.GetOrFetch(new List<string>() { "USO", "TQQQ", "UBER", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS", "C", "SIRI", "T", "PFE", "FCX", "TWTR", "JPM", "GM", "GOLD", "CARR", "SLB", "CSCO", "GILD", "KMI", "CVX", "V", "MPC", "KO", "BMY", "SBUX", "RTX", "WMB", "EBAY", "SQ", "ABBV", "VZ", "HPQ", "CTL", "EBD", "COP" }, "US", null, null); //, "ET"
-            //var list = ContractList.GetOrFetch(new List<string>() { "VXX", "UGAZ", "FB", "AMD", "GILD", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS" }, "US", null, null);
-            var list = ContractList.GetOrFetch(new List<string>() { "FB", "AMD", "GILD", "TQQQ" }, "US", null, null);
+            var list = ContractList.GetOrFetch(new List<string>() { "VXX", "UGAZ", "FB", "AMD", "GILD", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "AMD", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "BA", "DIS" }, "US", null, null);
+            //var list = ContractList.GetOrFetch(new List<string>() { "PLAY", "LYFT", "SPY", "FB", "AMD", "GILD", "TQQQ" }, "US", null, null);
 
-            foreach (Contract c in list) 
+            foreach (Contract c in list)
             {
                 BarTable bt_day = TableList.GetTable(c, BarFreq.Daily, BarType.Trades);
                 bt_day.Reset(new Period(DateTime.MinValue, DateTime.Now.AddDays(1)), null, null);
@@ -345,7 +345,7 @@ namespace Pacmio
             double vol_avg = b_1[MA_Volume.Result_Column];
             double vol = b_1.Volume;
 
-            bool vol_good =  vol > vol_avg;
+            bool vol_good = vol > vol_avg;
 
             // Entry Strategies, and the time effective should be set separately, however, I will let it go this time.
             if (ps.Quantity == 0 && vol_good && !b.PositionHasAnalyzed && !b.PositionHasExited && (b.Time.Hour > 9 || (b.Time.Hour == 9 && b.Time.Minute > 29)) && b.Time.Hour < 16)
