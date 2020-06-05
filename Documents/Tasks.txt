@@ -1,3 +1,91 @@
+
+Strategy:
+|||||||||||||||||||||||||||||||||
+
+Definitions:
+1. Condition
+2. Pool of Indication Template
+3. Confirmation Template
+4. Validation Template
+
+Tasks:
+1. Simulation
+2. Auto-Tuning and yield per contract paramater
+3. Trade
+
+
+
+
+Condition - Scanner - WatchList
+===================
+
+>>> 1. Scanner from Daily Chart: (Only valid way to do back testins)
+A. Price range 
+B. Volume x Price
+
+C. Total Existing Days (Since Incipient, Days since IPO)
+
+>>> 2. Manual List
+A. From chat rooms;
+
+>>> 3. IB Scanner
+A. 50 ticks total
+
+Result: WatchList
+
+
+
+
+
+
+Indication
+===================
+1. Bar_1 Gain
+2. Bar Gap
+
+Result:
+a. Cardinal Levels
+b. Ready to trade list for the Last Bar
+
+
+
+Confirmation
+===================
+1. Last Bar Price Action: a. Against Cardinal Levels; b. Against Candlestick types
+
+Result:
+a. Action: Long | Short
+b. Stop Loss: 1. Risk Management Stop | 2. Breakeven Stop | 3. Profit Taking Stop
+c. Profit Target
+
+
+
+Validation
+===================
+1. Last Bar Price Action: a. Against Cardinal Levels; b. Against Candlestick types
+2. Technical Data
+3. Stop Loss is hit
+
+
+Back Testing Parameters
+=============================
+
+1. Benchmark
+1. Trading Hours
+2. Paramters for Indication
+
+
+
+Simulation Report
+===================
+1. Per Symbol Report (Daily)
+2. Compound Report (Daily)
+3. Max Capitalization
+
+
+
+
+
 New Types for Bar
 ===================
 1. TrendLine Type
