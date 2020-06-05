@@ -1,5 +1,6 @@
 
-Strategy:
+Strategy: A static class
+
 |||||||||||||||||||||||||||||||||
 
 Definitions:
@@ -9,9 +10,9 @@ Definitions:
 4. Validation Template
 
 Tasks:
-1. Simulation
-2. Auto-Tuning and yield per contract paramater
-3. Trade
+1. Simulation ->
+2. Auto-Tuning -> Re-Simulate and yield per contract paramater
+3. Trade with the generated parameters
 
 
 
