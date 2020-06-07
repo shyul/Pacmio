@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Xu;
 using Xu.Chart;
@@ -23,14 +24,25 @@ namespace Pacmio
 
         public IndicatorParameter Parameter { get; } = new IndicatorParameter();
 
+
+        public string Name => Indicator.Name;
+
+        public int Order { get => IsManuallyAdded ? m_order : int.MinValue; set => m_order = IsManuallyAdded ? value : int.MinValue; }
+        private int m_order = int.MinValue; 
+
+        public bool IsManuallyAdded { get; set; } = false;
+
     }
 
     public class Indicator 
     {
         public string Name { get; }
 
+        public int Order { get; set; }
+
         public List<BarAnalysis> BarAnalysesTimeFrame1 { get; }
 
+        // List the scope of usable MAs, and testable range of intervals...
 
         // Different Time Frame
 
@@ -38,10 +50,19 @@ namespace Pacmio
 
 
         // Choices of SMA / EMA / Different Oscillators and so on...
+
+
+        // Will also be the one getting the Elevation Factors
     }
 
     public class IndicatorParameter 
     {
+
+        // Fit MA Cross -> SMA, EMA, ...
+        // MA Cross intervals?
+
+        // Levels
+
         // Confirmation Parameters
 
 
@@ -65,6 +86,12 @@ namespace Pacmio
 
 
         public static void GetWatchList(int daysSinceIPO, Range<double> priceRange, Range<double> volumeRange) // Types // Sinc 
+        {
+        
+        
+        }
+
+        public static void CleanUpWatchList() 
         {
         
         
