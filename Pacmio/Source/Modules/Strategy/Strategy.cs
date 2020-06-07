@@ -14,14 +14,87 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class Strategy
+    public class TradeParameter
     {
-        public Strategy() 
+        // Time Period
+
+        public Indicator Indicator { get; set;  } = new Indicator();
+
+
+        public IndicatorParameter Parameter { get; } = new IndicatorParameter();
+
+    }
+
+    public class Indicator 
+    {
+        public string Name { get; }
+
+        public List<BarAnalysis> BarAnalysesTimeFrame1 { get; }
+
+
+        // Different Time Frame
+
+        public List<BarAnalysis> BarAnalysesTimeFrame2 { get; }
+
+
+        // Choices of SMA / EMA / Different Oscillators and so on...
+    }
+
+    public class IndicatorParameter 
+    {
+        // Confirmation Parameters
+
+
+        // Validation Parameters
+
+    }
+
+    public static class Strategy
+    {
+        public static Dictionary<Contract, TradeParameter> WatchList = new Dictionary<Contract, TradeParameter>();
+
+        public static void GetWatchList() // Get it from the Market Scanner
+        {
+        
+        }
+        
+        public static void GetWatchList(List<Contract> list) 
         {
         
         }
 
-        public string Name { get; }
+
+        public static void GetWatchList(int daysSinceIPO, Range<double> priceRange, Range<double> volumeRange) // Types // Sinc 
+        {
+        
+        
+        }
+
+
+        public static List<Indicator> IndicatorList = new List<Indicator>();
+
+        public static void Optimize() 
+        {
+            // We have to run one symbol of a time, or the RAM is going to explode.
+
+        
+        }
+
+
+        public static void Simulate() 
+        {
+        
+        
+        
+        }
+
+
+        public static void LiveTrade() 
+        {
+        
+        
+        }
+
 
         // New Types for Bar
         // ===================
@@ -42,7 +115,7 @@ namespace Pacmio
         // 2. Price Range
         // 3. Indicators + Elevation Factors
 
-        public Dictionary<Contract, int> Parameters = new Dictionary<Contract, int>();
+        //public Dictionary<Contract, int> Parameters = new Dictionary<Contract, int>();
 
         // Indication
         // --------------------
@@ -72,10 +145,5 @@ namespace Pacmio
         // Result: Remove liquidation, scale out, Sell / Cover
     }
 
-    public class StrategyParameter 
-    {
-        // BarFreq
-        // List of indicators, and indicator parameters
-            
-    }
+
 }
