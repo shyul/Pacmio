@@ -53,6 +53,14 @@ namespace Pacmio
 
 
         // Will also be the one getting the Elevation Factors
+
+        // Here is how many days for generating new TradeParameter
+        public int BackTestingLength { get; } = 5;
+
+        // Will re-generate the IndicatorParameter after 2 days.
+        public int ValidTradingLength { get; } = 2;
+
+        // So we use the past five days of trading history to generate the next 2 days trading parameter
     }
 
     public class IndicatorParameter 

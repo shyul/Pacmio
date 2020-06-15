@@ -50,12 +50,11 @@ namespace TestClient
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
             this.BtnTestSymbolsToCheck = new System.Windows.Forms.Button();
             this.DownloadBarTableDetialedProgressBar = new System.Windows.Forms.ProgressBar();
-            this.BtnDownloadTables = new System.Windows.Forms.Button();
-            this.TextBoxSymbols = new System.Windows.Forms.RichTextBox();
+            this.BtnDownloadMultiTables = new System.Windows.Forms.Button();
+            this.TextBoxMultiContracts = new System.Windows.Forms.RichTextBox();
             this.TestMassOrder = new System.Windows.Forms.Button();
             this.BtnFindDuplicate = new System.Windows.Forms.Button();
             this.BtnExtractSymbols = new System.Windows.Forms.Button();
-            this.RichTextBoxMatchSymbols = new System.Windows.Forms.RichTextBox();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
             this.BtnMergeQuandlFile = new System.Windows.Forms.Button();
             this.BtnAddQuandlFile = new System.Windows.Forms.Button();
@@ -73,7 +72,7 @@ namespace TestClient
             this.CheckBoxChartToCurrent = new System.Windows.Forms.CheckBox();
             this.BtnAlignCharts = new System.Windows.Forms.Button();
             this.BtnTestRealTimeBars = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.LabelBarFreq = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.BtmImportQuandlBlob = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -186,6 +185,10 @@ namespace TestClient
             this.RequestPnL = new System.Windows.Forms.Button();
             this.BtnMasterCancel = new System.Windows.Forms.Button();
             this.TextBoxIPAddress = new System.Windows.Forms.TextBox();
+            this.GroupBoxSingleContract = new System.Windows.Forms.GroupBox();
+            this.LabelBarType = new System.Windows.Forms.Label();
+            this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
+            this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabDownload.SuspendLayout();
@@ -207,12 +210,15 @@ namespace TestClient
             this.tabSymbols.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewContractList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).BeginInit();
+            this.GroupBoxSingleContract.SuspendLayout();
+            this.GroupBoxBarTableSetting.SuspendLayout();
+            this.GroupBoxMultiContracts.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
             // 
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnConnect.Location = new System.Drawing.Point(117, 913);
+            this.btnConnect.Location = new System.Drawing.Point(117, 1167);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(80, 36);
             this.btnConnect.TabIndex = 0;
@@ -244,27 +250,15 @@ namespace TestClient
             this.MainTab.Controls.Add(this.tabMarketDepth);
             this.MainTab.Controls.Add(this.tabAccount);
             this.MainTab.Controls.Add(this.tabSymbols);
-            this.MainTab.Location = new System.Drawing.Point(12, 45);
+            this.MainTab.Location = new System.Drawing.Point(12, 216);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
-            this.MainTab.Size = new System.Drawing.Size(1560, 860);
+            this.MainTab.Size = new System.Drawing.Size(1560, 943);
             this.MainTab.TabIndex = 3;
             // 
             // tabHistoricalData
             // 
-            this.tabHistoricalData.Controls.Add(this.BtnTestSymbolsToCheck);
-            this.tabHistoricalData.Controls.Add(this.DownloadBarTableDetialedProgressBar);
-            this.tabHistoricalData.Controls.Add(this.BtnDownloadTables);
-            this.tabHistoricalData.Controls.Add(this.TextBoxSymbols);
-            this.tabHistoricalData.Controls.Add(this.TestMassOrder);
-            this.tabHistoricalData.Controls.Add(this.BtnFindDuplicate);
-            this.tabHistoricalData.Controls.Add(this.BtnExtractSymbols);
-            this.tabHistoricalData.Controls.Add(this.RichTextBoxMatchSymbols);
             this.tabHistoricalData.Controls.Add(this.BtnMatchSymbols);
-            this.tabHistoricalData.Controls.Add(this.BtnMergeQuandlFile);
-            this.tabHistoricalData.Controls.Add(this.BtnAddQuandlFile);
-            this.tabHistoricalData.Controls.Add(this.label13);
-            this.tabHistoricalData.Controls.Add(this.ListViewQuandlFileMerge);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
             this.tabHistoricalData.Controls.Add(this.BtnArmLiveTrade);
@@ -274,33 +268,24 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnTestScalping);
             this.tabHistoricalData.Controls.Add(this.BtnCloseChart);
             this.tabHistoricalData.Controls.Add(this.ListViewAllCharts);
-            this.tabHistoricalData.Controls.Add(this.CheckBoxChartToCurrent);
             this.tabHistoricalData.Controls.Add(this.BtnAlignCharts);
             this.tabHistoricalData.Controls.Add(this.BtnTestRealTimeBars);
-            this.tabHistoricalData.Controls.Add(this.label3);
-            this.tabHistoricalData.Controls.Add(this.label2);
-            this.tabHistoricalData.Controls.Add(this.BtmImportQuandlBlob);
-            this.tabHistoricalData.Controls.Add(this.label1);
-            this.tabHistoricalData.Controls.Add(this.DateTimePickerHistoricalDataStop);
-            this.tabHistoricalData.Controls.Add(this.SelectHistoricalDataBarType);
-            this.tabHistoricalData.Controls.Add(this.SelectHistoricalDataBarFreq);
-            this.tabHistoricalData.Controls.Add(this.DateTimePickerHistoricalDataStart);
             this.tabHistoricalData.Controls.Add(this.BtnRequestHistoricalTicks);
             this.tabHistoricalData.Controls.Add(this.BtnChartsUpdateAll);
             this.tabHistoricalData.Controls.Add(this.BtnRequestHistoricalData);
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHistoricalData.Size = new System.Drawing.Size(1552, 834);
+            this.tabHistoricalData.Size = new System.Drawing.Size(1552, 917);
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
             // 
             // BtnTestSymbolsToCheck
             // 
-            this.BtnTestSymbolsToCheck.Location = new System.Drawing.Point(1068, 368);
+            this.BtnTestSymbolsToCheck.Location = new System.Drawing.Point(596, 21);
             this.BtnTestSymbolsToCheck.Name = "BtnTestSymbolsToCheck";
-            this.BtnTestSymbolsToCheck.Size = new System.Drawing.Size(208, 23);
+            this.BtnTestSymbolsToCheck.Size = new System.Drawing.Size(167, 23);
             this.BtnTestSymbolsToCheck.TabIndex = 53;
             this.BtnTestSymbolsToCheck.Text = "Format Symbols To Check Only";
             this.BtnTestSymbolsToCheck.UseVisualStyleBackColor = true;
@@ -308,32 +293,32 @@ namespace TestClient
             // 
             // DownloadBarTableDetialedProgressBar
             // 
-            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(932, 453);
+            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(473, 1167);
             this.DownloadBarTableDetialedProgressBar.Name = "DownloadBarTableDetialedProgressBar";
-            this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 23);
+            this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 15);
             this.DownloadBarTableDetialedProgressBar.TabIndex = 11;
             // 
-            // BtnDownloadTables
+            // BtnDownloadMultiTables
             // 
-            this.BtnDownloadTables.Location = new System.Drawing.Point(916, 368);
-            this.BtnDownloadTables.Name = "BtnDownloadTables";
-            this.BtnDownloadTables.Size = new System.Drawing.Size(146, 23);
-            this.BtnDownloadTables.TabIndex = 10;
-            this.BtnDownloadTables.Text = "Download Tables";
-            this.BtnDownloadTables.UseVisualStyleBackColor = true;
-            this.BtnDownloadTables.Click += new System.EventHandler(this.BtnDownloadTables_Click);
+            this.BtnDownloadMultiTables.Location = new System.Drawing.Point(200, 20);
+            this.BtnDownloadMultiTables.Name = "BtnDownloadMultiTables";
+            this.BtnDownloadMultiTables.Size = new System.Drawing.Size(177, 23);
+            this.BtnDownloadMultiTables.TabIndex = 10;
+            this.BtnDownloadMultiTables.Text = "Download Multi Tables";
+            this.BtnDownloadMultiTables.UseVisualStyleBackColor = true;
+            this.BtnDownloadMultiTables.Click += new System.EventHandler(this.BtnDownloadTables_Click);
             // 
-            // TextBoxSymbols
+            // TextBoxMultiContracts
             // 
-            this.TextBoxSymbols.Location = new System.Drawing.Point(916, 183);
-            this.TextBoxSymbols.Name = "TextBoxSymbols";
-            this.TextBoxSymbols.Size = new System.Drawing.Size(584, 179);
-            this.TextBoxSymbols.TabIndex = 9;
-            this.TextBoxSymbols.Text = resources.GetString("TextBoxSymbols.Text");
+            this.TextBoxMultiContracts.Location = new System.Drawing.Point(6, 21);
+            this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
+            this.TextBoxMultiContracts.Size = new System.Drawing.Size(584, 169);
+            this.TextBoxMultiContracts.TabIndex = 9;
+            this.TextBoxMultiContracts.Text = resources.GetString("TextBoxMultiContracts.Text");
             // 
             // TestMassOrder
             // 
-            this.TestMassOrder.Location = new System.Drawing.Point(916, 134);
+            this.TestMassOrder.Location = new System.Drawing.Point(17, 335);
             this.TestMassOrder.Name = "TestMassOrder";
             this.TestMassOrder.Size = new System.Drawing.Size(128, 23);
             this.TestMassOrder.TabIndex = 12;
@@ -343,9 +328,9 @@ namespace TestClient
             // 
             // BtnFindDuplicate
             // 
-            this.BtnFindDuplicate.Location = new System.Drawing.Point(916, 79);
+            this.BtnFindDuplicate.Location = new System.Drawing.Point(596, 50);
             this.BtnFindDuplicate.Name = "BtnFindDuplicate";
-            this.BtnFindDuplicate.Size = new System.Drawing.Size(289, 23);
+            this.BtnFindDuplicate.Size = new System.Drawing.Size(167, 23);
             this.BtnFindDuplicate.TabIndex = 52;
             this.BtnFindDuplicate.Text = "Find Duplicate Symbols";
             this.BtnFindDuplicate.UseVisualStyleBackColor = true;
@@ -353,21 +338,13 @@ namespace TestClient
             // 
             // BtnExtractSymbols
             // 
-            this.BtnExtractSymbols.Location = new System.Drawing.Point(6, 671);
+            this.BtnExtractSymbols.Location = new System.Drawing.Point(875, 320);
             this.BtnExtractSymbols.Name = "BtnExtractSymbols";
             this.BtnExtractSymbols.Size = new System.Drawing.Size(173, 23);
             this.BtnExtractSymbols.TabIndex = 51;
             this.BtnExtractSymbols.Text = "Extract Symbols";
             this.BtnExtractSymbols.UseVisualStyleBackColor = true;
             this.BtnExtractSymbols.Click += new System.EventHandler(this.BtnExtractSymbols_Click);
-            // 
-            // RichTextBoxMatchSymbols
-            // 
-            this.RichTextBoxMatchSymbols.Location = new System.Drawing.Point(500, 546);
-            this.RichTextBoxMatchSymbols.Name = "RichTextBoxMatchSymbols";
-            this.RichTextBoxMatchSymbols.Size = new System.Drawing.Size(289, 236);
-            this.RichTextBoxMatchSymbols.TabIndex = 50;
-            this.RichTextBoxMatchSymbols.Text = "";
             // 
             // BtnMatchSymbols
             // 
@@ -381,7 +358,7 @@ namespace TestClient
             // 
             // BtnMergeQuandlFile
             // 
-            this.BtnMergeQuandlFile.Location = new System.Drawing.Point(6, 619);
+            this.BtnMergeQuandlFile.Location = new System.Drawing.Point(875, 268);
             this.BtnMergeQuandlFile.Name = "BtnMergeQuandlFile";
             this.BtnMergeQuandlFile.Size = new System.Drawing.Size(173, 23);
             this.BtnMergeQuandlFile.TabIndex = 48;
@@ -391,7 +368,7 @@ namespace TestClient
             // 
             // BtnAddQuandlFile
             // 
-            this.BtnAddQuandlFile.Location = new System.Drawing.Point(6, 590);
+            this.BtnAddQuandlFile.Location = new System.Drawing.Point(875, 239);
             this.BtnAddQuandlFile.Name = "BtnAddQuandlFile";
             this.BtnAddQuandlFile.Size = new System.Drawing.Size(173, 23);
             this.BtnAddQuandlFile.TabIndex = 47;
@@ -402,7 +379,7 @@ namespace TestClient
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(190, 574);
+            this.label13.Location = new System.Drawing.Point(408, 158);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(86, 13);
             this.label13.TabIndex = 46;
@@ -411,7 +388,7 @@ namespace TestClient
             // ListViewQuandlFileMerge
             // 
             this.ListViewQuandlFileMerge.HideSelection = false;
-            this.ListViewQuandlFileMerge.Location = new System.Drawing.Point(185, 590);
+            this.ListViewQuandlFileMerge.Location = new System.Drawing.Point(372, 174);
             this.ListViewQuandlFileMerge.Name = "ListViewQuandlFileMerge";
             this.ListViewQuandlFileMerge.Size = new System.Drawing.Size(279, 238);
             this.ListViewQuandlFileMerge.TabIndex = 45;
@@ -496,7 +473,7 @@ namespace TestClient
             // ListViewAllCharts
             // 
             this.ListViewAllCharts.HideSelection = false;
-            this.ListViewAllCharts.Location = new System.Drawing.Point(261, 104);
+            this.ListViewAllCharts.Location = new System.Drawing.Point(264, 100);
             this.ListViewAllCharts.Name = "ListViewAllCharts";
             this.ListViewAllCharts.Size = new System.Drawing.Size(279, 238);
             this.ListViewAllCharts.TabIndex = 36;
@@ -504,10 +481,11 @@ namespace TestClient
             // 
             // CheckBoxChartToCurrent
             // 
+            this.CheckBoxChartToCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CheckBoxChartToCurrent.AutoSize = true;
             this.CheckBoxChartToCurrent.Checked = true;
             this.CheckBoxChartToCurrent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxChartToCurrent.Location = new System.Drawing.Point(294, 37);
+            this.CheckBoxChartToCurrent.Location = new System.Drawing.Point(47, 76);
             this.CheckBoxChartToCurrent.Name = "CheckBoxChartToCurrent";
             this.CheckBoxChartToCurrent.Size = new System.Drawing.Size(65, 17);
             this.CheckBoxChartToCurrent.TabIndex = 35;
@@ -517,11 +495,9 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnAlignCharts.Location = new System.Drawing.Point(14, 104);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(14, 332);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
-            this.BtnAlignCharts.Size = new System.Drawing.Size(230, 0);
+            this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
             this.BtnAlignCharts.Text = "Align All Charts";
             this.BtnAlignCharts.UseVisualStyleBackColor = true;
@@ -537,19 +513,21 @@ namespace TestClient
             this.BtnTestRealTimeBars.UseVisualStyleBackColor = true;
             this.BtnTestRealTimeBars.Click += new System.EventHandler(this.BtnTestRealTimeBars_Click);
             // 
-            // label3
+            // LabelBarFreq
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 13);
-            this.label3.TabIndex = 27;
-            this.label3.Text = "Bar Settings:";
+            this.LabelBarFreq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LabelBarFreq.AutoSize = true;
+            this.LabelBarFreq.Location = new System.Drawing.Point(7, 104);
+            this.LabelBarFreq.Name = "LabelBarFreq";
+            this.LabelBarFreq.Size = new System.Drawing.Size(52, 13);
+            this.LabelBarFreq.TabIndex = 27;
+            this.LabelBarFreq.Text = "Bar Freq:";
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(193, 11);
+            this.label2.Location = new System.Drawing.Point(7, 52);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 26;
@@ -558,7 +536,7 @@ namespace TestClient
             // BtmImportQuandlBlob
             // 
             this.BtmImportQuandlBlob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtmImportQuandlBlob.Location = new System.Drawing.Point(6, 771);
+            this.BtmImportQuandlBlob.Location = new System.Drawing.Point(1033, 298);
             this.BtmImportQuandlBlob.Name = "BtmImportQuandlBlob";
             this.BtmImportQuandlBlob.Size = new System.Drawing.Size(173, 57);
             this.BtmImportQuandlBlob.TabIndex = 7;
@@ -568,8 +546,9 @@ namespace TestClient
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 12);
+            this.label1.Location = new System.Drawing.Point(7, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 12;
@@ -577,9 +556,10 @@ namespace TestClient
             // 
             // DateTimePickerHistoricalDataStop
             // 
+            this.DateTimePickerHistoricalDataStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DateTimePickerHistoricalDataStop.CustomFormat = "MM/dd/yyyy HH:mm:ss";
             this.DateTimePickerHistoricalDataStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePickerHistoricalDataStop.Location = new System.Drawing.Point(230, 7);
+            this.DateTimePickerHistoricalDataStop.Location = new System.Drawing.Point(47, 49);
             this.DateTimePickerHistoricalDataStop.Name = "DateTimePickerHistoricalDataStop";
             this.DateTimePickerHistoricalDataStop.Size = new System.Drawing.Size(140, 22);
             this.DateTimePickerHistoricalDataStop.TabIndex = 7;
@@ -587,27 +567,30 @@ namespace TestClient
             // 
             // SelectHistoricalDataBarType
             // 
+            this.SelectHistoricalDataBarType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SelectHistoricalDataBarType.FormattingEnabled = true;
-            this.SelectHistoricalDataBarType.Location = new System.Drawing.Point(193, 35);
+            this.SelectHistoricalDataBarType.Location = new System.Drawing.Point(65, 128);
             this.SelectHistoricalDataBarType.Name = "SelectHistoricalDataBarType";
-            this.SelectHistoricalDataBarType.Size = new System.Drawing.Size(95, 21);
+            this.SelectHistoricalDataBarType.Size = new System.Drawing.Size(122, 21);
             this.SelectHistoricalDataBarType.TabIndex = 25;
             this.SelectHistoricalDataBarType.Text = "Trades";
             // 
             // SelectHistoricalDataBarFreq
             // 
+            this.SelectHistoricalDataBarFreq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SelectHistoricalDataBarFreq.FormattingEnabled = true;
-            this.SelectHistoricalDataBarFreq.Location = new System.Drawing.Point(92, 35);
+            this.SelectHistoricalDataBarFreq.Location = new System.Drawing.Point(65, 101);
             this.SelectHistoricalDataBarFreq.Name = "SelectHistoricalDataBarFreq";
-            this.SelectHistoricalDataBarFreq.Size = new System.Drawing.Size(95, 21);
+            this.SelectHistoricalDataBarFreq.Size = new System.Drawing.Size(122, 21);
             this.SelectHistoricalDataBarFreq.TabIndex = 22;
             this.SelectHistoricalDataBarFreq.Text = "Minute";
             // 
             // DateTimePickerHistoricalDataStart
             // 
+            this.DateTimePickerHistoricalDataStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DateTimePickerHistoricalDataStart.CustomFormat = "MM/dd/yyyy HH:mm:ss";
             this.DateTimePickerHistoricalDataStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePickerHistoricalDataStart.Location = new System.Drawing.Point(47, 7);
+            this.DateTimePickerHistoricalDataStart.Location = new System.Drawing.Point(47, 21);
             this.DateTimePickerHistoricalDataStart.Name = "DateTimePickerHistoricalDataStart";
             this.DateTimePickerHistoricalDataStart.Size = new System.Drawing.Size(140, 22);
             this.DateTimePickerHistoricalDataStart.TabIndex = 5;
@@ -646,9 +629,16 @@ namespace TestClient
             // tabDownload
             // 
             this.tabDownload.Controls.Add(this.BtnTestMassiveSample);
+            this.tabDownload.Controls.Add(this.BtnExtractSymbols);
+            this.tabDownload.Controls.Add(this.BtnDownloadMultiTables);
+            this.tabDownload.Controls.Add(this.ListViewQuandlFileMerge);
+            this.tabDownload.Controls.Add(this.BtmImportQuandlBlob);
+            this.tabDownload.Controls.Add(this.BtnMergeQuandlFile);
+            this.tabDownload.Controls.Add(this.label13);
+            this.tabDownload.Controls.Add(this.BtnAddQuandlFile);
             this.tabDownload.Location = new System.Drawing.Point(4, 22);
             this.tabDownload.Name = "tabDownload";
-            this.tabDownload.Size = new System.Drawing.Size(1552, 834);
+            this.tabDownload.Size = new System.Drawing.Size(1552, 917);
             this.tabDownload.TabIndex = 6;
             this.tabDownload.Text = "Download";
             this.tabDownload.UseVisualStyleBackColor = true;
@@ -667,6 +657,7 @@ namespace TestClient
             // 
             this.tabOrder.Controls.Add(this.label11);
             this.tabOrder.Controls.Add(this.TextBoxOrderId);
+            this.tabOrder.Controls.Add(this.TestMassOrder);
             this.tabOrder.Controls.Add(this.BtnOrderBraket);
             this.tabOrder.Controls.Add(this.label9);
             this.tabOrder.Controls.Add(this.DateTimePickerOrderDate);
@@ -690,7 +681,7 @@ namespace TestClient
             this.tabOrder.Controls.Add(this.liveOrdersGroup);
             this.tabOrder.Location = new System.Drawing.Point(4, 22);
             this.tabOrder.Name = "tabOrder";
-            this.tabOrder.Size = new System.Drawing.Size(1552, 834);
+            this.tabOrder.Size = new System.Drawing.Size(1552, 917);
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
@@ -744,7 +735,7 @@ namespace TestClient
             // CheckBoxOrderWhatIf
             // 
             this.CheckBoxOrderWhatIf.AutoSize = true;
-            this.CheckBoxOrderWhatIf.Location = new System.Drawing.Point(48, 222);
+            this.CheckBoxOrderWhatIf.Location = new System.Drawing.Point(48, 208);
             this.CheckBoxOrderWhatIf.Name = "CheckBoxOrderWhatIf";
             this.CheckBoxOrderWhatIf.Size = new System.Drawing.Size(64, 17);
             this.CheckBoxOrderWhatIf.TabIndex = 76;
@@ -851,7 +842,7 @@ namespace TestClient
             // BtnGetOpenOrders
             // 
             this.BtnGetOpenOrders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnGetOpenOrders.Location = new System.Drawing.Point(3, 597);
+            this.BtnGetOpenOrders.Location = new System.Drawing.Point(3, 680);
             this.BtnGetOpenOrders.Name = "BtnGetOpenOrders";
             this.BtnGetOpenOrders.Size = new System.Drawing.Size(162, 23);
             this.BtnGetOpenOrders.TabIndex = 10;
@@ -871,12 +862,15 @@ namespace TestClient
             // 
             // BtnOrder
             // 
-            this.BtnOrder.Location = new System.Drawing.Point(3, 250);
+            this.BtnOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnOrder.Location = new System.Drawing.Point(3, 244);
             this.BtnOrder.Name = "BtnOrder";
-            this.BtnOrder.Size = new System.Drawing.Size(162, 23);
+            this.BtnOrder.Size = new System.Drawing.Size(162, 29);
             this.BtnOrder.TabIndex = 5;
             this.BtnOrder.Text = "Order";
-            this.BtnOrder.UseVisualStyleBackColor = true;
+            this.BtnOrder.UseVisualStyleBackColor = false;
             this.BtnOrder.Click += new System.EventHandler(this.BtnOrder_Click);
             // 
             // BtnGlobalCancel
@@ -906,7 +900,7 @@ namespace TestClient
             this.liveOrdersGroup.Controls.Add(this.GridViewAllOrders);
             this.liveOrdersGroup.Location = new System.Drawing.Point(171, 3);
             this.liveOrdersGroup.Name = "liveOrdersGroup";
-            this.liveOrdersGroup.Size = new System.Drawing.Size(1378, 828);
+            this.liveOrdersGroup.Size = new System.Drawing.Size(1378, 911);
             this.liveOrdersGroup.TabIndex = 2;
             this.liveOrdersGroup.TabStop = false;
             this.liveOrdersGroup.Text = "Live Orders - double click to modify.";
@@ -922,7 +916,7 @@ namespace TestClient
             this.GridViewAllOrders.Name = "GridViewAllOrders";
             this.GridViewAllOrders.ReadOnly = true;
             this.GridViewAllOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewAllOrders.Size = new System.Drawing.Size(1366, 803);
+            this.GridViewAllOrders.Size = new System.Drawing.Size(1366, 886);
             this.GridViewAllOrders.TabIndex = 0;
             this.GridViewAllOrders.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewAllOrders_RowEnter);
             // 
@@ -937,7 +931,7 @@ namespace TestClient
             this.tabTrade.Controls.Add(this.executionsGroup);
             this.tabTrade.Location = new System.Drawing.Point(4, 22);
             this.tabTrade.Name = "tabTrade";
-            this.tabTrade.Size = new System.Drawing.Size(1552, 834);
+            this.tabTrade.Size = new System.Drawing.Size(1552, 917);
             this.tabTrade.TabIndex = 4;
             this.tabTrade.Text = "Trades";
             this.tabTrade.UseVisualStyleBackColor = true;
@@ -986,7 +980,7 @@ namespace TestClient
             this.groupBoxPositions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxPositions.Controls.Add(this.PositionsGrid);
-            this.groupBoxPositions.Location = new System.Drawing.Point(193, 534);
+            this.groupBoxPositions.Location = new System.Drawing.Point(193, 617);
             this.groupBoxPositions.Name = "groupBoxPositions";
             this.groupBoxPositions.Size = new System.Drawing.Size(1356, 297);
             this.groupBoxPositions.TabIndex = 11;
@@ -1063,7 +1057,7 @@ namespace TestClient
             this.executionsGroup.Controls.Add(this.GridViewTradeTable);
             this.executionsGroup.Location = new System.Drawing.Point(196, 0);
             this.executionsGroup.Name = "executionsGroup";
-            this.executionsGroup.Size = new System.Drawing.Size(1356, 528);
+            this.executionsGroup.Size = new System.Drawing.Size(1356, 611);
             this.executionsGroup.TabIndex = 4;
             this.executionsGroup.TabStop = false;
             this.executionsGroup.Text = "Trade Log (Executions)";
@@ -1078,7 +1072,7 @@ namespace TestClient
             this.GridViewTradeTable.Location = new System.Drawing.Point(6, 19);
             this.GridViewTradeTable.Name = "GridViewTradeTable";
             this.GridViewTradeTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewTradeTable.Size = new System.Drawing.Size(1344, 503);
+            this.GridViewTradeTable.Size = new System.Drawing.Size(1344, 586);
             this.GridViewTradeTable.TabIndex = 0;
             // 
             // tabScan
@@ -1089,7 +1083,7 @@ namespace TestClient
             this.tabScan.Controls.Add(this.BtnRequestScanner);
             this.tabScan.Location = new System.Drawing.Point(4, 22);
             this.tabScan.Name = "tabScan";
-            this.tabScan.Size = new System.Drawing.Size(1552, 834);
+            this.tabScan.Size = new System.Drawing.Size(1552, 917);
             this.tabScan.TabIndex = 5;
             this.tabScan.Text = "Scanner";
             this.tabScan.UseVisualStyleBackColor = true;
@@ -1133,7 +1127,7 @@ namespace TestClient
             this.scannerGrid.Name = "scannerGrid";
             this.scannerGrid.ReadOnly = true;
             this.scannerGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.scannerGrid.Size = new System.Drawing.Size(1543, 793);
+            this.scannerGrid.Size = new System.Drawing.Size(1543, 876);
             this.scannerGrid.TabIndex = 7;
             // 
             // scanRank
@@ -1191,7 +1185,7 @@ namespace TestClient
             this.tabMarketQuote.Controls.Add(this.GridViewMarketQuote);
             this.tabMarketQuote.Location = new System.Drawing.Point(4, 22);
             this.tabMarketQuote.Name = "tabMarketQuote";
-            this.tabMarketQuote.Size = new System.Drawing.Size(1552, 834);
+            this.tabMarketQuote.Size = new System.Drawing.Size(1552, 917);
             this.tabMarketQuote.TabIndex = 3;
             this.tabMarketQuote.Text = "Market Quote";
             this.tabMarketQuote.UseVisualStyleBackColor = true;
@@ -1238,7 +1232,7 @@ namespace TestClient
             this.GridViewMarketQuote.ReadOnly = true;
             this.GridViewMarketQuote.RowHeadersWidth = 20;
             this.GridViewMarketQuote.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewMarketQuote.Size = new System.Drawing.Size(1547, 796);
+            this.GridViewMarketQuote.Size = new System.Drawing.Size(1547, 879);
             this.GridViewMarketQuote.TabIndex = 1;
             // 
             // tabMarketDepth
@@ -1247,7 +1241,7 @@ namespace TestClient
             this.tabMarketDepth.Controls.Add(this.BtnRequestMarketDepth);
             this.tabMarketDepth.Location = new System.Drawing.Point(4, 22);
             this.tabMarketDepth.Name = "tabMarketDepth";
-            this.tabMarketDepth.Size = new System.Drawing.Size(1552, 834);
+            this.tabMarketDepth.Size = new System.Drawing.Size(1552, 917);
             this.tabMarketDepth.TabIndex = 7;
             this.tabMarketDepth.Text = "Market Depth";
             this.tabMarketDepth.UseVisualStyleBackColor = true;
@@ -1270,7 +1264,7 @@ namespace TestClient
             this.mktDepthExchangesGrid_MDT.Name = "mktDepthExchangesGrid_MDT";
             this.mktDepthExchangesGrid_MDT.ReadOnly = true;
             this.mktDepthExchangesGrid_MDT.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mktDepthExchangesGrid_MDT.Size = new System.Drawing.Size(574, 793);
+            this.mktDepthExchangesGrid_MDT.Size = new System.Drawing.Size(574, 876);
             this.mktDepthExchangesGrid_MDT.TabIndex = 6;
             // 
             // mktDepthExchangesColumn_Exchange
@@ -1322,7 +1316,7 @@ namespace TestClient
             this.tabAccount.Location = new System.Drawing.Point(4, 22);
             this.tabAccount.Name = "tabAccount";
             this.tabAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAccount.Size = new System.Drawing.Size(1552, 834);
+            this.tabAccount.Size = new System.Drawing.Size(1552, 917);
             this.tabAccount.TabIndex = 0;
             this.tabAccount.Text = "Account";
             this.tabAccount.UseVisualStyleBackColor = true;
@@ -1353,7 +1347,7 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewAccount.Location = new System.Drawing.Point(6, 35);
             this.TreeViewAccount.Name = "TreeViewAccount";
-            this.TreeViewAccount.Size = new System.Drawing.Size(516, 793);
+            this.TreeViewAccount.Size = new System.Drawing.Size(516, 876);
             this.TreeViewAccount.TabIndex = 5;
             // 
             // tabSymbols
@@ -1375,7 +1369,7 @@ namespace TestClient
             this.tabSymbols.Controls.Add(this.GridViewContractList);
             this.tabSymbols.Location = new System.Drawing.Point(4, 22);
             this.tabSymbols.Name = "tabSymbols";
-            this.tabSymbols.Size = new System.Drawing.Size(1552, 834);
+            this.tabSymbols.Size = new System.Drawing.Size(1552, 917);
             this.tabSymbols.TabIndex = 2;
             this.tabSymbols.Text = "Symbol Information";
             this.tabSymbols.UseVisualStyleBackColor = true;
@@ -1536,7 +1530,7 @@ namespace TestClient
             this.GridViewContractList.ReadOnly = true;
             this.GridViewContractList.RowHeadersWidth = 20;
             this.GridViewContractList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewContractList.Size = new System.Drawing.Size(728, 828);
+            this.GridViewContractList.Size = new System.Drawing.Size(728, 911);
             this.GridViewContractList.TabIndex = 2;
             // 
             // ListBoxAccount
@@ -1544,9 +1538,9 @@ namespace TestClient
             this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListBoxAccount.FormattingEnabled = true;
-            this.ListBoxAccount.Location = new System.Drawing.Point(966, 911);
+            this.ListBoxAccount.Location = new System.Drawing.Point(1479, 63);
             this.ListBoxAccount.Name = "ListBoxAccount";
-            this.ListBoxAccount.Size = new System.Drawing.Size(602, 43);
+            this.ListBoxAccount.Size = new System.Drawing.Size(89, 121);
             this.ListBoxAccount.TabIndex = 4;
             // 
             // ib_banner
@@ -1564,7 +1558,7 @@ namespace TestClient
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LbStatus.AutoSize = true;
-            this.LbStatus.Location = new System.Drawing.Point(385, 915);
+            this.LbStatus.Location = new System.Drawing.Point(403, 1179);
             this.LbStatus.Name = "LbStatus";
             this.LbStatus.Size = new System.Drawing.Size(42, 13);
             this.LbStatus.TabIndex = 11;
@@ -1575,7 +1569,7 @@ namespace TestClient
             this.CheckUseSmart.AutoSize = true;
             this.CheckUseSmart.Checked = true;
             this.CheckUseSmart.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckUseSmart.Location = new System.Drawing.Point(544, 15);
+            this.CheckUseSmart.Location = new System.Drawing.Point(50, 105);
             this.CheckUseSmart.Name = "CheckUseSmart";
             this.CheckUseSmart.Size = new System.Drawing.Size(74, 17);
             this.CheckUseSmart.TabIndex = 24;
@@ -1586,35 +1580,35 @@ namespace TestClient
             // 
             this.SelectExchange.Enabled = false;
             this.SelectExchange.FormattingEnabled = true;
-            this.SelectExchange.Location = new System.Drawing.Point(425, 13);
+            this.SelectExchange.Location = new System.Drawing.Point(50, 76);
             this.SelectExchange.Name = "SelectExchange";
-            this.SelectExchange.Size = new System.Drawing.Size(95, 21);
+            this.SelectExchange.Size = new System.Drawing.Size(74, 21);
             this.SelectExchange.TabIndex = 23;
             this.SelectExchange.Text = "NYSE";
             // 
             // LbExchange
             // 
             this.LbExchange.AutoSize = true;
-            this.LbExchange.Location = new System.Drawing.Point(363, 16);
+            this.LbExchange.Location = new System.Drawing.Point(7, 79);
             this.LbExchange.Name = "LbExchange";
-            this.LbExchange.Size = new System.Drawing.Size(56, 13);
+            this.LbExchange.Size = new System.Drawing.Size(37, 13);
             this.LbExchange.TabIndex = 22;
-            this.LbExchange.Text = "Exchange";
+            this.LbExchange.Text = "Exchg";
             // 
             // SelectSecurityType
             // 
             this.SelectSecurityType.Enabled = false;
             this.SelectSecurityType.FormattingEnabled = true;
-            this.SelectSecurityType.Location = new System.Drawing.Point(253, 13);
+            this.SelectSecurityType.Location = new System.Drawing.Point(50, 49);
             this.SelectSecurityType.Name = "SelectSecurityType";
-            this.SelectSecurityType.Size = new System.Drawing.Size(95, 21);
+            this.SelectSecurityType.Size = new System.Drawing.Size(74, 21);
             this.SelectSecurityType.TabIndex = 21;
             this.SelectSecurityType.Text = "STOCK";
             // 
             // LbType
             // 
             this.LbType.AutoSize = true;
-            this.LbType.Location = new System.Drawing.Point(217, 16);
+            this.LbType.Location = new System.Drawing.Point(14, 52);
             this.LbType.Name = "LbType";
             this.LbType.Size = new System.Drawing.Size(30, 13);
             this.LbType.TabIndex = 20;
@@ -1623,7 +1617,7 @@ namespace TestClient
             // LbName
             // 
             this.LbName.AutoSize = true;
-            this.LbName.Location = new System.Drawing.Point(16, 16);
+            this.LbName.Location = new System.Drawing.Point(9, 24);
             this.LbName.Name = "LbName";
             this.LbName.Size = new System.Drawing.Size(36, 13);
             this.LbName.TabIndex = 19;
@@ -1631,9 +1625,9 @@ namespace TestClient
             // 
             // TbSymbolName
             // 
-            this.TbSymbolName.Location = new System.Drawing.Point(57, 13);
+            this.TbSymbolName.Location = new System.Drawing.Point(50, 21);
             this.TbSymbolName.Name = "TbSymbolName";
-            this.TbSymbolName.Size = new System.Drawing.Size(150, 22);
+            this.TbSymbolName.Size = new System.Drawing.Size(74, 22);
             this.TbSymbolName.TabIndex = 18;
             this.TbSymbolName.Text = "SPY";
             this.TbSymbolName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
@@ -1641,16 +1635,16 @@ namespace TestClient
             // MainProgBar
             // 
             this.MainProgBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MainProgBar.Location = new System.Drawing.Point(388, 931);
+            this.MainProgBar.Location = new System.Drawing.Point(473, 1188);
             this.MainProgBar.Name = "MainProgBar";
-            this.MainProgBar.Size = new System.Drawing.Size(572, 18);
+            this.MainProgBar.Size = new System.Drawing.Size(487, 15);
             this.MainProgBar.TabIndex = 25;
             // 
             // BtnValidUSSymbol
             // 
-            this.BtnValidUSSymbol.Location = new System.Drawing.Point(624, 12);
+            this.BtnValidUSSymbol.Location = new System.Drawing.Point(6, 130);
             this.BtnValidUSSymbol.Name = "BtnValidUSSymbol";
-            this.BtnValidUSSymbol.Size = new System.Drawing.Size(80, 22);
+            this.BtnValidUSSymbol.Size = new System.Drawing.Size(118, 22);
             this.BtnValidUSSymbol.TabIndex = 63;
             this.BtnValidUSSymbol.Text = "Valid US";
             this.BtnValidUSSymbol.UseVisualStyleBackColor = true;
@@ -1658,9 +1652,9 @@ namespace TestClient
             // 
             // BtnGetContractInfo
             // 
-            this.BtnGetContractInfo.Location = new System.Drawing.Point(710, 12);
+            this.BtnGetContractInfo.Location = new System.Drawing.Point(62, 178);
             this.BtnGetContractInfo.Name = "BtnGetContractInfo";
-            this.BtnGetContractInfo.Size = new System.Drawing.Size(80, 22);
+            this.BtnGetContractInfo.Size = new System.Drawing.Size(93, 22);
             this.BtnGetContractInfo.TabIndex = 64;
             this.BtnGetContractInfo.Text = "Get Info";
             this.BtnGetContractInfo.UseVisualStyleBackColor = true;
@@ -1681,7 +1675,7 @@ namespace TestClient
             this.BtnMasterCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BtnMasterCancel.BackColor = System.Drawing.Color.DarkRed;
             this.BtnMasterCancel.ForeColor = System.Drawing.Color.White;
-            this.BtnMasterCancel.Location = new System.Drawing.Point(12, 913);
+            this.BtnMasterCancel.Location = new System.Drawing.Point(12, 1167);
             this.BtnMasterCancel.Name = "BtnMasterCancel";
             this.BtnMasterCancel.Size = new System.Drawing.Size(99, 36);
             this.BtnMasterCancel.TabIndex = 38;
@@ -1692,30 +1686,83 @@ namespace TestClient
             // TextBoxIPAddress
             // 
             this.TextBoxIPAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TextBoxIPAddress.Location = new System.Drawing.Point(212, 922);
+            this.TextBoxIPAddress.Location = new System.Drawing.Point(212, 1176);
             this.TextBoxIPAddress.Name = "TextBoxIPAddress";
             this.TextBoxIPAddress.Size = new System.Drawing.Size(150, 22);
             this.TextBoxIPAddress.TabIndex = 65;
             this.TextBoxIPAddress.Text = "192.168.18.7";
             // 
+            // GroupBoxSingleContract
+            // 
+            this.GroupBoxSingleContract.Controls.Add(this.TbSymbolName);
+            this.GroupBoxSingleContract.Controls.Add(this.LbName);
+            this.GroupBoxSingleContract.Controls.Add(this.LbType);
+            this.GroupBoxSingleContract.Controls.Add(this.SelectSecurityType);
+            this.GroupBoxSingleContract.Controls.Add(this.LbExchange);
+            this.GroupBoxSingleContract.Controls.Add(this.SelectExchange);
+            this.GroupBoxSingleContract.Controls.Add(this.CheckUseSmart);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnValidUSSymbol);
+            this.GroupBoxSingleContract.Location = new System.Drawing.Point(12, 14);
+            this.GroupBoxSingleContract.Name = "GroupBoxSingleContract";
+            this.GroupBoxSingleContract.Size = new System.Drawing.Size(251, 158);
+            this.GroupBoxSingleContract.TabIndex = 66;
+            this.GroupBoxSingleContract.TabStop = false;
+            this.GroupBoxSingleContract.Text = "Single Contract";
+            // 
+            // LabelBarType
+            // 
+            this.LabelBarType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LabelBarType.AutoSize = true;
+            this.LabelBarType.Location = new System.Drawing.Point(7, 131);
+            this.LabelBarType.Name = "LabelBarType";
+            this.LabelBarType.Size = new System.Drawing.Size(52, 13);
+            this.LabelBarType.TabIndex = 67;
+            this.LabelBarType.Text = "Bar Type:";
+            // 
+            // GroupBoxBarTableSetting
+            // 
+            this.GroupBoxBarTableSetting.Controls.Add(this.DateTimePickerHistoricalDataStart);
+            this.GroupBoxBarTableSetting.Controls.Add(this.LabelBarType);
+            this.GroupBoxBarTableSetting.Controls.Add(this.label2);
+            this.GroupBoxBarTableSetting.Controls.Add(this.DateTimePickerHistoricalDataStop);
+            this.GroupBoxBarTableSetting.Controls.Add(this.label1);
+            this.GroupBoxBarTableSetting.Controls.Add(this.SelectHistoricalDataBarFreq);
+            this.GroupBoxBarTableSetting.Controls.Add(this.SelectHistoricalDataBarType);
+            this.GroupBoxBarTableSetting.Controls.Add(this.LabelBarFreq);
+            this.GroupBoxBarTableSetting.Controls.Add(this.CheckBoxChartToCurrent);
+            this.GroupBoxBarTableSetting.Location = new System.Drawing.Point(269, 14);
+            this.GroupBoxBarTableSetting.Name = "GroupBoxBarTableSetting";
+            this.GroupBoxBarTableSetting.Size = new System.Drawing.Size(193, 158);
+            this.GroupBoxBarTableSetting.TabIndex = 68;
+            this.GroupBoxBarTableSetting.TabStop = false;
+            this.GroupBoxBarTableSetting.Text = "BarTable Setting";
+            // 
+            // GroupBoxMultiContracts
+            // 
+            this.GroupBoxMultiContracts.Controls.Add(this.TextBoxMultiContracts);
+            this.GroupBoxMultiContracts.Controls.Add(this.BtnTestSymbolsToCheck);
+            this.GroupBoxMultiContracts.Controls.Add(this.BtnFindDuplicate);
+            this.GroupBoxMultiContracts.Location = new System.Drawing.Point(508, 14);
+            this.GroupBoxMultiContracts.Name = "GroupBoxMultiContracts";
+            this.GroupBoxMultiContracts.Size = new System.Drawing.Size(774, 196);
+            this.GroupBoxMultiContracts.TabIndex = 69;
+            this.GroupBoxMultiContracts.TabStop = false;
+            this.GroupBoxMultiContracts.Text = "Multi Contracts";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1584, 961);
+            this.ClientSize = new System.Drawing.Size(1584, 1215);
+            this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
+            this.Controls.Add(this.GroupBoxMultiContracts);
+            this.Controls.Add(this.GroupBoxBarTableSetting);
+            this.Controls.Add(this.GroupBoxSingleContract);
             this.Controls.Add(this.TextBoxIPAddress);
             this.Controls.Add(this.BtnMasterCancel);
             this.Controls.Add(this.BtnGetContractInfo);
-            this.Controls.Add(this.BtnValidUSSymbol);
             this.Controls.Add(this.MainProgBar);
-            this.Controls.Add(this.CheckUseSmart);
             this.Controls.Add(this.ListBoxAccount);
-            this.Controls.Add(this.SelectExchange);
-            this.Controls.Add(this.LbExchange);
-            this.Controls.Add(this.SelectSecurityType);
-            this.Controls.Add(this.LbType);
-            this.Controls.Add(this.LbName);
-            this.Controls.Add(this.TbSymbolName);
             this.Controls.Add(this.LbStatus);
             this.Controls.Add(this.ib_banner);
             this.Controls.Add(this.MainTab);
@@ -1731,6 +1778,7 @@ namespace TestClient
             this.tabHistoricalData.ResumeLayout(false);
             this.tabHistoricalData.PerformLayout();
             this.tabDownload.ResumeLayout(false);
+            this.tabDownload.PerformLayout();
             this.tabOrder.ResumeLayout(false);
             this.tabOrder.PerformLayout();
             this.liveOrdersGroup.ResumeLayout(false);
@@ -1751,6 +1799,11 @@ namespace TestClient
             this.tabSymbols.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewContractList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).EndInit();
+            this.GroupBoxSingleContract.ResumeLayout(false);
+            this.GroupBoxSingleContract.PerformLayout();
+            this.GroupBoxBarTableSetting.ResumeLayout(false);
+            this.GroupBoxBarTableSetting.PerformLayout();
+            this.GroupBoxMultiContracts.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1790,7 +1843,7 @@ namespace TestClient
         private System.Windows.Forms.DateTimePicker DateTimePickerHistoricalDataStop;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label LabelBarFreq;
         private System.Windows.Forms.ProgressBar MainProgBar;
         private System.Windows.Forms.DataGridView PositionsGrid;
         private System.Windows.Forms.Button BtnRequestPostion;
@@ -1854,11 +1907,11 @@ namespace TestClient
         private System.Windows.Forms.Button RequestPnL;
         private System.Windows.Forms.Button BtnAlignCharts;
         private System.Windows.Forms.CheckBox CheckBoxChartToCurrent;
-        private System.Windows.Forms.RichTextBox TextBoxSymbols;
+        private System.Windows.Forms.RichTextBox TextBoxMultiContracts;
         private System.Windows.Forms.ListView ListViewAllCharts;
         private System.Windows.Forms.Button BtnCloseChart;
         private System.Windows.Forms.Button BtnMasterCancel;
-        private System.Windows.Forms.Button BtnDownloadTables;
+        private System.Windows.Forms.Button BtnDownloadMultiTables;
         private System.Windows.Forms.ProgressBar DownloadBarTableDetialedProgressBar;
         private System.Windows.Forms.Button BtnTestScalping;
         private System.Windows.Forms.TextBox TextBoxIPAddress;
@@ -1895,10 +1948,13 @@ namespace TestClient
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ListView ListViewQuandlFileMerge;
         private System.Windows.Forms.Button BtnMergeQuandlFile;
-        private System.Windows.Forms.RichTextBox RichTextBoxMatchSymbols;
         private System.Windows.Forms.Button BtnMatchSymbols;
         private System.Windows.Forms.Button BtnExtractSymbols;
         private System.Windows.Forms.Button BtnFindDuplicate;
         private System.Windows.Forms.Button BtnTestSymbolsToCheck;
+        private System.Windows.Forms.GroupBox GroupBoxSingleContract;
+        private System.Windows.Forms.Label LabelBarType;
+        private System.Windows.Forms.GroupBox GroupBoxBarTableSetting;
+        private System.Windows.Forms.GroupBox GroupBoxMultiContracts;
     }
 }

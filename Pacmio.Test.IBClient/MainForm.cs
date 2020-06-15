@@ -752,9 +752,9 @@ namespace TestClient
             DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
-            string symbolText = TextBoxSymbols.Text;
+            string symbolText = TextBoxMultiContracts.Text;
             DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
-            TextBoxSymbols.Text = symbolText;
+            TextBoxMultiContracts.Text = symbolText;
 
             DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
             DownloadBarTable.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
@@ -767,9 +767,9 @@ namespace TestClient
 
         private void BtnTestSymbolsToCheck_Click(object sender, EventArgs e)
         {
-            string symbolText = TextBoxSymbols.Text;
+            string symbolText = TextBoxMultiContracts.Text;
             var SymbolList = ContractTools.GetSymbolList(ref symbolText);
-            TextBoxSymbols.Text = symbolText;
+            TextBoxMultiContracts.Text = symbolText;
             Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
             var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
 
