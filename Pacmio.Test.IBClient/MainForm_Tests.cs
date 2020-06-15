@@ -25,23 +25,23 @@ namespace TestClient
 
         public bool ValidateSymbol()
         {
-            string symbol = TbSymbolName.Text.ToUpper();
+            string symbol = TextBoxSingleContractName.Text.ToUpper();
             var siList = ContractList.GetOrFetch(symbol, "US");
 
             if (siList.Count() > 0)
             {
                 ContractTest.ActiveContract = siList.First();
-                TbSymbolName.Text = ContractTest.ActiveContract.Name;
-                TbSymbolName.ForeColor = Color.Green;
-                SelectSecurityType.Text = ContractTest.ActiveContract.TypeName.ToString();
-                SelectExchange.Text = ContractTest.ActiveContract.Exchange.ToString();
+                TextBoxSingleContractName.Text = ContractTest.ActiveContract.Name;
+                TextBoxSingleContractName.ForeColor = Color.Green;
+                SelectBoxSingleContractSecurityType.Text = ContractTest.ActiveContract.TypeName.ToString();
+                SelectBoxSingleContractExchange.Text = ContractTest.ActiveContract.Exchange.ToString();
                 return true;
             }
             else
             {
-                TbSymbolName.ForeColor = Color.Red;
-                SelectSecurityType.Text = string.Empty;
-                SelectExchange.Text = string.Empty;
+                TextBoxSingleContractName.ForeColor = Color.Red;
+                SelectBoxSingleContractSecurityType.Text = string.Empty;
+                SelectBoxSingleContractExchange.Text = string.Empty;
                 return false;
             }
         }

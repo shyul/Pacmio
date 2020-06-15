@@ -53,7 +53,7 @@ namespace TestClient
                 DownloadBarTableDetialedProgressBar.Value = val;
             });
 
-            SelectExchange.Items.Add<Exchange>();
+            SelectBoxSingleContractExchange.Items.Add<Exchange>();
             //SelectSecurityType.Items.Add<ContractType>();
             SelectHistoricalDataBarFreq.Items.Add<BarFreq>();
             SelectHistoricalDataBarType.Items.Add<BarType>();
@@ -109,14 +109,14 @@ namespace TestClient
 
         #region Symbols
 
-        private void TbSymbolName_TextChanged(object sender, EventArgs e) => TbSymbolName.ForeColor = Color.Orange;
+        private void TbSymbolName_TextChanged(object sender, EventArgs e) => TextBoxSingleContractName.ForeColor = Color.Orange;
         private void BtnValidUSSymbol_Click(object sender, EventArgs e)
         {
             ValidateSymbol();
         }
         private void BtnGetContractInfo_Click(object sender, EventArgs e)
         {
-            string symbol = TbSymbolName.Text.ToUpper();
+            string symbol = TextBoxSingleContractName.Text.ToUpper();
             ContractList.GetOrFetch(symbol, "US");
         }
 
