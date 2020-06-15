@@ -141,9 +141,7 @@ namespace Pacmio
         public static int MinimumTagPeakProminence { get; set; } = 5;
 
         public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
-        public static readonly ObjectColumn Column_PeakTags = new ObjectColumn("PEAKTAG", typeof(TagInfo));
-
-        public static readonly ObjectColumn Column_CandleStickTypes = new ObjectColumn("CandleStickTypes", typeof(List<CandleStickType>));
+        public static readonly TagColumn Column_PeakTags = new TagColumn("PEAKTAG", "PEAK");
 
         #endregion Data
 
@@ -542,7 +540,7 @@ namespace Pacmio
                                         {
                                             bt.SetCalculationPointer(bt.LatestCalculatePointer - 3); // This is to set the analysis pointer at least 2 Bars behind.
                                             bt.CalculateOnly();
-
+                                            /*
                                             if (ObsoleteStrategyMaster.Enabled)
                                             {
                                                 Contract c = bt.Contract;
@@ -553,44 +551,13 @@ namespace Pacmio
                                                         s.RunLiveTrade(c);
                                                     }
                                                 }
-                                            }
+                                            }*/
 
                                             bt.RefreshChartNextTick();
                                         }
                                     }
                                 });
                             });
-
-                            /*
-                            foreach (BarTable bt in listTickAdd)
-                            {
-                                bt.AddPriceTick(mt.Time, mt.Price, mt.Size);
-                                if (bt.ReadyForTickCalculation)
-                                {
-                                    Task.Run(() =>
-                                    {
-                                        lock (bt)
-                                        {
-                                            bt.SetCalculationPointer(bt.LatestCalculatePointer - 3); // This is to set the analysis pointer at least 2 Bars behind.
-                                            bt.CalculateOnly();
-
-                                            if (StrategyMaster.Enabled)
-                                            {
-                                                Contract c = bt.Contract;
-                                                if (StrategyMaster.TradeContract.ContainsKey(c))
-                                                {
-                                                    foreach (Strategy s in StrategyMaster.TradeContract[c])
-                                                    {
-                                                        s.RunLiveTrade(c);
-                                                    }
-                                                }
-                                            }
-
-                                            bt.RefreshChartNextTick();
-                                        }
-                                    });
-                                }
-                            }*/
 
                             break;
 

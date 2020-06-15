@@ -32,7 +32,7 @@ namespace Pacmio
             // Configure Price series by assigning the chart type
             // ===================================================
             AddSeries(PriceSeries = new OhlcSeries(TableList.Column_Open, TableList.Column_High, TableList.Column_Low, TableList.Column_Close, 
-                TableList.Column_Percent, TableList.Column_CandleStickTypes)
+                TableList.Column_Percent)
             {
                 Order = int.MaxValue,
                 Importance = Importance.Huge,

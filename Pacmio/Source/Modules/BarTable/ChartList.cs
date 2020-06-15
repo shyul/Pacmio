@@ -110,11 +110,11 @@ namespace Pacmio
             var volumeEma = new EMA(TableList.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };
             volumeEma.LineSeries.Side = AlignType.Left;
 
-            var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });
+            //var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });
             var mfi = new MFI(14) { Order = 99 };
             var rsi = new RSI(14);
             //var divergence = new Divergence(rsi);
-            var indicator_reference_cross = new ConstantData(rsi, new Range<double>(49, 51));
+            //var indicator_reference_cross = new ConstantData(rsi, new Range<double>(49, 51));
 
             //var boll = new Bollinger(20, 2.0);
             List<BarAnalysis> barAnalyses = new List<BarAnalysis>
@@ -151,7 +151,7 @@ namespace Pacmio
                 new PSAR(0.02, 0.2),
                 new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.HotPink },
                 //new Pivot(BarFreq.Daily),
-                ema5_smma5_cross,
+                //ema5_smma5_cross,
                 //divergence
                 mfi,
                 rsi,
@@ -159,8 +159,8 @@ namespace Pacmio
                 //new ADX(14) { Order = 100, HasXAxisBar = true },
 
 
-                indicator_reference_cross,
-                new CandleStick(),
+                //indicator_reference_cross,
+                //new CandleStick(),
             };
             return barAnalyses;
         }

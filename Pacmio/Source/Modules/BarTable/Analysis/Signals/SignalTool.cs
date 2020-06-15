@@ -11,21 +11,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
     public static class SignalTool
     {
-        #region Singal Data
-
-        public static int SingalDataSignal(this BarTable bt, int i, NumericColumn column, int maxTestCount) 
-        {
-            return 0;
-        }
-
-        #endregion Singal Data
-
         #region Constant Data
 
         public static ConstantDataType ConstantDataSignal(this BarTable bt, int i, ISingleData analysis, double constant)
@@ -224,9 +214,9 @@ namespace Pacmio
 
         #region Divergence
 
-        public static void Divergence(this BarTable bt, int i, int minimumPeakMargin) 
+        public static void Divergence(this BarTable bt, int i, int minimumPeakMargin)
         {
-        
+
         }
 
 
@@ -235,23 +225,4 @@ namespace Pacmio
 
 
     }
-
-    public struct DivergenceInfo 
-    {
-        public DivergenceType Type { get; }
-
-        public (int index, double peak, double value, double indicator_value) Point1 { get; set; } 
-
-        public (int index, double peak, double value, double indicator_value) Point2 { get; set; } 
-
-
-        public override bool Equals(object obj) => false;
-
-        public override int GetHashCode() => Type.GetHashCode();
-
-        public static bool operator ==(DivergenceInfo left, DivergenceInfo right) => false;
-
-        public static bool operator !=(DivergenceInfo left, DivergenceInfo right) => true;
-    }
-
 }

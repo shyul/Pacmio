@@ -25,7 +25,7 @@ namespace TestClient
 
             OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
 
-            ContractTest.InitializeTable(GridViewContractList);
+            ContractTest.InitializeTable(GridViewContractSearchResult);
             MarketDataTest.InitializeTable(GridViewMarketQuote);
             OrderTest.InitializeTable(GridViewAllOrders);
             TradeTest.InitializeTable(GridViewTradeTable);
@@ -294,34 +294,12 @@ namespace TestClient
 
         private void BtnTestScalping_Click(object sender, EventArgs e)
         {
-            ObsoleteStrategyMaster.SimulatePeriod = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-             new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
-
-            BarFreq barFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
-            ObsoleteScalping scp = new ObsoleteScalping()
-            {
-                PrimaryBarFreq = barFreq,
-                LiveTradeAccount = OrderTest.LiveAccount
-            };
-
-            scp.PrimaryBarFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
-
-            ObsoleteStrategyMaster.WatchList.Add(scp, new List<Contract>()); ;
-            ObsoleteStrategyMaster.BuildList();
-            /*
-            foreach (var bcf in BarChartManager.List.Values)
-                ChartTest.Ctf.AddForm(DockStyle.Fill, 0, bcf);
-                
-            ChartTest.Ctf.Show();*/
             Root.Form.Show();
         }
 
         private void BtnRunAllSimulation_Click(object sender, EventArgs e)
         {
-            ObsoleteStrategyMaster.SimulatePeriod = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
-            ObsoleteStrategyMaster.Simulate(TextBoxRunAllSimulationInitialAccountValue.Text.ToDouble(0));
         }
 
         private void BtnRequestHistoricalTicks_Click(object sender, EventArgs e)
@@ -527,17 +505,7 @@ namespace TestClient
 
         private void BtnArmLiveTrade_Click(object sender, EventArgs e)
         {
-            if (ObsoleteStrategyMaster.Enabled) ObsoleteStrategyMaster.Enabled = false;
-            else ObsoleteStrategyMaster.Enabled = true;
 
-            if (ObsoleteStrategyMaster.Enabled)
-            {
-                BtnArmLiveTrade.BackColor = Color.Green;
-            }
-            else
-            {
-                BtnArmLiveTrade.BackColor = Color.Red;
-            }
         }
 
         private void BtnExportExecTradeLog_Click(object sender, EventArgs e)

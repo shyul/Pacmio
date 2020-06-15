@@ -105,42 +105,24 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Datums\SupportResistancePatternDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalTool.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\ConstantDataType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DivergenceType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualDataType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IOscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPatternAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPatternDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Datums\PivotPatternDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\ConstantData.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\CandleStickSignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\ConstantSignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\DivergenceSignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Divergence.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\ConstantDataType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\DivergenceType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\DualDataType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Datums\DualDataSignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Types\ISignalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\SupportResistance.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Pivot.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\CandleStick.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\DualData.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineInfo.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternInfo.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Obsolete\Types\ISignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\Contract\ContractTools.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
-    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteBarAnalysisStack.cs" />
     <Compile Include="Source\Modules\BarTable\TableList.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
@@ -153,14 +135,11 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Strategy\Obsolete\Types\ObsoleteScalping.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\TradeLogManager.cs" />
     <Compile Include="Source\Modules\Trade\Types\PositionStatus.cs" />
     <Compile Include="Source\Modules\Trade\Account\SimulationAccount.cs" />
-    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteStrategyMaster.cs" />
-    <Compile Include="Source\Modules\Strategy\Obsolete\ObsoleteStrategy.cs" />
     <Compile Include="Source\Modules\Trade\Types\LiquidityType.cs" />
     <Compile Include="Source\Modules\Trade\Types\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
@@ -310,6 +289,8 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Modules\BarTable\Analysis\Patterns\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

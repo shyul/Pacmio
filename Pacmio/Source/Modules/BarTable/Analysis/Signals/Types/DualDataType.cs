@@ -4,18 +4,24 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Xu;
-using Xu.Chart;
-
 namespace Pacmio
 {
-    public interface IPatternDatum
+    public enum DualDataType : int
     {
-        //string Name { get; }
+        Above,
 
-        List<TrendLineInfo> TrendLines { get; }
+        Below,
+
+        Expansion,
+
+        Contraction,
+
+        CrossUp,
+
+        CrossDown,
+
+        TrendUp,
+
+        TrendDown,
     }
 }

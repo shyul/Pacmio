@@ -14,26 +14,8 @@ namespace Pacmio
 {
     public class SignalDatum
     {
-        /// <summary>
-        /// The Name of the signal, used as identifier for different signal types
-        /// </summary>
-        public string Name { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        public double Score => ScoreList[ScorePt];
-
-        /// <summary>
-        /// Score with lasting effect
-        /// </summary>
-        public List<double> ScoreList { get; } = new List<double>();
-
-        public int ScorePt { get; set; } = 0;
-
-        #region Graphics Properties
-
-        public Color Color { get; set; }
-
-        // Custom Graphics Shapes can be drawn from here.
-
-        #endregion Graphics Properties
+        public double[] Scores { get; set; }
     }
 }

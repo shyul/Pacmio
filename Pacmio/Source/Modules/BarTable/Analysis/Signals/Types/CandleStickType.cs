@@ -4,18 +4,10 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Xu;
-using Xu.Chart;
-
 namespace Pacmio
 {
-    public interface ISignalDatum
+    /*
+    public class CandleStickType
     {
-        double BullishScore { get; set; }
-
-        double BearishScore { get; set; }
-    }
+    }*/
 }

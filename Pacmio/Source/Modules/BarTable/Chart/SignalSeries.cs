@@ -37,14 +37,9 @@ namespace Pacmio
             ContinuousAxis axisY = area.AxisY(Side);
             for (int i = area.StartPt; i < area.StopPt; i++)
             {
-                if (i >= table.Count)
-                    break;
-                else if (i >= 0)
-                {
-                    axisY.Range.Insert(Table[i].BullishScore);
-                    axisY.Range.Insert(-Table[i].BearishScore);
-                }
-
+                var (bullish, bearish) = Table.SignalScore(i);
+                axisY.Range.Insert(bullish);
+                axisY.Range.Insert(bearish);
             }
             axisY.Range.Insert(0);
         }
@@ -77,7 +72,7 @@ namespace Pacmio
                 {
                     int x = area.IndexToPixel(pt) - (tickWidth / 2);
                     int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
-                    
+                    /*
                     foreach (ISignalAnalysis ca in Table.SignalAnalyses)
                     {
                         if(Table[i][ca.Signal_Column] is ISignalDatum data) 
@@ -103,7 +98,7 @@ namespace Pacmio
                                 g.DrawRectangle(ca.BearishTheme.EdgePen, rect);
                             }
                         }
-                    }
+                    }*/
                 }
                 pt++;
             }

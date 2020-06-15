@@ -172,7 +172,7 @@ namespace Pacmio
             }
         }
 
-        public object this[int i, ObjectColumn column]
+        public TagInfo this[int i, TagColumn column]
         {
             get
             {
@@ -182,6 +182,45 @@ namespace Pacmio
                     return Rows[i][column];
             }
         }
+
+        public (string description, double score) this[int i, SignalColumn column]
+        {
+            get
+            {
+                string description = string.Empty;
+                double score = 0;
+
+                for (int j = 0; j < column.MaxEffectLength; j++)
+                {
+                    int k = i - j;
+                    if (k >= 0 && k < Count)
+                    {
+                        var sd = Rows[k][column];
+                        if (sd is SignalDatum sdd)
+                        {
+                            if (string.IsNullOrEmpty(description)) description = sdd.Description;
+                            score += sdd.Scores[j];
+                        }
+                    }
+                }
+
+                return (description, score);
+            }
+        }
+
+        public (double bullish, double bearish) SignalScore(int i)
+        {
+            double bull = 0, bear = 0;
+            foreach (SignalColumn sc in SignalColumns)
+            {
+                var (_, score) = this[i, sc];
+                if (score > 0) bull += score;
+                else if (score < 0) bear += score;
+            }
+            return (bull, bear);
+        }
+
+        public readonly List<SignalColumn> SignalColumns = new List<SignalColumn>();
 
         /// <summary>
         /// Returns if the BarTable is has no Bars.
@@ -586,9 +625,7 @@ namespace Pacmio
             // Need to figure out a way to clean up bars.
         }
 
-        public bool HasSignalAnalysis => BarAnalysisPointerList.Keys.Where(n => n is ISignalAnalysis).Count() > 0;
 
-        public IEnumerable<ISignalAnalysis> SignalAnalyses => BarAnalysisPointerList.Keys.Where(n => n is ISignalAnalysis).Select(n => (ISignalAnalysis)n);
 
         public IEnumerable<(IChartOverlay, BarAnalysisPointer)> IChartOverlays => BarAnalysisPointerList.Keys.Where(n => n is IChartOverlay).Select(n => ((IChartOverlay)n, BarAnalysisPointerList[n]));
 
@@ -780,42 +817,23 @@ namespace Pacmio
 
                 b.Peak = peak_result;
 
+                if (peak_result > TableList.MinimumTagPeakProminence)
+                {
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, ChartList.Upper_TextTheme);
+                }
+                else if (peak_result < -TableList.MinimumTagPeakProminence)
+                {
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, ChartList.Lower_TextTheme);
+                }
+
                 b.TrendStrength = trend_1 = trend;
                 high_1 = high;
                 low_1 = low;
                 close_1 = close;
             }
-
-            for (int i = Gain_StartPt; i < Gain_StopPt; i++)
-            {
-                Bar b = this[i];
-                double peak_result = b.Peak;
-                double close = b.Close;
-
-                if (peak_result > TableList.MinimumTagPeakProminence)
-                {
-                    //Console.WriteLine("Add + peak: " + peak_result);
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, ChartList.Upper_TextTheme);
-                }
-                else if (peak_result < -TableList.MinimumTagPeakProminence)
-                {
-                    //Console.WriteLine("Add - peak: " + peak_result);
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, ChartList.Lower_TextTheme);
-                }
-            }
         }
 
         #endregion Data/Bar Analysis (TA) Calculation
-
-        #region Trend Lines
-
-        public readonly List<TrendLineInfo> CurrentTrendLines = new List<TrendLineInfo>();
-
-        public readonly List<SignalDatum> CurrentSignal = new List<SignalDatum>();
-
-        //public 
-
-        #endregion Trend Lines
 
         public bool ReadyForTickCalculation { get; set; } = false;
 

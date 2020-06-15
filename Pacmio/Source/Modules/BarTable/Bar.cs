@@ -17,6 +17,7 @@ using System.Text;
 using Xu;
 using Xu.Chart;
 using System.Security.Permissions;
+using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -313,20 +314,20 @@ namespace Pacmio
 
         #endregion Numeric Column
 
-        #region Object Column
+        #region Tag Column
 
-        private readonly Dictionary<ObjectColumn, object> ObjectDatums = new Dictionary<ObjectColumn, object>();
+        private readonly Dictionary<TagColumn, TagInfo> TagDatums = new Dictionary<TagColumn, TagInfo>();
 
-        public object this[ObjectColumn column]
+        public TagInfo this[TagColumn column]
         {
             get
             {
                 return column switch
                 {
-                    ObjectColumn oc when oc == TableList.Column_PeakTags => PeakTag,
-                    ObjectColumn oc when oc == TableList.Column_CandleStickTypes => CandleStickTypes,
+                    TagColumn oc when oc == TableList.Column_PeakTags => PeakTag,
+                    //TagColumn oc when oc == TableList.Column_CandleStickTypes => CandleStickTypes,
 
-                    ObjectColumn oc when ObjectDatums.ContainsKey(oc) => ObjectDatums[column],
+                    TagColumn oc when TagDatums.ContainsKey(oc) => TagDatums[column],
                     _ => null,
                 };
             }
@@ -336,71 +337,42 @@ namespace Pacmio
                 {
                     switch (column)
                     {
-                        case ObjectColumn oc when oc == TableList.Column_PeakTags: PeakTag = (TagInfo)value; break;
-                        case ObjectColumn oc when oc == TableList.Column_CandleStickTypes: break;
+                        case TagColumn oc when oc == TableList.Column_PeakTags: PeakTag = (TagInfo)value; break;
+                        //case TagColumn oc when oc == TableList.Column_CandleStickTypes: break;
 
                         default:
-                            if (!ObjectDatums.ContainsKey(column))
-                                ObjectDatums.Add(column, value);
+                            if (!TagDatums.ContainsKey(column))
+                                TagDatums.Add(column, value);
                             else
-                                ObjectDatums[column] = value;
+                                TagDatums[column] = value;
                             break;
                     }
                 }
             }
         }
 
-        public double BullishScore => ObjectDatums.Values.Where(n => n is ISignalDatum).Select(n => ((ISignalDatum)n).BullishScore).Sum();
+        #endregion Tag Column
 
-        public double BearishScore => ObjectDatums.Values.Where(n => n is ISignalDatum).Select(n => ((ISignalDatum)n).BearishScore).Sum();
+        #region Signal Score
 
-        #endregion Object Column
+        private readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        public bool RemoveAnalysisDatum(BarAnalysis da)
+        public SignalDatum this[SignalColumn column]
         {
-            return da switch
+            get
             {
-                NumericAnalysis dc => NumericDatums.Remove(dc),
-                ConditionAnalysis dsc => ConditionDatums.Remove(dsc),
-                PatternAnalysis pa => PatternDatums.Remove(pa),
-                _ => false,
-            };
+                if (SignalDatums.ContainsKey(column)) return SignalDatums[column];
+                else return null;
+            }
+            set
+            {
+                if (!SignalDatums.ContainsKey(column))
+                    SignalDatums.Add(column, value);
+                else
+                    SignalDatums[column] = value;
+            }
         }
 
-        public void CleanUp()
-        {
-            foreach (NumericAnalysis dc in NumericDatums.Keys)
-            {
-                if (!Table.Contains(dc)) NumericDatums.Remove(dc);
-            }
-
-            foreach (ConditionAnalysis dsc in ConditionDatums.Keys)
-            {
-                if (!Table.Contains(dsc)) ConditionDatums.Remove(dsc);
-            }
-
-            foreach (PatternAnalysis pa in PatternDatums.Keys)
-            {
-                if (!Table.Contains(pa)) PatternDatums.Remove(pa);
-            }
-        }*/
+        #endregion Signal Score
     }
 }
