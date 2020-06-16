@@ -74,6 +74,9 @@ namespace TestClient
 
                     lock (AccountManager.List)
                     {
+
+
+
                         PositionsGrid.Rows.Clear();
                         int i = 0;
                         foreach (InteractiveBrokersAccount ac in AccountManager.List)

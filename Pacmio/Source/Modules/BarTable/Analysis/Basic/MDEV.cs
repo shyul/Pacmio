@@ -22,9 +22,9 @@ namespace Pacmio
             Interval = sma.Interval;
             Column = column;
 
-            string label = (Column is null) ? "(error)" : ((Column == TableList.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
+            string label = (Column is null) ? "(error)" : ((Column == BarTable.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
             Name = GetType().Name + label;
-            GroupName = (Column == TableList.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+            GroupName = (Column == BarTable.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
             Result_Column = new NumericColumn(Name) { Label = label };
 

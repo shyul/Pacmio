@@ -25,8 +25,8 @@ namespace Pacmio
             AreaName = GroupName = GetType().Name;
             Description = "Commodity Channel Index " + label;
 
-            SMA_TP = new SMA(TableList.Column_Typical, interval);
-            MDEV_TP = new MDEV(TableList.Column_Typical, SMA_TP);
+            SMA_TP = new SMA(BarTable.Column_Typical, interval);
+            MDEV_TP = new MDEV(BarTable.Column_Typical, SMA_TP);
 
             SMA_TP.AddChild(MDEV_TP);
             MDEV_TP.AddChild(this);

@@ -1,0 +1,23 @@
+﻿/// ***************************************************************************
+/// Pacmio Research Enivironment
+/// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
+/// 
+/// ***************************************************************************
+
+using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Drawing;
+using Xu;
+using System.Linq;
+
+namespace Pacmio
+{
+    public class ContractColumn : Column
+    {
+
+
+
+    }
+}

@@ -588,8 +588,26 @@ namespace Pacmio
 
         #region Data/Bar Analysis (TA) Calculation
 
-        private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN") { Label = "O" };
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH") { Label = "H" };
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW") { Label = "L" };
+        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE") { Label = "C" };
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
 
+        public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
+        public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
+        public static readonly NumericColumn Column_Gap = new NumericColumn("GAP");
+        public static readonly NumericColumn Column_GapPercent = new NumericColumn("GAPPERCENT");
+        public static readonly NumericColumn Column_TrueRange = new NumericColumn("TRUERANGE");
+        public static readonly NumericColumn Column_Typical = new NumericColumn("TYPICAL");
+
+        public static readonly NumericColumn Column_TrendStrength = new NumericColumn("TREND");
+        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PROFIT") { Label = "PCHG" };
+
+        public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
+        public static readonly TagColumn Column_PeakTags = new TagColumn("PEAKTAG", "PEAK");
+
+        private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
 
         private readonly List<BarAnalysis> BarAnalysisToAddList = new List<BarAnalysis>();
         private void SetBarAnalysisParents(BarAnalysis ba)
@@ -647,7 +665,7 @@ namespace Pacmio
         {
             if (pt < 0) pt = 0;
 
-            Gain_StartPt = 0;
+            BasicData_StartPt = 0;
 
             foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
                 if (bap.StartPt > pt) bap.StartPt = pt;
@@ -673,12 +691,12 @@ namespace Pacmio
             Console.WriteLine("Table: " + Name + " | Count: " + Count);
             DateTime total_time = DateTime.Now;
 
-            int startPt = Gain_StopPt = Count;
+            int startPt = BasicData_StopPt = Count;
             if (Count > 0)
             {
-                if (Gain_StartPt < 0) Gain_StartPt = 0;
-                Gain_Calculate();
-                Gain_StartPt = Gain_StopPt;
+                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
+                BasicData_Calculate();
+                BasicData_StartPt = BasicData_StopPt;
 
                 foreach (BarAnalysis ba in BarAnalysisPointerList.Keys)
                 {
@@ -700,29 +718,31 @@ namespace Pacmio
             Console.WriteLine("==================\n");
         }
 
+        #region Basic Data
+
         /// <summary>
         /// Valid data start pointer
         /// </summary>
-        private int Gain_StartPt { get; set; } = 0;
+        private int BasicData_StartPt { get; set; } = 0;
 
         /// <summary>
         /// Pointer for calculated data end
         /// </summary>
-        private int Gain_StopPt { get; set; } = 0;
+        private int BasicData_StopPt { get; set; } = 0;
 
-        private void Gain_Calculate()
+        private void BasicData_Calculate()
         {
             double high_1, low_1, close_1, trend_1;
 
-            int min_peak_start = Gain_StopPt - TableList.MaximumPeakProminence * 2 - 1;
-            if (Gain_StartPt > min_peak_start) Gain_StartPt = min_peak_start;
+            int min_peak_start = BasicData_StopPt - MaximumPeakProminence * 2 - 1;
+            if (BasicData_StartPt > min_peak_start) BasicData_StartPt = min_peak_start;
 
             //if (Gain_StartPt < 0) return;
 
             // Define the bondary condition
-            if (Gain_StartPt < 1)
+            if (BasicData_StartPt < 1)
             {
-                if (Gain_StartPt < 0) Gain_StartPt = 0;
+                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
                 //open_1 = this[0].Open;
                 high_1 = this[0].High;
                 low_1 = this[0].Low;
@@ -731,7 +751,7 @@ namespace Pacmio
             }
             else
             {
-                Bar b_1 = this[Gain_StartPt - 1];
+                Bar b_1 = this[BasicData_StartPt - 1];
                 //open_1 = b_1.Open;
                 high_1 = b_1.High;
                 low_1 = b_1.Low;
@@ -739,7 +759,7 @@ namespace Pacmio
                 trend_1 = b_1.TrendStrength;
             }
 
-            for (int i = Gain_StartPt; i < Gain_StopPt; i++)
+            for (int i = BasicData_StartPt; i < BasicData_StopPt; i++)
             {
                 Bar b = this[i];
 
@@ -775,12 +795,12 @@ namespace Pacmio
                 int j = 1;
                 bool test_high = true, test_low = true;
 
-                while (j < TableList.MaximumPeakProminence)
+                while (j < MaximumPeakProminence)
                 {
                     if ((!test_high) && (!test_low)) break;
 
                     int right_index = i + j;
-                    if (right_index >= Gain_StopPt) break; // right_index = Gain_StopPt - 1;
+                    if (right_index >= BasicData_StopPt) break; // right_index = Gain_StopPt - 1;
 
                     int left_index = i - j;
                     if (left_index < 0) break; // left_index = 0;
@@ -819,11 +839,11 @@ namespace Pacmio
 
                 b.Peak = peak_result;
 
-                if (peak_result > TableList.MinimumTagPeakProminence)
+                if (peak_result > MinimumTagPeakProminence)
                 {
                     b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, ChartList.Upper_TextTheme);
                 }
-                else if (peak_result < -TableList.MinimumTagPeakProminence)
+                else if (peak_result < -MinimumTagPeakProminence)
                 {
                     b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, ChartList.Lower_TextTheme);
                 }
@@ -834,6 +854,27 @@ namespace Pacmio
                 close_1 = close;
             }
         }
+
+        public int MaximumPeakProminence
+        {
+            get
+            {
+                return m_MaximumPeakProminence;
+            }
+            set
+            {
+                if (m_MaximumPeakProminence != value)
+                {
+                    ResetCalculationPointer();
+                    m_MaximumPeakProminence = value;
+                }
+            }
+        }
+        private int m_MaximumPeakProminence = 100;
+
+        public int MinimumTagPeakProminence { get; set; } = 5;
+
+        #endregion Basic Data
 
         #endregion Data/Bar Analysis (TA) Calculation
 

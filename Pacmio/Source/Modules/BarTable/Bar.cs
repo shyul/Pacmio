@@ -260,22 +260,22 @@ namespace Pacmio
             {
                 return column switch
                 {
-                    NumericColumn dc when dc == TableList.Column_Open => Open,
-                    NumericColumn dc when dc == TableList.Column_High => High,
-                    NumericColumn dc when dc == TableList.Column_Low => Low,
-                    NumericColumn dc when dc == TableList.Column_Close => Close,
-                    NumericColumn dc when dc == TableList.Column_Volume => Volume,
+                    NumericColumn dc when dc == BarTable.Column_Open => Open,
+                    NumericColumn dc when dc == BarTable.Column_High => High,
+                    NumericColumn dc when dc == BarTable.Column_Low => Low,
+                    NumericColumn dc when dc == BarTable.Column_Close => Close,
+                    NumericColumn dc when dc == BarTable.Column_Volume => Volume,
 
-                    NumericColumn dc when dc == TableList.Column_Gain => Gain,
-                    NumericColumn dc when dc == TableList.Column_Percent => Percent,
-                    NumericColumn dc when dc == TableList.Column_Gap => Gap,
-                    NumericColumn dc when dc == TableList.Column_GapPercent => GapPercent,
-                    NumericColumn dc when dc == TableList.Column_TrueRange => TrueRange,
-                    NumericColumn dc when dc == TableList.Column_Typical => Typical,
-                    NumericColumn dc when dc == TableList.Column_Peak => Peak,
-                    NumericColumn dc when dc == TableList.Column_TrendStrength => TrendStrength,
+                    NumericColumn dc when dc == BarTable.Column_Gain => Gain,
+                    NumericColumn dc when dc == BarTable.Column_Percent => Percent,
+                    NumericColumn dc when dc == BarTable.Column_Gap => Gap,
+                    NumericColumn dc when dc == BarTable.Column_GapPercent => GapPercent,
+                    NumericColumn dc when dc == BarTable.Column_TrueRange => TrueRange,
+                    NumericColumn dc when dc == BarTable.Column_Typical => Typical,
+                    NumericColumn dc when dc == BarTable.Column_Peak => Peak,
+                    NumericColumn dc when dc == BarTable.Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == TableList.Column_ProfitChange => ProfitChangePercent,
+                    NumericColumn dc when dc == BarTable.Column_ProfitChange => ProfitChangePercent,
 
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
                     _ => double.NaN,
@@ -285,22 +285,22 @@ namespace Pacmio
             {
                 switch (column)
                 {
-                    case NumericColumn dc when dc == TableList.Column_Open: Open = value; break;
-                    case NumericColumn dc when dc == TableList.Column_High: High = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Low: Low = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Close: Close = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Volume: Volume = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Open: Open = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_High: High = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Low: Low = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Close: Close = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Volume: Volume = value; break;
 
-                    case NumericColumn dc when dc == TableList.Column_Gain: Gain = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Percent: Percent = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Gap: Gap = value; break;
-                    case NumericColumn dc when dc == TableList.Column_GapPercent: GapPercent = value; break;
-                    case NumericColumn dc when dc == TableList.Column_TrueRange: TrueRange = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Typical: Typical = value; break;
-                    case NumericColumn dc when dc == TableList.Column_Peak: Peak = value; break;
-                    case NumericColumn dc when dc == TableList.Column_TrendStrength: TrendStrength = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Gain: Gain = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Percent: Percent = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Gap: Gap = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_GapPercent: GapPercent = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_TrueRange: TrueRange = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Typical: Typical = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_Peak: Peak = value; break;
+                    case NumericColumn dc when dc == BarTable.Column_TrendStrength: TrendStrength = value; break;
 
-                    case NumericColumn dc when dc == TableList.Column_ProfitChange: break;
+                    case NumericColumn dc when dc == BarTable.Column_ProfitChange: break;
 
                     default:
                         if (!NumericDatums.ContainsKey(column))
@@ -324,8 +324,8 @@ namespace Pacmio
             {
                 return column switch
                 {
-                    TagColumn oc when oc == TableList.Column_PeakTags => PeakTag,
-                    //TagColumn oc when oc == TableList.Column_CandleStickTypes => CandleStickTypes,
+                    TagColumn oc when oc == BarTable.Column_PeakTags => PeakTag,
+                    //TagColumn oc when oc == BarTable.Column_CandleStickTypes => CandleStickTypes,
 
                     TagColumn oc when TagDatums.ContainsKey(oc) => TagDatums[column],
                     _ => null,
@@ -337,8 +337,8 @@ namespace Pacmio
                 {
                     switch (column)
                     {
-                        case TagColumn oc when oc == TableList.Column_PeakTags: PeakTag = (TagInfo)value; break;
-                        //case TagColumn oc when oc == TableList.Column_CandleStickTypes: break;
+                        case TagColumn oc when oc == BarTable.Column_PeakTags: PeakTag = (TagInfo)value; break;
+                        //case TagColumn oc when oc == BarTable.Column_CandleStickTypes: break;
 
                         default:
                             if (!TagDatums.ContainsKey(column))

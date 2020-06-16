@@ -13,16 +13,16 @@ namespace Pacmio
 {
     public class SMA : BarAnalysis, ISingleData, IChartSeries
     {
-        public SMA(int interval) : this(TableList.Column_Close, interval) { }
+        public SMA(int interval) : this(BarTable.Column_Close, interval) { }
 
         public SMA(NumericColumn column, int interval)
         {
             Interval = interval;
             Column = column;
 
-            string label = (Column is null) ? "(error)" : ((Column == TableList.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
+            string label = (Column is null) ? "(error)" : ((Column == BarTable.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
             Name = GetType().Name + label;
-            GroupName = (Column == TableList.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+            GroupName = (Column == BarTable.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
             Description = "Simple Moving Average " + label;
 
             Result_Column = new NumericColumn(Name) { Label = label };

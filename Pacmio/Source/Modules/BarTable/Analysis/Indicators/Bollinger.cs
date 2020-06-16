@@ -19,13 +19,13 @@ namespace Pacmio
 {
     public sealed class Bollinger : BarAnalysis, IDualData, IChartSeries
     {
-        public Bollinger(int interval, double spread) : this(TableList.Column_Close, interval, spread) { }
+        public Bollinger(int interval, double spread) : this(BarTable.Column_Close, interval, spread) { }
 
         public Bollinger(NumericColumn column, int interval, double spread = 2.0)
         {
             Spread = spread;
 
-            string label = column == TableList.Column_Close ?
+            string label = column == BarTable.Column_Close ?
                             "(" + interval.ToString() + "," + Spread.ToString() + ")" :
                             "(" + column.Name + "," + interval.ToString() + "," + Spread.ToString() + ")";
 

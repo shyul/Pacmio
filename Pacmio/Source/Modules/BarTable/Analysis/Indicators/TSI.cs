@@ -37,35 +37,35 @@ namespace Pacmio
             switch (AverageType)
             {
                 case MovingAverageType.Simple:
-                    MA_1_PC = new SMA(TableList.Column_Gain, Interval);
+                    MA_1_PC = new SMA(BarTable.Column_Gain, Interval);
                     MA_2_PC = new SMA(MA_1_PC.Result_Column, Interval_2nd);
                     MA_1_APC = new SMA(APC_Column, Interval);
                     MA_2_APC = new SMA(MA_1_APC.Result_Column, Interval_2nd);
                     MA_SL = new SMA(Result_Column, Interval_Signal);
                     break;
                 case MovingAverageType.Smoothed:
-                    MA_1_PC = new SMMA(TableList.Column_Gain, Interval);
+                    MA_1_PC = new SMMA(BarTable.Column_Gain, Interval);
                     MA_2_PC = new SMMA(MA_1_PC.Result_Column, Interval_2nd);
                     MA_1_APC = new SMMA(APC_Column, Interval);
                     MA_2_APC = new SMMA(MA_1_APC.Result_Column, Interval_2nd);
                     MA_SL = new SMMA(Result_Column, Interval_Signal);
                     break;
                 case MovingAverageType.Exponential:
-                    MA_1_PC = new EMA(TableList.Column_Gain, Interval);
+                    MA_1_PC = new EMA(BarTable.Column_Gain, Interval);
                     MA_2_PC = new EMA(MA_1_PC.Result_Column, Interval_2nd);
                     MA_1_APC = new EMA(APC_Column, Interval);
                     MA_2_APC = new EMA(MA_1_APC.Result_Column, Interval_2nd);
                     MA_SL = new EMA(Result_Column, Interval_Signal);
                     break;
                 case MovingAverageType.Weighted:
-                    MA_1_PC = new WMA(TableList.Column_Gain, Interval);
+                    MA_1_PC = new WMA(BarTable.Column_Gain, Interval);
                     MA_2_PC = new WMA(MA_1_PC.Result_Column, Interval_2nd);
                     MA_1_APC = new WMA(APC_Column, Interval);
                     MA_2_APC = new WMA(MA_1_APC.Result_Column, Interval_2nd);
                     MA_SL = new WMA(Result_Column, Interval_Signal);
                     break;
                 case MovingAverageType.Hull:
-                    MA_1_PC = new HMA(TableList.Column_Gain, Interval);
+                    MA_1_PC = new HMA(BarTable.Column_Gain, Interval);
                     MA_2_PC = new HMA(MA_1_PC.Result_Column, Interval_2nd);
                     MA_1_APC = new HMA(APC_Column, Interval);
                     MA_2_APC = new HMA(MA_1_APC.Result_Column, Interval_2nd);

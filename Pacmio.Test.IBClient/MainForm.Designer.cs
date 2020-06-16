@@ -81,18 +81,13 @@ namespace TestClient
             this.BtnGetContractInfo = new System.Windows.Forms.Button();
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
-            this.tabMarketQuote = new System.Windows.Forms.TabPage();
+            this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnMarketDataTestFormHide = new System.Windows.Forms.Button();
             this.BtnMarketDataTestFormShow = new System.Windows.Forms.Button();
             this.BtnMarketQuoteAddMultiContracts = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.BtnMarketQuoteAddContract = new System.Windows.Forms.Button();
             this.tabMarketDepth = new System.Windows.Forms.TabPage();
-            this.mktDepthExchangesGrid_MDT = new System.Windows.Forms.DataGridView();
-            this.mktDepthExchangesColumn_Exchange = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mktDepthExchangesColumn_SecType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mktDepthExchangesColumn_ListingExch = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mktDepthExchangesColumn_ServiceDataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mktDepthExchangesColumn_AggGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
             this.tabScan = new System.Windows.Forms.TabPage();
             this.BtnCancelAllScanner = new System.Windows.Forms.Button();
@@ -202,16 +197,14 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnMarketDataTestFormHide = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
             this.GroupBoxContractSearchResult.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewContractSearchResult)).BeginInit();
             this.GroupBoxContractInfo.SuspendLayout();
-            this.tabMarketQuote.SuspendLayout();
+            this.tabMarketData.SuspendLayout();
             this.tabMarketDepth.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mktDepthExchangesGrid_MDT)).BeginInit();
             this.tabScan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scannerGrid)).BeginInit();
             this.tabOrder.SuspendLayout();
@@ -259,7 +252,7 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainTab.Controls.Add(this.tabHistoricalData);
             this.MainTab.Controls.Add(this.tabContract);
-            this.MainTab.Controls.Add(this.tabMarketQuote);
+            this.MainTab.Controls.Add(this.tabMarketData);
             this.MainTab.Controls.Add(this.tabMarketDepth);
             this.MainTab.Controls.Add(this.tabScan);
             this.MainTab.Controls.Add(this.tabOrder);
@@ -653,19 +646,29 @@ namespace TestClient
             this.BtnSearchSymbol.UseVisualStyleBackColor = true;
             this.BtnSearchSymbol.Click += new System.EventHandler(this.BtnSearchSymbol_Click);
             // 
-            // tabMarketQuote
+            // tabMarketData
             // 
-            this.tabMarketQuote.Controls.Add(this.BtnMarketDataTestFormHide);
-            this.tabMarketQuote.Controls.Add(this.BtnMarketDataTestFormShow);
-            this.tabMarketQuote.Controls.Add(this.BtnMarketQuoteAddMultiContracts);
-            this.tabMarketQuote.Controls.Add(this.button4);
-            this.tabMarketQuote.Controls.Add(this.BtnMarketQuoteAddContract);
-            this.tabMarketQuote.Location = new System.Drawing.Point(4, 22);
-            this.tabMarketQuote.Name = "tabMarketQuote";
-            this.tabMarketQuote.Size = new System.Drawing.Size(1552, 943);
-            this.tabMarketQuote.TabIndex = 3;
-            this.tabMarketQuote.Text = "Market Quote";
-            this.tabMarketQuote.UseVisualStyleBackColor = true;
+            this.tabMarketData.Controls.Add(this.BtnMarketDataTestFormHide);
+            this.tabMarketData.Controls.Add(this.BtnMarketDataTestFormShow);
+            this.tabMarketData.Controls.Add(this.BtnMarketQuoteAddMultiContracts);
+            this.tabMarketData.Controls.Add(this.button4);
+            this.tabMarketData.Controls.Add(this.BtnMarketQuoteAddContract);
+            this.tabMarketData.Location = new System.Drawing.Point(4, 22);
+            this.tabMarketData.Name = "tabMarketData";
+            this.tabMarketData.Size = new System.Drawing.Size(1552, 943);
+            this.tabMarketData.TabIndex = 3;
+            this.tabMarketData.Text = "Market Data";
+            this.tabMarketData.UseVisualStyleBackColor = true;
+            // 
+            // BtnMarketDataTestFormHide
+            // 
+            this.BtnMarketDataTestFormHide.Location = new System.Drawing.Point(112, 6);
+            this.BtnMarketDataTestFormHide.Name = "BtnMarketDataTestFormHide";
+            this.BtnMarketDataTestFormHide.Size = new System.Drawing.Size(100, 23);
+            this.BtnMarketDataTestFormHide.TabIndex = 6;
+            this.BtnMarketDataTestFormHide.Text = "Hide Form";
+            this.BtnMarketDataTestFormHide.UseVisualStyleBackColor = true;
+            this.BtnMarketDataTestFormHide.Click += new System.EventHandler(this.BtnMarketDataTestFormHide_Click);
             // 
             // BtnMarketDataTestFormShow
             // 
@@ -708,7 +711,6 @@ namespace TestClient
             // 
             // tabMarketDepth
             // 
-            this.tabMarketDepth.Controls.Add(this.mktDepthExchangesGrid_MDT);
             this.tabMarketDepth.Controls.Add(this.BtnRequestMarketDepth);
             this.tabMarketDepth.Location = new System.Drawing.Point(4, 22);
             this.tabMarketDepth.Name = "tabMarketDepth";
@@ -716,57 +718,6 @@ namespace TestClient
             this.tabMarketDepth.TabIndex = 7;
             this.tabMarketDepth.Text = "Market Depth";
             this.tabMarketDepth.UseVisualStyleBackColor = true;
-            // 
-            // mktDepthExchangesGrid_MDT
-            // 
-            this.mktDepthExchangesGrid_MDT.AllowUserToAddRows = false;
-            this.mktDepthExchangesGrid_MDT.AllowUserToDeleteRows = false;
-            this.mktDepthExchangesGrid_MDT.AllowUserToOrderColumns = true;
-            this.mktDepthExchangesGrid_MDT.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.mktDepthExchangesGrid_MDT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.mktDepthExchangesGrid_MDT.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.mktDepthExchangesColumn_Exchange,
-            this.mktDepthExchangesColumn_SecType,
-            this.mktDepthExchangesColumn_ListingExch,
-            this.mktDepthExchangesColumn_ServiceDataType,
-            this.mktDepthExchangesColumn_AggGroup});
-            this.mktDepthExchangesGrid_MDT.Location = new System.Drawing.Point(6, 35);
-            this.mktDepthExchangesGrid_MDT.Name = "mktDepthExchangesGrid_MDT";
-            this.mktDepthExchangesGrid_MDT.ReadOnly = true;
-            this.mktDepthExchangesGrid_MDT.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mktDepthExchangesGrid_MDT.Size = new System.Drawing.Size(574, 902);
-            this.mktDepthExchangesGrid_MDT.TabIndex = 6;
-            // 
-            // mktDepthExchangesColumn_Exchange
-            // 
-            this.mktDepthExchangesColumn_Exchange.HeaderText = "Exchange";
-            this.mktDepthExchangesColumn_Exchange.Name = "mktDepthExchangesColumn_Exchange";
-            this.mktDepthExchangesColumn_Exchange.ReadOnly = true;
-            // 
-            // mktDepthExchangesColumn_SecType
-            // 
-            this.mktDepthExchangesColumn_SecType.HeaderText = "SecType";
-            this.mktDepthExchangesColumn_SecType.Name = "mktDepthExchangesColumn_SecType";
-            this.mktDepthExchangesColumn_SecType.ReadOnly = true;
-            // 
-            // mktDepthExchangesColumn_ListingExch
-            // 
-            this.mktDepthExchangesColumn_ListingExch.HeaderText = "ListingExch";
-            this.mktDepthExchangesColumn_ListingExch.Name = "mktDepthExchangesColumn_ListingExch";
-            this.mktDepthExchangesColumn_ListingExch.ReadOnly = true;
-            // 
-            // mktDepthExchangesColumn_ServiceDataType
-            // 
-            this.mktDepthExchangesColumn_ServiceDataType.HeaderText = "ServiceDataType";
-            this.mktDepthExchangesColumn_ServiceDataType.Name = "mktDepthExchangesColumn_ServiceDataType";
-            this.mktDepthExchangesColumn_ServiceDataType.ReadOnly = true;
-            // 
-            // mktDepthExchangesColumn_AggGroup
-            // 
-            this.mktDepthExchangesColumn_AggGroup.HeaderText = "AggGroup";
-            this.mktDepthExchangesColumn_AggGroup.Name = "mktDepthExchangesColumn_AggGroup";
-            this.mktDepthExchangesColumn_AggGroup.ReadOnly = true;
             // 
             // BtnRequestMarketDepth
             // 
@@ -1904,16 +1855,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnMarketDataTestFormHide
-            // 
-            this.BtnMarketDataTestFormHide.Location = new System.Drawing.Point(112, 6);
-            this.BtnMarketDataTestFormHide.Name = "BtnMarketDataTestFormHide";
-            this.BtnMarketDataTestFormHide.Size = new System.Drawing.Size(100, 23);
-            this.BtnMarketDataTestFormHide.TabIndex = 6;
-            this.BtnMarketDataTestFormHide.Text = "Hide Form";
-            this.BtnMarketDataTestFormHide.UseVisualStyleBackColor = true;
-            this.BtnMarketDataTestFormHide.Click += new System.EventHandler(this.BtnMarketDataTestFormHide_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1947,9 +1888,8 @@ namespace TestClient
             ((System.ComponentModel.ISupportInitialize)(this.GridViewContractSearchResult)).EndInit();
             this.GroupBoxContractInfo.ResumeLayout(false);
             this.GroupBoxContractInfo.PerformLayout();
-            this.tabMarketQuote.ResumeLayout(false);
+            this.tabMarketData.ResumeLayout(false);
             this.tabMarketDepth.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mktDepthExchangesGrid_MDT)).EndInit();
             this.tabScan.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scannerGrid)).EndInit();
             this.tabOrder.ResumeLayout(false);
@@ -1985,7 +1925,7 @@ namespace TestClient
         private System.Windows.Forms.TabPage tabHistoricalData;
         private System.Windows.Forms.PictureBox ib_banner;
         private System.Windows.Forms.TabPage tabTrade;
-        private System.Windows.Forms.TabPage tabMarketQuote;
+        private System.Windows.Forms.TabPage tabMarketData;
         private System.Windows.Forms.Label LbStatus;
         private System.Windows.Forms.CheckBox CheckBoxSingleContractUseSmart;
         private System.Windows.Forms.ComboBox SelectBoxSingleContractExchange;
@@ -2031,12 +1971,6 @@ namespace TestClient
         private System.Windows.Forms.DataGridViewTextBoxColumn scanLegStr;
         private System.Windows.Forms.Button BtnRequestScanner;
         private System.Windows.Forms.TabPage tabMarketDepth;
-        private System.Windows.Forms.DataGridView mktDepthExchangesGrid_MDT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mktDepthExchangesColumn_Exchange;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mktDepthExchangesColumn_SecType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mktDepthExchangesColumn_ListingExch;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mktDepthExchangesColumn_ServiceDataType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mktDepthExchangesColumn_AggGroup;
         private System.Windows.Forms.Button BtnRequestMarketDepth;
         private System.Windows.Forms.Button BtnGetOpenOrders;
         private System.Windows.Forms.DataGridViewTextBoxColumn positionContract;

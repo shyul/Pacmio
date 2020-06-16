@@ -36,7 +36,7 @@ namespace Pacmio
             //Visible = true;
             //FixedTickStep_Right = 2;
 
-            AddSeries(AccumulationSeries = new LineSeries(TableList.Column_ProfitChange, LineType.Step)
+            AddSeries(AccumulationSeries = new LineSeries(BarTable.Column_ProfitChange, LineType.Step)
             {
                 Color = Color.DimGray,
                 Order = int.MinValue,
