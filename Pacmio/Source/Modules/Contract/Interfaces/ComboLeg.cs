@@ -83,7 +83,7 @@ namespace Pacmio
         public string DesignatedLocation { get; set; }
 
         /// <summary>
-        /// TODO...
+        /// 
         /// </summary>
         public int ExemptCode { get; set; }
 

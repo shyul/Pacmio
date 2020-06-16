@@ -251,7 +251,7 @@ namespace Pacmio
         {
             if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
                 return false;
-            else if (other is Contract c) // else if (other.GetType().IsSubclassOf(typeof(IContract)))
+            else if (other is Contract c)
                 return Equals(c);
             else if (other.GetType() == typeof((string, Exchange, string)))
                 return Equals(((string, Exchange, string))other);

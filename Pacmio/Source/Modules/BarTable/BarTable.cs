@@ -107,12 +107,14 @@ namespace Pacmio
         public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            if (obj.GetType() == typeof(BarTable))
-                return Equals((BarTable)obj);
-            else if (obj.GetType() == typeof((Contract c, BarFreq barFreq, BarType type)))
-                return Equals(((Contract c, BarFreq barFreq, BarType type))obj);
+            if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+                return false;
+            else if (other is BarTable bt)
+                return Equals(bt);
+            else if (other.GetType() == typeof((Contract c, BarFreq barFreq, BarType type)))
+                return Equals(((Contract c, BarFreq barFreq, BarType type))other);
             else
                 return false;
         }

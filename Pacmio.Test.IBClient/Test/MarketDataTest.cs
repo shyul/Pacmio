@@ -19,12 +19,20 @@ using Pacmio;
 using Pacmio.IB;
 using System.Threading.Tasks;
 using System.Threading;
+using TestClient.UI;
 
 namespace TestClient
 {
     public static class MarketDataTest
     {
+        public static GridForm Form { get; } = new GridForm() { Text = "Market Data", Size = new Size(1600, 1200) };
+
         public static DataTable MarketQuoteTable { get; } = new DataTable();
+
+        public static void InitializeTable()
+        {
+            InitializeTable(Form.GridView);
+        }
 
         public static void InitializeTable(DataGridView gv)
         {
@@ -34,69 +42,89 @@ namespace TestClient
             System.Data.DataColumn keyColumn = new System.Data.DataColumn("Id", typeof(int));
             MarketQuoteTable.Columns.Add(keyColumn);
             MarketQuoteTable.PrimaryKey = new System.Data.DataColumn[] { keyColumn };
-            gv.Columns[0].Width = 60;
+            gv.Columns[0].Width = 80;
+            //gv.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Status", typeof(string));
             gv.Columns[1].Width = 70;
+            gv.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Symbol", typeof(string));
             gv.Columns[2].Width = 120;
+            gv.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Trade Time", typeof(string));
             gv.Columns[3].Width = 100;
             gv.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            gv.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Bid Exchange", typeof(string));
             gv.Columns[4].Width = 90;
             gv.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            gv.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Bid Size", typeof(double));
             gv.Columns[5].Width = 70;
             gv.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            gv.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Bid", typeof(double));
             gv.Columns[6].Width = 60;
             gv.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            //gv.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Ask", typeof(double));
             gv.Columns[7].Width = 60;
             gv.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            //gv.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Ask Size", typeof(double));
             gv.Columns[8].Width = 70;
+            gv.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Ask Exchange", typeof(string));
             gv.Columns[9].Width = 90;
+            gv.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Last", typeof(double));
             gv.Columns[10].Width = 60;
+            //gv.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Last Size", typeof(double));
             gv.Columns[11].Width = 80;
+            gv.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("L.Exch", typeof(string));
             gv.Columns[12].Width = 50;
+            gv.Columns[12].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Volume", typeof(double));
             gv.Columns[13].Width = 70;
+            gv.Columns[13].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Last Close", typeof(double));
             gv.Columns[14].Width = 65;
+            //gv.Columns[14].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Open", typeof(double));
             gv.Columns[15].Width = 65;
+            //gv.Columns[15].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("High", typeof(double));
             gv.Columns[16].Width = 65;
+            //gv.Columns[16].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Low", typeof(double));
             gv.Columns[17].Width = 65;
+            //gv.Columns[17].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("Short", typeof(double));
             gv.Columns[18].Width = 50;
+            //gv.Columns[18].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.Columns.Add("S Shares", typeof(double));
-            gv.Columns[19].Width = 80;
+            gv.Columns[19].Width = 100;
+            gv.Columns[19].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             MarketQuoteTable.AcceptChanges();
         }

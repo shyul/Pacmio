@@ -54,6 +54,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 985);
+            this.ControlBox = false;
             this.Controls.Add(this.GridView);
             this.Name = "GridForm";
             this.Text = "GridForm";
@@ -64,6 +65,6 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView GridView;
+        public System.Windows.Forms.DataGridView GridView;
     }
 }

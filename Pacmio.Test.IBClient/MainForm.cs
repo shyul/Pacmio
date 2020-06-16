@@ -26,7 +26,7 @@ namespace TestClient
             OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
 
             ContractTest.InitializeTable(GridViewContractSearchResult);
-            MarketDataTest.InitializeTable(GridViewMarketQuote);
+            MarketDataTest.InitializeTable();
             OrderTest.InitializeTable(GridViewAllOrders);
             TradeTest.InitializeTable(GridViewTradeTable);
 
@@ -779,6 +779,16 @@ namespace TestClient
             string rectified = symbols.ToString(", ");
 
             TextBoxSymbols.Text = rectified;*/
+        }
+
+        private void BtnMarketDataTestFormShow_Click(object sender, EventArgs e)
+        {
+            MarketDataTest.Form.Show();
+        }
+
+        private void BtnMarketDataTestFormHide_Click(object sender, EventArgs e)
+        {
+            MarketDataTest.Form.Hide();
         }
     }
     public static class DataGridHelper

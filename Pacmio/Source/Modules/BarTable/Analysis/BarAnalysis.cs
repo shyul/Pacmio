@@ -167,7 +167,7 @@ namespace Pacmio
         public bool Equals(BarAnalysis other) => GetType() == other.GetType() && Name == other.Name;
         public static bool operator !=(BarAnalysis s1, BarAnalysis s2) => !s1.Equals(s2);
         public static bool operator ==(BarAnalysis s1, BarAnalysis s2) => s1.Equals(s2);
-        public override bool Equals(object other) => other is BarAnalysis ba ? Equals(ba) : false;
+        public override bool Equals(object other) => other is BarAnalysis ba && Equals(ba);
 
         #endregion Equality
     }
