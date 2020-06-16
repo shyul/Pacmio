@@ -120,7 +120,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
-    <Compile Include="Source\Modules\Contract\Chart\IContractTable.cs" />
+    <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTools.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
@@ -136,8 +136,10 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Contract\Chart\ContractColumn.cs" />
-    <Compile Include="Source\Modules\MarketData\MarketDataTable.cs" />
+    <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
+    <Compile Include="Source\Modules\MarketData\GridView\MarketDataGridView.cs" />
+    <Compile Include="Source\Modules\MarketData\GridView\MarketDataTable.cs" />
+    <Compile Include="Source\Modules\MarketData\GridView\PositionGridView.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\TradeLogManager.cs" />
@@ -294,7 +296,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Modules\BarTable\Analysis\Patterns\" />
-    <Folder Include="Source\Modules\MarketData\Chart\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

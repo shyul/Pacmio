@@ -27,7 +27,7 @@ namespace Pacmio
     /// <summary>
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
-    public sealed class BarTable : ITable, IEquatable<BarTable>,
+    public sealed class BarTable : ITagTable, IEquatable<BarTable>,
         IEquatable<(Contract c, BarFreq barFreq, BarType type)>,
         IDependable, IDisposable
     {
