@@ -14,16 +14,16 @@ namespace Pacmio
 {
     public sealed class HMA : SMA
     {
-        public HMA(int interval) : this(BarTable.Column_Close, interval) { }
+        public HMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public HMA(NumericColumn column, int interval)
         {
             Interval = interval;
             Column = column;
 
-            string label = (Column is null) ? "(error)" : ((Column == BarTable.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
+            string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
             Name = GetType().Name + label;
-            GroupName = (Column == BarTable.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+            GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
             Description = "Hull Moving Average " + label;
 
             // Set Names for Each Column here

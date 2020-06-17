@@ -12,7 +12,7 @@ namespace Pacmio
 {
     public sealed class EMA : SMA
     {
-        public EMA(int interval) : this(BarTable.Column_Close, interval) { }
+        public EMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public EMA(NumericColumn column, int interval) : base(column, interval)
         {

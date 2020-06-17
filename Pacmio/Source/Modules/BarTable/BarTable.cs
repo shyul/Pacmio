@@ -588,25 +588,6 @@ namespace Pacmio
 
         #region Data/Bar Analysis (TA) Calculation
 
-        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN") { Label = "O" };
-        public static readonly NumericColumn Column_High = new NumericColumn("HIGH") { Label = "H" };
-        public static readonly NumericColumn Column_Low = new NumericColumn("LOW") { Label = "L" };
-        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE") { Label = "C" };
-        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
-
-        public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
-        public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
-        public static readonly NumericColumn Column_Gap = new NumericColumn("GAP");
-        public static readonly NumericColumn Column_GapPercent = new NumericColumn("GAPPERCENT");
-        public static readonly NumericColumn Column_TrueRange = new NumericColumn("TRUERANGE");
-        public static readonly NumericColumn Column_Typical = new NumericColumn("TYPICAL");
-
-        public static readonly NumericColumn Column_TrendStrength = new NumericColumn("TREND");
-        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PROFIT") { Label = "PCHG" };
-
-        public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
-        public static readonly TagColumn Column_PeakTags = new TagColumn("PEAKTAG", "PEAK");
-
         private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
 
         private readonly List<BarAnalysis> BarAnalysisToAddList = new List<BarAnalysis>();

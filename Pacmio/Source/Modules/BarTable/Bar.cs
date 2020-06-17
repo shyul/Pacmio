@@ -24,7 +24,7 @@ namespace Pacmio
     /// <summary>
     /// One Single Bar is not as simple as it sounds.
     /// </summary>
-    public class Bar // : IDisposable
+    public class Bar : IRow
     {
         #region Ctor
 
@@ -260,22 +260,22 @@ namespace Pacmio
             {
                 return column switch
                 {
-                    NumericColumn dc when dc == BarTable.Column_Open => Open,
-                    NumericColumn dc when dc == BarTable.Column_High => High,
-                    NumericColumn dc when dc == BarTable.Column_Low => Low,
-                    NumericColumn dc when dc == BarTable.Column_Close => Close,
-                    NumericColumn dc when dc == BarTable.Column_Volume => Volume,
+                    NumericColumn dc when dc == Column_Open => Open,
+                    NumericColumn dc when dc == Column_High => High,
+                    NumericColumn dc when dc == Column_Low => Low,
+                    NumericColumn dc when dc == Column_Close => Close,
+                    NumericColumn dc when dc == Column_Volume => Volume,
 
-                    NumericColumn dc when dc == BarTable.Column_Gain => Gain,
-                    NumericColumn dc when dc == BarTable.Column_Percent => Percent,
-                    NumericColumn dc when dc == BarTable.Column_Gap => Gap,
-                    NumericColumn dc when dc == BarTable.Column_GapPercent => GapPercent,
-                    NumericColumn dc when dc == BarTable.Column_TrueRange => TrueRange,
-                    NumericColumn dc when dc == BarTable.Column_Typical => Typical,
-                    NumericColumn dc when dc == BarTable.Column_Peak => Peak,
-                    NumericColumn dc when dc == BarTable.Column_TrendStrength => TrendStrength,
+                    NumericColumn dc when dc == Column_Gain => Gain,
+                    NumericColumn dc when dc == Column_Percent => Percent,
+                    NumericColumn dc when dc == Column_Gap => Gap,
+                    NumericColumn dc when dc == Column_GapPercent => GapPercent,
+                    NumericColumn dc when dc == Column_TrueRange => TrueRange,
+                    NumericColumn dc when dc == Column_Typical => Typical,
+                    NumericColumn dc when dc == Column_Peak => Peak,
+                    NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == BarTable.Column_ProfitChange => ProfitChangePercent,
+                    NumericColumn dc when dc == Column_ProfitChange => ProfitChangePercent,
 
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
                     _ => double.NaN,
@@ -285,22 +285,22 @@ namespace Pacmio
             {
                 switch (column)
                 {
-                    case NumericColumn dc when dc == BarTable.Column_Open: Open = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_High: High = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Low: Low = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Close: Close = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Volume: Volume = value; break;
+                    case NumericColumn dc when dc == Column_Open: Open = value; break;
+                    case NumericColumn dc when dc == Column_High: High = value; break;
+                    case NumericColumn dc when dc == Column_Low: Low = value; break;
+                    case NumericColumn dc when dc == Column_Close: Close = value; break;
+                    case NumericColumn dc when dc == Column_Volume: Volume = value; break;
 
-                    case NumericColumn dc when dc == BarTable.Column_Gain: Gain = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Percent: Percent = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Gap: Gap = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_GapPercent: GapPercent = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_TrueRange: TrueRange = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Typical: Typical = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_Peak: Peak = value; break;
-                    case NumericColumn dc when dc == BarTable.Column_TrendStrength: TrendStrength = value; break;
+                    case NumericColumn dc when dc == Column_Gain: Gain = value; break;
+                    case NumericColumn dc when dc == Column_Percent: Percent = value; break;
+                    case NumericColumn dc when dc == Column_Gap: Gap = value; break;
+                    case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
+                    case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
+                    case NumericColumn dc when dc == Column_Typical: Typical = value; break;
+                    case NumericColumn dc when dc == Column_Peak: Peak = value; break;
+                    case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value; break;
 
-                    case NumericColumn dc when dc == BarTable.Column_ProfitChange: break;
+                    case NumericColumn dc when dc == Column_ProfitChange: break;
 
                     default:
                         if (!NumericDatums.ContainsKey(column))
@@ -311,6 +311,24 @@ namespace Pacmio
                 }
             }
         }
+
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN") { Label = "O" };
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH") { Label = "H" };
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW") { Label = "L" };
+        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE") { Label = "C" };
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+
+        public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
+        public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
+        public static readonly NumericColumn Column_Gap = new NumericColumn("GAP");
+        public static readonly NumericColumn Column_GapPercent = new NumericColumn("GAPPERCENT");
+        public static readonly NumericColumn Column_TrueRange = new NumericColumn("TRUERANGE");
+        public static readonly NumericColumn Column_Typical = new NumericColumn("TYPICAL");
+
+        public static readonly NumericColumn Column_TrendStrength = new NumericColumn("TREND");
+        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PROFIT") { Label = "PCHG" };
+
+        public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
 
         #endregion Numeric Column
 
@@ -324,8 +342,8 @@ namespace Pacmio
             {
                 return column switch
                 {
-                    TagColumn oc when oc == BarTable.Column_PeakTags => PeakTag,
-                    //TagColumn oc when oc == BarTable.Column_CandleStickTypes => CandleStickTypes,
+                    TagColumn oc when oc == Column_PeakTags => PeakTag,
+                    //TagColumn oc when oc == Column_CandleStickTypes => CandleStickTypes,
 
                     TagColumn oc when TagDatums.ContainsKey(oc) => TagDatums[column],
                     _ => null,
@@ -337,8 +355,8 @@ namespace Pacmio
                 {
                     switch (column)
                     {
-                        case TagColumn oc when oc == BarTable.Column_PeakTags: PeakTag = (TagInfo)value; break;
-                        //case TagColumn oc when oc == BarTable.Column_CandleStickTypes: break;
+                        case TagColumn oc when oc == Column_PeakTags: PeakTag = (TagInfo)value; break;
+                        //case TagColumn oc when oc == Column_CandleStickTypes: break;
 
                         default:
                             if (!TagDatums.ContainsKey(column))
@@ -350,6 +368,8 @@ namespace Pacmio
                 }
             }
         }
+
+        public static readonly TagColumn Column_PeakTags = new TagColumn("PEAKTAG", "PEAK");
 
         #endregion Tag Column
 
@@ -374,5 +394,19 @@ namespace Pacmio
         }
 
         #endregion Signal Score
+
+        public object this[Column column]
+        {
+            get
+            {
+                return column switch
+                {
+                    NumericColumn nc => this[nc],
+                    TagColumn tc => this[tc],
+                    SignalColumn sc => this[sc],
+                    _ => null,
+                };
+            }
+        }
     }
 }

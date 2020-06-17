@@ -15,7 +15,7 @@ namespace Pacmio
     {
         public MACD(int interval_fast, int interval_slow, int interval_sl,
             MovingAverageType avgType = MovingAverageType.Exponential) :
-            this(BarTable.Column_Close, interval_fast, interval_slow, interval_sl, avgType)
+            this(Bar.Column_Close, interval_fast, interval_slow, interval_sl, avgType)
         { }
 
         public MACD(NumericColumn column, int interval_fast, int interval_slow, int interval_sl,
@@ -28,7 +28,7 @@ namespace Pacmio
             AverageType = avgType;
             Column = column;
 
-            string label = Column is null ? "(error)" : Column == BarTable.Column_Close ?
+            string label = Column is null ? "(error)" : Column == Bar.Column_Close ?
 
                             (AverageType == MovingAverageType.Exponential ? "(" + Interval.ToString() + "," + Interval_Slow.ToString() + "," + Interval_Signal.ToString() + ")" :
                             "(" + Interval.ToString() + "," + Interval_Slow.ToString() + "," + Interval_Signal.ToString() + "," + AverageType + ")") :

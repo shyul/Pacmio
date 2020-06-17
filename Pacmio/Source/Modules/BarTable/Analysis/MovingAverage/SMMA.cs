@@ -11,7 +11,7 @@ namespace Pacmio
 {
     public sealed class SMMA : SMA
     {
-        public SMMA(int interval) : this(BarTable.Column_Close, interval) { }
+        public SMMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public SMMA(NumericColumn column, int interval) : base(column, interval)
         {

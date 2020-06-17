@@ -107,7 +107,7 @@ namespace Pacmio
 
         public static List<BarAnalysis> SampleChartConfig()
         {
-            var volumeEma = new EMA(BarTable.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };
+            var volumeEma = new EMA(Bar.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };
             volumeEma.LineSeries.Side = AlignType.Left;
 
             //var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });

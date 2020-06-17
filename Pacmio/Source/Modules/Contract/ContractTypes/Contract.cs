@@ -20,7 +20,7 @@ namespace Pacmio
     [KnownType(typeof(MutualFund))]
     [KnownType(typeof(Forex))]
     [KnownType(typeof(BagComboContract))]
-    public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public abstract class Contract : IRow, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
         [IgnoreDataMember, Browsable(false)]
         public bool IsModified
@@ -169,7 +169,7 @@ namespace Pacmio
 
         public bool IsWorkHour => WorkHours.IsWorkTime(CurrentTime);
 
-        
+
 
         #endregion Exchange Information
 
@@ -221,15 +221,20 @@ namespace Pacmio
 
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
-        /*
-        public SymbolHistory GetISIN(DateTime time)
-        { 
-            foreach (Period p in History.Keys)
+
+        public object this[Column column]
+        {
+            get
             {
-                if (p.Contains(time)) return History[p];
+                return column switch
+                {
+                    ContractColumn cc => this,
+
+
+                    _ => null,
+                };
             }
-            return ISIN;
-        }*/
+        }
 
         #endregion Status and Market Data
 

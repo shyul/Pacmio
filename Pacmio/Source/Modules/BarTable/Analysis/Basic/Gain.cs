@@ -17,7 +17,7 @@ namespace Pacmio
         {
             MaximumPeakProminence = maximumPeakProminence;
 
-            string label = Column is null ? "(error)" : (Column == BarTable.Column_Close ? "(" + MaximumPeakProminence.ToString() + ")" : "(" + Column.Name + "," + MaximumPeakProminence.ToString() + ")");
+            string label = Column is null ? "(error)" : (Column == Bar.Column_Close ? "(" + MaximumPeakProminence.ToString() + ")" : "(" + Column.Name + "," + MaximumPeakProminence.ToString() + ")");
             Name = GetType().Name + label;
 
             Column = column;
@@ -28,7 +28,7 @@ namespace Pacmio
             Column_Peak = new NumericColumn(Name + "_Peak");
             Column_TrendStrength = new NumericColumn(Name + "_TrendStrength");
 
-            Description = (Column == BarTable.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+            Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MaximumPeakProminence;

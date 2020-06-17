@@ -9,7 +9,7 @@ namespace Pacmio // Can be derived from SMA
 {
     public sealed class WMA : SMA
     {
-        public WMA(int interval) : this(BarTable.Column_Close, interval) { }
+        public WMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public WMA(NumericColumn column, int interval) : base(column, interval) 
         {

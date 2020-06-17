@@ -120,6 +120,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
+    <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTools.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
+    <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataTable.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\PositionGridView.cs" />

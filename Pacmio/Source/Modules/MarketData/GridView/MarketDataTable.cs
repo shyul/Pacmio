@@ -16,15 +16,26 @@ namespace Pacmio
 {
     public sealed class MarketDataTable : IContractTable
     {
-        public Contract this[int i, ContractColumn column] => throw new NotImplementedException();
-
-        public double this[int i, NumericColumn column] => throw new NotImplementedException();
-
-        public TagInfo this[int i, TagColumn column] => throw new NotImplementedException();
-
         public int Count => Rows.Count; // Root.IBClient.ActiveTicks.Count;
 
         private readonly List<Contract> Rows = new List<Contract>();
+
+        public Contract this[int i, ContractColumn column]
+        {
+            get
+            {
+                if (i >= Count || i < 0)
+                    return null;
+                else
+                    return Rows[i];
+            }
+        }
+
+        public double this[int i, NumericColumn column] => throw new NotImplementedException();
+
+
+
+
 
         public object DataObjectLock => throw new NotImplementedException();
 

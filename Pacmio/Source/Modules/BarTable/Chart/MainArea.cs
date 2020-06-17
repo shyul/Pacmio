@@ -31,23 +31,23 @@ namespace Pacmio
 
             // Configure Price series by assigning the chart type
             // ===================================================
-            AddSeries(PriceSeries = new OhlcSeries(BarTable.Column_Open, BarTable.Column_High, BarTable.Column_Low, BarTable.Column_Close, 
-                BarTable.Column_Percent)
+            AddSeries(PriceSeries = new OhlcSeries(Bar.Column_Open, Bar.Column_High, Bar.Column_Low, Bar.Column_Close, 
+                Bar.Column_Percent)
             {
                 Order = int.MaxValue,
                 Importance = Importance.Huge,
                 LegendName = "PriceSeries"
             });
 
-            PriceSeries.TagColumns.Add(BarTable.Column_PeakTags);
+            PriceSeries.TagColumns.Add(Bar.Column_PeakTags);
 
             // Configure volume series
             // ===================================================
-            AddSeries(VolumeSeries = new AdColumnSeries(BarTable.Column_Volume, BarTable.Column_Percent, 50)
+            AddSeries(VolumeSeries = new AdColumnSeries(Bar.Column_Volume, Bar.Column_Percent, 50)
             {
                 Order = int.MinValue,
                 Side = AlignType.Left,
-                Name = BarTable.Column_Volume.Name,
+                Name = Bar.Column_Volume.Name,
                 LegendName = "VOLUME",
                 LegendLabelFormat = "0.##"
             });

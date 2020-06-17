@@ -6,26 +6,23 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Drawing;
 using Xu;
 using Xu.GridView;
 
 namespace Pacmio
 {
-    public class MarketDataGridView : GridWidget
+    public class ContractGridStripe : GridStripe
     {
-        public MarketDataGridView(string name) : base(name)
+
+        public override void Draw(Graphics g, Rectangle bound, ITable table, int index)
         {
+
 
         }
 
-        public MarketDataTable MarketDataTable { get; }
-
-        public override ITable Table => MarketDataTable;
-
-        public override IEnumerable<GridStripe> Stripes => throw new NotImplementedException();
     }
 }
