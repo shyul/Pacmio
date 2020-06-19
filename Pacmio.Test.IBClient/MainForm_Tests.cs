@@ -106,28 +106,7 @@ namespace TestClient
 
 
 
-        public void MarketQuoteHandler(int status, DateTime time, string msg)
-        {
-            //if((DateTime.Now - LastQuoteUpdate).TotalMilliseconds > 200) 
-            //{
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
 
-                    //MarketQuoteGrid.Suspend();
-                    lock (Root.IBClient.ActiveTicks)
-                    //foreach (int tickerId in Root.IBClient.ActiveQuotes.Keys)
-                    {
-                        int tickerId = status;
-                        Contract c = Root.IBClient.ActiveTicks[tickerId];
-                        MarketDataTest.UpdateMarketQuote(tickerId, c);
-                    }
-                    //MarketQuoteGrid.Resume();
-                    MarketDataTest.LastQuoteUpdate = DateTime.Now;
-                });
-            });
-            UpdateUI.Start();
-            //}
-        }
 
 
         public void OrderTableHandler(int status, DateTime time, string msg)

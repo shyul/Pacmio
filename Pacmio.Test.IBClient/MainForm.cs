@@ -37,7 +37,7 @@ namespace TestClient
             Root.IBClient.OnConnectedHandler += IBClientOnConnectedHandler;
             AccountManager.UpdatedHandler += AccountUpdatedHandler;
             AccountManager.UpdatedHandler += PositionUpdatedHandler;
-            MarketData.UpdatedHandler += MarketQuoteHandler;
+         
             OrderManager.UpdatedHandler += OrderTableHandler;
             TradeLogManager.UpdatedHandler += TradeTableHandler;
 
@@ -731,24 +731,12 @@ namespace TestClient
 
         private void BtnMarketDataFormShow_Click(object sender, EventArgs e)
         {
-            MarketDataTest.Form.Show();
-
-            MarketDataTable mdt = new MarketDataTable();
-            mdt.AddContract(ContractTest.ActiveContract);
-  
-
-            MarketDataGridView mdgv = new MarketDataGridView("Market Data", mdt);
-            Root.Form.AddForm(DockStyle.Fill, 0, mdgv);
-
-
-            Root.Form.Show();
-
-
+            Root.Form?.Show();
         }
 
         private void BtnMarketDataFormHide_Click(object sender, EventArgs e)
         {
-            MarketDataTest.Form.Hide();
+            Root.Form?.Hide();
         }
 
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
@@ -776,6 +764,8 @@ namespace TestClient
             {
                 Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
             }
+
+            Root.Form?.Show();
         }
 
         private void BtnRequestMarketDepth_Click(object sender, EventArgs e)

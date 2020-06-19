@@ -20,10 +20,9 @@ namespace Pacmio
 
         private readonly List<Contract> Rows = new List<Contract>();
 
-        public void AddContract(Contract c) 
-        {
-            Rows.CheckAdd(c);
-        }
+        public void Add(Contract c) => Rows.CheckAdd(c);
+
+        public bool Contains(Contract c) => Rows.Contains(c);
 
         public double this[int i, NumericColumn column]
         {
