@@ -57,10 +57,6 @@ namespace Pacmio
         #endregion IDependable
 
 
-        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN") { Label = "O" };
-        public static readonly NumericColumn Column_High = new NumericColumn("HIGH") { Label = "H" };
-        public static readonly NumericColumn Column_Low = new NumericColumn("LOW") { Label = "L" };
-        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE") { Label = "C" };
-        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+
     }
 }

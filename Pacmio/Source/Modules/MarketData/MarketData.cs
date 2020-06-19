@@ -262,7 +262,13 @@ namespace Pacmio
             = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
 
 
+        public double PositionQuantityAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => PositionQuantity(n)).Sum() : 0;
 
+        public double PositionQuantity(Account ac) => ac.Positions.ContainsKey(Contract) ? ac.Positions[Contract].Quantity : 0;
+
+        public double CostBasisAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => PositionQuantity(n)).Sum() : 0;
+
+        public double CostBasis(Account ac) => ac.Positions.ContainsKey(Contract) ? ac.Positions[Contract].CostBasis : 0;
 
         public double UnrealizedProfitAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => UnrealizedProfit(n)).Sum() : 0;
 

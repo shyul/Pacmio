@@ -122,17 +122,7 @@ namespace TestClient
 
         #endregion Symbols
 
-        private void BtnAddMarketQuote_Click(object sender, EventArgs e)
-        {
-            if (Root.IBClient is null || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.RequestQuote("236,375");
-        }
 
-        private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
-        {
-            if (Root.IBClient is null || !ValidateSymbol()) return;
-            Console.WriteLine("MarketDepth: " + Root.IBClient.SendRequest_MarketDepth(ContractTest.ActiveContract));
-        }
 
         private void BtnAccountSummary_Click(object sender, EventArgs e)
         {
@@ -346,18 +336,7 @@ namespace TestClient
         }
 
 
-        private void BtmImportQuandlBlob_Click(object sender, EventArgs e)
-        {
-            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
 
-            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
-            {
-
-                Cts = new CancellationTokenSource();
-                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
-                m.Start();
-            }
-        }
 
 
 
@@ -368,26 +347,7 @@ namespace TestClient
             ContractTest.UpdateSymbolInfoTable(TextBoxSearchSymbol.Text);
         }
 
-        private void BtnAddMarketQuoteTest_Click(object sender, EventArgs e)
-        {
-            //string tickList = "236,mdoff,292";
-            string tickList = "236,375";
-            /*
-            string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
-                                            "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
-                                            "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
-                                            "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN" };*/
 
-            string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
-            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };
-
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-
-            foreach (Contract c in cList)
-            {
-                Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
-            }
-        }
 
 
 
@@ -588,6 +548,61 @@ namespace TestClient
 
         }
 
+
+
+
+
+        private void BtnMatchSymbols_Click(object sender, EventArgs e)
+        {
+            Cts = new CancellationTokenSource();
+            Task m = new Task(() => { ContractList.MakeUp(Cts, Progress); });
+            m.Start();
+        }
+
+
+
+        private void BtnDownloadTables_Click(object sender, EventArgs e)
+        {
+            DownloadBarTable.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
+            DownloadBarTable.DownloadProgress = Progress;
+            DownloadBarTable.DetailedProgress = Detailed_Progress;
+
+            DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
+            string symbolText = TextBoxMultiContracts.Text;
+            DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
+            TextBoxMultiContracts.Text = symbolText;
+
+            DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
+            DownloadBarTable.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
+            //DownloadBarTable.BarFreqs.Add(BarFreq.HalfMinute);
+
+            Task.Run(() => { DownloadBarTable.Worker(); });
+        }
+
+        public static Progress<float> Detailed_Progress;
+
+        private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
+        {
+            var result = ContractTools.FindDuplicateStock("US");
+
+            var toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
+
+            foreach(Stock s in toDelete) 
+            {
+                ContractList.Remove(s.Info);
+                Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
+            }
+
+            foreach (Stock s in result)
+            {
+                Console.WriteLine(s.Status + " | " + s.ToString());
+            }
+        }
+
+        #region Quandl Tools
+
         private Dictionary<string, DateTime> MergeEODFiles { get; } = new Dictionary<string, DateTime>();
 
         private void BtnAddQuandlFile_Click(object sender, EventArgs e)
@@ -599,10 +614,6 @@ namespace TestClient
                 string fileName = Root.OpenFile.FileName;
                 ListViewQuandlFileMerge.Items.Add(fileName);
                 MergeEODFiles.CheckAdd(fileName, File.GetLastWriteTime(fileName));
-                /*
-                Cts = new CancellationTokenSource();
-                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
-                m.Start();*/
             }
         }
 
@@ -613,30 +624,6 @@ namespace TestClient
             Cts = new CancellationTokenSource();
             Task m = new Task(() => { Quandl.MergeEODFiles(list, "D:\\EOD_Merged.csv", Progress, Cts); });
             m.Start();
-
-
-
-            /*
-            foreach(string fileName in list)
-            {
-                Console.WriteLine(fileName);
-            }
-            */
-            /*
-            List<string> files = new List<string>();
-            foreach(var item in ListViewQuandlFileMerge.Items) 
-            {
-                if(item is ListViewItem s) 
-                {
-                    files.CheckAdd(s.Text);
-                    Console.WriteLine(s.Text);
-                }
-
-                //ListViewItem n = (ListViewItem)
-                //files.CheckAdd(item.T)
-            }*/
-
-            //var list = ListViewQuandlFileMerge.Items
         }
 
         private void BtnExtractSymbols_Click(object sender, EventArgs e)
@@ -671,67 +658,22 @@ namespace TestClient
             }
         }
 
-        private void BtnMatchSymbols_Click(object sender, EventArgs e)
+        private void BtmImportQuandlBlob_Click(object sender, EventArgs e)
         {
-            Cts = new CancellationTokenSource();
-            Task m = new Task(() => { ContractList.MakeUp(Cts, Progress); });
-            m.Start();
-        }
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
 
-        private void BtnFindDuplicate_Click(object sender, EventArgs e)
-        {
-            IEnumerable<Contract> cList = ContractList.Values.AsParallel().Where(n => n is Stock s && s.Country == "US"); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
-
-            Dictionary<string, int> duplicate = new Dictionary<string, int>();
-
-            foreach (Contract c in cList)
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
-                string name = c.Name;
 
-                if (!duplicate.ContainsKey(name))
-                    duplicate.Add(name, 1);
-                else
-                    duplicate[name]++;
-            }
-
-            var result = duplicate.Where(n => n.Value > 1).SelectMany(n => cList.Where(c => c.Name == n.Key));
-            /*
-            List<Contract> toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
-
-            foreach(Contract c in toDelete) 
-            {
-                ContractList.Remove(c.Info);
-                Console.WriteLine("Removing: " + c.Status + " | " + c.ToString());
-            }*/
-
-            
-            foreach (Contract c in result)
-            {
-                Console.WriteLine(c.Status + " | " + c.ToString());
+                Cts = new CancellationTokenSource();
+                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
+                m.Start();
             }
         }
 
-        private void BtnDownloadTables_Click(object sender, EventArgs e)
-        {
-            DownloadBarTable.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
-            DownloadBarTable.DownloadProgress = Progress;
-            DownloadBarTable.DetailedProgress = Detailed_Progress;
+        #endregion Quandl Tools
 
-            DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
-
-            string symbolText = TextBoxMultiContracts.Text;
-            DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
-            TextBoxMultiContracts.Text = symbolText;
-
-            DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
-            DownloadBarTable.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
-            //DownloadBarTable.BarFreqs.Add(BarFreq.HalfMinute);
-
-            Task.Run(() => { DownloadBarTable.Worker(); });
-        }
-
-        public static Progress<float> Detailed_Progress;
+        #region Contract Settings
 
         private void BtnTestSymbolsToCheck_Click(object sender, EventArgs e)
         {
@@ -744,14 +686,14 @@ namespace TestClient
             HashSet<string> existingSymbols = new HashSet<string>();
             var existingSymbolsArray = list.Select(n => n.Name);
 
-            foreach(string symbol in existingSymbolsArray) 
+            foreach (string symbol in existingSymbolsArray)
             {
                 existingSymbols.CheckAdd(symbol);
             }
 
             var non_existing_symbols = SymbolList.Where(n => !existingSymbols.Contains(n));
 
-            foreach(string s in non_existing_symbols) 
+            foreach (string s in non_existing_symbols)
             {
                 Console.WriteLine("Can't find: " + s);
             }
@@ -781,15 +723,56 @@ namespace TestClient
             TextBoxSymbols.Text = rectified;*/
         }
 
-        private void BtnMarketDataTestFormShow_Click(object sender, EventArgs e)
+
+
+        #endregion Contract Settings
+
+        #region Market Data
+
+        private void BtnMarketDataFormShow_Click(object sender, EventArgs e)
         {
             MarketDataTest.Form.Show();
         }
 
-        private void BtnMarketDataTestFormHide_Click(object sender, EventArgs e)
+        private void BtnMarketDataFormHide_Click(object sender, EventArgs e)
         {
             MarketDataTest.Form.Hide();
         }
+
+        private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !ValidateSymbol()) return;
+            ContractTest.ActiveContract.RequestQuote("236,375");
+        }
+
+        private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
+        {
+            //string tickList = "236,mdoff,292";
+            string tickList = "236,375";
+            /*
+            string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
+                                            "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
+                                            "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
+                                            "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN" };*/
+
+            string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
+            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };
+
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+
+            foreach (Contract c in cList)
+            {
+                Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
+            }
+        }
+
+        private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
+        {
+            if (Root.IBClient is null || !ValidateSymbol()) return;
+            Console.WriteLine("MarketDepth: " + Root.IBClient.SendRequest_MarketDepth(ContractTest.ActiveContract));
+        }
+
+        #endregion Market Data
     }
     public static class DataGridHelper
     {

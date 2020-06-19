@@ -626,8 +626,6 @@ namespace Pacmio
             // Need to figure out a way to clean up bars.
         }
 
-
-
         public IEnumerable<(IChartOverlay, BarAnalysisPointer)> IChartOverlays => BarAnalysisPointerList.Keys.Where(n => n is IChartOverlay).Select(n => ((IChartOverlay)n, BarAnalysisPointerList[n]));
 
         public BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)

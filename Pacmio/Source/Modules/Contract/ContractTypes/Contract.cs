@@ -222,20 +222,6 @@ namespace Pacmio
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
 
-        public object this[Column column]
-        {
-            get
-            {
-                return column switch
-                {
-                    ContractColumn cc => this,
-
-
-                    _ => null,
-                };
-            }
-        }
-
         #endregion Status and Market Data
 
         #region Equality
@@ -276,5 +262,70 @@ namespace Pacmio
         public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
 
         #endregion Equality
+
+
+        public object this[Column column]
+        {
+            get
+            {
+                return column switch
+                {
+                    ContractColumn _ => this,
+                    StringColumn sc when sc == Column_Status => MarketData.Status,
+                    StringColumn sc when sc == Column_TradeTime => MarketData.LastTradeTime,
+                    
+                    StringColumn sc when sc == Column_BidExchange => MarketData.BidExchange,
+                    NumericColumn dc when dc == Column_BidSize => MarketData.BidSize,
+                    NumericColumn dc when dc == Column_Bid => MarketData.Bid,
+                    NumericColumn dc when dc == Column_Ask => MarketData.Ask,
+                    NumericColumn dc when dc == Column_AskSize => MarketData.AskSize,
+                    StringColumn sc when sc == Column_AskExchange => MarketData.AskExchange,
+
+                    NumericColumn dc when dc == Column_Last => MarketData.Last,
+                    NumericColumn dc when dc == Column_LastSize => MarketData.LastSize,
+                    StringColumn sc when sc == Column_LastExchange => MarketData.LastExchange,
+
+                    NumericColumn dc when dc == Column_Open => MarketData.Open,
+                    NumericColumn dc when dc == Column_High => MarketData.High,
+                    NumericColumn dc when dc == Column_Low => MarketData.Low,
+                    NumericColumn dc when dc == Column_Volume => MarketData.Volume,
+
+                    NumericColumn dc when dc == Column_Short => MarketData.Shortable,
+                    NumericColumn dc when dc == Column_ShortShares => MarketData.ShortableShares,
+
+
+
+                    _ => null,
+                };
+            }
+        }
+
+  
+
+        public static readonly ContractColumn Column_Contract = new ContractColumn("Contract");
+        public static readonly StringColumn Column_Status = new StringColumn("STATUS");
+        public static readonly StringColumn Column_TradeTime = new StringColumn("TRADE_TIME");
+
+        public static readonly StringColumn Column_BidExchange = new StringColumn("BID_EXCHANGE");
+        public static readonly NumericColumn Column_BidSize = new NumericColumn("BID_SIZE");
+        public static readonly NumericColumn Column_Bid = new NumericColumn("BID");
+        public static readonly NumericColumn Column_Ask = new NumericColumn("ASK");
+        public static readonly NumericColumn Column_AskSize = new NumericColumn("ASK_SIZE");
+        public static readonly StringColumn Column_AskExchange = new StringColumn("ASK_EXCHANGE");
+
+        public static readonly NumericColumn Column_Last = new NumericColumn("LAST");
+        public static readonly NumericColumn Column_LastSize = new NumericColumn("LAST_SIZE");
+        public static readonly StringColumn Column_LastExchange = new StringColumn("LAST_EXCHANGE");
+
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN");
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH");
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW");
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+
+        public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
+        public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
+
+        public static readonly NumericColumn Column_Position = new NumericColumn("SHORT");
+        public static readonly NumericColumn Column_AverageCost = new NumericColumn("S_SHARES");
     }
 }
