@@ -14,11 +14,38 @@ using System.Linq;
 
 namespace Pacmio
 {
-    public sealed class MarketDataTable : IContractTable
+    public sealed class MarketDataTable : IContractTable, IStringTable
     {
-        public int Count => Rows.Count; // Root.IBClient.ActiveTicks.Count;
+        public int Count => Rows.Count;
 
         private readonly List<Contract> Rows = new List<Contract>();
+
+        public void AddContract(Contract c) 
+        {
+            Rows.CheckAdd(c);
+        }
+
+        public double this[int i, NumericColumn column]
+        {
+            get
+            {
+                if (i >= Count || i < 0)
+                    return double.NaN;
+                else
+                    return (double)Rows[i][column];
+            }
+        }
+
+        public string this[int i, StringColumn column]
+        {
+            get
+            {
+                if (i >= Count || i < 0)
+                    return null;
+                else
+                    return (string)Rows[i][column];
+            }
+        }
 
         public Contract this[int i, ContractColumn column]
         {
@@ -30,12 +57,6 @@ namespace Pacmio
                     return Rows[i];
             }
         }
-
-        public double this[int i, NumericColumn column] => throw new NotImplementedException();
-
-
-
-
 
         public object DataObjectLock { get; } = new object();
 

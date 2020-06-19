@@ -732,6 +732,18 @@ namespace TestClient
         private void BtnMarketDataFormShow_Click(object sender, EventArgs e)
         {
             MarketDataTest.Form.Show();
+
+            MarketDataTable mdt = new MarketDataTable();
+            mdt.AddContract(ContractTest.ActiveContract);
+  
+
+            MarketDataGridView mdgv = new MarketDataGridView("Market Data", mdt);
+            Root.Form.AddForm(DockStyle.Fill, 0, mdgv);
+
+
+            Root.Form.Show();
+
+
         }
 
         private void BtnMarketDataFormHide_Click(object sender, EventArgs e)

@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Drawing;
 using Xu;
 using Xu.GridView;
 
@@ -17,18 +17,20 @@ namespace Pacmio
 {
     public class MarketDataGridView : GridWidget
     {
-        public MarketDataGridView(string name) : base(name)
+        public MarketDataGridView(string name, MarketDataTable mdt) : base(name)
         {
-
+            MarketDataTable = mdt;
         }
 
         public MarketDataTable MarketDataTable { get; }
 
+        public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
+
         public override ITable Table => MarketDataTable;
 
-        public override IEnumerable<GridStripe> Stripes => S;
+        public override IEnumerable<GridStripe> Stripes => StripesSet;
 
-        private readonly List<GridStripe> S = new List<GridStripe>() {
+        private readonly List<GridStripe> StripesSet = new List<GridStripe>() {
 
             new StringGridStripe() { Name = "Status", Column = Contract.Column_Status, Importance = Importance.Major, Order = 0, Width = 70, AutoWidth = false },
             new ContractGridStripe() { Name = "Contract", Column = Contract.Column_Contract, Importance = Importance.Huge, Order = 1, Width = 120, AutoWidth = true },
