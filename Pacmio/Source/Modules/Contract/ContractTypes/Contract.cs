@@ -271,8 +271,8 @@ namespace Pacmio
                 return column switch
                 {
                     ContractColumn _ => this,
-                    StringColumn sc when sc == Column_Status => MarketData.Status,
-                    StringColumn sc when sc == Column_TradeTime => MarketData.LastTradeTime,
+                    StringColumn sc when sc == Column_Status => MarketData.Status.ToString(),
+                    StringColumn sc when sc == Column_TradeTime => MarketData.LastTradeTime.ToString(),
                     
                     StringColumn sc when sc == Column_BidExchange => MarketData.BidExchange,
                     NumericColumn dc when dc == Column_BidSize => MarketData.BidSize,
@@ -293,14 +293,10 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Short => MarketData.Shortable,
                     NumericColumn dc when dc == Column_ShortShares => MarketData.ShortableShares,
 
-
-
                     _ => null,
                 };
             }
         }
-
-  
 
         public static readonly ContractColumn Column_Contract = new ContractColumn("Contract");
         public static readonly StringColumn Column_Status = new StringColumn("STATUS");
@@ -324,8 +320,5 @@ namespace Pacmio
 
         public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
         public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
-
-        public static readonly NumericColumn Column_Position = new NumericColumn("SHORT");
-        public static readonly NumericColumn Column_AverageCost = new NumericColumn("S_SHARES");
     }
 }

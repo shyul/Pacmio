@@ -37,21 +37,41 @@ namespace Pacmio
 
 
 
-        public object DataObjectLock => throw new NotImplementedException();
+        public object DataObjectLock { get; } = new object();
 
-        public string Name => throw new NotImplementedException();
+        public string Name { get; set; }
 
-        public bool Enabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool Enabled { get; set; } = true;
 
         #region IDependable
 
-        public ICollection<IDependable> Children => throw new NotImplementedException();
+        public ICollection<IDependable> Children { get; } = new HashSet<IDependable>();
 
-        public ICollection<IDependable> Parents => throw new NotImplementedException();
+        public ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
 
         public void Remove(bool recursive)
         {
-            throw new NotImplementedException();
+            if (recursive || Children.Count == 0)
+            {
+                foreach (IDependable child in Children)
+                    child.Remove(true);
+
+                foreach (IDependable parent in Parents)
+                    parent.CheckRemove(this);
+
+                if (Children.Count > 0) throw new Exception("Still have children in this BarTable");
+
+                //Table.RemoveAnalysis(this);
+            }
+            else
+            {
+                if (Children.Count > 0)
+                {
+                    foreach (var child in Children)
+                        child.Enabled = false;
+                }
+                Enabled = false;
+            }
         }
 
         #endregion IDependable

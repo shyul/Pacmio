@@ -17,12 +17,15 @@ namespace Pacmio
 {
     public class ContractGridStripe : GridStripe
     {
+        public ContractColumn Column { get; set; }
 
         public override void Draw(Graphics g, Rectangle bound, ITable table, int index)
         {
-
-
+            if(table is IContractTable ct) 
+            {
+                Contract value = ct[index, Column];
+                g.DrawString(value.ToString(), Main.Theme.Font, Theme.ForeBrush, bound.Location);
+            }
         }
-
     }
 }

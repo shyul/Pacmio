@@ -26,6 +26,14 @@ namespace Pacmio
 
         public override ITable Table => MarketDataTable;
 
-        public override IEnumerable<GridStripe> Stripes => throw new NotImplementedException();
+        public override IEnumerable<GridStripe> Stripes => S;
+
+        public readonly List<GridStripe> S = new List<GridStripe>() { 
+            new ContractGridStripe() { Name = "Contract", Column = Contract.Column_Contract, Importance = Importance.Huge, Order = 0 },
+            new StringGridStripe() { Name = "Status", Column = Contract.Column_Status, Importance = Importance.Major, Order = 1 },
+
+
+
+        };
     }
 }
