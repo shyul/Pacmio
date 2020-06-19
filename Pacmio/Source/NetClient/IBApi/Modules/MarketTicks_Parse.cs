@@ -54,14 +54,14 @@ namespace Pacmio.IB
             // Console.WriteLine("\nParse Market Data Type: " + fields.ToFlat());
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32(-1);
-            lock (ActiveTicks)
-                if (msgVersion == "1" && ActiveTicks.ContainsKey(requestId) && fields.Length == 4)
+            lock (ActiveMarketTicks)
+                if (msgVersion == "1" && ActiveMarketTicks.ContainsKey(requestId) && fields.Length == 4)
                 {
-                    Contract c = ActiveTicks[requestId];
+                    Contract c = ActiveMarketTicks[requestId];
                     if (c is Stock si) si.Status = ContractStatus.Alive;
                     MarketData q = c.MarketData;
                     q.Status = (MarketQuoteStatus)fields[3].ToInt32(0);
-                    q.Update(requestId);
+                    WatchList.UpdateUI(c);
                 }
         }
 
@@ -98,20 +98,22 @@ namespace Pacmio.IB
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             // Console.WriteLine("\nParse Tick Req Params: " + fields.ToFlat());
 
-            int requestId = fields[1].ToInt32(-1);
-            lock (ActiveTicks)
-                if (ActiveTicks.ContainsKey(requestId) && fields.Length == 5)
+            int tickerId = fields[1].ToInt32(-1);
+            lock (ActiveMarketTicks)
+                if (ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    MarketData q = ActiveTicks[requestId].MarketData;
+                    Contract c = ActiveMarketTicks[tickerId];
+
+                    MarketData q = ActiveMarketTicks[tickerId].MarketData;
                     q.MinimumTick = fields[2].ToDouble(0);
                     q.BBOExchangeId = fields[3];
 
                     int snapshotPermissions = fields[4].ToInt32(-1);
 
-                    q.Update(requestId);
+                    WatchList.UpdateUI(c);
                 }
                 else
-                    SendCancel_MarketTicks(requestId);
+                    SendCancel_MarketTicks(tickerId);
         }
 
         /// <summary>
@@ -124,10 +126,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveTicks)
-                if (msgVersion == "6" && ActiveTicks.ContainsKey(tickerId) && fields.Length == 7)
+            lock (ActiveMarketTicks)
+                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 7)
                 {
-                    Contract c = ActiveTicks[tickerId];
+                    Contract c = ActiveMarketTicks[tickerId];
                     //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
                     MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
@@ -175,7 +177,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    q.Update(tickerId, tickType.ToString() + ": " + price + "/" + size);
+                    WatchList.UpdateUI(c);
                 }
         }
 
@@ -188,10 +190,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveTicks)
-                if (msgVersion == "6" && ActiveTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketTicks)
+                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveTicks[tickerId];
+                    Contract c = ActiveMarketTicks[tickerId];
                     //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
                     MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
@@ -225,7 +227,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    q.Update(tickerId, tickType.ToString() + ": " + size);
+                    WatchList.UpdateUI(c);
                 }
         }
 
@@ -255,10 +257,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveTicks)
-                if (msgVersion == "6" && ActiveTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketTicks)
+                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveTicks[tickerId];
+                    Contract c = ActiveMarketTicks[tickerId];
                     //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
                     MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
@@ -345,7 +347,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    q.Update(tickerId);
+                    WatchList.UpdateUI(c);
                 }
         }
 
@@ -361,10 +363,11 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveTicks)
-                if (msgVersion == "6" && ActiveTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketTicks)
+                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    MarketData q = ActiveTicks[tickerId].MarketData;
+                    Contract c = ActiveMarketTicks[tickerId];
+                    MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
@@ -379,7 +382,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    q.Update(tickerId);
+                    WatchList.UpdateUI(c);
                 }
         }
 

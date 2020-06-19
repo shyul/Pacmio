@@ -18,11 +18,11 @@ namespace Pacmio
     {
         public int Count => Rows.Count;
 
-        private readonly List<Contract> Rows = new List<Contract>();
+        private readonly List<MarketData> Rows = new List<MarketData>();
 
-        public void Add(Contract c) => Rows.CheckAdd(c);
+        public void Add(MarketData md) => Rows.CheckAdd(md);
 
-        public bool Contains(Contract c) => Rows.Contains(c);
+        public bool Contains(MarketData md) => Rows.Contains(md);
 
         public double this[int i, NumericColumn column]
         {
@@ -53,7 +53,7 @@ namespace Pacmio
                 if (i >= Count || i < 0)
                     return null;
                 else
-                    return Rows[i];
+                    return Rows[i].Contract;
             }
         }
 

@@ -36,7 +36,7 @@ namespace Pacmio
     /// https://interactivebrokers.github.io/tws-api/tick_types.html
     /// </summary>
     [Serializable]
-    public class MarketData
+    public class MarketData : IRow, IEquatable<MarketData>, IEquatable<Contract>
     {
         public MarketData(Contract c) { Contract = c; }
 
@@ -276,22 +276,86 @@ namespace Pacmio
 
 
 
-        DateTime LastUpdateEventSendTime { get; set; } = DateTime.MinValue;
-        public void Update(int statusCode = 3, string message = "")
+
+        public bool Equals(Contract other) => Contract == other;
+        public static bool operator ==(MarketData s1, Contract s2) => s1.Equals(s2);
+        public static bool operator !=(MarketData s1, Contract s2) => !s1.Equals(s2);
+        public bool Equals(MarketData other) => Contract == other.Contract;
+        public static bool operator ==(MarketData s1, MarketData s2) => s1.Equals(s2);
+        public static bool operator !=(MarketData s1, MarketData s2) => !s1.Equals(s2);
+
+        public override bool Equals(object other)
         {
-            UpdateTime = DateTime.Now;
-            //Console.WriteLine(message);
+            if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+                return false;
+            else if (other is Contract c)
+                return Equals(c);
+            else if (other is MarketData md)
+                return Equals(md);
+            else
+                return false;
+        }
+        public override int GetHashCode() => GetType().GetHashCode() ^ Contract.GetHashCode();
 
-            // Update all BarTables here.
-            // Call decsion making functions...
-
-            if ((UpdateTime - LastUpdateEventSendTime).TotalMilliseconds > 1000)
+        public object this[Column column]
+        {
+            get
             {
-                //Console.Write(".");
-                LastUpdateEventSendTime = UpdateTime;
-                UpdatedHandler?.Invoke(statusCode, UpdateTime, message);
+                return column switch
+                {
+                    ContractColumn _ => Contract,
+                    StringColumn sc when sc == Column_Status => Status.ToString(),
+                    StringColumn sc when sc == Column_TradeTime => LastTradeTime.ToString(),
+
+                    StringColumn sc when sc == Column_BidExchange => BidExchange,
+                    NumericColumn dc when dc == Column_BidSize => BidSize,
+                    NumericColumn dc when dc == Column_Bid => Bid,
+
+                    NumericColumn dc when dc == Column_Ask => Ask,
+                    NumericColumn dc when dc == Column_AskSize => AskSize,
+                    StringColumn sc when sc == Column_AskExchange => AskExchange,
+
+                    NumericColumn dc when dc == Column_Last => Last,
+                    NumericColumn dc when dc == Column_LastSize => LastSize,
+                    StringColumn sc when sc == Column_LastExchange => LastExchange,
+
+                    NumericColumn dc when dc == Column_Open => Open,
+                    NumericColumn dc when dc == Column_High => High,
+                    NumericColumn dc when dc == Column_Low => Low,
+                    NumericColumn dc when dc == Column_Close => LastClose,
+                    NumericColumn dc when dc == Column_Volume => Volume,
+
+                    NumericColumn dc when dc == Column_Short => Shortable,
+                    NumericColumn dc when dc == Column_ShortShares => ShortableShares,
+
+                    _ => null,
+                };
             }
         }
-        public static event StatusEventHandler UpdatedHandler;
+
+        public static readonly StringColumn Column_Status = new StringColumn("STATUS");
+        public static readonly ContractColumn Column_Contract = new ContractColumn("Contract");
+        public static readonly StringColumn Column_TradeTime = new StringColumn("TRADE_TIME");
+
+        public static readonly StringColumn Column_BidExchange = new StringColumn("BID_EXCHANGE");
+        public static readonly NumericColumn Column_BidSize = new NumericColumn("BID_SIZE");
+        public static readonly NumericColumn Column_Bid = new NumericColumn("BID");
+
+        public static readonly NumericColumn Column_Ask = new NumericColumn("ASK");
+        public static readonly NumericColumn Column_AskSize = new NumericColumn("ASK_SIZE");
+        public static readonly StringColumn Column_AskExchange = new StringColumn("ASK_EXCHANGE");
+
+        public static readonly NumericColumn Column_Last = new NumericColumn("LAST");
+        public static readonly NumericColumn Column_LastSize = new NumericColumn("LAST_SIZE");
+        public static readonly StringColumn Column_LastExchange = new StringColumn("LAST_EXCHANGE");
+
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN");
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH");
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW");
+        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE");
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+
+        public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
+        public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
     }
 }

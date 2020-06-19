@@ -26,7 +26,7 @@ namespace TestClient
             OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
 
             ContractTest.InitializeTable(GridViewContractSearchResult);
-            MarketDataTest.InitializeTable();
+            //MarketDataTest.InitializeTable();
             OrderTest.InitializeTable(GridViewAllOrders);
             TradeTest.InitializeTable(GridViewTradeTable);
 
@@ -759,12 +759,17 @@ namespace TestClient
             "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };
 
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+            MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
 
             foreach (Contract c in cList)
             {
                 Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
-            }
 
+                GridView.MarketDataTable.Add(c.MarketData);
+
+
+            }
+            WatchList.Add(GridView);
             Root.Form?.Show();
         }
 

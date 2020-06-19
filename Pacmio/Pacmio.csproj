@@ -141,6 +141,7 @@
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataTable.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\PositionGridView.cs" />
+    <Compile Include="Source\Modules\MarketData\WatchList.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\TradeLogManager.cs" />
@@ -197,7 +198,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\ITradable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\AccountManager.cs" />
-    <Compile Include="Source\Modules\MarketData\ScannerManager.cs" />
+    <Compile Include="Source\Modules\Strategy\ScannerManager.cs" />
     <Compile Include="Source\Modules\Trade\Types\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_ExecutionData.cs" />
@@ -237,7 +238,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\MarketData\ScannerInfo.cs" />
+    <Compile Include="Source\Modules\Strategy\ScannerInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />

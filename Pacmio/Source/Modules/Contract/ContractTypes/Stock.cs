@@ -87,7 +87,9 @@ namespace Pacmio
         // https://interactivebrokers.github.io/tws-api/tick_types.html
         public override bool RequestQuote(string genericTickList = "236,375") // 292 is news
         {
-            //if (MarketData is null) MarketData = new MarketData(this);
+            
+
+
             return Root.IBClient.SendRequest_MarketTicks(this, genericTickList);
         }
 
