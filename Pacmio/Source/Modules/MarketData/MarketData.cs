@@ -42,7 +42,17 @@ namespace Pacmio
 
         public Contract Contract { get; protected set; }
 
-        public int TickerId { get; set; } = 0;
+        #region Net Client Information
+
+        public IB.Client NetClient { get; set; }
+
+        public int TickerId { get; set; } = -1;
+        
+
+
+
+
+        #endregion Net Client Information
 
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 

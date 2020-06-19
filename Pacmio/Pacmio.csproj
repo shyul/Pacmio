@@ -140,10 +140,10 @@
     <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\MarketData\GridView\MarketDataTable.cs" />
-    <Compile Include="Source\Modules\MarketData\GridView\PositionGridView.cs" />
     <Compile Include="Source\Modules\MarketData\WatchList.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
+    <Compile Include="Source\Modules\Trade\GridView\PositionGridView.cs" />
     <Compile Include="Source\Modules\Trade\TradeLogManager.cs" />
     <Compile Include="Source\Modules\Trade\Types\PositionStatus.cs" />
     <Compile Include="Source\Modules\Trade\Account\SimulationAccount.cs" />

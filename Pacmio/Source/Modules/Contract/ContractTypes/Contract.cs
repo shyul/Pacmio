@@ -212,9 +212,9 @@ namespace Pacmio
         [IgnoreDataMember] //, NonSerialized]
         public MarketData MarketData { get; set; }
 
-        public abstract bool RequestQuote(string genericTickList);
+        public abstract bool RequestQuote(string param);
 
-        public abstract void StopQuote();
+        public abstract void CancelQuote();
 
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;

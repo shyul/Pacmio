@@ -85,31 +85,16 @@ namespace Pacmio
         #region Status and Market Data
 
         // https://interactivebrokers.github.io/tws-api/tick_types.html
-        public override bool RequestQuote(string genericTickList = "236,375") // 292 is news
+        public override bool RequestQuote(string param)
         {
-            
-
-
-            return Root.IBClient.SendRequest_MarketTicks(this, genericTickList);
+            //string genericTickList = "236,375";  // 292 is news
+            return Root.IBClient.SendRequest_MarketTicks(this, param);
         }
 
-        public override void StopQuote()
+        public override void CancelQuote()
         {
-            //if (MarketData is null) MarketData = new MarketData(this);
-            Root.IBClient.SendCancel_MarketTicks(MarketData.TickerId);
-            MarketData.TickerId = -1;
+            MarketData.NetClient.SendCancel_MarketTicks(MarketData.TickerId);
         }
-        /*
-        public override BarTable GetOrAdd(BarFreq freq = BarFreq.Daily, BarType type = BarType.Trades, bool adj_div = false)
-        {
-
-            BarTable bt = BarTableList.GetOrAdd(this, freq, type);
-            bt.AdjustDividend = adj_div;
-
-            // Also start adjust here...
-
-            return bt;
-        }*/
 
         #endregion Status and Market Data
 

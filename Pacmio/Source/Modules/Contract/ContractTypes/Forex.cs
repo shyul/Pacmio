@@ -28,12 +28,12 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(false), ReadOnly(true)]
         public override string TypeApiCode => "CASH";
 
-        public override bool RequestQuote(string genericTickList)
+        public override bool RequestQuote(string param)
         {
             throw new NotImplementedException();
         }
 
-        public override void StopQuote()
+        public override void CancelQuote()
         {
             throw new NotImplementedException();
         }

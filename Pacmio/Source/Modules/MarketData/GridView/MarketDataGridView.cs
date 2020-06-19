@@ -22,11 +22,13 @@ namespace Pacmio
         public MarketDataGridView(string name, MarketDataTable mdt) : base(name)
         {
             MarketDataTable = mdt;
-     
+
         }
 
 
         public MarketDataTable MarketDataTable { get; }
+
+        public MarketData SelectMarketData { get; }
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
 

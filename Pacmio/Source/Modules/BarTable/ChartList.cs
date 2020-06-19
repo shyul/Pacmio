@@ -59,8 +59,7 @@ namespace Pacmio
 
                 if (bc.IsActive)
                 {
-                    bc.Coordinate();
-                    bc.Invalidate();
+                    bc.UpdateUI();
                 }
             });
         }

@@ -437,7 +437,7 @@ namespace TestClient
 
             string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
             var list = ContractList.GetOrFetch(symbols, "US", null, null);
-            string tickList = "236,375";
+            string tickList = TextBoxGenericTickList.Text;
             foreach (Contract c in list)
             {
                 c.RequestQuote(tickList);
@@ -742,21 +742,24 @@ namespace TestClient
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
             if (Root.IBClient is null || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.RequestQuote("236,375");
+            ContractTest.ActiveContract.RequestQuote(TextBoxGenericTickList.Text);
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
         {
-            //string tickList = "236,mdoff,292";
-            string tickList = "236,375";
+            string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
             /*
             string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
                                             "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
                                             "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
                                             "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN" };*/
 
+
+            string symbolText = TextBoxMultiContracts.Text;
+            var symbols = ContractTools.GetSymbolList(ref symbolText);
+            /*
             string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
-            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };
+            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };*/
 
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());

@@ -76,31 +76,30 @@ namespace Pacmio.IB
             bool snapshot = false, bool regulatorySnaphsot = false,
             ICollection<(string, string)> options = null)
         {
-            if (!ActiveMarketTicks.Values.Contains(c))
+            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
+
+            if (Connected && valid_exchange && !ActiveMarketTicks.Values.Contains(c) && !SubscriptionOverflow)
             {
-                var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
+                (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
+                c.MarketData.NetClient = this;
+                c.MarketData.TickerId = requestId;
+                ActiveMarketTicks.CheckAdd(requestId, c);
 
-                if (Connected && valid_exchange && !ActiveMarketTicks.Values.Contains(c) && !SubscriptionOverflow)
+                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                string lastTradeDateOrContractMonth = "";
+                double strike = 0;
+                string right = "";
+                string multiplier = "";
+
+                if (c is IOption opt)
                 {
-                    (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
-                    c.MarketData.TickerId = requestId;
-                    ActiveMarketTicks.CheckAdd(requestId, c);
+                    lastTradeDateOrContractMonth = opt.LastTradeDateOrContractMonth;
+                    strike = opt.Strike;
+                    right = opt.Right;
+                    multiplier = opt.Multiplier;
+                }
 
-                    bool useSmart = c is ITradable it && it.AutoExchangeRoute;
-                    string lastTradeDateOrContractMonth = "";
-                    double strike = 0;
-                    string right = "";
-                    string multiplier = "";
-
-                    if (c is IOption opt)
-                    {
-                        lastTradeDateOrContractMonth = opt.LastTradeDateOrContractMonth;
-                        strike = opt.Strike;
-                        right = opt.Right;
-                        multiplier = opt.Multiplier;
-                    }
-
-                    List<string> paramsList = new List<string>() {
+                List<string> paramsList = new List<string>() {
                     requestType,
                     "11",
                     requestId.Param(),
@@ -123,63 +122,63 @@ namespace Pacmio.IB
                     //options.Param(),
                 };
 
-                    if (c is ICombo ic)
+                if (c is ICombo ic)
+                {
+                    if (ic.ComboLegs is null)
                     {
-                        if (ic.ComboLegs is null)
+                        paramsList.Add("0");
+                    }
+                    else
+                    {
+                        paramsList.Add(ic.ComboLegs.Count.ParamPos());
+                        foreach (ComboLeg leg in ic.ComboLegs)
                         {
-                            paramsList.Add("0");
-                        }
-                        else
-                        {
-                            paramsList.Add(ic.ComboLegs.Count.ParamPos());
-                            foreach (ComboLeg leg in ic.ComboLegs)
-                            {
-                                paramsList.AddRange(new string[] {
+                            paramsList.AddRange(new string[] {
                                 leg.ConId.ParamPos(),
                                 leg.Ratio.Param(),
                                 leg.Action,
                                 leg.Exchange,
                             });
-                                /*
-                                paramsList.Add(leg.ConId.ParamPos());
-                                paramsList.Add(leg.Ratio.Param());
-                                paramsList.Add(leg.Action);
-                                paramsList.Add(leg.Exchange);*/
-                            }
+                            /*
+                            paramsList.Add(leg.ConId.ParamPos());
+                            paramsList.Add(leg.Ratio.Param());
+                            paramsList.Add(leg.Action);
+                            paramsList.Add(leg.Exchange);*/
                         }
                     }
+                }
 
-                    if (c is IDeltaNeutral dnc && !(dnc.DeltaNeutralContract is null))
-                    {
-                        DeltaNeutralContract deltaNeutralContract = dnc.DeltaNeutralContract;
-                        paramsList.AddRange(new string[] {
+                if (c is IDeltaNeutral dnc && !(dnc.DeltaNeutralContract is null))
+                {
+                    DeltaNeutralContract deltaNeutralContract = dnc.DeltaNeutralContract;
+                    paramsList.AddRange(new string[] {
                         "1",
                         deltaNeutralContract.ConId.ParamPos(),
                         deltaNeutralContract.Delta.Param(),
                         deltaNeutralContract.Price.Param(),
                     });
-                        /*
-                        paramsList.Add("1"); // true
-                        paramsList.Add(deltaNeutralContract.ConId.ParamPos());
-                        paramsList.Add(deltaNeutralContract.Delta.Param());
-                        paramsList.Add(deltaNeutralContract.Price.Param());*/
-                    }
-                    else
-                    {
-                        paramsList.Add("0"); // 15
-                    }
+                    /*
+                    paramsList.Add("1"); // true
+                    paramsList.Add(deltaNeutralContract.ConId.ParamPos());
+                    paramsList.Add(deltaNeutralContract.Delta.Param());
+                    paramsList.Add(deltaNeutralContract.Price.Param());*/
+                }
+                else
+                {
+                    paramsList.Add("0"); // 15
+                }
 
-                    paramsList.AddRange(new string[] {
+                paramsList.AddRange(new string[] {
                     genericTickList,
                     snapshot.Param(),
                     regulatorySnaphsot.Param(),
                     options.Param(),
                 });
 
-                    SendRequest(paramsList);
-                    return true;
-                }
+                SendRequest(paramsList);
+                return true;
             }
+
             return false;
         }
 
@@ -267,6 +266,8 @@ namespace Pacmio.IB
             {
                 ActiveMarketTicks.TryRemove(requestId, out Contract c);
                 c.MarketData.Status = MarketQuoteStatus.DelayedFrozen;
+                c.MarketData.NetClient = null;
+                c.MarketData.TickerId = -1;
             }
             // Emit update cancelled.
             return false;

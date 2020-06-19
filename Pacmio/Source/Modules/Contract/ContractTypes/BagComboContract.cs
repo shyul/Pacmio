@@ -65,7 +65,7 @@ namespace Pacmio
 
         public override bool RequestQuote(string genericTickList) => false;
 
-        public override void StopQuote() { }
+        public override void CancelQuote() { }
 
         /// <summary>
         /// ############################## Can be simplified

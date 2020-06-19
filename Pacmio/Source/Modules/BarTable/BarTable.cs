@@ -1004,89 +1004,35 @@ namespace Pacmio
         public void RefreshChartToEnd()
         {
             // Update All Charts
-            Children.Where(c => c is BarChart).Select(n => (BarChart)n).ToList().ForEach(bc =>
+            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
             {
-                bc.StopPt = LastIndex;
-                bc.ReadyToShow = true;
+                n.StopPt = LastIndex;
+                n.ReadyToShow = true;
 
+                n.SetRefreshUI();
+                /*
                 bc.Coordinate();
-                bc.Invalidate();
+                bc.Invalidate();*/
             });
-
-            /*
-            Children.Where(c => c is BarChart).ToList().ForEach(n => {
-                BarChart bc = (BarChart)n;
-
-                int indexCount = bc.IndexCount;
-
-                bc.StopPt = Count;
-                bc.StartPt = bc.StopPt - indexCount;
-                                
-                else
-                {
-                    bc.StopPt = Count;
-                    bc.StartPt = bc.StopPt - 255;
-                }
-
-                if (bc.InvokeRequired)
-                {
-                    bc.Invoke(new SetChart(() => { GUI.Resume(bc); }));
-                }
-                else
-                {
-                    GUI.Resume(bc);
-                }
-
-                if (bc.IsActive)
-                {
-                    bc.Coordinate();
-                    bc.Invalidate();
-                }
-            });*/
         }
 
         public void RefreshChartNextTick()
         {
             // Update All Charts
-            Children.Where(c => c is BarChart).Select(n => (BarChart)n).ToList().ForEach(bc =>
+            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
             {
-                bc.ReadyToShow = true;
+                n.ReadyToShow = true;
 
-                if (bc.StopPt == Count - 1)
+                if (n.StopPt == Count - 1)
                 {
-                    bc.StopPt++;
+                    n.StopPt++;
                 }
 
+                n.SetRefreshUI();
+                /*
                 bc.Coordinate();
-                bc.Invalidate();
+                bc.Invalidate();*/
             });
-
-            /*
-            Children.Where(c => c is BarChart).ToList().ForEach(n => {
-                BarChart bc = (BarChart)n;
-
-                if (bc.StopPt == Count - 1)
-                {
-                    bc.StopPt++;
-                    bc.StartPt++;
-                }
-
-
-                if (bc.InvokeRequired)
-                {
-                    bc.Invoke(new SetChart(() => { GUI.Resume(bc); }));
-                }
-                else
-                {
-                    GUI.Resume(bc);
-                }
-
-                if (bc.IsActive)
-                {
-                    bc.Coordinate();
-                    bc.Invalidate();
-                }
-            });*/
         }
 
         /// <summary>

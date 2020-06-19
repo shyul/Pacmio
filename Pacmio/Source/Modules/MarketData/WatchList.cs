@@ -26,13 +26,35 @@ namespace Pacmio
             {
                 List.Add(gv);
             }
-
+            gv.ReadyToShow = true;
             Root.Form.AddForm(DockStyle.Fill, 0, gv);
         }
 
         private static readonly List<MarketDataGridView> List = new List<MarketDataGridView>();
 
-        public static void UpdateUI(Contract c) => List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.UpdateUI());
+        public static void UpdateUI(Contract c) => List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI());
+
+        public static void CleanUp() 
+        {
+        
+        }
+
+
+
+        public static Contract SelectedContract
+        {
+            get
+            {
+                if(DockCanvas.ActiveDockForm is MarketDataGridView gv) 
+                {
+                    return gv.SelectMarketData.Contract;
+                
+                }
+
+                return null;
+            }
+
+        }
     }
 }
 
