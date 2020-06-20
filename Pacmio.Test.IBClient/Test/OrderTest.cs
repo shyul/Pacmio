@@ -115,7 +115,7 @@ namespace TestClient
                 row["Time In Force"] = tif;
                 row["Status"] = od.Status.ToString();
                 row["Mode Code"] = od.ModeCode;
-                row["Account"] = od.Account;
+                row["Account"] = od.AccountCode;
                 row["Order Id"] = od.OrderId;
                 row["Client Id"] = od.ClientId;
                 row["Exec Time"] = od.OrderTime;
@@ -125,7 +125,7 @@ namespace TestClient
             {
                 Table.Rows.Add(od.PermId, contractName,
                     od.Quantity, orderType, od.Quantity * od.LimitPrice,
-                   tif, od.Status.ToString(), od.ModeCode, od.Account, od.OrderId, od.ClientId, od.OrderTime);
+                   tif, od.Status.ToString(), od.ModeCode, od.AccountCode, od.OrderId, od.ClientId, od.OrderTime);
             }
         }
     }

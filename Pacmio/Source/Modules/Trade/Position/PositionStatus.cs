@@ -16,7 +16,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PositionStatus
+    public class PositionStatus : IRow, IEquatable<PositionStatus>
     {
         #region Order
         public TradeActionType ActionType
@@ -44,24 +44,28 @@ namespace Pacmio
 
         public OrderInfo EntryOrder { get; set; } = null;
 
+        public Contract Contract => EntryOrder.Contract;
+
+        public string AccountCode => EntryOrder.AccountCode;
+
         #endregion
 
         #region Position Information
 
         public double Quantity { get; private set; } = 0;
 
-        public double CostBasis { get; private set; } = double.NaN;
+        public double AveragePrice { get; private set; } = double.NaN;
 
         public double Commission { get; private set; } = 0;
 
-        public double BreakEvenPrice => (Quantity * CostBasis + Commission) / Quantity;
+        public double BreakEvenPrice => (Quantity * AveragePrice + Commission) / Quantity;
 
-        public double Value => double.IsNaN(CostBasis) ? 0 : Math.Abs(Quantity * CostBasis);
+        public double Value => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
 
         public void Reset() 
         {
             Quantity = 0;
-            CostBasis = double.NaN;
+            AveragePrice = double.NaN;
             PendingExit = false;
         }
 
@@ -79,7 +83,7 @@ namespace Pacmio
             }
 
             Quantity = qty;
-            CostBasis = (Quantity == 0) ? double.NaN : price;
+            AveragePrice = (Quantity == 0) ? double.NaN : price;
         }
 
         public (double Proceeds, double PnL, LiquidityType LiquidityType) Close(double price) => Add(-Quantity, price);
@@ -110,7 +114,7 @@ namespace Pacmio
                     {
                         ActionType = TradeActionType.Long;
                         liquidityType = LiquidityType.Added;
-                        CostBasis = (Value + order_value) / new_qty;
+                        AveragePrice = (Value + order_value) / new_qty;
                         proceeds = order_value; // Positive proceeds
                         throw new Exception("Add Position over existing long position is not supported so far.");
                     }
@@ -120,16 +124,16 @@ namespace Pacmio
                         {
                             ActionType = TradeActionType.Sell;
                             liquidityType = LiquidityType.Removed;
-                            pnl = (CostBasis - price) * qty; // qty is negative
+                            pnl = (AveragePrice - price) * qty; // qty is negative
                             proceeds = order_value; // Negative Proceeds. Since qty < 0, so the cost is negative here, and proceeds is negative
                         }
                         else
                         {
                             ActionType = TradeActionType.Short;
                             liquidityType = LiquidityType.Added;
-                            pnl = (price - CostBasis) * Quantity; // Sell will generate pnl here
+                            pnl = (price - AveragePrice) * Quantity; // Sell will generate pnl here
                             proceeds = -(Quantity + new_qty) * price;
-                            CostBasis = price;
+                            AveragePrice = price;
                             throw new Exception("Sell long into short is not supported so far");
                         }
                     }
@@ -142,7 +146,7 @@ namespace Pacmio
                     {
                         ActionType = TradeActionType.Short;
                         liquidityType = LiquidityType.Added;
-                        CostBasis = (order_value - Value) / new_qty;
+                        AveragePrice = (order_value - Value) / new_qty;
                         proceeds = -order_value; // Positive proceeds
                         throw new Exception("Add Position over existing short position is not supported so far.");
                     }
@@ -152,23 +156,23 @@ namespace Pacmio
                         {
                             ActionType = TradeActionType.Cover;
                             liquidityType = LiquidityType.Removed;
-                            pnl = (CostBasis - price) * qty;
+                            pnl = (AveragePrice - price) * qty;
                             proceeds = -Value - pnl;// -order_value; // Negative Proceeds. Since qty > 0, so the cost is positive here, so we need to add negative to it.
                         }
                         else
                         {
                             ActionType = TradeActionType.Long;
                             liquidityType = LiquidityType.Added; // Positive proceeds
-                            pnl = (CostBasis - price) * Quantity; // Sell will generate pnl here
+                            pnl = (AveragePrice - price) * Quantity; // Sell will generate pnl here
                             proceeds = new_qty * price - Value - pnl;//   (Quantity + new_qty) * price; // Negative if new_qty is smaller than abs Quantity, which means new_qty value is smaller, so we have money flow back to the pool.
-                            CostBasis = price;
+                            AveragePrice = price;
                             throw new Exception("Cover short into long is not supported so far");
                         }
                     }
                     Quantity = new_qty;
                 }
 
-                if (Quantity == 0) CostBasis = double.NaN;
+                if (Quantity == 0) AveragePrice = double.NaN;
             }
             else
             {
@@ -176,7 +180,7 @@ namespace Pacmio
                 else if (Quantity < 0) ActionType = TradeActionType.ShortHold;
                 else
                 {
-                    CostBasis = double.NaN;
+                    AveragePrice = double.NaN;
                     ActionType = TradeActionType.None;
                 }
             }
@@ -188,7 +192,7 @@ namespace Pacmio
 
             if (Quantity == 0) 
             {
-                CostBasis = double.NaN;
+                AveragePrice = double.NaN;
                 PendingExit = false; 
             }
 
@@ -284,5 +288,36 @@ namespace Pacmio
         public double ShortPnL { get; private set; } = 0;
 
         #endregion Statistics
+
+        #region Equality
+
+        public bool Equals(PositionStatus other) => Contract == other.Contract && AccountCode == other.AccountCode;
+
+        public override bool Equals(object other)
+        {
+            if (other is PositionStatus ps)
+                return Equals(ps);
+            else
+                return false;
+        }
+
+        public static bool operator ==(PositionStatus s1, PositionStatus s2) => s1.Equals(s2);
+        public static bool operator !=(PositionStatus s1, PositionStatus s2) => !s1.Equals(s2);
+
+        public override int GetHashCode() => Contract.GetHashCode() ^ AccountCode.GetHashCode();
+
+        #endregion Equality
+
+        #region Grid View
+
+        public object this[Column column] => throw new NotImplementedException();
+
+        public static readonly NumericColumn Column_Quantity = new NumericColumn("QUANTITY");
+        public static readonly NumericColumn Column_AveragePrice = new NumericColumn("AVG_PRICE");
+        public static readonly NumericColumn Column_Value = new NumericColumn("VALUE");
+
+        public static readonly NumericColumn Column_PNL = new NumericColumn("PNL");
+
+        #endregion Grid View
     }
 }

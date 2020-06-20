@@ -16,9 +16,11 @@ namespace Pacmio
 {
     public sealed class MarketDataTable : IContractTable, IStringTable
     {
+        private readonly List<MarketData> Rows = new List<MarketData>();
+
         public int Count => Rows.Count;
 
-        private readonly List<MarketData> Rows = new List<MarketData>();
+     
 
         public void Add(MarketData md) => Rows.CheckAdd(md);
 

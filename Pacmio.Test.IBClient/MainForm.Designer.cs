@@ -64,8 +64,6 @@ namespace TestClient
             this.BtnRequestHistoricalData = new System.Windows.Forms.Button();
             this.tabContract = new System.Windows.Forms.TabPage();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
-            this.GroupBoxContractSearchResult = new System.Windows.Forms.GroupBox();
-            this.GridViewContractSearchResult = new System.Windows.Forms.DataGridView();
             this.BtnValidUSSymbol = new System.Windows.Forms.Button();
             this.GroupBoxContractInfo = new System.Windows.Forms.GroupBox();
             this.TextBoxSymbolFullName = new System.Windows.Forms.TextBox();
@@ -82,65 +80,46 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
-            this.BtnMarketDataFormHide = new System.Windows.Forms.Button();
-            this.BtnMarketDataFormShow = new System.Windows.Forms.Button();
+            this.LabelWatchListName = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.LabelGenericTickList = new System.Windows.Forms.Label();
+            this.TextBoxGenericTickList = new System.Windows.Forms.TextBox();
             this.BtnMarketDataAddMultiContracts = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.BtnMarketDataAddContract = new System.Windows.Forms.Button();
-            this.tabMarketDepth = new System.Windows.Forms.TabPage();
             this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
-            this.tabScan = new System.Windows.Forms.TabPage();
             this.BtnCancelAllScanner = new System.Windows.Forms.Button();
             this.BtnRequestScannerParameter = new System.Windows.Forms.Button();
-            this.scannerGrid = new System.Windows.Forms.DataGridView();
-            this.scanRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.scanContract = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.scanDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.scanBenchmark = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.scanProjection = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.scanLegStr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BtnRequestScanner = new System.Windows.Forms.Button();
             this.tabOrder = new System.Windows.Forms.TabPage();
-            this.label11 = new System.Windows.Forms.Label();
-            this.TextBoxOrderId = new System.Windows.Forms.TextBox();
-            this.TestMassOrder = new System.Windows.Forms.Button();
-            this.BtnOrderBraket = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.DateTimePickerOrderDate = new System.Windows.Forms.DateTimePicker();
+            this.BtnOrderSettingPlaceMultiOrder = new System.Windows.Forms.Button();
+            this.BtnOrderSettingOrderBraket = new System.Windows.Forms.Button();
+            this.LabelOrderSettingGTD = new System.Windows.Forms.Label();
+            this.DateTimePickerOrderSettingGTD = new System.Windows.Forms.DateTimePicker();
             this.CheckBoxOrderWhatIf = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.LabelOrderSettingStopPrice = new System.Windows.Forms.Label();
+            this.LabelOrderSettingLimitPrice = new System.Windows.Forms.Label();
             this.BtnGetCompletedOrders = new System.Windows.Forms.Button();
-            this.TextBoxOrderStopPrice = new System.Windows.Forms.TextBox();
-            this.TextBoxOrderLimitPrice = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.ComboBoxOrderTimeInForce = new System.Windows.Forms.ComboBox();
-            this.ComboxBoxOrderType = new System.Windows.Forms.ComboBox();
-            this.TextBoxOrderQuantity = new System.Windows.Forms.TextBox();
+            this.TextBoxOrderSettingStopPrice = new System.Windows.Forms.TextBox();
+            this.TextBoxOrderSettingLimitPrice = new System.Windows.Forms.TextBox();
+            this.LabelOrderSettingTIF = new System.Windows.Forms.Label();
+            this.LabelOrderSettingType = new System.Windows.Forms.Label();
+            this.LabelOrderSettingQuantity = new System.Windows.Forms.Label();
+            this.ComboBoxOrderSettingTIF = new System.Windows.Forms.ComboBox();
+            this.ComboxBoxOrderSettingType = new System.Windows.Forms.ComboBox();
+            this.TextBoxOrderSettingQuantity = new System.Windows.Forms.TextBox();
             this.BtnGetOpenOrders = new System.Windows.Forms.Button();
             this.BtnModifyOrder = new System.Windows.Forms.Button();
-            this.BtnOrder = new System.Windows.Forms.Button();
+            this.BtnOrderSettingPlaceOrder = new System.Windows.Forms.Button();
             this.BtnGlobalCancel = new System.Windows.Forms.Button();
             this.BtnCancelOrder = new System.Windows.Forms.Button();
-            this.liveOrdersGroup = new System.Windows.Forms.GroupBox();
-            this.GridViewAllOrders = new System.Windows.Forms.DataGridView();
-            this.tabTrade = new System.Windows.Forms.TabPage();
             this.BtnExportExecTradeLog = new System.Windows.Forms.Button();
             this.BtnPositionCloseSelected = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.BtnRequestExecData = new System.Windows.Forms.Button();
-            this.groupBoxPositions = new System.Windows.Forms.GroupBox();
-            this.PositionsGrid = new System.Windows.Forms.DataGridView();
-            this.positionContract = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.positionAccount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.positionPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.positionAvgCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PositionCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GroupBoxPositions = new System.Windows.Forms.GroupBox();
             this.BtnRequestPostion = new System.Windows.Forms.Button();
             this.executionsGroup = new System.Windows.Forms.GroupBox();
-            this.GridViewTradeTable = new System.Windows.Forms.DataGridView();
             this.tabAccount = new System.Windows.Forms.TabPage();
             this.BtnSubscribePnL = new System.Windows.Forms.Button();
             this.BtnRequestPnL = new System.Windows.Forms.Button();
@@ -160,6 +139,8 @@ namespace TestClient
             this.BtnDownloadMultiTables = new System.Windows.Forms.Button();
             this.BtnExportContracts = new System.Windows.Forms.Button();
             this.BtnImportContracts = new System.Windows.Forms.Button();
+            this.BtnMarketDataFormHide = new System.Windows.Forms.Button();
+            this.BtnMarketDataFormShow = new System.Windows.Forms.Button();
             this.BtnTestSymbolsToCheck = new System.Windows.Forms.Button();
             this.DownloadBarTableDetialedProgressBar = new System.Windows.Forms.ProgressBar();
             this.TextBoxMultiContracts = new System.Windows.Forms.RichTextBox();
@@ -197,28 +178,17 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.TextBoxGenericTickList = new System.Windows.Forms.TextBox();
-            this.LabelGenericTickList = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.LabelWatchListName = new System.Windows.Forms.Label();
+            this.GroupBoxOrderSetting = new System.Windows.Forms.GroupBox();
+            this.BtnOrderSettingApplyCurrentPrice = new System.Windows.Forms.Button();
+            this.tabSimulation = new System.Windows.Forms.TabPage();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
-            this.GroupBoxContractSearchResult.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewContractSearchResult)).BeginInit();
             this.GroupBoxContractInfo.SuspendLayout();
             this.tabMarketData.SuspendLayout();
-            this.tabMarketDepth.SuspendLayout();
-            this.tabScan.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scannerGrid)).BeginInit();
             this.tabOrder.SuspendLayout();
-            this.liveOrdersGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewAllOrders)).BeginInit();
-            this.tabTrade.SuspendLayout();
-            this.groupBoxPositions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PositionsGrid)).BeginInit();
+            this.GroupBoxPositions.SuspendLayout();
             this.executionsGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewTradeTable)).BeginInit();
             this.tabAccount.SuspendLayout();
             this.tabFileData.SuspendLayout();
             this.GroupBoxQuandlTool.SuspendLayout();
@@ -226,14 +196,16 @@ namespace TestClient
             this.GroupBoxSingleContract.SuspendLayout();
             this.GroupBoxBarTableSetting.SuspendLayout();
             this.GroupBoxMultiContracts.SuspendLayout();
+            this.GroupBoxOrderSetting.SuspendLayout();
+            this.tabSimulation.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
             // 
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnConnect.Location = new System.Drawing.Point(117, 1167);
+            this.btnConnect.Location = new System.Drawing.Point(16, 803);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(80, 36);
+            this.btnConnect.Size = new System.Drawing.Size(100, 40);
             this.btnConnect.TabIndex = 0;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -257,27 +229,20 @@ namespace TestClient
             this.MainTab.Controls.Add(this.tabHistoricalData);
             this.MainTab.Controls.Add(this.tabContract);
             this.MainTab.Controls.Add(this.tabMarketData);
-            this.MainTab.Controls.Add(this.tabMarketDepth);
-            this.MainTab.Controls.Add(this.tabScan);
             this.MainTab.Controls.Add(this.tabOrder);
-            this.MainTab.Controls.Add(this.tabTrade);
+            this.MainTab.Controls.Add(this.tabSimulation);
             this.MainTab.Controls.Add(this.tabAccount);
             this.MainTab.Controls.Add(this.tabFileData);
             this.MainTab.Location = new System.Drawing.Point(12, 190);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
-            this.MainTab.Size = new System.Drawing.Size(1364, 824);
+            this.MainTab.Size = new System.Drawing.Size(960, 510);
             this.MainTab.TabIndex = 3;
             // 
             // tabHistoricalData
             // 
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
-            this.tabHistoricalData.Controls.Add(this.BtnArmLiveTrade);
-            this.tabHistoricalData.Controls.Add(this.label10);
-            this.tabHistoricalData.Controls.Add(this.TextBoxRunAllSimulationInitialAccountValue);
-            this.tabHistoricalData.Controls.Add(this.BtnRunAllSimulation);
-            this.tabHistoricalData.Controls.Add(this.BtnTestScalping);
             this.tabHistoricalData.Controls.Add(this.BtnCloseChart);
             this.tabHistoricalData.Controls.Add(this.ListViewAllCharts);
             this.tabHistoricalData.Controls.Add(this.BtnAlignCharts);
@@ -288,7 +253,7 @@ namespace TestClient
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHistoricalData.Size = new System.Drawing.Size(1356, 798);
+            this.tabHistoricalData.Size = new System.Drawing.Size(952, 484);
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
@@ -314,7 +279,7 @@ namespace TestClient
             // 
             // BtnArmLiveTrade
             // 
-            this.BtnArmLiveTrade.Location = new System.Drawing.Point(559, 233);
+            this.BtnArmLiveTrade.Location = new System.Drawing.Point(283, 210);
             this.BtnArmLiveTrade.Name = "BtnArmLiveTrade";
             this.BtnArmLiveTrade.Size = new System.Drawing.Size(230, 23);
             this.BtnArmLiveTrade.TabIndex = 42;
@@ -325,7 +290,7 @@ namespace TestClient
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(566, 144);
+            this.label10.Location = new System.Drawing.Point(280, 138);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(67, 13);
             this.label10.TabIndex = 41;
@@ -333,7 +298,7 @@ namespace TestClient
             // 
             // TextBoxRunAllSimulationInitialAccountValue
             // 
-            this.TextBoxRunAllSimulationInitialAccountValue.Location = new System.Drawing.Point(639, 141);
+            this.TextBoxRunAllSimulationInitialAccountValue.Location = new System.Drawing.Point(363, 135);
             this.TextBoxRunAllSimulationInitialAccountValue.Name = "TextBoxRunAllSimulationInitialAccountValue";
             this.TextBoxRunAllSimulationInitialAccountValue.Size = new System.Drawing.Size(150, 22);
             this.TextBoxRunAllSimulationInitialAccountValue.TabIndex = 40;
@@ -341,7 +306,7 @@ namespace TestClient
             // 
             // BtnRunAllSimulation
             // 
-            this.BtnRunAllSimulation.Location = new System.Drawing.Point(559, 169);
+            this.BtnRunAllSimulation.Location = new System.Drawing.Point(283, 172);
             this.BtnRunAllSimulation.Name = "BtnRunAllSimulation";
             this.BtnRunAllSimulation.Size = new System.Drawing.Size(230, 23);
             this.BtnRunAllSimulation.TabIndex = 39;
@@ -351,7 +316,7 @@ namespace TestClient
             // 
             // BtnTestScalping
             // 
-            this.BtnTestScalping.Location = new System.Drawing.Point(559, 74);
+            this.BtnTestScalping.Location = new System.Drawing.Point(283, 81);
             this.BtnTestScalping.Name = "BtnTestScalping";
             this.BtnTestScalping.Size = new System.Drawing.Size(230, 23);
             this.BtnTestScalping.TabIndex = 38;
@@ -430,7 +395,6 @@ namespace TestClient
             // tabContract
             // 
             this.tabContract.Controls.Add(this.BtnMatchSymbols);
-            this.tabContract.Controls.Add(this.GroupBoxContractSearchResult);
             this.tabContract.Controls.Add(this.BtnValidUSSymbol);
             this.tabContract.Controls.Add(this.GroupBoxContractInfo);
             this.tabContract.Controls.Add(this.BtnGetContractInfo);
@@ -438,7 +402,7 @@ namespace TestClient
             this.tabContract.Controls.Add(this.BtnSearchSymbol);
             this.tabContract.Location = new System.Drawing.Point(4, 22);
             this.tabContract.Name = "tabContract";
-            this.tabContract.Size = new System.Drawing.Size(1356, 798);
+            this.tabContract.Size = new System.Drawing.Size(952, 484);
             this.tabContract.TabIndex = 2;
             this.tabContract.Text = "Contract";
             this.tabContract.UseVisualStyleBackColor = true;
@@ -452,32 +416,6 @@ namespace TestClient
             this.BtnMatchSymbols.Text = "Match Symbols";
             this.BtnMatchSymbols.UseVisualStyleBackColor = true;
             this.BtnMatchSymbols.Click += new System.EventHandler(this.BtnMatchSymbols_Click);
-            // 
-            // GroupBoxContractSearchResult
-            // 
-            this.GroupBoxContractSearchResult.Controls.Add(this.GridViewContractSearchResult);
-            this.GroupBoxContractSearchResult.Location = new System.Drawing.Point(398, 3);
-            this.GroupBoxContractSearchResult.Name = "GroupBoxContractSearchResult";
-            this.GroupBoxContractSearchResult.Size = new System.Drawing.Size(706, 937);
-            this.GroupBoxContractSearchResult.TabIndex = 65;
-            this.GroupBoxContractSearchResult.TabStop = false;
-            this.GroupBoxContractSearchResult.Text = "Search Result";
-            // 
-            // GridViewContractSearchResult
-            // 
-            this.GridViewContractSearchResult.AllowUserToAddRows = false;
-            this.GridViewContractSearchResult.AllowUserToDeleteRows = false;
-            this.GridViewContractSearchResult.AllowUserToOrderColumns = true;
-            this.GridViewContractSearchResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.GridViewContractSearchResult.Location = new System.Drawing.Point(6, 21);
-            this.GridViewContractSearchResult.Name = "GridViewContractSearchResult";
-            this.GridViewContractSearchResult.ReadOnly = true;
-            this.GridViewContractSearchResult.RowHeadersWidth = 20;
-            this.GridViewContractSearchResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewContractSearchResult.Size = new System.Drawing.Size(694, 910);
-            this.GridViewContractSearchResult.TabIndex = 2;
             // 
             // BtnValidUSSymbol
             // 
@@ -504,9 +442,9 @@ namespace TestClient
             this.GroupBoxContractInfo.Controls.Add(this.LbBusinessSummary);
             this.GroupBoxContractInfo.Controls.Add(this.LbFinancialSummary);
             this.GroupBoxContractInfo.Controls.Add(this.TextBoxSymbolSummaryB);
-            this.GroupBoxContractInfo.Location = new System.Drawing.Point(1110, 3);
+            this.GroupBoxContractInfo.Location = new System.Drawing.Point(398, 3);
             this.GroupBoxContractInfo.Name = "GroupBoxContractInfo";
-            this.GroupBoxContractInfo.Size = new System.Drawing.Size(243, 792);
+            this.GroupBoxContractInfo.Size = new System.Drawing.Size(551, 478);
             this.GroupBoxContractInfo.TabIndex = 63;
             this.GroupBoxContractInfo.TabStop = false;
             this.GroupBoxContractInfo.Text = "Contract Information";
@@ -518,7 +456,7 @@ namespace TestClient
             this.TextBoxSymbolFullName.Location = new System.Drawing.Point(57, 21);
             this.TextBoxSymbolFullName.Name = "TextBoxSymbolFullName";
             this.TextBoxSymbolFullName.ReadOnly = true;
-            this.TextBoxSymbolFullName.Size = new System.Drawing.Size(164, 22);
+            this.TextBoxSymbolFullName.Size = new System.Drawing.Size(472, 22);
             this.TextBoxSymbolFullName.TabIndex = 54;
             // 
             // LbSymbolISIN
@@ -542,7 +480,7 @@ namespace TestClient
             this.TextBoxSymbolIds.Name = "TextBoxSymbolIds";
             this.TextBoxSymbolIds.ReadOnly = true;
             this.TextBoxSymbolIds.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TextBoxSymbolIds.Size = new System.Drawing.Size(224, 150);
+            this.TextBoxSymbolIds.Size = new System.Drawing.Size(532, 150);
             this.TextBoxSymbolIds.TabIndex = 61;
             // 
             // LbSymbolFullName
@@ -579,12 +517,12 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolSummaryF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolSummaryF.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TextBoxSymbolSummaryF.Location = new System.Drawing.Point(8, 472);
+            this.TextBoxSymbolSummaryF.Location = new System.Drawing.Point(8, 413);
             this.TextBoxSymbolSummaryF.Multiline = true;
             this.TextBoxSymbolSummaryF.Name = "TextBoxSymbolSummaryF";
             this.TextBoxSymbolSummaryF.ReadOnly = true;
             this.TextBoxSymbolSummaryF.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TextBoxSymbolSummaryF.Size = new System.Drawing.Size(224, 288);
+            this.TextBoxSymbolSummaryF.Size = new System.Drawing.Size(532, 288);
             this.TextBoxSymbolSummaryF.TabIndex = 59;
             // 
             // LbBusinessSummary
@@ -601,7 +539,7 @@ namespace TestClient
             // 
             this.LbFinancialSummary.AutoSize = true;
             this.LbFinancialSummary.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LbFinancialSummary.Location = new System.Drawing.Point(8, 456);
+            this.LbFinancialSummary.Location = new System.Drawing.Point(8, 397);
             this.LbFinancialSummary.Name = "LbFinancialSummary";
             this.LbFinancialSummary.Size = new System.Drawing.Size(105, 13);
             this.LbFinancialSummary.TabIndex = 57;
@@ -619,7 +557,7 @@ namespace TestClient
             this.TextBoxSymbolSummaryB.Name = "TextBoxSymbolSummaryB";
             this.TextBoxSymbolSummaryB.ReadOnly = true;
             this.TextBoxSymbolSummaryB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TextBoxSymbolSummaryB.Size = new System.Drawing.Size(224, 176);
+            this.TextBoxSymbolSummaryB.Size = new System.Drawing.Size(532, 120);
             this.TextBoxSymbolSummaryB.TabIndex = 58;
             // 
             // BtnGetContractInfo
@@ -652,39 +590,57 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnCancelAllScanner);
+            this.tabMarketData.Controls.Add(this.BtnRequestMarketDepth);
             this.tabMarketData.Controls.Add(this.LabelWatchListName);
+            this.tabMarketData.Controls.Add(this.BtnRequestScannerParameter);
             this.tabMarketData.Controls.Add(this.textBox2);
             this.tabMarketData.Controls.Add(this.LabelGenericTickList);
+            this.tabMarketData.Controls.Add(this.BtnRequestScanner);
             this.tabMarketData.Controls.Add(this.TextBoxGenericTickList);
             this.tabMarketData.Controls.Add(this.BtnMarketDataAddMultiContracts);
             this.tabMarketData.Controls.Add(this.button4);
             this.tabMarketData.Controls.Add(this.BtnMarketDataAddContract);
             this.tabMarketData.Location = new System.Drawing.Point(4, 22);
             this.tabMarketData.Name = "tabMarketData";
-            this.tabMarketData.Size = new System.Drawing.Size(1356, 798);
+            this.tabMarketData.Size = new System.Drawing.Size(952, 484);
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
             // 
-            // BtnMarketDataFormHide
+            // LabelWatchListName
             // 
-            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(129, 1029);
-            this.BtnMarketDataFormHide.Name = "BtnMarketDataFormHide";
-            this.BtnMarketDataFormHide.Size = new System.Drawing.Size(100, 23);
-            this.BtnMarketDataFormHide.TabIndex = 6;
-            this.BtnMarketDataFormHide.Text = "Hide Form";
-            this.BtnMarketDataFormHide.UseVisualStyleBackColor = true;
-            this.BtnMarketDataFormHide.Click += new System.EventHandler(this.BtnMarketDataFormHide_Click);
+            this.LabelWatchListName.AutoSize = true;
+            this.LabelWatchListName.Location = new System.Drawing.Point(44, 44);
+            this.LabelWatchListName.Name = "LabelWatchListName";
+            this.LabelWatchListName.Size = new System.Drawing.Size(59, 13);
+            this.LabelWatchListName.TabIndex = 49;
+            this.LabelWatchListName.Text = "List Name:";
             // 
-            // BtnMarketDataFormShow
+            // textBox2
             // 
-            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(23, 1029);
-            this.BtnMarketDataFormShow.Name = "BtnMarketDataFormShow";
-            this.BtnMarketDataFormShow.Size = new System.Drawing.Size(100, 23);
-            this.BtnMarketDataFormShow.TabIndex = 5;
-            this.BtnMarketDataFormShow.Text = "Show Form";
-            this.BtnMarketDataFormShow.UseVisualStyleBackColor = true;
-            this.BtnMarketDataFormShow.Click += new System.EventHandler(this.BtnMarketDataFormShow_Click);
+            this.textBox2.Location = new System.Drawing.Point(109, 41);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(135, 22);
+            this.textBox2.TabIndex = 48;
+            this.textBox2.Text = "Market Data";
+            // 
+            // LabelGenericTickList
+            // 
+            this.LabelGenericTickList.AutoSize = true;
+            this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
+            this.LabelGenericTickList.Name = "LabelGenericTickList";
+            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
+            this.LabelGenericTickList.TabIndex = 47;
+            this.LabelGenericTickList.Text = "Generic Tick List:";
+            // 
+            // TextBoxGenericTickList
+            // 
+            this.TextBoxGenericTickList.Location = new System.Drawing.Point(109, 13);
+            this.TextBoxGenericTickList.Name = "TextBoxGenericTickList";
+            this.TextBoxGenericTickList.Size = new System.Drawing.Size(135, 22);
+            this.TextBoxGenericTickList.TabIndex = 19;
+            this.TextBoxGenericTickList.Text = "236,375";
             // 
             // BtnMarketDataAddMultiContracts
             // 
@@ -715,42 +671,19 @@ namespace TestClient
             this.BtnMarketDataAddContract.UseVisualStyleBackColor = true;
             this.BtnMarketDataAddContract.Click += new System.EventHandler(this.BtnMarketDataAddContract_Click);
             // 
-            // tabMarketDepth
-            // 
-            this.tabMarketDepth.Controls.Add(this.BtnRequestMarketDepth);
-            this.tabMarketDepth.Location = new System.Drawing.Point(4, 22);
-            this.tabMarketDepth.Name = "tabMarketDepth";
-            this.tabMarketDepth.Size = new System.Drawing.Size(1356, 798);
-            this.tabMarketDepth.TabIndex = 7;
-            this.tabMarketDepth.Text = "Market Depth";
-            this.tabMarketDepth.UseVisualStyleBackColor = true;
-            // 
             // BtnRequestMarketDepth
             // 
-            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(6, 6);
+            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(262, 86);
             this.BtnRequestMarketDepth.Name = "BtnRequestMarketDepth";
-            this.BtnRequestMarketDepth.Size = new System.Drawing.Size(100, 23);
+            this.BtnRequestMarketDepth.Size = new System.Drawing.Size(133, 23);
             this.BtnRequestMarketDepth.TabIndex = 5;
-            this.BtnRequestMarketDepth.Text = "Request";
+            this.BtnRequestMarketDepth.Text = "Request Market Depth";
             this.BtnRequestMarketDepth.UseVisualStyleBackColor = true;
             this.BtnRequestMarketDepth.Click += new System.EventHandler(this.BtnRequestMarketDepth_Click);
             // 
-            // tabScan
-            // 
-            this.tabScan.Controls.Add(this.BtnCancelAllScanner);
-            this.tabScan.Controls.Add(this.BtnRequestScannerParameter);
-            this.tabScan.Controls.Add(this.scannerGrid);
-            this.tabScan.Controls.Add(this.BtnRequestScanner);
-            this.tabScan.Location = new System.Drawing.Point(4, 22);
-            this.tabScan.Name = "tabScan";
-            this.tabScan.Size = new System.Drawing.Size(1356, 798);
-            this.tabScan.TabIndex = 5;
-            this.tabScan.Text = "Scanner";
-            this.tabScan.UseVisualStyleBackColor = true;
-            // 
             // BtnCancelAllScanner
             // 
-            this.BtnCancelAllScanner.Location = new System.Drawing.Point(440, 6);
+            this.BtnCancelAllScanner.Location = new System.Drawing.Point(506, 274);
             this.BtnCancelAllScanner.Name = "BtnCancelAllScanner";
             this.BtnCancelAllScanner.Size = new System.Drawing.Size(162, 23);
             this.BtnCancelAllScanner.TabIndex = 9;
@@ -760,7 +693,7 @@ namespace TestClient
             // 
             // BtnRequestScannerParameter
             // 
-            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(204, 6);
+            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(506, 245);
             this.BtnRequestScannerParameter.Name = "BtnRequestScannerParameter";
             this.BtnRequestScannerParameter.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestScannerParameter.TabIndex = 8;
@@ -768,68 +701,9 @@ namespace TestClient
             this.BtnRequestScannerParameter.UseVisualStyleBackColor = true;
             this.BtnRequestScannerParameter.Click += new System.EventHandler(this.BtnRequestScannerParameter_Click);
             // 
-            // scannerGrid
-            // 
-            this.scannerGrid.AllowUserToAddRows = false;
-            this.scannerGrid.AllowUserToDeleteRows = false;
-            this.scannerGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.scannerGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.scannerGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.scanRank,
-            this.scanContract,
-            this.scanDistance,
-            this.scanBenchmark,
-            this.scanProjection,
-            this.scanLegStr});
-            this.scannerGrid.Location = new System.Drawing.Point(6, 35);
-            this.scannerGrid.Name = "scannerGrid";
-            this.scannerGrid.ReadOnly = true;
-            this.scannerGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.scannerGrid.Size = new System.Drawing.Size(1347, 757);
-            this.scannerGrid.TabIndex = 7;
-            // 
-            // scanRank
-            // 
-            this.scanRank.HeaderText = "Rank";
-            this.scanRank.Name = "scanRank";
-            this.scanRank.ReadOnly = true;
-            // 
-            // scanContract
-            // 
-            this.scanContract.HeaderText = "Contract";
-            this.scanContract.Name = "scanContract";
-            this.scanContract.ReadOnly = true;
-            this.scanContract.Width = 200;
-            // 
-            // scanDistance
-            // 
-            this.scanDistance.HeaderText = "Distance";
-            this.scanDistance.Name = "scanDistance";
-            this.scanDistance.ReadOnly = true;
-            // 
-            // scanBenchmark
-            // 
-            this.scanBenchmark.HeaderText = "Benchmark";
-            this.scanBenchmark.Name = "scanBenchmark";
-            this.scanBenchmark.ReadOnly = true;
-            // 
-            // scanProjection
-            // 
-            this.scanProjection.HeaderText = "Projection";
-            this.scanProjection.Name = "scanProjection";
-            this.scanProjection.ReadOnly = true;
-            // 
-            // scanLegStr
-            // 
-            this.scanLegStr.HeaderText = "Legs";
-            this.scanLegStr.Name = "scanLegStr";
-            this.scanLegStr.ReadOnly = true;
-            // 
             // BtnRequestScanner
             // 
-            this.BtnRequestScanner.Location = new System.Drawing.Point(6, 6);
+            this.BtnRequestScanner.Location = new System.Drawing.Point(506, 216);
             this.BtnRequestScanner.Name = "BtnRequestScanner";
             this.BtnRequestScanner.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestScanner.TabIndex = 6;
@@ -839,124 +713,89 @@ namespace TestClient
             // 
             // tabOrder
             // 
-            this.tabOrder.Controls.Add(this.label11);
-            this.tabOrder.Controls.Add(this.TextBoxOrderId);
-            this.tabOrder.Controls.Add(this.TestMassOrder);
-            this.tabOrder.Controls.Add(this.BtnOrderBraket);
-            this.tabOrder.Controls.Add(this.label9);
-            this.tabOrder.Controls.Add(this.DateTimePickerOrderDate);
-            this.tabOrder.Controls.Add(this.CheckBoxOrderWhatIf);
-            this.tabOrder.Controls.Add(this.label8);
-            this.tabOrder.Controls.Add(this.label7);
+            this.tabOrder.Controls.Add(this.GroupBoxOrderSetting);
+            this.tabOrder.Controls.Add(this.GroupBoxPositions);
+            this.tabOrder.Controls.Add(this.executionsGroup);
+            this.tabOrder.Controls.Add(this.ib_banner);
             this.tabOrder.Controls.Add(this.BtnGetCompletedOrders);
-            this.tabOrder.Controls.Add(this.TextBoxOrderStopPrice);
-            this.tabOrder.Controls.Add(this.TextBoxOrderLimitPrice);
-            this.tabOrder.Controls.Add(this.label6);
-            this.tabOrder.Controls.Add(this.label5);
-            this.tabOrder.Controls.Add(this.label4);
-            this.tabOrder.Controls.Add(this.ComboBoxOrderTimeInForce);
-            this.tabOrder.Controls.Add(this.ComboxBoxOrderType);
-            this.tabOrder.Controls.Add(this.TextBoxOrderQuantity);
             this.tabOrder.Controls.Add(this.BtnGetOpenOrders);
-            this.tabOrder.Controls.Add(this.BtnModifyOrder);
-            this.tabOrder.Controls.Add(this.BtnOrder);
-            this.tabOrder.Controls.Add(this.BtnGlobalCancel);
-            this.tabOrder.Controls.Add(this.BtnCancelOrder);
-            this.tabOrder.Controls.Add(this.liveOrdersGroup);
             this.tabOrder.Location = new System.Drawing.Point(4, 22);
             this.tabOrder.Name = "tabOrder";
-            this.tabOrder.Size = new System.Drawing.Size(1356, 798);
+            this.tabOrder.Size = new System.Drawing.Size(952, 484);
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // BtnOrderSettingPlaceMultiOrder
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 443);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(50, 13);
-            this.label11.TabIndex = 81;
-            this.label11.Text = "Order Id";
+            this.BtnOrderSettingPlaceMultiOrder.Location = new System.Drawing.Point(13, 306);
+            this.BtnOrderSettingPlaceMultiOrder.Name = "BtnOrderSettingPlaceMultiOrder";
+            this.BtnOrderSettingPlaceMultiOrder.Size = new System.Drawing.Size(183, 23);
+            this.BtnOrderSettingPlaceMultiOrder.TabIndex = 12;
+            this.BtnOrderSettingPlaceMultiOrder.Text = "Multi Order";
+            this.BtnOrderSettingPlaceMultiOrder.UseVisualStyleBackColor = true;
+            this.BtnOrderSettingPlaceMultiOrder.Click += new System.EventHandler(this.TestMassOrder_Click);
             // 
-            // TextBoxOrderId
+            // BtnOrderSettingOrderBraket
             // 
-            this.TextBoxOrderId.Location = new System.Drawing.Point(70, 440);
-            this.TextBoxOrderId.Name = "TextBoxOrderId";
-            this.TextBoxOrderId.Size = new System.Drawing.Size(95, 22);
-            this.TextBoxOrderId.TabIndex = 80;
-            this.TextBoxOrderId.Text = "100";
+            this.BtnOrderSettingOrderBraket.Location = new System.Drawing.Point(13, 277);
+            this.BtnOrderSettingOrderBraket.Name = "BtnOrderSettingOrderBraket";
+            this.BtnOrderSettingOrderBraket.Size = new System.Drawing.Size(183, 23);
+            this.BtnOrderSettingOrderBraket.TabIndex = 79;
+            this.BtnOrderSettingOrderBraket.Text = "Braket Order";
+            this.BtnOrderSettingOrderBraket.UseVisualStyleBackColor = true;
+            this.BtnOrderSettingOrderBraket.Click += new System.EventHandler(this.BtnOrderBraket_Click);
             // 
-            // TestMassOrder
+            // LabelOrderSettingGTD
             // 
-            this.TestMassOrder.Location = new System.Drawing.Point(17, 335);
-            this.TestMassOrder.Name = "TestMassOrder";
-            this.TestMassOrder.Size = new System.Drawing.Size(128, 23);
-            this.TestMassOrder.TabIndex = 12;
-            this.TestMassOrder.Text = "Test Mass Order";
-            this.TestMassOrder.UseVisualStyleBackColor = true;
-            this.TestMassOrder.Click += new System.EventHandler(this.TestMassOrder_Click);
+            this.LabelOrderSettingGTD.AutoSize = true;
+            this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
+            this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingGTD.TabIndex = 78;
+            this.LabelOrderSettingGTD.Text = "GTD:";
             // 
-            // BtnOrderBraket
+            // DateTimePickerOrderSettingGTD
             // 
-            this.BtnOrderBraket.Location = new System.Drawing.Point(3, 279);
-            this.BtnOrderBraket.Name = "BtnOrderBraket";
-            this.BtnOrderBraket.Size = new System.Drawing.Size(162, 23);
-            this.BtnOrderBraket.TabIndex = 79;
-            this.BtnOrderBraket.Text = "Braket Order";
-            this.BtnOrderBraket.UseVisualStyleBackColor = true;
-            this.BtnOrderBraket.Click += new System.EventHandler(this.BtnOrderBraket_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 165);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(29, 13);
-            this.label9.TabIndex = 78;
-            this.label9.Text = "GTD";
-            // 
-            // DateTimePickerOrderDate
-            // 
-            this.DateTimePickerOrderDate.CustomFormat = "MM/dd/yyyy HH:mm:ss";
-            this.DateTimePickerOrderDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePickerOrderDate.Location = new System.Drawing.Point(41, 160);
-            this.DateTimePickerOrderDate.Name = "DateTimePickerOrderDate";
-            this.DateTimePickerOrderDate.Size = new System.Drawing.Size(124, 22);
-            this.DateTimePickerOrderDate.TabIndex = 77;
-            this.DateTimePickerOrderDate.Value = new System.DateTime(2020, 3, 20, 17, 0, 0, 0);
+            this.DateTimePickerOrderSettingGTD.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            this.DateTimePickerOrderSettingGTD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateTimePickerOrderSettingGTD.Location = new System.Drawing.Point(54, 159);
+            this.DateTimePickerOrderSettingGTD.Name = "DateTimePickerOrderSettingGTD";
+            this.DateTimePickerOrderSettingGTD.Size = new System.Drawing.Size(141, 22);
+            this.DateTimePickerOrderSettingGTD.TabIndex = 77;
+            this.DateTimePickerOrderSettingGTD.Value = new System.DateTime(2020, 3, 20, 17, 0, 0, 0);
             // 
             // CheckBoxOrderWhatIf
             // 
             this.CheckBoxOrderWhatIf.AutoSize = true;
-            this.CheckBoxOrderWhatIf.Location = new System.Drawing.Point(48, 208);
+            this.CheckBoxOrderWhatIf.Location = new System.Drawing.Point(69, 187);
             this.CheckBoxOrderWhatIf.Name = "CheckBoxOrderWhatIf";
             this.CheckBoxOrderWhatIf.Size = new System.Drawing.Size(64, 17);
             this.CheckBoxOrderWhatIf.TabIndex = 76;
             this.CheckBoxOrderWhatIf.Text = "What If";
             this.CheckBoxOrderWhatIf.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // LabelOrderSettingStopPrice
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 108);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(31, 13);
-            this.label8.TabIndex = 75;
-            this.label8.Text = "Stop";
+            this.LabelOrderSettingStopPrice.AutoSize = true;
+            this.LabelOrderSettingStopPrice.Location = new System.Drawing.Point(14, 107);
+            this.LabelOrderSettingStopPrice.Name = "LabelOrderSettingStopPrice";
+            this.LabelOrderSettingStopPrice.Size = new System.Drawing.Size(34, 13);
+            this.LabelOrderSettingStopPrice.TabIndex = 75;
+            this.LabelOrderSettingStopPrice.Text = "Stop:";
             // 
-            // label7
+            // LabelOrderSettingLimitPrice
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 80);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 74;
-            this.label7.Text = "Limit";
+            this.LabelOrderSettingLimitPrice.AutoSize = true;
+            this.LabelOrderSettingLimitPrice.Location = new System.Drawing.Point(14, 79);
+            this.LabelOrderSettingLimitPrice.Name = "LabelOrderSettingLimitPrice";
+            this.LabelOrderSettingLimitPrice.Size = new System.Drawing.Size(34, 13);
+            this.LabelOrderSettingLimitPrice.TabIndex = 74;
+            this.LabelOrderSettingLimitPrice.Text = "Limit:";
             // 
             // BtnGetCompletedOrders
             // 
-            this.BtnGetCompletedOrders.Location = new System.Drawing.Point(3, 626);
+            this.BtnGetCompletedOrders.Location = new System.Drawing.Point(460, 108);
             this.BtnGetCompletedOrders.Name = "BtnGetCompletedOrders";
             this.BtnGetCompletedOrders.Size = new System.Drawing.Size(162, 23);
             this.BtnGetCompletedOrders.TabIndex = 9;
@@ -964,79 +803,78 @@ namespace TestClient
             this.BtnGetCompletedOrders.UseVisualStyleBackColor = true;
             this.BtnGetCompletedOrders.Click += new System.EventHandler(this.BtnGetCompletedOrders_Click);
             // 
-            // TextBoxOrderStopPrice
+            // TextBoxOrderSettingStopPrice
             // 
-            this.TextBoxOrderStopPrice.Location = new System.Drawing.Point(48, 105);
-            this.TextBoxOrderStopPrice.Name = "TextBoxOrderStopPrice";
-            this.TextBoxOrderStopPrice.Size = new System.Drawing.Size(117, 22);
-            this.TextBoxOrderStopPrice.TabIndex = 73;
-            this.TextBoxOrderStopPrice.Text = "100";
+            this.TextBoxOrderSettingStopPrice.Location = new System.Drawing.Point(54, 104);
+            this.TextBoxOrderSettingStopPrice.Name = "TextBoxOrderSettingStopPrice";
+            this.TextBoxOrderSettingStopPrice.Size = new System.Drawing.Size(141, 22);
+            this.TextBoxOrderSettingStopPrice.TabIndex = 73;
+            this.TextBoxOrderSettingStopPrice.Text = "100";
             // 
-            // TextBoxOrderLimitPrice
+            // TextBoxOrderSettingLimitPrice
             // 
-            this.TextBoxOrderLimitPrice.Location = new System.Drawing.Point(48, 77);
-            this.TextBoxOrderLimitPrice.Name = "TextBoxOrderLimitPrice";
-            this.TextBoxOrderLimitPrice.Size = new System.Drawing.Size(117, 22);
-            this.TextBoxOrderLimitPrice.TabIndex = 72;
-            this.TextBoxOrderLimitPrice.Text = "100";
+            this.TextBoxOrderSettingLimitPrice.Location = new System.Drawing.Point(54, 76);
+            this.TextBoxOrderSettingLimitPrice.Name = "TextBoxOrderSettingLimitPrice";
+            this.TextBoxOrderSettingLimitPrice.Size = new System.Drawing.Size(141, 22);
+            this.TextBoxOrderSettingLimitPrice.TabIndex = 72;
+            this.TextBoxOrderSettingLimitPrice.Text = "100";
             // 
-            // label6
+            // LabelOrderSettingTIF
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 136);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(22, 13);
-            this.label6.TabIndex = 71;
-            this.label6.Text = "TIF";
+            this.LabelOrderSettingTIF.AutoSize = true;
+            this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
+            this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
+            this.LabelOrderSettingTIF.TabIndex = 71;
+            this.LabelOrderSettingTIF.Text = "TIF:";
             // 
-            // label5
+            // LabelOrderSettingType
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 13);
-            this.label5.TabIndex = 70;
-            this.label5.Text = "Type";
+            this.LabelOrderSettingType.AutoSize = true;
+            this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
+            this.LabelOrderSettingType.Name = "LabelOrderSettingType";
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
+            this.LabelOrderSettingType.TabIndex = 70;
+            this.LabelOrderSettingType.Text = "Type:";
             // 
-            // label4
+            // LabelOrderSettingQuantity
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 25);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(51, 13);
-            this.label4.TabIndex = 69;
-            this.label4.Text = "Quantity";
+            this.LabelOrderSettingQuantity.AutoSize = true;
+            this.LabelOrderSettingQuantity.Location = new System.Drawing.Point(9, 25);
+            this.LabelOrderSettingQuantity.Name = "LabelOrderSettingQuantity";
+            this.LabelOrderSettingQuantity.Size = new System.Drawing.Size(54, 13);
+            this.LabelOrderSettingQuantity.TabIndex = 69;
+            this.LabelOrderSettingQuantity.Text = "Quantity:";
             // 
-            // ComboBoxOrderTimeInForce
+            // ComboBoxOrderSettingTIF
             // 
-            this.ComboBoxOrderTimeInForce.FormattingEnabled = true;
-            this.ComboBoxOrderTimeInForce.Location = new System.Drawing.Point(48, 133);
-            this.ComboBoxOrderTimeInForce.Name = "ComboBoxOrderTimeInForce";
-            this.ComboBoxOrderTimeInForce.Size = new System.Drawing.Size(117, 21);
-            this.ComboBoxOrderTimeInForce.TabIndex = 68;
-            this.ComboBoxOrderTimeInForce.Text = "Day";
+            this.ComboBoxOrderSettingTIF.FormattingEnabled = true;
+            this.ComboBoxOrderSettingTIF.Location = new System.Drawing.Point(54, 132);
+            this.ComboBoxOrderSettingTIF.Name = "ComboBoxOrderSettingTIF";
+            this.ComboBoxOrderSettingTIF.Size = new System.Drawing.Size(141, 21);
+            this.ComboBoxOrderSettingTIF.TabIndex = 68;
+            this.ComboBoxOrderSettingTIF.Text = "Day";
             // 
-            // ComboxBoxOrderType
+            // ComboxBoxOrderSettingType
             // 
-            this.ComboxBoxOrderType.FormattingEnabled = true;
-            this.ComboxBoxOrderType.Location = new System.Drawing.Point(48, 50);
-            this.ComboxBoxOrderType.Name = "ComboxBoxOrderType";
-            this.ComboxBoxOrderType.Size = new System.Drawing.Size(117, 21);
-            this.ComboxBoxOrderType.TabIndex = 67;
-            this.ComboxBoxOrderType.Text = " Market";
+            this.ComboxBoxOrderSettingType.FormattingEnabled = true;
+            this.ComboxBoxOrderSettingType.Location = new System.Drawing.Point(54, 49);
+            this.ComboxBoxOrderSettingType.Name = "ComboxBoxOrderSettingType";
+            this.ComboxBoxOrderSettingType.Size = new System.Drawing.Size(141, 21);
+            this.ComboxBoxOrderSettingType.TabIndex = 67;
+            this.ComboxBoxOrderSettingType.Text = " Market";
             // 
-            // TextBoxOrderQuantity
+            // TextBoxOrderSettingQuantity
             // 
-            this.TextBoxOrderQuantity.Location = new System.Drawing.Point(70, 22);
-            this.TextBoxOrderQuantity.Name = "TextBoxOrderQuantity";
-            this.TextBoxOrderQuantity.Size = new System.Drawing.Size(95, 22);
-            this.TextBoxOrderQuantity.TabIndex = 66;
-            this.TextBoxOrderQuantity.Text = "100";
+            this.TextBoxOrderSettingQuantity.Location = new System.Drawing.Point(69, 21);
+            this.TextBoxOrderSettingQuantity.Name = "TextBoxOrderSettingQuantity";
+            this.TextBoxOrderSettingQuantity.Size = new System.Drawing.Size(126, 22);
+            this.TextBoxOrderSettingQuantity.TabIndex = 66;
+            this.TextBoxOrderSettingQuantity.Text = "100";
             // 
             // BtnGetOpenOrders
             // 
-            this.BtnGetOpenOrders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnGetOpenOrders.Location = new System.Drawing.Point(3, 561);
+            this.BtnGetOpenOrders.Location = new System.Drawing.Point(458, 137);
             this.BtnGetOpenOrders.Name = "BtnGetOpenOrders";
             this.BtnGetOpenOrders.Size = new System.Drawing.Size(162, 23);
             this.BtnGetOpenOrders.TabIndex = 10;
@@ -1046,32 +884,32 @@ namespace TestClient
             // 
             // BtnModifyOrder
             // 
-            this.BtnModifyOrder.Location = new System.Drawing.Point(3, 468);
+            this.BtnModifyOrder.Location = new System.Drawing.Point(13, 370);
             this.BtnModifyOrder.Name = "BtnModifyOrder";
-            this.BtnModifyOrder.Size = new System.Drawing.Size(162, 23);
+            this.BtnModifyOrder.Size = new System.Drawing.Size(182, 23);
             this.BtnModifyOrder.TabIndex = 7;
             this.BtnModifyOrder.Text = "Modify Order";
             this.BtnModifyOrder.UseVisualStyleBackColor = true;
             this.BtnModifyOrder.Click += new System.EventHandler(this.BtnModifyOrder_Click);
             // 
-            // BtnOrder
+            // BtnOrderSettingPlaceOrder
             // 
-            this.BtnOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.BtnOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.BtnOrder.Location = new System.Drawing.Point(3, 244);
-            this.BtnOrder.Name = "BtnOrder";
-            this.BtnOrder.Size = new System.Drawing.Size(162, 29);
-            this.BtnOrder.TabIndex = 5;
-            this.BtnOrder.Text = "Order";
-            this.BtnOrder.UseVisualStyleBackColor = false;
-            this.BtnOrder.Click += new System.EventHandler(this.BtnOrder_Click);
+            this.BtnOrderSettingPlaceOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnOrderSettingPlaceOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnOrderSettingPlaceOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnOrderSettingPlaceOrder.Location = new System.Drawing.Point(13, 242);
+            this.BtnOrderSettingPlaceOrder.Name = "BtnOrderSettingPlaceOrder";
+            this.BtnOrderSettingPlaceOrder.Size = new System.Drawing.Size(183, 29);
+            this.BtnOrderSettingPlaceOrder.TabIndex = 5;
+            this.BtnOrderSettingPlaceOrder.Text = "Order";
+            this.BtnOrderSettingPlaceOrder.UseVisualStyleBackColor = false;
+            this.BtnOrderSettingPlaceOrder.Click += new System.EventHandler(this.BtnOrder_Click);
             // 
             // BtnGlobalCancel
             // 
-            this.BtnGlobalCancel.Location = new System.Drawing.Point(3, 526);
+            this.BtnGlobalCancel.Location = new System.Drawing.Point(13, 428);
             this.BtnGlobalCancel.Name = "BtnGlobalCancel";
-            this.BtnGlobalCancel.Size = new System.Drawing.Size(162, 23);
+            this.BtnGlobalCancel.Size = new System.Drawing.Size(182, 23);
             this.BtnGlobalCancel.TabIndex = 6;
             this.BtnGlobalCancel.Text = "Global Cancel";
             this.BtnGlobalCancel.UseVisualStyleBackColor = true;
@@ -1079,60 +917,16 @@ namespace TestClient
             // 
             // BtnCancelOrder
             // 
-            this.BtnCancelOrder.Location = new System.Drawing.Point(3, 497);
+            this.BtnCancelOrder.Location = new System.Drawing.Point(13, 399);
             this.BtnCancelOrder.Name = "BtnCancelOrder";
-            this.BtnCancelOrder.Size = new System.Drawing.Size(162, 23);
+            this.BtnCancelOrder.Size = new System.Drawing.Size(182, 23);
             this.BtnCancelOrder.TabIndex = 8;
             this.BtnCancelOrder.Text = "Cancel Order";
             this.BtnCancelOrder.UseVisualStyleBackColor = true;
             // 
-            // liveOrdersGroup
-            // 
-            this.liveOrdersGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.liveOrdersGroup.Controls.Add(this.GridViewAllOrders);
-            this.liveOrdersGroup.Location = new System.Drawing.Point(171, 3);
-            this.liveOrdersGroup.Name = "liveOrdersGroup";
-            this.liveOrdersGroup.Size = new System.Drawing.Size(1182, 792);
-            this.liveOrdersGroup.TabIndex = 2;
-            this.liveOrdersGroup.TabStop = false;
-            this.liveOrdersGroup.Text = "Live Orders - double click to modify.";
-            // 
-            // GridViewAllOrders
-            // 
-            this.GridViewAllOrders.AllowUserToAddRows = false;
-            this.GridViewAllOrders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.GridViewAllOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridViewAllOrders.Location = new System.Drawing.Point(6, 19);
-            this.GridViewAllOrders.Name = "GridViewAllOrders";
-            this.GridViewAllOrders.ReadOnly = true;
-            this.GridViewAllOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewAllOrders.Size = new System.Drawing.Size(1170, 767);
-            this.GridViewAllOrders.TabIndex = 0;
-            this.GridViewAllOrders.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewAllOrders_RowEnter);
-            // 
-            // tabTrade
-            // 
-            this.tabTrade.Controls.Add(this.BtnExportExecTradeLog);
-            this.tabTrade.Controls.Add(this.BtnPositionCloseSelected);
-            this.tabTrade.Controls.Add(this.button1);
-            this.tabTrade.Controls.Add(this.BtnRequestExecData);
-            this.tabTrade.Controls.Add(this.groupBoxPositions);
-            this.tabTrade.Controls.Add(this.BtnRequestPostion);
-            this.tabTrade.Controls.Add(this.executionsGroup);
-            this.tabTrade.Location = new System.Drawing.Point(4, 22);
-            this.tabTrade.Name = "tabTrade";
-            this.tabTrade.Size = new System.Drawing.Size(1356, 798);
-            this.tabTrade.TabIndex = 4;
-            this.tabTrade.Text = "Trades";
-            this.tabTrade.UseVisualStyleBackColor = true;
-            // 
             // BtnExportExecTradeLog
             // 
-            this.BtnExportExecTradeLog.Location = new System.Drawing.Point(9, 48);
+            this.BtnExportExecTradeLog.Location = new System.Drawing.Point(20, 67);
             this.BtnExportExecTradeLog.Name = "BtnExportExecTradeLog";
             this.BtnExportExecTradeLog.Size = new System.Drawing.Size(167, 23);
             this.BtnExportExecTradeLog.TabIndex = 80;
@@ -1142,7 +936,7 @@ namespace TestClient
             // 
             // BtnPositionCloseSelected
             // 
-            this.BtnPositionCloseSelected.Location = new System.Drawing.Point(9, 584);
+            this.BtnPositionCloseSelected.Location = new System.Drawing.Point(20, 61);
             this.BtnPositionCloseSelected.Name = "BtnPositionCloseSelected";
             this.BtnPositionCloseSelected.Size = new System.Drawing.Size(167, 23);
             this.BtnPositionCloseSelected.TabIndex = 79;
@@ -1151,7 +945,7 @@ namespace TestClient
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 640);
+            this.button1.Location = new System.Drawing.Point(20, 117);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(167, 23);
             this.button1.TabIndex = 77;
@@ -1161,7 +955,7 @@ namespace TestClient
             // 
             // BtnRequestExecData
             // 
-            this.BtnRequestExecData.Location = new System.Drawing.Point(9, 19);
+            this.BtnRequestExecData.Location = new System.Drawing.Point(20, 38);
             this.BtnRequestExecData.Name = "BtnRequestExecData";
             this.BtnRequestExecData.Size = new System.Drawing.Size(167, 23);
             this.BtnRequestExecData.TabIndex = 78;
@@ -1169,73 +963,21 @@ namespace TestClient
             this.BtnRequestExecData.UseVisualStyleBackColor = true;
             this.BtnRequestExecData.Click += new System.EventHandler(this.BtnRequestExecData_Click);
             // 
-            // groupBoxPositions
+            // GroupBoxPositions
             // 
-            this.groupBoxPositions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxPositions.Controls.Add(this.PositionsGrid);
-            this.groupBoxPositions.Location = new System.Drawing.Point(193, 498);
-            this.groupBoxPositions.Name = "groupBoxPositions";
-            this.groupBoxPositions.Size = new System.Drawing.Size(1356, 297);
-            this.groupBoxPositions.TabIndex = 11;
-            this.groupBoxPositions.TabStop = false;
-            this.groupBoxPositions.Text = "Positions";
-            // 
-            // PositionsGrid
-            // 
-            this.PositionsGrid.AllowUserToAddRows = false;
-            this.PositionsGrid.AllowUserToDeleteRows = false;
-            this.PositionsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PositionsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.PositionsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.positionContract,
-            this.positionAccount,
-            this.positionPosition,
-            this.positionAvgCost,
-            this.PositionCost});
-            this.PositionsGrid.Location = new System.Drawing.Point(6, 21);
-            this.PositionsGrid.Name = "PositionsGrid";
-            this.PositionsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.PositionsGrid.Size = new System.Drawing.Size(1344, 270);
-            this.PositionsGrid.TabIndex = 6;
-            // 
-            // positionContract
-            // 
-            this.positionContract.HeaderText = "Contract";
-            this.positionContract.Name = "positionContract";
-            this.positionContract.ReadOnly = true;
-            this.positionContract.Width = 150;
-            // 
-            // positionAccount
-            // 
-            this.positionAccount.HeaderText = "Account";
-            this.positionAccount.Name = "positionAccount";
-            this.positionAccount.ReadOnly = true;
-            // 
-            // positionPosition
-            // 
-            this.positionPosition.HeaderText = "Position";
-            this.positionPosition.Name = "positionPosition";
-            this.positionPosition.ReadOnly = true;
-            this.positionPosition.Width = 80;
-            // 
-            // positionAvgCost
-            // 
-            this.positionAvgCost.HeaderText = "Average Cost";
-            this.positionAvgCost.Name = "positionAvgCost";
-            this.positionAvgCost.ReadOnly = true;
-            // 
-            // PositionCost
-            // 
-            this.PositionCost.HeaderText = "Position Cost";
-            this.PositionCost.Name = "PositionCost";
-            this.PositionCost.ReadOnly = true;
+            this.GroupBoxPositions.Controls.Add(this.BtnPositionCloseSelected);
+            this.GroupBoxPositions.Controls.Add(this.BtnRequestPostion);
+            this.GroupBoxPositions.Controls.Add(this.button1);
+            this.GroupBoxPositions.Location = new System.Drawing.Point(632, 225);
+            this.GroupBoxPositions.Name = "GroupBoxPositions";
+            this.GroupBoxPositions.Size = new System.Drawing.Size(248, 168);
+            this.GroupBoxPositions.TabIndex = 11;
+            this.GroupBoxPositions.TabStop = false;
+            this.GroupBoxPositions.Text = "Positions";
             // 
             // BtnRequestPostion
             // 
-            this.BtnRequestPostion.Location = new System.Drawing.Point(9, 555);
+            this.BtnRequestPostion.Location = new System.Drawing.Point(20, 32);
             this.BtnRequestPostion.Name = "BtnRequestPostion";
             this.BtnRequestPostion.Size = new System.Drawing.Size(167, 23);
             this.BtnRequestPostion.TabIndex = 7;
@@ -1245,29 +987,14 @@ namespace TestClient
             // 
             // executionsGroup
             // 
-            this.executionsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.executionsGroup.Controls.Add(this.GridViewTradeTable);
-            this.executionsGroup.Location = new System.Drawing.Point(196, 0);
+            this.executionsGroup.Controls.Add(this.BtnExportExecTradeLog);
+            this.executionsGroup.Controls.Add(this.BtnRequestExecData);
+            this.executionsGroup.Location = new System.Drawing.Point(348, 287);
             this.executionsGroup.Name = "executionsGroup";
-            this.executionsGroup.Size = new System.Drawing.Size(1356, 492);
+            this.executionsGroup.Size = new System.Drawing.Size(248, 136);
             this.executionsGroup.TabIndex = 4;
             this.executionsGroup.TabStop = false;
             this.executionsGroup.Text = "Trade Log (Executions)";
-            // 
-            // GridViewTradeTable
-            // 
-            this.GridViewTradeTable.AllowUserToAddRows = false;
-            this.GridViewTradeTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.GridViewTradeTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridViewTradeTable.Location = new System.Drawing.Point(6, 19);
-            this.GridViewTradeTable.Name = "GridViewTradeTable";
-            this.GridViewTradeTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewTradeTable.Size = new System.Drawing.Size(1344, 467);
-            this.GridViewTradeTable.TabIndex = 0;
             // 
             // tabAccount
             // 
@@ -1278,7 +1005,7 @@ namespace TestClient
             this.tabAccount.Location = new System.Drawing.Point(4, 22);
             this.tabAccount.Name = "tabAccount";
             this.tabAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAccount.Size = new System.Drawing.Size(1356, 798);
+            this.tabAccount.Size = new System.Drawing.Size(952, 484);
             this.tabAccount.TabIndex = 0;
             this.tabAccount.Text = "Account";
             this.tabAccount.UseVisualStyleBackColor = true;
@@ -1309,7 +1036,7 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewAccount.Location = new System.Drawing.Point(6, 35);
             this.TreeViewAccount.Name = "TreeViewAccount";
-            this.TreeViewAccount.Size = new System.Drawing.Size(516, 757);
+            this.TreeViewAccount.Size = new System.Drawing.Size(516, 443);
             this.TreeViewAccount.TabIndex = 5;
             // 
             // tabFileData
@@ -1324,14 +1051,14 @@ namespace TestClient
             this.tabFileData.Controls.Add(this.BtnImportContracts);
             this.tabFileData.Location = new System.Drawing.Point(4, 22);
             this.tabFileData.Name = "tabFileData";
-            this.tabFileData.Size = new System.Drawing.Size(1356, 798);
+            this.tabFileData.Size = new System.Drawing.Size(952, 484);
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
             // 
             // BtnDownloadBarTable
             // 
-            this.BtnDownloadBarTable.Location = new System.Drawing.Point(369, 79);
+            this.BtnDownloadBarTable.Location = new System.Drawing.Point(31, 79);
             this.BtnDownloadBarTable.Name = "BtnDownloadBarTable";
             this.BtnDownloadBarTable.Size = new System.Drawing.Size(160, 23);
             this.BtnDownloadBarTable.TabIndex = 54;
@@ -1340,7 +1067,7 @@ namespace TestClient
             // 
             // BtnReDownloadBarTable
             // 
-            this.BtnReDownloadBarTable.Location = new System.Drawing.Point(369, 108);
+            this.BtnReDownloadBarTable.Location = new System.Drawing.Point(31, 108);
             this.BtnReDownloadBarTable.Name = "BtnReDownloadBarTable";
             this.BtnReDownloadBarTable.Size = new System.Drawing.Size(160, 23);
             this.BtnReDownloadBarTable.TabIndex = 53;
@@ -1349,7 +1076,7 @@ namespace TestClient
             // 
             // BtnCleanUpDuplicateStock
             // 
-            this.BtnCleanUpDuplicateStock.Location = new System.Drawing.Point(776, 438);
+            this.BtnCleanUpDuplicateStock.Location = new System.Drawing.Point(750, 108);
             this.BtnCleanUpDuplicateStock.Name = "BtnCleanUpDuplicateStock";
             this.BtnCleanUpDuplicateStock.Size = new System.Drawing.Size(198, 23);
             this.BtnCleanUpDuplicateStock.TabIndex = 52;
@@ -1365,7 +1092,7 @@ namespace TestClient
             this.GroupBoxQuandlTool.Controls.Add(this.label13);
             this.GroupBoxQuandlTool.Controls.Add(this.ListViewQuandlFileMerge);
             this.GroupBoxQuandlTool.Controls.Add(this.BtnExtractSymbols);
-            this.GroupBoxQuandlTool.Location = new System.Drawing.Point(608, 13);
+            this.GroupBoxQuandlTool.Location = new System.Drawing.Point(270, 13);
             this.GroupBoxQuandlTool.Name = "GroupBoxQuandlTool";
             this.GroupBoxQuandlTool.Size = new System.Drawing.Size(474, 190);
             this.GroupBoxQuandlTool.TabIndex = 52;
@@ -1443,7 +1170,7 @@ namespace TestClient
             // 
             // BtnDownloadMultiTables
             // 
-            this.BtnDownloadMultiTables.Location = new System.Drawing.Point(369, 137);
+            this.BtnDownloadMultiTables.Location = new System.Drawing.Point(31, 137);
             this.BtnDownloadMultiTables.Name = "BtnDownloadMultiTables";
             this.BtnDownloadMultiTables.Size = new System.Drawing.Size(160, 23);
             this.BtnDownloadMultiTables.TabIndex = 10;
@@ -1453,7 +1180,7 @@ namespace TestClient
             // 
             // BtnExportContracts
             // 
-            this.BtnExportContracts.Location = new System.Drawing.Point(952, 380);
+            this.BtnExportContracts.Location = new System.Drawing.Point(762, 58);
             this.BtnExportContracts.Name = "BtnExportContracts";
             this.BtnExportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnExportContracts.TabIndex = 6;
@@ -1463,7 +1190,7 @@ namespace TestClient
             // 
             // BtnImportContracts
             // 
-            this.BtnImportContracts.Location = new System.Drawing.Point(952, 351);
+            this.BtnImportContracts.Location = new System.Drawing.Point(762, 29);
             this.BtnImportContracts.Name = "BtnImportContracts";
             this.BtnImportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnImportContracts.TabIndex = 5;
@@ -1471,9 +1198,32 @@ namespace TestClient
             this.BtnImportContracts.UseVisualStyleBackColor = true;
             this.BtnImportContracts.Click += new System.EventHandler(this.BtnImportSymbols_Click);
             // 
+            // BtnMarketDataFormHide
+            // 
+            this.BtnMarketDataFormHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 718);
+            this.BtnMarketDataFormHide.Name = "BtnMarketDataFormHide";
+            this.BtnMarketDataFormHide.Size = new System.Drawing.Size(100, 23);
+            this.BtnMarketDataFormHide.TabIndex = 6;
+            this.BtnMarketDataFormHide.Text = "Hide Form";
+            this.BtnMarketDataFormHide.UseVisualStyleBackColor = true;
+            this.BtnMarketDataFormHide.Click += new System.EventHandler(this.BtnMarketDataFormHide_Click);
+            // 
+            // BtnMarketDataFormShow
+            // 
+            this.BtnMarketDataFormShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 718);
+            this.BtnMarketDataFormShow.Name = "BtnMarketDataFormShow";
+            this.BtnMarketDataFormShow.Size = new System.Drawing.Size(100, 23);
+            this.BtnMarketDataFormShow.TabIndex = 5;
+            this.BtnMarketDataFormShow.Text = "Show Form";
+            this.BtnMarketDataFormShow.UseVisualStyleBackColor = true;
+            this.BtnMarketDataFormShow.Click += new System.EventHandler(this.BtnMarketDataFormShow_Click);
+            // 
             // BtnTestSymbolsToCheck
             // 
-            this.BtnTestSymbolsToCheck.Location = new System.Drawing.Point(536, 21);
+            this.BtnTestSymbolsToCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnTestSymbolsToCheck.Location = new System.Drawing.Point(410, 21);
             this.BtnTestSymbolsToCheck.Name = "BtnTestSymbolsToCheck";
             this.BtnTestSymbolsToCheck.Size = new System.Drawing.Size(58, 55);
             this.BtnTestSymbolsToCheck.TabIndex = 53;
@@ -1483,7 +1233,8 @@ namespace TestClient
             // 
             // DownloadBarTableDetialedProgressBar
             // 
-            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(473, 1167);
+            this.DownloadBarTableDetialedProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 757);
             this.DownloadBarTableDetialedProgressBar.Name = "DownloadBarTableDetialedProgressBar";
             this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 15);
             this.DownloadBarTableDetialedProgressBar.TabIndex = 11;
@@ -1495,7 +1246,7 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxMultiContracts.Location = new System.Drawing.Point(6, 21);
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
-            this.TextBoxMultiContracts.Size = new System.Drawing.Size(524, 143);
+            this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 143);
             this.TextBoxMultiContracts.TabIndex = 9;
             this.TextBoxMultiContracts.Text = resources.GetString("TextBoxMultiContracts.Text");
             // 
@@ -1587,20 +1338,19 @@ namespace TestClient
             // 
             // ListBoxAccount
             // 
-            this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ListBoxAccount.FormattingEnabled = true;
-            this.ListBoxAccount.Location = new System.Drawing.Point(84, 1029);
+            this.ListBoxAccount.Location = new System.Drawing.Point(88, 718);
             this.ListBoxAccount.Name = "ListBoxAccount";
             this.ListBoxAccount.Size = new System.Drawing.Size(0, 121);
             this.ListBoxAccount.TabIndex = 4;
             // 
             // ib_banner
             // 
-            this.ib_banner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ib_banner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ib_banner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ib_banner.Image = global::TestClient.Properties.Resources.LogoIcon;
-            this.ib_banner.Location = new System.Drawing.Point(1139, 1167);
+            this.ib_banner.Location = new System.Drawing.Point(696, 427);
             this.ib_banner.Name = "ib_banner";
             this.ib_banner.Size = new System.Drawing.Size(237, 36);
             this.ib_banner.TabIndex = 10;
@@ -1610,7 +1360,7 @@ namespace TestClient
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LbStatus.AutoSize = true;
-            this.LbStatus.Location = new System.Drawing.Point(403, 1179);
+            this.LbStatus.Location = new System.Drawing.Point(122, 805);
             this.LbStatus.Name = "LbStatus";
             this.LbStatus.Size = new System.Drawing.Size(42, 13);
             this.LbStatus.TabIndex = 11;
@@ -1687,7 +1437,7 @@ namespace TestClient
             // MainProgBar
             // 
             this.MainProgBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MainProgBar.Location = new System.Drawing.Point(473, 1188);
+            this.MainProgBar.Location = new System.Drawing.Point(125, 782);
             this.MainProgBar.Name = "MainProgBar";
             this.MainProgBar.Size = new System.Drawing.Size(487, 15);
             this.MainProgBar.TabIndex = 25;
@@ -1707,9 +1457,9 @@ namespace TestClient
             this.BtnMasterCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BtnMasterCancel.BackColor = System.Drawing.Color.DarkRed;
             this.BtnMasterCancel.ForeColor = System.Drawing.Color.White;
-            this.BtnMasterCancel.Location = new System.Drawing.Point(12, 1167);
+            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 757);
             this.BtnMasterCancel.Name = "BtnMasterCancel";
-            this.BtnMasterCancel.Size = new System.Drawing.Size(99, 36);
+            this.BtnMasterCancel.Size = new System.Drawing.Size(100, 40);
             this.BtnMasterCancel.TabIndex = 38;
             this.BtnMasterCancel.Text = "Master Cancel";
             this.BtnMasterCancel.UseVisualStyleBackColor = false;
@@ -1718,7 +1468,7 @@ namespace TestClient
             // TextBoxIPAddress
             // 
             this.TextBoxIPAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TextBoxIPAddress.Location = new System.Drawing.Point(212, 1176);
+            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 821);
             this.TextBoxIPAddress.Name = "TextBoxIPAddress";
             this.TextBoxIPAddress.Size = new System.Drawing.Size(150, 22);
             this.TextBoxIPAddress.TabIndex = 65;
@@ -1855,50 +1605,68 @@ namespace TestClient
             this.GroupBoxMultiContracts.Controls.Add(this.BtnTestSymbolsToCheck);
             this.GroupBoxMultiContracts.Location = new System.Drawing.Point(498, 14);
             this.GroupBoxMultiContracts.Name = "GroupBoxMultiContracts";
-            this.GroupBoxMultiContracts.Size = new System.Drawing.Size(600, 170);
+            this.GroupBoxMultiContracts.Size = new System.Drawing.Size(474, 170);
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // TextBoxGenericTickList
+            // GroupBoxOrderSetting
             // 
-            this.TextBoxGenericTickList.Location = new System.Drawing.Point(109, 13);
-            this.TextBoxGenericTickList.Name = "TextBoxGenericTickList";
-            this.TextBoxGenericTickList.Size = new System.Drawing.Size(135, 22);
-            this.TextBoxGenericTickList.TabIndex = 19;
-            this.TextBoxGenericTickList.Text = "236,375";
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingApplyCurrentPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingQuantity);
+            this.GroupBoxOrderSetting.Controls.Add(this.ComboxBoxOrderSettingType);
+            this.GroupBoxOrderSetting.Controls.Add(this.ComboBoxOrderSettingTIF);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingQuantity);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceMultiOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnModifyOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnGlobalCancel);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingType);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnCancelOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingTIF);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingOrderBraket);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingLimitPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.CheckBoxOrderWhatIf);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingGTD);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingStopPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.DateTimePickerOrderSettingGTD);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingLimitPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingStopPrice);
+            this.GroupBoxOrderSetting.Location = new System.Drawing.Point(7, 12);
+            this.GroupBoxOrderSetting.Name = "GroupBoxOrderSetting";
+            this.GroupBoxOrderSetting.Size = new System.Drawing.Size(210, 465);
+            this.GroupBoxOrderSetting.TabIndex = 82;
+            this.GroupBoxOrderSetting.TabStop = false;
+            this.GroupBoxOrderSetting.Text = "Order Setting";
             // 
-            // LabelGenericTickList
+            // BtnOrderSettingApplyCurrentPrice
             // 
-            this.LabelGenericTickList.AutoSize = true;
-            this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
-            this.LabelGenericTickList.Name = "LabelGenericTickList";
-            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
-            this.LabelGenericTickList.TabIndex = 47;
-            this.LabelGenericTickList.Text = "Generic Tick List:";
+            this.BtnOrderSettingApplyCurrentPrice.Location = new System.Drawing.Point(13, 213);
+            this.BtnOrderSettingApplyCurrentPrice.Name = "BtnOrderSettingApplyCurrentPrice";
+            this.BtnOrderSettingApplyCurrentPrice.Size = new System.Drawing.Size(183, 23);
+            this.BtnOrderSettingApplyCurrentPrice.TabIndex = 84;
+            this.BtnOrderSettingApplyCurrentPrice.Text = "Apply Current Price";
+            this.BtnOrderSettingApplyCurrentPrice.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // tabSimulation
             // 
-            this.textBox2.Location = new System.Drawing.Point(109, 41);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(135, 22);
-            this.textBox2.TabIndex = 48;
-            this.textBox2.Text = "Market Data";
-            // 
-            // LabelWatchListName
-            // 
-            this.LabelWatchListName.AutoSize = true;
-            this.LabelWatchListName.Location = new System.Drawing.Point(44, 44);
-            this.LabelWatchListName.Name = "LabelWatchListName";
-            this.LabelWatchListName.Size = new System.Drawing.Size(59, 13);
-            this.LabelWatchListName.TabIndex = 49;
-            this.LabelWatchListName.Text = "List Name:";
+            this.tabSimulation.Controls.Add(this.BtnTestScalping);
+            this.tabSimulation.Controls.Add(this.TextBoxRunAllSimulationInitialAccountValue);
+            this.tabSimulation.Controls.Add(this.label10);
+            this.tabSimulation.Controls.Add(this.BtnRunAllSimulation);
+            this.tabSimulation.Controls.Add(this.BtnArmLiveTrade);
+            this.tabSimulation.Location = new System.Drawing.Point(4, 22);
+            this.tabSimulation.Name = "tabSimulation";
+            this.tabSimulation.Size = new System.Drawing.Size(952, 484);
+            this.tabSimulation.TabIndex = 9;
+            this.tabSimulation.Text = "Simulation";
+            this.tabSimulation.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1388, 1215);
+            this.ClientSize = new System.Drawing.Size(984, 861);
             this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
             this.Controls.Add(this.BtnMarketDataFormShow);
             this.Controls.Add(this.BtnMarketDataFormHide);
@@ -1910,13 +1678,12 @@ namespace TestClient
             this.Controls.Add(this.MainProgBar);
             this.Controls.Add(this.ListBoxAccount);
             this.Controls.Add(this.LbStatus);
-            this.Controls.Add(this.ib_banner);
             this.Controls.Add(this.MainTab);
             this.Controls.Add(this.btnConnect);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1200, 1000);
+            this.MinimumSize = new System.Drawing.Size(1000, 900);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Test IB Client";
@@ -1925,24 +1692,13 @@ namespace TestClient
             this.tabHistoricalData.PerformLayout();
             this.tabContract.ResumeLayout(false);
             this.tabContract.PerformLayout();
-            this.GroupBoxContractSearchResult.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewContractSearchResult)).EndInit();
             this.GroupBoxContractInfo.ResumeLayout(false);
             this.GroupBoxContractInfo.PerformLayout();
             this.tabMarketData.ResumeLayout(false);
             this.tabMarketData.PerformLayout();
-            this.tabMarketDepth.ResumeLayout(false);
-            this.tabScan.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.scannerGrid)).EndInit();
             this.tabOrder.ResumeLayout(false);
-            this.tabOrder.PerformLayout();
-            this.liveOrdersGroup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewAllOrders)).EndInit();
-            this.tabTrade.ResumeLayout(false);
-            this.groupBoxPositions.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PositionsGrid)).EndInit();
+            this.GroupBoxPositions.ResumeLayout(false);
             this.executionsGroup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewTradeTable)).EndInit();
             this.tabAccount.ResumeLayout(false);
             this.tabFileData.ResumeLayout(false);
             this.GroupBoxQuandlTool.ResumeLayout(false);
@@ -1953,6 +1709,10 @@ namespace TestClient
             this.GroupBoxBarTableSetting.ResumeLayout(false);
             this.GroupBoxBarTableSetting.PerformLayout();
             this.GroupBoxMultiContracts.ResumeLayout(false);
+            this.GroupBoxOrderSetting.ResumeLayout(false);
+            this.GroupBoxOrderSetting.PerformLayout();
+            this.tabSimulation.ResumeLayout(false);
+            this.tabSimulation.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1966,7 +1726,6 @@ namespace TestClient
         private System.Windows.Forms.TabPage tabAccount;
         private System.Windows.Forms.TabPage tabHistoricalData;
         private System.Windows.Forms.PictureBox ib_banner;
-        private System.Windows.Forms.TabPage tabTrade;
         private System.Windows.Forms.TabPage tabMarketData;
         private System.Windows.Forms.Label LbStatus;
         private System.Windows.Forms.CheckBox CheckBoxSingleContractUseSmart;
@@ -1976,7 +1735,6 @@ namespace TestClient
         private System.Windows.Forms.Label LabelSingleContractType;
         private System.Windows.Forms.Label LabelSingleContractName;
         private System.Windows.Forms.TextBox TextBoxSingleContractName;
-        private System.Windows.Forms.TabPage tabScan;
         private System.Windows.Forms.ListBox ListBoxAccount;
         private System.Windows.Forms.TreeView TreeViewAccount;
         private System.Windows.Forms.Button BtnRequestHistoricalData;
@@ -1992,38 +1750,20 @@ namespace TestClient
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label LabelBarFreq;
         private System.Windows.Forms.ProgressBar MainProgBar;
-        private System.Windows.Forms.DataGridView PositionsGrid;
         private System.Windows.Forms.Button BtnRequestPostion;
         private System.Windows.Forms.GroupBox executionsGroup;
-        private System.Windows.Forms.DataGridView GridViewTradeTable;
-        private System.Windows.Forms.GroupBox liveOrdersGroup;
-        private System.Windows.Forms.DataGridView GridViewAllOrders;
         private System.Windows.Forms.Button BtnModifyOrder;
         private System.Windows.Forms.Button BtnGlobalCancel;
-        private System.Windows.Forms.Button BtnOrder;
+        private System.Windows.Forms.Button BtnOrderSettingPlaceOrder;
         private System.Windows.Forms.Button BtnCancelOrder;
         private System.Windows.Forms.Button BtnGetCompletedOrders;
         private System.Windows.Forms.TabPage tabFileData;
-        private System.Windows.Forms.DataGridView scannerGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanRank;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanContract;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanBenchmark;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanProjection;
-        private System.Windows.Forms.DataGridViewTextBoxColumn scanLegStr;
         private System.Windows.Forms.Button BtnRequestScanner;
-        private System.Windows.Forms.TabPage tabMarketDepth;
         private System.Windows.Forms.Button BtnRequestMarketDepth;
         private System.Windows.Forms.Button BtnGetOpenOrders;
-        private System.Windows.Forms.DataGridViewTextBoxColumn positionContract;
-        private System.Windows.Forms.DataGridViewTextBoxColumn positionAccount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn positionPosition;
-        private System.Windows.Forms.DataGridViewTextBoxColumn positionAvgCost;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PositionCost;
         private System.Windows.Forms.Button BtnMarketDataAddMultiContracts;
         private System.Windows.Forms.Button BtnExportContracts;
         private System.Windows.Forms.Button BtnImportContracts;
-        private System.Windows.Forms.DataGridView GridViewContractSearchResult;
         private System.Windows.Forms.TextBox TextBoxSymbolIds;
         private System.Windows.Forms.Label LbSymbolIdNumbers;
         private System.Windows.Forms.TextBox TextBoxSymbolSummaryF;
@@ -2056,33 +1796,31 @@ namespace TestClient
         private System.Windows.Forms.ProgressBar DownloadBarTableDetialedProgressBar;
         private System.Windows.Forms.Button BtnTestScalping;
         private System.Windows.Forms.TextBox TextBoxIPAddress;
-        private System.Windows.Forms.GroupBox groupBoxPositions;
+        private System.Windows.Forms.GroupBox GroupBoxPositions;
         private System.Windows.Forms.TabPage tabOrder;
-        private System.Windows.Forms.TextBox TextBoxOrderQuantity;
-        private System.Windows.Forms.ComboBox ComboxBoxOrderType;
-        private System.Windows.Forms.ComboBox ComboBoxOrderTimeInForce;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox TextBoxOrderStopPrice;
-        private System.Windows.Forms.TextBox TextBoxOrderLimitPrice;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox TextBoxOrderSettingQuantity;
+        private System.Windows.Forms.ComboBox ComboxBoxOrderSettingType;
+        private System.Windows.Forms.ComboBox ComboBoxOrderSettingTIF;
+        private System.Windows.Forms.Label LabelOrderSettingStopPrice;
+        private System.Windows.Forms.Label LabelOrderSettingLimitPrice;
+        private System.Windows.Forms.TextBox TextBoxOrderSettingStopPrice;
+        private System.Windows.Forms.TextBox TextBoxOrderSettingLimitPrice;
+        private System.Windows.Forms.Label LabelOrderSettingTIF;
+        private System.Windows.Forms.Label LabelOrderSettingType;
+        private System.Windows.Forms.Label LabelOrderSettingQuantity;
         private System.Windows.Forms.CheckBox CheckBoxOrderWhatIf;
-        private System.Windows.Forms.Button TestMassOrder;
+        private System.Windows.Forms.Button BtnOrderSettingPlaceMultiOrder;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button BtnRequestExecData;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.DateTimePicker DateTimePickerOrderDate;
+        private System.Windows.Forms.Label LabelOrderSettingGTD;
+        private System.Windows.Forms.DateTimePicker DateTimePickerOrderSettingGTD;
         private System.Windows.Forms.Button BtnPositionCloseSelected;
         private System.Windows.Forms.Button BtnRunAllSimulation;
-        private System.Windows.Forms.Button BtnOrderBraket;
+        private System.Windows.Forms.Button BtnOrderSettingOrderBraket;
         private System.Windows.Forms.TextBox TextBoxRunAllSimulationInitialAccountValue;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button BtnArmLiveTrade;
         private System.Windows.Forms.Button BtnExportExecTradeLog;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox TextBoxOrderId;
         private System.Windows.Forms.Button BtnApplyTradeLogToChart;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button BtnAddQuandlFile;
@@ -2107,7 +1845,6 @@ namespace TestClient
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label LabelSingleContractExpire;
-        private System.Windows.Forms.GroupBox GroupBoxContractSearchResult;
         private System.Windows.Forms.GroupBox GroupBoxQuandlTool;
         private System.Windows.Forms.Button BtnReDownloadBarTable;
         private System.Windows.Forms.Button BtnDownloadBarTable;
@@ -2117,5 +1854,8 @@ namespace TestClient
         private System.Windows.Forms.Label LabelGenericTickList;
         private System.Windows.Forms.Label LabelWatchListName;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.GroupBox GroupBoxOrderSetting;
+        private System.Windows.Forms.Button BtnOrderSettingApplyCurrentPrice;
+        private System.Windows.Forms.TabPage tabSimulation;
     }
 }

@@ -66,7 +66,7 @@ namespace TestClient
             });
             UpdateUI.Start();
         }
-
+        /*
         public void PositionUpdatedHandler(int status, DateTime time, string msg)
         {
             Task UpdateUI = new Task(() => {
@@ -90,7 +90,7 @@ namespace TestClient
                                 PositionsGrid[0, i].Value = c.Name + " @ " + c.Exchange;
                                 PositionsGrid[1, i].Value = ac.AccountCode;
                                 PositionsGrid[2, i].Value = pos.Quantity;
-                                PositionsGrid[3, i].Value = pos.CostBasis;
+                                PositionsGrid[3, i].Value = pos.AveragePrice;
                                 PositionsGrid[4, i].Value = pos.Value;
                                 i++;
                             }
@@ -101,7 +101,7 @@ namespace TestClient
             });
             UpdateUI.Start();
         }
-
+        */
 
 
 

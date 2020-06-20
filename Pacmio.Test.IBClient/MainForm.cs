@@ -24,19 +24,19 @@ namespace TestClient
             InitializeComponent();
 
             OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
-
+            /*
             ContractTest.InitializeTable(GridViewContractSearchResult);
-            //MarketDataTest.InitializeTable();
             OrderTest.InitializeTable(GridViewAllOrders);
             TradeTest.InitializeTable(GridViewTradeTable);
-
+            AccountManager.UpdatedHandler += AccountUpdatedHandler;
+            AccountManager.UpdatedHandler += PositionUpdatedHandler;
+            */
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
             ToggleConnect();
 
             Root.IBClient.OnConnectedHandler += IBClientOnConnectedHandler;
-            AccountManager.UpdatedHandler += AccountUpdatedHandler;
-            AccountManager.UpdatedHandler += PositionUpdatedHandler;
+
          
             OrderManager.UpdatedHandler += OrderTableHandler;
             TradeLogManager.UpdatedHandler += TradeTableHandler;
@@ -58,8 +58,8 @@ namespace TestClient
             SelectHistoricalDataBarFreq.Items.Add<BarFreq>();
             SelectHistoricalDataBarType.Items.Add<BarType>();
 
-            ComboxBoxOrderType.Items.Add<OrderType>();
-            ComboBoxOrderTimeInForce.Items.Add<OrderTimeInForce>();
+            ComboxBoxOrderSettingType.Items.Add<OrderType>();
+            ComboBoxOrderSettingTIF.Items.Add<OrderTimeInForce>();
 
             if (CheckBoxChartToCurrent.Checked)
             {
@@ -129,97 +129,6 @@ namespace TestClient
             if (Root.IBClient is null) return;
             Root.IBClient.SendRequest_AccountSummary();
         }
-
-        private void BtnOrder_Click(object sender, EventArgs e)
-        {
-            if (Root.IBConnected && ValidateSymbol())
-            {
-                OrderType orderType = ComboxBoxOrderType.Text.ParseEnum<OrderType>();
-                OrderTimeInForce tif = ComboBoxOrderTimeInForce.Text.ParseEnum<OrderTimeInForce>();
-
-                OrderInfo od = new OrderInfo()
-                {
-                    Contract = ContractTest.ActiveContract,
-                    Quantity = TextBoxOrderQuantity.Text.ToInt32(0),
-                    Type = orderType,
-                    LimitPrice = TextBoxOrderLimitPrice.Text.ToDouble(0),
-                    AuxPrice = TextBoxOrderStopPrice.Text.ToDouble(0),
-                    TimeInForce = tif,
-                    Account = "DU332281",
-                    OutsideRegularTradeHours = true,
-                };
-
-                if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
-                {
-                    od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
-                    DateTimePickerOrderDate.Value = od.EffectiveDateTime;
-                }
-
-                Root.IBClient.PlaceOrder(od, CheckBoxOrderWhatIf.Checked);
-            }
-        }
-
-        private void BtnOrderBraket_Click(object sender, EventArgs e)
-        {
-            if (Root.IBConnected && ValidateSymbol())
-            {
-                InteractiveBrokersAccount iba = OrderTest.LiveAccount;
-
-                iba.EntryBraket(
-                    ContractTest.ActiveContract,
-                    TextBoxOrderQuantity.Text.ToInt32(0),
-                    TextBoxOrderStopPrice.Text.ToDouble(0),
-                    TextBoxOrderLimitPrice.Text.ToDouble(0)
-                );
-            }
-        }
-
-        private void GridViewAllOrders_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            int selectedRowCount = GridViewAllOrders.Rows.GetRowCount(DataGridViewElementStates.Selected);
-            if (selectedRowCount > 0)
-                for (int i = 0; i < selectedRowCount; i++)
-                {
-                    DataGridViewRow row = GridViewAllOrders.SelectedRows[i];
-                    int orderId = (int)row.Cells.GetCellValueFromColumnHeader("PermId");
-                    TextBoxOrderId.Text = orderId.ToString(); //Console.WriteLine("Row Selected: " + (int)orderId);
-
-                    OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
-
-
-                    TextBoxOrderQuantity.Text = od.Quantity.ToString();
-                    TextBoxOrderStopPrice.Text = od.AuxPrice.ToString();
-                    TextBoxOrderLimitPrice.Text = od.LimitPrice.ToString();
-                }
-        }
-
-        private void BtnModifyOrder_Click(object sender, EventArgs e)
-        {
-            OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
-            if (od is OrderInfo)
-            {
-                od.Quantity = TextBoxOrderQuantity.Text.ToInt32();
-
-                if (od.Type == OrderType.Stop)
-                {
-                    od.AuxPrice = TextBoxOrderStopPrice.Text.ToInt32();
-                }
-
-                if (od.Type == OrderType.Limit)
-                {
-                    od.AuxPrice = TextBoxOrderLimitPrice.Text.ToInt32();
-                }
-
-                Root.IBClient.PlaceOrder(od, false, true);
-            }
-        }
-
-        private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
-        {
-            if (Root.IBConnected && Root.IBClient.IsReady_CompletedOrder)
-                Root.IBClient.SendRequest_CompletedOrders(false);
-        }
-
 
 
         private void BtnRequestPostion_Click(object sender, EventArgs e)
@@ -783,6 +692,104 @@ namespace TestClient
         }
 
         #endregion Market Data
+
+        #region Order
+
+        private void BtnOrder_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && ValidateSymbol())
+            {
+                OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
+                OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
+
+                OrderInfo od = new OrderInfo()
+                {
+                    Contract = ContractTest.ActiveContract,
+                    Quantity = TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                    Type = orderType,
+                    LimitPrice = TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
+                    AuxPrice = TextBoxOrderSettingStopPrice.Text.ToDouble(0),
+                    TimeInForce = tif,
+                    AccountCode = "DU332281",
+                    OutsideRegularTradeHours = true,
+                };
+
+                if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
+                {
+                    od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
+                    DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
+                }
+
+                Root.IBClient.PlaceOrder(od, CheckBoxOrderWhatIf.Checked);
+            }
+        }
+
+        private void BtnOrderBraket_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && ValidateSymbol())
+            {
+                InteractiveBrokersAccount iba = OrderTest.LiveAccount;
+
+                iba.EntryBraket(
+                    ContractTest.ActiveContract,
+                    TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                    TextBoxOrderSettingStopPrice.Text.ToDouble(0),
+                    TextBoxOrderSettingLimitPrice.Text.ToDouble(0)
+                );
+            }
+        }
+
+        private void GridViewAllOrders_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            /*
+            int selectedRowCount = GridViewAllOrders.Rows.GetRowCount(DataGridViewElementStates.Selected);
+            if (selectedRowCount > 0)
+                for (int i = 0; i < selectedRowCount; i++)
+                {
+                    DataGridViewRow row = GridViewAllOrders.SelectedRows[i];
+                    int orderId = (int)row.Cells.GetCellValueFromColumnHeader("PermId");
+                    TextBoxOrderId.Text = orderId.ToString(); //Console.WriteLine("Row Selected: " + (int)orderId);
+
+                    OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
+
+
+                    TextBoxOrderSettingQuantity.Text = od.Quantity.ToString();
+                    TextBoxOrderSettingStopPrice.Text = od.AuxPrice.ToString();
+                    TextBoxOrderSettingLimitPrice.Text = od.LimitPrice.ToString();
+                }
+            */
+        }
+
+        private void BtnModifyOrder_Click(object sender, EventArgs e)
+        {
+            /*
+            OrderInfo od = OrderManager.Get(TextBoxOrderId.Text.ToInt32());
+            if (od is OrderInfo)
+            {
+                od.Quantity = TextBoxOrderSettingQuantity.Text.ToInt32();
+
+                if (od.Type == OrderType.Stop)
+                {
+                    od.AuxPrice = TextBoxOrderSettingStopPrice.Text.ToInt32();
+                }
+
+                if (od.Type == OrderType.Limit)
+                {
+                    od.AuxPrice = TextBoxOrderSettingLimitPrice.Text.ToInt32();
+                }
+
+                Root.IBClient.PlaceOrder(od, false, true);
+            }*/
+        }
+
+        private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
+        {
+            if (Root.IBConnected && Root.IBClient.IsReady_CompletedOrder)
+                Root.IBClient.SendRequest_CompletedOrders(false);
+        }
+
+        #endregion Order
+
     }
     public static class DataGridHelper
     {

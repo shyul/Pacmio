@@ -117,39 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="scanRank.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="scanContract.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="scanDistance.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="scanBenchmark.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="scanProjection.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="scanLegStr.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="positionContract.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="positionAccount.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="positionPosition.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="positionAvgCost.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="PositionCost.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="TextBoxMultiContracts.Text" xml:space="preserve">
     <value>"VXX", "UGAZ", "FB", "AMD", "GOOGL", "AAPL", "GILD", "GOLD", "PENN", "BA", "LUV", "SNAP", "TQQQ", "ABBV", "PLAY", "LYFT", "MGM", "COG", "IMMU", "VIAC", "PINS", "OSTK", "BYND", "UBER", "DIS", "C", "SIRI", "T", "PFE", "FCX", "USO", "TWTR", "JPM", "GM", "CARR", "SLB", "CSCO", "KMI", "CVX", "V", "MPC", "KO", "BMY", "SBUX", "RTX", "WMB", "EBAY", "SQ", "VZ", "HPQ", "CTL", "EBD", "COP", "XLNX", "LULU", "CCL", "NATI", "DAL", "RCL", "PCG", "KEY", "RF", "SYF", "MRVL", "WORK", "TLRY", "IO", "CHEF", "VVUS", "NVDA", "AMGN", "UPRO", "ALXN", "UAL", "HAL", "INTC", "XOM", "MRNA", "WFC", "OXY", "BAC", "ET", "MSFT", "KEYS", "MRK", "NVS", "ORCL", "ABT", "CHK", "ADBE", "CHL", "LLY", "PYPL", "CRM", "SAP", "MDT", "AZN", "AMZN", "TSLA", "TMO", "NVO", "DHR", "TMUS", "ACN", "IBM", "AVGO", "ADI", "GSK", "TXN", "TOT", "QCOM", "BP", "FIS", "SYK", "CI", "FISV", "AGN", "ADP", "ZTS", "BSX", "MU", "CEO", "BAX", "QQQ", "SPY", "PSX", "A", "STM", "EOG", "TU", "RCI", "GLW", "NLOK", "SNN", "MYL", "JNPR", "ON", "SE", "TEVA", "IQ", "BHC", "UVXY", "VIXY", "VIXM", "EWZ", "EEM", "GDX", "NUGT", "GLD", "XLE", "XLF", "IBB", "TNA", "UNH", "JNUG"</value>
   </data>

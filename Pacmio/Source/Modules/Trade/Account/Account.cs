@@ -133,5 +133,11 @@ namespace Pacmio
         public override int GetHashCode() => AccountCode.GetHashCode();
 
         #endregion Equality
+
+        #region Grid View
+
+        public static readonly StringColumn Column_Account = new StringColumn("ACCOUNT");
+
+        #endregion Grid View
     }
 }

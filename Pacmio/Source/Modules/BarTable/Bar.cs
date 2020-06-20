@@ -241,7 +241,7 @@ namespace Pacmio
                 ActionType = ps.ActionType;
             }
             PositionQuantity = ps.Quantity;
-            PositionCostBasis = ps.CostBasis;
+            PositionCostBasis = ps.AveragePrice;
         }
 
         #endregion Position Tracking Information

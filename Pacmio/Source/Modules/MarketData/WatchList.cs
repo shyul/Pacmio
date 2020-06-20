@@ -18,8 +18,6 @@ namespace Pacmio
 {
     public static class WatchList
     {
-        
-
         public static void Add(MarketDataGridView gv) 
         {
             if (!List.Contains(gv)) 
@@ -38,8 +36,6 @@ namespace Pacmio
         {
         
         }
-
-
 
         public static Contract SelectedContract
         {

@@ -23,6 +23,16 @@ namespace Pacmio
     {
         public static HashSet<Account> List { get; set; }
 
+        public static Account Get(string accountCode)
+        {
+            if (List == null) List = new HashSet<Account>();
+
+            var res = List.Where(n => n.AccountCode == accountCode);
+
+            if (res.Count() > 0) return res.First();
+            else return null;
+        }
+
         public static T GetOrAdd<T>(T ac) where T : Account
         {
             if (List == null) List = new HashSet<Account>();

@@ -39,7 +39,10 @@ namespace Pacmio
         private Contract m_Contract;
 
         [DataMember]
-        public string Account { get; set; } = string.Empty;
+        public string AccountCode { get; set; } = string.Empty;
+
+        [IgnoreDataMember]
+        public Account Account => AccountManager.Get(AccountCode);
 
         [DataMember]
         public double Quantity { get; set; } = double.NaN;

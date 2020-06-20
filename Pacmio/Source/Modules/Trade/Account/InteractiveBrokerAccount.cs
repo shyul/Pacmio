@@ -49,7 +49,7 @@ namespace Pacmio
                 OrderType type = OrderType.Market;
                 ps.EntryOrder = new OrderInfo()
                 {
-                    Account = AccountCode,
+                    AccountCode = AccountCode,
                     Contract = c,
                     Type = type,
                     //LimitPrice = limit,
@@ -82,7 +82,7 @@ namespace Pacmio
 
             ps.EntryOrder = new OrderInfo()
             {
-                Account = AccountCode,
+                AccountCode = AccountCode,
                 Contract = c,
                 Type = type,
                 //LimitPrice = limit,
@@ -100,7 +100,7 @@ namespace Pacmio
             {
                 OrderInfo StopLossOrder = new OrderInfo()
                 {
-                    Account = AccountCode,
+                    AccountCode = AccountCode,
                     Contract = c,
                     Type = OrderType.Stop,
                     AuxPrice = ps.Stop,
@@ -117,7 +117,7 @@ namespace Pacmio
             {
                 OrderInfo ProfitTakingOrder = new OrderInfo()
                 {
-                    Account = AccountCode,
+                    AccountCode = AccountCode,
                     Contract = c,
                     Type = OrderType.Limit,
                     LimitPrice = ps.Limit,
@@ -252,7 +252,7 @@ namespace Pacmio
 
                 OrderInfo od = new OrderInfo()
                 {
-                    Account = AccountCode,
+                    AccountCode = AccountCode,
                     Contract = c,
                     Type = OrderType.Market, // OrderType.MarketLimit
                     Quantity = -ps.Quantity,

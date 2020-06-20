@@ -57,7 +57,6 @@ namespace Pacmio.IB
                     multiplier = opt.Multiplier;
                 }
 
-
                 string goodAfterDate = (od.TimeInForce == OrderTimeInForce.GoodAfterDate) ? od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
                 string goodTillDate = (od.TimeInForce == OrderTimeInForce.GoodUntilDate) ? od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
 
@@ -93,7 +92,7 @@ namespace Pacmio.IB
                     
                     TifCode, // 21
                     string.Empty, // 22
-                    od.Account, // 23
+                    od.AccountCode, // 23
                     string.Empty, // 24 OpenClose
                     "0", // 25 // Origin
                     od.Description, // 26 // OrderRef

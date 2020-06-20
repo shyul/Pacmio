@@ -49,7 +49,7 @@ namespace Pacmio
 
         public static IEnumerable<OrderInfo> GetActiveOrder(Account ac, Contract c)
         {
-            return List.Values.Where(od => od.IsEditable && od.Account == ac.AccountCode && od.Contract == c);
+            return List.Values.Where(od => od.IsEditable && od.AccountCode == ac.AccountCode && od.Contract == c);
         }
 
         public static DateTime UpdatedTime { get; set; }

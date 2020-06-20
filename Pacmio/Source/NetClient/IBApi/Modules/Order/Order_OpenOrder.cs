@@ -79,7 +79,7 @@ namespace Pacmio.IB
             od.AuxPrice = fields[17].ToDouble();
             od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[18]).Enum;
             // fields[19]  // order.OcaGroup = eDecoder.ReadString();
-            od.Account = fields[20];
+            od.AccountCode = fields[20];
             // fields[21]  // order.OpenClose = eDecoder.ReadString();
             // fields[22]  // order.Origin = eDecoder.ReadInt();
             od.Description = fields[23];  // order.OrderRef = eDecoder.ReadString();

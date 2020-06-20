@@ -271,21 +271,7 @@ namespace Pacmio
         public readonly Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth
             = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
 
-
-        public double PositionQuantityAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => PositionQuantity(n)).Sum() : 0;
-
-        public double PositionQuantity(Account ac) => ac.Positions.ContainsKey(Contract) ? ac.Positions[Contract].Quantity : 0;
-
-        public double CostBasisAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => PositionQuantity(n)).Sum() : 0;
-
-        public double CostBasis(Account ac) => ac.Positions.ContainsKey(Contract) ? ac.Positions[Contract].CostBasis : 0;
-
-        public double UnrealizedProfitAll => AccountManager.List.Count() > 0 ? AccountManager.List.Select(n => UnrealizedProfit(n)).Sum() : 0;
-
-        public double UnrealizedProfit(Account ac) => ac.Positions.ContainsKey(Contract) ? ac.Positions[Contract].Quantity * (LastClose - ac.Positions[Contract].CostBasis) : 0;
-
-
-
+        #region Equality
 
         public bool Equals(Contract other) => Contract == other;
         public static bool operator ==(MarketData s1, Contract s2) => s1.Equals(s2);
@@ -306,6 +292,10 @@ namespace Pacmio
                 return false;
         }
         public override int GetHashCode() => GetType().GetHashCode() ^ Contract.GetHashCode();
+
+        #endregion Equality
+
+        #region Grid View
 
         public object this[Column column]
         {
@@ -367,5 +357,7 @@ namespace Pacmio
 
         public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
         public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
+
+        #endregion Grid View
     }
 }

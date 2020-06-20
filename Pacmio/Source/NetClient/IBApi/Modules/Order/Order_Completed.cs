@@ -87,7 +87,7 @@ namespace Pacmio.IB
             }
            
             // fields[18]  // order.OcaGroup = eDecoder.ReadString();
-            od.Account = fields[19];
+            od.AccountCode = fields[19];
             // fields[20]  // order.OpenClose = eDecoder.ReadString();
             // fields[21]  // order.Origin = eDecoder.ReadInt();
             od.Description = fields[22];  // order.OrderRef = eDecoder.ReadString();
