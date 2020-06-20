@@ -48,7 +48,7 @@ namespace Pacmio
         }
 
         [DataMember]
-        public List<TradeInfo> TradeLog { get; protected set; } = new List<TradeInfo>();
+        public List<TradeLogDatum> TradeLog { get; protected set; } = new List<TradeLogDatum>();
 
         [IgnoreDataMember]
         public (BarTable bt, Bar b) QuoteCondition { get; private set; }
@@ -87,7 +87,7 @@ namespace Pacmio
 
                     if (liquidityType != LiquidityType.None)
                     {
-                        TradeLog.Add(new TradeInfo(c.ToString() + "|" + QuoteCondition.b.Time)
+                        TradeLog.Add(new TradeLogDatum(c.ToString() + "|" + QuoteCondition.b.Time)
                         {
                             Contract = c,
                             OrderId = Count,
@@ -163,7 +163,7 @@ namespace Pacmio
 
                     if (liquidityType != LiquidityType.None)
                     {
-                        TradeLog.Add(new TradeInfo(c.ToString() + "|" + QuoteCondition.b.Time)
+                        TradeLog.Add(new TradeLogDatum(c.ToString() + "|" + QuoteCondition.b.Time)
                         {
                             Contract = c,
                             OrderId = Count,

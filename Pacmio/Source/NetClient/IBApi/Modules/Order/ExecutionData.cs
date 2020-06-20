@@ -57,7 +57,7 @@ namespace Pacmio.IB
         {
             // int requestId = fields[1].ToInt32();
             string execId = fields[14];
-            TradeInfo ti = TradeLogManager.GetOrAdd(execId);
+            TradeLogDatum ti = TradeLogManager.GetOrAdd(execId);
 
             ti.OrderId = fields[2].ToInt32();
             ti.PermId = fields[21].ToInt32();
@@ -139,7 +139,7 @@ namespace Pacmio.IB
         private void Parse_CommissionsReport(string[] fields)
         {
             string execId = fields[2];
-            TradeInfo ti = TradeLogManager.GetOrAdd(execId);
+            TradeLogDatum ti = TradeLogManager.GetOrAdd(execId);
             ti.Commissions = fields[3].ToDouble();
 
             string pnlstring = fields[5];

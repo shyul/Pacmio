@@ -86,7 +86,7 @@ namespace TestClient
             return table;
         }
 
-        public static void UpdateTable(TradeInfo ti)
+        public static void UpdateTable(TradeLogDatum ti)
         {
             Console.WriteLine("\n\nUpdating ########## " + ti.ContractInfo.name);
 

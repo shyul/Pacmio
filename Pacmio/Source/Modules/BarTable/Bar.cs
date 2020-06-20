@@ -241,32 +241,35 @@ namespace Pacmio
             }
             set
             {
-                switch (column)
-                {
-                    case NumericColumn dc when dc == Column_Open: Open = value; break;
-                    case NumericColumn dc when dc == Column_High: High = value; break;
-                    case NumericColumn dc when dc == Column_Low: Low = value; break;
-                    case NumericColumn dc when dc == Column_Close: Close = value; break;
-                    case NumericColumn dc when dc == Column_Volume: Volume = value; break;
+                if (double.IsNaN(value) && NumericDatums.ContainsKey(column))
+                    NumericDatums.Remove(column);
+                else
+                    switch (column)
+                    {
+                        case NumericColumn dc when dc == Column_Open: Open = value; break;
+                        case NumericColumn dc when dc == Column_High: High = value; break;
+                        case NumericColumn dc when dc == Column_Low: Low = value; break;
+                        case NumericColumn dc when dc == Column_Close: Close = value; break;
+                        case NumericColumn dc when dc == Column_Volume: Volume = value; break;
 
-                    case NumericColumn dc when dc == Column_Gain: Gain = value; break;
-                    case NumericColumn dc when dc == Column_Percent: Percent = value; break;
-                    case NumericColumn dc when dc == Column_Gap: Gap = value; break;
-                    case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
-                    case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
-                    case NumericColumn dc when dc == Column_Typical: Typical = value; break;
-                    case NumericColumn dc when dc == Column_Peak: Peak = value; break;
-                    case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value; break;
+                        case NumericColumn dc when dc == Column_Gain: Gain = value; break;
+                        case NumericColumn dc when dc == Column_Percent: Percent = value; break;
+                        case NumericColumn dc when dc == Column_Gap: Gap = value; break;
+                        case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
+                        case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
+                        case NumericColumn dc when dc == Column_Typical: Typical = value; break;
+                        case NumericColumn dc when dc == Column_Peak: Peak = value; break;
+                        case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value; break;
 
-                    case NumericColumn dc when dc == Column_ProfitChange: break;
+                        case NumericColumn dc when dc == Column_ProfitChange: break;
 
-                    default:
-                        if (!NumericDatums.ContainsKey(column))
-                            NumericDatums.Add(column, value);
-                        else
-                            NumericDatums[column] = value;
-                        break;
-                }
+                        default:
+                            if (!NumericDatums.ContainsKey(column))
+                                NumericDatums.Add(column, value);
+                            else
+                                NumericDatums[column] = value;
+                            break;
+                    }
             }
         }
 
@@ -301,29 +304,25 @@ namespace Pacmio
                 return column switch
                 {
                     TagColumn oc when oc == Column_PeakTags => PeakTag,
-                    //TagColumn oc when oc == Column_CandleStickTypes => CandleStickTypes,
-
                     TagColumn oc when TagDatums.ContainsKey(oc) => TagDatums[column],
                     _ => null,
                 };
             }
             set
             {
-                if (!(value is null))
-                {
+                if (value is TagInfo tag)
                     switch (column)
                     {
-                        case TagColumn oc when oc == Column_PeakTags: PeakTag = (TagInfo)value; break;
-                        //case TagColumn oc when oc == Column_CandleStickTypes: break;
-
+                        case TagColumn oc when oc == Column_PeakTags: PeakTag = tag; break;
                         default:
                             if (!TagDatums.ContainsKey(column))
-                                TagDatums.Add(column, value);
+                                TagDatums.Add(column, tag);
                             else
-                                TagDatums[column] = value;
+                                TagDatums[column] = tag;
                             break;
                     }
-                }
+                else if (value is null && TagDatums.ContainsKey(column))
+                    TagDatums.Remove(column);
             }
         }
 
@@ -347,7 +346,12 @@ namespace Pacmio
                 if (!SignalDatums.ContainsKey(column))
                     SignalDatums.Add(column, value);
                 else
-                    SignalDatums[column] = value;
+                {
+                    if (value is null)
+                        SignalDatums.Remove(column);
+                    else
+                        SignalDatums[column] = value;
+                }
             }
         }
 
@@ -358,7 +362,7 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        public readonly Dictionary<ITradeSetting, BarPosition> SimulationSet = new Dictionary<ITradeSetting, BarPosition>();
+        private readonly Dictionary<ITradeSetting, BarPosition> SimulationSet = new Dictionary<ITradeSetting, BarPosition>();
 
         public BarPosition this[ITradeSetting tr]
         {
@@ -370,6 +374,14 @@ namespace Pacmio
                 }
 
                 return SimulationSet[tr];
+            }
+        }
+
+        public void RemoveSimulation(ITradeSetting tr) 
+        {
+            if (SimulationSet.ContainsKey(tr))
+            {
+                SimulationSet.Remove(tr);
             }
         }
 
