@@ -16,8 +16,6 @@ using System.Linq;
 using System.Text;
 using Xu;
 using Xu.Chart;
-using System.Security.Permissions;
-using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -31,6 +29,7 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time)
         {
             Table = bt;
+            Position = new BarPosition(this);
             Period = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency.AlignPeriod(time);
         }
 
@@ -190,61 +189,21 @@ namespace Pacmio
 
         public List<CandleStickType> CandleStickTypes { get; } = new List<CandleStickType>();
 
-        #endregion Intrinsic Indicators
-
-        #region Position Tracking Information
-
-        public void ResetPositionTrackingInfo()
+        public object this[Column column]
         {
-            PositionHasAnalyzed = false;
-            PositionHasExited = false;
-            ActionType = TradeActionType.None;
-            PositionQuantity = 0;
-            PositionCostBasis = double.NaN;
-        }
-
-        public bool PositionHasAnalyzed { get; set; } = false;
-
-        public bool PositionHasExited { get; set; } = false;
-
-        /// <summary>
-        /// The ActionType of current Bar
-        /// </summary>
-        public TradeActionType ActionType { get; set; } = TradeActionType.None;
-
-        // Preliminary
-        public readonly List<TradeActionType> TradeActions = new List<TradeActionType>();
-
-        public double PositionQuantity { get; set; } = 0;
-
-        public double PositionCostBasis { get; set; } = double.NaN;
-
-        public double PositionValue => double.IsNaN(PositionCostBasis) ? 0 : Math.Abs(PositionQuantity * PositionCostBasis);
-
-        public bool HasNoPosition => PositionQuantity == 0 || double.IsNaN(PositionCostBasis);
-
-        /// <summary>
-        /// For chart visual analysis only!!
-        /// Please use RealizedPnL from TradeLogDatum for performance calculation
-        /// </summary>
-        public double UnrealizedProfit => HasNoPosition ? 0 : PositionQuantity * (Close - PositionCostBasis);
-
-        /// <summary>
-        /// Profit Change in Percent
-        /// </summary>
-        public double ProfitChangePercent => HasNoPosition ? 0 : 100 * (Close - PositionCostBasis) / PositionCostBasis;
-
-        public void SnapShotPosition(PositionStatus ps)
-        {
-            if (ActionType == TradeActionType.None || (int)ps.ActionType > 10)
+            get
             {
-                ActionType = ps.ActionType;
+                return column switch
+                {
+                    NumericColumn nc => this[nc],
+                    TagColumn tc => this[tc],
+                    SignalColumn sc => this[sc],
+                    _ => null,
+                };
             }
-            PositionQuantity = ps.Quantity;
-            PositionCostBasis = ps.AveragePrice;
         }
 
-        #endregion Position Tracking Information
+        #endregion Intrinsic Indicators
 
         #region Numeric Column
 
@@ -395,18 +354,31 @@ namespace Pacmio
 
         #endregion Signal Score
 
-        public object this[Column column]
+        #region Position Tracking Information
+
+        /// <summary>
+        /// Trade Log for Live Trades
+        /// </summary>
+        public readonly BarPosition Position;
+
+        /// <summary>
+        /// Data sets for simulation analysis, virtualization
+        /// </summary>
+        public readonly Dictionary<TradeRule, BarPosition> SimulationSet = new Dictionary<TradeRule, BarPosition>();
+
+        public BarPosition this[TradeRule rule] 
         {
             get
             {
-                return column switch
-                {
-                    NumericColumn nc => this[nc],
-                    TagColumn tc => this[tc],
-                    SignalColumn sc => this[sc],
-                    _ => null,
-                };
+                if (!SimulationSet.ContainsKey(rule))
+                    SimulationSet.Add(rule, new BarPosition(this));
+
+                return SimulationSet[rule];
             }
         }
+
+
+
+        #endregion Position Tracking Information
     }
 }

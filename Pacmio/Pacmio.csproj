@@ -120,6 +120,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTools.cs" />
@@ -143,12 +144,14 @@
     <Compile Include="Source\Modules\MarketData\WatchList.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationResult.cs" />
+    <Compile Include="Source\Modules\Strategy\Indicator\Indicator.cs" />
+    <Compile Include="Source\Modules\Strategy\Indicator\IndicatorParameter.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionTools.cs" />
-    <Compile Include="Source\Modules\Trade\Rule\TradeRule.cs" />
+    <Compile Include="Source\Modules\Strategy\Rules\TradeRule.cs" />
     <Compile Include="Source\Modules\Trade\Log\TradeLogManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionStatus.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationAccount.cs" />
@@ -203,7 +206,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\ITradable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\Account\AccountManager.cs" />
-    <Compile Include="Source\Modules\Strategy\ScannerManager.cs" />
+    <Compile Include="Source\Modules\Strategy\Scanner\ScannerManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\ExecutionData.cs" />
@@ -243,7 +246,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\Strategy\ScannerInfo.cs" />
+    <Compile Include="Source\Modules\Strategy\Scanner\ScannerInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />

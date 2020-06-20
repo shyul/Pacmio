@@ -21,6 +21,19 @@ namespace Pacmio
     {
         public Contract Contract { get; set; }
 
+        // Time Period
 
+        public Indicator Indicator { get; set; } = new Indicator();
+
+
+        public IndicatorParameter Parameter { get; } = new IndicatorParameter();
+
+
+        public string Name => Indicator.Name;
+
+        public int Order { get => IsManuallyAdded ? m_order : int.MinValue; set => m_order = IsManuallyAdded ? value : int.MinValue; }
+        private int m_order = int.MinValue;
+
+        public bool IsManuallyAdded { get; set; } = false;
     }
 }

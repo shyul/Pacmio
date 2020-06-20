@@ -15,72 +15,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TradeParameter
-    {
-        // Time Period
-
-        public Indicator Indicator { get; set;  } = new Indicator();
-
-
-        public IndicatorParameter Parameter { get; } = new IndicatorParameter();
-
-
-        public string Name => Indicator.Name;
-
-        public int Order { get => IsManuallyAdded ? m_order : int.MinValue; set => m_order = IsManuallyAdded ? value : int.MinValue; }
-        private int m_order = int.MinValue; 
-
-        public bool IsManuallyAdded { get; set; } = false;
-
-    }
-
-    public class Indicator 
-    {
-        public string Name { get; }
-
-        public int Order { get; set; }
-
-        public List<BarAnalysis> BarAnalysesTimeFrame1 { get; }
-
-        // List the scope of usable MAs, and testable range of intervals...
-
-        // Different Time Frame
-
-        public List<BarAnalysis> BarAnalysesTimeFrame2 { get; }
-
-
-        // Choices of SMA / EMA / Different Oscillators and so on...
-
-
-        // Will also be the one getting the Elevation Factors
-
-        // Here is how many days for generating new TradeParameter
-        public int BackTestingLength { get; } = 5;
-
-        // Will re-generate the IndicatorParameter after 2 days.
-        public int ValidTradingLength { get; } = 2;
-
-        // So we use the past five days of trading history to generate the next 2 days trading parameter
-    }
-
-    public class IndicatorParameter 
-    {
-
-        // Fit MA Cross -> SMA, EMA, ...
-        // MA Cross intervals?
-
-        // Levels
-
-        // Confirmation Parameters
-
-
-        // Validation Parameters
-
-    }
-
     public static class Strategy
     {
-        public static Dictionary<Contract, TradeParameter> WatchList = new Dictionary<Contract, TradeParameter>();
+        public static Dictionary<Contract, TradeRule> WatchList = new Dictionary<Contract, TradeRule>();
 
         public static void GetWatchList() // Get it from the Market Scanner
         {
