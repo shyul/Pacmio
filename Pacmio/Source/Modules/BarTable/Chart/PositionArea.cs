@@ -85,7 +85,7 @@ namespace Pacmio
                     if (i >= bt.Count) break;
                     else if (i < 0) continue;
 
-                    TradeActionType this_Type = bt[i].ActionType;
+                    TradeActionType this_Type = bt[i].Position.ActionType;
 
                     if (i >= 0)
                     {

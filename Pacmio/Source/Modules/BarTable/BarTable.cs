@@ -253,6 +253,17 @@ namespace Pacmio
             }
         }
 
+        public Bar LastBar_1
+        {
+            get
+            {
+                if (LastIndex < 1)
+                    return null;
+                else
+                    return this[LastIndex - 1];
+            }
+        }
+
         /// <summary>
         /// Last most Close
         /// </summary>
@@ -855,7 +866,15 @@ namespace Pacmio
 
         #endregion Basic Data
 
+        #region Position / Simulation Information
+
+
+
+        #endregion Position / Simulation Information
+
         #endregion Data/Bar Analysis (TA) Calculation
+
+        #region Download / Update / Append New Bar
 
         public bool ReadyForTickCalculation { get; set; } = false;
 
@@ -865,8 +884,6 @@ namespace Pacmio
         /// For Multi Thread Access
         /// </summary>
         public object DataObjectLock { get; } = new object();
-
-        #region Download / Update / Append New Bar
 
         #region Intrinsic Data Prepare before Technical Analysis
 
@@ -945,8 +962,6 @@ namespace Pacmio
 
         #endregion Download / Update / Append New Bar
 
-
-
         #region Exposed Functions
 
         public void CalculateOnly() { lock (DataObjectLock) { Calculate(); } }
@@ -973,8 +988,6 @@ namespace Pacmio
             }
         }
 
-
-
         public void SuspendCharts()
         {
             Children.Where(c => c is ChartWidget).Select(n => (ChartWidget)n).ToList().ForEach(n =>
@@ -984,11 +997,7 @@ namespace Pacmio
             /*
             Children.Where(c => c is BarChart).ToList().ForEach(n =>
             {
-
-
                 BarChart bc = (BarChart)n;
-
-
 
                 if (bc.InvokeRequired)
                 {
@@ -1010,9 +1019,6 @@ namespace Pacmio
                 n.ReadyToShow = true;
 
                 n.SetRefreshUI();
-                /*
-                bc.Coordinate();
-                bc.Invalidate();*/
             });
         }
 
@@ -1029,62 +1035,8 @@ namespace Pacmio
                 }
 
                 n.SetRefreshUI();
-                /*
-                bc.Coordinate();
-                bc.Invalidate();*/
             });
         }
-
-        /// <summary>
-        /// Export the table to CSV file
-        /// </summary>
-        /// <param name="fileName"></param>
-        /*
-        public bool ExportCSV(string fileName)
-        {
-            lock (BarAnalysisLock)
-                lock (DataObjectLock)
-                {
-                    Calculate();
-
-                    StringBuilder sb = new StringBuilder("Source,Time,Open,High,Low,Close,Volume,Adj_Open,Adj_High,Adj_Low,Adj_Close,Adj_Volume");
-
-                    var DataColumnList = BarAnalysisPointerList.Where(n => n is NumericAnalysis).Where(n => n.Enabled).OrderBy(n => n.Order);
-
-                    foreach (NumericAnalysis bc in DataColumnList)
-                    {
-                        string p = bc.Name;
-                        if (p.Contains(",")) p = "\"" + p + "\"";
-                        sb.Append("," + p);
-                    }
-                    sb.Append("\n");
-
-                    for (int i = LastIndex; i >= 0; i--)
-                    {
-                        sb.Append(this[i].Source + "," +
-                            this[i].Time.ToString() + "," +
-                            this[i].Actual_Open.ToString() + "," +
-                            this[i].Actual_High.ToString() + "," +
-                            this[i].Actual_Low.ToString() + "," +
-                            this[i].Actual_Close.ToString() + "," +
-                            this[i].Actual_Volume.ToString() + "," +
-                            this[i].Open.ToString() + "," +
-                            this[i].High.ToString() + "," +
-                            this[i].Low.ToString() + "," +
-                            this[i].Close.ToString() + "," +
-                            this[i].Volume.ToString());
-
-                        foreach (NumericAnalysis bc in DataColumnList)
-                        {
-                            sb.Append("," + this[i][bc]);
-                        }
-
-                        sb.Append("\n");
-                    }
-
-                    return sb.ToFile(fileName);
-                }
-        }*/
 
         #endregion Exposed Functions
 
@@ -1162,5 +1114,56 @@ namespace Pacmio
         }
 
         #endregion File Operation
+
+        /// <summary>
+        /// Export the table to CSV file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /*
+        public bool ExportCSV(string fileName)
+        {
+            lock (BarAnalysisLock)
+                lock (DataObjectLock)
+                {
+                    Calculate();
+
+                    StringBuilder sb = new StringBuilder("Source,Time,Open,High,Low,Close,Volume,Adj_Open,Adj_High,Adj_Low,Adj_Close,Adj_Volume");
+
+                    var DataColumnList = BarAnalysisPointerList.Where(n => n is NumericAnalysis).Where(n => n.Enabled).OrderBy(n => n.Order);
+
+                    foreach (NumericAnalysis bc in DataColumnList)
+                    {
+                        string p = bc.Name;
+                        if (p.Contains(",")) p = "\"" + p + "\"";
+                        sb.Append("," + p);
+                    }
+                    sb.Append("\n");
+
+                    for (int i = LastIndex; i >= 0; i--)
+                    {
+                        sb.Append(this[i].Source + "," +
+                            this[i].Time.ToString() + "," +
+                            this[i].Actual_Open.ToString() + "," +
+                            this[i].Actual_High.ToString() + "," +
+                            this[i].Actual_Low.ToString() + "," +
+                            this[i].Actual_Close.ToString() + "," +
+                            this[i].Actual_Volume.ToString() + "," +
+                            this[i].Open.ToString() + "," +
+                            this[i].High.ToString() + "," +
+                            this[i].Low.ToString() + "," +
+                            this[i].Close.ToString() + "," +
+                            this[i].Volume.ToString());
+
+                        foreach (NumericAnalysis bc in DataColumnList)
+                        {
+                            sb.Append("," + this[i][bc]);
+                        }
+
+                        sb.Append("\n");
+                    }
+
+                    return sb.ToFile(fileName);
+                }
+        }*/
     }
 }

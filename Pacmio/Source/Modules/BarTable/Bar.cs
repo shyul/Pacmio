@@ -234,7 +234,7 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Peak => Peak,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == Column_ProfitChange => ProfitChangePercent,
+                    NumericColumn dc when dc == Column_ProfitChange => Position.PnL_Percent,
 
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
                     _ => double.NaN,
@@ -354,7 +354,7 @@ namespace Pacmio
 
         #endregion Signal Score
 
-        #region Position Tracking Information
+        #region Position / Simulation Information
 
         /// <summary>
         /// Trade Log for Live Trades
@@ -366,19 +366,19 @@ namespace Pacmio
         /// </summary>
         public readonly Dictionary<TradeRule, BarPosition> SimulationSet = new Dictionary<TradeRule, BarPosition>();
 
-        public BarPosition this[TradeRule rule] 
+        public BarPosition this[TradeRule tr] 
         {
             get
             {
-                if (!SimulationSet.ContainsKey(rule))
-                    SimulationSet.Add(rule, new BarPosition(this));
+                if (!SimulationSet.ContainsKey(tr))
+                    SimulationSet.Add(tr, new BarPosition(this, tr)); // No..............................
 
-                return SimulationSet[rule];
+                return SimulationSet[tr];
             }
         }
 
 
 
-        #endregion Position Tracking Information
+        #endregion Position / Simulation Information
     }
 }

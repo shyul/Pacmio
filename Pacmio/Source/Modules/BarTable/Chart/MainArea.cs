@@ -74,7 +74,7 @@ namespace Pacmio
                 if (i >= Table.Count) break;
                 if (i >= 0)
                 {
-                    int this_color = (int)BarTable[i].ActionType;
+                    //int this_color = (int)BarTable[i].ActionType;
 
 
                 }

@@ -21,12 +21,68 @@ namespace Pacmio
 {
     public class BarPosition
     {
-        public BarPosition(Bar b) 
+        public BarPosition(Bar b)
         {
             Bar = b;
+            if (Bar.Table.LastBar_1 is Bar b_1)
+                Snapshot(b_1.Position);
+            else
+                Reset();
+        }
+
+        public BarPosition(Bar b, TradeRule tr)
+        {
+            Bar = b;
+            if (Bar.Table.LastBar_1 is Bar b_1)
+                Snapshot(b_1[tr]);
+            else
+                Reset();
+        }
+
+        public void Reset()
+        {
             ActionType = TradeActionType.None;
             Quantity = 0;
             AveragePrice = double.NaN;
+        }
+
+        public void Snapshot(BarPosition bp)
+        {
+            Quantity = bp.Quantity;
+            AveragePrice = bp.AveragePrice;
+
+            if (Quantity == 0)
+                ActionType = TradeActionType.None;
+            else if (Quantity > 0)
+                ActionType = TradeActionType.LongHold;
+            else if (Quantity < 0)
+                ActionType = TradeActionType.ShortHold;
+        }
+
+        public void Snapshot(PositionStatus ps)
+        {
+            double qty_1 = ps.Quantity;
+
+            if (Quantity > qty_1)
+            {
+                ActionType = (Quantity <= 0) ? TradeActionType.Cover : TradeActionType.Long;
+            }
+            else if (Quantity < qty_1)
+            {
+                ActionType = (Quantity >= 0) ? TradeActionType.Sell : TradeActionType.Short;
+            }
+            else // (Quantity == qty_1)
+            {
+                if (Quantity == 0)
+                    ActionType = TradeActionType.None;
+                else if (Quantity > 0)
+                    ActionType = TradeActionType.LongHold;
+                else if (Quantity < 0)
+                    ActionType = TradeActionType.ShortHold;
+            }
+
+            Quantity = qty_1;
+            AveragePrice = ps.AveragePrice;
         }
 
         public readonly Bar Bar; 
@@ -42,19 +98,5 @@ namespace Pacmio
         public double PnL => Value == 0 ? 0 : Quantity * (Bar.Close - AveragePrice);
 
         public double PnL_Percent => Value == 0 ? 0 : 100 * (Bar.Close - AveragePrice) / AveragePrice;
-
-        public void Reset()
-        {
-            ActionType = TradeActionType.None;
-            Quantity = 0;
-            AveragePrice = double.NaN;
-        }
-
-        public void Snapshot(PositionStatus ps) 
-        {
-            ActionType = ps.ActionType;
-            Quantity = ps.Quantity;
-            AveragePrice = ps.AveragePrice;
-        }
     }
 }

@@ -389,6 +389,8 @@ namespace TestClient
 
         private void BtnApplyTradeLogToChart_Click(object sender, EventArgs e)
         {
+
+            /*
             foreach (BarTable bt in ChartList.List.Select(n => n.BarTable))
             {
                 Contract c = bt.Contract;
@@ -453,7 +455,7 @@ namespace TestClient
 
 
 
-            }
+            }*/
 
         }
 
