@@ -146,6 +146,7 @@
     <Compile Include="Source\Modules\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\Strategy\Indicator\Indicator.cs" />
     <Compile Include="Source\Modules\Strategy\Indicator\IndicatorParameter.cs" />
+    <Compile Include="Source\Modules\Strategy\Rules\ITradeSetting.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
@@ -190,7 +191,7 @@
     <Compile Include="Source\Modules\Fundamental\BusinessInfo.cs" />
     <Compile Include="Source\Modules\BarTable\ChartList.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
-    <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
+    <Compile Include="Source\Modules\Trade\Order\OrderSetting.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderTimeInForce.cs" />
     <Compile Include="Source\Modules\Trade\Log\TradeInfo.cs" />

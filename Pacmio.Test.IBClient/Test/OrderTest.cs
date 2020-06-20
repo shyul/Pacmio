@@ -82,7 +82,7 @@ namespace TestClient
             return table;
         }
 
-        public static void UpdateTable(OrderInfo od) 
+        public static void UpdateTable(OrderSetting od) 
         {
             //Console.WriteLine("\n\nUpdating ########## " + od.ContractInfo.name);
 

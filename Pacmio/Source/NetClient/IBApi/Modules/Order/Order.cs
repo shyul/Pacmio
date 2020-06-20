@@ -15,7 +15,7 @@ namespace Pacmio.IB
 {
     public partial class Client
     {
-        private readonly Dictionary<int, OrderInfo> PendingOrder = new Dictionary<int, OrderInfo>();
+        private readonly Dictionary<int, OrderSetting> PendingOrder = new Dictionary<int, OrderSetting>();
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/bracket_order.html
@@ -24,7 +24,7 @@ namespace Pacmio.IB
         /// <param name="whatIf"></param>
         /// <param name="modify"></param>
         /// <param name="useSmart"></param>
-        public void PlaceOrder(OrderInfo od, bool whatIf = false, bool modify = false, bool useSmart = true)
+        public void PlaceOrder(OrderSetting od, bool whatIf = false, bool modify = false, bool useSmart = true)
         {
             Contract c = od.Contract;
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);

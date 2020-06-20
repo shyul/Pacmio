@@ -17,9 +17,19 @@ using Xu;
 
 namespace Pacmio
 {
-    public class TradeRule
+    public class TradeRule : IEquatable<TradeRule>, ITradeSetting
     {
-        public Contract Contract { get; set; }
+        public TradeRule(string name) 
+        {
+
+            //Column_PnL = new NumericColumn(Name + "_PnL", "PnL");
+        }
+
+        public string Name => Indicator.Name;
+
+        //public NumericColumn Column_PnL { get; }
+
+        public Range<Time> TimeRange { get; set; } = new Range<Time>(new Time(9, 30), new Time(16, 0));
 
         // Time Period
 
@@ -29,11 +39,15 @@ namespace Pacmio
         public IndicatorParameter Parameter { get; } = new IndicatorParameter();
 
 
-        public string Name => Indicator.Name;
+
 
         public int Order { get => IsManuallyAdded ? m_order : int.MinValue; set => m_order = IsManuallyAdded ? value : int.MinValue; }
         private int m_order = int.MinValue;
 
         public bool IsManuallyAdded { get; set; } = false;
+
+        public bool Equals(TradeRule other) => Name == other.Name;
+
+
     }
 }

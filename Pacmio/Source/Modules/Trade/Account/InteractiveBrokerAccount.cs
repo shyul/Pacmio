@@ -47,7 +47,7 @@ namespace Pacmio
                 // Set the trading 
                 ps.Add(qty, c.MarketData.LastClose);
                 OrderType type = OrderType.Market;
-                ps.EntryOrder = new OrderInfo()
+                ps.EntryOrder = new OrderSetting()
                 {
                     AccountCode = AccountCode,
                     Contract = c,
@@ -80,7 +80,7 @@ namespace Pacmio
                 limit = entryLimit;
             }*/
 
-            ps.EntryOrder = new OrderInfo()
+            ps.EntryOrder = new OrderSetting()
             {
                 AccountCode = AccountCode,
                 Contract = c,
@@ -98,7 +98,7 @@ namespace Pacmio
 
             if (!double.IsNaN(stopLoss))
             {
-                OrderInfo StopLossOrder = new OrderInfo()
+                OrderSetting StopLossOrder = new OrderSetting()
                 {
                     AccountCode = AccountCode,
                     Contract = c,
@@ -115,7 +115,7 @@ namespace Pacmio
 
             if (!double.IsNaN(profitLimit))
             {
-                OrderInfo ProfitTakingOrder = new OrderInfo()
+                OrderSetting ProfitTakingOrder = new OrderSetting()
                 {
                     AccountCode = AccountCode,
                     Contract = c,
@@ -250,7 +250,7 @@ namespace Pacmio
                     Root.IBClient.PlaceOrder(od, whatIf);
                 }*/
 
-                OrderInfo od = new OrderInfo()
+                OrderSetting od = new OrderSetting()
                 {
                     AccountCode = AccountCode,
                     Contract = c,

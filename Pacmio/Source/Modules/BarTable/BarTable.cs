@@ -868,7 +868,7 @@ namespace Pacmio
 
         #region Position / Simulation Information
 
-
+        public ITradeSetting CurrentTradeSetting { get; set; }
 
         #endregion Position / Simulation Information
 

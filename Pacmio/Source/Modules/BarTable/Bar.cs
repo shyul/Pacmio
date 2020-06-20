@@ -29,7 +29,6 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time)
         {
             Table = bt;
-            Position = new BarPosition(this);
             Period = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency.AlignPeriod(time);
         }
 
@@ -234,9 +233,9 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Peak => Peak,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == Column_ProfitChange => Position.PnL_Percent,
-
+                    NumericColumn dc when dc == Column_ProfitChange => (Table.CurrentTradeSetting is ITradeSetting its) ? this[its].PnL : 0,
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
+
                     _ => double.NaN,
                 };
             }
@@ -285,9 +284,9 @@ namespace Pacmio
         public static readonly NumericColumn Column_Typical = new NumericColumn("TYPICAL");
 
         public static readonly NumericColumn Column_TrendStrength = new NumericColumn("TREND");
-        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PROFIT") { Label = "PCHG" };
-
         public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
+
+        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PCHG");
 
         #endregion Numeric Column
 
@@ -357,27 +356,22 @@ namespace Pacmio
         #region Position / Simulation Information
 
         /// <summary>
-        /// Trade Log for Live Trades
-        /// </summary>
-        public readonly BarPosition Position;
-
-        /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        public readonly Dictionary<TradeRule, BarPosition> SimulationSet = new Dictionary<TradeRule, BarPosition>();
+        public readonly Dictionary<ITradeSetting, BarPosition> SimulationSet = new Dictionary<ITradeSetting, BarPosition>();
 
-        public BarPosition this[TradeRule tr] 
+        public BarPosition this[ITradeSetting tr]
         {
             get
             {
                 if (!SimulationSet.ContainsKey(tr))
-                    SimulationSet.Add(tr, new BarPosition(this, tr)); // No..............................
+                {
+                    SimulationSet.Add(tr, new BarPosition(this, tr));
+                }
 
                 return SimulationSet[tr];
             }
         }
-
-
 
         #endregion Position / Simulation Information
     }

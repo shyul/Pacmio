@@ -23,8 +23,8 @@ namespace Pacmio
     {
         public PositionArea(BarChart chart) : base(chart, "Position Accumulation", 10)
         {
-
             BarChart = chart;
+
             Importance = Importance.Major;
             Order = int.MinValue;
 
@@ -70,7 +70,7 @@ namespace Pacmio
 
         public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt)
         {
-            if (bt.Count > 0)
+            if (bt.CurrentTradeSetting is ITradeSetting && bt.Count > 0)
             {
                 List<(Brush br, Rectangle rect)> rectangles = new List<(Brush, Rectangle)>();
 
@@ -85,7 +85,7 @@ namespace Pacmio
                     if (i >= bt.Count) break;
                     else if (i < 0) continue;
 
-                    TradeActionType this_Type = bt[i].Position.ActionType;
+                    TradeActionType this_Type = bt[i][bt.CurrentTradeSetting].ActionType;
 
                     if (i >= 0)
                     {

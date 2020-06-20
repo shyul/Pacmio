@@ -704,7 +704,7 @@ namespace TestClient
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
                 OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
 
-                OrderInfo od = new OrderInfo()
+                OrderSetting od = new OrderSetting()
                 {
                     Contract = ContractTest.ActiveContract,
                     Quantity = TextBoxOrderSettingQuantity.Text.ToInt32(0),

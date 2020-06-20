@@ -38,11 +38,11 @@ namespace Pacmio
 
         private TradeActionType m_ActionType = TradeActionType.None;
 
-        public bool PendingEntry => (EntryOrder is OrderInfo od) && (int)od.Status < 5;
+        public bool PendingEntry => (EntryOrder is OrderSetting od) && (int)od.Status < 5;
 
         public bool PendingExit { get; set; } = false;
 
-        public OrderInfo EntryOrder { get; set; } = null;
+        public OrderSetting EntryOrder { get; set; } = null;
 
         public Contract Contract => EntryOrder.Contract;
 

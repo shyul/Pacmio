@@ -187,9 +187,8 @@ namespace Pacmio
             ResumeLayout(true);
             if (IsActive && ReadyToShow && m_barTable is BarTable bt)
             {
-                SignalArea.Visible = false; // BarTable.HasSignalAnalysis;
-                PositionArea.Visible = false;
-                //BarTable.HasSignalAnalysis;
+                SignalArea.Visible = BarTable.CurrentTradeSetting is TradeRule; // BarTable.HasSignalAnalysis;
+                PositionArea.Visible = BarTable.CurrentTradeSetting is ITradeSetting; //BarTable.HasSignalAnalysis;
 
                 lock (bt.DataObjectLock)
                     lock (GraphicsObjectLock)
