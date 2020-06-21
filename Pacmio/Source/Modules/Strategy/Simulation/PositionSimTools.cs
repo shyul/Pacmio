@@ -133,7 +133,7 @@ namespace Pacmio
                 OrderId = Count,
                 PermId = Count,
                 ClientId = -1,
-                Account = "Simulation",
+                AccountCode = "Simulation",
                 FillExchangeCode = "PacmioSim",
                 TotalQuantity = quantity,
                 AveragePrice = price,

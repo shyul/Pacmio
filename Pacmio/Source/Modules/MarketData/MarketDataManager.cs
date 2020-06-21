@@ -13,10 +13,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using Xu;
 using Xu.GridView;
+using System.Threading.Tasks;
 
 namespace Pacmio
 {
-    public static class WatchList
+    public static class MarketDataManager
     {
         public static void Add(MarketDataGridView gv) 
         {
@@ -30,7 +31,26 @@ namespace Pacmio
 
         private static readonly List<MarketDataGridView> List = new List<MarketDataGridView>();
 
-        public static void UpdateUI(Contract c) => List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI());
+        public static void UpdateUI(Contract c) 
+        {
+            /*
+            Task UpdateUI = new Task(() => {
+                Invoke((MethodInvoker)delegate {
+                    lock (Root.IBClient.ActiveTicks)
+                    {
+                        int tickerId = status;
+                        Contract c = Root.IBClient.ActiveTicks[tickerId];
+                        MarketDataTest.UpdateMarketQuote(tickerId, c);
+                    }
+                    MarketDataTest.LastQuoteUpdate = DateTime.Now;
+                });
+            });
+            UpdateUI.Start();
+            */
+            List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI()); 
+
+            
+        }
 
         public static void CleanUp() 
         {
@@ -54,17 +74,3 @@ namespace Pacmio
     }
 }
 
-/*
-Task UpdateUI = new Task(() => {
-    Invoke((MethodInvoker)delegate {
-        lock (Root.IBClient.ActiveTicks)
-        {
-            int tickerId = status;
-            Contract c = Root.IBClient.ActiveTicks[tickerId];
-            MarketDataTest.UpdateMarketQuote(tickerId, c);
-        }
-        MarketDataTest.LastQuoteUpdate = DateTime.Now;
-    });
-});
-UpdateUI.Start();
-*/

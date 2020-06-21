@@ -27,7 +27,7 @@ namespace Pacmio.IB
 
             OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
             od.PermId = permId;
-            od = OrderManager.Add(od);
+            od = OrderManager.GetOrAdd(od);
 
             if (PendingOrder.ContainsKey(orderId) && permId > 0) PendingOrder.Remove(orderId);
 
@@ -42,7 +42,7 @@ namespace Pacmio.IB
             od.HeldNotice = fields[10];
             od.MarketCapPrice = fields[11].ToDouble();
 
-            OrderManager.Update(fields[0].ToInt32(-1), orderId.ToString());
+            OrderManager.Update(od);
 
             Console.WriteLine("\nParse Order Status: " + fields.ToStringWithIndex());
 

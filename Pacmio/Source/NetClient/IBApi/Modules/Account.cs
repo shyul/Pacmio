@@ -27,7 +27,7 @@ namespace Pacmio.IB
                 {
                     if (accountCode.Length > 0)
                     {
-                        AccountManager.GetOrAdd(new InteractiveBrokersAccount(accountCode));
+                        AccountManager.GetOrAdd(accountCode);
                     }
                 }
 

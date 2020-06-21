@@ -45,8 +45,8 @@ namespace Pacmio.IB
             if (fields[1] == "1")
             {
                 string accountCode = fields[3];
-                InteractiveBrokersAccount ac = AccountManager.GetOrAdd(new InteractiveBrokersAccount(accountCode));
-                ac.UpdateTags(fields[4], fields[5]);
+                Account ac = AccountManager.GetOrAdd(accountCode);
+                ac.UpdateFields(fields[4], fields[5]);
                 AccountManager.UpdatedTime = DateTime.Now;
             }
         }

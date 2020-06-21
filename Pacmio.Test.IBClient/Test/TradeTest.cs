@@ -109,7 +109,7 @@ namespace TestClient
                 row["Realized PnL"] = ti.RealizedPnL;
                 row["Status"] = ti.LastLiquidity.ToString();
                 row["Mode Code"] = ti.ModeCode;
-                row["Account"] = ti.Account;
+                row["Account"] = ti.AccountCode;
                 row["Perm Id"] = ti.PermId;
                 row["Exec Time"] = ti.ExecuteTime;
                 row.EndEdit();
@@ -118,7 +118,7 @@ namespace TestClient
             {
                 Table.Rows.Add(ti.ExecId, contractName, ti.TotalQuantity, ti.AveragePrice, ti.Quantity,
                     ti.Price, (ti.Quantity * ti.Price).ToString("0.000"), ti.Commissions, ti.RealizedPnL,
-                    ti.LastLiquidity.ToString(), ti.ModeCode, ti.Account, ti.PermId, ti.ExecuteTime);
+                    ti.LastLiquidity.ToString(), ti.ModeCode, ti.AccountCode, ti.PermId, ti.ExecuteTime);
             }
         }
     }

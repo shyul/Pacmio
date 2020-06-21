@@ -41,7 +41,7 @@ namespace Pacmio
         public DateTime ExecuteTime { get; set; }
 
         [DataMember, Browsable(true)]
-        public string Account { get; set; }
+        public string AccountCode { get; set; }
 
         [DataMember]
         public (string name, Exchange exchange, string typeName, int conId) ContractInfo { get; set; }

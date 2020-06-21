@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Xu;
-using System.Web.SessionState;
+using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -21,49 +21,30 @@ namespace Pacmio
     /// </summary>
     public static class AccountManager
     {
-        public static HashSet<Account> List { get; set; }
+        public static readonly HashSet<Account> List = new HashSet<Account>();
+
+        public static int Count => List.Count;
 
         public static Account Get(string accountCode)
         {
-            if (List == null) List = new HashSet<Account>();
-
             var res = List.Where(n => n.AccountCode == accountCode);
 
             if (res.Count() > 0) return res.First();
             else return null;
         }
 
-        public static T GetOrAdd<T>(T ac) where T : Account
+        public static Account GetOrAdd(string accountCode)
         {
-            if (List == null) List = new HashSet<Account>();
+            var res = List.Where(n => n.AccountCode == accountCode);
 
-            lock (List)
+            if (res.Count() > 0) return res.First();
+            else
             {
-                var list = List.Where(n => n.AccountCode == ac.AccountCode).ToList();
-
-                if (list.Count > 0)
-                    if (list.First().GetType() == typeof(T))
-                        return (T)list.First();
-                    else
-                        foreach (var acx in list)
-                            List.Remove(acx);
-
+                Account ac = new Account(accountCode);
                 List.Add(ac);
-                ac.Reset();
-
-                Update(1, "Account added and updated");
                 return ac;
             }
         }
-
-        public static void CloseAllPositions()
-        {
-            CancelAllOrders();
-            foreach (Account ac in List)
-                ac.CloseAllPositions();
-        }
-
-        public static void CancelAllOrders() => Root.IBClient.SendRequest_GlobalCancel();
 
         #region Updates
 
@@ -86,19 +67,21 @@ namespace Pacmio
         public static void Save()
         {
             lock (List)
-                List?.SerializeJsonFile(FileName);
+            {
+                List.ToArray().SerializeJsonFile(FileName);
+            }
         }
 
         public static void Load()
         {
             if (File.Exists(FileName))
-                List = Serialization.DeserializeJsonFile<HashSet<Account>>(FileName);
-            else
-                List = new HashSet<Account>();
-
-            foreach (var ac in List)
             {
-                ac.Reset();
+                var list = Serialization.DeserializeJsonFile<Account[]>(FileName);
+                foreach(Account ac in list) 
+                {
+                    ac.Reset();
+                    List.CheckAdd(ac);
+                }
             }
 
             Update(1, "Account file loaded.");

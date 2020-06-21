@@ -15,6 +15,7 @@ namespace Pacmio.IB
 {
     public partial class Client
     {
+        // TODO: #1: remove this, and merge this with OrderManager
         private readonly Dictionary<int, OrderInfo> PendingOrder = new Dictionary<int, OrderInfo>();
 
         /// <summary>

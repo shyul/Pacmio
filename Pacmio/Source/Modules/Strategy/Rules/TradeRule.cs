@@ -19,7 +19,7 @@ namespace Pacmio
 {
     public class TradeRule : IEquatable<TradeRule>, ITradeSetting
     {
-        public TradeRule(string name) 
+        public TradeRule(string name)
         {
 
             //Column_PnL = new NumericColumn(Name + "_PnL", "PnL");
@@ -27,7 +27,14 @@ namespace Pacmio
 
         public string Name => Indicator.Name;
 
-        public BarFreq BarFreq { get; private set;  }
+        public BarFreq BarFreq { get; private set; }
+
+
+
+        public int TrainingDays { get; set; } = 2;
+
+        public int TradingDays { get; set; } = 1;
+
 
         //public NumericColumn Column_PnL { get; }
 

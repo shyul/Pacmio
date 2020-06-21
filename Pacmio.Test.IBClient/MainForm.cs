@@ -23,7 +23,7 @@ namespace TestClient
         {
             InitializeComponent();
 
-            OrderTest.LiveAccount = AccountManager.GetOrAdd(new InteractiveBrokersAccount("DU332281"));
+            OrderTest.LiveAccount = AccountManager.GetOrAdd("DU332281");
             /*
             ContractTest.InitializeTable(GridViewContractSearchResult);
             OrderTest.InitializeTable(GridViewAllOrders);
@@ -37,8 +37,6 @@ namespace TestClient
 
             Root.IBClient.OnConnectedHandler += IBClientOnConnectedHandler;
 
-         
-            OrderManager.UpdatedHandler += OrderTableHandler;
             TradeLogManager.UpdatedHandler += TradeTableHandler;
 
             Progress = new Progress<int>(percent =>
@@ -369,7 +367,7 @@ namespace TestClient
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected) return;
-            AccountManager.CloseAllPositions();
+            OrderManager.CloseAllPositions();
         }
 
         private void BtnArmLiveTrade_Click(object sender, EventArgs e)
@@ -683,7 +681,7 @@ namespace TestClient
 
 
             }
-            WatchList.Add(GridView);
+            MarketDataManager.Add(GridView);
             Root.Form?.Show();
         }
 
@@ -730,7 +728,7 @@ namespace TestClient
         {
             if (Root.IBConnected && ValidateSymbol())
             {
-                InteractiveBrokersAccount iba = OrderTest.LiveAccount;
+                Account iba = OrderTest.LiveAccount;
 
                 iba.EntryBraket(
                     ContractTest.ActiveContract,

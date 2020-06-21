@@ -17,7 +17,18 @@ namespace Pacmio
 {
     public static class Strategy
     {
+        /// <summary>
+        /// List of all available trade rules
+        /// </summary>
+        public static readonly List<TradeRule> List = new List<TradeRule>();
+
+
+
+
         public static Dictionary<Contract, TradeRule> WatchList = new Dictionary<Contract, TradeRule>();
+
+
+
 
         public static void GetWatchList() // Get it from the Market Scanner
         {

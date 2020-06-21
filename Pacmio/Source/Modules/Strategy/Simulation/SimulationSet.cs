@@ -28,7 +28,9 @@ namespace Pacmio
 
         public SimulationResult Result { get; set; }
 
-        public double SlippagePercent { get; set; } = 0.0001;
+        public double SlippageRatio { get; set; } = 0.0001;
+
+        // List All BarTable here
 
         public void AddLiquidity(DateTime time, double quantity)
         {

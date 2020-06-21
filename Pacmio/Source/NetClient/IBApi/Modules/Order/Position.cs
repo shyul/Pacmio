@@ -15,7 +15,7 @@ namespace Pacmio.IB
 {
     public partial class Client
     {
-        private readonly List<(InteractiveBrokersAccount, Contract)> UpdatedPositions = new List<(InteractiveBrokersAccount, Contract)>();
+        private readonly List<(Account, Contract)> UpdatedPositions = new List<(Account, Contract)>();
 
         /// <summary>
         /// Subscribes to position updates for all accessible accounts.
@@ -46,14 +46,15 @@ namespace Pacmio.IB
                 if (symbolInfoValid)
                 {
                     string accountCode = fields[2];
-                    InteractiveBrokersAccount ac = AccountManager.GetOrAdd(new InteractiveBrokersAccount(accountCode));
+                    Account ac = AccountManager.GetOrAdd(accountCode);
                     c.Status = ContractStatus.Alive;
                     double totalQuantity = fields[14].ToDouble();
                     if (totalQuantity != 0) 
                     {
-                        double averageUnitCost = fields[15].ToDouble();
+                        double averagePrice = fields[15].ToDouble();
                         PositionStatus ps = ac.GetPosition(c);
-                        ps.Set(totalQuantity, averageUnitCost);
+                        ac.Positions[c].Quantity = totalQuantity;
+                        ac.Positions[c].AveragePrice = averagePrice;
                         UpdatedPositions.Add((ac, c));
                     }
                 }
@@ -70,7 +71,7 @@ namespace Pacmio.IB
         {
             if(fields[1] == "1") 
             {
-                foreach (InteractiveBrokersAccount ac in AccountManager.List) 
+                foreach (Account ac in AccountManager.List)
                 {
                     foreach(Contract c in ac.Positions.Keys) 
                     {
@@ -79,7 +80,8 @@ namespace Pacmio.IB
                         {
                             if (ac.Positions.ContainsKey(c))
                             {
-                                ac.Positions[c].Reset();
+                                ac.Positions[c].Quantity = 0;
+                                ac.Positions[c].AveragePrice = double.NaN;
                             }
                         }
                     }                       

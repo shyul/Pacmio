@@ -14,7 +14,7 @@ namespace TestClient
 {
     public static class OrderTest
     {
-        public static InteractiveBrokersAccount LiveAccount { get; set; }
+        public static Account LiveAccount { get; set; }
 
         private static readonly DataTable Table = new DataTable("Order List"); 
 

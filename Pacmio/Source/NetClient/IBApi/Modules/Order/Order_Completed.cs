@@ -46,7 +46,7 @@ namespace Pacmio.IB
 
             OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
             od.PermId = permId;
-            od = OrderManager.Add(od);
+            od = OrderManager.GetOrAdd(od);
 
             if (PendingOrder.ContainsKey(orderId) && permId > 0) PendingOrder.Remove(orderId);
 
@@ -142,14 +142,14 @@ namespace Pacmio.IB
             Console.WriteLine("\nCompleted Orders: " + fields.ToStringWithIndex());
             Console.WriteLine(OrderManager.Count + " | " + od.Status + " | " + fields[90]);
 
-            OrderManager.Update(fields[0].ToInt32(-1), od.PermId.ToString());
+            OrderManager.Update(od);
         }
 
         private void Parse_CompletedOrdersEnd(string[] fields)
         {
             requestId_CompletedOrder = -1;
             Console.WriteLine("\nCompleted Orders End: " + fields.ToStringWithIndex());
-            OrderManager.Update(fields[0].ToInt32(-1), "CompletedOrdersEnd");
+            OrderManager.Update(); // TODO: Tranmit message
         }
 
         private void Parse_VerifyCompleted(string[] fields)

@@ -33,8 +33,6 @@ namespace Pacmio.IB
 {
     public partial class Client
     {
-
-
         // Parse Errors: (0)"4"-(1)"2"-(2)"1"-(3)"321"-(4)"Error validating request:-'bN' : cause - The API interface is currently in Read-Only mode."
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace Pacmio.IB
 
             OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
             od.PermId = permId;
-            od = OrderManager.Add(od);
+            od = OrderManager.GetOrAdd(od);
 
             if (PendingOrder.ContainsKey(orderId) && permId > 0) PendingOrder.Remove(orderId);
 
@@ -195,7 +193,7 @@ namespace Pacmio.IB
 
             Console.WriteLine("\nParse Open Order | " + od.Status + ": " + fields.ToStringWithIndex());
 
-            OrderManager.Update(fields[0].ToInt32(-1), od.PermId.ToString());
+            OrderManager.Update(od);
             // Emit the signal
         }
 
@@ -211,7 +209,8 @@ namespace Pacmio.IB
 
             Console.WriteLine("\nParse Open Order End: " + fields.ToStringWithIndex());
 
-            OrderManager.Update(fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion);
+            // TODO: fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion
+            OrderManager.Update();
         }
 
 

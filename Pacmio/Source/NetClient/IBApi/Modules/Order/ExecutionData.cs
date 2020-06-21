@@ -63,7 +63,7 @@ namespace Pacmio.IB
             ti.PermId = fields[21].ToInt32();
             ti.ClientId = fields[22].ToInt32();
             ti.Description = fields[26];
-            ti.Account = fields[16];
+            ti.AccountCode = fields[16];
             ti.FillExchangeCode = fields[17];
 
             double quantity = fields[19].ToDouble();
@@ -84,11 +84,13 @@ namespace Pacmio.IB
             ti.ModeCode = fields[29];
             ti.Liquidation = fields[23].ToInt32();
 
-            if (ti.Description == InteractiveBrokersAccount.EntryOrderDescription)
+            // TODO: Check ExecutionData LiquidityType
+
+            if (ti.Description == OrderManager.EntryOrderDescription)
                 ti.LastLiquidity = LiquidityType.Added;
-            else if (ti.Description == InteractiveBrokersAccount.ExitOrderDescription ||
-                    ti.Description == InteractiveBrokersAccount.StopLossOrderDescription ||
-                    ti.Description == InteractiveBrokersAccount.ProfitTakerOrderDescription)
+            else if (ti.Description == OrderManager.ExitOrderDescription ||
+                    ti.Description == OrderManager.StopLossOrderDescription ||
+                    ti.Description == OrderManager.ProfitTakerOrderDescription)
                 ti.LastLiquidity = LiquidityType.Removed;
             else
                 ti.LastLiquidity = (LiquidityType)fields[30].ToInt32();
@@ -116,7 +118,7 @@ namespace Pacmio.IB
             else 
             {
                 ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
-                PositionStatus ps = AccountManager.GetOrAdd(new InteractiveBrokersAccount(ti.Account)).GetPosition(ti.Contract);
+                PositionStatus ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
 
             }
 
