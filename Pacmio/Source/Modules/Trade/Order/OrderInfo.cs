@@ -14,7 +14,7 @@ using Pacmio.IB;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class OrderSetting
+    public class OrderInfo
     {
         [DataMember]
         public (string name, Exchange exchange, string typeName, int conId) ContractInfo { get; set; }

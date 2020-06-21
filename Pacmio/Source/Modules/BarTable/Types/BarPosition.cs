@@ -37,10 +37,10 @@ namespace Pacmio
             AveragePrice = double.NaN;
         }
 
-        private void Snapshot(BarPosition bp)
+        private void Snapshot(BarPosition bp_1)
         {
-            Quantity = bp.Quantity;
-            AveragePrice = bp.AveragePrice;
+            Quantity = bp_1.Quantity;
+            AveragePrice = bp_1.AveragePrice;
 
             if (Quantity == 0)
                 ActionType = TradeActionType.None;
@@ -48,20 +48,22 @@ namespace Pacmio
                 ActionType = TradeActionType.LongHold;
             else if (Quantity < 0)
                 ActionType = TradeActionType.ShortHold;
+
+            CurrentOrder = bp_1.CurrentOrder;
         }
 
         public void Snapshot(PositionStatus ps)
         {
-            double qty_1 = ps.Quantity;
-            if (Quantity > qty_1)
+            double new_qty = ps.Quantity;
+            if (Quantity < new_qty)
             {
-                ActionType = (Quantity <= 0) ? TradeActionType.Cover : TradeActionType.Long;
+                ActionType = (Quantity < 0) ? TradeActionType.Cover : TradeActionType.Long;
             }
-            else if (Quantity < qty_1)
+            else if (Quantity > new_qty)
             {
-                ActionType = (Quantity >= 0) ? TradeActionType.Sell : TradeActionType.Short;
+                ActionType = (Quantity > 0) ? TradeActionType.Sell : TradeActionType.Short;
             }
-            else // (Quantity == qty_1)
+            else
             {
                 if (Quantity == 0)
                     ActionType = TradeActionType.None;
@@ -71,18 +73,15 @@ namespace Pacmio
                     ActionType = TradeActionType.ShortHold;
             }
 
-            Quantity = qty_1;
+            Quantity = new_qty;
             AveragePrice = ps.AveragePrice;
+
+            CurrentOrder = ps.CurrentOrder;
         }
 
-        public void Copy(PositionStatus ps)
-        {
-            ActionType = ps.ActionType;
-            Quantity = ps.Quantity;
-            AveragePrice = ps.AveragePrice;
-        }
+        private readonly Bar Bar;
 
-        private readonly Bar Bar; 
+        public OrderInfo CurrentOrder { get; private set; }
 
         public TradeActionType ActionType { get; private set; } = TradeActionType.None;
 

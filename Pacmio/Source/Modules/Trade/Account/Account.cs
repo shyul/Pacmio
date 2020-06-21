@@ -16,22 +16,17 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    [KnownType(typeof(SimulationAccount))]
     [KnownType(typeof(InteractiveBrokersAccount))]
     public abstract class Account : IEquatable<Account>, IEquatable<string>, ITradeSetting
     {
         public virtual void Reset()
         {
             Positions = new ConcurrentDictionary<Contract, PositionStatus>();
-           // Column_PnL = new NumericColumn(Name + "_PnL", "PnL");
         }
 
         [IgnoreDataMember]
         public string Name => "Account: " + AccountCode;
-        /*
-        [IgnoreDataMember]
-        public NumericColumn Column_PnL { get; set; }
-        */
+
         [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Account Code")]
         [Description("The account ID number.")]
         public virtual string AccountCode { get; protected set; }

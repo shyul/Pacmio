@@ -117,7 +117,7 @@ namespace TestClient
                     if(status == IncomingMessage.OpenOrder || status == IncomingMessage.CompletedOrder) 
                     {
                         int permId = msg.ToInt32(-1);
-                        OrderSetting od = OrderManager.Get(permId);
+                        OrderInfo od = OrderManager.Get(permId);
 
                         if (!(od is null))
                             OrderTest.UpdateTable(od);

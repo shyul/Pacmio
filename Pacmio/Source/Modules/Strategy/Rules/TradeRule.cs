@@ -27,6 +27,8 @@ namespace Pacmio
 
         public string Name => Indicator.Name;
 
+        public BarFreq BarFreq { get; private set;  }
+
         //public NumericColumn Column_PnL { get; }
 
         public Range<Time> TimeRange { get; set; } = new Range<Time>(new Time(9, 30), new Time(16, 0));
@@ -49,5 +51,7 @@ namespace Pacmio
         public bool Equals(TradeRule other) => Name == other.Name;
 
 
+
+        //public SimulationResult SimulationResult 
     }
 }

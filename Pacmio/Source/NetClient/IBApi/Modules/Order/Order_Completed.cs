@@ -44,7 +44,7 @@ namespace Pacmio.IB
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[23].ToInt32();
 
-            OrderSetting od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderSetting() { OrderId = orderId };
+            OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
             od.PermId = permId;
             od = OrderManager.Add(od);
 

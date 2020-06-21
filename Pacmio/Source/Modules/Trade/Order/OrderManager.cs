@@ -24,11 +24,11 @@ namespace Pacmio
         /// <summary>
         /// Perm Id to Order Information Lookup Table
         /// </summary>
-        private static readonly Dictionary<int, OrderSetting> List = new Dictionary<int, OrderSetting>();
+        private static readonly Dictionary<int, OrderInfo> List = new Dictionary<int, OrderInfo>();
 
         public static int Count => List.Count;
 
-        public static OrderSetting Add(OrderSetting od)
+        public static OrderInfo Add(OrderInfo od)
         {
             if (!List.ContainsKey(od.PermId) && od.PermId > 0)
             {
@@ -41,13 +41,13 @@ namespace Pacmio
             }
         }
 
-        public static OrderSetting Get(int permId)
+        public static OrderInfo Get(int permId)
         {
             if (List.ContainsKey(permId)) return List[permId];
             else return null;
         }
 
-        public static IEnumerable<OrderSetting> GetActiveOrder(Account ac, Contract c)
+        public static IEnumerable<OrderInfo> GetActiveOrder(Account ac, Contract c)
         {
             return List.Values.Where(od => od.IsEditable && od.AccountCode == ac.AccountCode && od.Contract == c);
         }

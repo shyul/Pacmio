@@ -362,26 +362,26 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private readonly Dictionary<ITradeSetting, BarPosition> SimulationSet = new Dictionary<ITradeSetting, BarPosition>();
+        private readonly Dictionary<ITradeSetting, BarPosition> SimulationDatums = new Dictionary<ITradeSetting, BarPosition>();
 
         public BarPosition this[ITradeSetting tr]
         {
             get
             {
-                if (!SimulationSet.ContainsKey(tr))
+                if (!SimulationDatums.ContainsKey(tr))
                 {
-                    SimulationSet.Add(tr, new BarPosition(this, tr));
+                    SimulationDatums.Add(tr, new BarPosition(this, tr));
                 }
 
-                return SimulationSet[tr];
+                return SimulationDatums[tr];
             }
         }
 
         public void RemoveSimulation(ITradeSetting tr) 
         {
-            if (SimulationSet.ContainsKey(tr))
+            if (SimulationDatums.ContainsKey(tr))
             {
-                SimulationSet.Remove(tr);
+                SimulationDatums.Remove(tr);
             }
         }
 

@@ -19,6 +19,44 @@ namespace Pacmio
 {
     public class SimulationResult
     {
+        public void AddTrade(TradeLogDatum tld)
+        {
+            // if (!TradeLog.ContainsKey(tld.ExecuteTime)) 
+            TradeLog.Add(tld.ExecuteTime, tld);
+
+            if (tld.RealizedPnL != 0)
+            {
+                double m_PnL = tld.RealizedPnL;
+                TradeCount++;
+                Accumulation += m_PnL;
+
+                if (m_PnL > 0)
+                {
+                    WinCount++;
+                    WinAccumulation += m_PnL;
+                    MaxSingleWin = (MaxSingleWin == 0) ? m_PnL : Math.Max(MaxSingleWin, m_PnL);
+                    MinSingleWin = (MinSingleWin == 0) ? m_PnL : Math.Min(MinSingleWin, m_PnL);
+                }
+                else if (m_PnL < 0)
+                {
+                    LossCount++;
+                    LossAccumulation += m_PnL;
+                    MaxSingleLoss = (MaxSingleLoss == 0) ? m_PnL : Math.Min(MaxSingleLoss, m_PnL);
+                    MinSingleLoss = (MinSingleLoss == 0) ? m_PnL : Math.Max(MinSingleLoss, m_PnL);
+                }
+
+                if (tld.Quantity > 0)
+                {
+                    ShortPnL += m_PnL;
+                }
+                else
+                {
+                    LongPnL += m_PnL;
+                }
+            }
+        }
+
+        private readonly SortedDictionary<DateTime, TradeLogDatum> TradeLog = new SortedDictionary<DateTime, TradeLogDatum>();
 
         public double MaxTradeValue { get; set; } = 0;
 

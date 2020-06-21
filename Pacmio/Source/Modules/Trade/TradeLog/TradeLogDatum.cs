@@ -15,7 +15,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class TradeLogDatum : IEquatable<TradeLogDatum>, IEquatable<OrderSetting>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public class TradeLogDatum : IEquatable<TradeLogDatum>, IEquatable<OrderInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
         public TradeLogDatum(string execId) => ExecId = execId;
 
@@ -134,7 +134,7 @@ namespace Pacmio
 
         public bool Equals(TradeLogDatum other) => ExecId == other.ExecId;
 
-        public bool Equals(OrderSetting other) => PermId == other.PermId;
+        public bool Equals(OrderInfo other) => PermId == other.PermId;
 
         public bool Equals(Contract other) => (ContractInfo.conId > 0 && ContractInfo.conId == other.ConId) || (ContractInfo.name, ContractInfo.exchange, ContractInfo.typeName) == other.Info;
 
@@ -144,7 +144,7 @@ namespace Pacmio
         public static bool operator ==(TradeLogDatum left, TradeLogDatum right) => left.ExecId == right.ExecId;
         public static bool operator !=(TradeLogDatum left, TradeLogDatum right) => !(left == right);
 
-        public static bool operator ==(TradeLogDatum left, OrderSetting right) => left.PermId == right.PermId;
-        public static bool operator !=(TradeLogDatum left, OrderSetting right) => !(left == right);
+        public static bool operator ==(TradeLogDatum left, OrderInfo right) => left.PermId == right.PermId;
+        public static bool operator !=(TradeLogDatum left, OrderInfo right) => !(left == right);
     }
 }

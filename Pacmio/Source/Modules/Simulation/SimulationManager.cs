@@ -18,5 +18,11 @@ namespace Pacmio
 {
     public static class SimulationManager
     {
+
+        public static readonly Dictionary<Contract, Dictionary<TradeRule, SimulationResult>> List = new Dictionary<Contract, Dictionary<TradeRule, SimulationResult>>();
+
+
+
+        // Per Contract and Per TradeRule 
     }
 }
