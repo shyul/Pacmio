@@ -149,6 +149,7 @@ namespace Pacmio
 
         /// <summary>
         /// Get bars of index i and the past length amount bars
+        /// TODO: Fixed sequence
         /// </summary>
         /// <param name="i"></param>
         /// <param name="length"></param>
@@ -159,7 +160,7 @@ namespace Pacmio
             {
                 int len = length - 1;
                 if (i < len) len = i;
-                return Rows.Skip(i - len).Take(len + 1);
+                return Rows.Skip(i - len).Take(len + 1).Reverse();
             }
         }
 

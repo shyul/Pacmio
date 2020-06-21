@@ -21,10 +21,10 @@ namespace Pacmio
         public Account(string accountCode) 
         {
             AccountCode = accountCode;
-            Reset();
+            Setup();
         }
 
-        public void Reset()
+        public void Setup()
         {
             Positions = new ConcurrentDictionary<Contract, PositionStatus>();
             CurrentOrders = new ConcurrentDictionary<Contract, OrderInfo>();

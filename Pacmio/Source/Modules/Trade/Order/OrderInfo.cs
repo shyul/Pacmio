@@ -35,6 +35,8 @@ namespace Pacmio
             }
         }
 
+        // TODO: contract look up 
+
         [IgnoreDataMember]
         private Contract m_Contract;
 

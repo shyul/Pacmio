@@ -35,33 +35,49 @@ namespace Pacmio
 
         public static OrderInfo Get(int permId)
         {
-            if (List.ContainsKey(permId)) return List[permId];
-            else return null;
+            if (List.ContainsKey(permId)) 
+                return List[permId];
+            else 
+                return null;
         }
 
         public static OrderInfo GetOrAdd(OrderInfo od)
         {
-            if (!List.ContainsKey(od.PermId) && od.PermId > 0)
+            if (od.PermId < 1) throw new Exception("Can not add OrderInfo without proper permId");
+
+            if (!List.ContainsKey(od.PermId))
             {
                 List.TryAdd(od.PermId, od);
-
-                if (od.IsEditable)
-                    od.Account.CurrentOrders[od.Contract] = od;
-
-                return od;
             }
-            else 
-            {
-                return List[od.PermId];
-            }
+
+            return List[od.PermId];
         }
 
+        /*
         public static IEnumerable<OrderInfo> GetActiveOrder(Account ac, Contract c)
         {
             return List.Values.Where(od => od.IsEditable && od.AccountCode == ac.AccountCode && od.Contract == c);
         }
+        */
 
         #region Order Actions
+
+        public static void PlaceOrder(OrderInfo od) 
+        {
+            Account ac = od.Account;
+            Contract c = od.Contract;
+
+            Root.IBClient.PlaceOrder(od);
+
+            ac.CurrentOrders[c] = od;
+        }
+
+        public static void CancelOrder(OrderInfo od) 
+        {
+        
+        }
+
+        public static void CancelAllOrders() => Root.IBClient.SendRequest_GlobalCancel();
 
         public static void CloseAllPositions()
         {
@@ -69,8 +85,6 @@ namespace Pacmio
             foreach (Account ac in AccountManager.List)
                 ac.CloseAllPositions();
         }
-
-        public static void CancelAllOrders() => Root.IBClient.SendRequest_GlobalCancel();
 
         #endregion Order Actions
 
@@ -102,6 +116,9 @@ namespace Pacmio
             }
         }
 
+        /// <summary>
+        /// This function should be used only at the startup of this application.
+        /// </summary>
         public static void Load()
         {
             if (File.Exists(FileName))
@@ -110,6 +127,9 @@ namespace Pacmio
                 foreach (OrderInfo od in list)
                 {
                     GetOrAdd(od);
+
+                    if (od.IsEditable)
+                        od.Account.CurrentOrders[od.Contract] = od;
                 }
             }
         }

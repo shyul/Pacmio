@@ -10,4 +10,10 @@ namespace Pacmio
     public class CandleStickType
     {
     }*/
+
+    public static class CandleStickTools 
+    {
+    
+    
+    }
 }

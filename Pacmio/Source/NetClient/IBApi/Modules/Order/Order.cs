@@ -18,6 +18,32 @@ namespace Pacmio.IB
         // TODO: #1: remove this, and merge this with OrderManager
         private readonly Dictionary<int, OrderInfo> PendingOrder = new Dictionary<int, OrderInfo>();
 
+        private OrderInfo GetOrder(int orderId, int permId = 0)
+        {
+            if (PendingOrder.ContainsKey(orderId))
+            {
+                OrderInfo od = PendingOrder[orderId];
+                if (permId > 0)
+                {
+                    od.PermId = permId;
+                    PendingOrder.Remove(orderId);
+                    return OrderManager.GetOrAdd(od);
+                }
+                else
+                    return od;
+            }
+            else
+            {
+                return OrderManager.Get(permId);
+            }
+
+            /*
+            OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
+            od.PermId = permId;
+            od = OrderManager.GetOrAdd(od);*/
+
+        }
+
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/bracket_order.html
         /// </summary>

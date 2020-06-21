@@ -31,29 +31,21 @@ namespace Pacmio
 
         private static readonly List<MarketDataGridView> List = new List<MarketDataGridView>();
 
+        /// <summary>
+        /// Update All UI Elements when a new tick comes in
+        /// </summary>
+        /// <param name="c"></param>
         public static void UpdateUI(Contract c)
         {
-            /*
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
-                    lock (Root.IBClient.ActiveTicks)
-                    {
-                        int tickerId = status;
-                        Contract c = Root.IBClient.ActiveTicks[tickerId];
-                        MarketDataTest.UpdateMarketQuote(tickerId, c);
-                    }
-                    MarketDataTest.LastQuoteUpdate = DateTime.Now;
-                });
-            });
-            UpdateUI.Start();
-            */
-            
             Task.Run(() =>
             {
                 List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI());
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void CleanUp() 
         {
         

@@ -79,7 +79,7 @@ namespace Pacmio
                 var list = Serialization.DeserializeJsonFile<Account[]>(FileName);
                 foreach(Account ac in list) 
                 {
-                    ac.Reset();
+                    ac.Setup();
                     List.CheckAdd(ac);
                 }
             }
