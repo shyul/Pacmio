@@ -212,9 +212,20 @@ namespace Pacmio
         [IgnoreDataMember] //, NonSerialized]
         public MarketData MarketData { get; set; }
 
-        public abstract bool RequestQuote(string param);
+        /// <summary>
+        /// https://interactivebrokers.github.io/tws-api/tick_types.html
+        /// string genericTickList = "236,375";  // 292 is news
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual bool Request_MarketTicks(string param) => IB.Client.SendRequest_MarketTicks(this, param);
 
-        public abstract void CancelQuote();
+        public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
+
+        public virtual void Request_RealTimeBars() => IB.Client.SendRequest_RealTimeBars(this);
+
+        // TODO: Cancel_RealTimeBars()
+        // public virtual void Cancel_RealTimeBars() => IB.Client.SendCancel_RealTimeBars(this);
 
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;

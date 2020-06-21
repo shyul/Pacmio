@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Pacmio;
+using Pacmio.IB;
 
 namespace TestClient
 {
@@ -18,18 +19,7 @@ namespace TestClient
         {
             if (disposing && (components != null))
             {
-                int timeout = Root.IBClient.Timeout + 2000;
-                int j = 0;
-                if (Root.IBClient.Connected)
-                {
-                    Root.IBClient.Disconnect.Start();
-                    while (Root.IBClient.Connected)
-                    {
-                        Thread.Sleep(1);
-                        j++;
-                        if (j > timeout) break;
-                    }
-                }
+                Root.IBClientStop();
                 components.Dispose();
             }
             base.Dispose(disposing);

@@ -13,13 +13,13 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// Requests position subscription for account and/or model
         /// Initially all positions are returned, and then updates are returned for any position changes in real time.
         /// </summary>
-        public void RequestRequestPostionMulti(string account, string modelCode)
+        internal static void SendRequest_PostionMulti(string account, string modelCode)
         {
             UpdatedPositions.Clear();
             if (Connected) // !IsActiveAccountSummary &&
@@ -36,12 +36,12 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_PositionMulti(string[] fields)
+        private static void Parse_PositionMulti(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
-        private void Parse_PositionMultiEnd(string[] fields)
+        private static void Parse_PositionMultiEnd(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }

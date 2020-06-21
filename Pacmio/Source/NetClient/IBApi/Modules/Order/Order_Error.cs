@@ -21,9 +21,9 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        private void ParseError_PlaceOrder(string[] fields)
+        private static void ParseError_PlaceOrder(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
             string message = fields[4];

@@ -13,16 +13,16 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        private readonly List<(Account, Contract)> UpdatedPositions = new List<(Account, Contract)>();
+        private static readonly List<(Account, Contract)> UpdatedPositions = new List<(Account, Contract)>();
 
         /// <summary>
         /// Subscribes to position updates for all accessible accounts.
         /// All positions sent initially, and then only updates as positions change.
         /// Send RequestPositions: (0)"61"-(1)"1"-
         /// </summary>
-        public void SendRequest_Postion()
+        internal static void SendRequest_Postion()
         {
             UpdatedPositions.Clear();
             if (Connected) // !IsActiveAccountSummary &&
@@ -36,7 +36,7 @@ namespace Pacmio.IB
         /// (10)"NASDAQ"-(11)"USD"-(12)"FB"-(13)"NMS"-(14)"162"-(15)"184.27472345"-
         /// </summary>
         /// <param name="fields"></param>
-        private void ParsePoistion(string[] fields) 
+        private static void ParsePoistion(string[] fields) 
         {
             int msgVersion = fields[1].ToInt32(-1);
             if(msgVersion == 3) 
@@ -67,7 +67,7 @@ namespace Pacmio.IB
         /// Received PositionEnd: (0)"62"-(1)"1"
         /// </summary>
         /// <param name="fields"></param>
-        private void ParsePoistionEnd(string[] fields)
+        private static void ParsePoistionEnd(string[] fields)
         {
             if(fields[1] == "1") 
             {

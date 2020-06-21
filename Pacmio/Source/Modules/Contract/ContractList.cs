@@ -118,22 +118,22 @@ namespace Pacmio
             {
 
             ContractData:
-                Root.IBClient.SendRequest_ContractData(c);
+                IB.Client.SendRequest_ContractData(c);
 
                 int time = 0;
-                while (!Root.IBClient.IsReady_ContractData)
+                while (!IB.Client.IsReady_ContractData)
                 {
                     time++;
                     Thread.Sleep(60);
                     if (time > DownloadTimeout) // Handle Time out here.
                     {
-                        Root.IBClient.Cancel_ContractData();
+                        IB.Client.Cancel_ContractData();
                         Thread.Sleep(100);
                         goto ContractData;
                     }
                     else if (cts.IsCancellationRequested)
                     {
-                        Root.IBClient.Cancel_ContractSamples();
+                        IB.Client.Cancel_ContractSamples();
                         return;
                     }
                 }
@@ -253,27 +253,27 @@ namespace Pacmio
                         while (ContractDataTaskList.Count > 0)
                             ContractDataTaskList.TryDequeue(out _);
                     }
-                    else if (SymbolTaskList.Count > 0 && Root.IBClient.IsReady_ContractSamples)
+                    else if (SymbolTaskList.Count > 0 && IB.Client.IsReady_ContractSamples)
                     {
                         SymbolTaskList.TryDequeue(out string symbol);
 
                     ContractSamples:
-                        Root.IBClient.SendRequest_ContractSamples(symbol);
+                        IB.Client.SendRequest_ContractSamples(symbol);
 
                         time = 0;
-                        while (!Root.IBClient.IsReady_ContractSamples)
+                        while (!IB.Client.IsReady_ContractSamples)
                         {
                             time++;
                             Thread.Sleep(60);
                             if (time > DownloadTimeout) // Handle Time out here.
                             {
-                                Root.IBClient.Cancel_ContractSamples();
+                                IB.Client.Cancel_ContractSamples();
                                 Thread.Sleep(100);
                                 goto ContractSamples;
                             }
                             else if (IsCancellationRequested)
                             {
-                                Root.IBClient.Cancel_ContractSamples();
+                                IB.Client.Cancel_ContractSamples();
                                 goto Start;
                             }
                         }
@@ -281,7 +281,7 @@ namespace Pacmio
                         ContractDataTaskList.Enqueue(symbol);
                         CheckedSymbolList.TryAdd(symbol, DateTime.Now);
                     }
-                    else if (SymbolTaskList.Count == 0 && ContractDataTaskList.Count > 0 && Root.IBClient.IsReady_ContractSamples && Root.IBClient.IsReady_ContractData)
+                    else if (SymbolTaskList.Count == 0 && ContractDataTaskList.Count > 0 && IB.Client.IsReady_ContractSamples && IB.Client.IsReady_ContractData)
                     {
                         List<string> symbols = new List<string>();
 
@@ -296,22 +296,22 @@ namespace Pacmio
                         {
 
                         ContractData:
-                            Root.IBClient.SendRequest_ContractData(c);
+                            IB.Client.SendRequest_ContractData(c);
 
                             time = 0;
-                            while (!Root.IBClient.IsReady_ContractData)
+                            while (!IB.Client.IsReady_ContractData)
                             {
                                 time++;
                                 Thread.Sleep(60);
                                 if (time > DownloadTimeout) // Handle Time out here.
                                 {
-                                    Root.IBClient.Cancel_ContractData();
+                                    IB.Client.Cancel_ContractData();
                                     Thread.Sleep(100);
                                     goto ContractData;
                                 }
                                 else if (IsCancellationRequested)
                                 {
-                                    Root.IBClient.Cancel_ContractSamples();
+                                    IB.Client.Cancel_ContractSamples();
                                     goto Start;
                                 }
                             }

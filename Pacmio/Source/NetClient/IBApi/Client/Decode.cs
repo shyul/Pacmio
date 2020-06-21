@@ -21,11 +21,11 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        private Task DecodeTask { get; set; }
+        private static Task DecodeTask { get; set; }
 
-        private void DecodeWorker()
+        private static void DecodeWorker()
         {
             while (!IsCancelled)
             {

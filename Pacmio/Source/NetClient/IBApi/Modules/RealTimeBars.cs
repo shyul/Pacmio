@@ -14,17 +14,17 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
 
-        public readonly ConcurrentDictionary<int, Contract> ActiveRealTimeBars = new ConcurrentDictionary<int, Contract>();
+        internal static readonly ConcurrentDictionary<int, Contract> ActiveRealTimeBars = new ConcurrentDictionary<int, Contract>();
 
         /// <summary>
         /// 5 Seconds Realtime Bars, the period can not be changed.
         /// </summary>
         /// <param name="bt"></param>
         /// <param name="options"></param>
-        public bool SendRequest_RealTimeBars(Contract c, ICollection<(string, string)> options = null)
+        internal static bool SendRequest_RealTimeBars(Contract c, ICollection<(string, string)> options = null)
         {
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
@@ -76,7 +76,7 @@ namespace Pacmio.IB
             return false;
         }
 
-        public bool SendCancel_RealTimeBars(int requestId)
+        internal static bool SendCancel_RealTimeBars(int requestId)
         {
             RemoveRequest(requestId, RequestType.RequestRealTimeBars);
             lock (ActiveRealTimeBars)
@@ -89,7 +89,7 @@ namespace Pacmio.IB
 
         //         CancelRealTimeBars = 51,  // OK
 
-        private void Parse_RealTimeBars(string[] fields)
+        private static void Parse_RealTimeBars(string[] fields)
         {
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32(-1);

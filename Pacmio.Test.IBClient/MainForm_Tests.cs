@@ -17,7 +17,7 @@ namespace TestClient
 {
     public partial class MainForm : Form
     {
-        public string Status => "Server Ver: " + Root.IBClient.ServerVersion + " | Next Valid ID: " + Root.IBClient.RequestId + " | Connect Time: " + Root.IBClient.ConnectTime.ToString();
+        public string Status => "Server Ver: " + Client.ServerVersion + " | Next Valid ID: " + Client.RequestId + " | Connect Time: " + Client.ConnectTime.ToString();
 
         public static CancellationTokenSource Cts { get; set; }
 
@@ -117,7 +117,7 @@ namespace TestClient
                     if(status == IncomingMessage.OpenOrder || status == IncomingMessage.CompletedOrder) 
                     {
                         int permId = msg.ToInt32(-1);
-                        OrderInfo od = OrderManager.Get(permId);
+                        OrderInfo od = OrderManager.GetOrAdd(permId);
 
                         if (!(od is null))
                             OrderTest.UpdateTable(od);
@@ -200,7 +200,7 @@ namespace TestClient
         {
       
 
-            if (!Root.IBClient.Connected)
+            if (!Root.IBConnected)
             {
                 btnConnect.Text = "Connect";
                 LbStatus.Text = "Not Connected";

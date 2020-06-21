@@ -17,7 +17,7 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /*
             Send MarketDataRequest: (0)"1"-(1)"11"-(2)"10000001"-(3)"0"-(4)"FB"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"0"-(16)""-(17)"0"-(18)"0"
@@ -48,7 +48,7 @@ namespace Pacmio.IB
         /// Delayed Frozen  4	Requests delayed "frozen" data for a user without market data subscriptions.
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_MarketDataType(string[] fields)
+        private static void Parse_MarketDataType(string[] fields)
         {
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
             // Console.WriteLine("\nParse Market Data Type: " + fields.ToFlat());
@@ -93,7 +93,7 @@ namespace Pacmio.IB
         /// More information about Component Exchanges.
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickReqParams(string[] fields)
+        private static void Parse_TickReqParams(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             // Console.WriteLine("\nParse Tick Req Params: " + fields.ToFlat());
@@ -121,7 +121,7 @@ namespace Pacmio.IB
         /// (0)"1"-(1)"6"-(2)"24"-(3)"4"-(4)"186.40"-(5)"2"-(6)"0"-
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickPrice(string[] fields)
+        private static void Parse_TickPrice(string[] fields)
         {
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
@@ -185,7 +185,7 @@ namespace Pacmio.IB
         /// TickSize: (0)"2"-(1)"6"-(2)"10000001"-(3)"8"-(4)"69980"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickSize(string[] fields)
+        private static void Parse_TickSize(string[] fields)
         {
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
@@ -252,7 +252,7 @@ namespace Pacmio.IB
         /// Z: BATS
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickString(string[] fields)
+        private static void Parse_TickString(string[] fields)
         {
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
@@ -358,7 +358,7 @@ namespace Pacmio.IB
         /// (0)"45"-(1)"6"-(2)"6"-(3)"46"-(4)"3.0"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickGeneric(string[] fields)
+        private static void Parse_TickGeneric(string[] fields)
         {
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
@@ -391,7 +391,7 @@ namespace Pacmio.IB
         /// 
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickEFP(string[] fields)
+        private static void Parse_TickEFP(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             // Console.WriteLine("\nParse Tick EFP: " + fields.ToFlat());
@@ -415,7 +415,7 @@ namespace Pacmio.IB
         /// 
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickOptionComputation(string[] fields)
+        private static void Parse_TickOptionComputation(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             // Console.WriteLine("\nParse Tick Option Computation: " + fields.ToFlat());
@@ -432,7 +432,7 @@ namespace Pacmio.IB
         /// (0)"84"-(1)"2"-(2)"1578657239000"-(3)"BRFUPDN"-(4)"BRFUPDN$0c2d715e"-(5)"Bernstein initiated Facebook (FB) coverage with Outperform"-(6)"K:1.00"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_TickNews(string[] fields)
+        private static void Parse_TickNews(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 

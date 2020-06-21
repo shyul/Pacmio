@@ -14,10 +14,10 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
 
-        private void Parse_DeltaNeutralValidation(string[] fields)
+        private static void Parse_DeltaNeutralValidation(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }

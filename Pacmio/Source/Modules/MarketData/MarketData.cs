@@ -44,8 +44,6 @@ namespace Pacmio
 
         #region Net Client Information
 
-        public IB.Client NetClient { get; set; }
-
         public int TickerId { get; set; } = -1;
         
 

@@ -13,36 +13,9 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         // TODO: #1: remove this, and merge this with OrderManager
-        private readonly Dictionary<int, OrderInfo> PendingOrder = new Dictionary<int, OrderInfo>();
-
-        private OrderInfo GetOrder(int orderId, int permId = 0)
-        {
-            if (PendingOrder.ContainsKey(orderId))
-            {
-                OrderInfo od = PendingOrder[orderId];
-                if (permId > 0)
-                {
-                    od.PermId = permId;
-                    PendingOrder.Remove(orderId);
-                    return OrderManager.GetOrAdd(od);
-                }
-                else
-                    return od;
-            }
-            else
-            {
-                return OrderManager.Get(permId);
-            }
-
-            /*
-            OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
-            od.PermId = permId;
-            od = OrderManager.GetOrAdd(od);*/
-
-        }
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/bracket_order.html
@@ -51,7 +24,7 @@ namespace Pacmio.IB
         /// <param name="whatIf"></param>
         /// <param name="modify"></param>
         /// <param name="useSmart"></param>
-        public void PlaceOrder(OrderInfo od, bool whatIf = false, bool modify = false, bool useSmart = true)
+        public static void PlaceOrder(OrderInfo od, bool whatIf = false, bool modify = false, bool useSmart = true)
         {
             Contract c = od.Contract;
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
@@ -68,7 +41,7 @@ namespace Pacmio.IB
                 {
                     (int requestId, _) = RegisterRequest(RequestType.PlaceOrder);
                     od.OrderId = requestId;
-                    PendingOrder.Add(requestId, od);
+                    if (!OrderManager.AddNew(od)) throw new Exception("Error adding new OrderInfo to OrderManager.ActiveList");
                 }
 
                 string lastTradeDateOrContractMonth = "";
@@ -224,7 +197,7 @@ namespace Pacmio.IB
         }
         
 
-        public void CancelOrder(int orderId)
+        public static void CancelOrder(int orderId)
         {
             RemoveRequest(orderId, RequestType.PlaceOrder);
             // Emit update cancelled.
@@ -236,11 +209,11 @@ namespace Pacmio.IB
 
         }
 
-        public void SendRequest_GlobalCancel()
+        internal static void SendRequest_GlobalCancel()
         {
             if (Connected)
                 SendRequest(new string[] {
-                    ((int)RequestType.RequestGlobalCancel).ToString(),
+                    RequestType.RequestGlobalCancel.Param(),
                     "1",
                 });
         }
@@ -248,46 +221,10 @@ namespace Pacmio.IB
 
 
 
-        public void SendRequest_OpenOrders()
-        {
-            if (Connected)
-            {
-                (_, string typeStr) = RegisterRequest(RequestType.RequestOpenOrders);
 
-                SendRequest(new string[] {
-                    typeStr,
-                    "1",
-                });
-            }
-        }
 
-        public void SendRequest_AllOpenOrders()
-        {
-            if (Connected)
-            {
-                (_, string typeStr) = RegisterRequest(RequestType.RequestAllOpenOrders);
 
-                SendRequest(new string[] {
-                    typeStr,
-                    "1",
-                });
-            }
-        }
-
-        public void SendRequest_CompletedOrders(bool apiOnly)
-        {
-            if (Connected)
-            {
-                (_, string typeStr) = RegisterRequest(RequestType.ReqCompletedOrders);
-
-                SendRequest(new string[] {
-                    typeStr,
-                    apiOnly.Param(),
-                });
-            }
-        }
-
-        public void SendRequest_AutoOpenOrders(bool autoBind)
+        internal static void SendRequest_AutoOpenOrders(bool autoBind)
         {
             if (Connected)
             {

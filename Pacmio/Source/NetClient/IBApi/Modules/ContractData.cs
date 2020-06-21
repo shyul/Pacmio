@@ -15,13 +15,13 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_ContractData => Connected && requestId_ContractData == -1;
-        private int requestId_ContractData = -1;
-        private Contract active_ContractData;
+        public static bool IsReady_ContractData => Connected && requestId_ContractData == -1;
+        private static int requestId_ContractData = -1;
+        private static Contract active_ContractData;
 
-        public void SendRequest_ContractData(Contract c, bool includeExpired = false)
+        internal static void SendRequest_ContractData(Contract c, bool includeExpired = false)
         {
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
@@ -69,13 +69,13 @@ namespace Pacmio.IB
             }
         }
 
-        public void Cancel_ContractData()
+        public static void Cancel_ContractData()
         {
             RemoveRequest(requestId_ContractData, true);
             requestId_ContractData = -1;
         }
 
-        private void Parse_ContractData(string[] fields) // 10
+        private static void Parse_ContractData(string[] fields) // 10
         {
             //PacLog.Debug("ParseSymbolInfo: " + values.ToFlat());
 
@@ -131,14 +131,14 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_ContractDataEnd(string[] fields) // 52
+        private static void Parse_ContractDataEnd(string[] fields) // 52
         {
             int requestId = fields[2].ToInt32(-1);
             if (requestId > -1) RemoveRequest(requestId);
             requestId_ContractData = -1;
         }
 
-        private void ParseError_ContractData(string[] fields)
+        private static void ParseError_ContractData(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
             string message = fields[4];

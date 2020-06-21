@@ -12,15 +12,15 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_AccountSummary => Connected && !ActiveRequestContains(RequestType.RequestAccountSummary);
+        internal static bool IsReady_AccountSummary => Connected && !ActiveRequestContains(RequestType.RequestAccountSummary);
 
         private const string ACCOUNT_SUMMARY_TAGS = "AccountType,NetLiquidation,TotalCashValue,SettledCash,AccruedCash,BuyingPower,EquityWithLoanValue,PreviousEquityWithLoanValue,"
                              + "GrossPositionValue,ReqTEquity,ReqTMargin,SMA,InitMarginReq,MaintMarginReq,AvailableFunds,ExcessLiquidity,Cushion,FullInitMarginReq,FullMaintMarginReq,FullAvailableFunds,"
                              + "FullExcessLiquidity,LookAheadNextChange,LookAheadInitMarginReq,LookAheadMaintMarginReq,LookAheadAvailableFunds,LookAheadExcessLiquidity,HighestSeverity,DayTradesRemaining,Leverage";
 
-        public bool SendRequest_AccountSummary(string group = "All", string tags = ACCOUNT_SUMMARY_TAGS)
+        internal static bool SendRequest_AccountSummary(string group = "All", string tags = ACCOUNT_SUMMARY_TAGS)
         {
             if (IsReady_AccountSummary)
             {
@@ -39,7 +39,7 @@ namespace Pacmio.IB
             return false;
         }
 
-        private void Parse_AccountSummary(string[] fields)
+        private static void Parse_AccountSummary(string[] fields)
         {
             Console.WriteLine(fields[3] + " >> Summary Item: " + fields.ToStringWithIndex());
             if (fields[1] == "1")
@@ -51,7 +51,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_AccountSummaryEnd(string[] fields)
+        private static void Parse_AccountSummaryEnd(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             if (fields.Length == 3 && fields[1] == "1")

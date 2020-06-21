@@ -13,11 +13,11 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_HistoricalDataHeadTimestamp => Connected && requestId_HistoricalDataHeadTimestamp == -1;
-        private int requestId_HistoricalDataHeadTimestamp = -1;
-        private BarTable activeBarTable_HistoricalDataHeadTimestamp;
+        public static bool IsReady_HistoricalDataHeadTimestamp => Connected && requestId_HistoricalDataHeadTimestamp == -1;
+        private static int requestId_HistoricalDataHeadTimestamp = -1;
+        private static BarTable activeBarTable_HistoricalDataHeadTimestamp;
 
         /// <summary>
         /// Sample Request: (0)87-(1)858750582-(2)0-(3)AAPL-(4)STK-(5)-(6)0-(7)-(8)-(9)SMART-(10)-(11)USD-(12)-(13)-(14)0-(15)1-(16)TRADES-(17)1-(18)
@@ -26,7 +26,7 @@ namespace Pacmio.IB
         /// <param name="useRTH"></param>
         /// <param name="type"></param>
         /// <param name="formatDate"></param>
-        public void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
+        internal static void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
         {
             Contract c = bt.Contract;
             var (valid_barFreq, _) = ApiCode.GetIbCode(bt.BarFreq);
@@ -84,7 +84,7 @@ namespace Pacmio.IB
         /// Sample Message HeadTimestamp: (0)"88"-(1)"1"-(2)"19801212  14:30:00"-
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_HistoricalHeadDataTimestamp(string[] fields)
+        private static void Parse_HistoricalHeadDataTimestamp(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
             if (requestId == requestId_HistoricalDataHeadTimestamp)
@@ -96,9 +96,9 @@ namespace Pacmio.IB
             requestId_HistoricalDataHeadTimestamp = -1;
         }
 
-        public void SendCancel_HistoricalHeadDataTimestamp() => SendCancel_HistoricalHeadDataTimestamp(requestId_HistoricalDataHeadTimestamp);
+        public static void SendCancel_HistoricalHeadDataTimestamp() => SendCancel_HistoricalHeadDataTimestamp(requestId_HistoricalDataHeadTimestamp);
 
-        private void SendCancel_HistoricalHeadDataTimestamp(int requestId)
+        private static void SendCancel_HistoricalHeadDataTimestamp(int requestId)
         {
             if (Connected && requestId > -1)
             {

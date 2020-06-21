@@ -14,8 +14,75 @@ using Pacmio.IB;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class OrderInfo
+    public class OrderInfo : IEquatable<OrderInfo>
     {
+
+
+        #region Identification Numbers
+
+        /// <summary>
+        /// Order id.
+        /// </summary>
+        [DataMember]
+        public int OrderId { get; set; } = -1;
+
+        /// <summary>
+        /// The Host order identifier.
+        /// </summary>
+        [DataMember]
+        public int PermId { get; set; } = -1;
+
+        /// <summary>
+        /// The order ID of the parent order, used for bracket and auto trailing stop orders.
+        /// </summary>
+        [DataMember]
+        public int ParentOrderId { get; set; } = 0;
+
+        /// <summary>
+        /// The parent host order identifier.
+        /// </summary>
+        [DataMember]
+        public int ParentPermId { get; set; } = -1;
+
+        [DataMember]
+        public int ClientId { get; set; } = -1;
+
+        #endregion Identification Numbers
+
+        #region Status
+
+        [DataMember]
+        public DateTime OrderTime { get; set; }
+
+        [DataMember]
+        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
+
+        [IgnoreDataMember]
+        public bool IsEditable => Status == OrderStatus.Inactive || Status == OrderStatus.ApiPending || Status == OrderStatus.PendingSubmit || Status == OrderStatus.PreSubmitted || Status == OrderStatus.Submitted;
+
+        [DataMember]
+        public double FilledQuantity { get; set; } = 0;
+
+        [DataMember]
+        public double RemainingQuantity { get; set; } = 0;
+
+        [DataMember]
+        public double LastFillPrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public double AveragePrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public double MarketCapPrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public string HeldNotice { get; set; } = string.Empty;
+
+        #endregion
+
+        [DataMember, Browsable(true)]
+        public string Description { get; set; }
+
         [DataMember]
         public (string name, Exchange exchange, string typeName, int conId) ContractInfo { get; set; }
 
@@ -131,76 +198,14 @@ namespace Pacmio
         [DataMember]
         public bool OutsideRegularTradeHours { get; set; } = true;
 
-        #region Identification Numbers
 
-        /// <summary>
-        /// Order id.
-        /// </summary>
-        [DataMember]
-        public int OrderId { get; set; } = -1;
-
-        /// <summary>
-        /// The Host order identifier.
-        /// </summary>
-        [DataMember]
-        public int PermId { get; set; } = -1;
-
-        /*
-        [DataMember]
-        public string ExecId { get; set; } = string.Empty;
-        */
-
-        /// <summary>
-        /// The order ID of the parent order, used for bracket and auto trailing stop orders.
-        /// </summary>
-        [DataMember]
-        public int ParentOrderId { get; set; } = 0;
-
-        /// <summary>
-        /// The parent host order identifier.
-        /// </summary>
-        [DataMember]
-        public int ParentPermId { get; set; } = -1;
-
-        [DataMember]
-        public int ClientId { get; set; } = -1;
-
-        #endregion Identification Numbers
-
-        #region Status
-
-        [DataMember]
-        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
-
-        public bool IsEditable => Status == OrderStatus.PreSubmitted || Status == OrderStatus.PendingSubmit || Status == OrderStatus.Submitted;
-
-        [DataMember]
-        public double FilledQuantity { get; set; } = 0;
-
-        [DataMember]
-        public double RemainingQuantity { get; set; } = 0;
-
-        [DataMember]
-        public double LastFillPrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public double AveragePrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public double MarketCapPrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public string HeldNotice { get; set; } = string.Empty;
-
-        #endregion
 
         [DataMember, Browsable(true)]
         public string ModeCode { get; set; } = string.Empty;
 
-        [DataMember, Browsable(true)]
-        public string Description { get; set; }
 
-        [DataMember]
-        public DateTime OrderTime { get; set; }
+
+
+        public bool Equals(OrderInfo other) => PermId > 0 && PermId == other.PermId;
     }
 }

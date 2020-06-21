@@ -46,6 +46,12 @@ namespace Pacmio
 
         public static double TotalPnL(this IEnumerable<TradeLogDatum> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
 
+        #region Data Requests
+
+        public static void Request_Log() => IB.Client.SendRequest_ExecutionData();
+
+        #endregion Data Requests
+
         #region Events
 
         public static DateTime UpdatedTime { get; set; }

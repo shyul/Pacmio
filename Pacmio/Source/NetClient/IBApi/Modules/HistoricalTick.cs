@@ -16,14 +16,14 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_HistoricalTick => Connected && requestId_HistoricalTick == -1;
-        private int requestId_HistoricalTick = -1;
-        private Contract active_HistoricalTick;
-        public DateTime LastTime_HistoricalTick { get; private set; }
+        public static bool IsReady_HistoricalTick => Connected && requestId_HistoricalTick == -1;
+        private static int requestId_HistoricalTick = -1;
+        private static Contract active_HistoricalTick;
+        public static DateTime LastTime_HistoricalTick { get; private set; }
 
-        public void SendRequest_HistoricalTick(Contract c, DateTime startTime, BarType barType = BarType.Trades,
+        internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, BarType barType = BarType.Trades,
             int numberOfTicks = 1000, bool useRTH = true, bool ignoreSize = false, bool includeExpired = false,
             ICollection<(string, string)> options = null)
         {
@@ -87,17 +87,17 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_HistoricalTick(string[] fields)
+        private static void Parse_HistoricalTick(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
-        private void Parse_HistoricalTickBidAsk(string[] fields)
+        private static void Parse_HistoricalTickBidAsk(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
-        private void Parse_HistoricalTickLast(string[] fields)
+        private static void Parse_HistoricalTickLast(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
             int num = fields[2].ToInt32();
@@ -127,11 +127,11 @@ namespace Pacmio.IB
             requestId_HistoricalTick = -1;
         }
         
-        private readonly ConcurrentDictionary<Contract, List<MarketTick>> TickList = new ConcurrentDictionary<Contract, List<MarketTick>>();
+        private static readonly ConcurrentDictionary<Contract, List<MarketTick>> TickList = new ConcurrentDictionary<Contract, List<MarketTick>>();
 
-        public void InboundTick(MarketTick mt) => TickList[mt.Contract].Add(mt);
+        public static void InboundTick(MarketTick mt) => TickList[mt.Contract].Add(mt);
 
-        public void Request_HistoricalTick(Contract c, Period pd)
+        public static void Request_HistoricalTick(Contract c, Period pd)
         {
             if (!TickList.ContainsKey(c)) TickList[c] = new List<MarketTick>();
 

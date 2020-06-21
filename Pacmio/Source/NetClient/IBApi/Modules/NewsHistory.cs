@@ -14,14 +14,14 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// Send RequestHistoricalNews: (0)"86"-(1)"90020000"-(2)"8314"-(3)"BZ+FLY"-(4)"2020-01-28 16:21:07.0"-(5)"2020-01-29 16:21:07.0"-(6)"5"
         /// </summary>
         /// <param name="conId"></param>
         /// <param name="providerCodes"></param>
-        public void RequestHistoricalNews(int conId, ICollection<string> providerCodes, Period period, int totalResults, ICollection<(string, string)> historicalNewsOptions = null)
+        internal static void SendRequest_HistoricalNews(int conId, ICollection<string> providerCodes, Period period, int totalResults, ICollection<(string, string)> historicalNewsOptions = null)
         {
             if (Connected) // && !M_IsActiveSymbolSamples && value != m_ActiveSymbolSample)
             {
@@ -44,7 +44,7 @@ namespace Pacmio.IB
         /// (0)"86"-(1)"90020000"-(2)"2019-10-17 14:46:06.0"-(3)"BRFG"-(4)"BRFG$0bc6e1ef"-(5)"{K:1.00}IBM is wearing a Red Hat but investors are disappointed with Q3 results"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_HistoricalNews(string[] fields)
+        private static void Parse_HistoricalNews(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 
@@ -60,7 +60,7 @@ namespace Pacmio.IB
         /// (0)"87"-(1)"90020000"-(2)"1"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_HistoricalNewsEnd(string[] fields)
+        private static void Parse_HistoricalNewsEnd(string[] fields)
         {
 
         }

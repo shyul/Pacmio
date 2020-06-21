@@ -12,14 +12,14 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// Send RequestFamilyCodes: (0)"80"-
-        /// Received FamilyCodes: (0)"78"-(1)"3"-(2)"U3372058"-(3)""-(4)"U1564932"-(5)""-(6)"U2234582"-
+        /// Received FamilyCodes: (0)"78"-(1)"3"-(2)"Uxxxxxx"-(3)""-(4)"Uxxxxxx"-(5)""-(6)"Uxxxxxx"-
         /// </summary>
         /// <param name="fields">respond sequence</param>
-        private void Parse_ManagedAccounts(string[] fields)
+        private static void Parse_ManagedAccounts(string[] fields)
         {
             if (fields[1] == "1")
             {
@@ -37,7 +37,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_AccountValue(string[] fields)
+        private static void Parse_AccountValue(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 
@@ -56,7 +56,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_AccountUpdateTime(string[] fields)
+        private static void Parse_AccountUpdateTime(string[] fields)
         {
             if (fields[1] == "1")
             {
@@ -65,7 +65,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_AccountDownloadEnd(string[] fields)
+        private static void Parse_AccountDownloadEnd(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 

@@ -28,7 +28,7 @@ namespace Pacmio
             {
                 if(List.TryAdd(info, new Dictionary<int, (int ConId, string Name, DateTime time)>())) 
                 {
-                    Root.IBClient.RequestScannerSubscription(info);
+                    IB.Client.SendRequest_ScannerSubscription(info);
                 }
             }
 
@@ -47,7 +47,7 @@ namespace Pacmio
             if (List.ContainsKey(info)) 
             {
                 List.TryRemove(info, out _);
-                Root.IBClient.CancelScannerSubscription(info.RequestId);
+                IB.Client.SendCancel_ScannerSubscription(info.RequestId);
             }
         }
 
@@ -55,11 +55,17 @@ namespace Pacmio
         {
             foreach (ScannerInfo info in List.Keys)
             {
-                Root.IBClient.CancelScannerSubscription(info.RequestId);
+                IB.Client.SendCancel_ScannerSubscription(info.RequestId);
             }
 
             List.Clear();
         }
+
+        #region Data Requests
+
+        public static void Request_ScannerParameters() => IB.Client.SendRequest_ScannerParameters();
+
+        #endregion Data Requests
 
         /// <summary>
         /// Do not call any IB function in this method... or it is going to lock up.
@@ -93,8 +99,8 @@ namespace Pacmio
                         if (c is ITradable it)
                         {
                             Console.WriteLine("Rank " + i.Key + ": " + c.Name + "\t" + "\t" + it.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
-                            if (!Root.IBClient.SubscriptionOverflow)
-                                c.RequestQuote("236,375");
+                            if (!IB.Client.SubscriptionOverflow)
+                                c.Request_MarketTicks("236,375");
                             /*
                             BarTable bt = c.GetOrAdd(BarFreq.Minute, BarType.Trades);
 

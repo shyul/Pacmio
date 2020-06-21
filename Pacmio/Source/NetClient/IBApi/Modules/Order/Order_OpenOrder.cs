@@ -31,24 +31,45 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
+        public static bool IsReady_OpenOrders { get; set; } = true;
+
+        internal static void SendRequest_OpenOrders()
+        {
+            if (Connected && IsReady_OpenOrders)
+            {
+                IsReady_OpenOrders = false;
+                SendRequest(new string[] {
+                    RequestType.RequestOpenOrders.Param(),
+                    "1",
+                });
+            }
+        }
+
+        internal static void SendRequest_AllOpenOrders()
+        {
+            if (Connected && IsReady_OpenOrders)
+            {
+                IsReady_OpenOrders = false;
+                SendRequest(new string[] {
+                    RequestType.RequestAllOpenOrders.Param(),
+                    "1",
+                });
+            }
+        }
+
         // Parse Errors: (0)"4"-(1)"2"-(2)"1"-(3)"321"-(4)"Error validating request:-'bN' : cause - The API interface is currently in Read-Only mode."
 
         /// <summary>
         /// Received OpenOrder: (0)"5"-(1)"0"-(2)"269753"-(3)"GILD"-(4)"STK"-(5)""-(6)"0"-(7)"?"-(8)""-(9)"SMART"-(10)"USD"-(11)"GILD"-(12)"NMS"-(13)"SELL"-(14)"100"-(15)"LMT"-(16)"78.38"-(17)"0.0"-(18)"GTC"-(19)""-(20)"DU332281"-(21)""-(22)"0"-(23)"Xu's BookTrader"-(24)"0"-(25)"975677963"-(26)"0"-(27)"1"-(28)"0"-(29)""-(30)"975677963.1/DU332281/100"-(31)""-(32)""-(33)""-(34)""-(35)""-(36)""-(37)""-(38)""-(39)""-(40)"0"-(41)""-(42)"-1"-(43)"0"-(44)""-(45)""-(46)""-(47)""-(48)""-(49)""-(50)"0"-(51)"0"-(52)"0"-(53)""-(54)"3"-(55)"0"-(56)"0"-(57)""-(58)"0"-(59)"0"-(60)""-(61)"0"-(62)"None"-(63)""-(64)"0"-(65)""-(66)""-(67)""-(68)"?"-(69)"0"-(70)"0"-(71)""-(72)"0"-(73)"0"-(74)""-(75)""-(76)""-(77)""-(78)""-(79)"0"-(80)"0"-(81)"0"-(82)""-(83)""-(84)""-(85)""-(86)"0"-(87)""-(88)"IB"-(89)"0"-(90)"0"-(91)""-(92)"0"-(93)"0"-(94)"PreSubmitted"-(95)"1.7976931348623157E308"-(96)"1.7976931348623157E308"-(97)"1.7976931348623157E308"-(98)"1.7976931348623157E308"-(99)"1.7976931348623157E308"-(100)"1.7976931348623157E308"-(101)"1.7976931348623157E308"-(102)"1.7976931348623157E308"-(103)"1.7976931348623157E308"-(104)""-(105)""-(106)""-(107)""-(108)""-(109)"0"-(110)"0"-(111)"0"-(112)"None"-(113)"1.7976931348623157E308"-(114)"79.38"-(115)"1.7976931348623157E308"-(116)"1.7976931348623157E308"-(117)"1.7976931348623157E308"-(118)"1.7976931348623157E308"-(119)"0"-(120)""-(121)""-(122)""-(123)"0"-(124)"1"-(125)"0"-(126)"0"-(127)"0"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_OpenOrder(string[] fields)
+        private static void Parse_OpenOrder(string[] fields)
         {
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[25].ToInt32();
-
-            OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
-            od.PermId = permId;
-            od = OrderManager.GetOrAdd(od);
-
-            if (PendingOrder.ContainsKey(orderId) && permId > 0) PendingOrder.Remove(orderId);
+            OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
 
             if (od.Contract is null)
             {
@@ -203,20 +224,14 @@ namespace Pacmio.IB
         /// eWrapper.openOrderEnd();
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_OpenOrderEnd(string[] fields)
+        private static void Parse_OpenOrderEnd(string[] fields)
         {
             string msgVersion = fields[1];
+            IsReady_OpenOrders = true;
 
             Console.WriteLine("\nParse Open Order End: " + fields.ToStringWithIndex());
-
             // TODO: fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion
             OrderManager.Update();
         }
-
-
-
-
-
-
     }
 }

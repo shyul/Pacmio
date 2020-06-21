@@ -14,15 +14,15 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public int MaximumSubscription => 100;
+        public static int MaximumSubscription => 100;
 
-        public int ActiveSubscriptionCount => ActiveMarketTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
+        public static int ActiveSubscriptionCount => ActiveMarketTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
 
-        public bool SubscriptionOverflow => ActiveSubscriptionCount > MaximumSubscription - 5;
+        public static bool SubscriptionOverflow => ActiveSubscriptionCount > MaximumSubscription - 5;
 
-        public readonly ConcurrentDictionary<int, Contract> ActiveMarketTicks = new ConcurrentDictionary<int, Contract>();
+        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketTicks = new ConcurrentDictionary<int, Contract>();
 
         /// <summary>
         /// enericTickList:
@@ -72,7 +72,7 @@ namespace Pacmio.IB
         /// <param name="regulatorySnaphsot">Regulatory Snapshots</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public bool SendRequest_MarketTicks(Contract c, string genericTickList = "236,375",
+        internal static bool SendRequest_MarketTicks(Contract c, string genericTickList = "236,375",
             bool snapshot = false, bool regulatorySnaphsot = false,
             ICollection<(string, string)> options = null)
         {
@@ -81,7 +81,6 @@ namespace Pacmio.IB
             if (Connected && valid_exchange && !ActiveMarketTicks.Values.Contains(c) && !SubscriptionOverflow)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
-                c.MarketData.NetClient = this;
                 c.MarketData.TickerId = requestId;
                 ActiveMarketTicks.CheckAdd(requestId, c);
 
@@ -259,18 +258,15 @@ namespace Pacmio.IB
         }
         */
 
-        public bool SendCancel_MarketTicks(int requestId)
+        public static void SendCancel_MarketTicks(int requestId)
         {
             RemoveRequest(requestId, RequestType.RequestMarketData);
             lock (ActiveMarketTicks)
             {
                 ActiveMarketTicks.TryRemove(requestId, out Contract c);
                 c.MarketData.Status = MarketQuoteStatus.DelayedFrozen;
-                c.MarketData.NetClient = null;
                 c.MarketData.TickerId = -1;
             }
-            // Emit update cancelled.
-            return false;
         }
 
 

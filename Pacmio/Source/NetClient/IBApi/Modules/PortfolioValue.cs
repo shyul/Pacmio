@@ -13,12 +13,9 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        //Send ReqPnL: (0)"92"-(1)"600065159"-(2)"U1564932"-
-        //Received PnL: (0)"94"-(1)"600065159"-(2)"-81.00009719999798"-(3)"6053.1747039"-(4)"0.0"-
-        //Received PnL: (0)"94"-(1)"600065159"-(2)"-97.20108764648467"-(3)"6036.9737134535135"-(4)"0.0"-
-        private void Parse_PortfolioValue(string[] fields)
+        private static void Parse_PortfolioValue(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }

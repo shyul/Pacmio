@@ -21,24 +21,24 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         #region Receive Data
         // => new Task(() => ReceiveWork(), taskCancellationTokenSource.Token);
-        private Task ReceiveTask { get; set; }
+        private static Task ReceiveTask { get; set; }
         // => new BinaryReader(tcpClient.GetStream());
-        private BinaryReader TcpReader { get; set; }
-        private bool IsReceiveDataAvailable => IsSocketConnected() && TcpClient.GetStream().DataAvailable;
+        private static BinaryReader TcpReader { get; set; }
+        private static bool IsReceiveDataAvailable => IsSocketConnected() && TcpClient.GetStream().DataAvailable;
 
-        private readonly ConcurrentQueue<string[]> receiveDataBuffer = new ConcurrentQueue<string[]>();
-        private int ReceiveDataBufferCount => receiveDataBuffer.Count;
-        private bool IsReceiveDataEmpty => receiveDataBuffer.IsEmpty;
-        private void FlushReceiveData() { lock (receiveDataBuffer) while (!IsReceiveDataEmpty) receiveDataBuffer.TryDequeue(out string[] fields); }
-        public int ReceivedMessageCount { get; private set; } = 0;
+        private static readonly ConcurrentQueue<string[]> receiveDataBuffer = new ConcurrentQueue<string[]>();
+        private static int ReceiveDataBufferCount => receiveDataBuffer.Count;
+        private static bool IsReceiveDataEmpty => receiveDataBuffer.IsEmpty;
+        private static void FlushReceiveData() { lock (receiveDataBuffer) while (!IsReceiveDataEmpty) receiveDataBuffer.TryDequeue(out _); } //(out string[] fields); }
+        public static int ReceivedMessageCount { get; private set; } = 0;
 
         private const int MaximumReceivedMessageSize = 0x00FFFFFF;
 
-        private void ReceiveWorker()
+        private static void ReceiveWorker()
         {
             while (!IsCancelled)
             {
@@ -59,11 +59,11 @@ namespace Pacmio.IB
                             // The time would be the local time, example PST for the west coast.
                             ConnectTime = DateTime.ParseExact(raw[1].Substring(0, raw[1].Length - 4), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                             ServerVersion = raw[0].ToInt32(-1);
-                            OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "API Server Ver: " + ServerVersion.ToString());
+                            Root.IBConnectUpdate(ApiStatus, DateTime.Now, "API Server Ver: " + ServerVersion.ToString());
 
                             if (ServerVersion < MIN_VERSION)
                             {
-                                OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now, "IB Gateway version: " + ServerVersion.ToString() + " is too old, requiring minimum version: " + MIN_VERSION.ToString());
+                                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now, "IB Gateway version: " + ServerVersion.ToString() + " is too old, requiring minimum version: " + MIN_VERSION.ToString());
                                 Disconnect.Start();
                                 break;
                             }
@@ -78,7 +78,7 @@ namespace Pacmio.IB
                 }
                 else if (!IsSocketConnected())
                 {
-                    OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
+                    Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();
                 }
                 else

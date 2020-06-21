@@ -46,6 +46,12 @@ namespace Pacmio
             }
         }
 
+        #region Data Requests
+
+        public static void Request_AccountSummary() => IB.Client.SendRequest_AccountSummary();
+
+        public static void Request_Postion() => IB.Client.SendRequest_Postion();
+
         #region Updates
 
         public static DateTime UpdatedTime { get; set; }
@@ -59,6 +65,8 @@ namespace Pacmio
         }
 
         #endregion Updates
+
+        #endregion Data Requests
 
         #region File system
 

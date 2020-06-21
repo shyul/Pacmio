@@ -15,16 +15,16 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// It has to be be waited until you get the result. Or there won't be any return of the result. It won't pop error, just fail silently.
         /// </summary>
-        public bool IsReady_ContractSamples => Connected && requestId_ContractSamples == -1;
-        private int requestId_ContractSamples = -1;
-        private string active_ContractSample = string.Empty;
+        public static bool IsReady_ContractSamples => Connected && requestId_ContractSamples == -1;
+        private static int requestId_ContractSamples = -1;
+        private static string active_ContractSample = string.Empty;
 
-        public void SendRequest_ContractSamples(string value) // Valid control send
+        internal static void SendRequest_ContractSamples(string value) // Valid control send
         {
             if (IsReady_ContractSamples)
             {
@@ -40,13 +40,13 @@ namespace Pacmio.IB
             }
         }
 
-        public void Cancel_ContractSamples() 
+        public static void Cancel_ContractSamples() 
         {
             RemoveRequest(requestId_ContractSamples, true);
             requestId_ContractSamples = -1;
         }
 
-        private void Parse_ContractSamples(string[] fields)
+        private static void Parse_ContractSamples(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
 

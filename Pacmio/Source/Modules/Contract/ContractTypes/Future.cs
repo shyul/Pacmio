@@ -42,16 +42,6 @@ namespace Pacmio
         {
             throw new NotImplementedException();
         }
-
-        public override bool RequestQuote(string param)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void CancelQuote()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

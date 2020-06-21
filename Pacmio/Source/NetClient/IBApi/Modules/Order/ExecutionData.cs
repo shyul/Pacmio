@@ -15,12 +15,12 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_ExecutionData => Connected && requestId_ExecutionData == -1;
-        private int requestId_ExecutionData = -1;
+        public static bool IsReady_ExecutionData => Connected && requestId_ExecutionData == -1;
+        private static int requestId_ExecutionData = -1;
 
-        public void SendRequest_ExecutionData()
+        internal static void SendRequest_ExecutionData()
         {
             if (IsReady_ExecutionData)
             {
@@ -53,7 +53,7 @@ namespace Pacmio.IB
         /// (15)"20200428  09:28:04"-(16)"DU332281"-(17)"ARCA"-(18)"SLD"-(19)"100"-(20)"78.39"-(21)"975677963"-(22)"0"-(23)"0"-(24)"100"-(25)"78.39"-(26)"Xu's BookTrader"-(27)""-(28)""-(29)""-(30)"2"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_ExecutionData(string[] fields)
+        private static void Parse_ExecutionData(string[] fields)
         {
             // int requestId = fields[1].ToInt32();
             string execId = fields[14];
@@ -138,7 +138,7 @@ namespace Pacmio.IB
         /// Received CommissionsReport: (0)"59"-(1)"1"-(2)"0000e0d5.5ea9265d.01.01"-(3)"0.841411"-(4)"USD"-(5)"958.590689"-(6)"1.7976931348623157E308"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_CommissionsReport(string[] fields)
+        private static void Parse_CommissionsReport(string[] fields)
         {
             string execId = fields[2];
             TradeLogDatum ti = TradeLogManager.GetOrAdd(execId);
@@ -159,11 +159,12 @@ namespace Pacmio.IB
             Console.WriteLine("Commissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
         }
 
-        private void Parse_ExecutionDataEnd(string[] fields)
+        private static void Parse_ExecutionDataEnd(string[] fields)
         {
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32();
-            if (requestId == requestId_ExecutionData) requestId_ExecutionData = -1;
+            //if (requestId == requestId_ExecutionData) 
+            requestId_ExecutionData = -1;
 
             TradeLogManager.Update(fields[0].ToInt32(-1), requestId.ToString());
 

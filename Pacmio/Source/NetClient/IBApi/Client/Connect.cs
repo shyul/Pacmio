@@ -21,42 +21,32 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public Client(int clientId = 180, int port = 15062, string address = "127.0.0.1", int timeout = 1000)
-        {
-            Hostname = address;
-            Port = port;
-            ClientId = clientId;
-            Timeout = timeout;
-
-            OnConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
-        }
-
         #region TCP Client Settings
 
-        public string Hostname { get; private set; }
+        public static string Hostname { get; private set; }
 
-        public int Port { get; private set; }
+        public static int Port { get; private set; }
 
-        public int ClientId { get; private set; }
+        public static int ClientId { get; private set; }
 
-        public int Timeout { get; private set; }
+        public static int Timeout { get; private set; }
 
-        public int Pace { get; private set; } = 50;
+        public const int Pace = 50;
 
-        public int ServerVersion { get; private set; }
-        public DateTime ConnectTime { get; private set; }
+        public static int ServerVersion { get; private set; }
+        public static DateTime ConnectTime { get; private set; }
 
-        public event ConnectionStatusEventHandler OnConnectedHandler;
 
-        private CancellationTokenSource TaskCancelTs { get; set; }
 
-        private bool IsCancelled => TaskCancelTs == null || TaskCancelTs.IsCancellationRequested;
+        private static CancellationTokenSource TaskCancelTs { get; set; }
+
+        private static bool IsCancelled => TaskCancelTs == null || TaskCancelTs.IsCancellationRequested;
 
         private const int bufferSize = 20 * 1024 * 1024;
 
-        private TcpClient TcpClient { get; set; }
+        private static TcpClient TcpClient { get; set; }
 
         #endregion TCP Client Settings
 
@@ -65,29 +55,29 @@ namespace Pacmio.IB
         public const int MIN_VERSION = ServerVersionHistory.PRICE_MGMT_ALGO;
         public const int MAX_VERSION = ServerVersionHistory.PRICE_MGMT_ALGO;
         public const string ConnectOptions = "";
-        private readonly string VERSION_STR = "v" + MIN_VERSION.ToString() + (MAX_VERSION != MIN_VERSION ? ".." + MAX_VERSION : string.Empty) + ((ConnectOptions.Length == 0) ? string.Empty : " " + ConnectOptions); //"v100..151";
+        private static readonly string VERSION_STR = "v" + MIN_VERSION.ToString() + (MAX_VERSION != MIN_VERSION ? ".." + MAX_VERSION : string.Empty) + ((ConnectOptions.Length == 0) ? string.Empty : " " + ConnectOptions); //"v100..151";
 
-        private Task ConnectTask { get; set; }
+        private static Task ConnectTask { get; set; }
 
-        private bool IsSocketConnected() 
+        private static bool IsSocketConnected()
         {
             if (TcpClient is null) return false;
             else
                 return TcpClient.Connected;
         }
 
-        public bool GatewayConnected { get; private set; } = true;
+        public static bool GatewayConnected { get; private set; } = true;
 
         /// <summary>
         /// usfarm
         /// </summary>
-        public readonly ConcurrentDictionary<string, ConnectionStatus> ServerList = new ConcurrentDictionary<string, ConnectionStatus>();
+        public static readonly ConcurrentDictionary<string, ConnectionStatus> ServerList = new ConcurrentDictionary<string, ConnectionStatus>();
 
-        public ConnectionStatus ApiStatus { get; private set; } = ConnectionStatus.Disconnected;
+        public static ConnectionStatus ApiStatus { get; private set; } = ConnectionStatus.Disconnected;
 
-        public bool Connected => ApiStatus == ConnectionStatus.Connected && GatewayConnected;
+        public static bool Connected => ApiStatus == ConnectionStatus.Connected && GatewayConnected;
 
-        public void Connect(int clientId = 180, int port = 15062, string address = "127.0.0.1", int timeout = 1000)
+        public static void Connect(int clientId = 180, int port = 15062, string address = "127.0.0.1", int timeout = 1000)
         {
             if (ApiStatus == ConnectionStatus.Disconnected || Hostname != address || Port != port || ClientId != clientId)
             {
@@ -103,15 +93,15 @@ namespace Pacmio.IB
             }
             else
             {
-                OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "Connect already established!");
+                Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Connect already established!");
             }
         }
 
-        private void ConnectWorker()
+        private static void ConnectWorker()
         {
-            OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Reset and prepare connectivity resource."); // If it is connected
+            Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Reset and prepare connectivity resource."); // If it is connected
             ResetAll();
-            OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Start connect: " + Hostname + ":" + Port); // If it is connected
+            Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Start connect: " + Hostname + ":" + Port); // If it is connected
 
             TcpClient = new TcpClient()
             {
@@ -121,10 +111,10 @@ namespace Pacmio.IB
                 SendTimeout = Timeout,
             };
 
-            try 
+            try
             {
                 TcpClient.Connect(Hostname, Port);
-                OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "TCP Client is connected: " + Hostname + ":" + Port); // If it is connected
+                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "TCP Client is connected: " + Hostname + ":" + Port); // If it is connected
 
                 int j = 0;
                 while (!IsSocketConnected() && j < Timeout)
@@ -156,7 +146,7 @@ namespace Pacmio.IB
                     }
                     catch (Exception e) when (e is IOException || e is InvalidOperationException)
                     {
-                        OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
+                        Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
                         Disconnect.Start();
                     }
 
@@ -183,32 +173,32 @@ namespace Pacmio.IB
                     {
 
 
-                        OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
+                        Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
                     }
                 }
 
                 if (j > Timeout - 2)
                 {
-                    OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Timeout. Failed to connect.");
+                    Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Timeout. Failed to connect.");
                     ResetAll();
                 }
             }
-            catch (SocketException e) 
+            catch (SocketException e)
             {
                 ResetAll();
-                OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Socket Error: " + e.Message);
+                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Socket Error: " + e.Message);
                 return;
             }
         }
 
-        public Task Disconnect => new Task(() =>
+        public static Task Disconnect => new Task(() =>
         {
             ScannerManager.CancelAll();
             if (ApiStatus == ConnectionStatus.Connected || ApiStatus == ConnectionStatus.Connecting)
             {
-                OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now);
+                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now);
                 ResetAll();
-                OnConnectedHandler?.Invoke(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now);
+                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now);
                 /*
                 foreach(var item in TicksList) 
                 {
@@ -220,7 +210,7 @@ namespace Pacmio.IB
             }
         });
 
-        private void ResetAll()
+        private static void ResetAll()
         {
             IsRequestIdValid = false;
 

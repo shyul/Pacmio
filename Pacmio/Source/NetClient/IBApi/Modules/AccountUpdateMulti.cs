@@ -12,12 +12,12 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsActiveAccountUpdateMulti => ActiveRequestContains(RequestType.RequestAccountUpdatesMulti);
+        public static bool IsActiveAccountUpdateMulti => ActiveRequestContains(RequestType.RequestAccountUpdatesMulti);
         //private int RequestIdAccountUpdateMulti = -1;
 
-        public void RequestAccountUpdateMulti(string account = "", string modelCode = "", bool ledgerAndNLV = false)
+        public static void RequestAccountUpdateMulti(string account = "", string modelCode = "", bool ledgerAndNLV = false)
         {
             if (!IsActiveAccountUpdateMulti && Connected)
             {
@@ -34,7 +34,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void Parse_AccountUpdateMulti(string[] fields)
+        private static void Parse_AccountUpdateMulti(string[] fields)
         {
             Console.WriteLine(fields[3] + " >> Summary Item: " + fields.ToStringWithIndex());
             if (fields[1] == "1")
@@ -51,7 +51,7 @@ namespace Pacmio.IB
                 */
             }
         }
-        private void Parse_AccountUpdateMultiEnd(string[] fields)
+        private static void Parse_AccountUpdateMultiEnd(string[] fields)
         {
             /*
                 int msgVersion = ReadInt();

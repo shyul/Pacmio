@@ -15,22 +15,22 @@ using IbXmlScannerParameter;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsActiveRequestScannerParameters = false;
+        private static bool IsReady_ScannerParameters { get; set; } = true;
 
-        public ScanParameterResponse ScanParameters { get; set; }
+        public static ScanParameterResponse ScanParameters { get; set; }
 
-        public void RequestScannerParameters()
+        internal static void SendRequest_ScannerParameters()
         {
-            if (Connected && !IsActiveRequestScannerParameters)
+            if (Connected && IsReady_ScannerParameters)
             {
-                IsActiveRequestScannerParameters = true;
+                IsReady_ScannerParameters = false;
                 SendRequest(new string[] { RequestType.RequestScannerParameters.Param(), "1" });
             }
         }
 
-        private void Parse_ScannerParameters(string[] fields)
+        private static void Parse_ScannerParameters(string[] fields)
         {
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
             string msgVersion = fields[1];
@@ -38,8 +38,6 @@ namespace Pacmio.IB
             {
                 string xmlString = fields[2];
                 ScanParameters = Serialization.DeserializeXML<ScanParameterResponse>(xmlString);
-
-               
 
                 //Console.WriteLine("\n\n" + xmlString);
 
@@ -96,7 +94,7 @@ namespace Pacmio.IB
 
             Console.WriteLine("\n\nmessage version = " + msgVersion);
 
-            IsActiveRequestScannerParameters = false;
+            IsReady_ScannerParameters = true;
         }
     }
 }

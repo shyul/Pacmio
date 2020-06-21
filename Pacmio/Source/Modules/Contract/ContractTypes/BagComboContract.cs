@@ -63,9 +63,9 @@ namespace Pacmio
 
         public override string TypeApiCode => "BAG";
 
-        public override bool RequestQuote(string genericTickList) => false;
+        public override bool Request_MarketTicks(string genericTickList) => false;
 
-        public override void CancelQuote() { }
+        public override void Cancel_MarketTicks() { }
 
         /// <summary>
         /// ############################## Can be simplified

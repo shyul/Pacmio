@@ -22,26 +22,26 @@ using System.Text.RegularExpressions;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         #region Request
-        private void SendRequest(string[] paramsList)
+        private static void SendRequest(string[] paramsList)
         {
             if (ApiStatus == ConnectionStatus.Connected)
                 sendDataBuffer.Enqueue(paramsList);
         }
 
-        private void SendRequest(List<string> paramsList) => SendRequest(paramsList.ToArray());
+        private static void SendRequest(List<string> paramsList) => SendRequest(paramsList.ToArray());
 
-        public int RequestId { get; private set; }
-        public bool IsRequestIdValid { get; private set; } = false;
+        public static int RequestId { get; private set; }
+        public static bool IsRequestIdValid { get; private set; } = false;
 
-        private readonly ConcurrentDictionary<int, RequestType> ActiveRequestIds = new ConcurrentDictionary<int, RequestType>();
+        private static readonly ConcurrentDictionary<int, RequestType> ActiveRequestIds = new ConcurrentDictionary<int, RequestType>();
 
-        private bool ActiveRequestContains(RequestType type) => ActiveRequestIds.Values.Contains(type);
-        private bool ActiveRequestContains(int reqId) => ActiveRequestIds.ContainsKey(reqId);
+        private static bool ActiveRequestContains(RequestType type) => ActiveRequestIds.Values.Contains(type);
+        private static bool ActiveRequestContains(int reqId) => ActiveRequestIds.ContainsKey(reqId);
 
-        private (int ReqId, string ReqTypeNum) RegisterRequest(RequestType type)
+        private static (int ReqId, string ReqTypeNum) RegisterRequest(RequestType type)
         {
             if (IsRequestIdValid)
             {
@@ -59,7 +59,7 @@ namespace Pacmio.IB
                 throw new Exception("Invalid RequestId, Please ask IB to get the next valid id.");
         }
 
-        private (bool valid, RequestType type) RemoveRequest(int requestId, bool cancel = true)
+        private static (bool valid, RequestType type) RemoveRequest(int requestId, bool cancel = true)
         {
             RequestType type = RequestType.RequestGlobalCancel;
             lock (ActiveRequestIds)
@@ -87,7 +87,7 @@ namespace Pacmio.IB
             return (false, type);
         }
 
-        private void RemoveRequest(int requestId, RequestType type)
+        private static void RemoveRequest(int requestId, RequestType type)
         {
             lock (ActiveRequestIds)
             {
@@ -110,7 +110,7 @@ namespace Pacmio.IB
             }
         }
 
-        private void RemoveRequest(RequestType type)
+        private static void RemoveRequest(RequestType type)
         {
             lock (ActiveRequestIds)
             {
@@ -130,12 +130,12 @@ namespace Pacmio.IB
         #region Send Data
 
         private const char MSG_EOL = '\0';
-        private Task SendTask { get; set; }
-        private readonly ConcurrentQueue<string[]> sendDataBuffer = new ConcurrentQueue<string[]>();
-        private bool SendDataEmpty => sendDataBuffer.IsEmpty;
-        private void FlushSendData() { lock (sendDataBuffer) while (!SendDataEmpty) sendDataBuffer.TryDequeue(out _); }
+        private static Task SendTask { get; set; }
+        private static readonly ConcurrentQueue<string[]> sendDataBuffer = new ConcurrentQueue<string[]>();
+        private static bool SendDataEmpty => sendDataBuffer.IsEmpty;
+        private static void FlushSendData() { lock (sendDataBuffer) while (!SendDataEmpty) sendDataBuffer.TryDequeue(out _); }
 
-        private void Send(string[] paramsList) // 50 request per second
+        private static void Send(string[] paramsList) // 50 request per second
         {
             StringBuilder sb = new StringBuilder("0000"); // Clear 4 byte (octet) for request length.
 
@@ -156,7 +156,7 @@ namespace Pacmio.IB
         /// <summary>
         /// =============================================================> Need to make a better pace
         /// </summary>
-        private void SendWorker()
+        private static void SendWorker()
         {
             int paceCount = 0, timer = 0;
             while (!IsCancelled)
@@ -188,14 +188,14 @@ namespace Pacmio.IB
                     }
                     catch (Exception e) when (e is IOException || e is InvalidOperationException)
                     {
-                        OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
+                        Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
                         Disconnect.Start();
                         break;
                     }
                 }
                 else if (!IsSocketConnected())
                 {
-                    OnConnectedHandler?.Invoke(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
+                    Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();
                     break;
                 }

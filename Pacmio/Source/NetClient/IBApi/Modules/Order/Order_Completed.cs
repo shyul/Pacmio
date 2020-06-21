@@ -15,20 +15,18 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public bool IsReady_CompletedOrder => Connected && requestId_CompletedOrder == -1;
-        private int requestId_CompletedOrder = -1;
+        internal static bool IsReady_CompletedOrders { get; set; } = true;
 
-        public void SendRequest_CompletedOrder(bool apiOnly = false)
+        internal static void SendRequest_CompletedOrders(bool apiOnly = false)
         {
-            if (IsReady_ExecutionData)
+            if (Connected && IsReady_CompletedOrders)
             {
-                (int requestId, string requestType) = RegisterRequest(RequestType.ReqCompletedOrders);
-                requestId_ExecutionData = requestId;
+                IsReady_CompletedOrders = false;
 
                 SendRequest(new string[] {
-                    requestType,
+                    RequestType.ReqCompletedOrders.Param(),
                     apiOnly.Param()
                 });
             }
@@ -39,16 +37,11 @@ namespace Pacmio.IB
         /// (93)"9223372036854775807"-(94)"20200427-13:04:53 PST"-(95)"Rejected by System: The exchange is closed."
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_CompletedOrder(string[] fields)
+        private static void Parse_CompletedOrder(string[] fields)
         {
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[23].ToInt32();
-
-            OrderInfo od = PendingOrder.ContainsKey(orderId) ? PendingOrder[orderId] : new OrderInfo() { OrderId = orderId };
-            od.PermId = permId;
-            od = OrderManager.GetOrAdd(od);
-
-            if (PendingOrder.ContainsKey(orderId) && permId > 0) PendingOrder.Remove(orderId);
+            OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
 
             if (od.Contract is null)
             {
@@ -145,14 +138,18 @@ namespace Pacmio.IB
             OrderManager.Update(od);
         }
 
-        private void Parse_CompletedOrdersEnd(string[] fields)
+        private static void Parse_CompletedOrdersEnd(string[] fields)
         {
-            requestId_CompletedOrder = -1;
+            IsReady_CompletedOrders = true;
             Console.WriteLine("\nCompleted Orders End: " + fields.ToStringWithIndex());
             OrderManager.Update(); // TODO: Tranmit message
         }
 
-        private void Parse_VerifyCompleted(string[] fields)
+        /// <summary>
+        /// TODO: Parse_VerifyCompleted(string[] fields)
+        /// </summary>
+        /// <param name="fields"></param>
+        private static void Parse_VerifyCompleted(string[] fields)
         {
             Console.WriteLine("\nVerify Completed Status: " + fields.ToStringWithIndex());
         }

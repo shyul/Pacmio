@@ -88,8 +88,8 @@ namespace Pacmio
             DownloadCancellationTokenSource = cts;
             DownloadProgress = progress;
 
-            if (period.IsCurrent && Root.IBClient.Connected)
-                bt.Contract.RequestQuote("236,375");
+            if (period.IsCurrent && IB.Client.Connected)
+                bt.Contract.Request_MarketTicks("236,375");
 
             LocalRequestAction.Enqueue(new Action(() => {
                 bt.LoadJsonFileToFileData(); // Blocking the process first
@@ -289,7 +289,7 @@ namespace Pacmio
 
             var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
 
-            if (bfi_valid && Root.IBConnected && Root.IBClient.HistoricalData_Connected) // && HistoricalData_Connected)
+            if (bfi_valid && Root.IBConnected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
             {
                 Console.WriteLine("RequestHistoricalData | Initial Request: " + period);
 
@@ -310,10 +310,10 @@ namespace Pacmio
                 {
 
                 Download_HistoricalDataHeadTimestamp:
-                    Root.IBClient.SendRequest_HistoricalDataHeadTimestamp(bt);
+                    IB.Client.SendRequest_HistoricalDataHeadTimestamp(bt);
 
                     time = 0;
-                    while (!Root.IBClient.IsReady_HistoricalDataHeadTimestamp)
+                    while (!IB.Client.IsReady_HistoricalDataHeadTimestamp)
                     {
                         time++;
                         Thread.Sleep(100);
@@ -322,13 +322,13 @@ namespace Pacmio
 
                         if (time > DownloadTimeout) // Handle Time out here.
                         {
-                            Root.IBClient.SendCancel_HistoricalHeadDataTimestamp();
+                            IB.Client.SendCancel_HistoricalHeadDataTimestamp();
                             Thread.Sleep(100);
                             goto Download_HistoricalDataHeadTimestamp;
                         }
                         else if (IsCancellationRequested)
                         {
-                            Root.IBClient.SendCancel_HistoricalHeadDataTimestamp();
+                            IB.Client.SendCancel_HistoricalHeadDataTimestamp();
                             goto End;
                         }
                     }
@@ -359,19 +359,19 @@ namespace Pacmio
                 }
 
                 time = 0;
-                while (!Root.IBClient.IsReady_HistoricalData)
+                while (!IB.Client.IsReady_HistoricalData)
                 {
                     time++;
                     Thread.Sleep(100);
                     if (time > DownloadTimeout) // Handle Time out here.
                     {
-                        Root.IBClient.SendCancel_HistoricalData();
+                        IB.Client.SendCancel_HistoricalData();
                         Thread.Sleep(100);
                         break;
                     }
                     else if (IsCancellationRequested)
                     {
-                        Root.IBClient.SendCancel_HistoricalData();
+                        IB.Client.SendCancel_HistoricalData();
                         goto End;
                     }
                 }
@@ -381,16 +381,16 @@ namespace Pacmio
                 {
                     Console.WriteLine("RequestHistoricalData: | Sending Api Request: " + api_request_pd);
 
-                    Root.IBClient.LastRequestedHistoricalDataPeriod = api_request_pd;
+                    IB.Client.LastRequestedHistoricalDataPeriod = api_request_pd;
 
                     // We will download, but won't log the period if the stop may extended to the future.
-                    Root.IBClient.IsLoggingLastRequestedHistoricalDataPeriod = api_request_pd.Stop < DateTime.Now.AddDays(-1);
+                    IB.Client.IsLoggingLastRequestedHistoricalDataPeriod = api_request_pd.Stop < DateTime.Now.AddDays(-1);
 
                 Download_HistoricalData:
-                    isModified = Root.IBClient.SendRequest_HistoricalData(bt, bfi.DurationString, api_request_pd.Stop);
+                    isModified = IB.Client.SendRequest_HistoricalData(bt, bfi.DurationString, api_request_pd.Stop);
 
                     time = 0; // Wait the last transmit is over.
-                    while (!Root.IBClient.IsReady_HistoricalData)
+                    while (!IB.Client.IsReady_HistoricalData)
                     {
                         time++;
                         Thread.Sleep(100);
@@ -399,13 +399,13 @@ namespace Pacmio
 
                         if (time > DownloadTimeout) // Handle Time out here.
                         {
-                            Root.IBClient.SendCancel_HistoricalData();
+                            IB.Client.SendCancel_HistoricalData();
                             Thread.Sleep(100);
                             goto Download_HistoricalData;
                         }
                         else if (IsCancellationRequested)
                         {
-                            Root.IBClient.SendCancel_HistoricalData();
+                            IB.Client.SendCancel_HistoricalData();
                             goto End;
                         }
                     }

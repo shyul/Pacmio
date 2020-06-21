@@ -13,7 +13,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Runtime.Serialization;
-using Pacmio.IB;
 using Xu;
 
 namespace Pacmio
@@ -23,7 +22,7 @@ namespace Pacmio
     /// This type is to be serialized into file blobs
     /// </summary>
     [Serializable, DataContract(Name = "Stock")]
-    public class Stock : Contract, ITradable
+    public class Stock : Contract, ITradable, IMarketDepth
     {
         #region Ctor
 
@@ -82,28 +81,20 @@ namespace Pacmio
 
         #endregion Identification
 
-        #region Status and Market Data
-
-        // https://interactivebrokers.github.io/tws-api/tick_types.html
-        public override bool RequestQuote(string param)
-        {
-            //string genericTickList = "236,375";  // 292 is news
-            return Root.IBClient.SendRequest_MarketTicks(this, param);
-        }
-
-        public override void CancelQuote()
-        {
-            MarketData.NetClient.SendCancel_MarketTicks(MarketData.TickerId);
-        }
-
-        #endregion Status and Market Data
-
         #region Order and Trade
 
         [DataMember]
         public bool AutoExchangeRoute { get; set; } = true;
 
         #endregion
+
+        #region Status and Market Data
+
+        public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
+
+        public virtual void Cancel_MarketDepth() { }
+
+        #endregion Status and Market Data
 
         #region Equality
 

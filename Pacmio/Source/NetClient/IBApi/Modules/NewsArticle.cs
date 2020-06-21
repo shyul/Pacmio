@@ -14,13 +14,13 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// (0)"84"-(1)"90010000"-(2)"BRFG"-(3)"BRFG$0bc6e1ef"
         /// </summary>
         /// <param name="value"></param>
-        public void RequestNewsArticle(string providerCode, string articleId, ICollection<(string, string)> newsArticleOptions = null)
+        public static void RequestNewsArticle(string providerCode, string articleId, ICollection<(string, string)> newsArticleOptions = null)
         {
             if (Connected)
             {
@@ -40,7 +40,7 @@ namespace Pacmio.IB
         /// (0)"83"-(1)"90010000"-(2)"0"-(3)"<html><body><p><strong>IBM (IBM -6%)</strong> is trading lower following its Q3 earnings report last night. It was a $0.02 beat with a slight revenue miss ($18.03 bln vs $18.29 bln consensus). Revs were down 3.9% yr/yr. IBM also reaffirmed full-year non-GAAP EPS guidance of at least $12.80 and reaffirmed free cash flow of approximately $12 bln. Gross margin slipped a bit to 46.2% from 47.0% in Q2 and 46.9% in the prior year period. </p><p>Global Business Services (GBS) revenue was up over 2%, led by consulting primarily for next-generation application offerings and an application modernization for the cloud. However, the Global Technology Services (GTS) segment saw revenue decline 4% as IBM exits lower margin offerings. Also, IBM was hurt by lower-than-expected volumes in certain markets and some multinational clients. Systems revenue was down 14%, primarily reflecting lower mainframe sales.  </p><p>Every quarter, the market is always scrutinizing IBM's cloud performance. Cloud &amp; Cognitive Software revenue rose 6.4% to $5.3 bln, a nice acceleration from +3.2% in Q2. This was led by security, IoT, data and AI platforms, and hybrid cloud. Cloud and data platforms, were up 17% while cognitive applications were up 4%. Cloud revenue of $5.0 bln in Q3 was up 11%. A key metric investors watch is cloud revenue over past 12 months and that came in at $20 bln, up from $19.5 bln in Q2. </p><p>It's important to mention that IBM finally closed on its purchase of Red Hat on July 9. As we have mentioned before, IBM made a huge cloud bet with this deal. The rationale for the purchase has been that the bulk (80%) of client business has yet to move to the cloud, held back by the proprietary nature of today's cloud market. IBM's huge scale in combination with the largest open source software provider (Red Hat) seems well poised to tackle this opportunity.  </p><p>This was the first quarter with Red Hat in the fold. As such, it was good to see IBM reaffirm and not lower guidance now that Red Hat is included and IBM is digging into it. IBM provided post-Red Hat guidance in early August and it's sticking with that, so that's good to see. </p><p>A big problem for IBM is that it has historically been a hardware-based, large mainframe type business, but the world is changing. Enterprise customers have been moving to the cloud and network virtualization. Also, competition has gotten more intense over the years as younger upstarts have been built from the ground up on cloud, mobility, virtualization etc. For example, Amazon (AMZN) with its AWS offering, and Microsoft's (MSFT) Azure have been very successful in cloud computing and IBM has been trying to play catch up.  </p><p>In sum, cloud revenue was decent, but mainframe sales and traditional services revenue were down. Total revenue was a miss and gross margin saw some compression. After a $0.09 beat last quarter, a $0.02 beat this time is a bit disappointing. All of this is weighing on the stock today. </p><p>Investors understand that it's going to take a while for IBM to catch up with its cloud computing rivals. The Red Hat acquisition seems like a great step in that direction, but the full benefit of this combination will take some time to be fully realized. It seems investors are willing to give IBM the benefit of the doubt for now but with five consecutive revenue declines, we sense that their patience is being tested. </p><BR><BR>Copyright (C) 2019 Briefing.com</body></html>"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_NewsArticle(string[] fields)
+        private static void Parse_NewsArticle(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
         }

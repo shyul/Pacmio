@@ -13,6 +13,8 @@ using System.Text;
 using System.IO;
 using Xu;
 using System.Threading.Tasks;
+using System.Security.Policy;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Pacmio
 {
@@ -33,12 +35,14 @@ namespace Pacmio
 
         public static int Count => List.Count;
 
-        public static OrderInfo Get(int permId)
+        public static OrderInfo GetOrAdd(int permId)
         {
-            if (List.ContainsKey(permId)) 
-                return List[permId];
-            else 
-                return null;
+            if (!List.ContainsKey(permId))
+            {
+                List.TryAdd(permId, new OrderInfo() { PermId = permId });
+            }
+
+            return List[permId];
         }
 
         public static OrderInfo GetOrAdd(OrderInfo od)
@@ -53,6 +57,43 @@ namespace Pacmio
             return List[od.PermId];
         }
 
+        #region Active List
+
+        private static readonly ConcurrentDictionary<int, OrderInfo> ActiveList = new ConcurrentDictionary<int, OrderInfo>();
+
+        public static bool AddNew(OrderInfo od) 
+        {
+            Account ac = od.Account;
+            Contract c = od.Contract;
+
+            bool valid = ActiveList.TryAdd(od.OrderId, od);
+            ac.CurrentOrders[c] = od;
+
+            return valid;
+        }
+
+        public static OrderInfo GetOrAdd(int orderId, int permId)
+        {
+            if (ActiveList.ContainsKey(orderId))
+            {
+                OrderInfo od = ActiveList[orderId];
+                if (permId > 0)
+                {
+                    od.PermId = permId;
+                    ActiveList.TryRemove(orderId, out _);
+                    return GetOrAdd(od);
+                }
+                else
+                    return od;
+            }
+            else
+            {
+                return GetOrAdd(permId);
+            }
+        }
+
+        #endregion Active List
+
         /*
         public static IEnumerable<OrderInfo> GetActiveOrder(Account ac, Contract c)
         {
@@ -64,12 +105,17 @@ namespace Pacmio
 
         public static void PlaceOrder(OrderInfo od) 
         {
-            Account ac = od.Account;
-            Contract c = od.Contract;
+            if(od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable) 
+            {
+                throw new Exception("There is an on-going order for this contract at the same account!");
+            }
 
-            Root.IBClient.PlaceOrder(od);
+            IB.Client.PlaceOrder(od);
+        }
 
-            ac.CurrentOrders[c] = od;
+        public static void ModifyOrder(OrderInfo od)
+        {
+
         }
 
         public static void CancelOrder(OrderInfo od) 
@@ -77,7 +123,7 @@ namespace Pacmio
         
         }
 
-        public static void CancelAllOrders() => Root.IBClient.SendRequest_GlobalCancel();
+        public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
 
         public static void CloseAllPositions()
         {
@@ -88,11 +134,19 @@ namespace Pacmio
 
         #endregion Order Actions
 
+        #region Data Requests
+
+        public static void Request_OpenOrders() => IB.Client.SendRequest_OpenOrders();
+
+        public static void Request_AllOpenOrders() => IB.Client.SendRequest_AllOpenOrders();
+
+        public static void Request_CompleteOrders(bool apiOnly = false) => IB.Client.SendRequest_CompletedOrders(apiOnly);
+
         #region Updates
 
         public static DateTime UpdatedTime { get; set; }
 
-        public static void Update(OrderInfo od) 
+        public static void Update(OrderInfo od)
         {
             UpdatedTime = DateTime.Now;
         }
@@ -103,6 +157,8 @@ namespace Pacmio
         }
 
         #endregion Updates
+
+        #endregion Data Requests
 
         #region File system
 

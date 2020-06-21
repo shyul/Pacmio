@@ -21,9 +21,9 @@ using Pacmio;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        private void Parse_Errors(string[] fields)
+        private static void Parse_Errors(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1000);
             if (ActiveRequestContains(requestId))

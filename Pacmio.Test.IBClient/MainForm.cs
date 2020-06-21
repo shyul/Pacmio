@@ -28,14 +28,17 @@ namespace TestClient
             ContractTest.InitializeTable(GridViewContractSearchResult);
             OrderTest.InitializeTable(GridViewAllOrders);
             TradeTest.InitializeTable(GridViewTradeTable);
-            AccountManager.UpdatedHandler += AccountUpdatedHandler;
-            AccountManager.UpdatedHandler += PositionUpdatedHandler;
+
             */
+
+            AccountManager.UpdatedHandler += AccountUpdatedHandler;
+            //AccountManager.UpdatedHandler += PositionUpdatedHandler;
+
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
             ToggleConnect();
 
-            Root.IBClient.OnConnectedHandler += IBClientOnConnectedHandler;
+            Root.OnIBConnectedHandler += IBClientOnConnectedHandler;
 
             TradeLogManager.UpdatedHandler += TradeTableHandler;
 
@@ -87,12 +90,10 @@ namespace TestClient
 
         private void BtnConnect_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null) return;
-
             Root.Settings.IBServerAddress = TextBoxIPAddress.Text;
 
             btnConnect.Enabled = false;
-            if (Root.IBClient.Connected)
+            if (Root.IBConnected)
             {
                 Root.IBClientStop();
             }
@@ -124,21 +125,19 @@ namespace TestClient
 
         private void BtnAccountSummary_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null) return;
-            Root.IBClient.SendRequest_AccountSummary();
+            AccountManager.Request_AccountSummary();
         }
 
 
         private void BtnRequestPostion_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null) return;
-            Root.IBClient.SendRequest_Postion();
+            AccountManager.Request_Postion();
         }
 
         private void BtnGetOpenOrders_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null) return;
-            Root.IBClient.SendRequest_AllOpenOrders();
+            OrderManager.Request_AllOpenOrders();
+            //OrderManager.Request_OpenOrders();
         }
 
         private void CheckBoxChartToCurrent_CheckedChanged(object sender, EventArgs e)
@@ -162,7 +161,7 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                //if (CheckBoxChartToCurrent.Checked && Root.IBClient.Connected)
+                //if (CheckBoxChartToCurrent.Checked && Client.Connected)
                 // ContractTest.ActiveContract.RequestQuote("236,375");
 
                 BarFreq barFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
@@ -188,6 +187,7 @@ namespace TestClient
 
         }
 
+        #region Simulation
 
         private void BtnTestScalping_Click(object sender, EventArgs e)
         {
@@ -199,16 +199,18 @@ namespace TestClient
 
         }
 
+        #endregion Simulation
+
         private void BtnRequestHistoricalTicks_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null || !Root.IBClient.Connected || !ValidateSymbol()) return;
+            if (!Root.IBConnected || !ValidateSymbol()) return;
 
             Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
 
-            Root.IBClient.Request_HistoricalTick(ContractTest.ActiveContract, pd);
-            //Root.IBClient.SendRequest_HistoricalTick(ContractTest.ActiveContract, DateTime.Now.AddHours(-6));
+            //Client.Request_HistoricalTick(ContractTest.ActiveContract, pd);
+            //Client.SendRequest_HistoricalTick(ContractTest.ActiveContract, DateTime.Now.AddHours(-6));
         }
 
         private void BtnAlignCharts_Click(object sender, EventArgs e) => ChartList.ResetAllChartsPointer();
@@ -262,7 +264,7 @@ namespace TestClient
 
         private void BtnRequestScanner_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null || !Root.IBClient.Connected) return;
+            if (!Root.IBConnected) return;
             ScannerInfo info_MOST_ACTIVE = new ScannerInfo()
             {
                 //Code = "MOST_ACTIVE",
@@ -297,8 +299,8 @@ namespace TestClient
 
         private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null) return;
-            Root.IBClient.RequestScannerParameters();
+            if (!Root.IBConnected) return;
+            ScannerManager.Request_ScannerParameters();
         }
 
 
@@ -313,14 +315,14 @@ namespace TestClient
             foreach (Contract c in ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null))
             {
                 Console.WriteLine("Request Realtime Bars: " + c.ToString());
-                Root.IBClient.SendRequest_RealTimeBars(c);
+                c.Request_RealTimeBars();
             }
         }
 
         private void BtnTestRealTimeBars_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null || !ValidateSymbol()) return;
-            Root.IBClient.SendRequest_RealTimeBars(ContractTest.ActiveContract);
+            if (!ValidateSymbol()) return;
+            ContractTest.ActiveContract.Request_RealTimeBars();
         }
 
         private void BtnRequestPnL_Click(object sender, EventArgs e)
@@ -340,28 +342,27 @@ namespace TestClient
         private void TestMassOrder_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected) return;
-            Root.IBClient.SendRequest_AccountSummary();
+            AccountManager.Request_AccountSummary();
 
             string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
             var list = ContractList.GetOrFetch(symbols, "US", null, null);
             string tickList = TextBoxGenericTickList.Text;
             foreach (Contract c in list)
             {
-                c.RequestQuote(tickList);
+                c.Request_MarketTicks(tickList);
             }
 
         }
 
         private void BtnGlobalCancel_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
-            Root.IBClient.SendRequest_GlobalCancel();
+            OrderManager.CancelAllOrders();
         }
 
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected) return;
-            Root.IBClient.SendRequest_ExecutionData();
+            TradeLogManager.Request_Log();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
@@ -498,7 +499,7 @@ namespace TestClient
 
             var toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
 
-            foreach(Stock s in toDelete) 
+            foreach (Stock s in toDelete)
             {
                 ContractList.Remove(s.Info);
                 Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
@@ -650,8 +651,8 @@ namespace TestClient
 
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.RequestQuote(TextBoxGenericTickList.Text);
+            if (!Root.IBConnected || !ValidateSymbol()) return;
+            ContractTest.ActiveContract.Request_MarketTicks(TextBoxGenericTickList.Text);
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
@@ -675,7 +676,7 @@ namespace TestClient
 
             foreach (Contract c in cList)
             {
-                Console.WriteLine("MarketQuote: " + c.RequestQuote(tickList));
+                Console.WriteLine("MarketQuote: " + c.Request_MarketTicks(tickList));
 
                 GridView.MarketDataTable.Add(c.MarketData);
 
@@ -687,8 +688,13 @@ namespace TestClient
 
         private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
         {
-            if (Root.IBClient is null || !ValidateSymbol()) return;
-            Console.WriteLine("MarketDepth: " + Root.IBClient.SendRequest_MarketDepth(ContractTest.ActiveContract));
+            if (!Root.IBConnected || !ValidateSymbol()) return;
+
+            if (ContractTest.ActiveContract is IMarketDepth imd)
+            {
+
+                Console.WriteLine("MarketDepth: " + imd.Request_MarketDepth());
+            }
         }
 
         #endregion Market Data
@@ -720,7 +726,7 @@ namespace TestClient
                     DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
                 }
 
-                Root.IBClient.PlaceOrder(od, CheckBoxOrderWhatIf.Checked);
+                OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
             }
         }
 
@@ -778,14 +784,13 @@ namespace TestClient
                     od.AuxPrice = TextBoxOrderSettingLimitPrice.Text.ToInt32();
                 }
 
-                Root.IBClient.PlaceOrder(od, false, true);
+                Client.PlaceOrder(od, false, true);
             }*/
         }
 
         private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
         {
-            if (Root.IBConnected && Root.IBClient.IsReady_CompletedOrder)
-                Root.IBClient.SendRequest_CompletedOrders(false);
+            OrderManager.Request_CompleteOrders(false);
         }
 
         #endregion Order

@@ -16,15 +16,15 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        private readonly ConcurrentDictionary<int, ScannerInfo> ScanRequestList = new ConcurrentDictionary<int, ScannerInfo>();
+        private static readonly ConcurrentDictionary<int, ScannerInfo> ScanRequestList = new ConcurrentDictionary<int, ScannerInfo>();
 
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"TOP_PERC_GAIN"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=1000000;"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
         // Received Error: (0)"4"-(1)"2"-(2)"-1"-(3)"2106"-(4)"HMDS data farm connection is OK:ushmds"
-        public void RequestScannerSubscription(ScannerInfo info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
+        internal static void SendRequest_ScannerSubscription(ScannerInfo info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
             double abovePrice = double.NaN, double belowPrice = double.NaN, double aboveVolume = double.NaN, double marketCapAbove = double.NaN, double marketCapBelow = double.NaN,
             bool excludeConvertible = false, string scannerSettingPairs = "",
             string moodyRatingAbove = "", string moodyRatingBelow = "", string spRatingAbove = "", string spRatingBelow = "",
@@ -37,7 +37,6 @@ namespace Pacmio.IB
 
                 info.RequestId = requestId;
                 ScanRequestList[requestId] = info;
-
 
                 ScannerManager.GetOrAdd(info);
 
@@ -76,14 +75,14 @@ namespace Pacmio.IB
             }
         }
 
-        public void CancelScannerSubscription(int requestId) 
+        public static void SendCancel_ScannerSubscription(int requestId) 
         {
             ScanRequestList.TryRemove(requestId, out _);
             RemoveRequest(requestId, RequestType.RequestScannerSubscription);
             // Emit update cancelled.
         }
 
-        private void ParseError_ScannerSubscription(string[] fields)
+        private static void ParseError_ScannerSubscription(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
             string message = fields[4];
@@ -109,7 +108,7 @@ namespace Pacmio.IB
         /// Received ScannerData: (0)"20"-(1)"3"-(2)"1"-(3)"15"-(4)"0"-(5)"32845340"-(6)"CHOB"-(7)"STK"-(8)""-(9)"0"-(10)""-(11)"SMART"-(12)"USD"-(13)"CHOB"-(14)"NOINFO"-(15)"NOINFO"-(16)""-(17)""-(18)""-(19)""-(20)"1"-(21)"30214186"-(22)"MTWD"-(23)"STK"-(24)""-(25)"0"-(26)""-(27)"SMART"-(28)"USD"-(29)"MTWD"-(30)"NOINFO"-(31)"NOINFO"-(32)""-(33)""-(34)""-(35)""-(36)"2"-(37)"131342699"-(38)"ADGS"-(39)"STK"-(40)""-(41)"0"-(42)""-(43)"SMART"-(44)"USD"-(45)"ADGS"-(46)"NOINFO"-(47)"NOINFO"-(48)""-(49)""-(50)""-(51)""-(52)"3"-(53)"45104157"-(54)"HGGGQ"-(55)"STK"-(56)""-(57)"0"-(58)""-(59)"SMART"-(60)"USD"-(61)"HGGGQ"-(62)"NOINFO"-(63)"NOINFO"-(64)""-(65)""-(66)""-(67)""-(68)"4"-(69)"76642648"-(70)"CGNH"-(71)"STK"-(72)""-(73)"0"-(74)""-(75)"SMART"-(76)"USD"-(77)"CGNH"-(78)"NOINFO"-(79)"NOINFO"-(80)""-(81)""-(82)""-(83)""-(84)"5"-(85)"383302038"-(86)"GBLTF"-(87)"STK"-(88)""-(89)"0"-(90)""-(91)"SMART"-(92)"USD"-(93)"GBLTF"-(94)"GBLTF"-(95)"GBLTF"-(96)""-(97)""-(98)""-(99)""-(100)"6"-(101)"282012636"-(102)"NVOS"-(103)"STK"-(104)""-(105)"0"-(106)""-(107)"SMART"-(108)"USD"-(109)"NVOS"-(110)"NVOS"-(111)"NVOS"-(112)""-(113)""-(114)""-(115)""-(116)"7"-(117)"348717254"-(118)"BYSD"-(119)"STK"-(120)""-(121)"0"-(122)""-(123)"SMART"-(124)"USD"-(125)"BYSD"-(126)"NOINFO"-(127)"NOINFO"-(128)""-(129)""-(130)""-(131)""-(132)"8"-(133)"166175511"-(134)"HKBT"-(135)"STK"-(136)""-(137)"0"-(138)""-(139)"SMART"-(140)"USD"-(141)"HKBT"-(142)"NOINFO"-(143)"NOINFO"-(144)""-(145)""-(146)""-(147)""-(148)"9"-(149)"75216761"-(150)"MYFT"-(151)"STK"-(152)""-(153)"0"-(154)""-(155)"SMART"-(156)"USD"-(157)"MYFT"-(158)"NOINFO"-(159)"NOINFO"-(160)""-(161)""-(162)""-(163)""-(164)"10"-(165)"56966455"-(166)"AGRS"-(167)"STK"-(168)""-(169)"0"-(170)""-(171)"SMART"-(172)"USD"-(173)"AGRS"-(174)"NOINFO"-(175)"NOINFO"-(176)""-(177)""-(178)""-(179)""-(180)"11"-(181)"316344600"-(182)"DTSS"-(183)"STK"-(184)""-(185)"0"-(186)""-(187)"SMART"-(188)"USD"-(189)"DTSS"-(190)"SCM"-(191)"SCM"-(192)""-(193)""-(194)""-(195)""-(196)"12"-(197)"77563575"-(198)"ECCE"-(199)"STK"-(200)""-(201)"0"-(202)""-(203)"SMART"-(204)"USD"-(205)"ECCE"-(206)"NOINFO"-(207)"NOINFO"-(208)""-(209)""-(210)""-(211)""-(212)"13"-(213)"44040755"-(214)"VOYT"-(215)"STK"-(216)""-(217)"0"-(218)""-(219)"SMART"-(220)"USD"-(221)"VOYT"-(222)"NOINFO"-(223)"NOINFO"-(224)""-(225)""-(226)""-(227)""-(228)"14"-(229)"397460970"-(230)"WBWB"-(231)"STK"-(232)""-(233)"0"-(234)""-(235)"SMART"-(236)"USD"-(237)"WBWB"-(238)"NOINFO"-(239)"NOINFO"
         /// </summary>
         /// <param name="fields"></param>
-        private void Parse_ScannerSubscription(string[] fields) 
+        private static void Parse_ScannerSubscription(string[] fields) 
         {
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
 

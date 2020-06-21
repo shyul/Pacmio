@@ -34,23 +34,30 @@ namespace Pacmio
 
         public static string CachePath => (Settings != null) ? Settings.CachePath : Path.GetTempPath() + "Pacmio\\";
 
-        public static IB.Client IBClient { get; private set; }
+        #region IB Client
 
-        public static bool IBConnected => !(IBClient is null) && IBClient.Connected;
+        public static void IBConnectUpdate(ConnectionStatus status, DateTime time, string message = "")
+        {
+            OnIBConnectedHandler?.Invoke(status, time, message);
+        }
+
+        public static event ConnectionStatusEventHandler OnIBConnectedHandler;
+
+        public static bool IBConnected => IB.Client.Connected;
 
         public static void IBClientStart()
         {
-            if (IBClient is null) return;
             if (Settings is null) return;
 
-            if (!IBClient.Connected)
+            if (!IB.Client.Connected)
             {
-                int timeout = IBClient.Timeout + 2000;
+                int timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
-                IBClient.Connect(Settings.IBClientId, Settings.IBServerPort, Settings.IBServerAddress, Settings.IBTimeout);
+                OnIBConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
+                IB.Client.Connect(Settings.IBClientId, Settings.IBServerPort, Settings.IBServerAddress, Settings.IBTimeout);
 
-                while (!IBClient.Connected)
+                while (!IB.Client.Connected)
                 {
                     Thread.Sleep(1);
                     j++;
@@ -61,16 +68,14 @@ namespace Pacmio
 
         public static void IBClientStop()
         {
-            if (IBClient is null) return;
-
-            if (IBClient.Connected)
+            if (IBConnected)
             {
-                int timeout = IBClient.Timeout + 2000;
+                int timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
-                IBClient.Disconnect.Start();
+                IB.Client.Disconnect.Start();
 
-                while (IBClient.Connected)
+                while (IBConnected)
                 {
                     Thread.Sleep(1);
                     j++;
@@ -78,6 +83,8 @@ namespace Pacmio
                 }
             }
         }
+
+        #endregion IB Client
 
         #region Background Tasks
 
@@ -116,8 +123,6 @@ namespace Pacmio
 
             ChartList.UpperColor = Color.Green;
             ChartList.LowerColor = Color.Red;
-
-            IBClient = new IB.Client(Settings.IBClientId, Settings.IBServerPort, Settings.IBServerAddress, Settings.IBTimeout);
 
             // Build essential directories
             if (!Directory.Exists(ResourcePath)) Directory.CreateDirectory(ResourcePath);

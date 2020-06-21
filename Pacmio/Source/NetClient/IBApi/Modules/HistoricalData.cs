@@ -27,13 +27,13 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
-        public DateTime LastDataRequestTime { get; private set; } = DateTime.MinValue;
+        public static DateTime LastDataRequestTime { get; private set; } = DateTime.MinValue;
 
-        public bool HistoricalData_Connected { get; private set; } = true;
+        public static bool HistoricalData_Connected { get; private set; } = true;
 
-        public readonly List<string> HistoricalData_Servers = new List<string>();
+        public static readonly List<string> HistoricalData_Servers = new List<string>();
 
         /**
          * @brief Requests contracts' historical data.
@@ -81,14 +81,14 @@ namespace Pacmio.IB
 
         #region Historical Data
 
-        public bool IsReady_HistoricalData => Connected && HistoricalData_Connected && requestId_HistoricalData == -1;
-        private int requestId_HistoricalData = -1;
+        public static bool IsReady_HistoricalData => Connected && HistoricalData_Connected && requestId_HistoricalData == -1;
+        private static int requestId_HistoricalData = -1;
 
-        public Period LastRequestedHistoricalDataPeriod { get; set; }  // Start Time and Stop Time
-        public bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
+        public static Period LastRequestedHistoricalDataPeriod { get; set; }  // Start Time and Stop Time
+        public static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
 
-        private BarTable active_HistoricalDataBarTable;
-        private TimeZoneInfo ActiveTimeZone_HistoricalData => active_HistoricalDataBarTable.Contract.TimeZone;
+        private static BarTable active_HistoricalDataBarTable;
+        private static TimeZoneInfo ActiveTimeZone_HistoricalData => active_HistoricalDataBarTable.Contract.TimeZone;
 
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Pacmio.IB
         /// <param name="formatDate"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public bool SendRequest_HistoricalData(BarTable bt, string durationString, DateTime endTime,
+        internal static bool SendRequest_HistoricalData(BarTable bt, string durationString, DateTime endTime,
             bool keepUpToDate = false, bool includeExpired = false, int formatDate = 1,
             ICollection<(string, string)> options = null)
         {
@@ -198,18 +198,18 @@ namespace Pacmio.IB
         }
 
 
-        public void SendCancel_HistoricalData() => SendCancel_HistoricalData(requestId_HistoricalData);
+        public static void SendCancel_HistoricalData() => SendCancel_HistoricalData(requestId_HistoricalData);
 
-        private void SendCancel_HistoricalData(int requestId)
+        private static void SendCancel_HistoricalData(int requestId)
         {
-            if(Connected && requestId > -1) 
+            if (Connected && requestId > -1)
             {
                 RemoveRequest(requestId, RequestType.RequestHistoricalData);
                 requestId_HistoricalData = -1; // Emit update cancelled.
             }
         }
 
-        private void ParseError_HistoricalData(string[] fields)
+        private static void ParseError_HistoricalData(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
             string message = fields[4];
@@ -222,14 +222,14 @@ namespace Pacmio.IB
                 requestId_HistoricalData = -1;
                 //ActiveBarTable_HistoricalData = null;
 
-                if(fields[3] == "366") 
+                if (fields[3] == "366")
                 {
                     // Unable to find the table for the contract
                 }
             }
         }
 
-        private void Parse_HistoricalData(string[] fields)
+        private static void Parse_HistoricalData(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
             int num = fields[4].ToInt32();
@@ -274,7 +274,7 @@ namespace Pacmio.IB
             requestId_HistoricalData = -1;
         }
 
-        private void Parse_HistoricalDataUpdate(string[] fields)
+        private static void Parse_HistoricalDataUpdate(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 

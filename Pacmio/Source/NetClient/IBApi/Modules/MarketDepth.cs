@@ -14,7 +14,7 @@ using Xu;
 
 namespace Pacmio.IB
 {
-    public partial class Client
+    public static partial class Client
     {
         /// <summary>
         /// Send MarketDepth: (0)"10"-(1)"5"-(2)"20000001"-(3)"0"-(4)"FB"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"20"-(16)"1"
@@ -23,7 +23,7 @@ namespace Pacmio.IB
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public bool SendRequest_MarketDepth(Contract c, int numRows = 20, bool isSmartDepth = true, ICollection<(string, string)> options = null)
+        internal static bool SendRequest_MarketDepth(Contract c, int numRows = 20, bool isSmartDepth = true, ICollection<(string, string)> options = null)
         {
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
@@ -74,12 +74,12 @@ namespace Pacmio.IB
         }
 
 
-        private void Parse_MarketDepth(string[] fields)
+        private static void Parse_MarketDepth(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
-        private void Parse_MarketDepthL2(string[] fields)
+        private static void Parse_MarketDepthL2(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
