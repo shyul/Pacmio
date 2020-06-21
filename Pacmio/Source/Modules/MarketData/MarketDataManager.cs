@@ -31,7 +31,7 @@ namespace Pacmio
 
         private static readonly List<MarketDataGridView> List = new List<MarketDataGridView>();
 
-        public static void UpdateUI(Contract c) 
+        public static void UpdateUI(Contract c)
         {
             /*
             Task UpdateUI = new Task(() => {
@@ -47,9 +47,11 @@ namespace Pacmio
             });
             UpdateUI.Start();
             */
-            List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI()); 
-
             
+            Task.Run(() =>
+            {
+                List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI());
+            });
         }
 
         public static void CleanUp() 

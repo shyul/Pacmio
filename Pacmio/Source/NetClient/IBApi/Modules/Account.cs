@@ -14,9 +14,11 @@ namespace Pacmio.IB
 {
     public partial class Client
     {
-        //Send RequestFamilyCodes: (0)"80"-
-        //Received FamilyCodes: (0)"78"-(1)"3"-(2)"U3372058"-(3)""-(4)"U1564932"-(5)""-(6)"U2234582"-
-
+        /// <summary>
+        /// Send RequestFamilyCodes: (0)"80"-
+        /// Received FamilyCodes: (0)"78"-(1)"3"-(2)"U3372058"-(3)""-(4)"U1564932"-(5)""-(6)"U2234582"-
+        /// </summary>
+        /// <param name="fields">respond sequence</param>
         private void Parse_ManagedAccounts(string[] fields)
         {
             if (fields[1] == "1")
