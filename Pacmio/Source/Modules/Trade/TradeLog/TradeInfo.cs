@@ -15,9 +15,9 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class TradeLogDatum : IEquatable<TradeLogDatum>, IEquatable<OrderInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public class TradeInfo : IEquatable<TradeInfo>, IEquatable<OrderInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
-        public TradeLogDatum(string execId) => ExecId = execId;
+        public TradeInfo(string execId) => ExecId = execId;
 
         [DataMember, Browsable(true)]
         public string ExecId { get; set; }
@@ -44,24 +44,49 @@ namespace Pacmio
         public string AccountCode { get; set; }
 
         [DataMember]
-        public (string name, Exchange exchange, string typeName, int conId) ContractInfo { get; set; }
+        public int ConId { get; set; } = -1;
+
+        [DataMember]
+        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
 
         [IgnoreDataMember]
         public Contract Contract
         {
             get
             {
+                if (m_Contract is null || (ConId > 1 && m_Contract.ConId != ConId))
+                {
+                    var cList = ContractList.Values.Where(n => n.ConId == ConId);
+                    // Or we should go fetch it!
+                    // Can't block here actually, because this function blocks the decoding
+                    if (cList.Count() == 1)
+                    {
+
+                        m_Contract = cList.First();
+                        ContractInfo = m_Contract.Info;
+                    }
+                    else
+                    {
+                        // TODO: Need to handle no / duplicated contract cases
+                        throw new Exception("Need to handle no / duplicated contract cases | Error searching by ConId");
+                    }
+                }
+
                 return m_Contract;
             }
             set
             {
-                ContractInfo = (value.Name, value.Exchange, value.TypeName, value.ConId);
+                ConId = value.ConId;
+                if (ConId < 1) throw new Exception("ConId can't be zero for order contract.");
+                ContractInfo = value.Info;
                 m_Contract = value;
             }
         }
 
+        // TODO: contract look up 
+
         [IgnoreDataMember]
-        private Contract m_Contract = null;
+        private Contract m_Contract;
 
         /// <summary>
         /// Positive means long position
@@ -118,33 +143,38 @@ namespace Pacmio
             }
         }
 
+        #region Equality
+
+        public override int GetHashCode() => ExecId.GetHashCode();
+
         public override bool Equals(object other)
         {
-            if (other is TradeLogDatum tld)
+            if (other is TradeInfo tld)
                 return Equals(tld);
+            else if (other is OrderInfo od)
+                return Equals(od);
             else if (other is Contract c)
                 return Equals(c);
             else if (other is Tuple<string, Exchange, string> info)
                 return Equals(info);
-            //else if (other.GetType() == typeof((string, Exchange, ContractType)))
-            //return Equals(((string, Exchange, ContractType))other);
             else
                 return false;
         }
 
-        public bool Equals(TradeLogDatum other) => ExecId == other.ExecId;
+        public bool Equals(TradeInfo other) => ExecId == other.ExecId;
 
         public bool Equals(OrderInfo other) => PermId == other.PermId;
 
-        public bool Equals(Contract other) => (ContractInfo.conId > 0 && ContractInfo.conId == other.ConId) || (ContractInfo.name, ContractInfo.exchange, ContractInfo.typeName) == other.Info;
+        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || ContractInfo == other.Info;
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => (ContractInfo.name, ContractInfo.exchange, ContractInfo.typeName) == other;
+        public bool Equals((string name, Exchange exchange, string typeName) other) => ContractInfo == other;
 
-        public override int GetHashCode() => ExecId.GetHashCode();
-        public static bool operator ==(TradeLogDatum left, TradeLogDatum right) => left.ExecId == right.ExecId;
-        public static bool operator !=(TradeLogDatum left, TradeLogDatum right) => !(left == right);
+        public static bool operator ==(TradeInfo left, TradeInfo right) => left.ExecId == right.ExecId;
+        public static bool operator !=(TradeInfo left, TradeInfo right) => !(left == right);
 
-        public static bool operator ==(TradeLogDatum left, OrderInfo right) => left.PermId == right.PermId;
-        public static bool operator !=(TradeLogDatum left, OrderInfo right) => !(left == right);
+        public static bool operator ==(TradeInfo left, OrderInfo right) => left.PermId == right.PermId;
+        public static bool operator !=(TradeInfo left, OrderInfo right) => !(left == right);
+
+        #endregion Equality
     }
 }

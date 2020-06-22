@@ -19,7 +19,6 @@ namespace Pacmio
     [KnownType(typeof(Option))]
     [KnownType(typeof(MutualFund))]
     [KnownType(typeof(Forex))]
-    [KnownType(typeof(BagComboContract))]
     public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
         [IgnoreDataMember, Browsable(false)]
@@ -29,7 +28,6 @@ namespace Pacmio
             {
                 return m_IsModified;
             }
-
             set
             {
                 m_IsModified = value;
@@ -237,17 +235,7 @@ namespace Pacmio
 
         #region Equality
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => Info == other;
-
-        public bool Equals(Contract other)
-        {
-            if (this is null || other is null)
-                return false;
-            else if (ConId > 0)
-                return ConId == other.ConId;
-            else
-                return Info == other.Info;
-        }
+        public override int GetHashCode() => Info.GetHashCode();
 
         public override bool Equals(object other)
         {
@@ -263,18 +251,26 @@ namespace Pacmio
                 return false;
         }
 
+        public bool Equals(Contract other)
+        {
+            if (this is null || other is null)
+                return false;
+            else if (ConId > 0)
+                return ConId == other.ConId;
+            else
+                return Info == other.Info;
+        }
+
+        public bool Equals((string name, Exchange exchange, string typeName) other) => Info == other;
+
         public static bool operator ==(Contract s1, Contract s2) => s1.Equals(s2);
         public static bool operator !=(Contract s1, Contract s2) => !s1.Equals(s2);
 
         public static bool operator ==(Contract s1, (string, Exchange, string) s2) => s1.Equals(s2);
         public static bool operator !=(Contract s1, (string, Exchange, string) s2) => !s1.Equals(s2);
 
-        public override int GetHashCode() => Info.GetHashCode();
-        public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
-
         #endregion Equality
 
-
-
+        public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
     }
 }

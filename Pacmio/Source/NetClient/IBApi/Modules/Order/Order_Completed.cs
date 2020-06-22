@@ -33,33 +33,30 @@ namespace Pacmio.IB
         }
 
         /// <summary>
-        /// Received CompletedOrder: (0)"101"-(1)"4762"-(2)"BA"-(3)"STK"-(4)""-(5)"0"-(6)"?"-(7)""-(8)"SMART"-(9)"USD"-(10)"BA"-(11)"BA"-(12)"BUY"-(13)"5"-(14)"LMT"-(15)"20.0"-(16)"0.0"-(17)"DAY"-(18)""-(19)"DU332281"-(20)"O"-(21)"0"-(22)""-(23)"130443186"-(24)"0"-(25)"0"-(26)"0"-(27)""-(28)""-(29)""-(30)""-(31)""-(32)""-(33)""-(34)""-(35)""-(36)""-(37)"0"-(38)""-(39)"-1"-(40)""-(41)""-(42)""-(43)""-(44)""-(45)""-(46)"0"-(47)"0"-(48)""-(49)"3"-(50)"0"-(51)""-(52)"0"-(53)"None"-(54)""-(55)"0"-(56)"0"-(57)"0"-(58)""-(59)"0"-(60)"0"-(61)""-(62)""-(63)""-(64)"0"-(65)"0"-(66)"0"-(67)""-(68)""-(69)""-(70)""-(71)""-(72)"IB"-(73)"0"-(74)"0"-(75)""-(76)"0"-(77)"Cancelled"-(78)"0"-(79)"0"-(80)"0"-(81)"21.0"-(82)"1.7976931348623157E308"-(83)"0"-(84)"1"-(85)"0"-(86)""-(87)"0.0"-(88)"2147483647"-(89)"0"-(90)"Not an insider or substantial shareholder"-(91)"0"-(92)"0"-(93)"9223372036854775807"-(94)"20200427-13:00:03 PST"-(95)"Expired"
+        /// Received CompletedOrder: (0)"101"-(1)"4762"-(2)"BA"-(3)"STK"-(4)""-(5)"0"-(6)"?"-(7)""-(8)"SMART"-(9)"USD"-(10)"BA"-(11)"BA"-(12)"BUY"-(13)"5"-(14)"LMT"-
+        /// (15)"20.0"-(16)"0.0"-(17)"DAY"-(18)""-(19)"DU332281"-(20)"O"-(21)"0"-(22)""-(23)"130443186"-(24)"0"-(25)"0"-(26)"0"-(27)""-(28)""-(29)""-(30)""-(31)""-
+        /// (32)""-(33)""-(34)""-(35)""-(36)""-(37)"0"-(38)""-(39)"-1"-(40)""-(41)""-(42)""-(43)""-(44)""-(45)""-(46)"0"-(47)"0"-(48)""-(49)"3"-(50)"0"-(51)""-
+        /// (52)"0"-(53)"None"-(54)""-(55)"0"-(56)"0"-(57)"0"-(58)""-(59)"0"-(60)"0"-(61)""-(62)""-(63)""-(64)"0"-(65)"0"-(66)"0"-(67)""-(68)""-(69)""-(70)""-(71)""-
+        /// (72)"IB"-(73)"0"-(74)"0"-(75)""-(76)"0"-(77)"Cancelled"-(78)"0"-(79)"0"-(80)"0"-(81)"21.0"-(82)"1.7976931348623157E308"-(83)"0"-(84)"1"-(85)"0"-(86)""-
+        /// (87)"0.0"-(88)"2147483647"-(89)"0"-(90)"Not an insider or substantial shareholder"-(91)"0"-(92)"0"-(93)"9223372036854775807"-(94)"20200427-13:00:03 PST"-(95)"Expired"
+        /// 
         /// (93)"9223372036854775807"-(94)"20200427-13:04:53 PST"-(95)"Rejected by System: The exchange is closed."
         /// </summary>
         /// <param name="fields"></param>
         private static void Parse_CompletedOrder(string[] fields)
         {
-            int orderId = fields[1].ToInt32(-1);
+            //int orderId = fields[1].ToInt32(-1);
             int permId = fields[23].ToInt32();
-            OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
+            OrderInfo od = OrderManager.GetOrAdd(permId);
+
+            od.ConId = fields[1].ToInt32(-1);
 
             if (od.Contract is null)
             {
-                int conId = fields[1].ToInt32(-1);
                 string name = fields[2].ToUpper();
                 string secTypeCode = fields[3].ToUpper();
 
-                var cList = ContractList.Values.Where(n => n.ConId == conId && n.Name == name);
-                // Or we should go fetch it!
-                // Can't block here actually, because this function blocks the decoding
-                if (cList.Count() > 0)
-                {
-                    od.Contract = cList.First();
-                }
-                else
-                {
-                    od.ContractInfo = (name, Exchange.UNKNOWN, secTypeCode, conId);
-                }
+                // Add match contract info task.
             }
 
             int totalQuantity = fields[13].ToInt32(0);
@@ -130,7 +127,6 @@ namespace Pacmio.IB
             N += 1; // readSolicited();
             // N = 77; //Console.WriteLine("4) N = " + N);
             od.Status = ApiCode.GetEnum<OrderStatus>(fields[N]).Enum;
-
 
             Console.WriteLine("\nCompleted Orders: " + fields.ToStringWithIndex());
             Console.WriteLine(OrderManager.Count + " | " + od.Status + " | " + fields[90]);

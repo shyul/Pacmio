@@ -17,17 +17,17 @@ namespace Pacmio
 {
     public static class TradeLogManager
     {
-        private static readonly ConcurrentDictionary<string, TradeLogDatum> List = new ConcurrentDictionary<string, TradeLogDatum>();
+        private static readonly ConcurrentDictionary<string, TradeInfo> List = new ConcurrentDictionary<string, TradeInfo>();
 
-        public static TradeLogDatum GetOrAdd(string execId)
+        public static TradeInfo GetOrAdd(string execId)
         {
-            if (!List.ContainsKey(execId)) List.TryAdd(execId, new TradeLogDatum(execId));
+            if (!List.ContainsKey(execId)) List.TryAdd(execId, new TradeInfo(execId));
             return List[execId];
         }
 
-        public static void Add(TradeLogDatum ti) => List.TryAdd(ti.ExecId, ti);
+        public static void Add(TradeInfo ti) => List.TryAdd(ti.ExecId, ti);
 
-        public static TradeLogDatum Get(string execId)
+        public static TradeInfo Get(string execId)
         {
             if (List.ContainsKey(execId))
                 return List[execId];
@@ -35,7 +35,7 @@ namespace Pacmio
                 return null;
         }
 
-        public static IEnumerable<TradeLogDatum> Get(Contract c)
+        public static IEnumerable<TradeInfo> Get(Contract c)
         {
             return List.Select(n => n.Value).Where(n => (n.Contract is Stock) && c == n.Contract).OrderBy(n => n.ExecuteTime);
         }
@@ -44,7 +44,7 @@ namespace Pacmio
 
         public static double TotalPnL() => TotalPnL(List.Values);
 
-        public static double TotalPnL(this IEnumerable<TradeLogDatum> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
+        public static double TotalPnL(this IEnumerable<TradeInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
 
         #region Data Requests
 
@@ -72,7 +72,7 @@ namespace Pacmio
 
         public static void Save()
         {
-            List<TradeLogDatum> trades = List.Values.ToList();
+            List<TradeInfo> trades = List.Values.ToList();
             trades.SerializeJsonFile(FileName);
         }
 
@@ -80,20 +80,20 @@ namespace Pacmio
         {
             if (File.Exists(FileName)) 
             {
-                List<TradeLogDatum> trades = Serialization.DeserializeJsonFile<List<TradeLogDatum>>(FileName);
+                List<TradeInfo> trades = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
                 trades.ForEach(n => Add(n));
             }
         }
 
         public static void ExportTradeLog(string fileName) => List.Values.ExportTradeLog(fileName);
 
-        public static void ExportTradeLog(this IEnumerable<TradeLogDatum> log, string fileName)
+        public static void ExportTradeLog(this IEnumerable<TradeInfo> log, string fileName)
         {
             StringBuilder sb = new StringBuilder("ACCOUNT_INFORMATION\n");
             sb.AppendLine("ACT_INF|DU332281|Xu Li|Individual|3581 Greenlee Dr. Apt 133 San Jose CA 95117 United States");
             sb.AppendLine("\n\nSTOCK_TRANSACTIONS");
 
-            foreach (TradeLogDatum ti in log)
+            foreach (TradeInfo ti in log)
             {
                 string action = (ti.Quantity > 0) ? "BUYTO" : "SELLTO";
                 if (ti.LastLiquidity == LiquidityType.Added)

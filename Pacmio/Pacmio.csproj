@@ -196,7 +196,7 @@
     <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderTimeInForce.cs" />
-    <Compile Include="Source\Modules\Trade\TradeLog\TradeLogDatum.cs" />
+    <Compile Include="Source\Modules\Trade\TradeLog\TradeInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Completed.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\DeltaNeutralValidation.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Error.cs" />
@@ -233,7 +233,6 @@
     <Compile Include="Source\NetClient\IBApi\Modules\ContractData.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\ContractSamples.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\SmartComponents.cs" />
-    <Compile Include="Source\Modules\Contract\ContractTypes\BagComboContract.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Util.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Account.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\AccountUpdateMulti.cs" />

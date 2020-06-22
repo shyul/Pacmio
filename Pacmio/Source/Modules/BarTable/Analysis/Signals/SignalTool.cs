@@ -214,7 +214,7 @@ namespace Pacmio
 
         #region CandleStick
 
-        public static void CandleStickDojiSignal(this BarTable bt, int i, double doji_ratio = 0.92)
+        public static void CandleStickDojiMarubozuSignal(this BarTable bt, int i, double doji_ratio = 0.12, double marubozu_ratio = 0.92)
         {
             Bar b = bt[i];
             double high = b.High;
@@ -228,11 +228,11 @@ namespace Pacmio
                 double oc_Length = Math.Abs(open - close);
                 double body_shadow_ratio = oc_Length / hl_Length;
 
-                if (body_shadow_ratio > doji_ratio) // Marubozu
+                if (body_shadow_ratio > marubozu_ratio) // Marubozu
                 {
                     b.CandleStickTypes.Add(CandleStickType.Marubozu);
                 }
-                else if (body_shadow_ratio < 0.12)
+                else if (body_shadow_ratio < doji_ratio)
                 {
                     b.CandleStickTypes.Add(CandleStickType.Doji);
 
@@ -240,13 +240,9 @@ namespace Pacmio
                     double oc_position_ratio = (high - avg_oc) / hl_Length;
 
                     if (oc_position_ratio > 0.88)
-                    {
                         b.CandleStickTypes.Add(CandleStickType.GravestoneDoji);
-                    }
                     else if (oc_position_ratio < 0.12)
-                    {
                         b.CandleStickTypes.Add(CandleStickType.DragonflyDoji);
-                    }
                     else if (oc_position_ratio > 0.45 && oc_position_ratio < 0.55)
                         b.CandleStickTypes.Add(CandleStickType.LongLeggedDoji);
                 }
@@ -257,7 +253,7 @@ namespace Pacmio
             }
         }
 
-        public static void CandleStickShadowSignal(this BarTable bt, int i)
+        public static void CandleStickShadowStarSignal(this BarTable bt, int i)
         {
             Bar b = bt[i];
             double high = b.High;
@@ -289,14 +285,11 @@ namespace Pacmio
                         else if (shadow_ratio < 0.2 && oc_Length / buttom_shadow < 0.3)
                         {
                             b.CandleStickTypes.Add(CandleStickType.LongButtomShadows);
+
                             if (trend_1 > 2)
-                            {
                                 b.CandleStickTypes.Add(CandleStickType.HangingMan);
-                            }
                             else if (trend_1 < -2)
-                            {
                                 b.CandleStickTypes.Add(CandleStickType.Hammer);
-                            }
                         }
                     }
 
@@ -307,13 +300,9 @@ namespace Pacmio
                         {
                             b.CandleStickTypes.Add(CandleStickType.LongTopShadows);
                             if (trend_1 > 2)
-                            {
                                 b.CandleStickTypes.Add(CandleStickType.ShootingStar);
-                            }
                             else if (trend_1 < -2)
-                            {
                                 b.CandleStickTypes.Add(CandleStickType.InvertedHammer);
-                            }
                         }
                     }
                 }
@@ -328,8 +317,6 @@ namespace Pacmio
         {
 
         }
-
-
 
         #endregion Divergence
     }

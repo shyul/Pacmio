@@ -19,7 +19,7 @@ namespace Pacmio
 {
     public class SimulationResult
     {
-        public void AddTrade(TradeLogDatum tld)
+        public void AddTrade(TradeInfo tld)
         {
             // if (!TradeLog.ContainsKey(tld.ExecuteTime)) 
             TradeLog.Add(tld.ExecuteTime, tld);
@@ -62,7 +62,7 @@ namespace Pacmio
         
         }
 
-        private readonly SortedDictionary<DateTime, TradeLogDatum> TradeLog = new SortedDictionary<DateTime, TradeLogDatum>();
+        private readonly SortedDictionary<DateTime, TradeInfo> TradeLog = new SortedDictionary<DateTime, TradeInfo>();
 
         public double MaxTradeValue { get; set; } = 0;
 

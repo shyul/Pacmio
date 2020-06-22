@@ -8,16 +8,14 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
-using Pacmio.IB;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class OrderInfo : IEquatable<OrderInfo>
+    public class OrderInfo : IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
-
-
         #region Identification Numbers
 
         /// <summary>
@@ -84,20 +82,47 @@ namespace Pacmio
         public string Description { get; set; }
 
         [DataMember]
-        public (string name, Exchange exchange, string typeName, int conId) ContractInfo { get; set; }
+        public string AccountCode { get; set; } = string.Empty;
+
+        [IgnoreDataMember]
+        public Account Account => AccountManager.Get(AccountCode);
+
+        [DataMember]
+        public int ConId { get; set; } = -1;
+
+        [DataMember]
+        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
 
         [IgnoreDataMember]
         public Contract Contract
         {
             get
             {
+                if (m_Contract is null || (ConId > 1 && m_Contract.ConId != ConId))
+                {
+                    var cList = ContractList.Values.Where(n => n.ConId == ConId);
+                    // Or we should go fetch it!
+                    // Can't block here actually, because this function blocks the decoding
+                    if (cList.Count() == 1)
+                    {
+
+                        m_Contract = cList.First();
+                        ContractInfo = m_Contract.Info;
+                    }
+                    else
+                    {
+                        // TODO: Need to handle no / duplicated contract cases
+                        throw new Exception("Need to handle no / duplicated contract cases | Error searching by ConId");
+                    }
+                }
+
                 return m_Contract;
             }
             set
             {
-                int conId = value.ConId;
-                if (conId < 1) throw new Exception("ConId can't be zero for order contract.");
-                ContractInfo = (value.Name, value.Exchange, value.TypeName, conId);
+                ConId = value.ConId;
+                if (ConId < 1) throw new Exception("ConId can't be zero for order contract.");
+                ContractInfo = value.Info;
                 m_Contract = value;
             }
         }
@@ -107,11 +132,7 @@ namespace Pacmio
         [IgnoreDataMember]
         private Contract m_Contract;
 
-        [DataMember]
-        public string AccountCode { get; set; } = string.Empty;
 
-        [IgnoreDataMember]
-        public Account Account => AccountManager.Get(AccountCode);
 
         [DataMember]
         public double Quantity { get; set; } = double.NaN;
@@ -204,8 +225,32 @@ namespace Pacmio
         public string ModeCode { get; set; } = string.Empty;
 
 
+        #region Equality
 
+        public override int GetHashCode() => PermId.GetHashCode();
+
+        public override bool Equals(object other)
+        {
+            if (other is OrderInfo od)
+                return Equals(od);
+            else if (other is TradeInfo tld)
+                return Equals(tld);
+            else if (other is Contract c)
+                return Equals(c);
+            else if (other is Tuple<string, Exchange, string> info)
+                return Equals(info);
+            else
+                return false;
+        }
 
         public bool Equals(OrderInfo other) => PermId > 0 && PermId == other.PermId;
+
+        public bool Equals(TradeInfo other) => PermId == other.PermId;
+
+        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || ContractInfo == other.Info;
+
+        public bool Equals((string name, Exchange exchange, string typeName) other) => ContractInfo == other;
+
+        #endregion Equality
     }
 }

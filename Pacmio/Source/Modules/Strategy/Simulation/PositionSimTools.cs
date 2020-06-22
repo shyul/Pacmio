@@ -41,13 +41,13 @@ namespace Pacmio
             return comms + exchange_fee + transaction_fee + finra_fee + nyse_pass_fee;
         }
 
-        public static TradeLogDatum AddLiquidity(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
+        public static TradeInfo AddLiquidity(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
 
 
 
-        public static TradeLogDatum Close(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
+        public static TradeInfo Close(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
 
-        public static TradeLogDatum Trade(this PositionStatus ps, double quantity, double price)
+        public static TradeInfo Trade(this PositionStatus ps, double quantity, double price)
         {
             Count++;
             double proceeds = 0; // Cash flow: positive means cash to stock (add liquidity), negative means stock to cash (removing liquidity)
@@ -127,7 +127,7 @@ namespace Pacmio
 
             DateTime time = DateTime.Now;
 
-            return new TradeLogDatum(ps.Contract.ToString() + "|" + time)
+            return new TradeInfo(ps.Contract.ToString() + "|" + time)
             {
                 Contract = ps.Contract,
                 OrderId = Count,

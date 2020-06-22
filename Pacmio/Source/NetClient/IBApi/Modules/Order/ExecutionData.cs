@@ -57,9 +57,10 @@ namespace Pacmio.IB
         {
             // int requestId = fields[1].ToInt32();
             string execId = fields[14];
-            TradeLogDatum ti = TradeLogManager.GetOrAdd(execId);
+            TradeInfo ti = TradeLogManager.GetOrAdd(execId);
 
             ti.OrderId = fields[2].ToInt32();
+            ti.ConId = fields[3].ToInt32();
             ti.PermId = fields[21].ToInt32();
             ti.ClientId = fields[22].ToInt32();
             ti.Description = fields[26];
@@ -97,34 +98,16 @@ namespace Pacmio.IB
 
             if (ti.Contract is null)
             {
-                int conId = fields[3].ToInt32();
                 string name = fields[4].ToUpper();
                 string secTypeCode = fields[5].ToUpper();
 
-                var cList = ContractList.Values.Where(n => n.ConId == conId && n.Name == name);
-                // Or we should go fetch it!
-                // Can't block here actually, because this function blocks the decoding
-                if (cList.Count() > 0)
-                {
-                    ti.Contract = cList.First();
-                    ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
-                }
-                else
-                {
-                    ti.ContractInfo = (name, Exchange.UNKNOWN, secTypeCode, conId);
-                    ti.ExecuteTime = DateTime.ParseExact(fields[15], "yyyyMMdd  HH:mm:ss", CultureInfo.InvariantCulture);
-                }
+                // Add match contract info task.
             }
             else 
             {
                 ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
                 PositionStatus ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
-
             }
-
-          
-
-
 
             TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
@@ -141,7 +124,7 @@ namespace Pacmio.IB
         private static void Parse_CommissionsReport(string[] fields)
         {
             string execId = fields[2];
-            TradeLogDatum ti = TradeLogManager.GetOrAdd(execId);
+            TradeInfo ti = TradeLogManager.GetOrAdd(execId);
             ti.Commissions = fields[3].ToDouble();
 
             string pnlstring = fields[5];
