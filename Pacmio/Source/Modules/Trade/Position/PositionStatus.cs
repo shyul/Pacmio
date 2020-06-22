@@ -10,19 +10,33 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
-using System.Runtime.Serialization;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
     public class PositionStatus : IRow
     {
-        public Contract Contract { get; set; }
+        public PositionStatus()
+        {
 
-        public OrderInfo CurrentOrder { get; private set; }
+        }
+
+        public Contract Contract { get; }
 
         #region Position Information
+
+        public TradeActionType ActionType
+        {
+            get
+            {
+                if (Quantity > 0)
+                    return TradeActionType.LongHold;
+                else if (Quantity < 0)
+                    return TradeActionType.ShortHold;
+                else
+                    return TradeActionType.None;
+            }
+        }
 
         public double Quantity { get; set; } = 0;
 
@@ -41,15 +55,15 @@ namespace Pacmio
 
         #endregion  Position Information
 
+        #region Risk Management
+
         //public double RiskDelta { get; set; } = double.NaN;
 
         public double Stop { get; set; } = double.NaN;
 
         public double Limit { get; set; } = double.NaN;
 
-
-
-
+        #endregion Risk Management
 
 
         #region Grid View

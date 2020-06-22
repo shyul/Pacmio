@@ -48,8 +48,6 @@ namespace Pacmio
                 ActionType = TradeActionType.LongHold;
             else if (Quantity < 0)
                 ActionType = TradeActionType.ShortHold;
-
-            CurrentOrder = bp_1.CurrentOrder;
         }
 
         public void Snapshot(PositionStatus ps)
@@ -65,23 +63,14 @@ namespace Pacmio
             }
             else
             {
-                if (Quantity == 0)
-                    ActionType = TradeActionType.None;
-                else if (Quantity > 0)
-                    ActionType = TradeActionType.LongHold;
-                else if (Quantity < 0)
-                    ActionType = TradeActionType.ShortHold;
+                ActionType = ps.ActionType;
             }
 
             Quantity = new_qty;
             AveragePrice = ps.AveragePrice;
-
-            CurrentOrder = ps.CurrentOrder;
         }
 
         private readonly Bar Bar;
-
-        public OrderInfo CurrentOrder { get; private set; }
 
         public TradeActionType ActionType { get; private set; } = TradeActionType.None;
 
