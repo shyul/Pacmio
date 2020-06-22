@@ -69,6 +69,37 @@ namespace Pacmio.IB
             }
         }
 
+        internal static void SendRequest_ContractData(int conId, bool includeExpired = false)
+        {
+            if (IsReady_ContractData)
+            {
+                (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
+                requestId_ContractData = requestId;
+                active_ContractData = null;
+
+                SendRequest(new string[] {
+                    requestType, // 9
+                    "8",
+                    requestId.ToString(),
+                    conId.Param(), // "0"
+                    string.Empty, // c.Name,
+                    string.Empty, // c.TypeApiCode,
+                    string.Empty, // lastTradeDateOrContractMonth,
+                    "0", // (strike == 0) ? "0" : strike.ToString("0.0###"),
+                    string.Empty, // Right
+                    string.Empty, // Multiplier
+                    "SMART", // exchange,
+                    string.Empty, // primaryExch,
+                    string.Empty, // currency,
+                    string.Empty, // LocalSymbol
+                    string.Empty, // TradingClass
+                    includeExpired.Param(),
+                    string.Empty, // SecIdType
+                    string.Empty, // SecId
+                });
+            }
+        }
+
         public static void Cancel_ContractData()
         {
             RemoveRequest(requestId_ContractData, true);
@@ -77,13 +108,17 @@ namespace Pacmio.IB
 
         private static void Parse_ContractData(string[] fields) // 10
         {
-            //PacLog.Debug("ParseSymbolInfo: " + values.ToFlat());
-
             int requestId = fields[2].ToInt32(-1);
 
             if (fields[1] == "8" && requestId == requestId_ContractData)
             {
                 Contract c = active_ContractData;
+
+                if(c is null) 
+                {
+                    // TODO: Add Contract
+                
+                }
 
                 string symbolStr = fields[3];
                 string conIdStr = fields[13];

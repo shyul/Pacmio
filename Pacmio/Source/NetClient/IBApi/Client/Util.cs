@@ -107,6 +107,9 @@ namespace Pacmio.IB
 
         public static (bool, Contract) GetSymbolByIbCode(string symbolName, string exchangeStr, string secTypeCode, string conIdStr)
         {
+            // TODO: if conId 
+            
+            
             (bool validExchange, Exchange ex, string suffix) = ExchangeInfo.GetEnum(exchangeStr);
 
             if (validExchange)
@@ -128,12 +131,9 @@ namespace Pacmio.IB
                         }
                         return (true, c);
                     }
+                    default: throw new Exception("GetSymbolByIbCode: Unknown secTypeCode");
 
-
-
-
-
-                    default:  return (false, null);
+                    //default:  return (false, null);
                 }
             }
             else
