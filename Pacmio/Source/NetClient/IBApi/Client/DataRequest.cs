@@ -32,41 +32,79 @@ namespace Pacmio.IB
 
         private static object RequestLockObject { get; } = new object();
 
-        public static DateTime HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false)
+        #region Fetch
+
+        public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
-            if (DataRequestReady)
-                lock (RequestLockObject)
-                    while (!IsCancelled)
+            lock (RequestLockObject)
+                if (DataRequestReady && HistoricalData_Connected)
+                {
+                StartDownload:
+                    SendRequest_HistoricalDataHeadTimestamp(bt);
+
+                    int time = 0;
+                    while (!DataRequestReady)
                     {
-                    StartDownload:
-                        DataRequestID = SendRequest_HistoricalDataHeadTimestamp(bt, includeExpired);
+                        time++;
+                        Thread.Sleep(10);
 
-                        int time = 0;
-                        while (!DataRequestReady)
+                        if (time > Timeout) // Handle Time out here.
                         {
-                            time++;
-                            Thread.Sleep(10);
-
-                            if (time > Timeout) // Handle Time out here.
-                            {
-                                SendCancel_HistoricalHeadDataTimestamp();
-                                Thread.Sleep(100);
-                                goto StartDownload;
-                            }
-                            else if (IsCancelled) // || //
-                            {
-                                SendCancel_HistoricalHeadDataTimestamp();
-                                goto End;
-                            }
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            goto End;
                         }
                     }
+                }
 
-                End:
+            End:
             return bt.Contract.BarTableEarliestTime;
         }
 
-        #region Task
+        public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)
+        {
+            var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
 
+            lock (RequestLockObject)
+                if (DataRequestReady && HistoricalData_Connected && bfi_valid)
+                {
+                    // We will download, but won't log the period if the stop may extended to the future.
+                    IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
+                    LastRequestedHistoricalDataPeriod = period;
+
+                StartDownload:
+                    SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
+
+                    int time = 0; // Wait the last transmit is over.
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_HistoricalData();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_HistoricalData();
+                            return;
+                        }
+                    }
+                }
+        }
+
+        #endregion Fetch
+
+        #region Task
+        /*
         private static readonly ConcurrentQueue<Action> DataRequestActionQueue = new ConcurrentQueue<Action>();
 
         private static readonly ConcurrentQueue<Action> DataRequestActionQueue_Background = new ConcurrentQueue<Action>();
@@ -101,7 +139,7 @@ namespace Pacmio.IB
                     Thread.Sleep(10);
             }
         }
-
+        */
         #endregion Task
     }
 }

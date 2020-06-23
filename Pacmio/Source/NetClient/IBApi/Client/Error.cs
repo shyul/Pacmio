@@ -46,11 +46,13 @@ namespace Pacmio.IB
 
                     case RequestType.RequestHistoricalData:
                         ParseError_HistoricalData(fields);
+                        DataRequestID = -1;
                         break;
 
                     case RequestType.RequestHeadTimestamp:
                         RemoveRequest(requestId);
-                        requestId_HistoricalDataHeadTimestamp = -1;
+                        //requestId_HistoricalDataHeadTimestamp = -1;
+                        DataRequestID = -1;
                         break;
 
                     case RequestType.RequestHistoricalTicks:
@@ -83,9 +85,10 @@ namespace Pacmio.IB
                         if (HistoricalData_Servers.Count == 0)
                         {
                             RemoveRequest(RequestType.RequestHeadTimestamp);
-                            requestId_HistoricalDataHeadTimestamp = -1;
+                            //requestId_HistoricalDataHeadTimestamp = -1;
                             RemoveRequest(RequestType.RequestHistoricalData);
-                            requestId_HistoricalData = -1;
+                            //requestId_HistoricalData = -1;
+                            DataRequestID = -1;
                             HistoricalData_Connected = false;
                         }
                         break;
@@ -93,6 +96,8 @@ namespace Pacmio.IB
                     case ("2106"): // 20:54:49:921 -> ---34-2--1-2106-HMDS data farm connection is OK:ushmds-
                         HistoricalData_Servers.CheckAdd(fields[4].Replace("HMDS data farm connection is OK:", ""));
                         HistoricalData_Connected = true;
+
+
                         break;
 
                     case ("2107"):

@@ -15,8 +15,6 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static bool IsReady_HistoricalDataHeadTimestamp => Connected && requestId_HistoricalDataHeadTimestamp == -1;
-        private static int requestId_HistoricalDataHeadTimestamp = -1;
         private static BarTable activeBarTable_HistoricalDataHeadTimestamp;
 
         /// <summary>
@@ -26,17 +24,17 @@ namespace Pacmio.IB
         /// <param name="useRTH"></param>
         /// <param name="type"></param>
         /// <param name="formatDate"></param>
-        internal static int SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
+        private static void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
         {
             Contract c = bt.Contract;
             var (valid_barFreq, _) = ApiCode.GetIbCode(bt.BarFreq);
             var (valid_barType, barTypeCode) = ApiCode.GetIbCode(bt.Type);
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
-            if (valid_barFreq && valid_barType && valid_exchange && requestId_HistoricalDataHeadTimestamp == -1) // Also please check the RHD is already active?
+            if (valid_barFreq && valid_barType && valid_exchange && DataRequestReady) // Also please check the RHD is already active?
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHeadTimestamp);
-                requestId_HistoricalDataHeadTimestamp = requestId;
+                DataRequestID = requestId;
                 activeBarTable_HistoricalDataHeadTimestamp = bt;
 
                 bool useSmart = c is ITradable it && it.AutoExchangeRoute;
@@ -77,11 +75,16 @@ namespace Pacmio.IB
                 };
 
                 SendRequest(paramsList);
-
-                return requestId;
             }
+        }
 
-            return -1;
+        private static void SendCancel_HistoricalHeadDataTimestamp()
+        {
+            if (Connected)
+            {
+                RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
+                DataRequestID = -1; // Emit update cancelled.
+            }
         }
 
         /// <summary>
@@ -91,30 +94,13 @@ namespace Pacmio.IB
         private static void Parse_HistoricalHeadDataTimestamp(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
-            if (requestId == requestId_HistoricalDataHeadTimestamp)
+            if (requestId == DataRequestID)
             {
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
                 activeBarTable_HistoricalDataHeadTimestamp.Contract.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
             }
             RemoveRequest(requestId, false);
-            requestId_HistoricalDataHeadTimestamp = -1;
-        }
-
-        public static void SendCancel_HistoricalHeadDataTimestamp() => SendCancel_HistoricalHeadDataTimestamp(requestId_HistoricalDataHeadTimestamp);
-        /*
-            if (Connected)
-            {
-                RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
-                DataRequestID = -1; // Emit update cancelled.
-            }*/
-
-    private static void SendCancel_HistoricalHeadDataTimestamp(int requestId)
-        {
-            if (Connected && requestId > -1)
-            {
-                RemoveRequest(requestId, RequestType.RequestHeadTimestamp);
-                requestId_HistoricalDataHeadTimestamp = -1; // Emit update cancelled.
-            }
+            DataRequestID = -1;
         }
     }
 }

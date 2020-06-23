@@ -81,11 +81,8 @@ namespace Pacmio.IB
 
         #region Historical Data
 
-        public static bool IsReady_HistoricalData => Connected && HistoricalData_Connected && requestId_HistoricalData == -1;
-        private static int requestId_HistoricalData = -1;
-
-        public static Period LastRequestedHistoricalDataPeriod { get; set; }  // Start Time and Stop Time
-        public static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
+        private static Period LastRequestedHistoricalDataPeriod { get; set; }  // Start Time and Stop Time
+        private static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
 
         private static BarTable active_HistoricalDataBarTable;
         private static TimeZoneInfo ActiveTimeZone_HistoricalData => active_HistoricalDataBarTable.Contract.TimeZone;
@@ -106,7 +103,7 @@ namespace Pacmio.IB
         /// <param name="formatDate"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        internal static bool SendRequest_HistoricalData(BarTable bt, string durationString, DateTime endTime,
+        private static void SendRequest_HistoricalData(BarTable bt, string durationString, DateTime endTime,
             bool keepUpToDate = false, bool includeExpired = false, int formatDate = 1,
             ICollection<(string, string)> options = null)
         {
@@ -118,10 +115,10 @@ namespace Pacmio.IB
             var (valid_barType, barTypeCode) = ApiCode.GetIbCode(bt.Type);
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
-            if (IsReady_HistoricalData && valid_barFreq && valid_barType && valid_exchange)
+            if (valid_barFreq && valid_barType && valid_exchange && DataRequestReady)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalData);
-                requestId_HistoricalData = requestId;
+                DataRequestID = requestId;
                 active_HistoricalDataBarTable = bt;
 
                 bool useSmart = c is ITradable it && it.AutoExchangeRoute;
@@ -191,21 +188,16 @@ namespace Pacmio.IB
                 while ((DateTime.Now - LastDataRequestTime).TotalSeconds < 3) { Thread.Sleep(200); }
                 SendRequest(paramsList);
                 LastDataRequestTime = DateTime.Now;
-
-                return true;
             }
-            return false;
         }
 
 
-        public static void SendCancel_HistoricalData() => SendCancel_HistoricalData(requestId_HistoricalData);
-
-        private static void SendCancel_HistoricalData(int requestId)
-        {
-            if (Connected && requestId > -1)
+        private static void SendCancel_HistoricalData() 
+        { 
+            if (Connected)
             {
-                RemoveRequest(requestId, RequestType.RequestHistoricalData);
-                requestId_HistoricalData = -1; // Emit update cancelled.
+                RemoveRequest(DataRequestID, RequestType.RequestHistoricalData);
+                DataRequestID = -1; // Emit update cancelled.
             }
         }
 
@@ -219,9 +211,12 @@ namespace Pacmio.IB
             if (requestId > -1)
             {
                 RemoveRequest(requestId, RequestType.RequestHistoricalData);
-                requestId_HistoricalData = -1;
-                //ActiveBarTable_HistoricalData = null;
+                if(DataRequestID == requestId) 
+                {
+                    DataRequestID = -1;
+                }
 
+                //ActiveBarTable_HistoricalData = null;
                 if (fields[3] == "366")
                 {
                     // Unable to find the table for the contract
@@ -234,7 +229,7 @@ namespace Pacmio.IB
             int requestId = fields[1].ToInt32(-1);
             int num = fields[4].ToInt32();
 
-            if (fields.Length == 5 + num * 8 && requestId == requestId_HistoricalData)
+            if (fields.Length == 5 + num * 8 && requestId == DataRequestID)
             {
                 /*
                 LastHistoricalDataPeriod = new Period(Util.ParseTime(fields[2], ActiveTimeZone_HistoricalData), 
@@ -271,7 +266,7 @@ namespace Pacmio.IB
             }
 
             RemoveRequest(requestId, false); // false means the task is ended with success
-            requestId_HistoricalData = -1;
+            DataRequestID = -1;
         }
 
         private static void Parse_HistoricalDataUpdate(string[] fields)

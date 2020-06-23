@@ -130,12 +130,12 @@ namespace Pacmio.IB
                     DecodeTask = new Task(() => DecodeWorker(), TaskCancelTs.Token);
                     ReceiveTask = new Task(() => ReceiveWorker(), TaskCancelTs.Token);
                     SendTask = new Task(() => SendWorker(), TaskCancelTs.Token);
-                    DataRequestTask = new Task(() => DataRequestTaskWorker(), TaskCancelTs.Token);
+                    //DataRequestTask = new Task(() => DataRequestTaskWorker(), TaskCancelTs.Token);
 
                     DecodeTask.Start();
                     ReceiveTask.Start();
                     SendTask.Start();
-                    DataRequestTask.Start();
+                    //DataRequestTask.Start();
 
                     try
                     {
@@ -220,10 +220,10 @@ namespace Pacmio.IB
                                                                 //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "TaskCancelTs.Cancel();");
 
             int i = Timeout + 100;
-            while ((!(DataRequestTask is null)) && DataRequestTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
-            DataRequestTask?.Dispose();
+            //while ((!(DataRequestTask is null)) && DataRequestTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
+            //DataRequestTask?.Dispose();
 
-            i = Timeout + 100;
+            //i = Timeout + 100;
             while ((!(SendTask is null)) && SendTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
             SendTask?.Dispose();
             //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "SendTask?.Dispose();");
@@ -263,11 +263,13 @@ namespace Pacmio.IB
             TaskCancelTs = new CancellationTokenSource();
 
             RequestId = 0;
+            DataRequestID = -1;
             ReceivedMessageCount = 0;
-            requestId_HistoricalData = -1;
+
+            //requestId_HistoricalData = -1;
             requestId_ContractData = -1;
             requestId_ContractSamples = -1;
-            requestId_HistoricalDataHeadTimestamp = -1;
+            //requestId_HistoricalDataHeadTimestamp = -1;
             requestId_HistoricalTick = -1;
         }
 

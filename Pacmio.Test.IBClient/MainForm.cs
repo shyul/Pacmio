@@ -476,6 +476,7 @@ namespace TestClient
                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
             string symbolText = TextBoxMultiContracts.Text;
+            DownloadBarTable.SymbolList.Clear();
             DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
             TextBoxMultiContracts.Text = symbolText;
 

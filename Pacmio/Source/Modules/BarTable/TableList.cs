@@ -283,7 +283,7 @@ namespace Pacmio
         /// <returns></returns>
         private static bool Fetch_IB(BarTable bt, Period period)
         {
-            int time = 0;
+            //int time = 0;
 
             bool isModified = false;
 
@@ -308,30 +308,10 @@ namespace Pacmio
                 //If EarliestTime is unset, then request it here.
                 if (bt.EarliestTime == DateTime.MinValue)
                 {
+                    if (IsCancellationRequested)
+                        goto End;
 
-                Download_HistoricalDataHeadTimestamp:
-                    IB.Client.SendRequest_HistoricalDataHeadTimestamp(bt);
-
-                    time = 0;
-                    while (!IB.Client.IsReady_HistoricalDataHeadTimestamp)
-                    {
-                        time++;
-                        Thread.Sleep(100);
-
-                        // Check Cancellation Token Here in the if statament
-
-                        if (time > DownloadTimeout) // Handle Time out here.
-                        {
-                            IB.Client.SendCancel_HistoricalHeadDataTimestamp();
-                            Thread.Sleep(100);
-                            goto Download_HistoricalDataHeadTimestamp;
-                        }
-                        else if (IsCancellationRequested)
-                        {
-                            IB.Client.SendCancel_HistoricalHeadDataTimestamp();
-                            goto End;
-                        }
-                    }
+                    IB.Client.Fetch_HistoricalDataHeadTimestamp(bt, DownloadCancellationTokenSource);
                 }
 
                 // https://interactivebrokers.github.io/tws-api/historical_limitations.html
@@ -358,59 +338,17 @@ namespace Pacmio
                     api_request_pd_list.AddRange(missing_period.Split(bfi.Duration));
                 }
 
-                time = 0;
-                while (!IB.Client.IsReady_HistoricalData)
-                {
-                    time++;
-                    Thread.Sleep(100);
-                    if (time > DownloadTimeout) // Handle Time out here.
-                    {
-                        IB.Client.SendCancel_HistoricalData();
-                        Thread.Sleep(100);
-                        break;
-                    }
-                    else if (IsCancellationRequested)
-                    {
-                        IB.Client.SendCancel_HistoricalData();
-                        goto End;
-                    }
-                }
 
                 int pt = 0;
                 foreach (Period api_request_pd in api_request_pd_list.OrderBy(n => n.Start))
                 {
+                    if (IsCancellationRequested)
+                        goto End;
+                    else
+                        Thread.Sleep(2000);
+
                     Console.WriteLine("RequestHistoricalData: | Sending Api Request: " + api_request_pd);
-
-                    IB.Client.LastRequestedHistoricalDataPeriod = api_request_pd;
-
-                    // We will download, but won't log the period if the stop may extended to the future.
-                    IB.Client.IsLoggingLastRequestedHistoricalDataPeriod = api_request_pd.Stop < DateTime.Now.AddDays(-1);
-
-                Download_HistoricalData:
-                    isModified = IB.Client.SendRequest_HistoricalData(bt, bfi.DurationString, api_request_pd.Stop);
-
-                    time = 0; // Wait the last transmit is over.
-                    while (!IB.Client.IsReady_HistoricalData)
-                    {
-                        time++;
-                        Thread.Sleep(100);
-
-                        // Check Cancellation Token Here in the if statament
-
-                        if (time > DownloadTimeout) // Handle Time out here.
-                        {
-                            IB.Client.SendCancel_HistoricalData();
-                            Thread.Sleep(100);
-                            goto Download_HistoricalData;
-                        }
-                        else if (IsCancellationRequested)
-                        {
-                            IB.Client.SendCancel_HistoricalData();
-                            goto End;
-                        }
-                    }
-
-                    Thread.Sleep(2000);
+                    IB.Client.Fetch_HistoricalData(bt, api_request_pd, DownloadCancellationTokenSource);
 
                     pt++;
                     DownloadProgress?.Report(100 * pt / api_request_pd_list.Count);
