@@ -20,7 +20,7 @@ namespace Pacmio
 
         public int Count => Rows.Count;
 
-        public object DataObjectLock => throw new NotImplementedException();
+        public object DataLockObject => throw new NotImplementedException();
 
         public string Name => throw new NotImplementedException();
 

@@ -26,7 +26,7 @@ namespace Pacmio.IB
         /// <param name="useRTH"></param>
         /// <param name="type"></param>
         /// <param name="formatDate"></param>
-        internal static void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
+        internal static int SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
         {
             Contract c = bt.Contract;
             var (valid_barFreq, _) = ApiCode.GetIbCode(bt.BarFreq);
@@ -77,7 +77,11 @@ namespace Pacmio.IB
                 };
 
                 SendRequest(paramsList);
+
+                return requestId;
             }
+
+            return -1;
         }
 
         /// <summary>
@@ -97,8 +101,14 @@ namespace Pacmio.IB
         }
 
         public static void SendCancel_HistoricalHeadDataTimestamp() => SendCancel_HistoricalHeadDataTimestamp(requestId_HistoricalDataHeadTimestamp);
+        /*
+            if (Connected)
+            {
+                RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
+                DataRequestID = -1; // Emit update cancelled.
+            }*/
 
-        private static void SendCancel_HistoricalHeadDataTimestamp(int requestId)
+    private static void SendCancel_HistoricalHeadDataTimestamp(int requestId)
         {
             if (Connected && requestId > -1)
             {

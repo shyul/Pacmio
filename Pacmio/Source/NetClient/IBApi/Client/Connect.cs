@@ -130,10 +130,12 @@ namespace Pacmio.IB
                     DecodeTask = new Task(() => DecodeWorker(), TaskCancelTs.Token);
                     ReceiveTask = new Task(() => ReceiveWorker(), TaskCancelTs.Token);
                     SendTask = new Task(() => SendWorker(), TaskCancelTs.Token);
+                    DataRequestTask = new Task(() => DataRequestTaskWorker(), TaskCancelTs.Token);
 
                     DecodeTask.Start();
                     ReceiveTask.Start();
                     SendTask.Start();
+                    DataRequestTask.Start();
 
                     try
                     {
@@ -215,9 +217,13 @@ namespace Pacmio.IB
             IsRequestIdValid = false;
 
             if (!(TaskCancelTs is null)) TaskCancelTs.Cancel(); // Cancel all tasks
-            //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "TaskCancelTs.Cancel();");
+                                                                //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "TaskCancelTs.Cancel();");
 
             int i = Timeout + 100;
+            while ((!(DataRequestTask is null)) && DataRequestTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
+            DataRequestTask?.Dispose();
+
+            i = Timeout + 100;
             while ((!(SendTask is null)) && SendTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
             SendTask?.Dispose();
             //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "SendTask?.Dispose();");

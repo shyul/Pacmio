@@ -884,7 +884,7 @@ namespace Pacmio
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
-        public object DataObjectLock { get; } = new object();
+        public object DataLockObject { get; } = new object();
 
         #region Intrinsic Data Prepare before Technical Analysis
 
@@ -893,7 +893,7 @@ namespace Pacmio
         /// Triggering conditions --> Split != 1, Dividend !=0 && adj_div == true
         private void SortThenAdjust(bool forwardAdjust = true)
         {
-            lock (DataObjectLock)
+            lock (DataLockObject)
             {
                 Sort();
                 if (Contract is ITradable it)
@@ -965,15 +965,15 @@ namespace Pacmio
 
         #region Exposed Functions
 
-        public void CalculateOnly() { lock (DataObjectLock) { Calculate(); } }
+        public void CalculateOnly() { lock (DataLockObject) { Calculate(); } }
 
-        public void SortThenAdjustOnly() { lock (DataObjectLock) { SortThenAdjust(); } }
+        public void SortThenAdjustOnly() { lock (DataLockObject) { SortThenAdjust(); } }
 
-        public void SortThenReverseAdjustOnly() { lock (DataObjectLock) { SortThenAdjust(false); } }
+        public void SortThenReverseAdjustOnly() { lock (DataLockObject) { SortThenAdjust(false); } }
 
         public void AdjustThenCalculate()
         {
-            lock (DataObjectLock)
+            lock (DataLockObject)
             {
                 SortThenAdjust();
                 Calculate();
@@ -982,7 +982,7 @@ namespace Pacmio
 
         public void ReverseAdjustThenCalculate()
         {
-            lock (DataObjectLock)
+            lock (DataLockObject)
             {
                 SortThenAdjust(false);
                 Calculate();

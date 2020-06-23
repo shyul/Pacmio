@@ -59,7 +59,7 @@ namespace Pacmio
             }
         }
 
-        public object DataObjectLock { get; } = new object();
+        public object DataLockObject { get; } = new object();
 
         public string Name { get; set; }
 

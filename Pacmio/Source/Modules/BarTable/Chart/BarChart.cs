@@ -190,8 +190,8 @@ namespace Pacmio
                 SignalArea.Visible = BarTable.CurrentTradeSetting is TradeRule; // BarTable.HasSignalAnalysis;
                 PositionArea.Visible = BarTable.CurrentTradeSetting is ITradeSetting; //BarTable.HasSignalAnalysis;
 
-                lock (bt.DataObjectLock)
-                    lock (GraphicsObjectLock)
+                lock (bt.DataLockObject)
+                    lock (GraphicsLockObject)
                     {
 
 
@@ -425,8 +425,8 @@ namespace Pacmio
             }
             else if (IsActive && ReadyToShow && ChartBounds.Width > 0 && m_barTable is BarTable bt)
             {
-                lock (bt.DataObjectLock)
-                    lock (GraphicsObjectLock)
+                lock (bt.DataLockObject)
+                    lock (GraphicsLockObject)
                     {
                         for (int i = 0; i < Areas.Count; i++)
                         {

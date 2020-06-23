@@ -197,6 +197,7 @@
     <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderTimeInForce.cs" />
     <Compile Include="Source\Modules\Trade\TradeLog\TradeInfo.cs" />
+    <Compile Include="Source\NetClient\IBApi\Client\DataRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Completed.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\DeltaNeutralValidation.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Error.cs" />
