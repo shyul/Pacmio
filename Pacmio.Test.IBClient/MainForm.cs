@@ -460,7 +460,7 @@ namespace TestClient
         private void BtnMatchSymbols_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task m = new Task(() => { ContractList.MakeUp(Cts, Progress); });
+            Task m = new Task(() => { ContractList.UpdateContractData(Cts, Progress); });
             m.Start();
         }
 

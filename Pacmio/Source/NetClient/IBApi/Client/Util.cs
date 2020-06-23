@@ -105,9 +105,9 @@ namespace Pacmio.IB
             }
         }
 
-        public static (bool, Contract) GetSymbolByIbCode(string symbolName, string exchangeStr, string secTypeCode, string conIdStr)
+        public static (bool, Contract) GetContractByIbCode(string symbolName, string exchangeStr, string secTypeCode, string conIdStr)
         {
-            (bool validExchange, Exchange ex, string suffix) = ExchangeInfo.GetEnum(exchangeStr);
+            (bool validExchange, Exchange exchange, string suffix) = ExchangeInfo.GetEnum(exchangeStr);
 
             if (validExchange)
             {
@@ -115,7 +115,7 @@ namespace Pacmio.IB
                 {
                     case ("STK"):
                         {
-                            Stock c = ContractList.GetOrAdd(new Stock(symbolName, ex));
+                            Stock c = ContractList.GetOrAdd(new Stock(symbolName, exchange));
                             if (!string.IsNullOrEmpty(suffix)) c.ExchangeSuffix = suffix;
                             c.ConId = conIdStr.ToInt32(0);
                             if (c.ConId == 0)
@@ -129,6 +129,19 @@ namespace Pacmio.IB
                             return (true, c);
                         }
                     case ("IND"):
+                        {
+                            Index c = ContractList.GetOrAdd(new Index(symbolName, exchange));
+                            c.ConId = conIdStr.ToInt32(0);
+                            if (c.ConId == 0)
+                            {
+                                c.Status = ContractStatus.Unknown;
+                            }
+                            else if (c.Status == ContractStatus.Unknown && c.ConId > 0)
+                            {
+                                c.Status = ContractStatus.Alive;
+                            }
+                            return (true, c);
+                        }
                     case ("OPT"):
                     case ("FUT"):
                     case ("FUND"):
@@ -139,6 +152,8 @@ namespace Pacmio.IB
             else
                 return (false, null);
         }
+
+
 
         public static TickType ToTickType(this string value)
         {

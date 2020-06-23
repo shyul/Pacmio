@@ -41,9 +41,9 @@ namespace Pacmio.IB
             int msgVersion = fields[1].ToInt32(-1);
             if(msgVersion == 3) 
             {
-                (bool symbolInfoValid, Contract c) = Util.GetSymbolByIbCode(fields[4], fields[10], fields[5], fields[3]);
+                (bool contractValid, Contract c) = Util.GetContractByIbCode(fields[4], fields[10], fields[5], fields[3]);
 
-                if (symbolInfoValid)
+                if (contractValid)
                 {
                     string accountCode = fields[2];
                     Account ac = AccountManager.GetOrAdd(accountCode);

@@ -2,6 +2,8 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// https://interactivebrokers.github.io/tws-api/basic_contracts.html#cash
+/// 
 /// ***************************************************************************
 
 using System;
@@ -16,6 +18,14 @@ using Xu;
 
 namespace Pacmio
 {
+    /*
+     
+     Contract contract = new Contract();
+            contract.Symbol = "VINIX";
+            contract.SecType = "FUND";
+            contract.Exchange = "FUNDSERV";
+            contract.Currency = "USD";
+     */
     [Serializable, DataContract(Name = "MutualFund")]
     public class MutualFund : Contract, ITradable
     {

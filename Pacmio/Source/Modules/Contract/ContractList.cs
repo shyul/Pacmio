@@ -61,53 +61,14 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetList(int conId) => Values.Where(val => val.ConId == conId);
 
-        public static bool Remove((string name, Exchange exchange, string typeName) info) 
+        public static bool Remove((string name, Exchange exchange, string typeName) info)
         {
             return List.TryRemove(info, out _);
         }
 
-        //private static IEnumerable<Contract> GetList(string value, List<Exchange> exchanges) => Values.Where(val => (val.Name.Equals(value) && exchanges.Contains(val.Exchange)));
-        /*
-        public static Contract GetOrAdd(string name, Exchange exchange, string typeName)
-            => GetOrAdd((name, exchange, typeName));
-
-        private static Contract GetOrAdd((string name, Exchange exchange, string typeName) info)
-        {
-            if (!List.ContainsKey(info))
-            {
-                switch (info.typeName)
-                {
-                    case ContractType.STOCK: List.TryAdd(info, new Stock(info.name, info.exchange)); break;
-                    default: break;
-                }
-            }
-
-            if (!List.ContainsKey(info))
-                return null;
-            else
-                return List[info];
-        }
-        */
-
-
-        //private static Contract Get(int pt) => List[GetKey(pt)];
-        //private static (bool IsSymbolValid, Contract Symbol) Get(string name, Exchange exchange, ContractType type) => Get((name, exchange, type));
-        /*
-        private static (bool IsSymbolValid, Contract Symbol) Get((string name, Exchange exchange, ContractType type) info)
-        {
-            if (List.ContainsKey(info))
-                return (true, List[info]);
-            else
-                return (false, null);
-        }*/
-
-        //private static bool Remove(string name, Exchange exchange, ContractType type) => Remove((name, exchange, type));
-        //private static bool Remove((string name, Exchange exchange, ContractType type) info) => List.TryRemove(info, out _);
-        //private static bool Remove(Contract si) => List.TryRemove(si.Info, out _);
-
         #region Fetch / Update
 
-        public static void MakeUp(CancellationTokenSource cts, IProgress<int> progress)
+        public static void UpdateContractData(CancellationTokenSource cts, IProgress<int> progress)
         {
             var cList = Values.Where(n => n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
 
@@ -141,7 +102,35 @@ namespace Pacmio
                 progress.Report(pt * 100 / count);
             }
         }
+        /*
+        public static Contract GetOrFetch(int conId)
+        {
+            DownloadCancellationTokenSource = null;
+            var list = GetList(conId);
 
+            if (list.Count() == 1)
+                return list.First();
+            else
+            {
+                if (list.Count() > 1)
+                {
+                    Contract[] toRemove = list.ToArray();
+                    foreach (Contract c in toRemove)
+                        Remove(c.Info);
+                }
+
+                if (Root.IBConnected)
+                {
+                    while () ;
+
+                    RequestFetchSymbolContracts(non_existing_symbols);
+                    WaitSymbolTaskBusy();
+                }
+
+                return GetList(conId).First();
+            }
+        }
+        */
         public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode)
         {
             DownloadCancellationTokenSource = null;
@@ -149,7 +138,7 @@ namespace Pacmio
 
             if (list.Count() == 0 && Root.IBConnected)
             {
-                RequestFetchSymbolContracts(symbol);
+                RequestFetchSymbolContract(symbol);
                 WaitSymbolTaskBusy();
             }
 
@@ -163,11 +152,13 @@ namespace Pacmio
 
             var existing_symbols = GetList(symbols, countryCode).Select(n => n.Name);
             var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
-            if (Root.IBConnected)
+
+            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
             {
                 RequestFetchSymbolContracts(non_existing_symbols);
                 WaitSymbolTaskBusy();
             }
+
             return GetList(symbols, countryCode);
         }
 
@@ -175,7 +166,13 @@ namespace Pacmio
         {
             DownloadCancellationTokenSource = null;
             IEnumerable<Contract> list = GetList(name, countryCode).Where(n => n.ConId > 0);
-            if (list.Count() == 0) RequestFetchSymbolContracts(name);
+
+            if (list.Count() == 0 && Root.IBConnected)
+            {
+                RequestFetchSymbolContract(name);
+                WaitSymbolTaskBusy();
+            }
+
             return list;
         }
 
@@ -183,20 +180,14 @@ namespace Pacmio
         {
             DownloadCancellationTokenSource = null;
             var list = Values.Where(n => n.ConId == conId && n.Name == name);
-            if (list.Count() == 0) RequestFetchSymbolContracts(name);
+
+            if (list.Count() == 0 && Root.IBConnected)
+            {
+                RequestFetchSymbolContract(name);
+                WaitSymbolTaskBusy();
+            }
+
             return list;
-        }
-
-        private static void RequestFetchSymbolContracts(IEnumerable<string> symbols)
-        {
-            foreach (string symbol in symbols)
-                RequestFetchSymbolContracts(symbol);
-        }
-
-        private static void RequestFetchSymbolContracts(string symbol)
-        {
-            if (CheckedSymbolList.ContainsKey(symbol) || SymbolTaskList.Contains(symbol)) return;
-            SymbolTaskList.Enqueue(symbol);
         }
 
         #endregion Fetch / Update
@@ -216,6 +207,18 @@ namespace Pacmio
         }
 
         #region Symbol Task
+
+        private static void RequestFetchSymbolContracts(IEnumerable<string> symbols)
+        {
+            foreach (string symbol in symbols)
+                RequestFetchSymbolContract(symbol);
+        }
+
+        private static void RequestFetchSymbolContract(string symbol)
+        {
+            if (CheckedSymbolList.ContainsKey(symbol) || SymbolTaskList.Contains(symbol)) return;
+            SymbolTaskList.Enqueue(symbol);
+        }
 
         public static CancellationTokenSource DownloadCancellationTokenSource { get; private set; }
 

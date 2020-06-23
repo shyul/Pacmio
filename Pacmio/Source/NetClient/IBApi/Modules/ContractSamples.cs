@@ -78,7 +78,7 @@ namespace Pacmio.IB
                     {
                         //Console.WriteLine("Item: " + symbolStr +" | " + exchangeStr + " | " + secTypeStr + " | " + conIdStr);
 
-                        (bool symbolInfoValid, Contract c) = Util.GetSymbolByIbCode(symbolStr, exchangeStr, secTypeCode, conIdStr);
+                        (bool symbolInfoValid, Contract c) = Util.GetContractByIbCode(symbolStr, exchangeStr, secTypeCode, conIdStr);
 
                         if (symbolInfoValid) 
                         {
