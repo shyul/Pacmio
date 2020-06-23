@@ -40,10 +40,5 @@ namespace Pacmio
         }
 
         public static TimeSpan Range { get; set; }
-
-        /// <summary>
-        /// Compound Result
-        /// </summary>
-        public static SimulationResult Result { get; set; } = new SimulationResult();
     }
 }

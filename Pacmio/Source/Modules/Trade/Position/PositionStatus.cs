@@ -16,9 +16,9 @@ namespace Pacmio
 {
     public class PositionStatus : IRow
     {
-        public PositionStatus()
+        public PositionStatus(Contract c)
         {
-
+            Contract = c;
         }
 
         public Contract Contract { get; }
@@ -65,14 +65,30 @@ namespace Pacmio
 
         #endregion Risk Management
 
-
         #region Grid View
 
-        public object this[Column column] => throw new NotImplementedException();
+        public object this[Column column]
+        {
+            get
+            {
+                return column switch
+                {
+                    ContractColumn _ => Contract,
+                    NumericColumn sc when sc == Column_Quantity => Quantity,
+                    NumericColumn sc when sc == Column_AveragePrice => AveragePrice,
+                    NumericColumn dc when dc == Column_Value => Value,
+                    NumericColumn dc when dc == MarketData.Column_Last => Contract.MarketData.Last,
+                    NumericColumn dc when dc == Column_PNL => 20,
+
+                    _ => null,
+                };
+            }
+        }
 
         public static readonly NumericColumn Column_Quantity = new NumericColumn("QUANTITY");
         public static readonly NumericColumn Column_AveragePrice = new NumericColumn("AVG_PRICE");
         public static readonly NumericColumn Column_Value = new NumericColumn("VALUE");
+
 
         public static readonly NumericColumn Column_PNL = new NumericColumn("PNL");
 

@@ -15,7 +15,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly List<(Account, Contract)> UpdatedPositions = new List<(Account, Contract)>();
+        private static readonly HashSet<(Account, Contract)> UpdatedPositions = new HashSet<(Account, Contract)>();
 
         /// <summary>
         /// Subscribes to position updates for all accessible accounts.
@@ -53,9 +53,9 @@ namespace Pacmio.IB
                     {
                         double averagePrice = fields[15].ToDouble();
                         PositionStatus ps = ac.GetPosition(c);
-                        ac.Positions[c].Quantity = totalQuantity;
-                        ac.Positions[c].AveragePrice = averagePrice;
-                        UpdatedPositions.Add((ac, c));
+                        ps.Quantity = totalQuantity;
+                        ps.AveragePrice = averagePrice;
+                        UpdatedPositions.CheckAdd((ac, c));
                     }
                 }
             }

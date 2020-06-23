@@ -59,7 +59,7 @@ namespace Pacmio
         public PositionStatus GetPosition(Contract c)
         {
             if (!Positions.ContainsKey(c))
-                Positions.TryAdd(c, new PositionStatus());
+                Positions.TryAdd(c, new PositionStatus(c));
 
             return Positions[c];
         }

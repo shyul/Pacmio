@@ -13,24 +13,35 @@ using System.Text;
 using System.Runtime.Serialization;
 using Xu;
 using Xu.Chart;
+using System.Diagnostics;
 
 namespace Pacmio
 {
     public class SimulationSet
     {
-        public Contract Contract { get; set; }
+        public SimulationSet(Contract c, TradeRule tr)
+        {
+            Contract = c;
+            TradeRule = tr;
+            Status = new PositionStatus(c);
+        }
 
-        public TradeRule TradeRule { get; set; }
+        public readonly Contract Contract;
 
-    
-        public PositionStatus Status { get; set; }
+        public readonly TradeRule TradeRule;
 
+        public readonly PositionStatus Status;
 
-        public SimulationResult Result { get; set; }
+        public readonly SimulationResult Result = new SimulationResult();
+
+        #region Simulation Settings
 
         public double SlippageRatio { get; set; } = 0.0001;
 
-        // List All BarTable here
+
+        #endregion Simulation Settings
+
+
 
         public void AddLiquidity(DateTime time, double quantity)
         {

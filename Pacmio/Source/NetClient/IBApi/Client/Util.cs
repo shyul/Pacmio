@@ -57,7 +57,7 @@ namespace Pacmio.IB
                 throw new Exception("Unable to parse field into DateTime: " + value);
         }
 
-        public static (string, TimeSpan) GetMaximumDuration(this BarFreq freq) 
+        public static (string, TimeSpan) GetMaximumDuration(this BarFreq freq)
         {
             switch (freq)
             {
@@ -107,33 +107,33 @@ namespace Pacmio.IB
 
         public static (bool, Contract) GetSymbolByIbCode(string symbolName, string exchangeStr, string secTypeCode, string conIdStr)
         {
-            // TODO: if conId 
-            
-            
             (bool validExchange, Exchange ex, string suffix) = ExchangeInfo.GetEnum(exchangeStr);
 
             if (validExchange)
             {
-                switch (secTypeCode) 
+                switch (secTypeCode)
                 {
                     case ("STK"):
-                    {
-                        Stock c = ContractList.GetOrAdd(new Stock(symbolName, ex));
-                        if (!string.IsNullOrEmpty(suffix)) c.ExchangeSuffix = suffix;
-                        c.ConId = conIdStr.ToInt32(0);
-                        if (c.ConId == 0)
                         {
-                            c.Status = ContractStatus.Unknown;
+                            Stock c = ContractList.GetOrAdd(new Stock(symbolName, ex));
+                            if (!string.IsNullOrEmpty(suffix)) c.ExchangeSuffix = suffix;
+                            c.ConId = conIdStr.ToInt32(0);
+                            if (c.ConId == 0)
+                            {
+                                c.Status = ContractStatus.Unknown;
+                            }
+                            else if (c.Status == ContractStatus.Unknown && c.ConId > 0)
+                            {
+                                c.Status = ContractStatus.Alive;
+                            }
+                            return (true, c);
                         }
-                        else if (c.Status == ContractStatus.Unknown && c.ConId > 0)
-                        {
-                            c.Status = ContractStatus.Alive;
-                        }
-                        return (true, c);
-                    }
+                    case ("IND"):
+                    case ("OPT"):
+                    case ("FUT"):
+                    case ("FUND"):
+                    case ("CASH"):
                     default: throw new Exception("GetSymbolByIbCode: Unknown secTypeCode");
-
-                    //default:  return (false, null);
                 }
             }
             else

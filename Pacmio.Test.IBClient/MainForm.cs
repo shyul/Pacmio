@@ -19,6 +19,13 @@ namespace TestClient
 {
     public partial class MainForm : Form
     {
+        public BarFreq BarFreq => SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
+
+        public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
+
+        public Period HistoricalPeriod => (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                        new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+
         public MainForm()
         {
             InitializeComponent();
@@ -150,42 +157,37 @@ namespace TestClient
             else
                 DateTimePickerHistoricalDataStop.Enabled = true;
         }
-        private void BtnRequestHistoricalData_Click(object sender, EventArgs e)
-        {
-            LoadValidSymbolHistoricalDataChart();
-        }
+
+        #region Bar Chart
 
 
 
-        public void LoadValidSymbolHistoricalDataChart()
+        private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
         {
             if (ValidateSymbol())
             {
-                //if (CheckBoxChartToCurrent.Checked && Client.Connected)
-                // ContractTest.ActiveContract.RequestQuote("236,375");
-
-                BarFreq barFreq = SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
-                BarType barType = SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
-
-                Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                    new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
-
-                BarTable bt = ContractTest.ActiveContract.GetTable(barFreq, barType);//, pd);
 
 
 
 
-                //BarChartForm bcf = ChartTest.ConfigChart(bt); // Added calculation
-                //BarChartManager.AddForm(bcf);
-
-                bt.Reset(pd, null, null);
+                BarTable bt = ContractTest.ActiveContract.GetTable(BarFreq, BarType);//, pd);
+                bt.Reset(HistoricalPeriod, null, null);
                 ChartList.GetForm(bt, ChartList.SampleChartConfig());
-
-                //ChartTest.Ctf.AddForm(DockStyle.Fill, 0, bcf);
                 Root.Form.Show();
             }
+        }
+
+        private void BtnLoadMultiHistoricalChart_Click(object sender, EventArgs e)
+        {
 
         }
+
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => ChartList.ResetAllChartsPointer();
+
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => ChartList.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
+
+
+        #endregion Bar Chart
 
         #region Simulation
 
@@ -205,22 +207,15 @@ namespace TestClient
         {
             if (!Root.IBConnected || !ValidateSymbol()) return;
 
-            Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
 
             //Client.Request_HistoricalTick(ContractTest.ActiveContract, pd);
             //Client.SendRequest_HistoricalTick(ContractTest.ActiveContract, DateTime.Now.AddHours(-6));
         }
 
-        private void BtnAlignCharts_Click(object sender, EventArgs e) => ChartList.ResetAllChartsPointer();
 
-        private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
-        {
-            Period pd = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
-            ChartList.UpdateAllCharts(pd, Cts = new CancellationTokenSource(), null);
-        }
+
+
 
         private void BtnImportSymbols_Click(object sender, EventArgs e)
         {
@@ -794,6 +789,7 @@ namespace TestClient
         }
 
         #endregion Order
+
 
     }
     public static class DataGridHelper

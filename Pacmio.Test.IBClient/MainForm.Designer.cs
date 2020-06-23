@@ -40,18 +40,13 @@ namespace TestClient
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
-            this.BtnArmLiveTrade = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.TextBoxRunAllSimulationInitialAccountValue = new System.Windows.Forms.TextBox();
-            this.BtnRunAllSimulation = new System.Windows.Forms.Button();
-            this.BtnTestScalping = new System.Windows.Forms.Button();
             this.BtnCloseChart = new System.Windows.Forms.Button();
             this.ListViewAllCharts = new System.Windows.Forms.ListView();
             this.BtnAlignCharts = new System.Windows.Forms.Button();
             this.BtnTestRealTimeBars = new System.Windows.Forms.Button();
             this.BtnRequestHistoricalTicks = new System.Windows.Forms.Button();
             this.BtnChartsUpdateAll = new System.Windows.Forms.Button();
-            this.BtnRequestHistoricalData = new System.Windows.Forms.Button();
+            this.BtnLoadHistoricalChart = new System.Windows.Forms.Button();
             this.tabContract = new System.Windows.Forms.TabPage();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
             this.BtnValidUSSymbol = new System.Windows.Forms.Button();
@@ -70,46 +65,55 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnCancelAllScanner = new System.Windows.Forms.Button();
+            this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
             this.LabelWatchListName = new System.Windows.Forms.Label();
+            this.BtnRequestScannerParameter = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.LabelGenericTickList = new System.Windows.Forms.Label();
+            this.BtnRequestScanner = new System.Windows.Forms.Button();
             this.TextBoxGenericTickList = new System.Windows.Forms.TextBox();
             this.BtnMarketDataAddMultiContracts = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.BtnMarketDataAddContract = new System.Windows.Forms.Button();
-            this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
-            this.BtnCancelAllScanner = new System.Windows.Forms.Button();
-            this.BtnRequestScannerParameter = new System.Windows.Forms.Button();
-            this.BtnRequestScanner = new System.Windows.Forms.Button();
             this.tabOrder = new System.Windows.Forms.TabPage();
-            this.BtnOrderSettingPlaceMultiOrder = new System.Windows.Forms.Button();
-            this.BtnOrderSettingOrderBraket = new System.Windows.Forms.Button();
-            this.LabelOrderSettingGTD = new System.Windows.Forms.Label();
-            this.DateTimePickerOrderSettingGTD = new System.Windows.Forms.DateTimePicker();
-            this.CheckBoxOrderWhatIf = new System.Windows.Forms.CheckBox();
-            this.LabelOrderSettingStopPrice = new System.Windows.Forms.Label();
-            this.LabelOrderSettingLimitPrice = new System.Windows.Forms.Label();
-            this.BtnGetCompletedOrders = new System.Windows.Forms.Button();
-            this.TextBoxOrderSettingStopPrice = new System.Windows.Forms.TextBox();
-            this.TextBoxOrderSettingLimitPrice = new System.Windows.Forms.TextBox();
-            this.LabelOrderSettingTIF = new System.Windows.Forms.Label();
-            this.LabelOrderSettingType = new System.Windows.Forms.Label();
-            this.LabelOrderSettingQuantity = new System.Windows.Forms.Label();
-            this.ComboBoxOrderSettingTIF = new System.Windows.Forms.ComboBox();
-            this.ComboxBoxOrderSettingType = new System.Windows.Forms.ComboBox();
+            this.GroupBoxOrderSetting = new System.Windows.Forms.GroupBox();
+            this.BtnOrderSettingApplyCurrentPrice = new System.Windows.Forms.Button();
             this.TextBoxOrderSettingQuantity = new System.Windows.Forms.TextBox();
-            this.BtnGetOpenOrders = new System.Windows.Forms.Button();
+            this.ComboxBoxOrderSettingType = new System.Windows.Forms.ComboBox();
+            this.ComboBoxOrderSettingTIF = new System.Windows.Forms.ComboBox();
+            this.LabelOrderSettingQuantity = new System.Windows.Forms.Label();
+            this.BtnOrderSettingPlaceMultiOrder = new System.Windows.Forms.Button();
             this.BtnModifyOrder = new System.Windows.Forms.Button();
-            this.BtnOrderSettingPlaceOrder = new System.Windows.Forms.Button();
             this.BtnGlobalCancel = new System.Windows.Forms.Button();
+            this.LabelOrderSettingType = new System.Windows.Forms.Label();
             this.BtnCancelOrder = new System.Windows.Forms.Button();
-            this.BtnExportExecTradeLog = new System.Windows.Forms.Button();
-            this.BtnPositionCloseSelected = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.BtnRequestExecData = new System.Windows.Forms.Button();
+            this.LabelOrderSettingTIF = new System.Windows.Forms.Label();
+            this.BtnOrderSettingOrderBraket = new System.Windows.Forms.Button();
+            this.TextBoxOrderSettingLimitPrice = new System.Windows.Forms.TextBox();
+            this.CheckBoxOrderWhatIf = new System.Windows.Forms.CheckBox();
+            this.LabelOrderSettingGTD = new System.Windows.Forms.Label();
+            this.TextBoxOrderSettingStopPrice = new System.Windows.Forms.TextBox();
+            this.DateTimePickerOrderSettingGTD = new System.Windows.Forms.DateTimePicker();
+            this.LabelOrderSettingLimitPrice = new System.Windows.Forms.Label();
+            this.BtnOrderSettingPlaceOrder = new System.Windows.Forms.Button();
+            this.LabelOrderSettingStopPrice = new System.Windows.Forms.Label();
             this.GroupBoxPositions = new System.Windows.Forms.GroupBox();
+            this.BtnPositionCloseSelected = new System.Windows.Forms.Button();
             this.BtnRequestPostion = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.executionsGroup = new System.Windows.Forms.GroupBox();
+            this.BtnExportExecTradeLog = new System.Windows.Forms.Button();
+            this.BtnRequestExecData = new System.Windows.Forms.Button();
+            this.ib_banner = new System.Windows.Forms.PictureBox();
+            this.BtnGetCompletedOrders = new System.Windows.Forms.Button();
+            this.BtnGetOpenOrders = new System.Windows.Forms.Button();
+            this.tabSimulation = new System.Windows.Forms.TabPage();
+            this.BtnTestScalping = new System.Windows.Forms.Button();
+            this.TextBoxRunAllSimulationInitialAccountValue = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.BtnRunAllSimulation = new System.Windows.Forms.Button();
+            this.BtnArmLiveTrade = new System.Windows.Forms.Button();
             this.tabAccount = new System.Windows.Forms.TabPage();
             this.BtnSubscribePnL = new System.Windows.Forms.Button();
             this.BtnRequestPnL = new System.Windows.Forms.Button();
@@ -143,7 +147,6 @@ namespace TestClient
             this.SelectHistoricalDataBarFreq = new System.Windows.Forms.ComboBox();
             this.DateTimePickerHistoricalDataStart = new System.Windows.Forms.DateTimePicker();
             this.ListBoxAccount = new System.Windows.Forms.ListBox();
-            this.ib_banner = new System.Windows.Forms.PictureBox();
             this.LbStatus = new System.Windows.Forms.Label();
             this.CheckBoxSingleContractUseSmart = new System.Windows.Forms.CheckBox();
             this.SelectBoxSingleContractExchange = new System.Windows.Forms.ComboBox();
@@ -168,26 +171,24 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.GroupBoxOrderSetting = new System.Windows.Forms.GroupBox();
-            this.BtnOrderSettingApplyCurrentPrice = new System.Windows.Forms.Button();
-            this.tabSimulation = new System.Windows.Forms.TabPage();
+            this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
             this.GroupBoxContractInfo.SuspendLayout();
             this.tabMarketData.SuspendLayout();
             this.tabOrder.SuspendLayout();
+            this.GroupBoxOrderSetting.SuspendLayout();
             this.GroupBoxPositions.SuspendLayout();
             this.executionsGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).BeginInit();
+            this.tabSimulation.SuspendLayout();
             this.tabAccount.SuspendLayout();
             this.tabFileData.SuspendLayout();
             this.GroupBoxQuandlTool.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).BeginInit();
             this.GroupBoxSingleContract.SuspendLayout();
             this.GroupBoxBarTableSetting.SuspendLayout();
             this.GroupBoxMultiContracts.SuspendLayout();
-            this.GroupBoxOrderSetting.SuspendLayout();
-            this.tabSimulation.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -231,6 +232,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
             this.tabHistoricalData.Controls.Add(this.BtnCloseChart);
@@ -239,7 +241,7 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnTestRealTimeBars);
             this.tabHistoricalData.Controls.Add(this.BtnRequestHistoricalTicks);
             this.tabHistoricalData.Controls.Add(this.BtnChartsUpdateAll);
-            this.tabHistoricalData.Controls.Add(this.BtnRequestHistoricalData);
+            this.tabHistoricalData.Controls.Add(this.BtnLoadHistoricalChart);
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
@@ -259,60 +261,13 @@ namespace TestClient
             // 
             // BtnApplyTradeLogToChart
             // 
-            this.BtnApplyTradeLogToChart.Location = new System.Drawing.Point(14, 364);
+            this.BtnApplyTradeLogToChart.Location = new System.Drawing.Point(695, 88);
             this.BtnApplyTradeLogToChart.Name = "BtnApplyTradeLogToChart";
             this.BtnApplyTradeLogToChart.Size = new System.Drawing.Size(230, 23);
             this.BtnApplyTradeLogToChart.TabIndex = 43;
             this.BtnApplyTradeLogToChart.Text = "Apply Trade Log";
             this.BtnApplyTradeLogToChart.UseVisualStyleBackColor = true;
             this.BtnApplyTradeLogToChart.Click += new System.EventHandler(this.BtnApplyTradeLogToChart_Click);
-            // 
-            // BtnArmLiveTrade
-            // 
-            this.BtnArmLiveTrade.Location = new System.Drawing.Point(283, 210);
-            this.BtnArmLiveTrade.Name = "BtnArmLiveTrade";
-            this.BtnArmLiveTrade.Size = new System.Drawing.Size(230, 23);
-            this.BtnArmLiveTrade.TabIndex = 42;
-            this.BtnArmLiveTrade.Text = "Arm Live Trade";
-            this.BtnArmLiveTrade.UseVisualStyleBackColor = true;
-            this.BtnArmLiveTrade.Click += new System.EventHandler(this.BtnArmLiveTrade_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(280, 138);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(67, 13);
-            this.label10.TabIndex = 41;
-            this.label10.Text = "Initial Value";
-            // 
-            // TextBoxRunAllSimulationInitialAccountValue
-            // 
-            this.TextBoxRunAllSimulationInitialAccountValue.Location = new System.Drawing.Point(363, 135);
-            this.TextBoxRunAllSimulationInitialAccountValue.Name = "TextBoxRunAllSimulationInitialAccountValue";
-            this.TextBoxRunAllSimulationInitialAccountValue.Size = new System.Drawing.Size(150, 22);
-            this.TextBoxRunAllSimulationInitialAccountValue.TabIndex = 40;
-            this.TextBoxRunAllSimulationInitialAccountValue.Text = "100000";
-            // 
-            // BtnRunAllSimulation
-            // 
-            this.BtnRunAllSimulation.Location = new System.Drawing.Point(283, 172);
-            this.BtnRunAllSimulation.Name = "BtnRunAllSimulation";
-            this.BtnRunAllSimulation.Size = new System.Drawing.Size(230, 23);
-            this.BtnRunAllSimulation.TabIndex = 39;
-            this.BtnRunAllSimulation.Text = "Run All Simulation";
-            this.BtnRunAllSimulation.UseVisualStyleBackColor = true;
-            this.BtnRunAllSimulation.Click += new System.EventHandler(this.BtnRunAllSimulation_Click);
-            // 
-            // BtnTestScalping
-            // 
-            this.BtnTestScalping.Location = new System.Drawing.Point(283, 81);
-            this.BtnTestScalping.Name = "BtnTestScalping";
-            this.BtnTestScalping.Size = new System.Drawing.Size(230, 23);
-            this.BtnTestScalping.TabIndex = 38;
-            this.BtnTestScalping.Text = "Setup Scalping Simulation";
-            this.BtnTestScalping.UseVisualStyleBackColor = true;
-            this.BtnTestScalping.Click += new System.EventHandler(this.BtnTestScalping_Click);
             // 
             // BtnCloseChart
             // 
@@ -334,7 +289,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(14, 332);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(14, 189);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -344,7 +299,7 @@ namespace TestClient
             // 
             // BtnTestRealTimeBars
             // 
-            this.BtnTestRealTimeBars.Location = new System.Drawing.Point(14, 229);
+            this.BtnTestRealTimeBars.Location = new System.Drawing.Point(695, 29);
             this.BtnTestRealTimeBars.Name = "BtnTestRealTimeBars";
             this.BtnTestRealTimeBars.Size = new System.Drawing.Size(230, 23);
             this.BtnTestRealTimeBars.TabIndex = 9;
@@ -354,7 +309,7 @@ namespace TestClient
             // 
             // BtnRequestHistoricalTicks
             // 
-            this.BtnRequestHistoricalTicks.Location = new System.Drawing.Point(14, 258);
+            this.BtnRequestHistoricalTicks.Location = new System.Drawing.Point(695, 58);
             this.BtnRequestHistoricalTicks.Name = "BtnRequestHistoricalTicks";
             this.BtnRequestHistoricalTicks.Size = new System.Drawing.Size(230, 23);
             this.BtnRequestHistoricalTicks.TabIndex = 3;
@@ -372,15 +327,15 @@ namespace TestClient
             this.BtnChartsUpdateAll.UseVisualStyleBackColor = true;
             this.BtnChartsUpdateAll.Click += new System.EventHandler(this.BtnChartsUpdateAll_Click);
             // 
-            // BtnRequestHistoricalData
+            // BtnLoadHistoricalChart
             // 
-            this.BtnRequestHistoricalData.Location = new System.Drawing.Point(14, 75);
-            this.BtnRequestHistoricalData.Name = "BtnRequestHistoricalData";
-            this.BtnRequestHistoricalData.Size = new System.Drawing.Size(230, 23);
-            this.BtnRequestHistoricalData.TabIndex = 0;
-            this.BtnRequestHistoricalData.Text = "Historical Chart";
-            this.BtnRequestHistoricalData.UseVisualStyleBackColor = true;
-            this.BtnRequestHistoricalData.Click += new System.EventHandler(this.BtnRequestHistoricalData_Click);
+            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(14, 18);
+            this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
+            this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadHistoricalChart.TabIndex = 0;
+            this.BtnLoadHistoricalChart.Text = "Show Historical Chart";
+            this.BtnLoadHistoricalChart.UseVisualStyleBackColor = true;
+            this.BtnLoadHistoricalChart.Click += new System.EventHandler(this.BtnLoadHistoricalChart_Click);
             // 
             // tabContract
             // 
@@ -598,6 +553,26 @@ namespace TestClient
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
             // 
+            // BtnCancelAllScanner
+            // 
+            this.BtnCancelAllScanner.Location = new System.Drawing.Point(506, 274);
+            this.BtnCancelAllScanner.Name = "BtnCancelAllScanner";
+            this.BtnCancelAllScanner.Size = new System.Drawing.Size(162, 23);
+            this.BtnCancelAllScanner.TabIndex = 9;
+            this.BtnCancelAllScanner.Text = "Cancel All Scanner";
+            this.BtnCancelAllScanner.UseVisualStyleBackColor = true;
+            this.BtnCancelAllScanner.Click += new System.EventHandler(this.BtnCancelAllScanner_Click);
+            // 
+            // BtnRequestMarketDepth
+            // 
+            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(262, 86);
+            this.BtnRequestMarketDepth.Name = "BtnRequestMarketDepth";
+            this.BtnRequestMarketDepth.Size = new System.Drawing.Size(133, 23);
+            this.BtnRequestMarketDepth.TabIndex = 5;
+            this.BtnRequestMarketDepth.Text = "Request Market Depth";
+            this.BtnRequestMarketDepth.UseVisualStyleBackColor = true;
+            this.BtnRequestMarketDepth.Click += new System.EventHandler(this.BtnRequestMarketDepth_Click);
+            // 
             // LabelWatchListName
             // 
             this.LabelWatchListName.AutoSize = true;
@@ -606,6 +581,16 @@ namespace TestClient
             this.LabelWatchListName.Size = new System.Drawing.Size(59, 13);
             this.LabelWatchListName.TabIndex = 49;
             this.LabelWatchListName.Text = "List Name:";
+            // 
+            // BtnRequestScannerParameter
+            // 
+            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(506, 245);
+            this.BtnRequestScannerParameter.Name = "BtnRequestScannerParameter";
+            this.BtnRequestScannerParameter.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestScannerParameter.TabIndex = 8;
+            this.BtnRequestScannerParameter.Text = "Request Parameter";
+            this.BtnRequestScannerParameter.UseVisualStyleBackColor = true;
+            this.BtnRequestScannerParameter.Click += new System.EventHandler(this.BtnRequestScannerParameter_Click);
             // 
             // textBox2
             // 
@@ -623,6 +608,16 @@ namespace TestClient
             this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
             this.LabelGenericTickList.TabIndex = 47;
             this.LabelGenericTickList.Text = "Generic Tick List:";
+            // 
+            // BtnRequestScanner
+            // 
+            this.BtnRequestScanner.Location = new System.Drawing.Point(506, 216);
+            this.BtnRequestScanner.Name = "BtnRequestScanner";
+            this.BtnRequestScanner.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestScanner.TabIndex = 6;
+            this.BtnRequestScanner.Text = "Request Scanner";
+            this.BtnRequestScanner.UseVisualStyleBackColor = true;
+            this.BtnRequestScanner.Click += new System.EventHandler(this.BtnRequestScanner_Click);
             // 
             // TextBoxGenericTickList
             // 
@@ -661,46 +656,6 @@ namespace TestClient
             this.BtnMarketDataAddContract.UseVisualStyleBackColor = true;
             this.BtnMarketDataAddContract.Click += new System.EventHandler(this.BtnMarketDataAddContract_Click);
             // 
-            // BtnRequestMarketDepth
-            // 
-            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(262, 86);
-            this.BtnRequestMarketDepth.Name = "BtnRequestMarketDepth";
-            this.BtnRequestMarketDepth.Size = new System.Drawing.Size(133, 23);
-            this.BtnRequestMarketDepth.TabIndex = 5;
-            this.BtnRequestMarketDepth.Text = "Request Market Depth";
-            this.BtnRequestMarketDepth.UseVisualStyleBackColor = true;
-            this.BtnRequestMarketDepth.Click += new System.EventHandler(this.BtnRequestMarketDepth_Click);
-            // 
-            // BtnCancelAllScanner
-            // 
-            this.BtnCancelAllScanner.Location = new System.Drawing.Point(506, 274);
-            this.BtnCancelAllScanner.Name = "BtnCancelAllScanner";
-            this.BtnCancelAllScanner.Size = new System.Drawing.Size(162, 23);
-            this.BtnCancelAllScanner.TabIndex = 9;
-            this.BtnCancelAllScanner.Text = "Cancel All Scanner";
-            this.BtnCancelAllScanner.UseVisualStyleBackColor = true;
-            this.BtnCancelAllScanner.Click += new System.EventHandler(this.BtnCancelAllScanner_Click);
-            // 
-            // BtnRequestScannerParameter
-            // 
-            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(506, 245);
-            this.BtnRequestScannerParameter.Name = "BtnRequestScannerParameter";
-            this.BtnRequestScannerParameter.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestScannerParameter.TabIndex = 8;
-            this.BtnRequestScannerParameter.Text = "Request Parameter";
-            this.BtnRequestScannerParameter.UseVisualStyleBackColor = true;
-            this.BtnRequestScannerParameter.Click += new System.EventHandler(this.BtnRequestScannerParameter_Click);
-            // 
-            // BtnRequestScanner
-            // 
-            this.BtnRequestScanner.Location = new System.Drawing.Point(506, 216);
-            this.BtnRequestScanner.Name = "BtnRequestScanner";
-            this.BtnRequestScanner.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestScanner.TabIndex = 6;
-            this.BtnRequestScanner.Text = "Request Scanner";
-            this.BtnRequestScanner.UseVisualStyleBackColor = true;
-            this.BtnRequestScanner.Click += new System.EventHandler(this.BtnRequestScanner_Click);
-            // 
             // tabOrder
             // 
             this.tabOrder.Controls.Add(this.GroupBoxOrderSetting);
@@ -716,6 +671,79 @@ namespace TestClient
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
             // 
+            // GroupBoxOrderSetting
+            // 
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingApplyCurrentPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingQuantity);
+            this.GroupBoxOrderSetting.Controls.Add(this.ComboxBoxOrderSettingType);
+            this.GroupBoxOrderSetting.Controls.Add(this.ComboBoxOrderSettingTIF);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingQuantity);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceMultiOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnModifyOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnGlobalCancel);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingType);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnCancelOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingTIF);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingOrderBraket);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingLimitPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.CheckBoxOrderWhatIf);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingGTD);
+            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingStopPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.DateTimePickerOrderSettingGTD);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingLimitPrice);
+            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceOrder);
+            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingStopPrice);
+            this.GroupBoxOrderSetting.Location = new System.Drawing.Point(7, 12);
+            this.GroupBoxOrderSetting.Name = "GroupBoxOrderSetting";
+            this.GroupBoxOrderSetting.Size = new System.Drawing.Size(210, 465);
+            this.GroupBoxOrderSetting.TabIndex = 82;
+            this.GroupBoxOrderSetting.TabStop = false;
+            this.GroupBoxOrderSetting.Text = "Order Setting";
+            // 
+            // BtnOrderSettingApplyCurrentPrice
+            // 
+            this.BtnOrderSettingApplyCurrentPrice.Location = new System.Drawing.Point(13, 213);
+            this.BtnOrderSettingApplyCurrentPrice.Name = "BtnOrderSettingApplyCurrentPrice";
+            this.BtnOrderSettingApplyCurrentPrice.Size = new System.Drawing.Size(183, 23);
+            this.BtnOrderSettingApplyCurrentPrice.TabIndex = 84;
+            this.BtnOrderSettingApplyCurrentPrice.Text = "Apply Current Price";
+            this.BtnOrderSettingApplyCurrentPrice.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxOrderSettingQuantity
+            // 
+            this.TextBoxOrderSettingQuantity.Location = new System.Drawing.Point(69, 21);
+            this.TextBoxOrderSettingQuantity.Name = "TextBoxOrderSettingQuantity";
+            this.TextBoxOrderSettingQuantity.Size = new System.Drawing.Size(126, 22);
+            this.TextBoxOrderSettingQuantity.TabIndex = 66;
+            this.TextBoxOrderSettingQuantity.Text = "100";
+            // 
+            // ComboxBoxOrderSettingType
+            // 
+            this.ComboxBoxOrderSettingType.FormattingEnabled = true;
+            this.ComboxBoxOrderSettingType.Location = new System.Drawing.Point(54, 49);
+            this.ComboxBoxOrderSettingType.Name = "ComboxBoxOrderSettingType";
+            this.ComboxBoxOrderSettingType.Size = new System.Drawing.Size(141, 21);
+            this.ComboxBoxOrderSettingType.TabIndex = 67;
+            this.ComboxBoxOrderSettingType.Text = " Market";
+            // 
+            // ComboBoxOrderSettingTIF
+            // 
+            this.ComboBoxOrderSettingTIF.FormattingEnabled = true;
+            this.ComboBoxOrderSettingTIF.Location = new System.Drawing.Point(54, 132);
+            this.ComboBoxOrderSettingTIF.Name = "ComboBoxOrderSettingTIF";
+            this.ComboBoxOrderSettingTIF.Size = new System.Drawing.Size(141, 21);
+            this.ComboBoxOrderSettingTIF.TabIndex = 68;
+            this.ComboBoxOrderSettingTIF.Text = "Day";
+            // 
+            // LabelOrderSettingQuantity
+            // 
+            this.LabelOrderSettingQuantity.AutoSize = true;
+            this.LabelOrderSettingQuantity.Location = new System.Drawing.Point(9, 25);
+            this.LabelOrderSettingQuantity.Name = "LabelOrderSettingQuantity";
+            this.LabelOrderSettingQuantity.Size = new System.Drawing.Size(54, 13);
+            this.LabelOrderSettingQuantity.TabIndex = 69;
+            this.LabelOrderSettingQuantity.Text = "Quantity:";
+            // 
             // BtnOrderSettingPlaceMultiOrder
             // 
             this.BtnOrderSettingPlaceMultiOrder.Location = new System.Drawing.Point(13, 306);
@@ -725,6 +753,53 @@ namespace TestClient
             this.BtnOrderSettingPlaceMultiOrder.Text = "Multi Order";
             this.BtnOrderSettingPlaceMultiOrder.UseVisualStyleBackColor = true;
             this.BtnOrderSettingPlaceMultiOrder.Click += new System.EventHandler(this.TestMassOrder_Click);
+            // 
+            // BtnModifyOrder
+            // 
+            this.BtnModifyOrder.Location = new System.Drawing.Point(13, 370);
+            this.BtnModifyOrder.Name = "BtnModifyOrder";
+            this.BtnModifyOrder.Size = new System.Drawing.Size(182, 23);
+            this.BtnModifyOrder.TabIndex = 7;
+            this.BtnModifyOrder.Text = "Modify Order";
+            this.BtnModifyOrder.UseVisualStyleBackColor = true;
+            this.BtnModifyOrder.Click += new System.EventHandler(this.BtnModifyOrder_Click);
+            // 
+            // BtnGlobalCancel
+            // 
+            this.BtnGlobalCancel.Location = new System.Drawing.Point(13, 428);
+            this.BtnGlobalCancel.Name = "BtnGlobalCancel";
+            this.BtnGlobalCancel.Size = new System.Drawing.Size(182, 23);
+            this.BtnGlobalCancel.TabIndex = 6;
+            this.BtnGlobalCancel.Text = "Global Cancel";
+            this.BtnGlobalCancel.UseVisualStyleBackColor = true;
+            this.BtnGlobalCancel.Click += new System.EventHandler(this.BtnGlobalCancel_Click);
+            // 
+            // LabelOrderSettingType
+            // 
+            this.LabelOrderSettingType.AutoSize = true;
+            this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
+            this.LabelOrderSettingType.Name = "LabelOrderSettingType";
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
+            this.LabelOrderSettingType.TabIndex = 70;
+            this.LabelOrderSettingType.Text = "Type:";
+            // 
+            // BtnCancelOrder
+            // 
+            this.BtnCancelOrder.Location = new System.Drawing.Point(13, 399);
+            this.BtnCancelOrder.Name = "BtnCancelOrder";
+            this.BtnCancelOrder.Size = new System.Drawing.Size(182, 23);
+            this.BtnCancelOrder.TabIndex = 8;
+            this.BtnCancelOrder.Text = "Cancel Order";
+            this.BtnCancelOrder.UseVisualStyleBackColor = true;
+            // 
+            // LabelOrderSettingTIF
+            // 
+            this.LabelOrderSettingTIF.AutoSize = true;
+            this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
+            this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
+            this.LabelOrderSettingTIF.TabIndex = 71;
+            this.LabelOrderSettingTIF.Text = "TIF:";
             // 
             // BtnOrderSettingOrderBraket
             // 
@@ -736,24 +811,13 @@ namespace TestClient
             this.BtnOrderSettingOrderBraket.UseVisualStyleBackColor = true;
             this.BtnOrderSettingOrderBraket.Click += new System.EventHandler(this.BtnOrderBraket_Click);
             // 
-            // LabelOrderSettingGTD
+            // TextBoxOrderSettingLimitPrice
             // 
-            this.LabelOrderSettingGTD.AutoSize = true;
-            this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
-            this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
-            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
-            this.LabelOrderSettingGTD.TabIndex = 78;
-            this.LabelOrderSettingGTD.Text = "GTD:";
-            // 
-            // DateTimePickerOrderSettingGTD
-            // 
-            this.DateTimePickerOrderSettingGTD.CustomFormat = "MM/dd/yyyy HH:mm:ss";
-            this.DateTimePickerOrderSettingGTD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePickerOrderSettingGTD.Location = new System.Drawing.Point(54, 159);
-            this.DateTimePickerOrderSettingGTD.Name = "DateTimePickerOrderSettingGTD";
-            this.DateTimePickerOrderSettingGTD.Size = new System.Drawing.Size(141, 22);
-            this.DateTimePickerOrderSettingGTD.TabIndex = 77;
-            this.DateTimePickerOrderSettingGTD.Value = new System.DateTime(2020, 3, 20, 17, 0, 0, 0);
+            this.TextBoxOrderSettingLimitPrice.Location = new System.Drawing.Point(54, 76);
+            this.TextBoxOrderSettingLimitPrice.Name = "TextBoxOrderSettingLimitPrice";
+            this.TextBoxOrderSettingLimitPrice.Size = new System.Drawing.Size(141, 22);
+            this.TextBoxOrderSettingLimitPrice.TabIndex = 72;
+            this.TextBoxOrderSettingLimitPrice.Text = "100";
             // 
             // CheckBoxOrderWhatIf
             // 
@@ -765,33 +829,14 @@ namespace TestClient
             this.CheckBoxOrderWhatIf.Text = "What If";
             this.CheckBoxOrderWhatIf.UseVisualStyleBackColor = true;
             // 
-            // LabelOrderSettingStopPrice
+            // LabelOrderSettingGTD
             // 
-            this.LabelOrderSettingStopPrice.AutoSize = true;
-            this.LabelOrderSettingStopPrice.Location = new System.Drawing.Point(14, 107);
-            this.LabelOrderSettingStopPrice.Name = "LabelOrderSettingStopPrice";
-            this.LabelOrderSettingStopPrice.Size = new System.Drawing.Size(34, 13);
-            this.LabelOrderSettingStopPrice.TabIndex = 75;
-            this.LabelOrderSettingStopPrice.Text = "Stop:";
-            // 
-            // LabelOrderSettingLimitPrice
-            // 
-            this.LabelOrderSettingLimitPrice.AutoSize = true;
-            this.LabelOrderSettingLimitPrice.Location = new System.Drawing.Point(14, 79);
-            this.LabelOrderSettingLimitPrice.Name = "LabelOrderSettingLimitPrice";
-            this.LabelOrderSettingLimitPrice.Size = new System.Drawing.Size(34, 13);
-            this.LabelOrderSettingLimitPrice.TabIndex = 74;
-            this.LabelOrderSettingLimitPrice.Text = "Limit:";
-            // 
-            // BtnGetCompletedOrders
-            // 
-            this.BtnGetCompletedOrders.Location = new System.Drawing.Point(460, 108);
-            this.BtnGetCompletedOrders.Name = "BtnGetCompletedOrders";
-            this.BtnGetCompletedOrders.Size = new System.Drawing.Size(162, 23);
-            this.BtnGetCompletedOrders.TabIndex = 9;
-            this.BtnGetCompletedOrders.Text = "Get Completed Orders";
-            this.BtnGetCompletedOrders.UseVisualStyleBackColor = true;
-            this.BtnGetCompletedOrders.Click += new System.EventHandler(this.BtnGetCompletedOrders_Click);
+            this.LabelOrderSettingGTD.AutoSize = true;
+            this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
+            this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingGTD.TabIndex = 78;
+            this.LabelOrderSettingGTD.Text = "GTD:";
             // 
             // TextBoxOrderSettingStopPrice
             // 
@@ -801,86 +846,24 @@ namespace TestClient
             this.TextBoxOrderSettingStopPrice.TabIndex = 73;
             this.TextBoxOrderSettingStopPrice.Text = "100";
             // 
-            // TextBoxOrderSettingLimitPrice
+            // DateTimePickerOrderSettingGTD
             // 
-            this.TextBoxOrderSettingLimitPrice.Location = new System.Drawing.Point(54, 76);
-            this.TextBoxOrderSettingLimitPrice.Name = "TextBoxOrderSettingLimitPrice";
-            this.TextBoxOrderSettingLimitPrice.Size = new System.Drawing.Size(141, 22);
-            this.TextBoxOrderSettingLimitPrice.TabIndex = 72;
-            this.TextBoxOrderSettingLimitPrice.Text = "100";
+            this.DateTimePickerOrderSettingGTD.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            this.DateTimePickerOrderSettingGTD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateTimePickerOrderSettingGTD.Location = new System.Drawing.Point(54, 159);
+            this.DateTimePickerOrderSettingGTD.Name = "DateTimePickerOrderSettingGTD";
+            this.DateTimePickerOrderSettingGTD.Size = new System.Drawing.Size(141, 22);
+            this.DateTimePickerOrderSettingGTD.TabIndex = 77;
+            this.DateTimePickerOrderSettingGTD.Value = new System.DateTime(2020, 3, 20, 17, 0, 0, 0);
             // 
-            // LabelOrderSettingTIF
+            // LabelOrderSettingLimitPrice
             // 
-            this.LabelOrderSettingTIF.AutoSize = true;
-            this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
-            this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
-            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
-            this.LabelOrderSettingTIF.TabIndex = 71;
-            this.LabelOrderSettingTIF.Text = "TIF:";
-            // 
-            // LabelOrderSettingType
-            // 
-            this.LabelOrderSettingType.AutoSize = true;
-            this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
-            this.LabelOrderSettingType.Name = "LabelOrderSettingType";
-            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
-            this.LabelOrderSettingType.TabIndex = 70;
-            this.LabelOrderSettingType.Text = "Type:";
-            // 
-            // LabelOrderSettingQuantity
-            // 
-            this.LabelOrderSettingQuantity.AutoSize = true;
-            this.LabelOrderSettingQuantity.Location = new System.Drawing.Point(9, 25);
-            this.LabelOrderSettingQuantity.Name = "LabelOrderSettingQuantity";
-            this.LabelOrderSettingQuantity.Size = new System.Drawing.Size(54, 13);
-            this.LabelOrderSettingQuantity.TabIndex = 69;
-            this.LabelOrderSettingQuantity.Text = "Quantity:";
-            // 
-            // ComboBoxOrderSettingTIF
-            // 
-            this.ComboBoxOrderSettingTIF.FormattingEnabled = true;
-            this.ComboBoxOrderSettingTIF.Location = new System.Drawing.Point(54, 132);
-            this.ComboBoxOrderSettingTIF.Name = "ComboBoxOrderSettingTIF";
-            this.ComboBoxOrderSettingTIF.Size = new System.Drawing.Size(141, 21);
-            this.ComboBoxOrderSettingTIF.TabIndex = 68;
-            this.ComboBoxOrderSettingTIF.Text = "Day";
-            // 
-            // ComboxBoxOrderSettingType
-            // 
-            this.ComboxBoxOrderSettingType.FormattingEnabled = true;
-            this.ComboxBoxOrderSettingType.Location = new System.Drawing.Point(54, 49);
-            this.ComboxBoxOrderSettingType.Name = "ComboxBoxOrderSettingType";
-            this.ComboxBoxOrderSettingType.Size = new System.Drawing.Size(141, 21);
-            this.ComboxBoxOrderSettingType.TabIndex = 67;
-            this.ComboxBoxOrderSettingType.Text = " Market";
-            // 
-            // TextBoxOrderSettingQuantity
-            // 
-            this.TextBoxOrderSettingQuantity.Location = new System.Drawing.Point(69, 21);
-            this.TextBoxOrderSettingQuantity.Name = "TextBoxOrderSettingQuantity";
-            this.TextBoxOrderSettingQuantity.Size = new System.Drawing.Size(126, 22);
-            this.TextBoxOrderSettingQuantity.TabIndex = 66;
-            this.TextBoxOrderSettingQuantity.Text = "100";
-            // 
-            // BtnGetOpenOrders
-            // 
-            this.BtnGetOpenOrders.Location = new System.Drawing.Point(458, 137);
-            this.BtnGetOpenOrders.Name = "BtnGetOpenOrders";
-            this.BtnGetOpenOrders.Size = new System.Drawing.Size(162, 23);
-            this.BtnGetOpenOrders.TabIndex = 10;
-            this.BtnGetOpenOrders.Text = "Get Open Orders";
-            this.BtnGetOpenOrders.UseVisualStyleBackColor = true;
-            this.BtnGetOpenOrders.Click += new System.EventHandler(this.BtnGetOpenOrders_Click);
-            // 
-            // BtnModifyOrder
-            // 
-            this.BtnModifyOrder.Location = new System.Drawing.Point(13, 370);
-            this.BtnModifyOrder.Name = "BtnModifyOrder";
-            this.BtnModifyOrder.Size = new System.Drawing.Size(182, 23);
-            this.BtnModifyOrder.TabIndex = 7;
-            this.BtnModifyOrder.Text = "Modify Order";
-            this.BtnModifyOrder.UseVisualStyleBackColor = true;
-            this.BtnModifyOrder.Click += new System.EventHandler(this.BtnModifyOrder_Click);
+            this.LabelOrderSettingLimitPrice.AutoSize = true;
+            this.LabelOrderSettingLimitPrice.Location = new System.Drawing.Point(14, 79);
+            this.LabelOrderSettingLimitPrice.Name = "LabelOrderSettingLimitPrice";
+            this.LabelOrderSettingLimitPrice.Size = new System.Drawing.Size(34, 13);
+            this.LabelOrderSettingLimitPrice.TabIndex = 74;
+            this.LabelOrderSettingLimitPrice.Text = "Limit:";
             // 
             // BtnOrderSettingPlaceOrder
             // 
@@ -895,63 +878,14 @@ namespace TestClient
             this.BtnOrderSettingPlaceOrder.UseVisualStyleBackColor = false;
             this.BtnOrderSettingPlaceOrder.Click += new System.EventHandler(this.BtnOrder_Click);
             // 
-            // BtnGlobalCancel
+            // LabelOrderSettingStopPrice
             // 
-            this.BtnGlobalCancel.Location = new System.Drawing.Point(13, 428);
-            this.BtnGlobalCancel.Name = "BtnGlobalCancel";
-            this.BtnGlobalCancel.Size = new System.Drawing.Size(182, 23);
-            this.BtnGlobalCancel.TabIndex = 6;
-            this.BtnGlobalCancel.Text = "Global Cancel";
-            this.BtnGlobalCancel.UseVisualStyleBackColor = true;
-            this.BtnGlobalCancel.Click += new System.EventHandler(this.BtnGlobalCancel_Click);
-            // 
-            // BtnCancelOrder
-            // 
-            this.BtnCancelOrder.Location = new System.Drawing.Point(13, 399);
-            this.BtnCancelOrder.Name = "BtnCancelOrder";
-            this.BtnCancelOrder.Size = new System.Drawing.Size(182, 23);
-            this.BtnCancelOrder.TabIndex = 8;
-            this.BtnCancelOrder.Text = "Cancel Order";
-            this.BtnCancelOrder.UseVisualStyleBackColor = true;
-            // 
-            // BtnExportExecTradeLog
-            // 
-            this.BtnExportExecTradeLog.Location = new System.Drawing.Point(20, 67);
-            this.BtnExportExecTradeLog.Name = "BtnExportExecTradeLog";
-            this.BtnExportExecTradeLog.Size = new System.Drawing.Size(167, 23);
-            this.BtnExportExecTradeLog.TabIndex = 80;
-            this.BtnExportExecTradeLog.Text = "Export To TradeLog";
-            this.BtnExportExecTradeLog.UseVisualStyleBackColor = true;
-            this.BtnExportExecTradeLog.Click += new System.EventHandler(this.BtnExportExecTradeLog_Click);
-            // 
-            // BtnPositionCloseSelected
-            // 
-            this.BtnPositionCloseSelected.Location = new System.Drawing.Point(20, 61);
-            this.BtnPositionCloseSelected.Name = "BtnPositionCloseSelected";
-            this.BtnPositionCloseSelected.Size = new System.Drawing.Size(167, 23);
-            this.BtnPositionCloseSelected.TabIndex = 79;
-            this.BtnPositionCloseSelected.Text = "Close Selected";
-            this.BtnPositionCloseSelected.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(20, 117);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 23);
-            this.button1.TabIndex = 77;
-            this.button1.Text = "Close All";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.BtnCloseAllPosition_Click);
-            // 
-            // BtnRequestExecData
-            // 
-            this.BtnRequestExecData.Location = new System.Drawing.Point(20, 38);
-            this.BtnRequestExecData.Name = "BtnRequestExecData";
-            this.BtnRequestExecData.Size = new System.Drawing.Size(167, 23);
-            this.BtnRequestExecData.TabIndex = 78;
-            this.BtnRequestExecData.Text = "Request Exec Data";
-            this.BtnRequestExecData.UseVisualStyleBackColor = true;
-            this.BtnRequestExecData.Click += new System.EventHandler(this.BtnRequestExecData_Click);
+            this.LabelOrderSettingStopPrice.AutoSize = true;
+            this.LabelOrderSettingStopPrice.Location = new System.Drawing.Point(14, 107);
+            this.LabelOrderSettingStopPrice.Name = "LabelOrderSettingStopPrice";
+            this.LabelOrderSettingStopPrice.Size = new System.Drawing.Size(34, 13);
+            this.LabelOrderSettingStopPrice.TabIndex = 75;
+            this.LabelOrderSettingStopPrice.Text = "Stop:";
             // 
             // GroupBoxPositions
             // 
@@ -965,6 +899,15 @@ namespace TestClient
             this.GroupBoxPositions.TabStop = false;
             this.GroupBoxPositions.Text = "Positions";
             // 
+            // BtnPositionCloseSelected
+            // 
+            this.BtnPositionCloseSelected.Location = new System.Drawing.Point(20, 61);
+            this.BtnPositionCloseSelected.Name = "BtnPositionCloseSelected";
+            this.BtnPositionCloseSelected.Size = new System.Drawing.Size(167, 23);
+            this.BtnPositionCloseSelected.TabIndex = 79;
+            this.BtnPositionCloseSelected.Text = "Close Selected";
+            this.BtnPositionCloseSelected.UseVisualStyleBackColor = true;
+            // 
             // BtnRequestPostion
             // 
             this.BtnRequestPostion.Location = new System.Drawing.Point(20, 32);
@@ -974,6 +917,16 @@ namespace TestClient
             this.BtnRequestPostion.Text = "Request Postion";
             this.BtnRequestPostion.UseVisualStyleBackColor = true;
             this.BtnRequestPostion.Click += new System.EventHandler(this.BtnRequestPostion_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(20, 117);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(167, 23);
+            this.button1.TabIndex = 77;
+            this.button1.Text = "Close All";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.BtnCloseAllPosition_Click);
             // 
             // executionsGroup
             // 
@@ -985,6 +938,118 @@ namespace TestClient
             this.executionsGroup.TabIndex = 4;
             this.executionsGroup.TabStop = false;
             this.executionsGroup.Text = "Trade Log (Executions)";
+            // 
+            // BtnExportExecTradeLog
+            // 
+            this.BtnExportExecTradeLog.Location = new System.Drawing.Point(20, 67);
+            this.BtnExportExecTradeLog.Name = "BtnExportExecTradeLog";
+            this.BtnExportExecTradeLog.Size = new System.Drawing.Size(167, 23);
+            this.BtnExportExecTradeLog.TabIndex = 80;
+            this.BtnExportExecTradeLog.Text = "Export To TradeLog";
+            this.BtnExportExecTradeLog.UseVisualStyleBackColor = true;
+            this.BtnExportExecTradeLog.Click += new System.EventHandler(this.BtnExportExecTradeLog_Click);
+            // 
+            // BtnRequestExecData
+            // 
+            this.BtnRequestExecData.Location = new System.Drawing.Point(20, 38);
+            this.BtnRequestExecData.Name = "BtnRequestExecData";
+            this.BtnRequestExecData.Size = new System.Drawing.Size(167, 23);
+            this.BtnRequestExecData.TabIndex = 78;
+            this.BtnRequestExecData.Text = "Request Exec Data";
+            this.BtnRequestExecData.UseVisualStyleBackColor = true;
+            this.BtnRequestExecData.Click += new System.EventHandler(this.BtnRequestExecData_Click);
+            // 
+            // ib_banner
+            // 
+            this.ib_banner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ib_banner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ib_banner.Image = global::TestClient.Properties.Resources.LogoIcon;
+            this.ib_banner.Location = new System.Drawing.Point(696, 427);
+            this.ib_banner.Name = "ib_banner";
+            this.ib_banner.Size = new System.Drawing.Size(237, 36);
+            this.ib_banner.TabIndex = 10;
+            this.ib_banner.TabStop = false;
+            // 
+            // BtnGetCompletedOrders
+            // 
+            this.BtnGetCompletedOrders.Location = new System.Drawing.Point(460, 108);
+            this.BtnGetCompletedOrders.Name = "BtnGetCompletedOrders";
+            this.BtnGetCompletedOrders.Size = new System.Drawing.Size(162, 23);
+            this.BtnGetCompletedOrders.TabIndex = 9;
+            this.BtnGetCompletedOrders.Text = "Get Completed Orders";
+            this.BtnGetCompletedOrders.UseVisualStyleBackColor = true;
+            this.BtnGetCompletedOrders.Click += new System.EventHandler(this.BtnGetCompletedOrders_Click);
+            // 
+            // BtnGetOpenOrders
+            // 
+            this.BtnGetOpenOrders.Location = new System.Drawing.Point(458, 137);
+            this.BtnGetOpenOrders.Name = "BtnGetOpenOrders";
+            this.BtnGetOpenOrders.Size = new System.Drawing.Size(162, 23);
+            this.BtnGetOpenOrders.TabIndex = 10;
+            this.BtnGetOpenOrders.Text = "Get Open Orders";
+            this.BtnGetOpenOrders.UseVisualStyleBackColor = true;
+            this.BtnGetOpenOrders.Click += new System.EventHandler(this.BtnGetOpenOrders_Click);
+            // 
+            // tabSimulation
+            // 
+            this.tabSimulation.Controls.Add(this.BtnTestScalping);
+            this.tabSimulation.Controls.Add(this.TextBoxRunAllSimulationInitialAccountValue);
+            this.tabSimulation.Controls.Add(this.label10);
+            this.tabSimulation.Controls.Add(this.BtnRunAllSimulation);
+            this.tabSimulation.Controls.Add(this.BtnArmLiveTrade);
+            this.tabSimulation.Location = new System.Drawing.Point(4, 22);
+            this.tabSimulation.Name = "tabSimulation";
+            this.tabSimulation.Size = new System.Drawing.Size(952, 484);
+            this.tabSimulation.TabIndex = 9;
+            this.tabSimulation.Text = "Simulation";
+            this.tabSimulation.UseVisualStyleBackColor = true;
+            // 
+            // BtnTestScalping
+            // 
+            this.BtnTestScalping.Location = new System.Drawing.Point(283, 81);
+            this.BtnTestScalping.Name = "BtnTestScalping";
+            this.BtnTestScalping.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestScalping.TabIndex = 38;
+            this.BtnTestScalping.Text = "Setup Scalping Simulation";
+            this.BtnTestScalping.UseVisualStyleBackColor = true;
+            this.BtnTestScalping.Click += new System.EventHandler(this.BtnTestScalping_Click);
+            // 
+            // TextBoxRunAllSimulationInitialAccountValue
+            // 
+            this.TextBoxRunAllSimulationInitialAccountValue.Location = new System.Drawing.Point(363, 135);
+            this.TextBoxRunAllSimulationInitialAccountValue.Name = "TextBoxRunAllSimulationInitialAccountValue";
+            this.TextBoxRunAllSimulationInitialAccountValue.Size = new System.Drawing.Size(150, 22);
+            this.TextBoxRunAllSimulationInitialAccountValue.TabIndex = 40;
+            this.TextBoxRunAllSimulationInitialAccountValue.Text = "100000";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(280, 138);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(67, 13);
+            this.label10.TabIndex = 41;
+            this.label10.Text = "Initial Value";
+            // 
+            // BtnRunAllSimulation
+            // 
+            this.BtnRunAllSimulation.Location = new System.Drawing.Point(283, 172);
+            this.BtnRunAllSimulation.Name = "BtnRunAllSimulation";
+            this.BtnRunAllSimulation.Size = new System.Drawing.Size(230, 23);
+            this.BtnRunAllSimulation.TabIndex = 39;
+            this.BtnRunAllSimulation.Text = "Run All Simulation";
+            this.BtnRunAllSimulation.UseVisualStyleBackColor = true;
+            this.BtnRunAllSimulation.Click += new System.EventHandler(this.BtnRunAllSimulation_Click);
+            // 
+            // BtnArmLiveTrade
+            // 
+            this.BtnArmLiveTrade.Location = new System.Drawing.Point(283, 210);
+            this.BtnArmLiveTrade.Name = "BtnArmLiveTrade";
+            this.BtnArmLiveTrade.Size = new System.Drawing.Size(230, 23);
+            this.BtnArmLiveTrade.TabIndex = 42;
+            this.BtnArmLiveTrade.Text = "Arm Live Trade";
+            this.BtnArmLiveTrade.UseVisualStyleBackColor = true;
+            this.BtnArmLiveTrade.Click += new System.EventHandler(this.BtnArmLiveTrade_Click);
             // 
             // tabAccount
             // 
@@ -1335,17 +1400,6 @@ namespace TestClient
             this.ListBoxAccount.Size = new System.Drawing.Size(0, 121);
             this.ListBoxAccount.TabIndex = 4;
             // 
-            // ib_banner
-            // 
-            this.ib_banner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ib_banner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ib_banner.Image = global::TestClient.Properties.Resources.LogoIcon;
-            this.ib_banner.Location = new System.Drawing.Point(696, 427);
-            this.ib_banner.Name = "ib_banner";
-            this.ib_banner.Size = new System.Drawing.Size(237, 36);
-            this.ib_banner.TabIndex = 10;
-            this.ib_banner.TabStop = false;
-            // 
             // LbStatus
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1600,57 +1654,15 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // GroupBoxOrderSetting
+            // BtnLoadMultiHistoricalChart
             // 
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingApplyCurrentPrice);
-            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingQuantity);
-            this.GroupBoxOrderSetting.Controls.Add(this.ComboxBoxOrderSettingType);
-            this.GroupBoxOrderSetting.Controls.Add(this.ComboBoxOrderSettingTIF);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingQuantity);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceMultiOrder);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnModifyOrder);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnGlobalCancel);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingType);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnCancelOrder);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingTIF);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingOrderBraket);
-            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingLimitPrice);
-            this.GroupBoxOrderSetting.Controls.Add(this.CheckBoxOrderWhatIf);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingGTD);
-            this.GroupBoxOrderSetting.Controls.Add(this.TextBoxOrderSettingStopPrice);
-            this.GroupBoxOrderSetting.Controls.Add(this.DateTimePickerOrderSettingGTD);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingLimitPrice);
-            this.GroupBoxOrderSetting.Controls.Add(this.BtnOrderSettingPlaceOrder);
-            this.GroupBoxOrderSetting.Controls.Add(this.LabelOrderSettingStopPrice);
-            this.GroupBoxOrderSetting.Location = new System.Drawing.Point(7, 12);
-            this.GroupBoxOrderSetting.Name = "GroupBoxOrderSetting";
-            this.GroupBoxOrderSetting.Size = new System.Drawing.Size(210, 465);
-            this.GroupBoxOrderSetting.TabIndex = 82;
-            this.GroupBoxOrderSetting.TabStop = false;
-            this.GroupBoxOrderSetting.Text = "Order Setting";
-            // 
-            // BtnOrderSettingApplyCurrentPrice
-            // 
-            this.BtnOrderSettingApplyCurrentPrice.Location = new System.Drawing.Point(13, 213);
-            this.BtnOrderSettingApplyCurrentPrice.Name = "BtnOrderSettingApplyCurrentPrice";
-            this.BtnOrderSettingApplyCurrentPrice.Size = new System.Drawing.Size(183, 23);
-            this.BtnOrderSettingApplyCurrentPrice.TabIndex = 84;
-            this.BtnOrderSettingApplyCurrentPrice.Text = "Apply Current Price";
-            this.BtnOrderSettingApplyCurrentPrice.UseVisualStyleBackColor = true;
-            // 
-            // tabSimulation
-            // 
-            this.tabSimulation.Controls.Add(this.BtnTestScalping);
-            this.tabSimulation.Controls.Add(this.TextBoxRunAllSimulationInitialAccountValue);
-            this.tabSimulation.Controls.Add(this.label10);
-            this.tabSimulation.Controls.Add(this.BtnRunAllSimulation);
-            this.tabSimulation.Controls.Add(this.BtnArmLiveTrade);
-            this.tabSimulation.Location = new System.Drawing.Point(4, 22);
-            this.tabSimulation.Name = "tabSimulation";
-            this.tabSimulation.Size = new System.Drawing.Size(952, 484);
-            this.tabSimulation.TabIndex = 9;
-            this.tabSimulation.Text = "Simulation";
-            this.tabSimulation.UseVisualStyleBackColor = true;
+            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(14, 47);
+            this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
+            this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadMultiHistoricalChart.TabIndex = 45;
+            this.BtnLoadMultiHistoricalChart.Text = "Show Multi Historical Chart";
+            this.BtnLoadMultiHistoricalChart.UseVisualStyleBackColor = true;
+            this.BtnLoadMultiHistoricalChart.Click += new System.EventHandler(this.BtnLoadMultiHistoricalChart_Click);
             // 
             // MainForm
             // 
@@ -1687,22 +1699,22 @@ namespace TestClient
             this.tabMarketData.ResumeLayout(false);
             this.tabMarketData.PerformLayout();
             this.tabOrder.ResumeLayout(false);
+            this.GroupBoxOrderSetting.ResumeLayout(false);
+            this.GroupBoxOrderSetting.PerformLayout();
             this.GroupBoxPositions.ResumeLayout(false);
             this.executionsGroup.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).EndInit();
+            this.tabSimulation.ResumeLayout(false);
+            this.tabSimulation.PerformLayout();
             this.tabAccount.ResumeLayout(false);
             this.tabFileData.ResumeLayout(false);
             this.GroupBoxQuandlTool.ResumeLayout(false);
             this.GroupBoxQuandlTool.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ib_banner)).EndInit();
             this.GroupBoxSingleContract.ResumeLayout(false);
             this.GroupBoxSingleContract.PerformLayout();
             this.GroupBoxBarTableSetting.ResumeLayout(false);
             this.GroupBoxBarTableSetting.PerformLayout();
             this.GroupBoxMultiContracts.ResumeLayout(false);
-            this.GroupBoxOrderSetting.ResumeLayout(false);
-            this.GroupBoxOrderSetting.PerformLayout();
-            this.tabSimulation.ResumeLayout(false);
-            this.tabSimulation.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1727,7 +1739,7 @@ namespace TestClient
         private System.Windows.Forms.TextBox TextBoxSingleContractName;
         private System.Windows.Forms.ListBox ListBoxAccount;
         private System.Windows.Forms.TreeView TreeViewAccount;
-        private System.Windows.Forms.Button BtnRequestHistoricalData;
+        private System.Windows.Forms.Button BtnLoadHistoricalChart;
         private System.Windows.Forms.Button BtnRequestHistoricalTicks;
         private System.Windows.Forms.Button BtnChartsUpdateAll;
         private System.Windows.Forms.DateTimePicker DateTimePickerHistoricalDataStart;
@@ -1847,5 +1859,6 @@ namespace TestClient
         private System.Windows.Forms.GroupBox GroupBoxOrderSetting;
         private System.Windows.Forms.Button BtnOrderSettingApplyCurrentPrice;
         private System.Windows.Forms.TabPage tabSimulation;
+        private System.Windows.Forms.Button BtnLoadMultiHistoricalChart;
     }
 }
