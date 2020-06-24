@@ -17,20 +17,17 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static bool IsReady_ContractData => Connected && requestId_ContractData == -1;
-        private static int requestId_ContractData = -1;
-        private static Contract active_ContractData;
-        private static int active_ContractData_ConId = -1;
+        private static readonly List<Contract> active_ContractData = new List<Contract>();
 
-        internal static void SendRequest_ContractData(Contract c, bool includeExpired = false)
+        private static void SendRequest_ContractData(Contract c, bool includeExpired = false)
         {
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
-            if (IsReady_ContractData && valid_exchange)
+            if (DataRequestReady && valid_exchange)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
-                requestId_ContractData = requestId;
-                active_ContractData = c;
+                DataRequestID = requestId;
+                active_ContractData.Clear();
 
                 bool useSmart = c is ITradable it && it.AutoExchangeRoute;
 
@@ -81,28 +78,27 @@ namespace Pacmio.IB
         /// <param name="secTypeCode"></param>
         /// <param name="conId"></param>
         /// <param name="includeExpired"></param>
-        internal static void SendRequest_ContractData(int conId, bool includeExpired = false)
+        private static void SendRequest_ContractData(int conId, string name = "", string exchangeCode = "", string typeCode = "", bool includeExpired = false)
         {
-            if (IsReady_ContractData)
+            if (DataRequestReady)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
-                requestId_ContractData = requestId;
-                active_ContractData = null;
-                active_ContractData_ConId = conId;
+                DataRequestID = requestId;
+                active_ContractData.Clear();
 
                 SendRequest(new string[] {
                     requestType, // 9
                     "8",
                     requestId.ToString(),
                     conId.Param(), // "0"
-                    string.Empty, // c.Name,
-                    string.Empty, // c.TypeApiCode,
+                    name, // c.Name,
+                    typeCode, // c.TypeApiCode,
                     string.Empty, // lastTradeDateOrContractMonth,
                     "0", // (strike == 0) ? "0" : strike.ToString("0.0###"),
                     string.Empty, // Right
                     string.Empty, // Multiplier
                     string.Empty, // exchange,
-                    string.Empty, // primaryExch,
+                    exchangeCode, // primaryExch,
                     string.Empty, // currency,
                     string.Empty, // LocalSymbol
                     string.Empty, // TradingClass
@@ -113,10 +109,10 @@ namespace Pacmio.IB
             }
         }
 
-        public static void Cancel_ContractData()
+        private static void SendCancel_ContractData()
         {
-            RemoveRequest(requestId_ContractData, true);
-            requestId_ContractData = -1;
+            RemoveRequest(DataRequestID, true);
+            DataRequestID = -1;
         }
 
         /// <summary>
@@ -128,69 +124,56 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void Parse_ContractData(string[] fields) // 10
         {
-            int requestId = fields[2].ToInt32(-1);
+            //int requestId = fields[2].ToInt32(-1);
 
-            if (fields[1] == "8" && requestId == requestId_ContractData)
+            if (fields[1] == "8")// && requestId == DataRequestID)
             {
                 string symbolStr = fields[3];
                 string conIdStr = fields[13];
-                int conId = conIdStr.ToInt32(int.MinValue);
+                string secTypeCode = fields[4];
+                string exchangeStr = fields[22] + "." + fields[12];
 
-                Contract c = active_ContractData;
+                (bool contractValid, Contract c) = Util.GetContractByIbCode(symbolStr, exchangeStr, secTypeCode, conIdStr);
 
-                if (c is null) // TODO: Add Contract
+                if (contractValid)
                 {
-                    string secTypeCode = fields[4];
-                    string exchangeStr = fields[22] + "." + fields[12];
-                    if (conId == active_ContractData_ConId)
+                    c.MarketData.OrderTypes.FromString(fields[17], ',');
+                    c.MarketData.ValidExchanges.FromString(fields[18], ',');
+
+                    //si.IndustryInfo.Industry = rawInput[24];
+                    //si.IndustryInfo.Category = rawInput[25];
+                    //si.IndustryInfo.Subcategory = rawInput[26];
+
+                    // Get ISIN here.
+                    int tagNum = fields[32].ToInt32(0);
+
+                    int pt = 33;
+
+                    Dictionary<string, string> tags = new Dictionary<string, string>();
+
+                    for (int i = 0; i < tagNum; i++)
                     {
-                        (bool contractValid, Contract c_result) = Util.GetContractByIbCode(symbolStr, exchangeStr, secTypeCode, conIdStr);
-                        if (contractValid) active_ContractData = c_result;
-                        //active_ContractData_ConId = -1;
-                    }
-                }
-                else
-                {
-                    if (c.ConId == conId && c.Name == symbolStr)
-                    {
-                        c.MarketData.OrderTypes.FromString(fields[17], ',');
-                        c.MarketData.ValidExchanges.FromString(fields[18], ',');
-
-                        //si.IndustryInfo.Industry = rawInput[24];
-                        //si.IndustryInfo.Category = rawInput[25];
-                        //si.IndustryInfo.Subcategory = rawInput[26];
-
-                        // Get ISIN here.
-                        int tagNum = fields[32].ToInt32(0);
-
-                        int pt = 33;
-
-                        Dictionary<string, string> tags = new Dictionary<string, string>();
-
-                        for (int i = 0; i < tagNum; i++)
-                        {
-                            tags.Add(fields[pt], fields[pt + 1]);
-                            pt += 2;
-                        }
-
-                        if (tags.ContainsKey("ISIN") && c is ITradable it)
-                        {
-                            it.ISIN = tags["ISIN"];
-
-                            //string isin_header = si.ISIN.Substring(0, 2);
-                            //if (isin_header == "US")
-                            //   si.CUSIP = si.ISIN.Substring(2, 9);
-                        }
-
-                        c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
-
-                        if (c.FullName.Length < 5)
-                            c.FullName = fields[21].Replace("\"", "");
-
-                        c.UpdateTime = DateTime.Now;
+                        tags.Add(fields[pt], fields[pt + 1]);
+                        pt += 2;
                     }
 
-                    //active_ContractData = null;
+                    if (tags.ContainsKey("ISIN") && c is ITradable it)
+                    {
+                        it.ISIN = tags["ISIN"];
+
+                        //string isin_header = si.ISIN.Substring(0, 2);
+                        //if (isin_header == "US")
+                        //   si.CUSIP = si.ISIN.Substring(2, 9);
+                    }
+
+                    c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
+
+                    if (c.FullName.Length < 5)
+                        c.FullName = fields[21].Replace("\"", "");
+
+                    c.UpdateTime = DateTime.Now;
+
+                    active_ContractData.Add(c);
                 }
             }
         }
@@ -198,8 +181,10 @@ namespace Pacmio.IB
         private static void Parse_ContractDataEnd(string[] fields) // 52
         {
             int requestId = fields[2].ToInt32(-1);
-            if (requestId > -1) RemoveRequest(requestId);
-            requestId_ContractData = -1;
+            if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
+
+            if (requestId > -1) RemoveRequest(requestId, false);
+            DataRequestID = -1;
         }
 
         private static void ParseError_ContractData(string[] fields)
@@ -207,14 +192,10 @@ namespace Pacmio.IB
             int requestId = fields[2].ToInt32(-1);
             string message = fields[4];
 
-            Console.WriteLine("Symbol Data Error !!!!!!!!!!!!! " + fields[2] + ": " + message);
-            if (message.Contains("No security definition has been found for the request"))
-            {
-                active_ContractData.UpdateTime = DateTime.Now;
-            }
+            Console.WriteLine(">>>>>>>>> Symbol Data Error: " + fields[2] + ": " + message);
 
-            if (requestId > -1) RemoveRequest(requestId);
-            requestId_ContractData = -1;
+            if (requestId > -1) RemoveRequest(requestId, false);
+            DataRequestID = -1;
         }
     }
 }

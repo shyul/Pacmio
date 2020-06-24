@@ -38,6 +38,7 @@ namespace Pacmio.IB
 
                     case RequestType.RequestContractData:
                         ParseError_ContractData(fields);
+                        DataRequestID = -1;
                         break;
 
                     case RequestType.RequestScannerSubscription:
@@ -51,7 +52,6 @@ namespace Pacmio.IB
 
                     case RequestType.RequestHeadTimestamp:
                         RemoveRequest(requestId);
-                        //requestId_HistoricalDataHeadTimestamp = -1;
                         DataRequestID = -1;
                         break;
 

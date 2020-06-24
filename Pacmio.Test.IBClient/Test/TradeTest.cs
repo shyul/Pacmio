@@ -116,7 +116,7 @@ namespace TestClient
             }
             else
             {
-                Table.Rows.Add(ti.ExecId, contractName, ti.TotalQuantity, ti.AveragePrice, ti.Quantity,
+                Table?.Rows.Add(ti.ExecId, contractName, ti.TotalQuantity, ti.AveragePrice, ti.Quantity,
                     ti.Price, (ti.Quantity * ti.Price).ToString("0.000"), ti.Commissions, ti.RealizedPnL,
                     ti.LastLiquidity.ToString(), ti.ModeCode, ti.AccountCode, ti.PermId, ti.ExecuteTime);
             }

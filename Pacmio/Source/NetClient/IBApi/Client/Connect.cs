@@ -267,8 +267,8 @@ namespace Pacmio.IB
             ReceivedMessageCount = 0;
 
             //requestId_HistoricalData = -1;
-            requestId_ContractData = -1;
-            requestId_ContractSamples = -1;
+            //requestId_ContractData = -1;
+            //requestId_ContractSamples = -1;
             //requestId_HistoricalDataHeadTimestamp = -1;
             requestId_HistoricalTick = -1;
         }

@@ -119,6 +119,7 @@ namespace Pacmio.IB
         /// <summary>
         /// 59: (0)"59"-(1)"1"-(2)"0000e22a.5eac83de.01.01"-(3)"0.364507"-(4)"USD"-(5)"1.7976931348623157E308"-(6)"1.7976931348623157E308"
         /// Received CommissionsReport: (0)"59"-(1)"1"-(2)"0000e0d5.5ea9265d.01.01"-(3)"0.841411"-(4)"USD"-(5)"958.590689"-(6)"1.7976931348623157E308"
+        /// Commissions Report | USD | 1.79769313486232E+308 | 0 : (0)"59"-(1)"1"-(2)"0000e0d5.5efbe8f4.01.01"-(3)"0.353064"-(4)"USD"-(5)"1.7976931348623157E308"-(6)"1.7976931348623157E308"
         /// </summary>
         /// <param name="fields"></param>
         private static void Parse_CommissionsReport(string[] fields)

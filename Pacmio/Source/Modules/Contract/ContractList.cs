@@ -68,6 +68,78 @@ namespace Pacmio
 
         #region Fetch / Update
 
+        public static Contract[] Fetch(string symbol, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractSamples(symbol, cts);
+
+        public static void Fetch(Contract c, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(c, cts);
+
+        public static Contract Fetch(int conId, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(conId, cts);
+
+        public static Contract GetOrFetch(int conId, CancellationTokenSource cts = null)
+        {
+            if (conId > 0)
+            {
+                var list = GetList(conId);
+
+                if (list.Count() == 1)
+                    return list.First();
+                else if (Root.IBConnected)
+                {
+                    if (list.Count() > 1)
+                    {
+                        Contract[] toRemove = list.ToArray();
+                        foreach (Contract c in toRemove)
+                            Remove(c.Info);
+                    }
+
+                    return Fetch(conId, cts);
+                }
+            }
+
+            return null;
+        }
+
+        public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode, CancellationTokenSource cts = null)
+        {
+            var list = GetList(symbol, countryCode).Where(n => n.ConId > 0);
+
+            if (list.Count() == 0 && Root.IBConnected)
+            {
+                Fetch(symbol, cts);
+                return GetList(symbol, countryCode).Where(n => n.ConId > 0);
+            }
+            else
+                return list;
+        }
+
+        public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            var existing_symbols = GetList(symbols, countryCode).Select(n => n.Name);
+            var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
+
+            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
+            {
+                int i = 0, count = non_existing_symbols.Count();
+                foreach (string symbol in non_existing_symbols)
+                {
+                    progress?.Report(100 * i / count);
+                    Thread.Sleep(10);
+                    Fetch(symbol, cts);
+                    i++;
+                }
+            }
+
+            return GetList(symbols, countryCode);
+        }
+
+        #endregion Fetch / Update
+
+        #region Database Tools
+
+        /// <summary>
+        /// TODO: Test
+        /// </summary>
+        /// <param name="cts"></param>
+        /// <param name="progress"></param>
         public static void UpdateContractData(CancellationTokenSource cts, IProgress<int> progress)
         {
             var cList = Values.Where(n => n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
@@ -77,120 +149,15 @@ namespace Pacmio
 
             foreach (Contract c in cList)
             {
-
-            ContractData:
-                IB.Client.SendRequest_ContractData(c);
-
-                int time = 0;
-                while (!IB.Client.IsReady_ContractData)
-                {
-                    time++;
-                    Thread.Sleep(60);
-                    if (time > DownloadTimeout) // Handle Time out here.
-                    {
-                        IB.Client.Cancel_ContractData();
-                        Thread.Sleep(100);
-                        goto ContractData;
-                    }
-                    else if (cts.IsCancellationRequested)
-                    {
-                        IB.Client.Cancel_ContractSamples();
-                        return;
-                    }
-                }
+                if (cts.IsCancellationRequested) return;
+                Thread.Sleep(10);
+                Fetch(c, cts);
                 pt++;
                 progress.Report(pt * 100 / count);
             }
         }
-        /*
-        public static Contract GetOrFetch(int conId)
-        {
-            DownloadCancellationTokenSource = null;
-            var list = GetList(conId);
 
-            if (list.Count() == 1)
-                return list.First();
-            else
-            {
-                if (list.Count() > 1)
-                {
-                    Contract[] toRemove = list.ToArray();
-                    foreach (Contract c in toRemove)
-                        Remove(c.Info);
-                }
-
-                if (Root.IBConnected)
-                {
-                    while () ;
-
-                    RequestFetchSymbolContracts(non_existing_symbols);
-                    WaitSymbolTaskBusy();
-                }
-
-                return GetList(conId).First();
-            }
-        }
-        */
-        public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode)
-        {
-            DownloadCancellationTokenSource = null;
-            var list = GetList(symbol, countryCode).Where(n => n.ConId > 0).Select(n => n.Name);
-
-            if (list.Count() == 0 && Root.IBConnected)
-            {
-                RequestFetchSymbolContract(symbol);
-                WaitSymbolTaskBusy();
-            }
-
-            return GetList(symbol, countryCode);
-        }
-
-        public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
-        {
-            DownloadCancellationTokenSource = cts;
-            DownloadProgress = progress;
-
-            var existing_symbols = GetList(symbols, countryCode).Select(n => n.Name);
-            var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
-
-            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
-            {
-                RequestFetchSymbolContracts(non_existing_symbols);
-                WaitSymbolTaskBusy();
-            }
-
-            return GetList(symbols, countryCode);
-        }
-
-        public static IEnumerable<Contract> GetOrRequestFetch(string name, string countryCode)
-        {
-            DownloadCancellationTokenSource = null;
-            IEnumerable<Contract> list = GetList(name, countryCode).Where(n => n.ConId > 0);
-
-            if (list.Count() == 0 && Root.IBConnected)
-            {
-                RequestFetchSymbolContract(name);
-                WaitSymbolTaskBusy();
-            }
-
-            return list;
-        }
-
-        public static IEnumerable<Contract> GetOrRequestFetch(string name, int conId)
-        {
-            DownloadCancellationTokenSource = null;
-            var list = Values.Where(n => n.ConId == conId && n.Name == name);
-
-            if (list.Count() == 0 && Root.IBConnected)
-            {
-                RequestFetchSymbolContract(name);
-                WaitSymbolTaskBusy();
-            }
-
-            return list;
-        }
-
-        #endregion Fetch / Update
+        #endregion Database Tools
 
         #region Background Task
 
@@ -207,7 +174,7 @@ namespace Pacmio
         }
 
         #region Symbol Task
-
+        /*
         private static void RequestFetchSymbolContracts(IEnumerable<string> symbols)
         {
             foreach (string symbol in symbols)
@@ -219,12 +186,12 @@ namespace Pacmio
             if (CheckedSymbolList.ContainsKey(symbol) || SymbolTaskList.Contains(symbol)) return;
             SymbolTaskList.Enqueue(symbol);
         }
+        */
+        //public static CancellationTokenSource DownloadCancellationTokenSource { get; private set; }
 
-        public static CancellationTokenSource DownloadCancellationTokenSource { get; private set; }
+        //public static bool IsCancellationRequested => !(DownloadCancellationTokenSource is null) && DownloadCancellationTokenSource.IsCancellationRequested;
 
-        public static bool IsCancellationRequested => !(DownloadCancellationTokenSource is null) && DownloadCancellationTokenSource.IsCancellationRequested;
-
-        public static IProgress<float> DownloadProgress { get; private set; }
+        //public static IProgress<float> DownloadProgress { get; private set; }
 
         private static int DownloadTimeout { get; set; } = 1000; // 5 minutes
 
@@ -270,13 +237,13 @@ namespace Pacmio
                             Thread.Sleep(60);
                             if (time > DownloadTimeout) // Handle Time out here.
                             {
-                                IB.Client.Cancel_ContractSamples();
+                                IB.Client.SendCancel_ContractSamples();
                                 Thread.Sleep(100);
                                 goto ContractSamples;
                             }
                             else if (IsCancellationRequested)
                             {
-                                IB.Client.Cancel_ContractSamples();
+                                IB.Client.SendCancel_ContractSamples();
                                 goto Start;
                             }
                         }
@@ -308,13 +275,13 @@ namespace Pacmio
                                 Thread.Sleep(60);
                                 if (time > DownloadTimeout) // Handle Time out here.
                                 {
-                                    IB.Client.Cancel_ContractData();
+                                    IB.Client.SendCancel_ContractData();
                                     Thread.Sleep(100);
                                     goto ContractData;
                                 }
                                 else if (IsCancellationRequested)
                                 {
-                                    IB.Client.Cancel_ContractSamples();
+                                    IB.Client.SendCancel_ContractSamples();
                                     goto Start;
                                 }
                             }

@@ -21,18 +21,161 @@ using System.Threading.Tasks;
 using Xu;
 using Pacmio;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
+        /// <summary>
+        /// Check list:
+        /// 1. DataRequestID must be set in SendRequest_ function
+        /// 2. DataRequestID must be set to -1 when the data is being parsed
+        /// 2. DataRequestID must be set to -1 in SendCancel_ function
+        /// 
+        /// TODO: TQQQ 3 minutes chart won't receive updated ticks, when 1 minute chart is loaded.
+        /// 
+        /// </summary>
+
         private static bool DataRequestReady => Connected && DataRequestID == -1;
 
         private static int DataRequestID { get; set; } = -1;
 
         private static object RequestLockObject { get; } = new object();
 
-        #region Fetch
+        #region Fetch Contract
+
+        public static Contract[] Fetch_ContractSamples(string symbol, CancellationTokenSource cts = null)
+        {
+            lock (RequestLockObject)
+                if (DataRequestReady)
+                {
+                StartDownload:
+                    SendRequest_ContractSamples(symbol);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_ContractSamples();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_ContractSamples();
+                            goto End;
+                        }
+                    }
+
+                    return active_ContractSamples.ToArray();
+                }
+
+            End:
+            return null;
+        }
+
+        public static Contract[] Fetch_ContractData(string name, string exchangeCode, string typeCode = "STK", CancellationTokenSource cts = null)
+        {
+            lock (RequestLockObject)
+                if (DataRequestReady)
+                {
+                StartDownload:
+                    SendRequest_ContractData(0, name, exchangeCode, typeCode);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_ContractData();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_ContractData();
+                            goto End;
+                        }
+                    }
+
+                    return active_ContractData.ToArray();
+                }
+
+            End:
+            return null;
+        }
+
+        public static Contract Fetch_ContractData(int conId, CancellationTokenSource cts = null)
+        {
+            lock (RequestLockObject)
+                if (DataRequestReady)
+                {
+                StartDownload:
+                    SendRequest_ContractData(conId);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_ContractData();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_ContractData();
+                            goto End;
+                        }
+                    }
+
+                    var list = active_ContractData.Where(n => n.ConId == conId);
+                    return (list.Count() > 0) ? list.First() : null;
+                }
+
+            End:
+            return null;
+        }
+
+        public static void Fetch_ContractData(Contract c, CancellationTokenSource cts = null)
+        {
+            lock (RequestLockObject)
+                if (DataRequestReady)
+                {
+                StartDownload:
+                    SendRequest_ContractData(c);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_ContractData();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        {
+                            SendCancel_ContractData();
+                            return;
+                        }
+                    }
+                }
+        }
+
+        #endregion Fetch Contract
+
+        #region Fetch Historical Data
 
         public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
@@ -101,45 +244,6 @@ namespace Pacmio.IB
                 }
         }
 
-        #endregion Fetch
-
-        #region Task
-        /*
-        private static readonly ConcurrentQueue<Action> DataRequestActionQueue = new ConcurrentQueue<Action>();
-
-        private static readonly ConcurrentQueue<Action> DataRequestActionQueue_Background = new ConcurrentQueue<Action>();
-
-        private static Task DataRequestTask { get; set; }
-
-        private static void DataRequestTaskWorker()
-        {
-            while (true)
-            {
-                if (IsCancelled)
-                {
-                    while (DataRequestActionQueue.Count > 0)
-                        DataRequestActionQueue.TryDequeue(out _);
-
-                    break;
-                }
-                else if (DataRequestActionQueue.Count > 0 || DataRequestActionQueue_Background.Count > 0)
-                {
-                    if(DataRequestActionQueue.Count > 0) 
-                    {
-                        DataRequestActionQueue.TryDequeue(out Action ax);
-                        ax?.Invoke();
-                    }
-                    else if (DataRequestActionQueue_Background.Count > 0)
-                    {
-                        DataRequestActionQueue_Background.TryDequeue(out Action ax_background);
-                        ax_background?.Invoke();
-                    }
-                }
-                else
-                    Thread.Sleep(10);
-            }
-        }
-        */
-        #endregion Task
+        #endregion Fetch Historical Data
     }
 }

@@ -192,8 +192,8 @@ namespace Pacmio.IB
         }
 
 
-        private static void SendCancel_HistoricalData() 
-        { 
+        private static void SendCancel_HistoricalData()
+        {
             if (Connected)
             {
                 RemoveRequest(DataRequestID, RequestType.RequestHistoricalData);
@@ -211,7 +211,7 @@ namespace Pacmio.IB
             if (requestId > -1)
             {
                 RemoveRequest(requestId, RequestType.RequestHistoricalData);
-                if(DataRequestID == requestId) 
+                if (DataRequestID == requestId)
                 {
                     DataRequestID = -1;
                 }

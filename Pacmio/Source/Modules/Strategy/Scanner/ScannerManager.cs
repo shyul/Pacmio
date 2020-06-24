@@ -77,7 +77,7 @@ namespace Pacmio
             {
                 //var clist = ;
 
-                var conList = List[info].Select(n => (n.Key, ContractList.GetOrRequestFetch(n.Value.Name, n.Value.ConId))).OrderBy(n => n.Key);
+                var conList = List[info].Select(n => (n.Key, ContractList.GetOrFetch(n.Value.ConId))).OrderBy(n => n.Key);
 
                 /*
                 var names = clist.Values.Where(n => ContractList.GetList(n.ConId).Count() == 0).Select(n => n.Name).ToArray();
@@ -92,10 +92,8 @@ namespace Pacmio
                 Console.WriteLine("\nScanner Result: " + info.Code);
                 foreach (var i in conList)
                 {
-                    if (i.Item2.Count() > 0) 
+                    if (i.Item2  is Contract c) 
                     {
-                        Contract c = i.Item2.First();
-
                         if (c is ITradable it)
                         {
                             Console.WriteLine("Rank " + i.Key + ": " + c.Name + "\t" + "\t" + it.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);

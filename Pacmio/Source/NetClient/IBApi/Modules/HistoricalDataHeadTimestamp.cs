@@ -99,6 +99,7 @@ namespace Pacmio.IB
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
                 activeBarTable_HistoricalDataHeadTimestamp.Contract.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
             }
+
             RemoveRequest(requestId, false);
             DataRequestID = -1;
         }
