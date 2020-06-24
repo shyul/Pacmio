@@ -56,7 +56,7 @@ namespace Pacmio.IB
         {
             int requestId = fields[1].ToInt32(-1);
 
-            if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
+            //if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
 
             //if (requestId == DataRequestID)
             //{

@@ -31,8 +31,8 @@ namespace Pacmio
 
         public static int Count => List.Count;
         public static bool IsEmpty => Count == 0;
+        public static bool Remove((string name, Exchange exchange, string typeName) info) => List.TryRemove(info, out _);
         public static IEnumerable<Contract> Values => List.Values;
-
         public static T GetOrAdd<T>(T c) where T : Contract
         {
             if (!List.ContainsKey(c.Info))
@@ -41,30 +41,26 @@ namespace Pacmio
             return (T)List[c.Info];
         }
 
-        //private static (string name, Exchange exchange, ContractType type) GetKey(int pt) => List.ElementAt(pt).Key;
+        public static IEnumerable<Contract> GetList(int conId)
+            => Values.Where(val => val.ConId == conId);
 
-        public static IEnumerable<Contract> GetList(string value)
-            => Values.Where(val => val.Name == value.ToUpper());
-        //private static bool Contains(string value) => (GetList(value).Count() > 0 || UnknownItemList.Contains(value.ToUpper()));
+        public static IEnumerable<Contract> GetList(string symbol)
+            => Values.Where(val => val.Name == symbol.ToUpper());
 
-        private static IEnumerable<Contract> GetList(string value, IEnumerable<Exchange> exchanges)
-            => Values.Where(val => val.Name == value.ToUpper() && exchanges.Contains(val.Exchange));
-        private static IEnumerable<Contract> GetList(IEnumerable<string> values, IEnumerable<Exchange> exchanges)
-            => Values.Where(val => values.Contains(val.Name) && exchanges.Contains(val.Exchange));
+        public static IEnumerable<Contract> GetList(IEnumerable<string> symbols)
+            => Values.Where(val => symbols.Contains(val.Name));
 
-        //private static bool Contains(string value, ICollection<Exchange> exchanges) => GetList(value, exchanges).Count() > 0;
-        private static IEnumerable<Contract> GetList(string value, string countryCode)
-            => GetList(value, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
+        private static IEnumerable<Contract> GetList(string symbol, IEnumerable<Exchange> exchanges)
+            => Values.Where(val => val.Name == symbol.ToUpper() && exchanges.Contains(val.Exchange));
 
-        public static IEnumerable<Contract> GetList(IEnumerable<string> values, string countryCode)
-            => GetList(values, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
+        private static IEnumerable<Contract> GetList(IEnumerable<string> symbols, IEnumerable<Exchange> exchanges)
+            => Values.Where(val => symbols.Contains(val.Name) && exchanges.Contains(val.Exchange));
 
-        public static IEnumerable<Contract> GetList(int conId) => Values.Where(val => val.ConId == conId);
+        private static IEnumerable<Contract> GetList(string symbol, string countryCode)
+            => GetList(symbol, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
 
-        public static bool Remove((string name, Exchange exchange, string typeName) info)
-        {
-            return List.TryRemove(info, out _);
-        }
+        public static IEnumerable<Contract> GetList(IEnumerable<string> symbols, string countryCode)
+            => GetList(symbols, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
 
         #region Fetch / Update
 
@@ -111,6 +107,27 @@ namespace Pacmio
                 return list;
         }
 
+        public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            var existing_symbols = GetList(symbols).Select(n => n.Name);
+            var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
+
+            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
+            {
+                int i = 0, count = non_existing_symbols.Count();
+                foreach (string symbol in non_existing_symbols)
+                {
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                    progress?.Report(100.0f * i / count);
+                    Thread.Sleep(10);
+                    Fetch(symbol, cts);
+                    i++;
+                }
+            }
+
+            return GetList(symbols);
+        }
+
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
         {
             var existing_symbols = GetList(symbols, countryCode).Select(n => n.Name);
@@ -121,7 +138,8 @@ namespace Pacmio
                 int i = 0, count = non_existing_symbols.Count();
                 foreach (string symbol in non_existing_symbols)
                 {
-                    progress?.Report(100 * i / count);
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                    progress?.Report(100.0f * i / count);
                     Thread.Sleep(10);
                     Fetch(symbol, cts);
                     i++;
@@ -140,170 +158,22 @@ namespace Pacmio
         /// </summary>
         /// <param name="cts"></param>
         /// <param name="progress"></param>
-        public static void UpdateContractData(CancellationTokenSource cts, IProgress<int> progress)
+        public static void UpdateContractData(CancellationTokenSource cts, IProgress<float> progress)
         {
             var cList = Values.Where(n => n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
 
             int count = cList.Count();
-            int pt = 0;
+            int i = 0;
 
             foreach (Contract c in cList)
             {
-                if (cts.IsCancellationRequested) return;
+                if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                 Thread.Sleep(10);
                 Fetch(c, cts);
-                pt++;
-                progress.Report(pt * 100 / count);
+                i++;
+                progress?.Report(i * 100.0f / count);
             }
         }
-
-        #endregion Database Tools
-
-        #region Background Task
-
-        public static void StartTask(CancellationTokenSource cts)
-        {
-            SymbolTask = new Task(() => SymbolTaskWorker(), cts.Token);
-            SymbolTask.Start();
-        }
-
-        public static void StopTask()
-        {
-            while (SymbolTask != null && SymbolTask?.Status == TaskStatus.Running) { Thread.Sleep(1); }
-            SymbolTask?.Dispose();
-        }
-
-        #region Symbol Task
-        /*
-        private static void RequestFetchSymbolContracts(IEnumerable<string> symbols)
-        {
-            foreach (string symbol in symbols)
-                RequestFetchSymbolContract(symbol);
-        }
-
-        private static void RequestFetchSymbolContract(string symbol)
-        {
-            if (CheckedSymbolList.ContainsKey(symbol) || SymbolTaskList.Contains(symbol)) return;
-            SymbolTaskList.Enqueue(symbol);
-        }
-        */
-        //public static CancellationTokenSource DownloadCancellationTokenSource { get; private set; }
-
-        //public static bool IsCancellationRequested => !(DownloadCancellationTokenSource is null) && DownloadCancellationTokenSource.IsCancellationRequested;
-
-        //public static IProgress<float> DownloadProgress { get; private set; }
-
-        private static int DownloadTimeout { get; set; } = 1000; // 5 minutes
-
-        private static Task SymbolTask { get; set; }
-
-        public static bool SymbolTaskIsBusy => SymbolTaskList.Count > 0 || ContractDataTaskList.Count > 0;
-
-        private static void WaitSymbolTaskBusy() { while (SymbolTaskIsBusy) { Thread.Sleep(100); } }
-
-        private static readonly ConcurrentQueue<string> SymbolTaskList = new ConcurrentQueue<string>();
-
-        private static readonly ConcurrentQueue<string> ContractDataTaskList = new ConcurrentQueue<string>();
-
-        private static readonly ConcurrentDictionary<string, DateTime> CheckedSymbolList = new ConcurrentDictionary<string, DateTime>();
-
-        private static void SymbolTaskWorker()
-        {
-            int time = 0;
-            while (!Root.RequestWorkerCancel)
-            {
-                if (Root.IBConnected)
-                {
-                Start:
-                    if (IsCancellationRequested)
-                    {
-                        while (SymbolTaskList.Count > 0)
-                            SymbolTaskList.TryDequeue(out _);
-
-                        while (ContractDataTaskList.Count > 0)
-                            ContractDataTaskList.TryDequeue(out _);
-                    }
-                    else if (SymbolTaskList.Count > 0 && IB.Client.IsReady_ContractSamples)
-                    {
-                        SymbolTaskList.TryDequeue(out string symbol);
-
-                    ContractSamples:
-                        IB.Client.SendRequest_ContractSamples(symbol);
-
-                        time = 0;
-                        while (!IB.Client.IsReady_ContractSamples)
-                        {
-                            time++;
-                            Thread.Sleep(60);
-                            if (time > DownloadTimeout) // Handle Time out here.
-                            {
-                                IB.Client.SendCancel_ContractSamples();
-                                Thread.Sleep(100);
-                                goto ContractSamples;
-                            }
-                            else if (IsCancellationRequested)
-                            {
-                                IB.Client.SendCancel_ContractSamples();
-                                goto Start;
-                            }
-                        }
-
-                        ContractDataTaskList.Enqueue(symbol);
-                        CheckedSymbolList.TryAdd(symbol, DateTime.Now);
-                    }
-                    else if (SymbolTaskList.Count == 0 && ContractDataTaskList.Count > 0 && IB.Client.IsReady_ContractSamples && IB.Client.IsReady_ContractData)
-                    {
-                        List<string> symbols = new List<string>();
-
-                        while (ContractDataTaskList.Count > 0)
-                        {
-                            ContractDataTaskList.TryDequeue(out string s);
-                            symbols.Add(s);
-                        }
-
-                        var cList = Values.Where(c => symbols.Contains(c.Name) && c.ConId > 0 && (DateTime.Now - c.UpdateTime).TotalDays > 1);
-                        foreach (Contract c in cList)
-                        {
-
-                        ContractData:
-                            IB.Client.SendRequest_ContractData(c);
-
-                            time = 0;
-                            while (!IB.Client.IsReady_ContractData)
-                            {
-                                time++;
-                                Thread.Sleep(60);
-                                if (time > DownloadTimeout) // Handle Time out here.
-                                {
-                                    IB.Client.SendCancel_ContractData();
-                                    Thread.Sleep(100);
-                                    goto ContractData;
-                                }
-                                else if (IsCancellationRequested)
-                                {
-                                    IB.Client.SendCancel_ContractSamples();
-                                    goto Start;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var list = CheckedSymbolList.Where(n => (DateTime.Now - n.Value).TotalDays > 1).Select(n => n.Key);
-                        foreach (string sym in list) CheckedSymbolList.TryRemove(sym, out _);
-                    }
-
-                    DownloadProgress?.Report(SymbolTaskList.Count + ContractDataTaskList.Count);
-                    Thread.Sleep(15);
-                }
-                else
-                    Thread.Sleep(100);
-            }
-        }
-
-        #endregion Symbol Task
-
-        #endregion Background Task
 
         #region File Operation
 
@@ -332,7 +202,7 @@ namespace Pacmio
 
         #region Export / Import
 
-        public static bool ExportCSV(string fileName, IProgress<int> progress)
+        public static bool ExportCSV(string fileName, CancellationTokenSource cts, IProgress<float> progress)
         {
             StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
 
@@ -347,6 +217,8 @@ namespace Pacmio
             int pt = 0;
             foreach (Contract c in sorted)
             {
+                if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+
                 switch (c)
                 {
                     case Stock si:
@@ -369,14 +241,13 @@ namespace Pacmio
                 }
 
                 pt++;
-                float percent = pt * 100 / Count;
-                if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                progress?.Report(pt * 100 / Count);
             }
 
             return sb.ToFile(fileName);
         }
 
-        public static void ImportCSV(string fileName, IProgress<int> progress)
+        public static void ImportCSV(string fileName, CancellationTokenSource cts, IProgress<float> progress)
         {
             long byteread = 0;
 
@@ -393,6 +264,8 @@ namespace Pacmio
                     string line = sr.ReadLine();
                     byteread += line.Length + 1;
                     float percent = byteread * 100.0f / totalSize;
+
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
 
                     string[] fields = line.CsvReadFields();
                     if (fields.Length == 10)
@@ -450,11 +323,13 @@ namespace Pacmio
                                 break;
                         }
                     }
-                    if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                    progress?.Report(percent);
                 }
             }
         }
 
         #endregion Export / Import
+
+        #endregion Database Tools
     }
 }

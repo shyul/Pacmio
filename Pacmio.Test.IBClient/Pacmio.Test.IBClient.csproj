@@ -84,12 +84,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Test\TradeTest.cs" />
-    <Compile Include="UI\GridForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\GridForm.Designer.cs">
-      <DependentUpon>GridForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -118,9 +112,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\GridForm.resx">
-      <DependentUpon>GridForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ib_logo_2015.ico" />
@@ -128,6 +119,8 @@
   <ItemGroup>
     <None Include="Resources\LogoIcon.gif" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

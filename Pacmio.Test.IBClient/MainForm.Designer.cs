@@ -38,6 +38,7 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
             this.BtnCloseChart = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@ namespace TestClient
             this.BtnLoadHistoricalChart = new System.Windows.Forms.Button();
             this.tabContract = new System.Windows.Forms.TabPage();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
-            this.BtnValidUSSymbol = new System.Windows.Forms.Button();
             this.GroupBoxContractInfo = new System.Windows.Forms.GroupBox();
             this.TextBoxSymbolFullName = new System.Windows.Forms.TextBox();
             this.LbSymbolISIN = new System.Windows.Forms.Label();
@@ -119,6 +119,7 @@ namespace TestClient
             this.BtnRequestPnL = new System.Windows.Forms.Button();
             this.TreeViewAccount = new System.Windows.Forms.TreeView();
             this.tabFileData = new System.Windows.Forms.TabPage();
+            this.BtnImportSymbols = new System.Windows.Forms.Button();
             this.BtnDownloadBarTable = new System.Windows.Forms.Button();
             this.BtnReDownloadBarTable = new System.Windows.Forms.Button();
             this.BtnCleanUpDuplicateStock = new System.Windows.Forms.Button();
@@ -133,9 +134,10 @@ namespace TestClient
             this.BtnDownloadMultiTables = new System.Windows.Forms.Button();
             this.BtnExportContracts = new System.Windows.Forms.Button();
             this.BtnImportContracts = new System.Windows.Forms.Button();
+            this.BtnValidUSSymbol = new System.Windows.Forms.Button();
             this.BtnMarketDataFormHide = new System.Windows.Forms.Button();
             this.BtnMarketDataFormShow = new System.Windows.Forms.Button();
-            this.BtnTestSymbolsToCheck = new System.Windows.Forms.Button();
+            this.BtnFormatSymbolsList = new System.Windows.Forms.Button();
             this.DownloadBarTableDetialedProgressBar = new System.Windows.Forms.ProgressBar();
             this.TextBoxMultiContracts = new System.Windows.Forms.RichTextBox();
             this.CheckBoxChartToCurrent = new System.Windows.Forms.CheckBox();
@@ -171,7 +173,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
+            this.BtnUpdateContracts = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -249,6 +251,16 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnLoadMultiHistoricalChart
+            // 
+            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(14, 47);
+            this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
+            this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadMultiHistoricalChart.TabIndex = 45;
+            this.BtnLoadMultiHistoricalChart.Text = "Show Multi Historical Chart";
+            this.BtnLoadMultiHistoricalChart.UseVisualStyleBackColor = true;
+            this.BtnLoadMultiHistoricalChart.Click += new System.EventHandler(this.BtnLoadMultiHistoricalChart_Click);
             // 
             // label12
             // 
@@ -340,7 +352,6 @@ namespace TestClient
             // tabContract
             // 
             this.tabContract.Controls.Add(this.BtnMatchSymbols);
-            this.tabContract.Controls.Add(this.BtnValidUSSymbol);
             this.tabContract.Controls.Add(this.GroupBoxContractInfo);
             this.tabContract.Controls.Add(this.BtnGetContractInfo);
             this.tabContract.Controls.Add(this.TextBoxSearchSymbol);
@@ -361,16 +372,6 @@ namespace TestClient
             this.BtnMatchSymbols.Text = "Match Symbols";
             this.BtnMatchSymbols.UseVisualStyleBackColor = true;
             this.BtnMatchSymbols.Click += new System.EventHandler(this.BtnMatchSymbols_Click);
-            // 
-            // BtnValidUSSymbol
-            // 
-            this.BtnValidUSSymbol.Location = new System.Drawing.Point(17, 91);
-            this.BtnValidUSSymbol.Name = "BtnValidUSSymbol";
-            this.BtnValidUSSymbol.Size = new System.Drawing.Size(260, 22);
-            this.BtnValidUSSymbol.TabIndex = 63;
-            this.BtnValidUSSymbol.Text = "Valid US";
-            this.BtnValidUSSymbol.UseVisualStyleBackColor = true;
-            this.BtnValidUSSymbol.Click += new System.EventHandler(this.BtnValidUSSymbol_Click);
             // 
             // GroupBoxContractInfo
             // 
@@ -1096,6 +1097,8 @@ namespace TestClient
             // 
             // tabFileData
             // 
+            this.tabFileData.Controls.Add(this.BtnUpdateContracts);
+            this.tabFileData.Controls.Add(this.BtnImportSymbols);
             this.tabFileData.Controls.Add(this.BtnDownloadBarTable);
             this.tabFileData.Controls.Add(this.BtnReDownloadBarTable);
             this.tabFileData.Controls.Add(this.BtnCleanUpDuplicateStock);
@@ -1110,6 +1113,16 @@ namespace TestClient
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
+            // 
+            // BtnImportSymbols
+            // 
+            this.BtnImportSymbols.Location = new System.Drawing.Point(523, 302);
+            this.BtnImportSymbols.Name = "BtnImportSymbols";
+            this.BtnImportSymbols.Size = new System.Drawing.Size(120, 23);
+            this.BtnImportSymbols.TabIndex = 55;
+            this.BtnImportSymbols.Text = "Import Symbols";
+            this.BtnImportSymbols.UseVisualStyleBackColor = true;
+            this.BtnImportSymbols.Click += new System.EventHandler(this.BtnImportSymbols_Click);
             // 
             // BtnDownloadBarTable
             // 
@@ -1131,7 +1144,7 @@ namespace TestClient
             // 
             // BtnCleanUpDuplicateStock
             // 
-            this.BtnCleanUpDuplicateStock.Location = new System.Drawing.Point(750, 108);
+            this.BtnCleanUpDuplicateStock.Location = new System.Drawing.Point(750, 172);
             this.BtnCleanUpDuplicateStock.Name = "BtnCleanUpDuplicateStock";
             this.BtnCleanUpDuplicateStock.Size = new System.Drawing.Size(198, 23);
             this.BtnCleanUpDuplicateStock.TabIndex = 52;
@@ -1235,7 +1248,7 @@ namespace TestClient
             // 
             // BtnExportContracts
             // 
-            this.BtnExportContracts.Location = new System.Drawing.Point(762, 58);
+            this.BtnExportContracts.Location = new System.Drawing.Point(523, 360);
             this.BtnExportContracts.Name = "BtnExportContracts";
             this.BtnExportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnExportContracts.TabIndex = 6;
@@ -1245,13 +1258,23 @@ namespace TestClient
             // 
             // BtnImportContracts
             // 
-            this.BtnImportContracts.Location = new System.Drawing.Point(762, 29);
+            this.BtnImportContracts.Location = new System.Drawing.Point(523, 331);
             this.BtnImportContracts.Name = "BtnImportContracts";
             this.BtnImportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnImportContracts.TabIndex = 5;
             this.BtnImportContracts.Text = "Import Contracts";
             this.BtnImportContracts.UseVisualStyleBackColor = true;
-            this.BtnImportContracts.Click += new System.EventHandler(this.BtnImportSymbols_Click);
+            this.BtnImportContracts.Click += new System.EventHandler(this.BtnImportContracts_Click);
+            // 
+            // BtnValidUSSymbol
+            // 
+            this.BtnValidUSSymbol.Location = new System.Drawing.Point(191, 21);
+            this.BtnValidUSSymbol.Name = "BtnValidUSSymbol";
+            this.BtnValidUSSymbol.Size = new System.Drawing.Size(79, 22);
+            this.BtnValidUSSymbol.TabIndex = 63;
+            this.BtnValidUSSymbol.Text = "Valid US";
+            this.BtnValidUSSymbol.UseVisualStyleBackColor = true;
+            this.BtnValidUSSymbol.Click += new System.EventHandler(this.BtnValidUSSymbol_Click);
             // 
             // BtnMarketDataFormHide
             // 
@@ -1275,16 +1298,16 @@ namespace TestClient
             this.BtnMarketDataFormShow.UseVisualStyleBackColor = true;
             this.BtnMarketDataFormShow.Click += new System.EventHandler(this.BtnMarketDataFormShow_Click);
             // 
-            // BtnTestSymbolsToCheck
+            // BtnFormatSymbolsList
             // 
-            this.BtnTestSymbolsToCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnTestSymbolsToCheck.Location = new System.Drawing.Point(410, 21);
-            this.BtnTestSymbolsToCheck.Name = "BtnTestSymbolsToCheck";
-            this.BtnTestSymbolsToCheck.Size = new System.Drawing.Size(58, 55);
-            this.BtnTestSymbolsToCheck.TabIndex = 53;
-            this.BtnTestSymbolsToCheck.Text = "Format Symbols List";
-            this.BtnTestSymbolsToCheck.UseVisualStyleBackColor = true;
-            this.BtnTestSymbolsToCheck.Click += new System.EventHandler(this.BtnTestSymbolsToCheck_Click);
+            this.BtnFormatSymbolsList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnFormatSymbolsList.Location = new System.Drawing.Point(410, 21);
+            this.BtnFormatSymbolsList.Name = "BtnFormatSymbolsList";
+            this.BtnFormatSymbolsList.Size = new System.Drawing.Size(58, 55);
+            this.BtnFormatSymbolsList.TabIndex = 53;
+            this.BtnFormatSymbolsList.Text = "Format Symbols List";
+            this.BtnFormatSymbolsList.UseVisualStyleBackColor = true;
+            this.BtnFormatSymbolsList.Click += new System.EventHandler(this.BtnFormatSymbolsList_Click);
             // 
             // DownloadBarTableDetialedProgressBar
             // 
@@ -1473,7 +1496,7 @@ namespace TestClient
             // 
             this.TextBoxSingleContractName.Location = new System.Drawing.Point(50, 21);
             this.TextBoxSingleContractName.Name = "TextBoxSingleContractName";
-            this.TextBoxSingleContractName.Size = new System.Drawing.Size(220, 22);
+            this.TextBoxSingleContractName.Size = new System.Drawing.Size(132, 22);
             this.TextBoxSingleContractName.TabIndex = 18;
             this.TextBoxSingleContractName.Text = "SPY";
             this.TextBoxSingleContractName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
@@ -1521,6 +1544,7 @@ namespace TestClient
             // GroupBoxSingleContract
             // 
             this.GroupBoxSingleContract.Controls.Add(this.label14);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnValidUSSymbol);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxSingleContractName);
             this.GroupBoxSingleContract.Controls.Add(this.LabelSingleContractName);
             this.GroupBoxSingleContract.Controls.Add(this.textBox1);
@@ -1646,7 +1670,7 @@ namespace TestClient
             // GroupBoxMultiContracts
             // 
             this.GroupBoxMultiContracts.Controls.Add(this.TextBoxMultiContracts);
-            this.GroupBoxMultiContracts.Controls.Add(this.BtnTestSymbolsToCheck);
+            this.GroupBoxMultiContracts.Controls.Add(this.BtnFormatSymbolsList);
             this.GroupBoxMultiContracts.Location = new System.Drawing.Point(498, 14);
             this.GroupBoxMultiContracts.Name = "GroupBoxMultiContracts";
             this.GroupBoxMultiContracts.Size = new System.Drawing.Size(474, 170);
@@ -1654,15 +1678,15 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnLoadMultiHistoricalChart
+            // BtnUpdateContracts
             // 
-            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(14, 47);
-            this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
-            this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
-            this.BtnLoadMultiHistoricalChart.TabIndex = 45;
-            this.BtnLoadMultiHistoricalChart.Text = "Show Multi Historical Chart";
-            this.BtnLoadMultiHistoricalChart.UseVisualStyleBackColor = true;
-            this.BtnLoadMultiHistoricalChart.Click += new System.EventHandler(this.BtnLoadMultiHistoricalChart_Click);
+            this.BtnUpdateContracts.Location = new System.Drawing.Point(523, 411);
+            this.BtnUpdateContracts.Name = "BtnUpdateContracts";
+            this.BtnUpdateContracts.Size = new System.Drawing.Size(120, 23);
+            this.BtnUpdateContracts.TabIndex = 56;
+            this.BtnUpdateContracts.Text = "Update Contracts";
+            this.BtnUpdateContracts.UseVisualStyleBackColor = true;
+            this.BtnUpdateContracts.Click += new System.EventHandler(this.BtnUpdateContracts_Click);
             // 
             // MainForm
             // 
@@ -1832,7 +1856,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnMatchSymbols;
         private System.Windows.Forms.Button BtnExtractSymbols;
         private System.Windows.Forms.Button BtnCleanUpDuplicateStock;
-        private System.Windows.Forms.Button BtnTestSymbolsToCheck;
+        private System.Windows.Forms.Button BtnFormatSymbolsList;
         private System.Windows.Forms.GroupBox GroupBoxSingleContract;
         private System.Windows.Forms.Label LabelBarType;
         private System.Windows.Forms.GroupBox GroupBoxBarTableSetting;
@@ -1860,5 +1884,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnOrderSettingApplyCurrentPrice;
         private System.Windows.Forms.TabPage tabSimulation;
         private System.Windows.Forms.Button BtnLoadMultiHistoricalChart;
+        private System.Windows.Forms.Button BtnImportSymbols;
+        private System.Windows.Forms.Button BtnUpdateContracts;
     }
 }

@@ -21,7 +21,7 @@ namespace TestClient
 
         public static CancellationTokenSource Cts { get; set; }
 
-        public static Progress<int> Progress;
+        public static Progress<float> Progress;
 
         public bool ValidateSymbol()
         {

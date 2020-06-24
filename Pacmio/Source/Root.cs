@@ -95,14 +95,12 @@ namespace Pacmio
         public static void StartTask()
         {
             BackgroundTaskCancellationTokenSource = new CancellationTokenSource();
-            ContractList.StartTask(BackgroundTaskCancellationTokenSource);
             TableList.StartTask(BackgroundTaskCancellationTokenSource);
         }
 
         public static void StopTask()
         {
             if (!(BackgroundTaskCancellationTokenSource is null)) BackgroundTaskCancellationTokenSource.Cancel();
-            ContractList.StopTask();
             TableList.StopTask();
         }
 

@@ -49,9 +49,14 @@ namespace TestClient
 
             TradeLogManager.UpdatedHandler += TradeTableHandler;
 
-            Progress = new Progress<int>(percent =>
+            Progress = new Progress<float>(percent =>
             {
-                MainProgBar.Value = percent;
+                if (percent >= 0 && percent <= 100)
+                {
+                    Console.WriteLine("Progress Reported: " + percent.ToString("0.##") + "%");
+                    MainProgBar.Value = percent.ToInt32();
+                }
+
             });
 
             Detailed_Progress = new Progress<float>(p => {
@@ -115,11 +120,13 @@ namespace TestClient
 
         #region Symbols
 
-        private void TbSymbolName_TextChanged(object sender, EventArgs e) => TextBoxSingleContractName.ForeColor = Color.Orange;
-        private void BtnValidUSSymbol_Click(object sender, EventArgs e)
+        private void TbSymbolName_TextChanged(object sender, EventArgs e)
         {
-            ValidateSymbol();
+            TextBoxSingleContractName.ForeColor = Color.Orange;
         }
+
+
+
         private void BtnGetContractInfo_Click(object sender, EventArgs e)
         {
             string symbol = TextBoxSingleContractName.Text.ToUpper();
@@ -217,27 +224,9 @@ namespace TestClient
 
 
 
-        private void BtnImportSymbols_Click(object sender, EventArgs e)
-        {
-            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
 
-            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
-            {
-                Task m = new Task(() => { ContractList.ImportCSV(Root.OpenFile.FileName, Progress); });
-                m.Start();
-            }
-        }
 
-        private void BtnExportSymbols_Click(object sender, EventArgs e)
-        {
-            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
 
-            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
-            {
-                Task m = new Task(() => { ContractList.ExportCSV(Root.SaveFile.FileName, Progress); });
-                m.Start();
-            }
-        }
 
 
 
@@ -535,34 +524,45 @@ namespace TestClient
         private void BtnExtractSymbols_Click(object sender, EventArgs e)
         {
             Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
 
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
-                string fileName = Root.OpenFile.FileName;
-                Cts = new CancellationTokenSource();
-                Task m = new Task(() =>
+                if (Root.SaveFile.ShowDialog() == DialogResult.OK)
                 {
-                    var list = Quandl.ImportSymbols(fileName, Progress, Cts);
-                    /*
-                    foreach (var symbol in list)
-                    {
-                        ContractList.GetOrFetch(symbol, "US");
-                    }*/
+                    string sourceFileName = Root.OpenFile.FileName;
+                    string destFileName = Root.SaveFile.FileName;
 
-                    /*
-                    using (var fs = new FileStream("D:\\EOD_symbols.txt", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-                    using (StreamWriter file = new StreamWriter(fs))
+                    Cts = new CancellationTokenSource();
+                    Task m = new Task(() =>
                     {
+                        var list = Quandl.ImportSymbols(sourceFileName, Cts, Progress);
+
+
+
+                        /*
                         foreach (var symbol in list)
                         {
- 
-                            file.WriteLine(symbol);
+                            ContractList.GetOrFetch(symbol, "US");
+                        }*/
+
+
+                        using (var fs = new FileStream(destFileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                        using (StreamWriter file = new StreamWriter(fs))
+                        {
+                            foreach (var symbol in list)
+                            {
+
+                                file.WriteLine(symbol);
+                            }
                         }
-                    }*/
-                });
-                m.Start();
+                    });
+                    m.Start();
+                }
             }
         }
+
+
 
         private void BtmImportQuandlBlob_Click(object sender, EventArgs e)
         {
@@ -570,7 +570,6 @@ namespace TestClient
 
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
-
                 Cts = new CancellationTokenSource();
                 Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
                 m.Start();
@@ -581,7 +580,61 @@ namespace TestClient
 
         #region Contract Settings
 
-        private void BtnTestSymbolsToCheck_Click(object sender, EventArgs e)
+        private void BtnValidUSSymbol_Click(object sender, EventArgs e) => ValidateSymbol();
+
+        private void BtnImportSymbols_Click(object sender, EventArgs e)
+        {
+            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                Cts = new CancellationTokenSource();
+                Task.Run(() => {
+                    string sourceFileName = Root.OpenFile.FileName;
+                    using (var fs = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        string[] symbols = sr.ReadLine().Split(',');
+                        ContractList.GetOrFetch(symbols, Cts, Progress);
+                    }
+                }, Cts.Token);
+            }
+        }
+
+        private void BtnUpdateContracts_Click(object sender, EventArgs e)
+        {
+            Cts = new CancellationTokenSource();
+            Task.Run(() => {
+                ContractList.UpdateContractData(Cts, Progress);
+            }, Cts.Token);
+        }
+
+        private void BtnImportContracts_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                Cts = new CancellationTokenSource();
+                Task.Run(() => {
+                    ContractList.ImportCSV(Root.OpenFile.FileName, Cts, Progress);
+                }, Cts.Token);
+            }
+        }
+
+        private void BtnExportSymbols_Click(object sender, EventArgs e)
+        {
+            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+
+            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+            {
+                Cts = new CancellationTokenSource();
+                Task.Run(() => {
+                    ContractList.ExportCSV(Root.SaveFile.FileName, Cts, Progress);
+                }, Cts.Token);
+            }
+        }
+
+        private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
             var SymbolList = ContractTools.GetSymbolList(ref symbolText);
@@ -628,8 +681,6 @@ namespace TestClient
 
             TextBoxSymbols.Text = rectified;*/
         }
-
-
 
         #endregion Contract Settings
 
@@ -788,6 +839,8 @@ namespace TestClient
         {
             OrderManager.Request_CompleteOrders(false);
         }
+
+
 
         #endregion Order
 

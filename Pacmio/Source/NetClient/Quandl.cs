@@ -69,7 +69,7 @@ namespace Pacmio
                                 if (fields.Length == 13)
                                 {
                                     double close = fields[4].ToDouble(0);
-                                    if(close > 0) 
+                                    if (close > 0)
                                     {
                                         DateTime time = DateTime.Parse(fields[0]);
                                         period.Insert(time);
@@ -133,7 +133,7 @@ namespace Pacmio
                     Console.WriteLine("Quandl download finished");
                     success = true;
                 }
-                catch(Exception e) when (e is WebException || e is ArgumentException)
+                catch (Exception e) when (e is WebException || e is ArgumentException)
                 {
                     Console.WriteLine("Quandl download failed" + e.ToString());
                 }
@@ -141,7 +141,7 @@ namespace Pacmio
             return success;
         }
 
-        public static void ImportEOD(string fileName, IProgress<int> progress, CancellationTokenSource cts)
+        public static void ImportEOD(string fileName, IProgress<float> progress, CancellationTokenSource cts)
         {
             long byteread = 0;
 
@@ -191,8 +191,8 @@ namespace Pacmio
 
                                     // !! Please check if the file is locked or now before saving.
                                     btd.SerializeJsonFile(btd.FileName);
-                                    
-                                    
+
+
                                     Console.Write(btd.Contract.name + ". ");
                                     pd.Reset();
                                     currentContract = null;
@@ -218,7 +218,7 @@ namespace Pacmio
                             if (btdIsValid)
                             {
                                 double close = fields[5].ToDouble(0);
-                                if(close > 0) 
+                                if (close > 0)
                                 {
                                     DateTime time = DateTime.Parse(fields[1]);
                                     double dividend_percent = fields[7].ToDouble(0) / close;
@@ -280,14 +280,14 @@ namespace Pacmio
 
                         }
 
-                        if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                        progress.Report(percent);
                     }
             }
 
             Log.Print("Job done!! Hooray!\n" + CollectionTool.ToString(Unknown) + "\n");
         }
 
-        public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, IProgress<int> progress, CancellationTokenSource cts)
+        public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, IProgress<float> progress, CancellationTokenSource cts)
         {
             Dictionary<(string symbol, DateTime time), string> Lines = new Dictionary<(string symbol, DateTime time), string>();
             //HashSet<string> Symbols = new HashSet<string>();
@@ -326,7 +326,7 @@ namespace Pacmio
                                 string symbol = fields[0];
                                 DateTime time = DateTime.Parse(fields[1]);
 
-                                if (!Lines.ContainsKey((symbol, time))) 
+                                if (!Lines.ContainsKey((symbol, time)))
                                 {
                                     //Symbols.CheckAdd(symbol);
                                     Lines[(symbol, time)] = line;
@@ -338,7 +338,7 @@ namespace Pacmio
                             Console.WriteLine("line error: " + line + " | " + e.ToString());
                         }
 
-                        if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                        progress.Report(percent);
                     }
                 }
 
@@ -359,7 +359,7 @@ namespace Pacmio
                 {
                     pt++;
                     float percent = pt * 100.0f / totalSize;
-                    if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                    progress.Report(percent);
                     file.WriteLine(line.Value);
                 }
             }
@@ -370,7 +370,7 @@ namespace Pacmio
             Console.ReadKey();
         }
 
-        public static HashSet<string> ImportSymbols(string EODFile, IProgress<int> progress, CancellationTokenSource cts)
+        public static HashSet<string> ImportSymbols(string EODFile, CancellationTokenSource cts, IProgress<float> progress)
         {
             HashSet<string> Symbols = new HashSet<string>();
 
@@ -397,15 +397,15 @@ namespace Pacmio
                             string symbol = ConvertToPacmioOrIbSymbolName(fields[0]);
                             if (Regex.IsMatch(symbol, @"^[a-zA-Z0-9_]+$"))
                             {
-                                if (Symbols.CheckAdd(symbol)) 
+                                if (Symbols.CheckAdd(symbol))
                                 {
                                     Console.Write(symbol + ". ");
                                     ContractList.GetOrFetch(symbol, "US");
                                 }
-                         
+
                             }
                         }
-                        if (percent % 1 == 0 && percent <= 100) progress.Report((int)percent);
+                        progress?.Report(percent);
                     }
             }
             return Symbols;

@@ -17,7 +17,7 @@ namespace TestClient
     {
         public static CancellationTokenSource DownloadCancellationTokenSource { get; set; }
 
-        public static IProgress<int> DownloadProgress { get; set; }
+        public static IProgress<float> DownloadProgress { get; set; }
 
         public static IProgress<float> DetailedProgress { get; set; }
 
@@ -54,7 +54,7 @@ namespace TestClient
                     bt.SaveFileDataToJsonFile();
 
                     pt++;
-                    DownloadProgress?.Report((100.0f * pt / total_downloads).ToInt32());
+                    DownloadProgress?.Report(100.0f * pt / total_downloads);
 
                     if (DownloadCancellationTokenSource.IsCancellationRequested) break;
                 }
