@@ -42,6 +42,7 @@ namespace Pacmio
 
         public bool AutoExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+
         public bool Equals(BusinessInfo other)
         {
             throw new NotImplementedException();

@@ -91,11 +91,7 @@ namespace Pacmio
 
         #region Status and Market Data
 
-        [DataMember]
-        public double Price { get; set; } = 0;
 
-        [DataMember]
-        public DateTime LastTradeTime { get; set; } = DateTime.MinValue;
 
 
 

@@ -182,19 +182,29 @@ namespace Pacmio
 
         #endregion Contract Type Information
 
+        #region Data Update
+
+        [DataMember, Browsable(false)]
+        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
+
+        [DataMember]
+        public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
+
+        [DataMember]
+        public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
+
+        #endregion Data Update
+
         #region Status and Market Data
 
         [DataMember, Browsable(true), Category("Basic Information"), DisplayName("Security Status")]
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         [DataMember]
-        public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
 
         [IgnoreDataMember]
         public MarketData MarketData { get; set; }
-
-
-
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -211,20 +221,13 @@ namespace Pacmio
         // TODO: Cancel_RealTimeBars()
         // public virtual void Cancel_RealTimeBars() => IB.Client.SendCancel_RealTimeBars(this);
 
+        [DataMember]
+        public virtual double Price { get; set; } = -1;
+
+        [DataMember]
+        public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
+
         #endregion Status and Market Data
-
-        #region Data Update
-
-        [DataMember, Browsable(false)]
-        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
-
-        [DataMember]
-        public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
-
-        [DataMember]
-        public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
-
-        #endregion Data Update
 
         #region Equality
 
