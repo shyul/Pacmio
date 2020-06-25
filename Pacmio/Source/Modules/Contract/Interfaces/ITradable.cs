@@ -5,15 +5,6 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Runtime.Serialization;
-using Xu;
 
 namespace Pacmio
 {
@@ -31,6 +22,12 @@ namespace Pacmio
 
         (bool valid, BusinessInfo bi) GetBusinessInfo();
 
-        //bool Equals(BusinessInfo other);
+        bool Request_MarketTicks(string param);
+
+        void Cancel_MarketTicks();
+
+        double Price { get; }
+
+        DateTime LastTradeTime { get; }
     }
 }

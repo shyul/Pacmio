@@ -4,13 +4,19 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.Collections.Generic;
+
 namespace Pacmio
 {
-    public interface IMarketDepth
+    public interface IMarketDepth : IBidAsk
     {
         bool Request_MarketDepth();
 
         void Cancel_MarketDepth();
 
+        //DateTime LastTradeTime { get; }
+
+        Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; }
     }
 }

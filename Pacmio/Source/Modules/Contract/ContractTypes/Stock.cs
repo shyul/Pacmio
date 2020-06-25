@@ -24,7 +24,7 @@ namespace Pacmio
     /// This type is to be serialized into file blobs
     /// </summary>
     [Serializable, DataContract(Name = "Stock")]
-    public class Stock : Contract, ITradable, IMarketDepth
+    public class Stock : Contract, IMarketDepth
     {
         #region Ctor
 
@@ -32,7 +32,6 @@ namespace Pacmio
         {
             Name = name;
             Exchange = exchange;
-            IsModified = false;
             MarketData = new MarketData(this);
         }
 
@@ -92,9 +91,27 @@ namespace Pacmio
 
         #region Status and Market Data
 
+        [DataMember]
+        public double Price { get; set; } = 0;
+
+        [DataMember]
+        public DateTime LastTradeTime { get; set; } = DateTime.MinValue;
+
+
+
+
+
         public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
 
         public virtual void Cancel_MarketDepth() { }
+
+        [DataMember]
+        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
+            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+
+
+
+
 
         #endregion Status and Market Data
 

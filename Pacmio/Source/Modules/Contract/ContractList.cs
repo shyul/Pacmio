@@ -194,6 +194,7 @@ namespace Pacmio
             if (list is null) return;
             Parallel.ForEach(list, c => {
                 c.MarketData = new MarketData(c);
+                //if (c.TradingPeriods is null) c.TradingPeriods = new MultiPeriod();
                 GetOrAdd(c);
             });
         }
@@ -311,7 +312,6 @@ namespace Pacmio
                                         {
                                             si.FullName = fullName;
                                         }
-                                        si.IsModified = true;
                                     }
                                     else
                                     {

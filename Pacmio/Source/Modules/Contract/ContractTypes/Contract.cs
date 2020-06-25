@@ -21,26 +21,6 @@ namespace Pacmio
     [KnownType(typeof(Forex))]
     public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
-        [IgnoreDataMember, Browsable(false)]
-        public bool IsModified
-        {
-            get
-            {
-                return m_IsModified;
-            }
-            set
-            {
-                m_IsModified = value;
-                if (value) UpdateTime = DateTime.Now;
-            }
-        }
-
-        [IgnoreDataMember, NonSerialized]
-        private bool m_IsModified;
-
-        [DataMember, Browsable(false)]
-        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
-
         #region Identification
 
         /// <summary>
@@ -207,8 +187,14 @@ namespace Pacmio
         [DataMember, Browsable(true), Category("Basic Information"), DisplayName("Security Status")]
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
-        [IgnoreDataMember] //, NonSerialized]
+        [DataMember]
+        public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+
+        [IgnoreDataMember]
         public MarketData MarketData { get; set; }
+
+
+
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -225,13 +211,20 @@ namespace Pacmio
         // TODO: Cancel_RealTimeBars()
         // public virtual void Cancel_RealTimeBars() => IB.Client.SendCancel_RealTimeBars(this);
 
+        #endregion Status and Market Data
+
+        #region Data Update
+
+        [DataMember, Browsable(false)]
+        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
+
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
 
-        #endregion Status and Market Data
+        #endregion Data Update
 
         #region Equality
 
