@@ -186,6 +186,9 @@ namespace Pacmio
 
         #region Data Update
 
+        [IgnoreDataMember]
+        public virtual bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && ((DateTime.Now - TradingPeriods.Stop).Days > TradingPeriods.Count || FullName.Length < 2);
+
         [DataMember, Browsable(false)]
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
@@ -303,7 +306,7 @@ namespace Pacmio
                 return column switch
                 {
                     ContractColumn _ => this,
-                    
+
                     StringColumn sc when sc == Column_Status => Status.ToString(),
                     StringColumn sc when sc == Column_TradeTime => LastTradeTime.ToString(),
 
@@ -327,7 +330,7 @@ namespace Pacmio
 
                     NumericColumn dc when dc == Column_Short && this is Stock q => q.ShortStatus,
                     NumericColumn dc when dc == Column_ShortShares && this is Stock q => q.ShortableShares,
-                    
+
                     _ => null,
                 };
             }

@@ -24,7 +24,7 @@ namespace Pacmio
     /// This type is to be serialized into file blobs
     /// </summary>
     [Serializable, DataContract(Name = "Stock")]
-    public class Stock : Contract, ITradable, IMarketDepth
+    public class Stock : Contract, ITradable, IMarketDepth, IHistoricalData
     {
         #region Ctor
 
@@ -41,6 +41,9 @@ namespace Pacmio
         public override string TypeFullName => "Stock";
 
         #endregion Ctor
+
+        [IgnoreDataMember]
+        public override bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && (base.NeedUpdate || ISIN.Length < 2);
 
         #region Identification
 
@@ -132,9 +135,6 @@ namespace Pacmio
 
         [DataMember]
         public double LastClose { get; set; } = -double.MinValue;
-
-
-
 
         #endregion Status and Market Data
 

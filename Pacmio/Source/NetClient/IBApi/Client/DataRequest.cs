@@ -104,7 +104,7 @@ namespace Pacmio.IB
                         }
                     }
 
-                    return active_ContractData.ToArray();
+                    return active_ContractData_ResultList.ToArray();
                 }
 
             End:
@@ -137,7 +137,7 @@ namespace Pacmio.IB
                         }
                     }
 
-                    var list = active_ContractData.Where(n => n.ConId == conId);
+                    var list = active_ContractData_ResultList.Where(n => n.ConId == conId);
                     return (list.Count() > 0) ? list.First() : null;
                 }
 

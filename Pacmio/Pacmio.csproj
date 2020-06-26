@@ -140,6 +140,7 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBidAsk.cs" />
+    <Compile Include="Source\Modules\Contract\Interfaces\IHistoricalData.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IMarketDepth.cs" />
     <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataGridView.cs" />

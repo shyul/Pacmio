@@ -160,7 +160,7 @@ namespace Pacmio
         /// <param name="progress"></param>
         public static void UpdateContractData(CancellationTokenSource cts, IProgress<float> progress)
         {
-            var cList = Values.Where(n => (DateTime.Now - n.TradingPeriods.Stop).Days > n.TradingPeriods.Count || n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
+            var cList = Values.Where(n => n.NeedUpdate);
 
             int count = cList.Count();
             int i = 0;

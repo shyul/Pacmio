@@ -16,7 +16,9 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly List<Contract> active_ContractData = new List<Contract>();
+        private static readonly List<Contract> active_ContractData_ResultList = new List<Contract>();
+
+        private static Contract active_ContractData = null;
 
         private static void SendRequest_ContractData(Contract c, bool includeExpired = false)
         {
@@ -26,7 +28,8 @@ namespace Pacmio.IB
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
                 DataRequestID = requestId;
-                active_ContractData.Clear();
+                active_ContractData_ResultList.Clear();
+                active_ContractData = c;
 
                 bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
@@ -81,7 +84,8 @@ namespace Pacmio.IB
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
                 DataRequestID = requestId;
-                active_ContractData.Clear();
+                active_ContractData_ResultList.Clear();
+                active_ContractData = null;
 
                 SendRequest(new string[] {
                     requestType, // 9
@@ -185,7 +189,7 @@ namespace Pacmio.IB
 
                     c.UpdateTime = DateTime.Now;
 
-                    active_ContractData.Add(c);
+                    active_ContractData_ResultList.Add(c);
                 }
             }
         }
@@ -207,10 +211,12 @@ namespace Pacmio.IB
         private static void Parse_ContractDataEnd(string[] fields) // 52
         {
             int requestId = fields[2].ToInt32(-1);
-            if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
+            //if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
 
             if (requestId > -1) RemoveRequest(requestId, false);
             DataRequestID = -1;
+
+            active_ContractData = null;
         }
 
         private static void ParseError_ContractData(string[] fields)
@@ -222,6 +228,9 @@ namespace Pacmio.IB
 
             if (requestId > -1) RemoveRequest(requestId, false);
             DataRequestID = -1;
+
+            if(active_ContractData is Contract c) c.UpdateTime = DateTime.Now;
+            active_ContractData = null;
         }
     }
 }
