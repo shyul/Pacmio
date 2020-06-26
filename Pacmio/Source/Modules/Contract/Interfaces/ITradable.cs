@@ -5,6 +5,8 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Generic;
+using Xu;
 
 namespace Pacmio
 {
@@ -22,12 +24,8 @@ namespace Pacmio
 
         (bool valid, BusinessInfo bi) GetBusinessInfo();
 
-        bool Request_MarketTicks(string param);
+        MultiPeriod TradingPeriods { get; }
 
-        void Cancel_MarketTicks();
 
-        double Price { get; }
-
-        DateTime LastTradeTime { get; }
     }
 }

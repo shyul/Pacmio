@@ -299,14 +299,14 @@ namespace TestClient
             foreach (Contract c in ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null))
             {
                 Console.WriteLine("Request Realtime Bars: " + c.ToString());
-                c.Request_RealTimeBars();
+                //c.Request_RealTimeBars();
             }
         }
 
         private void BtnTestRealTimeBars_Click(object sender, EventArgs e)
         {
             if (!ValidateSymbol()) return;
-            ContractTest.ActiveContract.Request_RealTimeBars();
+            //ContractTest.ActiveContract.Request_RealTimeBars();
         }
 
         private void BtnRequestPnL_Click(object sender, EventArgs e)

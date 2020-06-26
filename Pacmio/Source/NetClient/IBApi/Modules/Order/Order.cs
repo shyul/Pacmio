@@ -69,7 +69,7 @@ namespace Pacmio.IB
 
                     c.ConId.Param(), // 2
                     c.Name, // 3
-                    c.TypeApiCode, // 4
+                    c.TypeCode(), // 4
                     
                     lastTradeDateOrContractMonth, // 5
                     (strike == 0) ? "0" : strike.ToString("0.0###"), // 6

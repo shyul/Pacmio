@@ -60,7 +60,7 @@ namespace Pacmio.IB
                     Contract c = ActiveMarketTicks[requestId];
                     if (c is Stock si) si.Status = ContractStatus.Alive;
                     MarketData q = c.MarketData;
-                    q.Status = (MarketQuoteStatus)fields[3].ToInt32(0);
+                    q.Status = (MarketTickStatus)fields[3].ToInt32(0);
                     MarketDataManager.UpdateUI(c);
                 }
         }
@@ -91,6 +91,8 @@ namespace Pacmio.IB
         /// bboExchange will be a symbol such as "a6" which can be used to decode the single letter exchange abbreviations
         /// returned to the bidExch, askExch, and lastExch fields by invoking the function IBApi::EClient::reqSmartComponents.
         /// More information about Component Exchanges.
+        /// https://interactivebrokers.github.io/tws-api/smart_components.html
+        /// client.reqSmartComponents(13002, testImpl.BboExchange);
         /// </summary>
         /// <param name="fields"></param>
         private static void Parse_TickReqParams(string[] fields)
@@ -137,7 +139,7 @@ namespace Pacmio.IB
                     double size = fields[5].ToDouble();
                     //int attrMask = fields[6].ToInt32(-1);
 
-                    if (price < 0) q.Status = MarketQuoteStatus.Unknown;
+                    if (price < 0) q.Status = MarketTickStatus.Unknown;
 
                     switch (tickType)
                     {

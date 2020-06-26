@@ -24,7 +24,7 @@ namespace Pacmio
     /// This type is to be serialized into file blobs
     /// </summary>
     [Serializable, DataContract(Name = "Stock")]
-    public class Stock : Contract, IMarketDepth
+    public class Stock : Contract, ITradable, IMarketDepth
     {
         #region Ctor
 
@@ -40,9 +40,6 @@ namespace Pacmio
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Stock";
-
-        [IgnoreDataMember, Browsable(false), ReadOnly(true)]
-        public override string TypeApiCode => "STK";
 
         #endregion Ctor
 
@@ -89,27 +86,84 @@ namespace Pacmio
 
         #endregion
 
+        [DataMember]
+        public double TargetPrice { get; set; }
+
+
         #region Status and Market Data
 
-
-
-
-
-
-
-        public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
-
-        public virtual void Cancel_MarketDepth() { }
+        [DataMember]
+        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
 
         [DataMember]
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
-            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+        public double Ask { get; set; } = -double.MinValue;
 
+        [DataMember]
+        public double AskSize { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public string AskExchange { get; set; } = string.Empty;
+
+        [DataMember]
+        public double Bid { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public double BidSize { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public string BidExchange { get; set; } = string.Empty;
+
+        [DataMember]
+        public double Open { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public double High { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public double Low { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public double Last { get => Price; set => Price = value; }
+
+        [DataMember]
+        public double LastSize { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public double Volume { get; set; } = -double.MinValue;
+
+        [DataMember]
+        public string LastExchange { get; set; } = string.Empty;
+
+        [DataMember]
+        public double LastClose { get; set; } = -double.MinValue;
 
 
 
 
         #endregion Status and Market Data
+
+        #region Short Status
+
+        [DataMember]
+        public double ShortableStatus { get; set; }
+
+        [DataMember]
+        public double ShortableShares { get; set; }
+
+        #endregion Short Status
+
+
+
+        public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
+
+        /// <summary>
+        /// TODO: Cancel_MarketDepth()
+        /// </summary>
+        public virtual void Cancel_MarketDepth() { }
+
+        [DataMember]
+        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
+            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
 
         #region Equality
 

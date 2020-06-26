@@ -104,7 +104,7 @@ namespace Pacmio.IB
                     requestId.Param(),
                     c.ConId.Param(), // Contract id
                     c.Name, // Contract Symbol
-                    c.TypeApiCode, // Contract SecType
+                    c.TypeCode(), // Contract SecType
                     lastTradeDateOrContractMonth, // Contract Date
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Contract Right
@@ -181,90 +181,13 @@ namespace Pacmio.IB
             return false;
         }
 
-        /*
-        public bool RequestMarketTicks(BagComboContract c, string genericTickList = "236",
-            bool snapshot = false, bool regulatorySnaphsot = false, ICollection<(string, string)> marketQuoteOptions = null)
-        {
-            var (valid_type, secTypeCode) = ApiCode.GetIbCode(c.Type);
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
-
-            if (Connected && valid_type && valid_exchange && !ActiveTicks.Values.Contains(c))
-            {
-                (int tickerId, string typeStr) = RegisterRequest(RequestType.RequestMarketData);
-
-                c.MarketData.TickerId = tickerId;
-                ActiveTicks.CheckAdd(tickerId, c);
-
-                List<string> paramsList = new List<string>() {
-                    typeStr,
-                    "11",
-                    tickerId.ParamPos(),
-
-                    c.ConId.Param(),
-                    c.Name,
-                    secTypeCode,
-                    c.LastTradeDateOrContractMonth,
-                    (c.Strike == 0) ? "0" : c.Strike.ToString("0.0###"),
-                    c.Right,
-                    c.Multiplier,
-                    c.AutoExchangeRoute ? "SMART" : exchangeCode, // "ISLAND" exchange,
-                    exchangeCode, // primaryExch,
-                    c.CurrencyCode, // USD / currency,
-                    c.LocalSymbol,
-                    c.TradingClass
-                };
-
-                if (c.IsBAG)
-                {
-                    if (c.ComboLegs is null)
-                    {
-                        paramsList.Add("0");
-                    }
-                    else
-                    {
-                        paramsList.Add(c.ComboLegs.Count.ParamPos());
-                        foreach (ComboLeg leg in c.ComboLegs)
-                        {
-                            paramsList.Add(leg.ConId.ParamPos());
-                            paramsList.Add(leg.Ratio.Param());
-                            paramsList.Add(leg.Action);
-                            paramsList.Add(leg.Exchange);
-                        }
-                    }
-                }
-
-                if (c.DeltaNeutralContract is null)
-                {
-                    paramsList.Add("0"); // 15
-                }
-                else
-                {
-                    DeltaNeutralContract deltaNeutralContract = c.DeltaNeutralContract;
-                    paramsList.Add("1"); // true
-                    paramsList.Add(deltaNeutralContract.ConId.ParamPos());
-                    paramsList.Add(deltaNeutralContract.Delta.Param());
-                    paramsList.Add(deltaNeutralContract.Price.Param());
-                }
-
-                paramsList.Add(genericTickList); // 16
-                paramsList.Add(snapshot.Param()); // 17
-                paramsList.Add(regulatorySnaphsot.Param()); // 18
-                paramsList.Add(marketQuoteOptions.Param()); // 19
-
-                SendRequest(paramsList);
-                return true;
-            }
-            return false;
-        }
-        */
-
         public static void SendCancel_MarketTicks(int requestId)
         {
             RemoveRequest(requestId, RequestType.RequestMarketData);
             lock (ActiveMarketTicks)
             {
                 ActiveMarketTicks.TryRemove(requestId, out Contract c);
-                c.MarketData.Status = MarketQuoteStatus.DelayedFrozen;
+                c.MarketData.Status = MarketTickStatus.DelayedFrozen;
                 c.MarketData.TickerId = -1;
             }
         }

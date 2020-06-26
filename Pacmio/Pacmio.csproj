@@ -141,6 +141,7 @@
     <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBidAsk.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IMarketDepth.cs" />
+    <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataTable.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataManager.cs" />
@@ -264,7 +265,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\NetClient\Quandl.cs" />
     <Compile Include="Source\Modules\Fundamental\Fundamental.cs" />
-    <Compile Include="Source\Modules\Contract\ContractTypes\Contract.cs" />
+    <Compile Include="Source\Modules\Contract\Types\Contract.cs" />
     <Compile Include="Source\Modules\Contract\Types\SymbolHistory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -42,12 +42,11 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Future";
 
-        [IgnoreDataMember, Browsable(false), ReadOnly(true)]
-        public override string TypeApiCode => "FUT";
-
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool AutoExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        [DataMember]
+        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
 
         public bool Equals(BusinessInfo other)
         {

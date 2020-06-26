@@ -8,10 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+using System.Globalization;
 using Xu;
-using Pacmio;
+
 
 namespace Pacmio.IB
 {
@@ -50,7 +49,7 @@ namespace Pacmio.IB
                     requestId.ToString(),
                     c.ConId.Param(), // "0"
                     c.Name,
-                    c.TypeApiCode,
+                    c.TypeCode(),
                     lastTradeDateOrContractMonth,
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Right
@@ -66,8 +65,6 @@ namespace Pacmio.IB
                 });
             }
         }
-
-
 
         /// <summary>
         /// Send RequestContractData: (0)"'9"-(1)"8"-(2)"60000001"-(3)"4762"-(4)"ba"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)"0"
@@ -92,7 +89,7 @@ namespace Pacmio.IB
                     requestId.ToString(),
                     conId.Param(), // "0"
                     name, // c.Name,
-                    typeCode, // c.TypeApiCode,
+                    typeCode, // c.Param(),
                     string.Empty, // lastTradeDateOrContractMonth,
                     "0", // (strike == 0) ? "0" : strike.ToString("0.0###"),
                     string.Empty, // Right
@@ -148,6 +145,8 @@ namespace Pacmio.IB
                     //si.IndustryInfo.Category = rawInput[25];
                     //si.IndustryInfo.Subcategory = rawInput[26];
 
+
+
                     // Get ISIN here.
                     int tagNum = fields[32].ToInt32(0);
 
@@ -161,14 +160,23 @@ namespace Pacmio.IB
                         pt += 2;
                     }
 
-                    if (tags.ContainsKey("ISIN") && c is ITradable it)
+                    if (c is ITradable it)
                     {
-                        it.ISIN = tags["ISIN"];
+                        it.TradingPeriods.Clear();
+                        ApplyTradingPeriods(it, fields[28]);
+                        ApplyTradingPeriods(it, fields[29]);
 
-                        //string isin_header = si.ISIN.Substring(0, 2);
-                        //if (isin_header == "US")
-                        //   si.CUSIP = si.ISIN.Substring(2, 9);
+                        if (tags.ContainsKey("ISIN"))
+                        {
+                            it.ISIN = tags["ISIN"];
+
+                            //string isin_header = si.ISIN.Substring(0, 2);
+                            //if (isin_header == "US")
+                            //   si.CUSIP = si.ISIN.Substring(2, 9);
+                        }
                     }
+
+
 
                     c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
 
@@ -179,6 +187,17 @@ namespace Pacmio.IB
 
                     active_ContractData.Add(c);
                 }
+            }
+        }
+
+        private static void ApplyTradingPeriods(ITradable it, string field)
+        {
+            string[] pd_string_list = field.Split(';');
+            foreach (string pd_string in pd_string_list)
+            {
+                string[] pd_string_pair = pd_string.Split('-');
+                Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
+                it.TradingPeriods.Add(pd);
             }
         }
 

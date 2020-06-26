@@ -19,8 +19,10 @@ namespace Pacmio
     [KnownType(typeof(Option))]
     [KnownType(typeof(MutualFund))]
     [KnownType(typeof(Forex))]
-    public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public abstract class Contract : IRow, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
+        public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
+
         #region Identification
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace Pacmio
         public int ConId { get; set; } = -2;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Symbol")]
-        public string Name { get; protected set; }
+        public virtual string Name { get; protected set; }
 
         [IgnoreDataMember]
         public virtual string FullName { get => m_fullName; set => m_fullName = value; }
@@ -177,8 +179,8 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public abstract string TypeFullName { get; }
 
-        [IgnoreDataMember, Browsable(false), ReadOnly(true)]
-        public abstract string TypeApiCode { get; }
+        [DataMember]
+        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
 
         #endregion Contract Type Information
 
@@ -201,10 +203,20 @@ namespace Pacmio
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
         [IgnoreDataMember]
         public MarketData MarketData { get; set; }
+
+
+
+        #region Market Ticks
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -216,10 +228,26 @@ namespace Pacmio
 
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
-        public virtual void Request_RealTimeBars() => IB.Client.SendRequest_RealTimeBars(this);
+        [DataMember]
+        public int TickerId { get; set; } = int.MinValue;
 
-        // TODO: Cancel_RealTimeBars()
-        // public virtual void Cancel_RealTimeBars() => IB.Client.SendCancel_RealTimeBars(this);
+        [IgnoreDataMember]
+        public MarketTickStatus TickStatus { get; set; } = MarketTickStatus.Unknown;
+
+        [DataMember]
+        public double MinimumTick { get; set; }
+
+        [DataMember]
+        public string BBOExchangeId { get; set; }
+
+        #endregion Market Ticks
+
+
+
+
+
+
+
 
         [DataMember]
         public virtual double Price { get; set; } = -1;
@@ -267,6 +295,70 @@ namespace Pacmio
 
         #endregion Equality
 
-        public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
+        #region Grid View
+
+        public virtual object this[Column column]
+        {
+            get
+            {
+                return column switch
+                {
+                    ContractColumn _ => this,
+                    /*
+                    StringColumn sc when sc == Column_Status => Status.ToString(),
+                    StringColumn sc when sc == Column_TradeTime => LastTradeTime.ToString(),
+
+                    StringColumn sc when sc == Column_BidExchange => BidExchange,
+                    NumericColumn dc when dc == Column_BidSize => BidSize,
+                    NumericColumn dc when dc == Column_Bid => Bid,
+
+                    NumericColumn dc when dc == Column_Ask => Ask,
+                    NumericColumn dc when dc == Column_AskSize => AskSize,
+                    StringColumn sc when sc == Column_AskExchange => AskExchange,
+
+                    NumericColumn dc when dc == Column_Last => Last,
+                    NumericColumn dc when dc == Column_LastSize => LastSize,
+                    StringColumn sc when sc == Column_LastExchange => LastExchange,
+
+                    NumericColumn dc when dc == Column_Open => Open,
+                    NumericColumn dc when dc == Column_High => High,
+                    NumericColumn dc when dc == Column_Low => Low,
+                    NumericColumn dc when dc == Column_Close => LastClose,
+                    NumericColumn dc when dc == Column_Volume => Volume,
+
+                    NumericColumn dc when dc == Column_Short => Shortable,
+                    NumericColumn dc when dc == Column_ShortShares => ShortableShares,
+                    */
+                    _ => null,
+                };
+            }
+        }
+
+        public static readonly StringColumn Column_Status = new StringColumn("STATUS");
+        public static readonly ContractColumn Column_Contract = new ContractColumn("Contract");
+        public static readonly StringColumn Column_TradeTime = new StringColumn("TRADE_TIME");
+
+        public static readonly StringColumn Column_BidExchange = new StringColumn("BID_EXCHANGE");
+        public static readonly NumericColumn Column_BidSize = new NumericColumn("BID_SIZE");
+        public static readonly NumericColumn Column_Bid = new NumericColumn("BID");
+
+        public static readonly NumericColumn Column_Ask = new NumericColumn("ASK");
+        public static readonly NumericColumn Column_AskSize = new NumericColumn("ASK_SIZE");
+        public static readonly StringColumn Column_AskExchange = new StringColumn("ASK_EXCHANGE");
+
+        public static readonly NumericColumn Column_Last = new NumericColumn("LAST");
+        public static readonly NumericColumn Column_LastSize = new NumericColumn("LAST_SIZE");
+        public static readonly StringColumn Column_LastExchange = new StringColumn("LAST_EXCHANGE");
+
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN");
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH");
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW");
+        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE");
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+
+        public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
+        public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
+
+        #endregion Grid View
     }
 }

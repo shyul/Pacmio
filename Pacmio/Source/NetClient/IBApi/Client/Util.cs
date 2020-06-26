@@ -105,6 +105,20 @@ namespace Pacmio.IB
             }
         }
 
+        public static string TypeCode(this Contract c)
+        {
+            return c switch
+            {
+                Stock _ => "STK",
+                Index _ => "IND",
+                Future _ => "FUT",
+                Option _ => "OPT",
+                MutualFund _ => "FUND",
+                Forex _ => "CASH",
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         public static (bool, Contract) GetContractByIbCode(string symbolName, string exchangeStr, string secTypeCode, string conIdStr)
         {
             (bool validExchange, Exchange exchange, string suffix) = ExchangeInfo.GetEnum(exchangeStr);

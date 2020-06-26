@@ -14,14 +14,7 @@ using System.Linq;
 
 namespace Pacmio
 {
-    public enum MarketQuoteStatus : int
-    {
-        Unknown = 0,
-        RealTime = 1,
-        Delayed = 3,
-        Frozen = 2,
-        DelayedFrozen = 4,
-    }
+
 
     public enum HaltedStatus : int
     {
@@ -65,7 +58,7 @@ namespace Pacmio
         /// <summary>
         /// ParseMarketDataType(string[] fields)
         /// </summary>
-        public MarketQuoteStatus Status { get; set; } = MarketQuoteStatus.Unknown;
+        public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
 
         /// <summary>
         /// Code 49: Indicates if a contract is halted.

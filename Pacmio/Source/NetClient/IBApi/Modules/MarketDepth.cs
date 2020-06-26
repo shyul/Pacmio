@@ -52,7 +52,7 @@ namespace Pacmio.IB
                     requestId.ParamPos(),
                     c.ConId.Param(),
                     c.Name,
-                    c.TypeApiCode,
+                    c.TypeCode(),
                     lastTradeDateOrContractMonth,
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Right
