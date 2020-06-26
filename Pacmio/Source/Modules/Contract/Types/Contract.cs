@@ -180,7 +180,7 @@ namespace Pacmio
         public abstract string TypeFullName { get; }
 
         [DataMember]
-        public HashSet<string> DerivativeTypes { get; set; } = new HashSet<string>();
+        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
 
         #endregion Contract Type Information
 
@@ -203,16 +203,19 @@ namespace Pacmio
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         [DataMember]
-        public HashSet<string> ValidExchanges { get; set; } = new HashSet<string>();
+        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
 
         [DataMember]
-        public HashSet<string> OrderTypes { get; set; } = new HashSet<string>();
+        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
 
         [DataMember]
-        public HashSet<string> MarketRules { get; set; } = new HashSet<string>();
+        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
 
         #region Market Ticks
+
+        [DataMember]
+        public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -246,7 +249,7 @@ namespace Pacmio
 
 
         [DataMember]
-        public virtual double Price { get; set; } = -1;
+        public virtual double Price { get; set; } = double.NaN;
 
         [DataMember]
         public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;

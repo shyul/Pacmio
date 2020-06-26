@@ -160,7 +160,7 @@ namespace Pacmio
         /// <param name="progress"></param>
         public static void UpdateContractData(CancellationTokenSource cts, IProgress<float> progress)
         {
-            var cList = Values.Where(n => n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
+            var cList = Values.Where(n => (DateTime.Now - n.TradingPeriods.Stop).Days > n.TradingPeriods.Count || n.FullName.Length < 2 || (n is ITradable it && it.ISIN.Length < 2));
 
             int count = cList.Count();
             int i = 0;
@@ -194,12 +194,14 @@ namespace Pacmio
             if (list is null) return;
             Parallel.ForEach(list, c => {
                 c.TickStatus = MarketTickStatus.Unknown;
+                /*
                 c.DerivativeTypes = new HashSet<string>();
                 c.ValidExchanges = new HashSet<string>();
                 c.OrderTypes = new HashSet<string>();
                 c.MarketRules = new HashSet<string>();
                 if (c is ITradable it && it.TradingPeriods is null) 
                     it.TradingPeriods = new MultiPeriod();
+                */
                 GetOrAdd(c);
             });
         }

@@ -92,9 +92,6 @@ namespace Pacmio
         #region Status and Market Data
 
         [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; set; } = new MultiPeriod();
-
-        [DataMember]
         public double Ask { get; set; } = -double.MinValue;
 
         [DataMember]

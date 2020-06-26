@@ -29,9 +29,6 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Option";
 
-        [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; set; } = new MultiPeriod();
-
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

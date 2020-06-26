@@ -24,7 +24,7 @@ namespace Pacmio
 
         (bool valid, BusinessInfo bi) GetBusinessInfo();
 
-        MultiPeriod TradingPeriods { get; set; }
+        MultiPeriod TradingPeriods { get; }
 
 
     }

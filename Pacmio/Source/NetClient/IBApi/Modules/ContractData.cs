@@ -195,9 +195,12 @@ namespace Pacmio.IB
             string[] pd_string_list = field.Split(';');
             foreach (string pd_string in pd_string_list)
             {
-                string[] pd_string_pair = pd_string.Split('-');
-                Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
-                it.TradingPeriods.Add(pd);
+                if (!pd_string.ToUpper().Contains("CLOSED")) 
+                {
+                    string[] pd_string_pair = pd_string.Split('-');
+                    Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
+                    it.TradingPeriods.Add(pd);
+                }
             }
         }
 
