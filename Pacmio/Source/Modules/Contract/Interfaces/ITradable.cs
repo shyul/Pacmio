@@ -20,11 +20,11 @@ namespace Pacmio
 
         string ISIN { get; set; }
 
-        bool AutoExchangeRoute { get; set; }
+        bool SmartExchangeRoute { get; set; }
 
         (bool valid, BusinessInfo bi) GetBusinessInfo();
 
-        MultiPeriod TradingPeriods { get; }
+        MultiPeriod TradingPeriods { get; set; }
 
 
     }

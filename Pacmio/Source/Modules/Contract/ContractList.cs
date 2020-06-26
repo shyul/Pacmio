@@ -193,8 +193,13 @@ namespace Pacmio
             var list = Serialization.DeserializeJsonFile<Contract[]>(FileName);
             if (list is null) return;
             Parallel.ForEach(list, c => {
-                c.MarketData = new MarketData(c);
-                //if (c.TradingPeriods is null) c.TradingPeriods = new MultiPeriod();
+                c.TickStatus = MarketTickStatus.Unknown;
+                c.DerivativeTypes = new HashSet<string>();
+                c.ValidExchanges = new HashSet<string>();
+                c.OrderTypes = new HashSet<string>();
+                c.MarketRules = new HashSet<string>();
+                if (c is ITradable it && it.TradingPeriods is null) 
+                    it.TradingPeriods = new MultiPeriod();
                 GetOrAdd(c);
             });
         }

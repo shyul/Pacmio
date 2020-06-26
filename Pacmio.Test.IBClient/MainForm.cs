@@ -725,7 +725,7 @@ namespace TestClient
             {
                 Console.WriteLine("MarketQuote: " + c.Request_MarketTicks(tickList));
 
-                GridView.MarketDataTable.Add(c.MarketData);
+                GridView.MarketDataTable.Add(c);
 
 
             }

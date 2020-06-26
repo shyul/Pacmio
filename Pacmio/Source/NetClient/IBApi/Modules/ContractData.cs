@@ -28,7 +28,7 @@ namespace Pacmio.IB
                 DataRequestID = requestId;
                 active_ContractData.Clear();
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -138,8 +138,8 @@ namespace Pacmio.IB
 
                 if (contractValid)
                 {
-                    c.MarketData.OrderTypes.FromString(fields[17], ',');
-                    c.MarketData.ValidExchanges.FromString(fields[18], ',');
+                    c.OrderTypes.FromString(fields[17], ',');
+                    c.ValidExchanges.FromString(fields[18], ',');
 
                     //si.IndustryInfo.Industry = rawInput[24];
                     //si.IndustryInfo.Category = rawInput[25];
@@ -178,7 +178,7 @@ namespace Pacmio.IB
 
 
 
-                    c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
+                    c.MarketRules.FromString(fields[pt + 3], ','); // 38
 
                     if (c.FullName.Length < 5)
                         c.FullName = fields[21].Replace("\"", "");

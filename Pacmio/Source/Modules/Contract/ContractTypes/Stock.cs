@@ -32,7 +32,6 @@ namespace Pacmio
         {
             Name = name;
             Exchange = exchange;
-            MarketData = new MarketData(this);
         }
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
@@ -82,7 +81,7 @@ namespace Pacmio
         #region Order and Trade
 
         [DataMember]
-        public bool AutoExchangeRoute { get; set; } = true;
+        public bool SmartExchangeRoute { get; set; } = true;
 
         #endregion
 
@@ -93,7 +92,7 @@ namespace Pacmio
         #region Status and Market Data
 
         [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        public virtual MultiPeriod TradingPeriods { get; set; } = new MultiPeriod();
 
         [DataMember]
         public double Ask { get; set; } = -double.MinValue;
@@ -145,7 +144,7 @@ namespace Pacmio
         #region Short Status
 
         [DataMember]
-        public double ShortableStatus { get; set; }
+        public double ShortStatus { get; set; }
 
         [DataMember]
         public double ShortableShares { get; set; }

@@ -36,7 +36,7 @@ namespace Pacmio.IB
 
                 //RequestId_HistoricalData = requestId;
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
                 string right = "";
@@ -97,7 +97,6 @@ namespace Pacmio.IB
             if (msgVersion == "3" && ActiveRealTimeBars.ContainsKey(requestId) && fields.Length == 11)
             {
                 Contract c = ActiveRealTimeBars[requestId];
-                MarketData q = c.MarketData;
 
                 long epochTime = fields[3].ToInt64(); // This is Zulu (UTC) Time.
                 double open = fields[4].ToDouble();

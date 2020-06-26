@@ -42,7 +42,7 @@ namespace Pacmio.IB
             return tagValuesStr.ToString();
         }
 
-        private const string FORMAT_FILTERDATE = "yyyymmdd-hh:mm:ss";
+        //private const string FORMAT_FILTERDATE = "yyyymmdd-hh:mm:ss";
         private const string FORMAT_DATEONLY = "yyyyMMdd";
         private const string FORMAT_DATETIME = "yyyyMMdd  HH:mm:ss";
 

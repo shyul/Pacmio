@@ -37,7 +37,7 @@ namespace Pacmio.IB
                 DataRequestID = requestId;
                 activeBarTable_HistoricalDataHeadTimestamp = bt;
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;

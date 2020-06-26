@@ -208,7 +208,6 @@
     <Compile Include="Source\UnknownItemList.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
-    <Compile Include="Source\Modules\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\ITradable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\Account\AccountManager.cs" />

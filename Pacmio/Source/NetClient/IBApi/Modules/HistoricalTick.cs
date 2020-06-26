@@ -39,7 +39,7 @@ namespace Pacmio.IB
 
                 startTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(startTime, c.TimeZone), TimeZoneInfo.Local);
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -109,7 +109,7 @@ namespace Pacmio.IB
                 {
                     long epochSec = fields[pt].ToInt64();
                     DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddSeconds(epochSec), c.TimeZone);
-                    int mask = fields[pt + 1].ToInt32(); // Unreported | PastLimit
+                    //int mask = fields[pt + 1].ToInt32(); // Unreported | PastLimit
                     double last = fields[pt + 2].ToDouble();
                     double vol = fields[pt + 3].ToDouble();
                     string exchange = fields[pt + 4];

@@ -5,6 +5,14 @@
 /// Interactive Brokers API
 /// https://interactivebrokers.github.io/tws-api/tick_types.html
 /// 
+/// https://interactivebrokers.github.io/tws-api/md_receive.html
+/// 
+/// For bid, ask, and last data, there will always be a IBApi::EWrapper::tickSize callback following each IBApi::EWrapper::tickPrice. 
+/// This is important because with combo contracts, an actively trading contract can have a price of zero. 
+/// In this case it will have a positive IBApi::EWrapper::tickSize value. 
+/// IBApi::EWrapper::tickSize is also invoked every time there is a change in the size of the last traded price. 
+/// For that reason, there will be duplicate tickSize events when both the price and size of a trade changes.
+/// 
 /// ***************************************************************************
 
 using System;
@@ -58,9 +66,9 @@ namespace Pacmio.IB
                 if (msgVersion == "1" && ActiveMarketTicks.ContainsKey(requestId) && fields.Length == 4)
                 {
                     Contract c = ActiveMarketTicks[requestId];
-                    if (c is Stock si) si.Status = ContractStatus.Alive;
-                    MarketData q = c.MarketData;
-                    q.Status = (MarketTickStatus)fields[3].ToInt32(0);
+                    if (c is Stock stk) stk.Status = ContractStatus.Alive;
+
+                    c.TickStatus = (MarketTickStatus)fields[3].ToInt32(0);
                     MarketDataManager.UpdateUI(c);
                 }
         }
@@ -106,9 +114,8 @@ namespace Pacmio.IB
                 {
                     Contract c = ActiveMarketTicks[tickerId];
 
-                    MarketData q = ActiveMarketTicks[tickerId].MarketData;
-                    q.MinimumTick = fields[2].ToDouble(0);
-                    q.BBOExchangeId = fields[3];
+                    c.MinimumTick = fields[2].ToDouble(0);
+                    c.BBOExchangeId = fields[3];
 
                     int snapshotPermissions = fields[4].ToInt32(-1);
 
@@ -132,45 +139,43 @@ namespace Pacmio.IB
                 if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 7)
                 {
                     Contract c = ActiveMarketTicks[tickerId];
-                    //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
-                    MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
                     double price = fields[4].ToDouble();
                     double size = fields[5].ToDouble();
                     //int attrMask = fields[6].ToInt32(-1);
 
-                    if (price < 0) q.Status = MarketTickStatus.Unknown;
+                    if (price < 0) c.TickStatus = MarketTickStatus.Unknown;
 
                     switch (tickType)
                     {
-                        case TickType.BidPrice:
+                        case TickType.BidPrice when c is IBidAsk q:
                             q.Bid = price;
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskPrice:
+                        case TickType.AskPrice when c is IBidAsk q:
                             q.Ask = price;
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastPrice:
+                        case TickType.LastPrice when c is IBidAsk q:
                             q.Last = price;
                             q.LastSize = size * 100;
                             break;
 
-                        case TickType.Open:
+                        case TickType.Open when c is IBidAsk q:
                             q.Open = price;
                             break;
 
-                        case TickType.High:
+                        case TickType.High when c is IBidAsk q:
                             q.High = price;
                             break;
 
-                        case TickType.Low:
+                        case TickType.Low when c is IBidAsk q:
                             q.Low = price;
                             break;
 
-                        case TickType.LastClose:
+                        case TickType.LastClose when c is IBidAsk q:
                             q.LastClose = price;
                             break;
 
@@ -196,30 +201,28 @@ namespace Pacmio.IB
                 if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
                     Contract c = ActiveMarketTicks[tickerId];
-                    //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
-                    MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
                     double size = fields[4].ToDouble();
 
                     switch (tickType)
                     {
-                        case TickType.BidSize:
+                        case TickType.BidSize when c is IBidAsk q:
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskSize:
+                        case TickType.AskSize when c is IBidAsk q:
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastSize:
+                        case TickType.LastSize when c is IBidAsk q:
                             q.LastSize = size * 100;
                             break;
 
-                        case TickType.Volume:
+                        case TickType.Volume when c is IBidAsk q:
                             q.Volume = size * 100;
                             break;
 
-                        case TickType.ShortableShares:
+                        case TickType.ShortableShares when c is Stock q:
                             q.ShortableShares = size;
                             break;
 
@@ -263,27 +266,25 @@ namespace Pacmio.IB
                 if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
                     Contract c = ActiveMarketTicks[tickerId];
-                    //if (c is SymbolInfo si) si.Status = SecurityStatus.Alive;
-                    MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
                     {
-                        case (TickType.AskExchange):
+                        case TickType.AskExchange when c is IBidAsk q:
                             q.AskExchange = fields[4];
                             break;
 
-                        case (TickType.BidExchange):
+                        case TickType.BidExchange when c is IBidAsk q:
                             q.BidExchange = fields[4];
                             break;
 
-                        case (TickType.LastExchange):
+                        case TickType.LastExchange when c is IBidAsk q:
                             q.LastExchange = fields[4];
                             break;
 
-                        case (TickType.LastTimestamp):
+                        case TickType.LastTimestamp:
                             long epoch = fields[4].ToInt64(0); // (3)"45"-(4)"1580146441"
-                            q.LastTradeTime = TimeTool.FromEpoch(epoch);
+                            c.LastTradeTime = TimeTool.FromEpoch(epoch);
                             break;
 
                         /*
@@ -307,8 +308,7 @@ namespace Pacmio.IB
 
                             https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                         */
-                        case (TickType.RTVolumeTimeSales):
-
+                        case TickType.RTVolumeTimeSales:
                             Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
                             break;
 
@@ -316,11 +316,11 @@ namespace Pacmio.IB
                             The RT Trade Volume is similar to RT Volume, but designed to avoid relaying back "Unreportable Trades" shown in TWS Time&Sales via the API.
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
-                        case (TickType.RTTradeVolume):
+                        case TickType.RTTradeVolume:
                             string[] volFields = fields[4].Split(';');
 
                             double last = volFields[0].ToDouble();
-                            if (double.IsNaN(last)) last = q.Last;
+                            if (double.IsNaN(last) && c is IBidAsk iba) last = iba.Last;
 
                             double vol = volFields[1].ToDouble() * 100;
                             if (vol == 0) vol = 20;
@@ -353,7 +353,6 @@ namespace Pacmio.IB
                 }
         }
 
-        //private static readonly ConcurrentDictionary<Contract, StringBuilder> TicksList = new ConcurrentDictionary<Contract, StringBuilder>();
 
         /// <summary>
         /// TickGeneric
@@ -369,13 +368,12 @@ namespace Pacmio.IB
                 if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
                     Contract c = ActiveMarketTicks[tickerId];
-                    MarketData q = c.MarketData;
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
                     {
-                        case (TickType.Shortable):
-                            q.Shortable = fields[4].ToDouble(-1);
+                        case TickType.Shortable when c is Stock q:
+                            q.ShortStatus = fields[4].ToDouble(-1);
                             break;
 
                         default:

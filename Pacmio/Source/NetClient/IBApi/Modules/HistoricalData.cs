@@ -121,7 +121,7 @@ namespace Pacmio.IB
                 DataRequestID = requestId;
                 active_HistoricalDataBarTable = bt;
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -179,7 +179,6 @@ namespace Pacmio.IB
                             paramsList.Add(leg.Exchange);
                         }
                     }
-
                 }
 
                 paramsList.Add(keepUpToDate.Param());

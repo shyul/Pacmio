@@ -180,7 +180,7 @@ namespace Pacmio
         public abstract string TypeFullName { get; }
 
         [DataMember]
-        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
+        public HashSet<string> DerivativeTypes { get; set; } = new HashSet<string>();
 
         #endregion Contract Type Information
 
@@ -203,17 +203,13 @@ namespace Pacmio
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         [DataMember]
-        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
+        public HashSet<string> ValidExchanges { get; set; } = new HashSet<string>();
 
         [DataMember]
-        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
+        public HashSet<string> OrderTypes { get; set; } = new HashSet<string>();
 
         [DataMember]
-        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
-
-        [IgnoreDataMember]
-        public MarketData MarketData { get; set; }
-
+        public HashSet<string> MarketRules { get; set; } = new HashSet<string>();
 
 
         #region Market Ticks
@@ -226,12 +222,12 @@ namespace Pacmio
         /// <returns></returns>
         public virtual bool Request_MarketTicks(string param) => IB.Client.SendRequest_MarketTicks(this, param);
 
-        public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
+        public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(TickerId);
 
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;
 
-        [IgnoreDataMember]
+        [DataMember]
         public MarketTickStatus TickStatus { get; set; } = MarketTickStatus.Unknown;
 
         [DataMember]
@@ -304,31 +300,31 @@ namespace Pacmio
                 return column switch
                 {
                     ContractColumn _ => this,
-                    /*
+                    
                     StringColumn sc when sc == Column_Status => Status.ToString(),
                     StringColumn sc when sc == Column_TradeTime => LastTradeTime.ToString(),
 
-                    StringColumn sc when sc == Column_BidExchange => BidExchange,
-                    NumericColumn dc when dc == Column_BidSize => BidSize,
-                    NumericColumn dc when dc == Column_Bid => Bid,
+                    StringColumn sc when sc == Column_BidExchange && this is IBidAsk q => q.BidExchange,
+                    NumericColumn dc when dc == Column_BidSize && this is IBidAsk q => q.BidSize,
+                    NumericColumn dc when dc == Column_Bid && this is IBidAsk q => q.Bid,
 
-                    NumericColumn dc when dc == Column_Ask => Ask,
-                    NumericColumn dc when dc == Column_AskSize => AskSize,
-                    StringColumn sc when sc == Column_AskExchange => AskExchange,
+                    NumericColumn dc when dc == Column_Ask && this is IBidAsk q => q.Ask,
+                    NumericColumn dc when dc == Column_AskSize && this is IBidAsk q => q.AskSize,
+                    StringColumn sc when sc == Column_AskExchange && this is IBidAsk q => q.AskExchange,
 
-                    NumericColumn dc when dc == Column_Last => Last,
-                    NumericColumn dc when dc == Column_LastSize => LastSize,
-                    StringColumn sc when sc == Column_LastExchange => LastExchange,
+                    NumericColumn dc when dc == Column_Last && this is IBidAsk q => q.Last,
+                    NumericColumn dc when dc == Column_LastSize && this is IBidAsk q => q.LastSize,
+                    StringColumn sc when sc == Column_LastExchange && this is IBidAsk q => q.LastExchange,
 
-                    NumericColumn dc when dc == Column_Open => Open,
-                    NumericColumn dc when dc == Column_High => High,
-                    NumericColumn dc when dc == Column_Low => Low,
-                    NumericColumn dc when dc == Column_Close => LastClose,
-                    NumericColumn dc when dc == Column_Volume => Volume,
+                    NumericColumn dc when dc == Column_Open && this is IBidAsk q => q.Open,
+                    NumericColumn dc when dc == Column_High && this is IBidAsk q => q.High,
+                    NumericColumn dc when dc == Column_Low && this is IBidAsk q => q.Low,
+                    NumericColumn dc when dc == Column_Close && this is IBidAsk q => q.LastClose,
+                    NumericColumn dc when dc == Column_Volume && this is IBidAsk q => q.Volume,
 
-                    NumericColumn dc when dc == Column_Short => Shortable,
-                    NumericColumn dc when dc == Column_ShortShares => ShortableShares,
-                    */
+                    NumericColumn dc when dc == Column_Short && this is Stock q => q.ShortStatus,
+                    NumericColumn dc when dc == Column_ShortShares && this is Stock q => q.ShortableShares,
+                    
                     _ => null,
                 };
             }

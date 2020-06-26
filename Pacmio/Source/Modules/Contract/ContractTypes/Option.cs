@@ -30,11 +30,11 @@ namespace Pacmio
         public override string TypeFullName => "Option";
 
         [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        public virtual MultiPeriod TradingPeriods { get; set; } = new MultiPeriod();
 
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool AutoExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string Right { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

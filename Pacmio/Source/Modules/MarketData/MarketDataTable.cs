@@ -16,15 +16,15 @@ namespace Pacmio
 {
     public sealed class MarketDataTable : IContractTable, IStringTable
     {
-        private readonly List<MarketData> Rows = new List<MarketData>();
+        private readonly List<Contract> Rows = new List<Contract>();
 
         public int Count => Rows.Count;
 
      
 
-        public void Add(MarketData md) => Rows.CheckAdd(md);
+        public void Add(Contract c) => Rows.CheckAdd(c);
 
-        public bool Contains(MarketData md) => Rows.Contains(md);
+        public bool Contains(Contract c) => Rows.Contains(c);
 
         public double this[int i, NumericColumn column]
         {
@@ -55,7 +55,7 @@ namespace Pacmio
                 if (i >= Count || i < 0)
                     return null;
                 else
-                    return Rows[i].Contract;
+                    return Rows[i];
             }
         }
 

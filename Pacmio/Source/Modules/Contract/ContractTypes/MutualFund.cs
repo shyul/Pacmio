@@ -37,10 +37,10 @@ namespace Pacmio
 
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool AutoExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         [DataMember]
-        public virtual MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        public virtual MultiPeriod TradingPeriods { get; set; } = new MultiPeriod();
 
         public bool Equals(BusinessInfo other)
         {

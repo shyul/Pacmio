@@ -39,7 +39,7 @@ namespace Pacmio
         {
             Task.Run(() =>
             {
-                List.Where(n => n.MarketDataTable.Contains(c.MarketData)).ToList().ForEach(n => n.SetRefreshUI());
+                List.Where(n => n.MarketDataTable.Contains(c)).ToList().ForEach(n => n.SetRefreshUI());
             });
         }
 
@@ -57,7 +57,7 @@ namespace Pacmio
             {
                 if(DockCanvas.ActiveDockForm is MarketDataGridView gv) 
                 {
-                    return gv.SelectMarketData.Contract;
+                    return gv.SelectedContract;
                 
                 }
 

@@ -31,7 +31,7 @@ namespace Pacmio.IB
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
 
-                bool useSmart = c is ITradable it && it.AutoExchangeRoute;
+                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
