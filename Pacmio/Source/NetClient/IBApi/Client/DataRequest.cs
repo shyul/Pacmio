@@ -50,6 +50,8 @@ namespace Pacmio.IB
             lock (RequestLockObject)
                 if (DataRequestReady)
                 {
+                    Console.WriteLine("Fetch_ContractSamples: " + symbol);
+
                 StartDownload:
                     SendRequest_ContractSamples(symbol);
 

@@ -32,18 +32,35 @@ namespace Pacmio
         {
             Name = name;
             Exchange = exchange;
-            StockData = new StockData();
+            //m_StockData = new StockData();
         }
 
         [IgnoreDataMember]
-        public StockData StockData { get; private set; }
+        public StockData StockData
+        {
+            get
+            {
+                if (m_StockData is null) LoadMarketData();
+                return m_StockData;
+            }
+        }
 
-        public override void LoadMarketData() => StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
+        [IgnoreDataMember]
+        private StockData m_StockData = null;
+
+        public override void LoadMarketData() 
+        {
+            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
+            m_StockData.Status = MarketTickStatus.Unknown;
+        }
 
         public override void SaveMarketData()
         {
-            if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
-            StockData.SerializeJsonFile(MarketDataFileName);
+            if(m_StockData is StockData sd) 
+            {
+                if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
+                sd.SerializeJsonFile(MarketDataFileName);
+            }
         }
 
         [IgnoreDataMember]

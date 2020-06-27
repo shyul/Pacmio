@@ -32,6 +32,8 @@ namespace Pacmio.IB
         {
             if (DataRequestReady)
             {
+                Console.WriteLine("SendRequest_ContractSamples: " + symbol);
+
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMatchingSymbols);
 
                 DataRequestID = requestId;

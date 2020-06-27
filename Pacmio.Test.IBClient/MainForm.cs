@@ -600,8 +600,16 @@ namespace TestClient
                     using (var fs = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     using (StreamReader sr = new StreamReader(fs))
                     {
-                        string[] symbols = sr.ReadLine().Split(',');
-                        ContractList.GetOrFetch(symbols, Cts, Progress);
+                        List<string> symbollist = new List<string>();
+                        while (!sr.EndOfStream)
+                        {
+                            string line = sr.ReadLine();
+                            string[] symbols = line.Split(',');
+                            //Console.WriteLine(line + ": " + symbols.Length);
+                            symbollist.AddRange(symbols);
+                        }
+
+                        ContractList.GetOrFetch(symbollist, Cts, Progress);
                     }
                 }, Cts.Token);
             }

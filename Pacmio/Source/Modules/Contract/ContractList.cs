@@ -195,9 +195,9 @@ namespace Pacmio
             if (list is null) return;
 
             Parallel.ForEach(list, c => {
-                c.LoadMarketData();
+                //c.LoadMarketData();
                
-                c.MarketData.Status = MarketTickStatus.Unknown;
+                //c.MarketData.Status = MarketTickStatus.Unknown;
                 /*
                 c.DerivativeTypes = new HashSet<string>();
                 c.ValidExchanges = new HashSet<string>();

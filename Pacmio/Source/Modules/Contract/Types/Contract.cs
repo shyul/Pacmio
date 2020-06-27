@@ -152,8 +152,6 @@ namespace Pacmio
 
         public bool IsWorkHour => WorkHours.IsWorkTime(CurrentTime);
 
-
-
         #endregion Exchange Information
 
         #region Contract Type Information
@@ -213,7 +211,7 @@ namespace Pacmio
         public abstract void SaveMarketData();
 
         [IgnoreDataMember]
-        public virtual MarketData MarketData { get; private set; }
+        public virtual MarketData MarketData { get; }
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
