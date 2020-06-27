@@ -31,8 +31,6 @@ namespace Pacmio.IB
                 active_ContractData_ResultList.Clear();
                 active_ContractData = c;
 
-                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
-
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
                 string right = "";
@@ -57,7 +55,7 @@ namespace Pacmio.IB
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Right
                     multiplier, // Multiplier
-                    useSmart ? "SMART" : exchangeCode, // "ISLAND" exchange,
+                    c.SmartExchangeRoute ? "SMART" : exchangeCode, // "ISLAND" exchange,
                     exchangeCode, // primaryExch,
                     c.CurrencyCode, // currency,
                     string.Empty, // LocalSymbol
@@ -119,7 +117,8 @@ namespace Pacmio.IB
         /// <summary>
         /// Received ContractData: (0)"10"-(1)"8"-(2)"60000001"-(3)"FB"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)"SMART"-(9)"USD"-(10)"FB"-(11)"NMS"-(12)"NMS"-(13)"107113386"-(14)"0.01"-(15)"100"-(16)""-
         /// (17)"ACTIVETIM,AD,ADJUST,ALERT,ALGO,ALLOC,AVGCOST,BASKET,BENCHPX,CASHQTY,COND,CONDORDER,DARKONLY,DARKPOLL,DAY,DEACT,DEACTDIS,DEACTEOD,DIS,GAT,GTC,GTD,GTT,HID,IBKRATS,ICE,IMB,IOC,LIT,LMT,LOC,MIDPX,MIT,MKT,MOC,MTL,NGCOMB,NODARK,NONALGO,OCA,OPG,OPGREROUT,PEGBENCH,POSTONLY,PREOPGRTH,PRICECHK,REL,RPI,RTH,SCALE,SCALEODD,SCALERST,SIZECHK,SMARTSTG,SNAPMID,SNAPMKT,SNAPREL,STP,STPLMT,SWEEP,TRAIL,TRAILLIT,TRAILLMT,TRAILMIT,WHATIF"-
-        /// (18)"SMART,AMEX,NYSE,CBOE,PHLX,ISE,CHX,ARCA,ISLAND,DRCTEDGE,BEX,BATS,EDGEA,CSFBALGO,JEFFALGO,BYX,IEX,EDGX,FOXRIVER,TPLUS1,NYSENAT,PSX"-(19)"1"-(20)"0"-(21)"FACEBOOK INC-CLASS A"-(22)"NASDAQ"-(23)""-(24)"Communications"-(25)"Internet"-(26)"Internet Content-Entmnt"-
+        /// (18)"SMART,AMEX,NYSE,CBOE,PHLX,ISE,CHX,ARCA,ISLAND,DRCTEDGE,BEX,BATS,EDGEA,CSFBALGO,JEFFALGO,BYX,IEX,EDGX,FOXRIVER,TPLUS1,NYSENAT,PSX"-(19)"1"-(20)"0"-(21)"FACEBOOK INC-CLASS A"-(22)"NASDAQ"-(23)""-
+        /// (24)"Communications"-(25)"Internet"-(26)"Internet Content-Entmnt"-
         /// (27)"EST (Eastern Standard Time)"-
         /// (28)"20200623:0400-20200623:2000;20200624:0400-20200624:2000;20200625:0400-20200625:2000;20200626:0400-20200626:2000;20200627:CLOSED;20200628:CLOSED;20200629:0400-20200629:2000;20200630:0400-20200630:2000;20200701:0400-20200701:2000;20200702:0400-20200702:2000;20200703:CLOSED;20200704:CLOSED;20200705:CLOSED;20200706:0400-20200706:2000;20200707:0400-20200707:2000;20200708:0400-20200708:2000;20200709:0400-20200709:2000;20200710:0400-20200710:2000;20200711:CLOSED;20200712:CLOSED;20200713:0400-20200713:2000;20200714:0400-20200714:2000;20200715:0400-20200715:2000;20200716:0400-20200716:2000;20200717:0400-20200717:2000;20200718:CLOSED;20200719:CLOSED;20200720:0400-20200720:2000;20200721:0400-20200721:2000;20200722:0400-20200722:2000;20200723:0400-20200723:2000;20200724:0400-20200724:2000;20200725:CLOSED;20200726:CLOSED;20200727:0400-20200727:2000"-
         /// (29)"20200623:0930-20200623:1600;20200624:0930-20200624:1600;20200625:0930-20200625:1600;20200626:0930-20200626:1600;20200627:CLOSED;20200628:CLOSED;20200629:0930-20200629:1600;20200630:0930-20200630:1600;20200701:0930-20200701:1600;20200702:0930-20200702:1600;20200703:CLOSED;20200704:CLOSED;20200705:CLOSED;20200706:0930-20200706:1600;20200707:0930-20200707:1600;20200708:0930-20200708:1600;20200709:0930-20200709:1600;20200710:0930-20200710:1600;20200711:CLOSED;20200712:CLOSED;20200713:0930-20200713:1600;20200714:0930-20200714:1600;20200715:0930-20200715:1600;20200716:0930-20200716:1600;20200717:0930-20200717:1600;20200718:CLOSED;20200719:CLOSED;20200720:0930-20200720:1600;20200721:0930-20200721:1600;20200722:0930-20200722:1600;20200723:0930-20200723:1600;20200724:0930-20200724:1600;20200725:CLOSED;20200726:CLOSED;20200727:0930-20200727:1600"-
@@ -142,14 +141,24 @@ namespace Pacmio.IB
 
                 if (contractValid)
                 {
-                    c.OrderTypes.FromString(fields[17], ',');
-                    c.ValidExchanges.FromString(fields[18], ',');
+                    c.MarketData.OrderTypes.FromString(fields[17], ',');
+                    c.MarketData.ValidExchanges.FromString(fields[18], ',');
 
-                    //si.IndustryInfo.Industry = rawInput[24];
-                    //si.IndustryInfo.Category = rawInput[25];
-                    //si.IndustryInfo.Subcategory = rawInput[26];
+                    string industry = fields[24];
+                    string category = fields[25];
+                    string subcategory = fields[26];
 
+                    if (!UnknownItemList.Industry.ContainsKey(industry))
+                        UnknownItemList.Industry.Add(industry, new Dictionary<string, HashSet<string>>());
 
+                    if (!UnknownItemList.Industry[industry].ContainsKey(category))
+                        UnknownItemList.Industry[industry].Add(category, new HashSet<string>());
+
+                    UnknownItemList.Industry[industry][category].CheckAdd(subcategory);
+
+                    c.MarketData.TradingPeriods.Clear();
+                    ApplyTradingPeriods(c.MarketData, fields[28]);
+                    ApplyTradingPeriods(c.MarketData, fields[29]);
 
                     // Get ISIN here.
                     int tagNum = fields[32].ToInt32(0);
@@ -164,12 +173,8 @@ namespace Pacmio.IB
                         pt += 2;
                     }
 
-                    if (c is ITradable it)
+                    if (c is IBusiness it)
                     {
-                        it.TradingPeriods.Clear();
-                        ApplyTradingPeriods(it, fields[28]);
-                        ApplyTradingPeriods(it, fields[29]);
-
                         if (tags.ContainsKey("ISIN"))
                         {
                             it.ISIN = tags["ISIN"];
@@ -182,7 +187,7 @@ namespace Pacmio.IB
 
 
 
-                    c.MarketRules.FromString(fields[pt + 3], ','); // 38
+                    c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
 
                     if (c.FullName.Length < 5)
                         c.FullName = fields[21].Replace("\"", "");
@@ -194,7 +199,7 @@ namespace Pacmio.IB
             }
         }
 
-        private static void ApplyTradingPeriods(ITradable it, string field)
+        private static void ApplyTradingPeriods(MarketData q, string field)
         {
             string[] pd_string_list = field.Split(';');
             foreach (string pd_string in pd_string_list)
@@ -203,7 +208,7 @@ namespace Pacmio.IB
                 {
                     string[] pd_string_pair = pd_string.Split('-');
                     Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
-                    it.TradingPeriods.Add(pd);
+                    q.TradingPeriods.Add(pd);
                 }
             }
         }
@@ -229,7 +234,11 @@ namespace Pacmio.IB
             if (requestId > -1) RemoveRequest(requestId, false);
             DataRequestID = -1;
 
-            if(active_ContractData is Contract c) c.UpdateTime = DateTime.Now;
+            if (active_ContractData is Contract c)
+            {
+                c.Status = ContractStatus.Unknown;
+                c.UpdateTime = DateTime.Now;
+            }
             active_ContractData = null;
         }
     }

@@ -21,7 +21,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract(Name = "Option")]
-    public class Option : Contract, ITradable, IOption
+    public class Option : Contract, IBusiness, IOption
     {
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "OPTION";
@@ -31,7 +31,6 @@ namespace Pacmio
 
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string Right { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -40,6 +39,16 @@ namespace Pacmio
         public string Multiplier { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string LastTradeDateOrContractMonth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public override void LoadMarketData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveMarketData()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool Equals(BusinessInfo other)
         {

@@ -47,6 +47,9 @@ namespace Pacmio
 
         #region Exchange Information
 
+        [DataMember]
+        public bool SmartExchangeRoute { get; set; } = true;
+
         /// <summary>
         /// The contract's primary exchange.
         /// For smart routed contracts, used to define contract in case of ambiguity.
@@ -179,46 +182,38 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public abstract string TypeFullName { get; }
 
-        [DataMember]
-        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
-
         #endregion Contract Type Information
 
         #region Data Update
 
         [IgnoreDataMember]
-        public virtual bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && ((DateTime.Now - TradingPeriods.Stop).Days > TradingPeriods.Count || FullName.Length < 2);
+        public virtual bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && ((DateTime.Now - MarketData.TradingPeriods.Stop).Days > MarketData.TradingPeriods.Count || FullName.Length < 2);
 
         [DataMember, Browsable(false)]
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
-        public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
-
-        [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
+
+        [DataMember, Browsable(true), Category("Basic Information"), DisplayName("Security Status")]
+        public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         #endregion Data Update
 
         #region Status and Market Data
 
-        [DataMember, Browsable(true), Category("Basic Information"), DisplayName("Security Status")]
-        public ContractStatus Status { get; set; } = ContractStatus.Unknown;
+        [IgnoreDataMember]
+        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalBars\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
 
-        [DataMember]
-        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
+        [IgnoreDataMember]
+        public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
 
-        [DataMember]
-        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
+        public abstract void LoadMarketData();
 
-        [DataMember]
-        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
+        public abstract void SaveMarketData();
 
-
-        #region Market Ticks
-
-        [DataMember]
-        public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+        [IgnoreDataMember]
+        public virtual MarketData MarketData { get; private set; }
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -228,34 +223,7 @@ namespace Pacmio
         /// <returns></returns>
         public virtual bool Request_MarketTicks(string param) => IB.Client.SendRequest_MarketTicks(this, param);
 
-        public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(TickerId);
-
-        [DataMember]
-        public int TickerId { get; set; } = int.MinValue;
-
-        [DataMember]
-        public MarketTickStatus TickStatus { get; set; } = MarketTickStatus.Unknown;
-
-        [DataMember]
-        public double MinimumTick { get; set; }
-
-        [DataMember]
-        public string BBOExchangeId { get; set; }
-
-        #endregion Market Ticks
-
-
-
-
-
-
-
-
-        [DataMember]
-        public virtual double Price { get; set; } = double.NaN;
-
-        [DataMember]
-        public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
+        public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
         #endregion Status and Market Data
 
@@ -308,28 +276,28 @@ namespace Pacmio
                     ContractColumn _ => this,
 
                     StringColumn sc when sc == Column_Status => Status.ToString(),
-                    StringColumn sc when sc == Column_TradeTime => LastTradeTime.ToString(),
+                    StringColumn sc when sc == Column_TradeTime => MarketData.LastTradeTime.ToString(),
 
-                    StringColumn sc when sc == Column_BidExchange && this is IBidAsk q => q.BidExchange,
-                    NumericColumn dc when dc == Column_BidSize && this is IBidAsk q => q.BidSize,
-                    NumericColumn dc when dc == Column_Bid && this is IBidAsk q => q.Bid,
+                    StringColumn sc when sc == Column_BidExchange && MarketData is BidAskData q => q.BidExchange,
+                    NumericColumn dc when dc == Column_BidSize && MarketData is BidAskData q => q.BidSize,
+                    NumericColumn dc when dc == Column_Bid && MarketData is BidAskData q => q.Bid,
 
-                    NumericColumn dc when dc == Column_Ask && this is IBidAsk q => q.Ask,
-                    NumericColumn dc when dc == Column_AskSize && this is IBidAsk q => q.AskSize,
-                    StringColumn sc when sc == Column_AskExchange && this is IBidAsk q => q.AskExchange,
+                    NumericColumn dc when dc == Column_Ask && MarketData is BidAskData q => q.Ask,
+                    NumericColumn dc when dc == Column_AskSize && MarketData is BidAskData q => q.AskSize,
+                    StringColumn sc when sc == Column_AskExchange && MarketData is BidAskData q => q.AskExchange,
 
-                    NumericColumn dc when dc == Column_Last && this is IBidAsk q => q.Last,
-                    NumericColumn dc when dc == Column_LastSize && this is IBidAsk q => q.LastSize,
-                    StringColumn sc when sc == Column_LastExchange && this is IBidAsk q => q.LastExchange,
+                    NumericColumn dc when dc == Column_Last => MarketData.LastPrice,
+                    NumericColumn dc when dc == Column_LastSize && MarketData is BidAskData q => q.LastSize,
+                    StringColumn sc when sc == Column_LastExchange && MarketData is BidAskData q => q.LastExchange,
 
-                    NumericColumn dc when dc == Column_Open && this is IBidAsk q => q.Open,
-                    NumericColumn dc when dc == Column_High && this is IBidAsk q => q.High,
-                    NumericColumn dc when dc == Column_Low && this is IBidAsk q => q.Low,
-                    NumericColumn dc when dc == Column_Close && this is IBidAsk q => q.LastClose,
-                    NumericColumn dc when dc == Column_Volume && this is IBidAsk q => q.Volume,
+                    NumericColumn dc when dc == Column_Open && MarketData is BidAskData q => q.Open,
+                    NumericColumn dc when dc == Column_High && MarketData is BidAskData q => q.High,
+                    NumericColumn dc when dc == Column_Low && MarketData is BidAskData q => q.Low,
+                    NumericColumn dc when dc == Column_Close && MarketData is BidAskData q => q.PreviousClose,
+                    NumericColumn dc when dc == Column_Volume && MarketData is BidAskData q => q.Volume,
 
-                    NumericColumn dc when dc == Column_Short && this is Stock q => q.ShortStatus,
-                    NumericColumn dc when dc == Column_ShortShares && this is Stock q => q.ShortableShares,
+                    NumericColumn dc when dc == Column_Short && MarketData is StockData q => q.ShortStatus,
+                    NumericColumn dc when dc == Column_ShortShares && MarketData is StockData q => q.ShortableShares,
 
                     _ => null,
                 };

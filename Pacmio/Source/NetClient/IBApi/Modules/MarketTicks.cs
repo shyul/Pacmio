@@ -81,10 +81,9 @@ namespace Pacmio.IB
             if (Connected && valid_exchange && !ActiveMarketTicks.Values.Contains(c) && !SubscriptionOverflow)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
-                c.TickerId = requestId;
+                c.MarketData.TickerId = requestId;
                 ActiveMarketTicks.CheckAdd(requestId, c);
 
-                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
                 string right = "";
@@ -109,7 +108,7 @@ namespace Pacmio.IB
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Contract Right
                     multiplier, // Contract Multiplier
-                    useSmart ? "SMART" : exchangeCode,  // "ISLAND", Contract Exchange, Specify the Primary Exchange attribute to avoid contract ambiguity
+                    c.SmartExchangeRoute ? "SMART" : exchangeCode,  // "ISLAND", Contract Exchange, Specify the Primary Exchange attribute to avoid contract ambiguity
                     exchangeCode, // PrimaryExch,
                     c.CurrencyCode, //  "USD", // Contract Currency
                     string.Empty, // Contract Local Symnbol
@@ -187,8 +186,8 @@ namespace Pacmio.IB
             lock (ActiveMarketTicks)
             {
                 ActiveMarketTicks.TryRemove(requestId, out Contract c);
-                c.TickStatus = MarketTickStatus.DelayedFrozen;
-                c.TickerId = int.MinValue;
+                c.MarketData.Status = MarketTickStatus.DelayedFrozen;
+                c.MarketData.TickerId = int.MinValue;
             }
         }
     }

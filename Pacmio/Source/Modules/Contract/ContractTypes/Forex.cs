@@ -19,7 +19,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract(Name = "Forex")]
-    public class Forex : Contract, IMarketDepth
+    public class Forex : Contract
     {
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "FX";
@@ -27,58 +27,28 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Forex";
 
-        [DataMember]
-        public double Ask { get; set; } = -double.MinValue;
+        public override void LoadMarketData()
+        {
+            throw new NotImplementedException();
+        }
 
-        [DataMember]
-        public double AskSize { get; set; } = -double.MinValue;
+        public override void SaveMarketData()
+        {
+            throw new NotImplementedException();
+        }
 
-        [DataMember]
-        public string AskExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double Bid { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double BidSize { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public string BidExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double Open { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double High { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Low { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Last { get => Price; set => Price = value; }
-
-        [DataMember]
-        public double LastSize { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Volume { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public string LastExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double LastClose { get; set; } = -double.MinValue;
-
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth => throw new NotImplementedException();
 
         public void Cancel_MarketDepth()
         {
             throw new NotImplementedException();
         }
 
+
         public bool Request_MarketDepth()
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

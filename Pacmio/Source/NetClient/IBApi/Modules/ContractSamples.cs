@@ -91,12 +91,12 @@ namespace Pacmio.IB
                         {
 
 
-                            c.DerivativeTypes.Clear();// = new List<ContractType>();
+                            c.MarketData.DerivativeTypes.Clear();// = new List<ContractType>();
 
                             for (int i = 0; i < DerivativeSecTypeCount; i++)
                             {
                                 string derSecTypeCode = fields[pt + 6 + i];
-                                c.DerivativeTypes.FromString(derSecTypeCode, ',');
+                                c.MarketData.DerivativeTypes.FromString(derSecTypeCode, ',');
                                 /// Need to convert derSecTypeStr to ContractType here.
                                 /// if (stIsValid && !c.MarketData.DerivativeSecTypes.Contains(st)) c.MarketData.DerivativeSecTypes.Add(st);
                             }

@@ -28,7 +28,7 @@ namespace Pacmio
         /// </summary>
         private static readonly Dictionary<string, BusinessInfo> List = new Dictionary<string, BusinessInfo>();
 
-        public static (bool, BusinessInfo) GetOrAdd(ITradable it) => GetOrAdd(it.ISIN);
+        public static (bool, BusinessInfo) GetOrAdd(IBusiness it) => GetOrAdd(it.ISIN);
 
         public static (bool, BusinessInfo) GetOrAdd(string isin)
         {

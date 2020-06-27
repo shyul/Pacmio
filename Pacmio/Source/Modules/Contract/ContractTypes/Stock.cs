@@ -24,7 +24,7 @@ namespace Pacmio
     /// This type is to be serialized into file blobs
     /// </summary>
     [Serializable, DataContract(Name = "Stock")]
-    public class Stock : Contract, ITradable, IMarketDepth, IHistoricalData
+    public class Stock : Contract, IBusiness
     {
         #region Ctor
 
@@ -32,7 +32,22 @@ namespace Pacmio
         {
             Name = name;
             Exchange = exchange;
+            StockData = new StockData();
         }
+
+        [IgnoreDataMember]
+        public StockData StockData { get; private set; }
+
+        public override void LoadMarketData() => StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
+
+        public override void SaveMarketData()
+        {
+            if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
+            StockData.SerializeJsonFile(MarketDataFileName);
+        }
+
+        [IgnoreDataMember]
+        public override MarketData MarketData => StockData;
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";
@@ -83,72 +98,11 @@ namespace Pacmio
 
         #region Order and Trade
 
-        [DataMember]
-        public bool SmartExchangeRoute { get; set; } = true;
+
 
         #endregion
 
-        [DataMember]
-        public double TargetPrice { get; set; }
-
-
-        #region Status and Market Data
-
-        [DataMember]
-        public double Ask { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double AskSize { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public string AskExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double Bid { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double BidSize { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public string BidExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double Open { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double High { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Low { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Last { get => Price; set => Price = value; }
-
-        [DataMember]
-        public double LastSize { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public double Volume { get; set; } = -double.MinValue;
-
-        [DataMember]
-        public string LastExchange { get; set; } = string.Empty;
-
-        [DataMember]
-        public double LastClose { get; set; } = -double.MinValue;
-
-        #endregion Status and Market Data
-
-        #region Short Status
-
-        [DataMember]
-        public double ShortStatus { get; set; }
-
-        [DataMember]
-        public double ShortableShares { get; set; }
-
-        #endregion Short Status
-
-
+        #region Market Depth
 
         public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
 
@@ -157,9 +111,16 @@ namespace Pacmio
         /// </summary>
         public virtual void Cancel_MarketDepth() { }
 
-        [DataMember]
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
-            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+        #endregion Market Depth
+
+        #region Historical Bar
+
+        [IgnoreDataMember]
+        public BarTable DailyBarTable => this.GetTable(BarFreq.Daily, BarType.Trades);
+
+        public double ClosePrice(DateTime date) { return DailyBarTable.LastClose; }
+
+        #endregion Historical Bar
 
         #region Equality
 

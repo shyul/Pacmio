@@ -69,7 +69,7 @@ namespace TestClient
         public static object[] selector(Contract c)
         {
             RowIndex++;
-            if (c is ITradable it)
+            if (c is IBusiness it)
             {
                 (bool biValid, BusinessInfo info) = it.GetBusinessInfo();
                 return new object[] { RowIndex, c.ConId, c.Status.ToString(), c.TypeName, c.Name, c.ExchangeName, c.FullName, it.ISIN, biValid ? info.CUSIP : string.Empty };

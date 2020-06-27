@@ -27,6 +27,9 @@ namespace Pacmio
     /// </summary>
     public static class UnknownItemList
     {
+        public static Dictionary<string, Dictionary<string, HashSet<string>>> Industry { get; private set; } = new Dictionary<string, Dictionary<string, HashSet<string>>>();
+
+
         /// <summary>
         /// Stores previously found invalid symbol names here to prevent any further repeating query.
         /// </summary>
@@ -107,6 +110,8 @@ namespace Pacmio
 
         public static void Save()
         {
+            Industry.SerializeJsonFile(Root.ResourcePath + "Industry.Json");
+
             StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
 
             var sorted = List.OrderBy(n => n.Key.SymbolName);
@@ -132,7 +137,12 @@ namespace Pacmio
 
         public static void Load()
         {
-            if (File.Exists(FileName))
+            if (File.Exists(Root.ResourcePath + "Industry.Json"))
+            {
+                Industry = Serialization.DeserializeJsonFile<Dictionary<string, Dictionary<string, HashSet<string>>>>(Root.ResourcePath + "Industry.Json");
+            }
+
+                if (File.Exists(FileName))
             {
                 lock (List)
                     using (var fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -185,7 +195,7 @@ namespace Pacmio
                                                 c.ConId = conId;
                                                 c.ExchangeSuffix = exSuffix;
 
-                                                if (c is ITradable it)
+                                                if (c is IBusiness it)
                                                 {
                                                     it.ISIN = ISIN;
                                                     (bool ciValid, BusinessInfo ci) = BusinessInfoList.GetOrAdd(it);

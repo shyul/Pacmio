@@ -27,7 +27,7 @@ namespace Pacmio
             contract.Currency = "USD";
      */
     [Serializable, DataContract(Name = "MutualFund")]
-    public class MutualFund : Contract, ITradable
+    public class MutualFund : Contract, IBusiness
     {
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "MFUND";
@@ -37,7 +37,15 @@ namespace Pacmio
 
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override void LoadMarketData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveMarketData()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool Equals(BusinessInfo other)
         {

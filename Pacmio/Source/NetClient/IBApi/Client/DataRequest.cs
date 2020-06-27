@@ -206,7 +206,7 @@ namespace Pacmio.IB
                 }
 
             End:
-            return bt.Contract.BarTableEarliestTime;
+            return bt.EarliestTime;
         }
 
         public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)

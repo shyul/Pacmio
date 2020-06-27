@@ -10,7 +10,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface ITradable : IEquatable<BusinessInfo>
+    public interface IBusiness : IEquatable<BusinessInfo>
     {
         string Name { get; }
 
@@ -20,12 +20,6 @@ namespace Pacmio
 
         string ISIN { get; set; }
 
-        bool SmartExchangeRoute { get; set; }
-
         (bool valid, BusinessInfo bi) GetBusinessInfo();
-
-        MultiPeriod TradingPeriods { get; }
-
-
     }
 }

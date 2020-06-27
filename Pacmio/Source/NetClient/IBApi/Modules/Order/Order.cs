@@ -33,7 +33,7 @@ namespace Pacmio.IB
 
             Console.WriteLine("PlaceOrder: " + c.ToString());
 
-            if (Connected && valid_exchange && c is ITradable it && valid_orderType && valid_tif && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
+            if (Connected && valid_exchange && c is IBusiness it && valid_orderType && valid_tif && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
                 od.Status = OrderStatus.Inactive;
 

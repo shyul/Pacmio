@@ -26,6 +26,8 @@ namespace TestClient
         public Period HistoricalPeriod => (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
                         new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
+        int MainProgBarValue = 0;
+
         public MainForm()
         {
             InitializeComponent();
@@ -51,12 +53,13 @@ namespace TestClient
 
             Progress = new Progress<float>(percent =>
             {
-                if (percent >= 0 && percent <= 100)
+                //Console.WriteLine("Progress Reported: " + percent.ToString("0.##") + "%");
+                int pct = percent.ToInt32();
+                if (pct >= 0 && pct <= 100 && MainProgBarValue != pct)
                 {
-                    Console.WriteLine("Progress Reported: " + percent.ToString("0.##") + "%");
-                    MainProgBar.Value = percent.ToInt32();
+                    MainProgBar.Value = MainProgBarValue = pct;
+                    Console.WriteLine("Progress Reported: " + MainProgBarValue.ToString("0.##") + "%");
                 }
-
             });
 
             Detailed_Progress = new Progress<float>(p => {
@@ -514,11 +517,15 @@ namespace TestClient
 
         private void BtnMergeQuandlFile_Click(object sender, EventArgs e)
         {
-            var list = MergeEODFiles.OrderByDescending(n => n.Value).Select(n => n.Key);
+            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+            {
 
-            Cts = new CancellationTokenSource();
-            Task m = new Task(() => { Quandl.MergeEODFiles(list, "D:\\EOD_Merged.csv", Progress, Cts); });
-            m.Start();
+                var list = MergeEODFiles.OrderByDescending(n => n.Value).Select(n => n.Key);
+
+                Cts = new CancellationTokenSource();
+                Task m = new Task(() => { Quandl.MergeEODFiles(list, Root.SaveFile.FileName, Cts, Progress); });
+                m.Start();
+            }
         }
 
         private void BtnExtractSymbols_Click(object sender, EventArgs e)
@@ -737,7 +744,7 @@ namespace TestClient
         {
             if (!Root.IBConnected || !ValidateSymbol()) return;
 
-            if (ContractTest.ActiveContract is IMarketDepth imd)
+            if (ContractTest.ActiveContract is Stock imd)
             {
 
                 Console.WriteLine("MarketDepth: " + imd.Request_MarketDepth());

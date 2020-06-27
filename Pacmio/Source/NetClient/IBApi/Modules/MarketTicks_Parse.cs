@@ -68,7 +68,7 @@ namespace Pacmio.IB
                     Contract c = ActiveMarketTicks[requestId];
                     if (c is Stock stk) stk.Status = ContractStatus.Alive;
 
-                    c.TickStatus = (MarketTickStatus)fields[3].ToInt32(0);
+                    c.MarketData.Status = (MarketTickStatus)fields[3].ToInt32(0);
                     MarketDataManager.UpdateUI(c);
                 }
         }
@@ -114,8 +114,8 @@ namespace Pacmio.IB
                 {
                     Contract c = ActiveMarketTicks[tickerId];
 
-                    c.MinimumTick = fields[2].ToDouble(0);
-                    c.BBOExchangeId = fields[3];
+                    c.MarketData.MinimumTick = fields[2].ToDouble(0);
+                    c.MarketData.BBOExchangeId = fields[3];
 
                     int snapshotPermissions = fields[4].ToInt32(-1);
 
@@ -144,39 +144,39 @@ namespace Pacmio.IB
                     double size = fields[5].ToDouble();
                     //int attrMask = fields[6].ToInt32(-1);
 
-                    if (price < 0) c.TickStatus = MarketTickStatus.Unknown;
+                    if (price < 0) c.MarketData.Status = MarketTickStatus.Unknown;
 
                     switch (tickType)
                     {
-                        case TickType.BidPrice when c is IBidAsk q:
+                        case TickType.BidPrice when c.MarketData is BidAskData q:
                             q.Bid = price;
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskPrice when c is IBidAsk q:
+                        case TickType.AskPrice when c.MarketData is BidAskData q:
                             q.Ask = price;
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastPrice when c is IBidAsk q:
-                            q.Last = price;
+                        case TickType.LastPrice when c.MarketData is BidAskData q:
+                            q.LastPrice = price;
                             q.LastSize = size * 100;
                             break;
 
-                        case TickType.Open when c is IBidAsk q:
+                        case TickType.Open when c.MarketData is BidAskData q:
                             q.Open = price;
                             break;
 
-                        case TickType.High when c is IBidAsk q:
+                        case TickType.High when c.MarketData is BidAskData q:
                             q.High = price;
                             break;
 
-                        case TickType.Low when c is IBidAsk q:
+                        case TickType.Low when c.MarketData is BidAskData q:
                             q.Low = price;
                             break;
 
-                        case TickType.LastClose when c is IBidAsk q:
-                            q.LastClose = price;
+                        case TickType.LastClose when c.MarketData is BidAskData q:
+                            q.PreviousClose = price;
                             break;
 
                         default:
@@ -206,23 +206,23 @@ namespace Pacmio.IB
 
                     switch (tickType)
                     {
-                        case TickType.BidSize when c is IBidAsk q:
+                        case TickType.BidSize when c.MarketData is BidAskData q:
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskSize when c is IBidAsk q:
+                        case TickType.AskSize when c.MarketData is BidAskData q:
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastSize when c is IBidAsk q:
+                        case TickType.LastSize when c.MarketData is BidAskData q:
                             q.LastSize = size * 100;
                             break;
 
-                        case TickType.Volume when c is IBidAsk q:
+                        case TickType.Volume when c.MarketData is BidAskData q:
                             q.Volume = size * 100;
                             break;
 
-                        case TickType.ShortableShares when c is Stock q:
+                        case TickType.ShortableShares when c.MarketData is StockData q:
                             q.ShortableShares = size;
                             break;
 
@@ -270,21 +270,21 @@ namespace Pacmio.IB
 
                     switch (tickType)
                     {
-                        case TickType.AskExchange when c is IBidAsk q:
+                        case TickType.AskExchange when c.MarketData is BidAskData q:
                             q.AskExchange = fields[4];
                             break;
 
-                        case TickType.BidExchange when c is IBidAsk q:
+                        case TickType.BidExchange when c.MarketData is BidAskData q:
                             q.BidExchange = fields[4];
                             break;
 
-                        case TickType.LastExchange when c is IBidAsk q:
+                        case TickType.LastExchange when c.MarketData is BidAskData q:
                             q.LastExchange = fields[4];
                             break;
 
                         case TickType.LastTimestamp:
                             long epoch = fields[4].ToInt64(0); // (3)"45"-(4)"1580146441"
-                            c.LastTradeTime = TimeTool.FromEpoch(epoch);
+                            c.MarketData.LastTradeTime = TimeTool.FromEpoch(epoch);
                             break;
 
                         /*
@@ -320,7 +320,7 @@ namespace Pacmio.IB
                             string[] volFields = fields[4].Split(';');
 
                             double last = volFields[0].ToDouble();
-                            if (double.IsNaN(last) && c is IBidAsk iba) last = iba.Last;
+                            if (double.IsNaN(last) && c.MarketData is BidAskData baq) last = baq.LastPrice;
 
                             double vol = volFields[1].ToDouble() * 100;
                             if (vol == 0) vol = 20;
@@ -372,7 +372,7 @@ namespace Pacmio.IB
 
                     switch (tickType)
                     {
-                        case TickType.Shortable when c is Stock q:
+                        case TickType.Shortable when c.MarketData is StockData q:
                             q.ShortStatus = fields[4].ToDouble(-1);
                             break;
 
@@ -394,8 +394,8 @@ namespace Pacmio.IB
         private static void Parse_TickEFP(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
-            // Console.WriteLine("\nParse Tick EFP: " + fields.ToFlat());
 
+            /*
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
             TickType tickType = fields[3].ToTickType();
@@ -406,7 +406,7 @@ namespace Pacmio.IB
             string futureLastTradeDate = fields[8];
             double dividendImpact = fields[9].ToDouble(-1);
             double dividendsToLastTradeDate = fields[10].ToDouble(-1);
-
+            */
 
         }
 
@@ -418,13 +418,13 @@ namespace Pacmio.IB
         private static void Parse_TickOptionComputation(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
-            // Console.WriteLine("\nParse Tick Option Computation: " + fields.ToFlat());
 
+            /*
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
             TickType tickType = fields[3].ToTickType();
             double impliedVolatility = fields[4].ToDouble(-1);
-
+            */
 
         }
 

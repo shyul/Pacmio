@@ -31,12 +31,6 @@ namespace Pacmio
         [EnumMember, Description("Floating Shares")]
         ShareFloat = 20,
 
-        [EnumMember, Description("Split")]
-        Split = 30,
-
-        [EnumMember, Description("Dividend")]
-        DividendPercent = 40,
-
         [EnumMember, Description("EPS")]
         EPS = 100,
 

@@ -896,28 +896,24 @@ namespace Pacmio
             lock (DataLockObject)
             {
                 Sort();
-                if (Contract is ITradable it)
+                if (Contract.MarketData is StockData sd)
                 {
-                    var (valid_bi, bi) = it.GetBusinessInfo();
-                    if (valid_bi)
+                    MultiPeriod<(double Price, double Volume)> barTableAdjust = sd.BarTableAdjust(AdjustDividend);
+
+                    // Please notice b.Time is the start time of the Bar
+                    // When the adjust event (split or dividend) happens at d 
+                    // The adjust will happen in d-1, which belongs to the
+                    // prior adjust segment.
+                    //                    S
+                    // ---------------------------------------
+                    //                   AD
+                    // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+                    for (int i = 0; i < Count; i++)
                     {
-                        MultiPeriod<(double Price, double Volume)> barTableAdjust = bi.BarTableAdjust(AdjustDividend);
+                        Bar b = this[i];
 
-                        // Please notice b.Time is the start time of the Bar
-                        // When the adjust event (split or dividend) happens at d 
-                        // The adjust will happen in d-1, which belongs to the
-                        // prior adjust segment.
-                        //                    S
-                        // ---------------------------------------
-                        //                   AD
-                        // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
-                        for (int i = 0; i < Count; i++)
-                        {
-                            Bar b = this[i];
-
-                            var (adj_price, adj_vol) = barTableAdjust[b.Time];
-                            b.Adjust(adj_price, adj_vol, forwardAdjust);
-                        }
+                        var (adj_price, adj_vol) = barTableAdjust[b.Time];
+                        b.Adjust(adj_price, adj_vol, forwardAdjust);
                     }
                 }
                 ResetCalculationPointer();
@@ -941,7 +937,7 @@ namespace Pacmio
 
         #endregion Intrinsic Data Prepare before Technical Analysis
 
-        public DateTime EarliestTime => Contract.BarTableEarliestTime;
+        public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
@@ -1082,7 +1078,7 @@ namespace Pacmio
                     BarTableFileData.Bars[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
 
             if (BarTableFileData.EarliestTime < EarliestTime)
-                BarTableFileData.EarliestTime = Contract.BarTableEarliestTime;
+                BarTableFileData.EarliestTime = EarliestTime;
 
             if (BarTableFileData.LastUpdateTime < LastDownloadRequestTime)
                 BarTableFileData.LastUpdateTime = LastDownloadRequestTime;

@@ -94,7 +94,7 @@ namespace Pacmio
                 {
                     if (i.Item2  is Contract c) 
                     {
-                        if (c is ITradable it)
+                        if (c is IBusiness it)
                         {
                             Console.WriteLine("Rank " + i.Key + ": " + c.Name + "\t" + "\t" + it.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
                             if (!IB.Client.SubscriptionOverflow)

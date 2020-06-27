@@ -185,6 +185,7 @@ namespace Pacmio
             {
                 Contract[] list = Values.ToArray();
                 list.SerializeJsonFile(FileName);
+                Parallel.ForEach(list, c => c.SaveMarketData());
             }
         }
 
@@ -192,8 +193,11 @@ namespace Pacmio
         {
             var list = Serialization.DeserializeJsonFile<Contract[]>(FileName);
             if (list is null) return;
+
             Parallel.ForEach(list, c => {
-                c.TickStatus = MarketTickStatus.Unknown;
+                c.LoadMarketData();
+               
+                c.MarketData.Status = MarketTickStatus.Unknown;
                 /*
                 c.DerivativeTypes = new HashSet<string>();
                 c.ValidExchanges = new HashSet<string>();
@@ -202,6 +206,12 @@ namespace Pacmio
                 if (c is ITradable it && it.TradingPeriods is null) 
                     it.TradingPeriods = new MultiPeriod();
                 */
+                /*
+                if(c is IHistoricalBar ihb) 
+                {
+                    ihb.DividendTable = new Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)>();
+                    ihb.SplitTable = new Dictionary<DateTime, (DataSource DataSource, double Split)>();
+                }*/
                 GetOrAdd(c);
             });
         }

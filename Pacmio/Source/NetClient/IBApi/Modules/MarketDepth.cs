@@ -31,8 +31,6 @@ namespace Pacmio.IB
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
 
-                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
-
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
                 string right = "";
@@ -57,7 +55,7 @@ namespace Pacmio.IB
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // Right
                     multiplier, // Multiplier
-                    useSmart ? "SMART" : exchangeCode, // "ISLAND" exchange,
+                    c.SmartExchangeRoute ? "SMART" : exchangeCode, // "ISLAND" exchange,
                     exchangeCode, // primaryExch,
                     c.CurrencyCode, // USD / currency,
                     string.Empty, // LocalSymbol

@@ -77,7 +77,7 @@ namespace Pacmio
                     NumericColumn sc when sc == Column_Quantity => Quantity,
                     NumericColumn sc when sc == Column_AveragePrice => AveragePrice,
                     NumericColumn dc when dc == Column_Value => Value,
-                    NumericColumn dc when dc == Contract.Column_Last => Contract.Price,
+                    NumericColumn dc when dc == Contract.Column_Last => Contract.MarketData.LastPrice,
                     NumericColumn dc when dc == Column_PNL => 20,
 
                     _ => null,

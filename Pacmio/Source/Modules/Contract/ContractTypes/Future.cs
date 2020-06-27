@@ -34,7 +34,7 @@ namespace Pacmio
      */
 
     [Serializable, DataContract(Name = "Future")]
-    public class Future : Contract, ITradable
+    public class Future : Contract, IBusiness
     {
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "FUTURE";
@@ -43,7 +43,16 @@ namespace Pacmio
         public override string TypeFullName => "Future";
 
         public string ISIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool SmartExchangeRoute { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public override void LoadMarketData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveMarketData()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool Equals(BusinessInfo other)
         {

@@ -121,8 +121,6 @@ namespace Pacmio.IB
                 DataRequestID = requestId;
                 active_HistoricalDataBarTable = bt;
 
-                bool useSmart = c is ITradable it && it.SmartExchangeRoute;
-
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
                 string right = "";
@@ -146,7 +144,7 @@ namespace Pacmio.IB
                     (strike == 0) ? "0" : strike.ToString("0.0###"),
                     right, // 7
                     multiplier, // 8
-                    useSmart ? "SMART" : exchangeCode, // "ISLAND" exchange,
+                    c.SmartExchangeRoute ? "SMART" : exchangeCode, // "ISLAND" exchange,
                     exchangeCode, // primaryExch,
                     c.CurrencyCode, // currency,
                     "", // LocalSymbol / 12 Judy the name

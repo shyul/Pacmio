@@ -26,7 +26,7 @@ namespace Pacmio
         (DataSource Source, string Param, double Value, double AdjValue)>;
 
     [Serializable, DataContract]
-    public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<ITradable>, IEquatable<string>
+    public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>
     {
         public BusinessInfo(string isin)
         {
@@ -158,48 +158,6 @@ namespace Pacmio
             .OrderBy(n => n.Key.Time)
             .ThenBy(n => n.Value.Source);
 
-        public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
-        {
-            MultiPeriod<(double Price, double Volume)> list = new MultiPeriod<(double Price, double Volume)>();
-
-            var split_dividend_list = FundamentalData.Where(n =>
-            (n.Key.Type == FundamentalDataType.Split || n.Key.Type == FundamentalDataType.DividendPercent) &&
-            n.Key.Freq == Frequency.Daily &&
-            n.Value.Source == DataSource.Quandl).
-            OrderByDescending(n => n.Key.Time);
-
-            DateTime latestTime = DateTime.MaxValue;
-            double adj_price = 1;
-            double adj_vol = 1;
-
-            foreach (var pair in split_dividend_list) 
-            {
-                DateTime time = pair.Key.Time;
-                double value = pair.Value.Value;
-
-                //Console.WriteLine("->> Loading: " + time + " / " + pair.Key.Type + " / " + pair.Value.Value);
-
-                if (pair.Key.Type == FundamentalDataType.Split && value != 1) 
-                {
-                    list.Add(time, latestTime, (adj_price, adj_vol));
-                    adj_price /= value;
-                    adj_vol /= value;
-                    latestTime = time;
-                }
-
-                if (pair.Key.Type == FundamentalDataType.DividendPercent && value != 0 && includeDividend)
-                {
-                    list.Add(time, latestTime, (adj_price, adj_vol));
-                    adj_price *= 1 / (1 + value);
-                    latestTime = time;
-                }
-            }
-
-            list.Add(latestTime, DateTime.MinValue, (adj_price, adj_vol));
-
-            return list;
-        }
-
         // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/introduction-to-linq-queries
         // The actual execution of the query is deferred until you iterate over the query variable in a foreach statement. 
         // This concept is referred to as deferred execution and is demonstrated in the following example:
@@ -254,13 +212,13 @@ namespace Pacmio
         #region Equality
 
         public bool Equals(BusinessInfo other) => ISIN == other.ISIN;
-        public bool Equals(ITradable other) => ISIN == other.ISIN;
+        public bool Equals(IBusiness other) => ISIN == other.ISIN;
         public bool Equals(string other) => ISIN == other;
 
         public static bool operator ==(BusinessInfo s1, BusinessInfo s2) => s1.Equals(s2);
         public static bool operator !=(BusinessInfo s1, BusinessInfo s2) => !s1.Equals(s2);
-        public static bool operator ==(BusinessInfo s1, ITradable s2) => s1.Equals(s2);
-        public static bool operator !=(BusinessInfo s1, ITradable s2) => !s1.Equals(s2);
+        public static bool operator ==(BusinessInfo s1, IBusiness s2) => s1.Equals(s2);
+        public static bool operator !=(BusinessInfo s1, IBusiness s2) => !s1.Equals(s2);
         public static bool operator ==(BusinessInfo s1, string s2) => s1.Equals(s2);
         public static bool operator !=(BusinessInfo s1, string s2) => !s1.Equals(s2);
 
@@ -270,7 +228,7 @@ namespace Pacmio
                 return this is null;
             else if (obj is BusinessInfo bi)
                 return Equals(bi);
-            else if (obj is ITradable tr)
+            else if (obj is IBusiness tr)
                 return Equals(tr);
             else if (obj is string isin)
                 return Equals(isin);

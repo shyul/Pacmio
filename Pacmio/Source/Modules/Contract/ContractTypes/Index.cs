@@ -54,7 +54,7 @@ namespace Pacmio
     [Serializable, DataContract(Name = "Index")]
     public class Index : Contract
     {
-        public Index(string name, Exchange exchange) 
+        public Index(string name, Exchange exchange)
         {
             Name = name;
             Exchange = exchange;
@@ -66,6 +66,17 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Index";
 
+        [IgnoreDataMember]
+        public override string MarketDataFileName => MarketDataFilePath + "^" + Name + ".json";
 
+        public override void LoadMarketData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveMarketData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

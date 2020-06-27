@@ -30,8 +30,8 @@ namespace Pacmio
 
         #region URLs
 
-        private static string EOD_FULL_URL => "https://www.quandl.com/api/v3/databases/EOD/data?api_key=" + Key;
-        private static string EOD_LAST_DAY_URL => "https://www.quandl.com/api/v3/databases/EOD/data?download_type=partial&api_key=" + Key;
+        //private static string EOD_FULL_URL => "https://www.quandl.com/api/v3/databases/EOD/data?api_key=" + Key;
+        //private static string EOD_LAST_DAY_URL => "https://www.quandl.com/api/v3/databases/EOD/data?download_type=partial&api_key=" + Key;
         private static string DailyBarURL(string symbol) => "https://www.quandl.com/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?api_key=" + Key;
         private static string DailyBarURL(string symbol, Period period) => "https://www.quandl.com/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?start_date=" + period.Start.ToString("yyyy-MM-dd") + "&end_date=" + period.Stop.ToString("yyyy-MM-dd") + "&api_key=" + Key;
 
@@ -79,46 +79,26 @@ namespace Pacmio
                                         double low = fields[3].ToDouble(0);
                                         double volume = fields[5].ToDouble(0);
 
-                                        double dividend_percent = fields[6].ToDouble(0) / close;
-                                        double split = fields[7].ToDouble(1);
+                                        //double dividend_percent = fields[6].ToDouble(0) / close;
+                                        //double split = fields[7].ToDouble(1);
 
                                         TableList.Inbound(new BarData(
                                              bt, DataSource.Quandl, time, ts,
                                              open, high, low, close, volume, false));
 
                                         //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                        if (dividend_percent != 0 || split != 1)
+                                        if (c.MarketData is StockData sd)
                                         {
-                                            (bool valid, BusinessInfo bi) = c.GetBusinessInfo();
-                                            if (valid)
+                                            double dividend = fields[6].ToDouble(0);
+                                            if (dividend != 0)
                                             {
-                                                if (dividend_percent != 0)
-                                                {
-                                                    (FundamentalDataType Type, DateTime Time, Frequency Freq) info = (FundamentalDataType.DividendPercent, time, Frequency.Daily);
-                                                    lock (bi.FundamentalData)
-                                                    {
-                                                        if (!bi.FundamentalData.ContainsKey(info))
-                                                            bi.FundamentalData[info] = (DataSource.Quandl, "", dividend_percent, dividend_percent);
-                                                        else
-                                                            bi.FundamentalData[info] = (DataSource.Quandl, bi.FundamentalData[info].Param, dividend_percent, bi.FundamentalData[info].AdjValue);
+                                                sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
+                                            }
 
-                                                        bi.IsModified = true;
-                                                    }
-                                                }
-
-                                                if (split != 1)
-                                                {
-                                                    (FundamentalDataType Type, DateTime Time, Frequency Freq) info = (FundamentalDataType.Split, time, Frequency.Daily);
-                                                    lock (bi.FundamentalData)
-                                                    {
-                                                        if (!bi.FundamentalData.ContainsKey(info))
-                                                            bi.FundamentalData[info] = (DataSource.Quandl, "", split, split);
-                                                        else
-                                                            bi.FundamentalData[info] = (DataSource.Quandl, bi.FundamentalData[info].Param, split, split);
-
-                                                        bi.IsModified = true;
-                                                    }
-                                                }
+                                            double split = fields[7].ToDouble(1);
+                                            if (split != 1)
+                                            {
+                                                sd.SplitTable[time] = (DataSource.Quandl, split);
                                             }
                                         }
                                     }
@@ -221,8 +201,6 @@ namespace Pacmio
                                 if (close > 0)
                                 {
                                     DateTime time = DateTime.Parse(fields[1]);
-                                    double dividend_percent = fields[7].ToDouble(0) / close;
-                                    double split = fields[8].ToDouble(1);
 
                                     if (!btd.Bars.ContainsKey(time) || btd.Bars[time].SRC > DataSource.Quandl)
                                     {
@@ -237,36 +215,18 @@ namespace Pacmio
                                     }
 
                                     //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                    if ((dividend_percent != 0 || split != 1) && currentContract is Stock si)
+                                    if (currentContract.MarketData is StockData sd)
                                     {
-                                        (bool valid, BusinessInfo bi) = si.GetBusinessInfo();
-                                        if (valid)
+                                        double dividend = fields[6].ToDouble(0);
+                                        if (dividend != 0)
                                         {
-                                            if (dividend_percent != 0)
-                                            {
-                                                (FundamentalDataType Type, DateTime Time, Frequency Freq) info = (FundamentalDataType.DividendPercent, time, Frequency.Daily);
-                                                lock (bi.FundamentalData)
-                                                {
-                                                    if (!bi.FundamentalData.ContainsKey(info))
-                                                        bi.FundamentalData[info] = (DataSource.Quandl, "", dividend_percent, dividend_percent);
-                                                    else
-                                                        bi.FundamentalData[info] = (DataSource.Quandl, bi.FundamentalData[info].Param, dividend_percent, bi.FundamentalData[info].AdjValue);
-                                                    bi.IsModified = true;
-                                                }
-                                            }
+                                            sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
+                                        }
 
-                                            if (split != 1)
-                                            {
-                                                (FundamentalDataType Type, DateTime Time, Frequency Freq) info = (FundamentalDataType.Split, time, Frequency.Daily);
-                                                lock (bi.FundamentalData)
-                                                {
-                                                    if (!bi.FundamentalData.ContainsKey(info))
-                                                        bi.FundamentalData[info] = (DataSource.Quandl, "", split, split);
-                                                    else
-                                                        bi.FundamentalData[info] = (DataSource.Quandl, bi.FundamentalData[info].Param, split, split);
-                                                    bi.IsModified = true;
-                                                }
-                                            }
+                                        double split = fields[7].ToDouble(1);
+                                        if (split != 1)
+                                        {
+                                            sd.SplitTable[time] = (DataSource.Quandl, split);
                                         }
                                     }
                                 }
@@ -287,36 +247,30 @@ namespace Pacmio
             Log.Print("Job done!! Hooray!\n" + CollectionTool.ToString(Unknown) + "\n");
         }
 
-        public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, IProgress<float> progress, CancellationTokenSource cts)
+        public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, CancellationTokenSource cts, IProgress<float> progress)
         {
             Dictionary<(string symbol, DateTime time), string> Lines = new Dictionary<(string symbol, DateTime time), string>();
-            //HashSet<string> Symbols = new HashSet<string>();
+            HashSet<string> Symbols = new HashSet<string>();
 
             long totalSize = 0;
 
             foreach (string file in EODFiles)
-            {
                 totalSize += new FileInfo(file).Length;
-
-            }
 
             long byteread = 0;
             long pt = 0;
 
             foreach (string file in EODFiles)
             {
+                if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                 Console.WriteLine("loading: " + file);
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (StreamReader sr = new StreamReader(fs))
                 {
                     while (!sr.EndOfStream)
                     {
+                        if (cts is CancellationTokenSource cs2 && cs2.IsCancellationRequested) break;
                         string line = sr.ReadLine();
-
-                        byteread += line.Length + 1;
-
-                        float percent = byteread * 100.0f / totalSize;
-
                         try
                         {
                             string[] fields = line.Split(',');
@@ -324,6 +278,8 @@ namespace Pacmio
                             if (fields.Length == 14)
                             {
                                 string symbol = fields[0];
+                                Symbols.CheckAdd(symbol);
+
                                 DateTime time = DateTime.Parse(fields[1]);
 
                                 if (!Lines.ContainsKey((symbol, time)))
@@ -338,7 +294,8 @@ namespace Pacmio
                             Console.WriteLine("line error: " + line + " | " + e.ToString());
                         }
 
-                        progress.Report(percent);
+                        byteread += line.Length + 1;
+                        progress.Report(byteread * 100.0f / totalSize);
                     }
                 }
 
@@ -362,6 +319,14 @@ namespace Pacmio
                     progress.Report(percent);
                     file.WriteLine(line.Value);
                 }
+            }
+
+            using (var fs = new FileStream(mergedFile.Replace(".csv", "_Symbols.csv"), FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            using (StreamWriter file = new StreamWriter(fs))
+            {
+                //StringBuilder sb = new StringBuilder();
+                foreach (string s in Symbols) file.WriteLine(s);//sb.Append(s + ",");
+                //file.WriteLine(sb);
             }
 
             Console.WriteLine("Job Completed.");
