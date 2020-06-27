@@ -28,26 +28,28 @@ namespace Pacmio
         /// </summary>
         private static readonly Dictionary<string, BusinessInfo> List = new Dictionary<string, BusinessInfo>();
 
-        public static (bool, BusinessInfo) GetOrAdd(IBusiness it) => GetOrAdd(it.ISIN);
+        private static string BusinessFileName(string isin)
+        {
+            string path = Root.ResourcePath + "BusinessData\\" + isin.Substring(0, 2) + "\\";
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path + isin;
+        }
 
-        public static (bool, BusinessInfo) GetOrAdd(string isin)
+        public static BusinessInfo GetOrAdd(string isin)
         {
             isin = isin.Trim();
 
             if (isin.Length < 11)
-                return (false, null);
-            else
+                return null;
+            else if (!List.ContainsKey(isin))
             {
-                lock (List)
-                    if (!List.ContainsKey(isin))
-                    {
-                        string fileName = FileName(isin);
-                        BusinessInfo bi = (!File.Exists(fileName)) ? new BusinessInfo(isin) : Serialization.DeserializeJsonFile<BusinessInfo>(fileName);
-                        bi.IsModified = false;
-                        List.Add(isin, bi);
-                    }
-                return (true, List[isin]);
+                string fileName = BusinessFileName(isin);
+                BusinessInfo bi = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
+                List.Add(isin, bi);
+                return bi;
             }
+            else
+                return List[isin];
         }
 
         /// <summary>
@@ -67,36 +69,29 @@ namespace Pacmio
 
         private static string IndustrySectorsFile => Root.ResourcePath + @"IndustrySectors.csv";
 
-        public static string FileName(string isin)
-        {
-            string path = Root.ResourcePath + "BusinessData\\" + isin.Substring(0, 2) + "\\";
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path + isin;
-        }
+
 
         public static void Load()
         {
             lock (IndustrySectors)
                 if (File.Exists(IndustrySectorsFile))
                 {
-                    using (var fs = new FileStream(IndustrySectorsFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (StreamReader sr = new StreamReader(fs))
-                    {
-                        string[] headers = sr.ReadLine().Split(',');
+                    using var fs = new FileStream(IndustrySectorsFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using StreamReader sr = new StreamReader(fs);
+                    string[] headers = sr.ReadLine().Split(',');
 
-                        if (headers.Length == 3)
-                            while (!sr.EndOfStream)
+                    if (headers.Length == 3)
+                        while (!sr.EndOfStream)
+                        {
+                            string[] fields = sr.CsvReadFields();
+
+                            if (fields.Length == 3)
                             {
-                                string[] fields = sr.CsvReadFields();
-
-                                if (fields.Length == 3)
-                                {
-                                    IndustrySectors.CheckAdd((fields[0].TrimCsvValueField(), fields[1].TrimCsvValueField()), fields[2].TrimCsvValueField());
-                                }
-                                else
-                                    throw new Exception("Error loading Industry Sectors File!");
+                                IndustrySectors.CheckAdd((fields[0].TrimCsvValueField(), fields[1].TrimCsvValueField()), fields[2].TrimCsvValueField());
                             }
-                    }
+                            else
+                                throw new Exception("Error loading Industry Sectors File!");
+                        }
                 }
         }
 
@@ -125,9 +120,9 @@ namespace Pacmio
             // Save Business Info
             lock (List)
             {
-                Parallel.ForEach(List.Values, (bi) =>
+                Parallel.ForEach(List.Values, bi =>
                 {
-                    if (bi.IsModified) bi.SerializeJsonFile(FileName(bi.ISIN));
+                    if (bi.IsModified) bi.SerializeJsonFile(BusinessFileName(bi.ISIN));
                     pt++;
                 });
             }

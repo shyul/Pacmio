@@ -84,20 +84,20 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, BusinessInfo bi) = GetBusinessInfo();
-
-                if (valid)
+                if (BusinessInfo is BusinessInfo bi)
                     if (bi.FullName.Length > 3)
                         m_fullName = bi.FullName;
                     else
+                    {
                         bi.FullName = m_fullName;
+                        bi.IsModified = true;
+                    }
 
                 return m_fullName;
             }
             set
             {
-                (bool valid, BusinessInfo bi) = GetBusinessInfo();
-                if (valid)
+                if (BusinessInfo is BusinessInfo bi)
                 {
                     if (bi.FullName.Length < 5) bi.FullName = value;
                     bi.IsModified = true;
@@ -109,7 +109,10 @@ namespace Pacmio
         [DataMember, Browsable(true), Category("IDs"), DisplayName("ISIN")]
         public string ISIN { get; set; } = string.Empty;
 
-        public (bool valid, BusinessInfo bi) GetBusinessInfo() => BusinessInfoList.GetOrAdd(this);
+        [IgnoreDataMember]
+        public BusinessInfo BusinessInfo => BusinessInfoList.GetOrAdd(ISIN);
+
+        //public (bool valid, BusinessInfo bi) GetBusinessInfo() => BusinessInfoList.GetOrAdd(this);
 
         #endregion Identification
 
@@ -135,7 +138,7 @@ namespace Pacmio
         [IgnoreDataMember]
         public BarTable DailyBarTable => this.GetTable(BarFreq.Daily, BarType.Trades);
 
-        public double ClosePrice(DateTime date) { return DailyBarTable.LastClose; }
+        //public double ClosePrice(DateTime date) { return DailyBarTable.LastClose; }
 
         #endregion Historical Bar
 

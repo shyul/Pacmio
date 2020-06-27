@@ -151,7 +151,7 @@ namespace Pacmio
 
         public static IProgress<float> DownloadProgress { get; private set; }
 
-        private static int DownloadTimeout { get; set; } = 3000; // 5 minutes
+        //private static int DownloadTimeout { get; set; } = 3000; // 5 minutes
 
         private static readonly ConcurrentQueue<object> LocalRequestAction = new ConcurrentQueue<object>();
 

@@ -109,18 +109,30 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, CancellationTokenSource cts, IProgress<float> progress)
         {
-            var existing_symbols = GetList(symbols).Select(n => n.Name);
-            var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
+            //Console.WriteLine("GetOrFetch: Listing existing_symbols");
+            HashSet<string> existing_symbols = new HashSet<string>();
+            GetList(symbols).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
 
-            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
+            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols");
+            var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
+            int count = non_existing_symbols.Count();
+
+            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols is done: " + count);
+
+            if (count > 0 && Root.IBConnected)
             {
-                int i = 0, count = non_existing_symbols.Count();
+                int i = 0;
                 foreach (string symbol in non_existing_symbols)
                 {
                     if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                     progress?.Report(100.0f * i / count);
                     Thread.Sleep(10);
-                    Fetch(symbol, cts);
+                    Contract[] clist = Fetch(symbol, cts);
+                    foreach (Contract c in clist)
+                    {
+                        if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
+                        Fetch(c, cts);
+                    }
                     i++;
                 }
             }
@@ -130,18 +142,30 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
         {
-            var existing_symbols = GetList(symbols, countryCode).Select(n => n.Name);
-            var non_existing_symbols = symbols.Where(n => !existing_symbols.Contains(n));
+            //Console.WriteLine("GetOrFetch: Listing existing_symbols");
+            HashSet<string> existing_symbols = new HashSet<string>();
+            GetList(symbols, countryCode).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
 
-            if (non_existing_symbols.Count() > 0 && Root.IBConnected)
+            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols");
+            var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
+            int count = non_existing_symbols.Count();
+
+            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols is done: " + count);
+
+            if (count > 0 && Root.IBConnected)
             {
-                int i = 0, count = non_existing_symbols.Count();
+                int i = 0;
                 foreach (string symbol in non_existing_symbols)
                 {
                     if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                     progress?.Report(100.0f * i / count);
                     Thread.Sleep(10);
-                    Fetch(symbol, cts);
+                    Contract[] clist = Fetch(symbol, cts);
+                    foreach(Contract c in clist)
+                    {
+                        if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
+                        Fetch(c, cts);
+                    }
                     i++;
                 }
             }
@@ -239,19 +263,18 @@ namespace Pacmio
 
                 switch (c)
                 {
-                    case Stock si:
-                        (bool ciValid, BusinessInfo ci) = BusinessInfoList.GetOrAdd(si);
-                        string cusip = (ciValid) ? ci.CUSIP : string.Empty;
+                    case Stock stk:
+                        string cusip = (stk.BusinessInfo is BusinessInfo bi) ? bi.CUSIP : string.Empty;
                         string[] items = {
-                            si.Status.ToString(),
-                            si.TypeName.ToString(),
-                            si.ConId.ToString(),
-                            si.Name.CsvEncode(),
-                            si.Exchange.ToString(),
-                            si.ExchangeSuffix.CsvEncode(),
-                            si.FullName.CsvEncode(),
-                            CollectionTool.ToString(si.NameSuffix),
-                            si.ISIN.CsvEncode(),
+                            stk.Status.ToString(),
+                            stk.TypeName.ToString(),
+                            stk.ConId.ToString(),
+                            stk.Name.CsvEncode(),
+                            stk.Exchange.ToString(),
+                            stk.ExchangeSuffix.CsvEncode(),
+                            stk.FullName.CsvEncode(),
+                            CollectionTool.ToString(stk.NameSuffix),
+                            stk.ISIN.CsvEncode(),
                             cusip.CsvEncode(),
                         };
                         sb.AppendLine(string.Join(",", items));
@@ -295,47 +318,39 @@ namespace Pacmio
                             case ("STOCK"):
                                 if (fields[4] != "VALUE")
                                 {
-                                    Exchange exchange = fields[4].ParseEnum<Exchange>(); //(Exchange)Enum.Parse(typeof(Exchange), fields[4]);
+                                    Exchange exchange = fields[4].ParseEnum<Exchange>();
+                                    Stock stk = GetOrAdd(new Stock(fields[3].TrimCsvValueField(), exchange) { Status = ContractStatus.Unknown });
 
-                                    Stock si = GetOrAdd(new Stock(fields[3].TrimCsvValueField(), exchange));
+                                    Console.Write(stk.Name + ". ");
 
-                                    Console.Write(si.Name + ". ");
-
-                                    if (si.Status != ContractStatus.Alive)
+                                    if (stk.Status != ContractStatus.Alive)
                                     {
-                                        si.Status = fields[0].ParseEnum<ContractStatus>(); // ContractStatus.Unknown;
-                                        si.ConId = fields[2].TrimCsvValueField().ToInt32(0);
-                                        si.ExchangeSuffix = fields[5].TrimCsvValueField();
-                                        si.ISIN = fields[8].TrimCsvValueField();
+                                        // stk.Status = fields[0].ParseEnum<ContractStatus>(); // ContractStatus.Unknown;
+                                        stk.ConId = fields[2].TrimCsvValueField().ToInt32(0);
+                                        stk.ExchangeSuffix = fields[5].TrimCsvValueField();
+                                        stk.ISIN = fields[8].TrimCsvValueField();
 
-                                        if (si.ISIN.Length != 12 && si.ISIN.Length > 0)
-                                            throw new Exception(si.ISIN);
+                                        if (stk.ISIN.Length != 12 && stk.ISIN.Length > 0)
+                                            throw new Exception(stk.ISIN);
 
                                         string fullName = fields[6].TrimCsvValueField();
-                                        CollectionTool.FromString(si.NameSuffix, fields[7].TrimCsvValueField());
+                                        CollectionTool.FromString(stk.NameSuffix, fields[7].TrimCsvValueField());
+                                        stk.FullName = fullName;
 
-                                        (bool ciValid, BusinessInfo bi) = BusinessInfoList.GetOrAdd(si);
-
-                                        if (ciValid)
+                                        if (stk.BusinessInfo is BusinessInfo bi)
                                         {
-                                            bi.FullName = fullName;
                                             bi.CUSIP = fields[9].TrimCsvValueField();
                                             bi.IsModified = true;
 
                                             if (bi.CUSIP.Length != 9 && bi.CUSIP.Length > 0)
                                                 throw new Exception("Invalid CUSIP: " + bi.CUSIP);
                                         }
-                                        else
-                                        {
-                                            si.FullName = fullName;
-                                        }
                                     }
                                     else
                                     {
-                                        if (si.ISIN.Length < 2) si.ISIN = fields[8].TrimCsvValueField();
-                                        if (si.FullName.Length < 4) si.FullName = fields[6].TrimCsvValueField();
+                                        if (stk.ISIN.Length < 2) stk.ISIN = fields[8].TrimCsvValueField();
+                                        if (stk.FullName.Length < 4) stk.FullName = fields[6].TrimCsvValueField();
                                     }
-
                                 }
                                 break;
                         }

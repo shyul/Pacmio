@@ -201,7 +201,7 @@ namespace Pacmio
         #region Status and Market Data
 
         [IgnoreDataMember]
-        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalBars\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
+        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
 
         [IgnoreDataMember]
         public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";

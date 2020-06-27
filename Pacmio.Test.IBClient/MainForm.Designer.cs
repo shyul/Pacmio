@@ -119,6 +119,7 @@ namespace TestClient
             this.BtnRequestPnL = new System.Windows.Forms.Button();
             this.TreeViewAccount = new System.Windows.Forms.TreeView();
             this.tabFileData = new System.Windows.Forms.TabPage();
+            this.BtnUpdateContracts = new System.Windows.Forms.Button();
             this.BtnImportSymbols = new System.Windows.Forms.Button();
             this.BtnDownloadBarTable = new System.Windows.Forms.Button();
             this.BtnReDownloadBarTable = new System.Windows.Forms.Button();
@@ -173,7 +174,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnUpdateContracts = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -1114,9 +1114,19 @@ namespace TestClient
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
             // 
+            // BtnUpdateContracts
+            // 
+            this.BtnUpdateContracts.Location = new System.Drawing.Point(547, 386);
+            this.BtnUpdateContracts.Name = "BtnUpdateContracts";
+            this.BtnUpdateContracts.Size = new System.Drawing.Size(120, 23);
+            this.BtnUpdateContracts.TabIndex = 56;
+            this.BtnUpdateContracts.Text = "Update Contracts";
+            this.BtnUpdateContracts.UseVisualStyleBackColor = true;
+            this.BtnUpdateContracts.Click += new System.EventHandler(this.BtnUpdateContracts_Click);
+            // 
             // BtnImportSymbols
             // 
-            this.BtnImportSymbols.Location = new System.Drawing.Point(523, 302);
+            this.BtnImportSymbols.Location = new System.Drawing.Point(547, 357);
             this.BtnImportSymbols.Name = "BtnImportSymbols";
             this.BtnImportSymbols.Size = new System.Drawing.Size(120, 23);
             this.BtnImportSymbols.TabIndex = 55;
@@ -1248,7 +1258,7 @@ namespace TestClient
             // 
             // BtnExportContracts
             // 
-            this.BtnExportContracts.Location = new System.Drawing.Point(523, 360);
+            this.BtnExportContracts.Location = new System.Drawing.Point(547, 289);
             this.BtnExportContracts.Name = "BtnExportContracts";
             this.BtnExportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnExportContracts.TabIndex = 6;
@@ -1258,7 +1268,7 @@ namespace TestClient
             // 
             // BtnImportContracts
             // 
-            this.BtnImportContracts.Location = new System.Drawing.Point(523, 331);
+            this.BtnImportContracts.Location = new System.Drawing.Point(547, 260);
             this.BtnImportContracts.Name = "BtnImportContracts";
             this.BtnImportContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnImportContracts.TabIndex = 5;
@@ -1677,16 +1687,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnUpdateContracts
-            // 
-            this.BtnUpdateContracts.Location = new System.Drawing.Point(523, 411);
-            this.BtnUpdateContracts.Name = "BtnUpdateContracts";
-            this.BtnUpdateContracts.Size = new System.Drawing.Size(120, 23);
-            this.BtnUpdateContracts.TabIndex = 56;
-            this.BtnUpdateContracts.Text = "Update Contracts";
-            this.BtnUpdateContracts.UseVisualStyleBackColor = true;
-            this.BtnUpdateContracts.Click += new System.EventHandler(this.BtnUpdateContracts_Click);
             // 
             // MainForm
             // 

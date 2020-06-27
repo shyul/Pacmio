@@ -195,16 +195,15 @@ namespace Pacmio
                                                 c.ConId = conId;
                                                 c.ExchangeSuffix = exSuffix;
 
-                                                if (c is IBusiness it)
+                                                if (c is IBusiness ib)
                                                 {
-                                                    it.ISIN = ISIN;
-                                                    (bool ciValid, BusinessInfo ci) = BusinessInfoList.GetOrAdd(it);
+                                                    ib.ISIN = ISIN;
 
-                                                    if (ciValid)
+                                                    if (ib.BusinessInfo is BusinessInfo bi)
                                                     {
-                                                        ci.FullName = businessName;
-                                                        ci.FullNameLocked = true;
-                                                        if (ci.CUSIP.Length == 0) ci.CUSIP = CUSIP;
+                                                        bi.FullName = businessName;
+                                                        bi.FullNameLocked = true;
+                                                        if (bi.CUSIP.Length == 0) bi.CUSIP = CUSIP;
                                                     }
                                                 }
 

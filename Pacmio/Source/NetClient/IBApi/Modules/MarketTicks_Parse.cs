@@ -335,7 +335,7 @@ namespace Pacmio.IB
                                 TicksList[c] = new StringBuilder();
                             else if(TicksList[c].Length > 16e3)
                             {
-                                string path = Root.ResourcePath + "HistoricalBars\\" + c.Type.ToString() + "\\" + c.Exchange.ToString() + "\\Ticks\\";
+                                string path = Root.ResourcePath + "HistoricalData\\" + c.Type.ToString() + "\\" + c.Exchange.ToString() + "\\Ticks\\";
                                 if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                                 File.WriteAllText(path + "$" + c.Name + ".csv", TicksList[c].ToString());
                             }
@@ -436,8 +436,8 @@ namespace Pacmio.IB
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
 
-            int tickerId = fields[1].ToInt32(-1);
-            long epoch = fields[2].ToInt64(0); // (3)"45"-(4)"1580146441"
+            //int tickerId = fields[1].ToInt32(-1);
+            //long epoch = fields[2].ToInt64(0); // (3)"45"-(4)"1580146441"
 
 
 

@@ -193,7 +193,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\ICombo.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IDeltaNeutral.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IOption.cs" />
-    <Compile Include="Source\Modules\Fundamental\BusinessInfo.cs" />
+    <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfo.cs" />
     <Compile Include="Source\Modules\BarTable\ChartList.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
@@ -257,14 +257,14 @@
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
-    <Compile Include="Source\Modules\Fundamental\BusinessInfoList.cs" />
+    <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfoList.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\ReutersXml.cs" />
     <Compile Include="Source\Modules\BarTable\Types\DataSource.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\NetClient\Quandl.cs" />
-    <Compile Include="Source\Modules\Fundamental\Fundamental.cs" />
+    <Compile Include="Source\Modules\Contract\BusinessInfo\Fundamental.cs" />
     <Compile Include="Source\Modules\Contract\Types\Contract.cs" />
     <Compile Include="Source\Modules\Contract\Types\SymbolHistory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

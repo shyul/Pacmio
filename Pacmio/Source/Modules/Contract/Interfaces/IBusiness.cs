@@ -18,8 +18,10 @@ namespace Pacmio
 
         string TypeName { get; }
 
+        string FullName { get; }
+
         string ISIN { get; set; }
 
-        (bool valid, BusinessInfo bi) GetBusinessInfo();
+        BusinessInfo BusinessInfo { get; }
     }
 }

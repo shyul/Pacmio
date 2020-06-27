@@ -40,6 +40,8 @@ namespace Pacmio
 
         public string LastTradeDateOrContractMonth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public BusinessInfo BusinessInfo => throw new NotImplementedException();
+
         public override void LoadMarketData()
         {
             throw new NotImplementedException();
@@ -55,10 +57,7 @@ namespace Pacmio
             throw new NotImplementedException();
         }
 
-        public (bool valid, BusinessInfo bi) GetBusinessInfo()
-        {
-            throw new NotImplementedException();
-        }
+
 
     }
 }

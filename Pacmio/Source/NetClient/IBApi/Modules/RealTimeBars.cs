@@ -95,6 +95,7 @@ namespace Pacmio.IB
                 Contract c = ActiveRealTimeBars[requestId];
 
                 long epochTime = fields[3].ToInt64(); // This is Zulu (UTC) Time.
+                /*
                 double open = fields[4].ToDouble();
                 double high = fields[4].ToDouble();
                 double low = fields[4].ToDouble();
@@ -102,9 +103,9 @@ namespace Pacmio.IB
                 long volume = fields[3].ToInt64();
                 double wap = fields[4].ToDouble();
                 int count = fields[3].ToInt32();
-
+                */
                 DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.FromEpoch(epochTime), c.TimeZone);
-                Period p = new Period(time, time.AddSeconds(5));
+                //Period p = new Period(time, time.AddSeconds(5));
                 
                 // Emit BarTable update
 

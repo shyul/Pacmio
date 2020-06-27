@@ -65,7 +65,7 @@ namespace Pacmio
         {
             string prefix = "$";
             if (info.Contract.typeName == "INDEX") prefix = "^";
-            string path = Root.ResourcePath + "HistoricalBars\\" + info.Contract.typeName.ToString() + "\\" + info.Contract.exchange.ToString() + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
+            string path = Root.ResourcePath + "HistoricalData\\" + info.Contract.typeName.ToString() + "\\" + info.Contract.exchange.ToString() + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             return path + prefix + info.Contract.name + ".json";
         }

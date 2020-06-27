@@ -204,7 +204,7 @@ namespace Pacmio.IB
                 /*
                 foreach(var item in TicksList) 
                 {
-                    string path = Root.ResourcePath + "HistoricalBars\\" + item.Key.Type.ToString() + "\\" + item.Key.Exchange.ToString() + "\\Ticks\\";
+                    string path = Root.ResourcePath + "HistoricalData\\" + item.Key.Type.ToString() + "\\" + item.Key.Exchange.ToString() + "\\Ticks\\";
 
                     if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                     File.WriteAllText(path + "$" + item.Key.Name + ".csv", TicksList[item.Key].ToString());

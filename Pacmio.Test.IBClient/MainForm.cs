@@ -609,7 +609,7 @@ namespace TestClient
                             symbollist.AddRange(symbols);
                         }
 
-                        ContractList.GetOrFetch(symbollist, Cts, Progress);
+                        ContractList.GetOrFetch(symbollist, "US", Cts, Progress);
                     }
                 }, Cts.Token);
             }
