@@ -70,13 +70,13 @@ namespace Pacmio
 
         public static Contract Fetch(int conId, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(conId, cts);
 
-        public static Contract GetOrFetch(int conId, CancellationTokenSource cts = null)
+        public static Contract GetOrFetch(int conId, bool forceUpdate = false, CancellationTokenSource cts = null)
         {
             if (conId > 0)
             {
                 var list = GetList(conId);
 
-                if (list.Count() == 1)
+                if (list.Count() == 1 && !forceUpdate)
                     return list.First();
                 else if (Root.IBConnected)
                 {
@@ -94,13 +94,18 @@ namespace Pacmio
             return null;
         }
 
-        public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode, CancellationTokenSource cts = null)
+        public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode, bool forceUpdate = false, CancellationTokenSource cts = null)
         {
             var list = GetList(symbol, countryCode).Where(n => n.ConId > 0);
 
-            if (list.Count() == 0 && Root.IBConnected)
+            if ((list.Count() == 0 || forceUpdate) && Root.IBConnected)
             {
-                Fetch(symbol, cts);
+                Contract[] clist = Fetch(symbol, cts);
+                foreach (Contract c in clist)
+                {
+                    if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
+                    Fetch(c, cts);
+                }
                 return GetList(symbol, countryCode).Where(n => n.ConId > 0);
             }
             else
@@ -109,15 +114,11 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, CancellationTokenSource cts, IProgress<float> progress)
         {
-            //Console.WriteLine("GetOrFetch: Listing existing_symbols");
             HashSet<string> existing_symbols = new HashSet<string>();
             GetList(symbols).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
 
-            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols");
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
-
-            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols is done: " + count);
 
             if (count > 0 && Root.IBConnected)
             {
@@ -142,15 +143,11 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
         {
-            //Console.WriteLine("GetOrFetch: Listing existing_symbols");
             HashSet<string> existing_symbols = new HashSet<string>();
             GetList(symbols, countryCode).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
 
-            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols");
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
-
-            //Console.WriteLine("GetOrFetch: Listing non_existing_symbols is done: " + count);
 
             if (count > 0 && Root.IBConnected)
             {
@@ -193,6 +190,7 @@ namespace Pacmio
             {
                 if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                 Thread.Sleep(10);
+                Fetch(c.Name, cts);
                 Fetch(c, cts);
                 i++;
                 progress?.Report(i * 100.0f / count);
@@ -319,7 +317,7 @@ namespace Pacmio
                                 if (fields[4] != "VALUE")
                                 {
                                     Exchange exchange = fields[4].ParseEnum<Exchange>();
-                                    Stock stk = GetOrAdd(new Stock(fields[3].TrimCsvValueField(), exchange) { Status = ContractStatus.Unknown });
+                                    Stock stk = GetOrAdd(new Stock(fields[3].TrimCsvValueField(), exchange) { Status = ContractStatus.Unknown, UpdateTime = DateTime.MinValue });
 
                                     Console.Write(stk.Name + ". ");
 

@@ -133,7 +133,8 @@ namespace TestClient
         private void BtnGetContractInfo_Click(object sender, EventArgs e)
         {
             string symbol = TextBoxSingleContractName.Text.ToUpper();
-            ContractList.GetOrFetch(symbol, "US");
+            Cts = new CancellationTokenSource();
+            ContractList.GetOrFetch(symbol, "US", true, Cts);
         }
 
         #endregion Symbols

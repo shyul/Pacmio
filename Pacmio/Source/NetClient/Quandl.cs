@@ -55,7 +55,13 @@ namespace Pacmio
 
                 if (GetAll) period = new Period(period.Stop); // From now and onward
                 TimeSpan ts = bt.Frequency.Span;
-
+                /*
+                if (c.MarketData is StockData sd0) 
+                {
+                    sd0.DividendTable.Clear();
+                    sd0.SplitTable.Clear();
+                }*/
+          
                 try
                 {
                     using (MemoryStream stream = new MemoryStream(Client.DownloadData(url)))
@@ -92,12 +98,14 @@ namespace Pacmio
                                             double dividend = fields[6].ToDouble(0);
                                             if (dividend != 0)
                                             {
+                                                //Console.WriteLine("Add Dividend: " + dividend);
                                                 sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
                                             }
 
                                             double split = fields[7].ToDouble(1);
                                             if (split != 1)
                                             {
+                                                //Console.WriteLine("Add Split: " + split);
                                                 sd.SplitTable[time] = (DataSource.Quandl, split);
                                             }
                                         }
@@ -182,6 +190,13 @@ namespace Pacmio
                                 if (symbolList.ContainsKey(currentSymbolName))
                                 {
                                     currentContract = symbolList[currentSymbolName];
+
+                                    if (currentContract.MarketData is StockData sd0)
+                                    {
+                                        sd0.DividendTable.Clear();
+                                        sd0.SplitTable.Clear();
+                                    }
+
                                     btd = new BarTableFileData(currentContract, BarFreq.Daily, BarType.Trades);
                                     btdIsValid = true;
                                 }
@@ -217,15 +232,20 @@ namespace Pacmio
                                     //// Add Split and dividend to FundamentalData Table in BusinessInfo
                                     if (currentContract.MarketData is StockData sd)
                                     {
-                                        double dividend = fields[6].ToDouble(0);
+                                        double dividend = fields[7].ToDouble(0);
                                         if (dividend != 0)
                                         {
+                                            if (dividend < 0) throw new Exception("Split can't be: " + dividend);
+                                            //Console.WriteLine("Add Dividend: " + dividend);
                                             sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
                                         }
 
-                                        double split = fields[7].ToDouble(1);
+                                        double split = fields[8].ToDouble(1);
                                         if (split != 1)
                                         {
+                                            //Console.WriteLine("Add Split: " + split);
+
+                                            if (split <= 0) throw new Exception("Split can't be: " + split);
                                             sd.SplitTable[time] = (DataSource.Quandl, split);
                                         }
                                     }
