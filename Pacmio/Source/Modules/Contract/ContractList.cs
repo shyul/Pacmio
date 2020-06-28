@@ -12,9 +12,7 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.Serialization;
 using Xu;
-using System.Diagnostics.Contracts;
 
 namespace Pacmio
 {
@@ -100,12 +98,13 @@ namespace Pacmio
 
             if ((list.Count() == 0 || forceUpdate) && Root.IBConnected)
             {
-                Contract[] clist = Fetch(symbol, cts);
-                foreach (Contract c in clist)
-                {
-                    if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
-                    Fetch(c, cts);
-                }
+                var dataDownload = Fetch(symbol, cts).Where(n => n.Name == symbol);
+                if (dataDownload.Count() > 0)
+                    foreach (Contract c in dataDownload)
+                    {
+                        if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
+                        Fetch(c, cts);
+                    }
                 return GetList(symbol, countryCode).Where(n => n.ConId > 0);
             }
             else
@@ -115,7 +114,7 @@ namespace Pacmio
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, CancellationTokenSource cts, IProgress<float> progress)
         {
             HashSet<string> existing_symbols = new HashSet<string>();
-            GetList(symbols).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
+            GetList(symbols).Where(n => (DateTime.Now - n.UpdateTime).Days < 7).Select(n => n.Name).ToList().ForEach(n => existing_symbols.CheckAdd(n));
 
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
@@ -125,16 +124,26 @@ namespace Pacmio
                 int i = 0;
                 foreach (string symbol in non_existing_symbols)
                 {
-                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                    progress?.Report(100.0f * i / count);
-                    Thread.Sleep(10);
-                    Contract[] clist = Fetch(symbol, cts);
-                    foreach (Contract c in clist)
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested)
+                        break;
+                    else
                     {
-                        if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
-                        Fetch(c, cts);
+                        progress?.Report(100.0f * i / count);
+                        Thread.Sleep(10);
+                        if (Fetch(symbol, cts) is Contract[] cx)
+                        {
+                            var clist = cx.Where(n => (DateTime.Now - n.UpdateTime).Days > 6);
+                            foreach (Contract c in clist)
+                            {
+                                if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested)
+                                    break;
+                                else
+                                    Fetch(c, cts);
+                            }
+
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
 
@@ -143,36 +152,49 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
         {
-            HashSet<string> existing_symbols = new HashSet<string>();
-            GetList(symbols, countryCode).Select(n => n.Name).ToList().ForEach(n => existing_symbols.Add(n));
+            List<string> existing_symbols = new List<string>();
+            GetList(symbols, countryCode).Where(n => (DateTime.Now - n.UpdateTime).Days < 7).Select(n => n.Name).ToList().ForEach(n => existing_symbols.CheckAdd(n));
 
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
-
+            Console.WriteLine("non_existing_symbols.Count() = " + count);
             if (count > 0 && Root.IBConnected)
             {
                 int i = 0;
                 foreach (string symbol in non_existing_symbols)
                 {
-                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                    progress?.Report(100.0f * i / count);
-                    Thread.Sleep(10);
-                    Contract[] clist = Fetch(symbol, cts);
-                    foreach(Contract c in clist)
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested)
+                        break;
+                    else
                     {
-                        if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested) break;
-                        Fetch(c, cts);
+                        progress?.Report(100.0f * i / count);
+                        Thread.Sleep(10);
+                        if(Fetch(symbol, cts) is Contract[] cx) 
+                        {
+                            var clist = cx.Where(n => (DateTime.Now - n.UpdateTime).Days > 6);
+                            foreach (Contract c in clist)
+                            {
+                                if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested)
+                                    break;
+                                else
+                                    Fetch(c, cts);
+                            }
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
 
             return GetList(symbols, countryCode);
         }
 
+
+
         #endregion Fetch / Update
 
         #region Database Tools
+
+
 
         /// <summary>
         /// TODO: Test
@@ -218,7 +240,7 @@ namespace Pacmio
 
             Parallel.ForEach(list, c => {
                 //c.LoadMarketData();
-               
+
                 //c.MarketData.Status = MarketTickStatus.Unknown;
                 /*
                 c.DerivativeTypes = new HashSet<string>();
@@ -286,6 +308,79 @@ namespace Pacmio
             return sb.ToFile(fileName);
         }
 
+        /// <summary>
+        /// ftp://ftp.nasdaqtrader.com/symboldirectory/
+        /// nasdaqtraded.txt
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="cts"></param>
+        /// <param name="progress"></param>
+        public static void ImportNasdaq(string fileName, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            if (File.Exists(fileName))
+            {
+                var regexItem = new System.Text.RegularExpressions.Regex("^[A-Z0-9 ]*$");
+
+                long totalSize = new FileInfo(fileName).Length;
+                using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using StreamReader sr = new StreamReader(fs);
+                string[] headers = sr.ReadLine().Split('|');
+
+                long byteread = 0;
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    byteread += line.Length + 1;
+
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                    progress?.Report(byteread * 100.0f / totalSize);
+
+                    string[] fields = line.Split('|');
+
+                    //Console.WriteLine("fields.Length = " + fields.Length);
+                    if (fields.Length == 12 && (fields[5] == "Y" || fields[5] == "N") && fields[1] != "ZEXIT" && fields[1] != "ZIEXT" && fields[1] != "ZXIET")
+                    {
+                        bool isETF = fields[5] == "Y";
+
+                        string symbolName = fields[1];
+                        string fullName = fields[2];
+
+                        if (regexItem.IsMatch(symbolName)) 
+                        {
+                            fullName = fullName.Replace(" - Common Stock", "").Replace(" Common Stock", "");
+                        }
+
+                        symbolName = symbolName.Replace("$", " PR").Replace(".", " ");
+                        Exchange exchange = fields[3] switch
+                        {
+                            "N" => Exchange.NYSE,
+                            "P" => Exchange.ARCA,
+                            "Q" => Exchange.NASDAQ,
+                            "A" => Exchange.AMEX,
+                            "Z" => Exchange.BATS,
+                            "V" => Exchange.IEX,
+                            _ => throw new Exception("Unknown exchange"),
+                        };
+
+                        var searchList = GetOrFetch(symbolName, "US", false, cts).Where(n => n is Stock && n.Exchange == exchange);
+
+                        if(searchList.Count() > 0 && searchList.First() is Stock stk) 
+                        {
+                            stk.FullName = fullName;
+                            stk.IsETF = isETF;
+                        }
+
+                        //if (!regexItem.IsMatch(symbolName)) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
+                        //if(symbolName.Any(n => !char.IsLetterOrDigit(n))) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
+                    }
+
+
+                }
+            }
+            //Console.WriteLine("\nExchanges are: ");
+            //foreach(string s in exchangeTypes) { Console.Write(s + " ");
+        }
+
         public static void ImportCSV(string fileName, CancellationTokenSource cts, IProgress<float> progress)
         {
             long byteread = 0;
@@ -302,9 +397,9 @@ namespace Pacmio
                 {
                     string line = sr.ReadLine();
                     byteread += line.Length + 1;
-                    float percent = byteread * 100.0f / totalSize;
 
                     if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                    progress?.Report(byteread * 100.0f / totalSize);
 
                     string[] fields = line.CsvReadFields();
                     if (fields.Length == 10)
@@ -353,7 +448,7 @@ namespace Pacmio
                                 break;
                         }
                     }
-                    progress?.Report(percent);
+         
                 }
             }
         }

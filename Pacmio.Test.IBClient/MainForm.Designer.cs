@@ -174,6 +174,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnImportNasdaq = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -1097,6 +1098,7 @@ namespace TestClient
             // 
             // tabFileData
             // 
+            this.tabFileData.Controls.Add(this.BtnImportNasdaq);
             this.tabFileData.Controls.Add(this.BtnUpdateContracts);
             this.tabFileData.Controls.Add(this.BtnImportSymbols);
             this.tabFileData.Controls.Add(this.BtnDownloadBarTable);
@@ -1116,7 +1118,7 @@ namespace TestClient
             // 
             // BtnUpdateContracts
             // 
-            this.BtnUpdateContracts.Location = new System.Drawing.Point(547, 386);
+            this.BtnUpdateContracts.Location = new System.Drawing.Point(547, 414);
             this.BtnUpdateContracts.Name = "BtnUpdateContracts";
             this.BtnUpdateContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnUpdateContracts.TabIndex = 56;
@@ -1126,7 +1128,7 @@ namespace TestClient
             // 
             // BtnImportSymbols
             // 
-            this.BtnImportSymbols.Location = new System.Drawing.Point(547, 357);
+            this.BtnImportSymbols.Location = new System.Drawing.Point(547, 385);
             this.BtnImportSymbols.Name = "BtnImportSymbols";
             this.BtnImportSymbols.Size = new System.Drawing.Size(120, 23);
             this.BtnImportSymbols.TabIndex = 55;
@@ -1688,6 +1690,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnImportNasdaq
+            // 
+            this.BtnImportNasdaq.Location = new System.Drawing.Point(547, 356);
+            this.BtnImportNasdaq.Name = "BtnImportNasdaq";
+            this.BtnImportNasdaq.Size = new System.Drawing.Size(120, 23);
+            this.BtnImportNasdaq.TabIndex = 57;
+            this.BtnImportNasdaq.Text = "Import Nasdaq";
+            this.BtnImportNasdaq.UseVisualStyleBackColor = true;
+            this.BtnImportNasdaq.Click += new System.EventHandler(this.BtnImportNasdaq_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1886,5 +1898,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnLoadMultiHistoricalChart;
         private System.Windows.Forms.Button BtnImportSymbols;
         private System.Windows.Forms.Button BtnUpdateContracts;
+        private System.Windows.Forms.Button BtnImportNasdaq;
     }
 }

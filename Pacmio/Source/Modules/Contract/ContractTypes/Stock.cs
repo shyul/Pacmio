@@ -66,11 +66,16 @@ namespace Pacmio
         [IgnoreDataMember]
         public override MarketData MarketData => StockData;
 
+
+
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Stock";
+
+        [DataMember]
+        public bool IsETF { get; set; } = false;
 
         #endregion Ctor
 
@@ -99,7 +104,7 @@ namespace Pacmio
             {
                 if (BusinessInfo is BusinessInfo bi)
                 {
-                    if (bi.FullName.Length < 5) bi.FullName = value;
+                    bi.FullName = value;
                     bi.IsModified = true;
                 }
                 m_fullName = value;

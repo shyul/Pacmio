@@ -592,7 +592,7 @@ namespace TestClient
 
         private void BtnImportSymbols_Click(object sender, EventArgs e)
         {
-            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
+            Root.OpenFile.Filter = "Comma-separated values file (*.csv) | *.csv";
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
@@ -612,6 +612,19 @@ namespace TestClient
 
                         ContractList.GetOrFetch(symbollist, "US", Cts, Progress);
                     }
+                }, Cts.Token);
+            }
+        }
+
+        private void BtnImportNasdaq_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "Comma-separated values file (*.txt) | *.txt";
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                Cts = new CancellationTokenSource();
+                Task.Run(() => {
+                    string sourceFileName = Root.OpenFile.FileName;
+                    ContractList.ImportNasdaq(sourceFileName, Cts, Progress);
                 }, Cts.Token);
             }
         }
@@ -855,6 +868,7 @@ namespace TestClient
         {
             OrderManager.Request_CompleteOrders(false);
         }
+
 
 
 
