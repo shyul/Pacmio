@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Xu;
 using Xu.Chart;
 
@@ -30,9 +30,21 @@ namespace Pacmio
 
 
 
-        public static void GetWatchList() // Get it from the Market Scanner
+        public static void GetWatchList(IEnumerable<Stock> list, CancellationTokenSource cts, IProgress<float> progress) // Get it from the Market Scanner
         {
-        
+            int count = list.Count();
+            int i = 0;
+            foreach (Stock stk in list)
+            {
+                if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                BarTable bt = stk.GetTable(BarFreq.Daily, BarType.Trades);//, pd);
+                if (Root.IBConnected)
+                {
+                    bt.Reset(new Period(new DateTime(1900, 1, 1), DateTime.Now), cts, null);
+                }
+                i++;
+                progress?.Report(i * 100.0f / count);
+            }
         }
         
         public static void GetWatchList(List<Contract> list) 

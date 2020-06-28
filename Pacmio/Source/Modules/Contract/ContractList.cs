@@ -61,7 +61,7 @@ namespace Pacmio
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols, string countryCode)
             => GetList(symbols, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
 
-        private static IEnumerable<Contract> GetListByCountry(string countryCode)
+        public static IEnumerable<Contract> GetListByCountry(string countryCode)
             => Values.AsParallel().Where(val => Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode).Contains(val.Exchange));
 
         #region Fetch / Update

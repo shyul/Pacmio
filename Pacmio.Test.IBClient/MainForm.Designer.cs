@@ -49,7 +49,6 @@ namespace TestClient
             this.BtnChartsUpdateAll = new System.Windows.Forms.Button();
             this.BtnLoadHistoricalChart = new System.Windows.Forms.Button();
             this.tabContract = new System.Windows.Forms.TabPage();
-            this.BtnMatchSymbols = new System.Windows.Forms.Button();
             this.GroupBoxContractInfo = new System.Windows.Forms.GroupBox();
             this.TextBoxSymbolFullName = new System.Windows.Forms.TextBox();
             this.LbSymbolISIN = new System.Windows.Forms.Label();
@@ -109,7 +108,7 @@ namespace TestClient
             this.BtnGetCompletedOrders = new System.Windows.Forms.Button();
             this.BtnGetOpenOrders = new System.Windows.Forms.Button();
             this.tabSimulation = new System.Windows.Forms.TabPage();
-            this.BtnTestScalping = new System.Windows.Forms.Button();
+            this.BtnSetupSimulation = new System.Windows.Forms.Button();
             this.TextBoxRunAllSimulationInitialAccountValue = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.BtnRunAllSimulation = new System.Windows.Forms.Button();
@@ -119,6 +118,8 @@ namespace TestClient
             this.BtnRequestPnL = new System.Windows.Forms.Button();
             this.TreeViewAccount = new System.Windows.Forms.TreeView();
             this.tabFileData = new System.Windows.Forms.TabPage();
+            this.BtnMatchSymbols = new System.Windows.Forms.Button();
+            this.BtnImportNasdaq = new System.Windows.Forms.Button();
             this.BtnUpdateContracts = new System.Windows.Forms.Button();
             this.BtnImportSymbols = new System.Windows.Forms.Button();
             this.BtnDownloadBarTable = new System.Windows.Forms.Button();
@@ -163,6 +164,7 @@ namespace TestClient
             this.BtnMasterCancel = new System.Windows.Forms.Button();
             this.TextBoxIPAddress = new System.Windows.Forms.TextBox();
             this.GroupBoxSingleContract = new System.Windows.Forms.GroupBox();
+            this.TextBoxValidCountryCode = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -174,7 +176,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnImportNasdaq = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -352,7 +353,6 @@ namespace TestClient
             // 
             // tabContract
             // 
-            this.tabContract.Controls.Add(this.BtnMatchSymbols);
             this.tabContract.Controls.Add(this.GroupBoxContractInfo);
             this.tabContract.Controls.Add(this.BtnGetContractInfo);
             this.tabContract.Controls.Add(this.TextBoxSearchSymbol);
@@ -363,16 +363,6 @@ namespace TestClient
             this.tabContract.TabIndex = 2;
             this.tabContract.Text = "Contract";
             this.tabContract.UseVisualStyleBackColor = true;
-            // 
-            // BtnMatchSymbols
-            // 
-            this.BtnMatchSymbols.Location = new System.Drawing.Point(17, 203);
-            this.BtnMatchSymbols.Name = "BtnMatchSymbols";
-            this.BtnMatchSymbols.Size = new System.Drawing.Size(289, 23);
-            this.BtnMatchSymbols.TabIndex = 49;
-            this.BtnMatchSymbols.Text = "Match Symbols";
-            this.BtnMatchSymbols.UseVisualStyleBackColor = true;
-            this.BtnMatchSymbols.Click += new System.EventHandler(this.BtnMatchSymbols_Click);
             // 
             // GroupBoxContractInfo
             // 
@@ -994,7 +984,7 @@ namespace TestClient
             // 
             // tabSimulation
             // 
-            this.tabSimulation.Controls.Add(this.BtnTestScalping);
+            this.tabSimulation.Controls.Add(this.BtnSetupSimulation);
             this.tabSimulation.Controls.Add(this.TextBoxRunAllSimulationInitialAccountValue);
             this.tabSimulation.Controls.Add(this.label10);
             this.tabSimulation.Controls.Add(this.BtnRunAllSimulation);
@@ -1006,15 +996,15 @@ namespace TestClient
             this.tabSimulation.Text = "Simulation";
             this.tabSimulation.UseVisualStyleBackColor = true;
             // 
-            // BtnTestScalping
+            // BtnSetupSimulation
             // 
-            this.BtnTestScalping.Location = new System.Drawing.Point(283, 81);
-            this.BtnTestScalping.Name = "BtnTestScalping";
-            this.BtnTestScalping.Size = new System.Drawing.Size(230, 23);
-            this.BtnTestScalping.TabIndex = 38;
-            this.BtnTestScalping.Text = "Setup Scalping Simulation";
-            this.BtnTestScalping.UseVisualStyleBackColor = true;
-            this.BtnTestScalping.Click += new System.EventHandler(this.BtnTestScalping_Click);
+            this.BtnSetupSimulation.Location = new System.Drawing.Point(19, 15);
+            this.BtnSetupSimulation.Name = "BtnSetupSimulation";
+            this.BtnSetupSimulation.Size = new System.Drawing.Size(159, 23);
+            this.BtnSetupSimulation.TabIndex = 38;
+            this.BtnSetupSimulation.Text = "Setup Simulation";
+            this.BtnSetupSimulation.UseVisualStyleBackColor = true;
+            this.BtnSetupSimulation.Click += new System.EventHandler(this.BtnSetupSimulation_Click);
             // 
             // TextBoxRunAllSimulationInitialAccountValue
             // 
@@ -1098,6 +1088,7 @@ namespace TestClient
             // 
             // tabFileData
             // 
+            this.tabFileData.Controls.Add(this.BtnMatchSymbols);
             this.tabFileData.Controls.Add(this.BtnImportNasdaq);
             this.tabFileData.Controls.Add(this.BtnUpdateContracts);
             this.tabFileData.Controls.Add(this.BtnImportSymbols);
@@ -1116,9 +1107,29 @@ namespace TestClient
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
             // 
+            // BtnMatchSymbols
+            // 
+            this.BtnMatchSymbols.Location = new System.Drawing.Point(799, 289);
+            this.BtnMatchSymbols.Name = "BtnMatchSymbols";
+            this.BtnMatchSymbols.Size = new System.Drawing.Size(120, 23);
+            this.BtnMatchSymbols.TabIndex = 49;
+            this.BtnMatchSymbols.Text = "Match Symbols";
+            this.BtnMatchSymbols.UseVisualStyleBackColor = true;
+            this.BtnMatchSymbols.Click += new System.EventHandler(this.BtnMatchSymbols_Click);
+            // 
+            // BtnImportNasdaq
+            // 
+            this.BtnImportNasdaq.Location = new System.Drawing.Point(673, 260);
+            this.BtnImportNasdaq.Name = "BtnImportNasdaq";
+            this.BtnImportNasdaq.Size = new System.Drawing.Size(120, 23);
+            this.BtnImportNasdaq.TabIndex = 57;
+            this.BtnImportNasdaq.Text = "Import Nasdaq";
+            this.BtnImportNasdaq.UseVisualStyleBackColor = true;
+            this.BtnImportNasdaq.Click += new System.EventHandler(this.BtnImportNasdaq_Click);
+            // 
             // BtnUpdateContracts
             // 
-            this.BtnUpdateContracts.Location = new System.Drawing.Point(547, 414);
+            this.BtnUpdateContracts.Location = new System.Drawing.Point(799, 260);
             this.BtnUpdateContracts.Name = "BtnUpdateContracts";
             this.BtnUpdateContracts.Size = new System.Drawing.Size(120, 23);
             this.BtnUpdateContracts.TabIndex = 56;
@@ -1128,7 +1139,7 @@ namespace TestClient
             // 
             // BtnImportSymbols
             // 
-            this.BtnImportSymbols.Location = new System.Drawing.Point(547, 385);
+            this.BtnImportSymbols.Location = new System.Drawing.Point(673, 289);
             this.BtnImportSymbols.Name = "BtnImportSymbols";
             this.BtnImportSymbols.Size = new System.Drawing.Size(120, 23);
             this.BtnImportSymbols.TabIndex = 55;
@@ -1282,9 +1293,9 @@ namespace TestClient
             // 
             this.BtnValidUSSymbol.Location = new System.Drawing.Point(191, 21);
             this.BtnValidUSSymbol.Name = "BtnValidUSSymbol";
-            this.BtnValidUSSymbol.Size = new System.Drawing.Size(79, 22);
+            this.BtnValidUSSymbol.Size = new System.Drawing.Size(47, 22);
             this.BtnValidUSSymbol.TabIndex = 63;
-            this.BtnValidUSSymbol.Text = "Valid US";
+            this.BtnValidUSSymbol.Text = "Valid";
             this.BtnValidUSSymbol.UseVisualStyleBackColor = true;
             this.BtnValidUSSymbol.Click += new System.EventHandler(this.BtnValidUSSymbol_Click);
             // 
@@ -1555,6 +1566,7 @@ namespace TestClient
             // 
             // GroupBoxSingleContract
             // 
+            this.GroupBoxSingleContract.Controls.Add(this.TextBoxValidCountryCode);
             this.GroupBoxSingleContract.Controls.Add(this.label14);
             this.GroupBoxSingleContract.Controls.Add(this.BtnValidUSSymbol);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxSingleContractName);
@@ -1577,6 +1589,14 @@ namespace TestClient
             this.GroupBoxSingleContract.TabIndex = 66;
             this.GroupBoxSingleContract.TabStop = false;
             this.GroupBoxSingleContract.Text = "Single Contract";
+            // 
+            // TextBoxValidCountryCode
+            // 
+            this.TextBoxValidCountryCode.Location = new System.Drawing.Point(244, 21);
+            this.TextBoxValidCountryCode.Name = "TextBoxValidCountryCode";
+            this.TextBoxValidCountryCode.Size = new System.Drawing.Size(26, 22);
+            this.TextBoxValidCountryCode.TabIndex = 64;
+            this.TextBoxValidCountryCode.Text = "US";
             // 
             // label14
             // 
@@ -1689,16 +1709,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnImportNasdaq
-            // 
-            this.BtnImportNasdaq.Location = new System.Drawing.Point(547, 356);
-            this.BtnImportNasdaq.Name = "BtnImportNasdaq";
-            this.BtnImportNasdaq.Size = new System.Drawing.Size(120, 23);
-            this.BtnImportNasdaq.TabIndex = 57;
-            this.BtnImportNasdaq.Text = "Import Nasdaq";
-            this.BtnImportNasdaq.UseVisualStyleBackColor = true;
-            this.BtnImportNasdaq.Click += new System.EventHandler(this.BtnImportNasdaq_Click);
             // 
             // MainForm
             // 
@@ -1832,7 +1842,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnMasterCancel;
         private System.Windows.Forms.Button BtnDownloadMultiTables;
         private System.Windows.Forms.ProgressBar DownloadBarTableDetialedProgressBar;
-        private System.Windows.Forms.Button BtnTestScalping;
+        private System.Windows.Forms.Button BtnSetupSimulation;
         private System.Windows.Forms.TextBox TextBoxIPAddress;
         private System.Windows.Forms.GroupBox GroupBoxPositions;
         private System.Windows.Forms.TabPage tabOrder;
@@ -1899,5 +1909,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnImportSymbols;
         private System.Windows.Forms.Button BtnUpdateContracts;
         private System.Windows.Forms.Button BtnImportNasdaq;
+        private System.Windows.Forms.TextBox TextBoxValidCountryCode;
     }
 }

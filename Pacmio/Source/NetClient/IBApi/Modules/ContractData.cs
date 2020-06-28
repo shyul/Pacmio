@@ -239,7 +239,9 @@ namespace Pacmio.IB
 
             if (active_ContractData is Contract c)
             {
-                c.Status = ContractStatus.Incomplete;
+                if (message.Contains("No security definition has been found for the request"))
+                    c.Status = ContractStatus.Incomplete;
+
                 c.UpdateTime = DateTime.Now;
             }
             active_ContractData = null;

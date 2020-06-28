@@ -202,9 +202,13 @@ namespace TestClient
 
         #region Simulation
 
-        private void BtnTestScalping_Click(object sender, EventArgs e)
+        private void BtnSetupSimulation_Click(object sender, EventArgs e)
         {
-            Root.Form.Show();
+            Cts = new CancellationTokenSource();
+            Task.Run(() => {
+                var list = ContractList.GetListByCountry("US").AsParallel().Where(n => n is Stock && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN")).Select(n => (Stock)n);
+                Strategy.GetWatchList(list, Cts, Progress);
+            }, Cts.Token);
         }
 
         private void BtnRunAllSimulation_Click(object sender, EventArgs e)
@@ -593,7 +597,7 @@ namespace TestClient
                             symbollist.AddRange(symbols);
                         }
 
-                        ContractList.GetOrFetch(symbollist, "US", Cts, Progress);
+                        ContractList.GetOrFetch(symbollist, TextBoxValidCountryCode.Text, Cts, Progress);
                     }
                 }, Cts.Token);
             }
