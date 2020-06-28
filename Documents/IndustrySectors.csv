@@ -1,0 +1,3078 @@
+Type,Code,Title
+NAICS,	11,"Agriculture, Forestry, Fishing and Hunting"
+NAICS,	111,Crop Production
+NAICS,	1111,Oilseed and Grain Farming
+NAICS,	11111,Soybean Farming
+NAICS,	111110,Soybean Farming
+NAICS,	11112,Oilseed (except Soybean) Farming
+NAICS,	111120,Oilseed (except Soybean) Farming
+NAICS,	11113,Dry Pea and Bean Farming
+NAICS,	111130,Dry Pea and Bean Farming
+NAICS,	11114,Wheat Farming
+NAICS,	111140,Wheat Farming
+NAICS,	11115,Corn Farming
+NAICS,	111150,Corn Farming
+NAICS,	11116,Rice Farming
+NAICS,	111160,Rice Farming
+NAICS,	11119,Other Grain Farming
+NAICS,	111191,Oilseed and Grain Combination Farming
+NAICS,	111199,All Other Grain Farming
+NAICS,	1112,Vegetable and Melon Farming
+NAICS,	11121,Vegetable and Melon Farming
+NAICS,	111211,Potato Farming
+NAICS,	111219,Other Vegetable (except Potato) and Melon Farming
+NAICS,	1113,Fruit and Tree Nut Farming
+NAICS,	11131,Orange Groves
+NAICS,	111310,Orange Groves
+NAICS,	11132,Citrus (except Orange) Groves
+NAICS,	111320,Citrus (except Orange) Groves
+NAICS,	11133,Noncitrus Fruit and Tree Nut Farming
+NAICS,	111331,Apple Orchards
+NAICS,	111332,Grape Vineyards
+NAICS,	111333,Strawberry Farming
+NAICS,	111334,Berry (except Strawberry) Farming
+NAICS,	111335,Tree Nut Farming
+NAICS,	111336,Fruit and Tree Nut Combination Farming
+NAICS,	111339,Other Noncitrus Fruit Farming
+NAICS,	1114,"Greenhouse, Nursery, and Floriculture Production"
+NAICS,	11141,Food Crops Grown Under Cover
+NAICS,	111411,Mushroom Production
+NAICS,	111419,Other Food Crops Grown Under Cover
+NAICS,	11142,Nursery and Floriculture Production
+NAICS,	111421,Nursery and Tree Production
+NAICS,	111422,Floriculture Production
+NAICS,	1119,Other Crop Farming
+NAICS,	11191,Tobacco Farming
+NAICS,	111910,Tobacco Farming
+NAICS,	11192,Cotton Farming
+NAICS,	111920,Cotton Farming
+NAICS,	11193,Sugarcane Farming
+NAICS,	111930,Sugarcane Farming
+NAICS,	11194,Hay Farming
+NAICS,	111940,Hay Farming
+NAICS,	11199,All Other Crop Farming
+NAICS,	111991,Sugar Beet Farming
+NAICS,	111992,Peanut Farming
+NAICS,	111998,All Other Miscellaneous Crop Farming
+NAICS,	112,Animal Production and Aquaculture
+NAICS,	1121,Cattle Ranching and Farming
+NAICS,	11211,"Beef Cattle Ranching and Farming, including Feedlots"
+NAICS,	112111,Beef Cattle Ranching and Farming
+NAICS,	112112,Cattle Feedlots
+NAICS,	11212,Dairy Cattle and Milk Production
+NAICS,	112120,Dairy Cattle and Milk Production
+NAICS,	11213,Dual-Purpose Cattle Ranching and Farming
+NAICS,	112130,Dual-Purpose Cattle Ranching and Farming
+NAICS,	1122,Hog and Pig Farming
+NAICS,	11221,Hog and Pig Farming
+NAICS,	112210,Hog and Pig Farming
+NAICS,	1123,Poultry and Egg Production
+NAICS,	11231,Chicken Egg Production
+NAICS,	112310,Chicken Egg Production
+NAICS,	11232,Broilers and Other Meat Type Chicken Production
+NAICS,	112320,Broilers and Other Meat Type Chicken Production
+NAICS,	11233,Turkey Production
+NAICS,	112330,Turkey Production
+NAICS,	11234,Poultry Hatcheries
+NAICS,	112340,Poultry Hatcheries
+NAICS,	11239,Other Poultry Production
+NAICS,	112390,Other Poultry Production
+NAICS,	1124,Sheep and Goat Farming
+NAICS,	11241,Sheep Farming
+NAICS,	112410,Sheep Farming
+NAICS,	11242,Goat Farming
+NAICS,	112420,Goat Farming
+NAICS,	1125,Aquaculture
+NAICS,	11251,Aquaculture
+NAICS,	112511,Finfish Farming and Fish Hatcheries
+NAICS,	112512,Shellfish Farming
+NAICS,	112519,Other Aquaculture
+NAICS,	1129,Other Animal Production
+NAICS,	11291,Apiculture
+NAICS,	112910,Apiculture
+NAICS,	11292,Horses and Other Equine Production
+NAICS,	112920,Horses and Other Equine Production
+NAICS,	11293,Fur-Bearing Animal and Rabbit Production
+NAICS,	112930,Fur-Bearing Animal and Rabbit Production
+NAICS,	11299,All Other Animal Production
+NAICS,	112990,All Other Animal Production
+NAICS,	113,Forestry and Logging
+NAICS,	1131,Timber Tract Operations
+NAICS,	11311,Timber Tract Operations
+NAICS,	113110,Timber Tract Operations
+NAICS,	1132,Forest Nurseries and Gathering of Forest Products
+NAICS,	11321,Forest Nurseries and Gathering of Forest Products
+NAICS,	113210,Forest Nurseries and Gathering of Forest Products
+NAICS,	1133,Logging
+NAICS,	11331,Logging
+NAICS,	113310,Logging
+NAICS,	114,"Fishing, Hunting and Trapping"
+NAICS,	1141,Fishing
+NAICS,	11411,Fishing
+NAICS,	114111,Finfish Fishing
+NAICS,	114112,Shellfish Fishing
+NAICS,	114119,Other Marine Fishing
+NAICS,	1142,Hunting and Trapping
+NAICS,	11421,Hunting and Trapping
+NAICS,	114210,Hunting and Trapping
+NAICS,	115,Support Activities for Agriculture and Forestry
+NAICS,	1151,Support Activities for Crop Production
+NAICS,	11511,Support Activities for Crop Production
+NAICS,	115111,Cotton Ginning
+NAICS,	115112,"Soil Preparation, Planting, and Cultivating"
+NAICS,	115113,"Crop Harvesting, Primarily by Machine"
+NAICS,	115114,Postharvest Crop Activities (except Cotton Ginning)
+NAICS,	115115,Farm Labor Contractors and Crew Leaders
+NAICS,	115116,Farm Management Services
+NAICS,	1152,Support Activities for Animal Production
+NAICS,	11521,Support Activities for Animal Production
+NAICS,	115210,Support Activities for Animal Production
+NAICS,	1153,Support Activities for Forestry
+NAICS,	11531,Support Activities for Forestry
+NAICS,	115310,Support Activities for Forestry
+NAICS,	21,"Mining, Quarrying, and Oil and Gas Extraction"
+NAICS,	211,Oil and Gas Extraction
+NAICS,	2111,Oil and Gas Extraction
+NAICS,	21112,Crude Petroleum Extraction
+NAICS,	211120,Crude Petroleum Extraction
+NAICS,	21113,Natural Gas Extraction
+NAICS,	211130,Natural Gas Extraction
+NAICS,	212,Mining (except Oil and Gas)
+NAICS,	2121,Coal Mining
+NAICS,	21211,Coal Mining
+NAICS,	212111,Bituminous Coal and Lignite Surface Mining
+NAICS,	212112,Bituminous Coal Underground Mining
+NAICS,	212113,Anthracite Mining
+NAICS,	2122,Metal Ore Mining
+NAICS,	21221,Iron Ore Mining
+NAICS,	212210,Iron Ore Mining
+NAICS,	21222,Gold Ore and Silver Ore Mining
+NAICS,	212221,Gold Ore Mining
+NAICS,	212222,Silver Ore Mining
+NAICS,	21223,"Copper, Nickel, Lead, and Zinc Mining"
+NAICS,	212230,"Copper, Nickel, Lead, and Zinc Mining"
+NAICS,	21229,Other Metal Ore Mining
+NAICS,	212291,Uranium-Radium-Vanadium Ore Mining
+NAICS,	212299,All Other Metal Ore Mining
+NAICS,	2123,Nonmetallic Mineral Mining and Quarrying
+NAICS,	21231,Stone Mining and Quarrying
+NAICS,	212311,Dimension Stone Mining and Quarrying
+NAICS,	212312,Crushed and Broken Limestone Mining and Quarrying
+NAICS,	212313,Crushed and Broken Granite Mining and Quarrying
+NAICS,	212319,Other Crushed and Broken Stone Mining and Quarrying
+NAICS,	21232,"Sand, Gravel, Clay, and Ceramic and Refractory Minerals Mining and Quarrying"
+NAICS,	212321,Construction Sand and Gravel Mining
+NAICS,	212322,Industrial Sand Mining
+NAICS,	212324,Kaolin and Ball Clay Mining
+NAICS,	212325,Clay and Ceramic and Refractory Minerals Mining
+NAICS,	21239,Other Nonmetallic Mineral Mining and Quarrying
+NAICS,	212391,"Potash, Soda, and Borate Mineral Mining"
+NAICS,	212392,Phosphate Rock Mining
+NAICS,	212393,Other Chemical and Fertilizer Mineral Mining
+NAICS,	212399,All Other Nonmetallic Mineral Mining
+NAICS,	213,Support Activities for Mining
+NAICS,	2131,Support Activities for Mining
+NAICS,	21311,Support Activities for Mining
+NAICS,	213111,Drilling Oil and Gas Wells
+NAICS,	213112,Support Activities for Oil and Gas Operations
+NAICS,	213113,Support Activities for Coal Mining
+NAICS,	213114,Support Activities for Metal Mining
+NAICS,	213115,Support Activities for Nonmetallic Minerals (except Fuels) Mining
+NAICS,	22,Utilities
+NAICS,	221,Utilities
+NAICS,	2211,"Electric Power Generation, Transmission and Distribution"
+NAICS,	22111,Electric Power Generation
+NAICS,	221111,Hydroelectric Power Generation
+NAICS,	221112,Fossil Fuel Electric Power Generation
+NAICS,	221113,Nuclear Electric Power Generation
+NAICS,	221114,Solar Electric Power Generation
+NAICS,	221115,Wind Electric Power Generation
+NAICS,	221116,Geothermal Electric Power Generation
+NAICS,	221117,Biomass Electric Power Generation
+NAICS,	221118,Other Electric Power Generation
+NAICS,	22112,"Electric Power Transmission, Control, and Distribution"
+NAICS,	221121,Electric Bulk Power Transmission and Control
+NAICS,	221122,Electric Power Distribution
+NAICS,	2212,Natural Gas Distribution
+NAICS,	22121,Natural Gas Distribution
+NAICS,	221210,Natural Gas Distribution
+NAICS,	2213,"Water, Sewage and Other Systems"
+NAICS,	22131,Water Supply and Irrigation Systems
+NAICS,	221310,Water Supply and Irrigation Systems
+NAICS,	22132,Sewage Treatment Facilities
+NAICS,	221320,Sewage Treatment Facilities
+NAICS,	22133,Steam and Air-Conditioning Supply
+NAICS,	221330,Steam and Air-Conditioning Supply
+NAICS,	23,Construction
+NAICS,	236,Construction of Buildings
+NAICS,	2361,Residential Building Construction
+NAICS,	23611,Residential Building Construction
+NAICS,	236115,New Single-Family Housing Construction (except For-Sale Builders)
+NAICS,	236116,New Multifamily Housing Construction (except For-Sale Builders)
+NAICS,	236117,New Housing For-Sale Builders
+NAICS,	236118,Residential Remodelers
+NAICS,	2362,Nonresidential Building Construction
+NAICS,	23621,Industrial Building Construction
+NAICS,	236210,Industrial Building Construction
+NAICS,	23622,Commercial and Institutional Building Construction
+NAICS,	236220,Commercial and Institutional Building Construction
+NAICS,	237,Heavy and Civil Engineering Construction
+NAICS,	2371,Utility System Construction
+NAICS,	23711,Water and Sewer Line and Related Structures Construction
+NAICS,	237110,Water and Sewer Line and Related Structures Construction
+NAICS,	23712,Oil and Gas Pipeline and Related Structures Construction
+NAICS,	237120,Oil and Gas Pipeline and Related Structures Construction
+NAICS,	23713,Power and Communication Line and Related Structures Construction
+NAICS,	237130,Power and Communication Line and Related Structures Construction
+NAICS,	2372,Land Subdivision
+NAICS,	23721,Land Subdivision
+NAICS,	237210,Land Subdivision
+NAICS,	2373,"Highway, Street, and Bridge Construction"
+NAICS,	23731,"Highway, Street, and Bridge Construction"
+NAICS,	237310,"Highway, Street, and Bridge Construction"
+NAICS,	2379,Other Heavy and Civil Engineering Construction
+NAICS,	23799,Other Heavy and Civil Engineering Construction
+NAICS,	237990,Other Heavy and Civil Engineering Construction
+NAICS,	238,Specialty Trade Contractors
+NAICS,	2381,"Foundation, Structure, and Building Exterior Contractors"
+NAICS,	23811,Poured Concrete Foundation and Structure Contractors
+NAICS,	238110,Poured Concrete Foundation and Structure Contractors
+NAICS,	23812,Structural Steel and Precast Concrete Contractors
+NAICS,	238120,Structural Steel and Precast Concrete Contractors
+NAICS,	23813,Framing Contractors
+NAICS,	238130,Framing Contractors
+NAICS,	23814,Masonry Contractors
+NAICS,	238140,Masonry Contractors
+NAICS,	23815,Glass and Glazing Contractors
+NAICS,	238150,Glass and Glazing Contractors
+NAICS,	23816,Roofing Contractors
+NAICS,	238160,Roofing Contractors
+NAICS,	23817,Siding Contractors
+NAICS,	238170,Siding Contractors
+NAICS,	23819,"Other Foundation, Structure, and Building Exterior Contractors"
+NAICS,	238190,"Other Foundation, Structure, and Building Exterior Contractors"
+NAICS,	2382,Building Equipment Contractors
+NAICS,	23821,Electrical Contractors and Other Wiring Installation Contractors
+NAICS,	238210,Electrical Contractors and Other Wiring Installation Contractors
+NAICS,	23822,"Plumbing, Heating, and Air-Conditioning Contractors"
+NAICS,	238220,"Plumbing, Heating, and Air-Conditioning Contractors"
+NAICS,	23829,Other Building Equipment Contractors
+NAICS,	238290,Other Building Equipment Contractors
+NAICS,	2383,Building Finishing Contractors
+NAICS,	23831,Drywall and Insulation Contractors
+NAICS,	238310,Drywall and Insulation Contractors
+NAICS,	23832,Painting and Wall Covering Contractors
+NAICS,	238320,Painting and Wall Covering Contractors
+NAICS,	23833,Flooring Contractors
+NAICS,	238330,Flooring Contractors
+NAICS,	23834,Tile and Terrazzo Contractors
+NAICS,	238340,Tile and Terrazzo Contractors
+NAICS,	23835,Finish Carpentry Contractors
+NAICS,	238350,Finish Carpentry Contractors
+NAICS,	23839,Other Building Finishing Contractors
+NAICS,	238390,Other Building Finishing Contractors
+NAICS,	2389,Other Specialty Trade Contractors
+NAICS,	23891,Site Preparation Contractors
+NAICS,	238910,Site Preparation Contractors
+NAICS,	23899,All Other Specialty Trade Contractors
+NAICS,	238990,All Other Specialty Trade Contractors
+NAICS,	311,Food Manufacturing
+NAICS,	3111,Animal Food Manufacturing
+NAICS,	31111,Animal Food Manufacturing
+NAICS,	311111,Dog and Cat Food Manufacturing
+NAICS,	311119,Other Animal Food Manufacturing
+NAICS,	3112,Grain and Oilseed Milling
+NAICS,	31121,Flour Milling and Malt Manufacturing
+NAICS,	311211,Flour Milling
+NAICS,	311212,Rice Milling
+NAICS,	311213,Malt Manufacturing
+NAICS,	31122,Starch and Vegetable Fats and Oils Manufacturing
+NAICS,	311221,Wet Corn Milling
+NAICS,	311224,Soybean and Other Oilseed Processing
+NAICS,	311225,Fats and Oils Refining and Blending
+NAICS,	31123,Breakfast Cereal Manufacturing
+NAICS,	311230,Breakfast Cereal Manufacturing
+NAICS,	3113,Sugar and Confectionery Product Manufacturing
+NAICS,	31131,Sugar Manufacturing
+NAICS,	311313,Beet Sugar Manufacturing
+NAICS,	311314,Cane Sugar Manufacturing
+NAICS,	31134,Nonchocolate Confectionery Manufacturing
+NAICS,	311340,Nonchocolate Confectionery Manufacturing
+NAICS,	31135,Chocolate and Confectionery Manufacturing
+NAICS,	311351,Chocolate and Confectionery Manufacturing from Cacao Beans
+NAICS,	311352,Confectionery Manufacturing from Purchased Chocolate
+NAICS,	3114,Fruit and Vegetable Preserving and Specialty Food Manufacturing
+NAICS,	31141,Frozen Food Manufacturing
+NAICS,	311411,"Frozen Fruit, Juice, and Vegetable Manufacturing"
+NAICS,	311412,Frozen Specialty Food Manufacturing
+NAICS,	31142,"Fruit and Vegetable Canning, Pickling, and Drying"
+NAICS,	311421,Fruit and Vegetable Canning
+NAICS,	311422,Specialty Canning
+NAICS,	311423,Dried and Dehydrated Food Manufacturing
+NAICS,	3115,Dairy Product Manufacturing
+NAICS,	31151,Dairy Product (except Frozen) Manufacturing
+NAICS,	311511,Fluid Milk Manufacturing
+NAICS,	311512,Creamery Butter Manufacturing
+NAICS,	311513,Cheese Manufacturing
+NAICS,	311514,"Dry, Condensed, and Evaporated Dairy Product Manufacturing"
+NAICS,	31152,Ice Cream and Frozen Dessert Manufacturing
+NAICS,	311520,Ice Cream and Frozen Dessert Manufacturing
+NAICS,	3116,Animal Slaughtering and Processing
+NAICS,	31161,Animal Slaughtering and Processing
+NAICS,	311611,Animal (except Poultry) Slaughtering
+NAICS,	311612,Meat Processed from Carcasses
+NAICS,	311613,Rendering and Meat Byproduct Processing
+NAICS,	311615,Poultry Processing
+NAICS,	3117,Seafood Product Preparation and Packaging
+NAICS,	31171,Seafood Product Preparation and Packaging
+NAICS,	311710,Seafood Product Preparation and Packaging
+NAICS,	3118,Bakeries and Tortilla Manufacturing
+NAICS,	31181,Bread and Bakery Product Manufacturing
+NAICS,	311811,Retail Bakeries
+NAICS,	311812,Commercial Bakeries
+NAICS,	311813,"Frozen Cakes, Pies, and Other Pastries Manufacturing"
+NAICS,	31182,"Cookie, Cracker, and Pasta Manufacturing"
+NAICS,	311821,Cookie and Cracker Manufacturing
+NAICS,	311824,"Dry Pasta, Dough, and Flour Mixes Manufacturing from Purchased Flour"
+NAICS,	31183,Tortilla Manufacturing
+NAICS,	311830,Tortilla Manufacturing
+NAICS,	3119,Other Food Manufacturing
+NAICS,	31191,Snack Food Manufacturing
+NAICS,	311911,Roasted Nuts and Peanut Butter Manufacturing
+NAICS,	311919,Other Snack Food Manufacturing
+NAICS,	31192,Coffee and Tea Manufacturing
+NAICS,	311920,Coffee and Tea Manufacturing
+NAICS,	31193,Flavoring Syrup and Concentrate Manufacturing
+NAICS,	311930,Flavoring Syrup and Concentrate Manufacturing
+NAICS,	31194,Seasoning and Dressing Manufacturing
+NAICS,	311941,"Mayonnaise, Dressing, and Other Prepared Sauce Manufacturing"
+NAICS,	311942,Spice and Extract Manufacturing
+NAICS,	31199,All Other Food Manufacturing
+NAICS,	311991,Perishable Prepared Food Manufacturing
+NAICS,	311999,All Other Miscellaneous Food Manufacturing
+NAICS,	312,Beverage and Tobacco Product Manufacturing
+NAICS,	3121,Beverage Manufacturing
+NAICS,	31211,Soft Drink and Ice Manufacturing
+NAICS,	312111,Soft Drink Manufacturing
+NAICS,	312112,Bottled Water Manufacturing
+NAICS,	312113,Ice Manufacturing
+NAICS,	31212,Breweries
+NAICS,	312120,Breweries
+NAICS,	31213,Wineries
+NAICS,	312130,Wineries
+NAICS,	31214,Distilleries
+NAICS,	312140,Distilleries
+NAICS,	3122,Tobacco Manufacturing
+NAICS,	31223,Tobacco Manufacturing
+NAICS,	312230,Tobacco Manufacturing
+NAICS,	313,Textile Mills
+NAICS,	3131,"Fiber, Yarn, and Thread Mills"
+NAICS,	31311,"Fiber, Yarn, and Thread Mills"
+NAICS,	313110,"Fiber, Yarn, and Thread Mills"
+NAICS,	3132,Fabric Mills
+NAICS,	31321,Broadwoven Fabric Mills
+NAICS,	313210,Broadwoven Fabric Mills
+NAICS,	31322,Narrow Fabric Mills and Schiffli Machine Embroidery
+NAICS,	313220,Narrow Fabric Mills and Schiffli Machine Embroidery
+NAICS,	31323,Nonwoven Fabric Mills
+NAICS,	313230,Nonwoven Fabric Mills
+NAICS,	31324,Knit Fabric Mills
+NAICS,	313240,Knit Fabric Mills
+NAICS,	3133,Textile and Fabric Finishing and Fabric Coating Mills
+NAICS,	31-33,Manufacturing
+NAICS,	31331,Textile and Fabric Finishing Mills
+NAICS,	313310,Textile and Fabric Finishing Mills
+NAICS,	31332,Fabric Coating Mills
+NAICS,	313320,Fabric Coating Mills
+NAICS,	314,Textile Product Mills
+NAICS,	3141,Textile Furnishings Mills
+NAICS,	31411,Carpet and Rug Mills
+NAICS,	314110,Carpet and Rug Mills
+NAICS,	31412,Curtain and Linen Mills
+NAICS,	314120,Curtain and Linen Mills
+NAICS,	3149,Other Textile Product Mills
+NAICS,	31491,Textile Bag and Canvas Mills
+NAICS,	314910,Textile Bag and Canvas Mills
+NAICS,	31499,All Other Textile Product Mills
+NAICS,	314994,"Rope, Cordage, Twine, Tire Cord, and Tire Fabric Mills"
+NAICS,	314999,All Other Miscellaneous Textile Product Mills
+NAICS,	315,Apparel Manufacturing
+NAICS,	3151,Apparel Knitting Mills
+NAICS,	31511,Hosiery and Sock Mills
+NAICS,	315110,Hosiery and Sock Mills
+NAICS,	31519,Other Apparel Knitting Mills
+NAICS,	315190,Other Apparel Knitting Mills
+NAICS,	3152,Cut and Sew Apparel Manufacturing
+NAICS,	31521,Cut and Sew Apparel Contractors
+NAICS,	315210,Cut and Sew Apparel Contractors
+NAICS,	31522,Men�s and Boys� Cut and Sew Apparel Manufacturing
+NAICS,	315220,Men�s and Boys� Cut and Sew Apparel Manufacturing
+NAICS,	31524,"Women�s, Girls�, and Infants� Cut and Sew Apparel Manufacturing"
+NAICS,	315240,"Women�s, Girls�, and Infants� Cut and Sew Apparel Manufacturing"
+NAICS,	31528,Other Cut and Sew Apparel Manufacturing
+NAICS,	315280,Other Cut and Sew Apparel Manufacturing
+NAICS,	3159,Apparel Accessories and Other Apparel Manufacturing
+NAICS,	31599,Apparel Accessories and Other Apparel Manufacturing
+NAICS,	315990,Apparel Accessories and Other Apparel Manufacturing
+NAICS,	316,Leather and Allied Product Manufacturing
+NAICS,	3161,Leather and Hide Tanning and Finishing
+NAICS,	31611,Leather and Hide Tanning and Finishing
+NAICS,	316110,Leather and Hide Tanning and Finishing
+NAICS,	3162,Footwear Manufacturing
+NAICS,	31621,Footwear Manufacturing
+NAICS,	316210,Footwear Manufacturing
+NAICS,	3169,Other Leather and Allied Product Manufacturing
+NAICS,	31699,Other Leather and Allied Product Manufacturing
+NAICS,	316992,Women's Handbag and Purse Manufacturing
+NAICS,	316998,All Other Leather Good and Allied Product Manufacturing
+NAICS,	321,Wood Product Manufacturing
+NAICS,	3211,Sawmills and Wood Preservation
+NAICS,	32111,Sawmills and Wood Preservation
+NAICS,	321113,Sawmills
+NAICS,	321114,Wood Preservation
+NAICS,	3212,"Veneer, Plywood, and Engineered Wood Product Manufacturing"
+NAICS,	32121,"Veneer, Plywood, and Engineered Wood Product Manufacturing"
+NAICS,	321211,Hardwood Veneer and Plywood Manufacturing
+NAICS,	321212,Softwood Veneer and Plywood Manufacturing
+NAICS,	321213,Engineered Wood Member (except Truss) Manufacturing
+NAICS,	321214,Truss Manufacturing
+NAICS,	321219,Reconstituted Wood Product Manufacturing
+NAICS,	3219,Other Wood Product Manufacturing
+NAICS,	32191,Millwork
+NAICS,	321911,Wood Window and Door Manufacturing
+NAICS,	321912,"Cut Stock, Resawing Lumber, and Planing"
+NAICS,	321918,Other Millwork (including Flooring)
+NAICS,	32192,Wood Container and Pallet Manufacturing
+NAICS,	321920,Wood Container and Pallet Manufacturing
+NAICS,	32199,All Other Wood Product Manufacturing
+NAICS,	321991,Manufactured Home (Mobile Home) Manufacturing
+NAICS,	321992,Prefabricated Wood Building Manufacturing
+NAICS,	321999,All Other Miscellaneous Wood Product Manufacturing
+NAICS,	322,Paper Manufacturing
+NAICS,	3221,"Pulp, Paper, and Paperboard Mills"
+NAICS,	32211,Pulp Mills
+NAICS,	322110,Pulp Mills
+NAICS,	32212,Paper Mills
+NAICS,	322121,Paper (except Newsprint) Mills
+NAICS,	322122,Newsprint Mills
+NAICS,	32213,Paperboard Mills
+NAICS,	322130,Paperboard Mills
+NAICS,	3222,Converted Paper Product Manufacturing
+NAICS,	32221,Paperboard Container Manufacturing
+NAICS,	322211,Corrugated and Solid Fiber Box Manufacturing
+NAICS,	322212,Folding Paperboard Box Manufacturing
+NAICS,	322219,Other Paperboard Container Manufacturing
+NAICS,	32222,Paper Bag and Coated and Treated Paper Manufacturing
+NAICS,	322220,Paper Bag and Coated and Treated Paper Manufacturing
+NAICS,	32223,Stationery Product Manufacturing
+NAICS,	322230,Stationery Product Manufacturing
+NAICS,	32229,Other Converted Paper Product Manufacturing
+NAICS,	322291,Sanitary Paper Product Manufacturing
+NAICS,	322299,All Other Converted Paper Product Manufacturing
+NAICS,	323,Printing and Related Support Activities
+NAICS,	3231,Printing and Related Support Activities
+NAICS,	32311,Printing
+NAICS,	323111,Commercial Printing (except Screen and Books)
+NAICS,	323113,Commercial Screen Printing
+NAICS,	323117,Books Printing
+NAICS,	32312,Support Activities for Printing
+NAICS,	323120,Support Activities for Printing
+NAICS,	324,Petroleum and Coal Products Manufacturing
+NAICS,	3241,Petroleum and Coal Products Manufacturing
+NAICS,	32411,Petroleum Refineries
+NAICS,	324110,Petroleum Refineries
+NAICS,	32412,"Asphalt Paving, Roofing, and Saturated Materials Manufacturing"
+NAICS,	324121,Asphalt Paving Mixture and Block Manufacturing
+NAICS,	324122,Asphalt Shingle and Coating Materials Manufacturing
+NAICS,	32419,Other Petroleum and Coal Products Manufacturing
+NAICS,	324191,Petroleum Lubricating Oil and Grease Manufacturing
+NAICS,	324199,All Other Petroleum and Coal Products Manufacturing
+NAICS,	325,Chemical Manufacturing
+NAICS,	3251,Basic Chemical Manufacturing
+NAICS,	32511,Petrochemical Manufacturing
+NAICS,	325110,Petrochemical Manufacturing
+NAICS,	32512,Industrial Gas Manufacturing
+NAICS,	325120,Industrial Gas Manufacturing
+NAICS,	32513,Synthetic Dye and Pigment Manufacturing
+NAICS,	325130,Synthetic Dye and Pigment Manufacturing
+NAICS,	32518,Other Basic Inorganic Chemical Manufacturing
+NAICS,	325180,Other Basic Inorganic Chemical Manufacturing
+NAICS,	32519,Other Basic Organic Chemical Manufacturing
+NAICS,	325193,Ethyl Alcohol Manufacturing
+NAICS,	325194,"Cyclic Crude, Intermediate, and Gum and Wood Chemical Manufacturing"
+NAICS,	325199,All Other Basic Organic Chemical Manufacturing
+NAICS,	3252,"Resin, Synthetic Rubber, and Artificial and Synthetic Fibers and Filaments Manufacturing"
+NAICS,	32521,Resin and Synthetic Rubber Manufacturing
+NAICS,	325211,Plastics Material and Resin Manufacturing
+NAICS,	325212,Synthetic Rubber Manufacturing
+NAICS,	32522,Artificial and Synthetic Fibers and Filaments Manufacturing
+NAICS,	325220,Artificial and Synthetic Fibers and Filaments Manufacturing
+NAICS,	3253,"Pesticide, Fertilizer, and Other Agricultural Chemical Manufacturing"
+NAICS,	32531,Fertilizer Manufacturing
+NAICS,	325311,Nitrogenous Fertilizer Manufacturing
+NAICS,	325312,Phosphatic Fertilizer Manufacturing
+NAICS,	325314,Fertilizer (Mixing Only) Manufacturing
+NAICS,	32532,Pesticide and Other Agricultural Chemical Manufacturing
+NAICS,	325320,Pesticide and Other Agricultural Chemical Manufacturing
+NAICS,	3254,Pharmaceutical and Medicine Manufacturing
+NAICS,	32541,Pharmaceutical and Medicine Manufacturing
+NAICS,	325411,Medicinal and Botanical Manufacturing
+NAICS,	325412,Pharmaceutical Preparation Manufacturing
+NAICS,	325413,In-Vitro Diagnostic Substance Manufacturing
+NAICS,	325414,Biological Product (except Diagnostic) Manufacturing
+NAICS,	3255,"Paint, Coating, and Adhesive Manufacturing"
+NAICS,	32551,Paint and Coating Manufacturing
+NAICS,	325510,Paint and Coating Manufacturing
+NAICS,	32552,Adhesive Manufacturing
+NAICS,	325520,Adhesive Manufacturing
+NAICS,	3256,"Soap, Cleaning Compound, and Toilet Preparation Manufacturing"
+NAICS,	32561,Soap and Cleaning Compound Manufacturing
+NAICS,	325611,Soap and Other Detergent Manufacturing
+NAICS,	325612,Polish and Other Sanitation Good Manufacturing
+NAICS,	325613,Surface Active Agent Manufacturing
+NAICS,	32562,Toilet Preparation Manufacturing
+NAICS,	325620,Toilet Preparation Manufacturing
+NAICS,	3259,Other Chemical Product and Preparation Manufacturing
+NAICS,	32591,Printing Ink Manufacturing
+NAICS,	325910,Printing Ink Manufacturing
+NAICS,	32592,Explosives Manufacturing
+NAICS,	325920,Explosives Manufacturing
+NAICS,	32599,All Other Chemical Product and Preparation Manufacturing
+NAICS,	325991,Custom Compounding of Purchased Resins
+NAICS,	325992,"Photographic Film, Paper, Plate, and Chemical Manufacturing"
+NAICS,	325998,All Other Miscellaneous Chemical Product and Preparation Manufacturing
+NAICS,	326,Plastics and Rubber Products Manufacturing
+NAICS,	3261,Plastics Product Manufacturing
+NAICS,	32611,Plastics Packaging Materials and Unlaminated Film and Sheet Manufacturing
+NAICS,	326111,Plastics Bag and Pouch Manufacturing
+NAICS,	326112,Plastics Packaging Film and Sheet (including Laminated) Manufacturing
+NAICS,	326113,Unlaminated Plastics Film and Sheet (except Packaging) Manufacturing
+NAICS,	32612,"Plastics Pipe, Pipe Fitting, and Unlaminated Profile Shape Manufacturing"
+NAICS,	326121,Unlaminated Plastics Profile Shape Manufacturing
+NAICS,	326122,Plastics Pipe and Pipe Fitting Manufacturing
+NAICS,	32613,"Laminated Plastics Plate, Sheet (except Packaging), and Shape Manufacturing"
+NAICS,	326130,"Laminated Plastics Plate, Sheet (except Packaging), and Shape Manufacturing"
+NAICS,	32614,Polystyrene Foam Product Manufacturing
+NAICS,	326140,Polystyrene Foam Product Manufacturing
+NAICS,	32615,Urethane and Other Foam Product (except Polystyrene) Manufacturing
+NAICS,	326150,Urethane and Other Foam Product (except Polystyrene) Manufacturing
+NAICS,	32616,Plastics Bottle Manufacturing
+NAICS,	326160,Plastics Bottle Manufacturing
+NAICS,	32619,Other Plastics Product Manufacturing
+NAICS,	326191,Plastics Plumbing Fixture Manufacturing
+NAICS,	326199,All Other Plastics Product Manufacturing
+NAICS,	3262,Rubber Product Manufacturing
+NAICS,	32621,Tire Manufacturing
+NAICS,	326211,Tire Manufacturing (except Retreading)
+NAICS,	326212,Tire Retreading
+NAICS,	32622,Rubber and Plastics Hoses and Belting Manufacturing
+NAICS,	326220,Rubber and Plastics Hoses and Belting Manufacturing
+NAICS,	32629,Other Rubber Product Manufacturing
+NAICS,	326291,Rubber Product Manufacturing for Mechanical Use
+NAICS,	326299,All Other Rubber Product Manufacturing
+NAICS,	327,Nonmetallic Mineral Product Manufacturing
+NAICS,	3271,Clay Product and Refractory Manufacturing
+NAICS,	32711,"Pottery, Ceramics, and Plumbing Fixture Manufacturing"
+NAICS,	327110,"Pottery, Ceramics, and Plumbing Fixture Manufacturing"
+NAICS,	32712,Clay Building Material and Refractories Manufacturing
+NAICS,	327120,Clay Building Material and Refractories Manufacturing
+NAICS,	3272,Glass and Glass Product Manufacturing
+NAICS,	32721,Glass and Glass Product Manufacturing
+NAICS,	327211,Flat Glass Manufacturing
+NAICS,	327212,Other Pressed and Blown Glass and Glassware Manufacturing
+NAICS,	327213,Glass Container Manufacturing
+NAICS,	327215,Glass Product Manufacturing Made of Purchased Glass
+NAICS,	3273,Cement and Concrete Product Manufacturing
+NAICS,	32731,Cement Manufacturing
+NAICS,	327310,Cement Manufacturing
+NAICS,	32732,Ready-Mix Concrete Manufacturing
+NAICS,	327320,Ready-Mix Concrete Manufacturing
+NAICS,	32733,"Concrete Pipe, Brick, and Block Manufacturing"
+NAICS,	327331,Concrete Block and Brick Manufacturing
+NAICS,	327332,Concrete Pipe Manufacturing
+NAICS,	32739,Other Concrete Product Manufacturing
+NAICS,	327390,Other Concrete Product Manufacturing
+NAICS,	3274,Lime and Gypsum Product Manufacturing
+NAICS,	32741,Lime Manufacturing
+NAICS,	327410,Lime Manufacturing
+NAICS,	32742,Gypsum Product Manufacturing
+NAICS,	327420,Gypsum Product Manufacturing
+NAICS,	3279,Other Nonmetallic Mineral Product Manufacturing
+NAICS,	32791,Abrasive Product Manufacturing
+NAICS,	327910,Abrasive Product Manufacturing
+NAICS,	32799,All Other Nonmetallic Mineral Product Manufacturing
+NAICS,	327991,Cut Stone and Stone Product Manufacturing
+NAICS,	327992,Ground or Treated Mineral and Earth Manufacturing
+NAICS,	327993,Mineral Wool Manufacturing
+NAICS,	327999,All Other Miscellaneous Nonmetallic Mineral Product Manufacturing
+NAICS,	331,Primary Metal Manufacturing
+NAICS,	3311,Iron and Steel Mills and Ferroalloy Manufacturing
+NAICS,	33111,Iron and Steel Mills and Ferroalloy Manufacturing
+NAICS,	331110,Iron and Steel Mills and Ferroalloy Manufacturing
+NAICS,	3312,Steel Product Manufacturing from Purchased Steel
+NAICS,	33121,Iron and Steel Pipe and Tube Manufacturing from Purchased Steel
+NAICS,	331210,Iron and Steel Pipe and Tube Manufacturing from Purchased Steel
+NAICS,	33122,Rolling and Drawing of Purchased Steel
+NAICS,	331221,Rolled Steel Shape Manufacturing
+NAICS,	331222,Steel Wire Drawing
+NAICS,	3313,Alumina and Aluminum Production and Processing
+NAICS,	33131,Alumina and Aluminum Production and Processing
+NAICS,	331313,Alumina Refining and Primary Aluminum Production
+NAICS,	331314,Secondary Smelting and Alloying of Aluminum
+NAICS,	331315,"Aluminum Sheet, Plate, and Foil Manufacturing"
+NAICS,	331318,"Other Aluminum Rolling, Drawing, and Extruding"
+NAICS,	3314,Nonferrous Metal (except Aluminum) Production and Processing
+NAICS,	33141,Nonferrous Metal (except Aluminum) Smelting and Refining
+NAICS,	331410,Nonferrous Metal (except Aluminum) Smelting and Refining
+NAICS,	33142,"Copper Rolling, Drawing, Extruding, and Alloying"
+NAICS,	331420,"Copper Rolling, Drawing, Extruding, and Alloying"
+NAICS,	33149,"Nonferrous Metal (except Copper and Aluminum) Rolling, Drawing, Extruding, and Alloying"
+NAICS,	331491,"Nonferrous Metal (except Copper and Aluminum) Rolling, Drawing, and Extruding"
+NAICS,	331492,"Secondary Smelting, Refining, and Alloying of Nonferrous Metal (except Copper and Aluminum)"
+NAICS,	3315,Foundries
+NAICS,	33151,Ferrous Metal Foundries
+NAICS,	331511,Iron Foundries
+NAICS,	331512,Steel Investment Foundries
+NAICS,	331513,Steel Foundries (except Investment)
+NAICS,	33152,Nonferrous Metal Foundries
+NAICS,	331523,Nonferrous Metal Die-Casting Foundries
+NAICS,	331524,Aluminum Foundries (except Die-Casting)
+NAICS,	331529,Other Nonferrous Metal Foundries (except Die-Casting)
+NAICS,	332,Fabricated Metal Product Manufacturing
+NAICS,	3321,Forging and Stamping
+NAICS,	33211,Forging and Stamping
+NAICS,	332111,Iron and Steel Forging
+NAICS,	332112,Nonferrous Forging
+NAICS,	332114,Custom Roll Forming
+NAICS,	332117,Powder Metallurgy Part Manufacturing
+NAICS,	332119,"Metal Crown, Closure, and Other Metal Stamping (except Automotive)"
+NAICS,	3322,Cutlery and Handtool Manufacturing
+NAICS,	33221,Cutlery and Handtool Manufacturing
+NAICS,	332215,"Metal Kitchen Cookware, Utensil, Cutlery, and Flatware (except Precious) Manufacturing"
+NAICS,	332216,Saw Blade and Handtool Manufacturing
+NAICS,	3323,Architectural and Structural Metals Manufacturing
+NAICS,	33231,Plate Work and Fabricated Structural Product Manufacturing
+NAICS,	332311,Prefabricated Metal Building and Component Manufacturing
+NAICS,	332312,Fabricated Structural Metal Manufacturing
+NAICS,	332313,Plate Work Manufacturing
+NAICS,	33232,Ornamental and Architectural Metal Products Manufacturing
+NAICS,	332321,Metal Window and Door Manufacturing
+NAICS,	332322,Sheet Metal Work Manufacturing
+NAICS,	332323,Ornamental and Architectural Metal Work Manufacturing
+NAICS,	3324,"Boiler, Tank, and Shipping Container Manufacturing"
+NAICS,	33241,Power Boiler and Heat Exchanger Manufacturing
+NAICS,	332410,Power Boiler and Heat Exchanger Manufacturing
+NAICS,	33242,Metal Tank (Heavy Gauge) Manufacturing
+NAICS,	332420,Metal Tank (Heavy Gauge) Manufacturing
+NAICS,	33243,"Metal Can, Box, and Other Metal Container (Light Gauge) Manufacturing"
+NAICS,	332431,Metal Can Manufacturing
+NAICS,	332439,Other Metal Container Manufacturing
+NAICS,	3325,Hardware Manufacturing
+NAICS,	33251,Hardware Manufacturing
+NAICS,	332510,Hardware Manufacturing
+NAICS,	3326,Spring and Wire Product Manufacturing
+NAICS,	33261,Spring and Wire Product Manufacturing
+NAICS,	332613,Spring Manufacturing
+NAICS,	332618,Other Fabricated Wire Product Manufacturing
+NAICS,	3327,"Machine Shops; Turned Product; and Screw, Nut, and Bolt Manufacturing"
+NAICS,	33271,Machine Shops
+NAICS,	332710,Machine Shops
+NAICS,	33272,"Turned Product and Screw, Nut, and Bolt Manufacturing"
+NAICS,	332721,Precision Turned Product Manufacturing
+NAICS,	332722,"Bolt, Nut, Screw, Rivet, and Washer Manufacturing"
+NAICS,	3328,"Coating, Engraving, Heat Treating, and Allied Activities"
+NAICS,	33281,"Coating, Engraving, Heat Treating, and Allied Activities"
+NAICS,	332811,Metal Heat Treating
+NAICS,	332812,"Metal Coating, Engraving (except Jewelry and Silverware), and Allied Services to Manufacturers"
+NAICS,	332813,"Electroplating, Plating, Polishing, Anodizing, and Coloring"
+NAICS,	3329,Other Fabricated Metal Product Manufacturing
+NAICS,	33291,Metal Valve Manufacturing
+NAICS,	332911,Industrial Valve Manufacturing
+NAICS,	332912,Fluid Power Valve and Hose Fitting Manufacturing
+NAICS,	332913,Plumbing Fixture Fitting and Trim Manufacturing
+NAICS,	332919,Other Metal Valve and Pipe Fitting Manufacturing
+NAICS,	33299,All Other Fabricated Metal Product Manufacturing
+NAICS,	332991,Ball and Roller Bearing Manufacturing
+NAICS,	332992,Small Arms Ammunition Manufacturing
+NAICS,	332993,Ammunition (except Small Arms) Manufacturing
+NAICS,	332994,"Small Arms, Ordnance, and Ordnance Accessories Manufacturing"
+NAICS,	332996,Fabricated Pipe and Pipe Fitting Manufacturing
+NAICS,	332999,All Other Miscellaneous Fabricated Metal Product Manufacturing
+NAICS,	333,Machinery Manufacturing
+NAICS,	3331,"Agriculture, Construction, and Mining Machinery Manufacturing"
+NAICS,	33311,Agricultural Implement Manufacturing
+NAICS,	333111,Farm Machinery and Equipment Manufacturing
+NAICS,	333112,Lawn and Garden Tractor and Home Lawn and Garden Equipment Manufacturing
+NAICS,	33312,Construction Machinery Manufacturing
+NAICS,	333120,Construction Machinery Manufacturing
+NAICS,	33313,Mining and Oil and Gas Field Machinery Manufacturing
+NAICS,	333131,Mining Machinery and Equipment Manufacturing
+NAICS,	333132,Oil and Gas Field Machinery and Equipment Manufacturing
+NAICS,	3332,Industrial Machinery Manufacturing
+NAICS,	33324,Industrial Machinery Manufacturing
+NAICS,	333241,Food Product Machinery Manufacturing
+NAICS,	333242,Semiconductor Machinery Manufacturing
+NAICS,	333243,"Sawmill, Woodworking, and Paper Machinery Manufacturing"
+NAICS,	333244,Printing Machinery and Equipment Manufacturing
+NAICS,	333249,Other Industrial Machinery Manufacturing
+NAICS,	3333,Commercial and Service Industry Machinery Manufacturing
+NAICS,	33331,Commercial and Service Industry Machinery Manufacturing
+NAICS,	333314,Optical Instrument and Lens Manufacturing
+NAICS,	333316,Photographic and Photocopying Equipment Manufacturing
+NAICS,	333318,Other Commercial and Service Industry Machinery Manufacturing
+NAICS,	3334,"Ventilation, Heating, Air-Conditioning, and Commercial Refrigeration Equipment Manufacturing"
+NAICS,	33341,"Ventilation, Heating, Air-Conditioning, and Commercial Refrigeration Equipment Manufacturing"
+NAICS,	333413,Industrial and Commercial Fan and Blower and Air Purification Equipment Manufacturing
+NAICS,	333414,Heating Equipment (except Warm Air Furnaces) Manufacturing
+NAICS,	333415,Air-Conditioning and Warm Air Heating Equipment and Commercial and Industrial Refrigeration Equipment Manufacturing
+NAICS,	3335,Metalworking Machinery Manufacturing
+NAICS,	33351,Metalworking Machinery Manufacturing
+NAICS,	333511,Industrial Mold Manufacturing
+NAICS,	333514,"Special Die and Tool, Die Set, Jig, and Fixture Manufacturing"
+NAICS,	333515,Cutting Tool and Machine Tool Accessory Manufacturing
+NAICS,	333517,Machine Tool Manufacturing
+NAICS,	333519,Rolling Mill and Other Metalworking Machinery Manufacturing
+NAICS,	3336,"Engine, Turbine, and Power Transmission Equipment Manufacturing"
+NAICS,	33361,"Engine, Turbine, and Power Transmission Equipment Manufacturing"
+NAICS,	333611,Turbine and Turbine Generator Set Units Manufacturing
+NAICS,	333612,"Speed Changer, Industrial High-Speed Drive, and Gear Manufacturing"
+NAICS,	333613,Mechanical Power Transmission Equipment Manufacturing
+NAICS,	333618,Other Engine Equipment Manufacturing
+NAICS,	3339,Other General Purpose Machinery Manufacturing
+NAICS,	33391,Pump and Compressor Manufacturing
+NAICS,	333912,Air and Gas Compressor Manufacturing
+NAICS,	333914,"Measuring, Dispensing, and Other Pumping Equipment Manufacturing"
+NAICS,	33392,Material Handling Equipment Manufacturing
+NAICS,	333921,Elevator and Moving Stairway Manufacturing
+NAICS,	333922,Conveyor and Conveying Equipment Manufacturing
+NAICS,	333923,"Overhead Traveling Crane, Hoist, and Monorail System Manufacturing"
+NAICS,	333924,"Industrial Truck, Tractor, Trailer, and Stacker Machinery Manufacturing"
+NAICS,	33399,All Other General Purpose Machinery Manufacturing
+NAICS,	333991,Power-Driven Handtool Manufacturing
+NAICS,	333992,Welding and Soldering Equipment Manufacturing
+NAICS,	333993,Packaging Machinery Manufacturing
+NAICS,	333994,Industrial Process Furnace and Oven Manufacturing
+NAICS,	333995,Fluid Power Cylinder and Actuator Manufacturing
+NAICS,	333996,Fluid Power Pump and Motor Manufacturing
+NAICS,	333997,Scale and Balance Manufacturing
+NAICS,	333999,All Other Miscellaneous General Purpose Machinery Manufacturing
+NAICS,	334,Computer and Electronic Product Manufacturing
+NAICS,	3341,Computer and Peripheral Equipment Manufacturing
+NAICS,	33411,Computer and Peripheral Equipment Manufacturing
+NAICS,	334111,Electronic Computer Manufacturing
+NAICS,	334112,Computer Storage Device Manufacturing
+NAICS,	334118,Computer Terminal and Other Computer Peripheral Equipment Manufacturing
+NAICS,	3342,Communications Equipment Manufacturing
+NAICS,	33421,Telephone Apparatus Manufacturing
+NAICS,	334210,Telephone Apparatus Manufacturing
+NAICS,	33422,Radio and Television Broadcasting and Wireless Communications Equipment Manufacturing
+NAICS,	334220,Radio and Television Broadcasting and Wireless Communications Equipment Manufacturing
+NAICS,	33429,Other Communications Equipment Manufacturing
+NAICS,	334290,Other Communications Equipment Manufacturing
+NAICS,	3343,Audio and Video Equipment Manufacturing
+NAICS,	33431,Audio and Video Equipment Manufacturing
+NAICS,	334310,Audio and Video Equipment Manufacturing
+NAICS,	3344,Semiconductor and Other Electronic Component Manufacturing
+NAICS,	33441,Semiconductor and Other Electronic Component Manufacturing
+NAICS,	334412,Bare Printed Circuit Board Manufacturing
+NAICS,	334413,Semiconductor and Related Device Manufacturing
+NAICS,	334416,"Capacitor, Resistor, Coil, Transformer, and Other Inductor Manufacturing"
+NAICS,	334417,Electronic Connector Manufacturing
+NAICS,	334418,Printed Circuit Assembly (Electronic Assembly) Manufacturing
+NAICS,	334419,Other Electronic Component Manufacturing
+NAICS,	3345,"Navigational, Measuring, Electromedical, and Control Instruments Manufacturing"
+NAICS,	33451,"Navigational, Measuring, Electromedical, and Control Instruments Manufacturing"
+NAICS,	334510,Electromedical and Electrotherapeutic Apparatus Manufacturing
+NAICS,	334511,"Search, Detection, Navigation, Guidance, Aeronautical, and Nautical System and Instrument Manufacturing"
+NAICS,	334512,"Automatic Environmental Control Manufacturing for Residential, Commercial, and Appliance Use"
+NAICS,	334513,"Instruments and Related Products Manufacturing for Measuring, Displaying, and Controlling Industrial Process Variables"
+NAICS,	334514,Totalizing Fluid Meter and Counting Device Manufacturing
+NAICS,	334515,Instrument Manufacturing for Measuring and Testing Electricity and Electrical Signals
+NAICS,	334516,Analytical Laboratory Instrument Manufacturing
+NAICS,	334517,Irradiation Apparatus Manufacturing
+NAICS,	334519,Other Measuring and Controlling Device Manufacturing
+NAICS,	3346,Manufacturing and Reproducing Magnetic and Optical Media
+NAICS,	33461,Manufacturing and Reproducing Magnetic and Optical Media
+NAICS,	334613,Blank Magnetic and Optical Recording Media Manufacturing
+NAICS,	334614,"Software and Other Prerecorded Compact Disc, Tape, and Record Reproducing"
+NAICS,	335,"Electrical Equipment, Appliance, and Component Manufacturing"
+NAICS,	3351,Electric Lighting Equipment Manufacturing
+NAICS,	33511,Electric Lamp Bulb and Part Manufacturing
+NAICS,	335110,Electric Lamp Bulb and Part Manufacturing
+NAICS,	33512,Lighting Fixture Manufacturing
+NAICS,	335121,Residential Electric Lighting Fixture Manufacturing
+NAICS,	335122,"Commercial, Industrial, and Institutional Electric Lighting Fixture Manufacturing"
+NAICS,	335129,Other Lighting Equipment Manufacturing
+NAICS,	3352,Household Appliance Manufacturing
+NAICS,	33521,Small Electrical Appliance Manufacturing
+NAICS,	335210,Small Electrical Appliance Manufacturing
+NAICS,	33522,Major Household Appliance Manufacturing
+NAICS,	335220,Major Household Appliance Manufacturing
+NAICS,	3353,Electrical Equipment Manufacturing
+NAICS,	33531,Electrical Equipment Manufacturing
+NAICS,	335311,"Power, Distribution, and Specialty Transformer Manufacturing"
+NAICS,	335312,Motor and Generator Manufacturing
+NAICS,	335313,Switchgear and Switchboard Apparatus Manufacturing
+NAICS,	335314,Relay and Industrial Control Manufacturing
+NAICS,	3359,Other Electrical Equipment and Component Manufacturing
+NAICS,	33591,Battery Manufacturing
+NAICS,	335911,Storage Battery Manufacturing
+NAICS,	335912,Primary Battery Manufacturing
+NAICS,	33592,Communication and Energy Wire and Cable Manufacturing
+NAICS,	335921,Fiber Optic Cable Manufacturing
+NAICS,	335929,Other Communication and Energy Wire Manufacturing
+NAICS,	33593,Wiring Device Manufacturing
+NAICS,	335931,Current-Carrying Wiring Device Manufacturing
+NAICS,	335932,Noncurrent-Carrying Wiring Device Manufacturing
+NAICS,	33599,All Other Electrical Equipment and Component Manufacturing
+NAICS,	335991,Carbon and Graphite Product Manufacturing
+NAICS,	335999,All Other Miscellaneous Electrical Equipment and Component Manufacturing
+NAICS,	336,Transportation Equipment Manufacturing
+NAICS,	3361,Motor Vehicle Manufacturing
+NAICS,	33611,Automobile and Light Duty Motor Vehicle Manufacturing
+NAICS,	336111,Automobile Manufacturing
+NAICS,	336112,Light Truck and Utility Vehicle Manufacturing
+NAICS,	33612,Heavy Duty Truck Manufacturing
+NAICS,	336120,Heavy Duty Truck Manufacturing
+NAICS,	3362,Motor Vehicle Body and Trailer Manufacturing
+NAICS,	33621,Motor Vehicle Body and Trailer Manufacturing
+NAICS,	336211,Motor Vehicle Body Manufacturing
+NAICS,	336212,Truck Trailer Manufacturing
+NAICS,	336213,Motor Home Manufacturing
+NAICS,	336214,Travel Trailer and Camper Manufacturing
+NAICS,	3363,Motor Vehicle Parts Manufacturing
+NAICS,	33631,Motor Vehicle Gasoline Engine and Engine Parts Manufacturing
+NAICS,	336310,Motor Vehicle Gasoline Engine and Engine Parts Manufacturing
+NAICS,	33632,Motor Vehicle Electrical and Electronic Equipment Manufacturing
+NAICS,	336320,Motor Vehicle Electrical and Electronic Equipment Manufacturing
+NAICS,	33633,Motor Vehicle Steering and Suspension Components (except Spring) Manufacturing
+NAICS,	336330,Motor Vehicle Steering and Suspension Components (except Spring) Manufacturing
+NAICS,	33634,Motor Vehicle Brake System Manufacturing
+NAICS,	336340,Motor Vehicle Brake System Manufacturing
+NAICS,	33635,Motor Vehicle Transmission and Power Train Parts Manufacturing
+NAICS,	336350,Motor Vehicle Transmission and Power Train Parts Manufacturing
+NAICS,	33636,Motor Vehicle Seating and Interior Trim Manufacturing
+NAICS,	336360,Motor Vehicle Seating and Interior Trim Manufacturing
+NAICS,	33637,Motor Vehicle Metal Stamping
+NAICS,	336370,Motor Vehicle Metal Stamping
+NAICS,	33639,Other Motor Vehicle Parts Manufacturing
+NAICS,	336390,Other Motor Vehicle Parts Manufacturing
+NAICS,	3364,Aerospace Product and Parts Manufacturing
+NAICS,	33641,Aerospace Product and Parts Manufacturing
+NAICS,	336411,Aircraft Manufacturing
+NAICS,	336412,Aircraft Engine and Engine Parts Manufacturing
+NAICS,	336413,Other Aircraft Parts and Auxiliary Equipment Manufacturing
+NAICS,	336414,Guided Missile and Space Vehicle Manufacturing
+NAICS,	336415,Guided Missile and Space Vehicle Propulsion Unit and Propulsion Unit Parts Manufacturing
+NAICS,	336419,Other Guided Missile and Space Vehicle Parts and Auxiliary Equipment Manufacturing
+NAICS,	3365,Railroad Rolling Stock Manufacturing
+NAICS,	33651,Railroad Rolling Stock Manufacturing
+NAICS,	336510,Railroad Rolling Stock Manufacturing
+NAICS,	3366,Ship and Boat Building
+NAICS,	33661,Ship and Boat Building
+NAICS,	336611,Ship Building and Repairing
+NAICS,	336612,Boat Building
+NAICS,	3369,Other Transportation Equipment Manufacturing
+NAICS,	33699,Other Transportation Equipment Manufacturing
+NAICS,	336991,"Motorcycle, Bicycle, and Parts Manufacturing"
+NAICS,	336992,"Military Armored Vehicle, Tank, and Tank Component Manufacturing"
+NAICS,	336999,All Other Transportation Equipment Manufacturing
+NAICS,	337,Furniture and Related Product Manufacturing
+NAICS,	3371,Household and Institutional Furniture and Kitchen Cabinet Manufacturing
+NAICS,	33711,Wood Kitchen Cabinet and Countertop Manufacturing
+NAICS,	337110,Wood Kitchen Cabinet and Countertop Manufacturing
+NAICS,	33712,Household and Institutional Furniture Manufacturing
+NAICS,	337121,Upholstered Household Furniture Manufacturing
+NAICS,	337122,Nonupholstered Wood Household Furniture Manufacturing
+NAICS,	337124,Metal Household Furniture Manufacturing
+NAICS,	337125,Household Furniture (except Wood and Metal) Manufacturing
+NAICS,	337127,Institutional Furniture Manufacturing
+NAICS,	3372,Office Furniture (including Fixtures) Manufacturing
+NAICS,	33721,Office Furniture (including Fixtures) Manufacturing
+NAICS,	337211,Wood Office Furniture Manufacturing
+NAICS,	337212,Custom Architectural Woodwork and Millwork Manufacturing
+NAICS,	337214,Office Furniture (except Wood) Manufacturing
+NAICS,	337215,"Showcase, Partition, Shelving, and Locker Manufacturing"
+NAICS,	3379,Other Furniture Related Product Manufacturing
+NAICS,	33791,Mattress Manufacturing
+NAICS,	337910,Mattress Manufacturing
+NAICS,	33792,Blind and Shade Manufacturing
+NAICS,	337920,Blind and Shade Manufacturing
+NAICS,	339,Miscellaneous Manufacturing
+NAICS,	3391,Medical Equipment and Supplies Manufacturing
+NAICS,	33911,Medical Equipment and Supplies Manufacturing
+NAICS,	339112,Surgical and Medical Instrument Manufacturing
+NAICS,	339113,Surgical Appliance and Supplies Manufacturing
+NAICS,	339114,Dental Equipment and Supplies Manufacturing
+NAICS,	339115,Ophthalmic Goods Manufacturing
+NAICS,	339116,Dental Laboratories
+NAICS,	3399,Other Miscellaneous Manufacturing
+NAICS,	33991,Jewelry and Silverware Manufacturing
+NAICS,	339910,Jewelry and Silverware Manufacturing
+NAICS,	33992,Sporting and Athletic Goods Manufacturing
+NAICS,	339920,Sporting and Athletic Goods Manufacturing
+NAICS,	33993,"Doll, Toy, and Game Manufacturing"
+NAICS,	339930,"Doll, Toy, and Game Manufacturing"
+NAICS,	33994,Office Supplies (except Paper) Manufacturing
+NAICS,	339940,Office Supplies (except Paper) Manufacturing
+NAICS,	33995,Sign Manufacturing
+NAICS,	339950,Sign Manufacturing
+NAICS,	33999,All Other Miscellaneous Manufacturing
+NAICS,	339991,"Gasket, Packing, and Sealing Device Manufacturing"
+NAICS,	339992,Musical Instrument Manufacturing
+NAICS,	339993,"Fastener, Button, Needle, and Pin Manufacturing"
+NAICS,	339994,"Broom, Brush, and Mop Manufacturing"
+NAICS,	339995,Burial Casket Manufacturing
+NAICS,	339999,All Other Miscellaneous Manufacturing
+NAICS,	42,Wholesale Trade
+NAICS,	423,"Merchant Wholesalers, Durable Goods"
+NAICS,	4231,Motor Vehicle and Motor Vehicle Parts and Supplies Merchant Wholesalers
+NAICS,	42311,Automobile and Other Motor Vehicle Merchant Wholesalers
+NAICS,	423110,Automobile and Other Motor Vehicle Merchant Wholesalers
+NAICS,	42312,Motor Vehicle Supplies and New Parts Merchant Wholesalers
+NAICS,	423120,Motor Vehicle Supplies and New Parts Merchant Wholesalers
+NAICS,	42313,Tire and Tube Merchant Wholesalers
+NAICS,	423130,Tire and Tube Merchant Wholesalers
+NAICS,	42314,Motor Vehicle Parts (Used) Merchant Wholesalers
+NAICS,	423140,Motor Vehicle Parts (Used) Merchant Wholesalers
+NAICS,	4232,Furniture and Home Furnishing Merchant Wholesalers
+NAICS,	42321,Furniture Merchant Wholesalers
+NAICS,	423210,Furniture Merchant Wholesalers
+NAICS,	42322,Home Furnishing Merchant Wholesalers
+NAICS,	423220,Home Furnishing Merchant Wholesalers
+NAICS,	4233,Lumber and Other Construction Materials Merchant Wholesalers
+NAICS,	42331,"Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers"
+NAICS,	423310,"Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers"
+NAICS,	42332,"Brick, Stone, and Related Construction Material Merchant Wholesalers"
+NAICS,	423320,"Brick, Stone, and Related Construction Material Merchant Wholesalers"
+NAICS,	42333,"Roofing, Siding, and Insulation Material Merchant Wholesalers"
+NAICS,	423330,"Roofing, Siding, and Insulation Material Merchant Wholesalers"
+NAICS,	42339,Other Construction Material Merchant Wholesalers
+NAICS,	423390,Other Construction Material Merchant Wholesalers
+NAICS,	4234,Professional and Commercial Equipment and Supplies Merchant Wholesalers
+NAICS,	42341,Photographic Equipment and Supplies Merchant Wholesalers
+NAICS,	423410,Photographic Equipment and Supplies Merchant Wholesalers
+NAICS,	42342,Office Equipment Merchant Wholesalers
+NAICS,	423420,Office Equipment Merchant Wholesalers
+NAICS,	42343,Computer and Computer Peripheral Equipment and Software Merchant Wholesalers
+NAICS,	423430,Computer and Computer Peripheral Equipment and Software Merchant Wholesalers
+NAICS,	42344,Other Commercial Equipment Merchant Wholesalers
+NAICS,	423440,Other Commercial Equipment Merchant Wholesalers
+NAICS,	42345,"Medical, Dental, and Hospital Equipment and Supplies Merchant Wholesalers"
+NAICS,	423450,"Medical, Dental, and Hospital Equipment and Supplies Merchant Wholesalers"
+NAICS,	42346,Ophthalmic Goods Merchant Wholesalers
+NAICS,	423460,Ophthalmic Goods Merchant Wholesalers
+NAICS,	42349,Other Professional Equipment and Supplies Merchant Wholesalers
+NAICS,	423490,Other Professional Equipment and Supplies Merchant Wholesalers
+NAICS,	4235,Metal and Mineral (except Petroleum) Merchant Wholesalers
+NAICS,	42351,Metal Service Centers and Other Metal Merchant Wholesalers
+NAICS,	423510,Metal Service Centers and Other Metal Merchant Wholesalers
+NAICS,	42352,Coal and Other Mineral and Ore Merchant Wholesalers
+NAICS,	423520,Coal and Other Mineral and Ore Merchant Wholesalers
+NAICS,	4236,Household Appliances and Electrical and Electronic Goods Merchant Wholesalers
+NAICS,	42361,"Electrical Apparatus and Equipment, Wiring Supplies, and Related Equipment Merchant Wholesalers"
+NAICS,	423610,"Electrical Apparatus and Equipment, Wiring Supplies, and Related Equipment Merchant Wholesalers"
+NAICS,	42362,"Household Appliances, Electric Housewares, and Consumer Electronics Merchant Wholesalers"
+NAICS,	423620,"Household Appliances, Electric Housewares, and Consumer Electronics Merchant Wholesalers"
+NAICS,	42369,Other Electronic Parts and Equipment Merchant Wholesalers
+NAICS,	423690,Other Electronic Parts and Equipment Merchant Wholesalers
+NAICS,	4237,"Hardware, and Plumbing and Heating Equipment and Supplies Merchant Wholesalers"
+NAICS,	42371,Hardware Merchant Wholesalers
+NAICS,	423710,Hardware Merchant Wholesalers
+NAICS,	42372,Plumbing and Heating Equipment and Supplies (Hydronics) Merchant Wholesalers
+NAICS,	423720,Plumbing and Heating Equipment and Supplies (Hydronics) Merchant Wholesalers
+NAICS,	42373,Warm Air Heating and Air-Conditioning Equipment and Supplies Merchant Wholesalers
+NAICS,	423730,Warm Air Heating and Air-Conditioning Equipment and Supplies Merchant Wholesalers
+NAICS,	42374,Refrigeration Equipment and Supplies Merchant Wholesalers
+NAICS,	423740,Refrigeration Equipment and Supplies Merchant Wholesalers
+NAICS,	4238,"Machinery, Equipment, and Supplies Merchant Wholesalers"
+NAICS,	42381,Construction and Mining (except Oil Well) Machinery and Equipment Merchant Wholesalers
+NAICS,	423810,Construction and Mining (except Oil Well) Machinery and Equipment Merchant Wholesalers
+NAICS,	42382,Farm and Garden Machinery and Equipment Merchant Wholesalers
+NAICS,	423820,Farm and Garden Machinery and Equipment Merchant Wholesalers
+NAICS,	42383,Industrial Machinery and Equipment Merchant Wholesalers
+NAICS,	423830,Industrial Machinery and Equipment Merchant Wholesalers
+NAICS,	42384,Industrial Supplies Merchant Wholesalers
+NAICS,	423840,Industrial Supplies Merchant Wholesalers
+NAICS,	42385,Service Establishment Equipment and Supplies Merchant Wholesalers
+NAICS,	423850,Service Establishment Equipment and Supplies Merchant Wholesalers
+NAICS,	42386,Transportation Equipment and Supplies (except Motor Vehicle) Merchant Wholesalers
+NAICS,	423860,Transportation Equipment and Supplies (except Motor Vehicle) Merchant Wholesalers
+NAICS,	4239,Miscellaneous Durable Goods Merchant Wholesalers
+NAICS,	42391,Sporting and Recreational Goods and Supplies Merchant Wholesalers
+NAICS,	423910,Sporting and Recreational Goods and Supplies Merchant Wholesalers
+NAICS,	42392,Toy and Hobby Goods and Supplies Merchant Wholesalers
+NAICS,	423920,Toy and Hobby Goods and Supplies Merchant Wholesalers
+NAICS,	42393,Recyclable Material Merchant Wholesalers
+NAICS,	423930,Recyclable Material Merchant Wholesalers
+NAICS,	42394,"Jewelry, Watch, Precious Stone, and Precious Metal Merchant Wholesalers"
+NAICS,	423940,"Jewelry, Watch, Precious Stone, and Precious Metal Merchant Wholesalers"
+NAICS,	42399,Other Miscellaneous Durable Goods Merchant Wholesalers
+NAICS,	423990,Other Miscellaneous Durable Goods Merchant Wholesalers
+NAICS,	424,"Merchant Wholesalers, Nondurable Goods"
+NAICS,	4241,Paper and Paper Product Merchant Wholesalers
+NAICS,	42411,Printing and Writing Paper Merchant Wholesalers
+NAICS,	424110,Printing and Writing Paper Merchant Wholesalers
+NAICS,	42412,Stationery and Office Supplies Merchant Wholesalers
+NAICS,	424120,Stationery and Office Supplies Merchant Wholesalers
+NAICS,	42413,Industrial and Personal Service Paper Merchant Wholesalers
+NAICS,	424130,Industrial and Personal Service Paper Merchant Wholesalers
+NAICS,	4242,Drugs and Druggists' Sundries Merchant Wholesalers
+NAICS,	42421,Drugs and Druggists' Sundries Merchant Wholesalers
+NAICS,	424210,Drugs and Druggists' Sundries Merchant Wholesalers
+NAICS,	4243,"Apparel, Piece Goods, and Notions Merchant Wholesalers"
+NAICS,	42431,"Piece Goods, Notions, and Other Dry Goods Merchant Wholesalers"
+NAICS,	424310,"Piece Goods, Notions, and Other Dry Goods Merchant Wholesalers"
+NAICS,	42432,Men's and Boys' Clothing and Furnishings Merchant Wholesalers
+NAICS,	424320,Men's and Boys' Clothing and Furnishings Merchant Wholesalers
+NAICS,	42433,"Women's, Children's, and Infants' Clothing and Accessories Merchant Wholesalers"
+NAICS,	424330,"Women's, Children's, and Infants' Clothing and Accessories Merchant Wholesalers"
+NAICS,	42434,Footwear Merchant Wholesalers
+NAICS,	424340,Footwear Merchant Wholesalers
+NAICS,	4244,Grocery and Related Product Merchant Wholesalers
+NAICS,	42441,General Line Grocery Merchant Wholesalers
+NAICS,	424410,General Line Grocery Merchant Wholesalers
+NAICS,	42442,Packaged Frozen Food Merchant Wholesalers
+NAICS,	424420,Packaged Frozen Food Merchant Wholesalers
+NAICS,	42443,Dairy Product (except Dried or Canned) Merchant Wholesalers
+NAICS,	424430,Dairy Product (except Dried or Canned) Merchant Wholesalers
+NAICS,	42444,Poultry and Poultry Product Merchant Wholesalers
+NAICS,	424440,Poultry and Poultry Product Merchant Wholesalers
+NAICS,	42445,Confectionery Merchant Wholesalers
+NAICS,	424450,Confectionery Merchant Wholesalers
+NAICS,	42446,Fish and Seafood Merchant Wholesalers
+NAICS,	424460,Fish and Seafood Merchant Wholesalers
+NAICS,	42447,Meat and Meat Product Merchant Wholesalers
+NAICS,	424470,Meat and Meat Product Merchant Wholesalers
+NAICS,	42448,Fresh Fruit and Vegetable Merchant Wholesalers
+NAICS,	424480,Fresh Fruit and Vegetable Merchant Wholesalers
+NAICS,	42449,Other Grocery and Related Products Merchant Wholesalers
+NAICS,	424490,Other Grocery and Related Products Merchant Wholesalers
+NAICS,	4245,Farm Product Raw Material Merchant Wholesalers
+NAICS,	42451,Grain and Field Bean Merchant Wholesalers
+NAICS,	424510,Grain and Field Bean Merchant Wholesalers
+NAICS,	42452,Livestock Merchant Wholesalers
+NAICS,	424520,Livestock Merchant Wholesalers
+NAICS,	42459,Other Farm Product Raw Material Merchant Wholesalers
+NAICS,	424590,Other Farm Product Raw Material Merchant Wholesalers
+NAICS,	4246,Chemical and Allied Products Merchant Wholesalers
+NAICS,	42461,Plastics Materials and Basic Forms and Shapes Merchant Wholesalers
+NAICS,	424610,Plastics Materials and Basic Forms and Shapes Merchant Wholesalers
+NAICS,	42469,Other Chemical and Allied Products Merchant Wholesalers
+NAICS,	424690,Other Chemical and Allied Products Merchant Wholesalers
+NAICS,	4247,Petroleum and Petroleum Products Merchant Wholesalers
+NAICS,	42471,Petroleum Bulk Stations and Terminals
+NAICS,	424710,Petroleum Bulk Stations and Terminals
+NAICS,	42472,Petroleum and Petroleum Products Merchant Wholesalers (except Bulk Stations and Terminals)
+NAICS,	424720,Petroleum and Petroleum Products Merchant Wholesalers (except Bulk Stations and Terminals)
+NAICS,	4248,"Beer, Wine, and Distilled Alcoholic Beverage Merchant Wholesalers"
+NAICS,	42481,Beer and Ale Merchant Wholesalers
+NAICS,	424810,Beer and Ale Merchant Wholesalers
+NAICS,	42482,Wine and Distilled Alcoholic Beverage Merchant Wholesalers
+NAICS,	424820,Wine and Distilled Alcoholic Beverage Merchant Wholesalers
+NAICS,	4249,Miscellaneous Nondurable Goods Merchant Wholesalers
+NAICS,	42491,Farm Supplies Merchant Wholesalers
+NAICS,	424910,Farm Supplies Merchant Wholesalers
+NAICS,	42492,"Book, Periodical, and Newspaper Merchant Wholesalers"
+NAICS,	424920,"Book, Periodical, and Newspaper Merchant Wholesalers"
+NAICS,	42493,"Flower, Nursery Stock, and Florists' Supplies Merchant Wholesalers"
+NAICS,	424930,"Flower, Nursery Stock, and Florists' Supplies Merchant Wholesalers"
+NAICS,	42494,Tobacco and Tobacco Product Merchant Wholesalers
+NAICS,	424940,Tobacco and Tobacco Product Merchant Wholesalers
+NAICS,	42495,"Paint, Varnish, and Supplies Merchant Wholesalers"
+NAICS,	424950,"Paint, Varnish, and Supplies Merchant Wholesalers"
+NAICS,	42499,Other Miscellaneous Nondurable Goods Merchant Wholesalers
+NAICS,	424990,Other Miscellaneous Nondurable Goods Merchant Wholesalers
+NAICS,	425,Wholesale Electronic Markets and Agents and Brokers
+NAICS,	4251,Wholesale Electronic Markets and Agents and Brokers
+NAICS,	42511,Business to Business Electronic Markets
+NAICS,	425110,Business to Business Electronic Markets
+NAICS,	42512,Wholesale Trade Agents and Brokers
+NAICS,	425120,Wholesale Trade Agents and Brokers
+NAICS,	441,Motor Vehicle and Parts Dealers
+NAICS,	4411,Automobile Dealers
+NAICS,	44111,New Car Dealers
+NAICS,	441110,New Car Dealers
+NAICS,	44112,Used Car Dealers
+NAICS,	441120,Used Car Dealers
+NAICS,	4412,Other Motor Vehicle Dealers
+NAICS,	44121,Recreational Vehicle Dealers
+NAICS,	441210,Recreational Vehicle Dealers
+NAICS,	44122,"Motorcycle, Boat, and Other Motor Vehicle Dealers"
+NAICS,	441222,Boat Dealers
+NAICS,	441228,"Motorcycle, ATV, and All Other Motor Vehicle Dealers"
+NAICS,	4413,"Automotive Parts, Accessories, and Tire Stores"
+NAICS,	44131,Automotive Parts and Accessories Stores
+NAICS,	441310,Automotive Parts and Accessories Stores
+NAICS,	44132,Tire Dealers
+NAICS,	441320,Tire Dealers
+NAICS,	442,Furniture and Home Furnishings Stores
+NAICS,	4421,Furniture Stores
+NAICS,	44211,Furniture Stores
+NAICS,	442110,Furniture Stores
+NAICS,	4422,Home Furnishings Stores
+NAICS,	44221,Floor Covering Stores
+NAICS,	442210,Floor Covering Stores
+NAICS,	44229,Other Home Furnishings Stores
+NAICS,	442291,Window Treatment Stores
+NAICS,	442299,All Other Home Furnishings Stores
+NAICS,	443,Electronics and Appliance Stores
+NAICS,	4431,Electronics and Appliance Stores
+NAICS,	44314,Electronics and Appliance Stores
+NAICS,	443141,Household Appliance Stores
+NAICS,	443142,Electronics Stores
+NAICS,	444,Building Material and Garden Equipment and Supplies Dealers
+NAICS,	4441,Building Material and Supplies Dealers
+NAICS,	44411,Home Centers
+NAICS,	444110,Home Centers
+NAICS,	44412,Paint and Wallpaper Stores
+NAICS,	444120,Paint and Wallpaper Stores
+NAICS,	44413,Hardware Stores
+NAICS,	444130,Hardware Stores
+NAICS,	44419,Other Building Material Dealers
+NAICS,	444190,Other Building Material Dealers
+NAICS,	4442,Lawn and Garden Equipment and Supplies Stores
+NAICS,	44421,Outdoor Power Equipment Stores
+NAICS,	444210,Outdoor Power Equipment Stores
+NAICS,	44422,"Nursery, Garden Center, and Farm Supply Stores"
+NAICS,	444220,"Nursery, Garden Center, and Farm Supply Stores"
+NAICS,	44-45,Retail Trade
+NAICS,	445,Food and Beverage Stores
+NAICS,	4451,Grocery Stores
+NAICS,	44511,Supermarkets and Other Grocery (except Convenience) Stores
+NAICS,	445110,Supermarkets and Other Grocery (except Convenience) Stores
+NAICS,	44512,Convenience Stores
+NAICS,	445120,Convenience Stores
+NAICS,	4452,Specialty Food Stores
+NAICS,	44521,Meat Markets
+NAICS,	445210,Meat Markets
+NAICS,	44522,Fish and Seafood Markets
+NAICS,	445220,Fish and Seafood Markets
+NAICS,	44523,Fruit and Vegetable Markets
+NAICS,	445230,Fruit and Vegetable Markets
+NAICS,	44529,Other Specialty Food Stores
+NAICS,	445291,Baked Goods Stores
+NAICS,	445292,Confectionery and Nut Stores
+NAICS,	445299,All Other Specialty Food Stores
+NAICS,	4453,"Beer, Wine, and Liquor Stores"
+NAICS,	44531,"Beer, Wine, and Liquor Stores"
+NAICS,	445310,"Beer, Wine, and Liquor Stores"
+NAICS,	446,Health and Personal Care Stores
+NAICS,	4461,Health and Personal Care Stores
+NAICS,	44611,Pharmacies and Drug Stores
+NAICS,	446110,Pharmacies and Drug Stores
+NAICS,	44612,"Cosmetics, Beauty Supplies, and Perfume Stores"
+NAICS,	446120,"Cosmetics, Beauty Supplies, and Perfume Stores"
+NAICS,	44613,Optical Goods Stores
+NAICS,	446130,Optical Goods Stores
+NAICS,	44619,Other Health and Personal Care Stores
+NAICS,	446191,Food (Health) Supplement Stores
+NAICS,	446199,All Other Health and Personal Care Stores
+NAICS,	447,Gasoline Stations
+NAICS,	4471,Gasoline Stations
+NAICS,	44711,Gasoline Stations with Convenience Stores
+NAICS,	447110,Gasoline Stations with Convenience Stores
+NAICS,	44719,Other Gasoline Stations
+NAICS,	447190,Other Gasoline Stations
+NAICS,	448,Clothing and Clothing Accessories Stores
+NAICS,	4481,Clothing Stores
+NAICS,	44811,Men's Clothing Stores
+NAICS,	448110,Men's Clothing Stores
+NAICS,	44812,Women's Clothing Stores
+NAICS,	448120,Women's Clothing Stores
+NAICS,	44813,Children's and Infants' Clothing Stores
+NAICS,	448130,Children's and Infants' Clothing Stores
+NAICS,	44814,Family Clothing Stores
+NAICS,	448140,Family Clothing Stores
+NAICS,	44815,Clothing Accessories Stores
+NAICS,	448150,Clothing Accessories Stores
+NAICS,	44819,Other Clothing Stores
+NAICS,	448190,Other Clothing Stores
+NAICS,	4482,Shoe Stores
+NAICS,	44821,Shoe Stores
+NAICS,	448210,Shoe Stores
+NAICS,	4483,"Jewelry, Luggage, and Leather Goods Stores"
+NAICS,	44831,Jewelry Stores
+NAICS,	448310,Jewelry Stores
+NAICS,	44832,Luggage and Leather Goods Stores
+NAICS,	448320,Luggage and Leather Goods Stores
+NAICS,	451,"Sporting Goods, Hobby, Musical Instrument, and Book Stores"
+NAICS,	4511,"Sporting Goods, Hobby, and Musical Instrument Stores"
+NAICS,	45111,Sporting Goods Stores
+NAICS,	451110,Sporting Goods Stores
+NAICS,	45112,"Hobby, Toy, and Game Stores"
+NAICS,	451120,"Hobby, Toy, and Game Stores"
+NAICS,	45113,"Sewing, Needlework, and Piece Goods Stores"
+NAICS,	451130,"Sewing, Needlework, and Piece Goods Stores"
+NAICS,	45114,Musical Instrument and Supplies Stores
+NAICS,	451140,Musical Instrument and Supplies Stores
+NAICS,	4512,Book Stores and News Dealers
+NAICS,	45121,Book Stores and News Dealers
+NAICS,	451211,Book Stores
+NAICS,	451212,News Dealers and Newsstands
+NAICS,	452,General Merchandise Stores
+NAICS,	4522,Department Stores
+NAICS,	45221,Department Stores
+NAICS,	452210,Department Stores
+NAICS,	4523,"General Merchandise Stores, including Warehouse Clubs and Supercenters"
+NAICS,	45231,"General Merchandise Stores, including Warehouse Clubs and Supercenters"
+NAICS,	452311,Warehouse Clubs and Supercenters
+NAICS,	452319,All Other General Merchandise Stores
+NAICS,	453,Miscellaneous Store Retailers
+NAICS,	4531,Florists
+NAICS,	45311,Florists
+NAICS,	453110,Florists
+NAICS,	4532,"Office Supplies, Stationery, and Gift Stores"
+NAICS,	45321,Office Supplies and Stationery Stores
+NAICS,	453210,Office Supplies and Stationery Stores
+NAICS,	45322,"Gift, Novelty, and Souvenir Stores"
+NAICS,	453220,"Gift, Novelty, and Souvenir Stores"
+NAICS,	4533,Used Merchandise Stores
+NAICS,	45331,Used Merchandise Stores
+NAICS,	453310,Used Merchandise Stores
+NAICS,	4539,Other Miscellaneous Store Retailers
+NAICS,	45391,Pet and Pet Supplies Stores
+NAICS,	453910,Pet and Pet Supplies Stores
+NAICS,	45392,Art Dealers
+NAICS,	453920,Art Dealers
+NAICS,	45393,Manufactured (Mobile) Home Dealers
+NAICS,	453930,Manufactured (Mobile) Home Dealers
+NAICS,	45399,All Other Miscellaneous Store Retailers
+NAICS,	453991,Tobacco Stores
+NAICS,	453998,All Other Miscellaneous Store Retailers (except Tobacco Stores)
+NAICS,	454,Nonstore Retailers
+NAICS,	4541,Electronic Shopping and Mail-Order Houses
+NAICS,	45411,Electronic Shopping and Mail-Order Houses
+NAICS,	454110,Electronic Shopping and Mail-Order Houses
+NAICS,	4542,Vending Machine Operators
+NAICS,	45421,Vending Machine Operators
+NAICS,	454210,Vending Machine Operators
+NAICS,	4543,Direct Selling Establishments
+NAICS,	45431,Fuel Dealers
+NAICS,	454310,Fuel Dealers
+NAICS,	45439,Other Direct Selling Establishments
+NAICS,	454390,Other Direct Selling Establishments
+NAICS,	481,Air Transportation
+NAICS,	4811,Scheduled Air Transportation
+NAICS,	48111,Scheduled Air Transportation
+NAICS,	481111,Scheduled Passenger Air Transportation
+NAICS,	481112,Scheduled Freight Air Transportation
+NAICS,	4812,Nonscheduled Air Transportation
+NAICS,	48121,Nonscheduled Air Transportation
+NAICS,	481211,Nonscheduled Chartered Passenger Air Transportation
+NAICS,	481212,Nonscheduled Chartered Freight Air Transportation
+NAICS,	481219,Other Nonscheduled Air Transportation
+NAICS,	482,Rail Transportation
+NAICS,	4821,Rail Transportation
+NAICS,	48211,Rail Transportation
+NAICS,	482111,Line-Haul Railroads
+NAICS,	482112,Short Line Railroads
+NAICS,	483,Water Transportation
+NAICS,	4831,"Deep Sea, Coastal, and Great Lakes Water Transportation"
+NAICS,	48311,"Deep Sea, Coastal, and Great Lakes Water Transportation"
+NAICS,	483111,Deep Sea Freight Transportation
+NAICS,	483112,Deep Sea Passenger Transportation
+NAICS,	483113,Coastal and Great Lakes Freight Transportation
+NAICS,	483114,Coastal and Great Lakes Passenger Transportation
+NAICS,	4832,Inland Water Transportation
+NAICS,	48321,Inland Water Transportation
+NAICS,	483211,Inland Water Freight Transportation
+NAICS,	483212,Inland Water Passenger Transportation
+NAICS,	484,Truck Transportation
+NAICS,	4841,General Freight Trucking
+NAICS,	48411,"General Freight Trucking, Local"
+NAICS,	484110,"General Freight Trucking, Local"
+NAICS,	48412,"General Freight Trucking, Long-Distance"
+NAICS,	484121,"General Freight Trucking, Long-Distance, Truckload"
+NAICS,	484122,"General Freight Trucking, Long-Distance, Less Than Truckload"
+NAICS,	4842,Specialized Freight Trucking
+NAICS,	48421,Used Household and Office Goods Moving
+NAICS,	484210,Used Household and Office Goods Moving
+NAICS,	48422,"Specialized Freight (except Used Goods) Trucking, Local"
+NAICS,	484220,"Specialized Freight (except Used Goods) Trucking, Local"
+NAICS,	48423,"Specialized Freight (except Used Goods) Trucking, Long-Distance"
+NAICS,	484230,"Specialized Freight (except Used Goods) Trucking, Long-Distance"
+NAICS,	48-49,Transportation and Warehousing
+NAICS,	485,Transit and Ground Passenger Transportation
+NAICS,	4851,Urban Transit Systems
+NAICS,	48511,Urban Transit Systems
+NAICS,	485111,Mixed Mode Transit Systems
+NAICS,	485112,Commuter Rail Systems
+NAICS,	485113,Bus and Other Motor Vehicle Transit Systems
+NAICS,	485119,Other Urban Transit Systems
+NAICS,	4852,Interurban and Rural Bus Transportation
+NAICS,	48521,Interurban and Rural Bus Transportation
+NAICS,	485210,Interurban and Rural Bus Transportation
+NAICS,	4853,Taxi and Limousine Service
+NAICS,	48531,Taxi Service
+NAICS,	485310,Taxi Service
+NAICS,	48532,Limousine Service
+NAICS,	485320,Limousine Service
+NAICS,	4854,School and Employee Bus Transportation
+NAICS,	48541,School and Employee Bus Transportation
+NAICS,	485410,School and Employee Bus Transportation
+NAICS,	4855,Charter Bus Industry
+NAICS,	48551,Charter Bus Industry
+NAICS,	485510,Charter Bus Industry
+NAICS,	4859,Other Transit and Ground Passenger Transportation
+NAICS,	48599,Other Transit and Ground Passenger Transportation
+NAICS,	485991,Special Needs Transportation
+NAICS,	485999,All Other Transit and Ground Passenger Transportation
+NAICS,	486,Pipeline Transportation
+NAICS,	4861,Pipeline Transportation of Crude Oil
+NAICS,	48611,Pipeline Transportation of Crude Oil
+NAICS,	486110,Pipeline Transportation of Crude Oil
+NAICS,	4862,Pipeline Transportation of Natural Gas
+NAICS,	48621,Pipeline Transportation of Natural Gas
+NAICS,	486210,Pipeline Transportation of Natural Gas
+NAICS,	4869,Other Pipeline Transportation
+NAICS,	48691,Pipeline Transportation of Refined Petroleum Products
+NAICS,	486910,Pipeline Transportation of Refined Petroleum Products
+NAICS,	48699,All Other Pipeline Transportation
+NAICS,	486990,All Other Pipeline Transportation
+NAICS,	487,Scenic and Sightseeing Transportation
+NAICS,	4871,"Scenic and Sightseeing Transportation, Land"
+NAICS,	48711,"Scenic and Sightseeing Transportation, Land"
+NAICS,	487110,"Scenic and Sightseeing Transportation, Land"
+NAICS,	4872,"Scenic and Sightseeing Transportation, Water"
+NAICS,	48721,"Scenic and Sightseeing Transportation, Water"
+NAICS,	487210,"Scenic and Sightseeing Transportation, Water"
+NAICS,	4879,"Scenic and Sightseeing Transportation, Other"
+NAICS,	48799,"Scenic and Sightseeing Transportation, Other"
+NAICS,	487990,"Scenic and Sightseeing Transportation, Other"
+NAICS,	488,Support Activities for Transportation
+NAICS,	4881,Support Activities for Air Transportation
+NAICS,	48811,Airport Operations
+NAICS,	488111,Air Traffic Control
+NAICS,	488119,Other Airport Operations
+NAICS,	48819,Other Support Activities for Air Transportation
+NAICS,	488190,Other Support Activities for Air Transportation
+NAICS,	4882,Support Activities for Rail Transportation
+NAICS,	48821,Support Activities for Rail Transportation
+NAICS,	488210,Support Activities for Rail Transportation
+NAICS,	4883,Support Activities for Water Transportation
+NAICS,	48831,Port and Harbor Operations
+NAICS,	488310,Port and Harbor Operations
+NAICS,	48832,Marine Cargo Handling
+NAICS,	488320,Marine Cargo Handling
+NAICS,	48833,Navigational Services to Shipping
+NAICS,	488330,Navigational Services to Shipping
+NAICS,	48839,Other Support Activities for Water Transportation
+NAICS,	488390,Other Support Activities for Water Transportation
+NAICS,	4884,Support Activities for Road Transportation
+NAICS,	48841,Motor Vehicle Towing
+NAICS,	488410,Motor Vehicle Towing
+NAICS,	48849,Other Support Activities for Road Transportation
+NAICS,	488490,Other Support Activities for Road Transportation
+NAICS,	4885,Freight Transportation Arrangement
+NAICS,	48851,Freight Transportation Arrangement
+NAICS,	488510,Freight Transportation Arrangement
+NAICS,	4889,Other Support Activities for Transportation
+NAICS,	48899,Other Support Activities for Transportation
+NAICS,	488991,Packing and Crating
+NAICS,	488999,All Other Support Activities for Transportation
+NAICS,	491,Postal Service
+NAICS,	4911,Postal Service
+NAICS,	49111,Postal Service
+NAICS,	491110,Postal Service
+NAICS,	492,Couriers and Messengers
+NAICS,	4921,Couriers and Express Delivery Services
+NAICS,	49211,Couriers and Express Delivery Services
+NAICS,	492110,Couriers and Express Delivery Services
+NAICS,	4922,Local Messengers and Local Delivery
+NAICS,	49221,Local Messengers and Local Delivery
+NAICS,	492210,Local Messengers and Local Delivery
+NAICS,	493,Warehousing and Storage
+NAICS,	4931,Warehousing and Storage
+NAICS,	49311,General Warehousing and Storage
+NAICS,	493110,General Warehousing and Storage
+NAICS,	49312,Refrigerated Warehousing and Storage
+NAICS,	493120,Refrigerated Warehousing and Storage
+NAICS,	49313,Farm Product Warehousing and Storage
+NAICS,	493130,Farm Product Warehousing and Storage
+NAICS,	49319,Other Warehousing and Storage
+NAICS,	493190,Other Warehousing and Storage
+NAICS,	51,Information
+NAICS,	511,Publishing Industries (except Internet)
+NAICS,	5111,"Newspaper, Periodical, Book, and Directory Publishers"
+NAICS,	51111,Newspaper Publishers
+NAICS,	511110,Newspaper Publishers
+NAICS,	51112,Periodical Publishers
+NAICS,	511120,Periodical Publishers
+NAICS,	51113,Book Publishers
+NAICS,	511130,Book Publishers
+NAICS,	51114,Directory and Mailing List Publishers
+NAICS,	511140,Directory and Mailing List Publishers
+NAICS,	51119,Other Publishers
+NAICS,	511191,Greeting Card Publishers
+NAICS,	511199,All Other Publishers
+NAICS,	5112,Software Publishers
+NAICS,	51121,Software Publishers
+NAICS,	511210,Software Publishers
+NAICS,	512,Motion Picture and Sound Recording Industries
+NAICS,	5121,Motion Picture and Video Industries
+NAICS,	51211,Motion Picture and Video Production
+NAICS,	512110,Motion Picture and Video Production
+NAICS,	51212,Motion Picture and Video Distribution
+NAICS,	512120,Motion Picture and Video Distribution
+NAICS,	51213,Motion Picture and Video Exhibition
+NAICS,	512131,Motion Picture Theaters (except Drive-Ins)
+NAICS,	512132,Drive-In Motion Picture Theaters
+NAICS,	51219,Postproduction Services and Other Motion Picture and Video Industries
+NAICS,	512191,Teleproduction and Other Postproduction Services
+NAICS,	512199,Other Motion Picture and Video Industries
+NAICS,	5122,Sound Recording Industries
+NAICS,	51223,Music Publishers
+NAICS,	512230,Music Publishers
+NAICS,	51224,Sound Recording Studios
+NAICS,	512240,Sound Recording Studios
+NAICS,	51225,Record Production and Distribution
+NAICS,	512250,Record Production and Distribution
+NAICS,	51229,Other Sound Recording Industries
+NAICS,	512290,Other Sound Recording Industries
+NAICS,	515,Broadcasting (except Internet)
+NAICS,	5151,Radio and Television Broadcasting
+NAICS,	51511,Radio Broadcasting
+NAICS,	515111,Radio Networks
+NAICS,	515112,Radio Stations
+NAICS,	51512,Television Broadcasting
+NAICS,	515120,Television Broadcasting
+NAICS,	5152,Cable and Other Subscription Programming
+NAICS,	51521,Cable and Other Subscription Programming
+NAICS,	515210,Cable and Other Subscription Programming
+NAICS,	517,Telecommunications
+NAICS,	5173,Wired and Wireless Telecommunications Carriers
+NAICS,	51731,Wired and Wireless Telecommunications Carriers
+NAICS,	517311,Wired Telecommunications Carriers
+NAICS,	517312,Wireless Telecommunications Carriers (except Satellite)
+NAICS,	5174,Satellite Telecommunications
+NAICS,	51741,Satellite Telecommunications
+NAICS,	517410,Satellite Telecommunications
+NAICS,	5179,Other Telecommunications
+NAICS,	51791,Other Telecommunications
+NAICS,	517911,Telecommunications Resellers
+NAICS,	517919,All Other Telecommunications
+NAICS,	518,"Data Processing, Hosting, and Related Services"
+NAICS,	5182,"Data Processing, Hosting, and Related Services"
+NAICS,	51821,"Data Processing, Hosting, and Related Services"
+NAICS,	518210,"Data Processing, Hosting, and Related Services"
+NAICS,	519,Other Information Services
+NAICS,	5191,Other Information Services
+NAICS,	51911,News Syndicates
+NAICS,	519110,News Syndicates
+NAICS,	51912,Libraries and Archives
+NAICS,	519120,Libraries and Archives
+NAICS,	51913,Internet Publishing and Broadcasting and Web Search Portals
+NAICS,	519130,Internet Publishing and Broadcasting and Web Search Portals
+NAICS,	51919,All Other Information Services
+NAICS,	519190,All Other Information Services
+NAICS,	52,Finance and Insurance
+NAICS,	521,Monetary Authorities-Central Bank
+NAICS,	5211,Monetary Authorities-Central Bank
+NAICS,	52111,Monetary Authorities-Central Bank
+NAICS,	521110,Monetary Authorities-Central Bank
+NAICS,	522,Credit Intermediation and Related Activities
+NAICS,	5221,Depository Credit Intermediation
+NAICS,	52211,Commercial Banking
+NAICS,	522110,Commercial Banking
+NAICS,	52212,Savings Institutions
+NAICS,	522120,Savings Institutions
+NAICS,	52213,Credit Unions
+NAICS,	522130,Credit Unions
+NAICS,	52219,Other Depository Credit Intermediation
+NAICS,	522190,Other Depository Credit Intermediation
+NAICS,	5222,Nondepository Credit Intermediation
+NAICS,	52221,Credit Card Issuing
+NAICS,	522210,Credit Card Issuing
+NAICS,	52222,Sales Financing
+NAICS,	522220,Sales Financing
+NAICS,	52229,Other Nondepository Credit Intermediation
+NAICS,	522291,Consumer Lending
+NAICS,	522292,Real Estate Credit
+NAICS,	522293,International Trade Financing
+NAICS,	522294,Secondary Market Financing
+NAICS,	522298,All Other Nondepository Credit Intermediation
+NAICS,	5223,Activities Related to Credit Intermediation
+NAICS,	52231,Mortgage and Nonmortgage Loan Brokers
+NAICS,	522310,Mortgage and Nonmortgage Loan Brokers
+NAICS,	52232,"Financial Transactions Processing, Reserve, and Clearinghouse Activities"
+NAICS,	522320,"Financial Transactions Processing, Reserve, and Clearinghouse Activities"
+NAICS,	52239,Other Activities Related to Credit Intermediation
+NAICS,	522390,Other Activities Related to Credit Intermediation
+NAICS,	523,"Securities, Commodity Contracts, and Other Financial Investments and Related Activities"
+NAICS,	5231,Securities and Commodity Contracts Intermediation and Brokerage
+NAICS,	52311,Investment Banking and Securities Dealing
+NAICS,	523110,Investment Banking and Securities Dealing
+NAICS,	52312,Securities Brokerage
+NAICS,	523120,Securities Brokerage
+NAICS,	52313,Commodity Contracts Dealing
+NAICS,	523130,Commodity Contracts Dealing
+NAICS,	52314,Commodity Contracts Brokerage
+NAICS,	523140,Commodity Contracts Brokerage
+NAICS,	5232,Securities and Commodity Exchanges
+NAICS,	52321,Securities and Commodity Exchanges
+NAICS,	523210,Securities and Commodity Exchanges
+NAICS,	5239,Other Financial Investment Activities
+NAICS,	52391,Miscellaneous Intermediation
+NAICS,	523910,Miscellaneous Intermediation
+NAICS,	52392,Portfolio Management
+NAICS,	523920,Portfolio Management
+NAICS,	52393,Investment Advice
+NAICS,	523930,Investment Advice
+NAICS,	52399,All Other Financial Investment Activities
+NAICS,	523991,"Trust, Fiduciary, and Custody Activities"
+NAICS,	523999,Miscellaneous Financial Investment Activities
+NAICS,	524,Insurance Carriers and Related Activities
+NAICS,	5241,Insurance Carriers
+NAICS,	52411,"Direct Life, Health, and Medical Insurance Carriers"
+NAICS,	524113,Direct Life Insurance Carriers
+NAICS,	524114,Direct Health and Medical Insurance Carriers
+NAICS,	52412,"Direct Insurance (except Life, Health, and Medical) Carriers"
+NAICS,	524126,Direct Property and Casualty Insurance Carriers
+NAICS,	524127,Direct Title Insurance Carriers
+NAICS,	524128,"Other Direct Insurance (except Life, Health, and Medical) Carriers"
+NAICS,	52413,Reinsurance Carriers
+NAICS,	524130,Reinsurance Carriers
+NAICS,	5242,"Agencies, Brokerages, and Other Insurance Related Activities"
+NAICS,	52421,Insurance Agencies and Brokerages
+NAICS,	524210,Insurance Agencies and Brokerages
+NAICS,	52429,Other Insurance Related Activities
+NAICS,	524291,Claims Adjusting
+NAICS,	524292,Third Party Administration of Insurance and Pension Funds
+NAICS,	524298,All Other Insurance Related Activities
+NAICS,	525,"Funds, Trusts, and Other Financial Vehicles"
+NAICS,	5251,Insurance and Employee Benefit Funds
+NAICS,	52511,Pension Funds
+NAICS,	525110,Pension Funds
+NAICS,	52512,Health and Welfare Funds
+NAICS,	525120,Health and Welfare Funds
+NAICS,	52519,Other Insurance Funds
+NAICS,	525190,Other Insurance Funds
+NAICS,	5259,Other Investment Pools and Funds
+NAICS,	52591,Open-End Investment Funds
+NAICS,	525910,Open-End Investment Funds
+NAICS,	52592,"Trusts, Estates, and Agency Accounts"
+NAICS,	525920,"Trusts, Estates, and Agency Accounts"
+NAICS,	52599,Other Financial Vehicles
+NAICS,	525990,Other Financial Vehicles
+NAICS,	53,Real Estate and Rental and Leasing
+NAICS,	531,Real Estate
+NAICS,	5311,Lessors of Real Estate
+NAICS,	53111,Lessors of Residential Buildings and Dwellings
+NAICS,	531110,Lessors of Residential Buildings and Dwellings
+NAICS,	53112,Lessors of Nonresidential Buildings (except Miniwarehouses)
+NAICS,	531120,Lessors of Nonresidential Buildings (except Miniwarehouses)
+NAICS,	53113,Lessors of Miniwarehouses and Self-Storage Units
+NAICS,	531130,Lessors of Miniwarehouses and Self-Storage Units
+NAICS,	53119,Lessors of Other Real Estate Property
+NAICS,	531190,Lessors of Other Real Estate Property
+NAICS,	5312,Offices of Real Estate Agents and Brokers
+NAICS,	53121,Offices of Real Estate Agents and Brokers
+NAICS,	531210,Offices of Real Estate Agents and Brokers
+NAICS,	5313,Activities Related to Real Estate
+NAICS,	53131,Real Estate Property Managers
+NAICS,	531311,Residential Property Managers
+NAICS,	531312,Nonresidential Property Managers
+NAICS,	53132,Offices of Real Estate Appraisers
+NAICS,	531320,Offices of Real Estate Appraisers
+NAICS,	53139,Other Activities Related to Real Estate
+NAICS,	531390,Other Activities Related to Real Estate
+NAICS,	532,Rental and Leasing Services
+NAICS,	5321,Automotive Equipment Rental and Leasing
+NAICS,	53211,Passenger Car Rental and Leasing
+NAICS,	532111,Passenger Car Rental
+NAICS,	532112,Passenger Car Leasing
+NAICS,	53212,"Truck, Utility Trailer, and RV (Recreational Vehicle) Rental and Leasing"
+NAICS,	532120,"Truck, Utility Trailer, and RV (Recreational Vehicle) Rental and Leasing"
+NAICS,	5322,Consumer Goods Rental
+NAICS,	53221,Consumer Electronics and Appliances Rental
+NAICS,	532210,Consumer Electronics and Appliances Rental
+NAICS,	53228,Other Consumer Goods Rental
+NAICS,	532281,Formal Wear and Costume Rental
+NAICS,	532282,Video Tape and Disc Rental
+NAICS,	532283,Home Health Equipment Rental
+NAICS,	532284,Recreational Goods Rental
+NAICS,	532289,All Other Consumer Goods Rental
+NAICS,	5323,General Rental Centers
+NAICS,	53231,General Rental Centers
+NAICS,	532310,General Rental Centers
+NAICS,	5324,Commercial and Industrial Machinery and Equipment Rental and Leasing
+NAICS,	53241,"Construction, Transportation, Mining, and Forestry Machinery and Equipment Rental and Leasing"
+NAICS,	532411,"Commercial Air, Rail, and Water Transportation Equipment Rental and Leasing"
+NAICS,	532412,"Construction, Mining, and Forestry Machinery and Equipment Rental and Leasing"
+NAICS,	53242,Office Machinery and Equipment Rental and Leasing
+NAICS,	532420,Office Machinery and Equipment Rental and Leasing
+NAICS,	53249,Other Commercial and Industrial Machinery and Equipment Rental and Leasing
+NAICS,	532490,Other Commercial and Industrial Machinery and Equipment Rental and Leasing
+NAICS,	533,Lessors of Nonfinancial Intangible Assets (except Copyrighted Works)
+NAICS,	5331,Lessors of Nonfinancial Intangible Assets (except Copyrighted Works)
+NAICS,	53311,Lessors of Nonfinancial Intangible Assets (except Copyrighted Works)
+NAICS,	533110,Lessors of Nonfinancial Intangible Assets (except Copyrighted Works)
+NAICS,	54,"Professional, Scientific, and Technical Services"
+NAICS,	541,"Professional, Scientific, and Technical Services"
+NAICS,	5411,Legal Services
+NAICS,	54111,Offices of Lawyers
+NAICS,	541110,Offices of Lawyers
+NAICS,	54112,Offices of Notaries
+NAICS,	541120,Offices of Notaries
+NAICS,	54119,Other Legal Services
+NAICS,	541191,Title Abstract and Settlement Offices
+NAICS,	541199,All Other Legal Services
+NAICS,	5412,"Accounting, Tax Preparation, Bookkeeping, and Payroll Services"
+NAICS,	54121,"Accounting, Tax Preparation, Bookkeeping, and Payroll Services"
+NAICS,	541211,Offices of Certified Public Accountants
+NAICS,	541213,Tax Preparation Services
+NAICS,	541214,Payroll Services
+NAICS,	541219,Other Accounting Services
+NAICS,	5413,"Architectural, Engineering, and Related Services"
+NAICS,	54131,Architectural Services
+NAICS,	541310,Architectural Services
+NAICS,	54132,Landscape Architectural Services
+NAICS,	541320,Landscape Architectural Services
+NAICS,	54133,Engineering Services
+NAICS,	541330,Engineering Services
+NAICS,	54134,Drafting Services
+NAICS,	541340,Drafting Services
+NAICS,	54135,Building Inspection Services
+NAICS,	541350,Building Inspection Services
+NAICS,	54136,Geophysical Surveying and Mapping Services
+NAICS,	541360,Geophysical Surveying and Mapping Services
+NAICS,	54137,Surveying and Mapping (except Geophysical) Services
+NAICS,	541370,Surveying and Mapping (except Geophysical) Services
+NAICS,	54138,Testing Laboratories
+NAICS,	541380,Testing Laboratories
+NAICS,	5414,Specialized Design Services
+NAICS,	54141,Interior Design Services
+NAICS,	541410,Interior Design Services
+NAICS,	54142,Industrial Design Services
+NAICS,	541420,Industrial Design Services
+NAICS,	54143,Graphic Design Services
+NAICS,	541430,Graphic Design Services
+NAICS,	54149,Other Specialized Design Services
+NAICS,	541490,Other Specialized Design Services
+NAICS,	5415,Computer Systems Design and Related Services
+NAICS,	54151,Computer Systems Design and Related Services
+NAICS,	541511,Custom Computer Programming Services
+NAICS,	541512,Computer Systems Design Services
+NAICS,	541513,Computer Facilities Management Services
+NAICS,	541519,Other Computer Related Services
+NAICS,	5416,"Management, Scientific, and Technical Consulting Services"
+NAICS,	54161,Management Consulting Services
+NAICS,	541611,Administrative Management and General Management Consulting Services
+NAICS,	541612,Human Resources Consulting Services
+NAICS,	541613,Marketing Consulting Services
+NAICS,	541614,"Process, Physical Distribution, and Logistics Consulting Services"
+NAICS,	541618,Other Management Consulting Services
+NAICS,	54162,Environmental Consulting Services
+NAICS,	541620,Environmental Consulting Services
+NAICS,	54169,Other Scientific and Technical Consulting Services
+NAICS,	541690,Other Scientific and Technical Consulting Services
+NAICS,	5417,Scientific Research and Development Services
+NAICS,	54171,"Research and Development in the Physical, Engineering, and Life Sciences"
+NAICS,	541713,Research and Development in Nanotechnology
+NAICS,	541714,Research and Development in Biotechnology (except Nanobiotechnology)
+NAICS,	541715,"Research and Development in the Physical, Engineering, and Life Sciences (except Nanotechnology and Biotechnology)"
+NAICS,	54172,Research and Development in the Social Sciences and Humanities
+NAICS,	541720,Research and Development in the Social Sciences and Humanities
+NAICS,	5418,"Advertising, Public Relations, and Related Services"
+NAICS,	54181,Advertising Agencies
+NAICS,	541810,Advertising Agencies
+NAICS,	54182,Public Relations Agencies
+NAICS,	541820,Public Relations Agencies
+NAICS,	54183,Media Buying Agencies
+NAICS,	541830,Media Buying Agencies
+NAICS,	54184,Media Representatives
+NAICS,	541840,Media Representatives
+NAICS,	54185,Outdoor Advertising
+NAICS,	541850,Outdoor Advertising
+NAICS,	54186,Direct Mail Advertising
+NAICS,	541860,Direct Mail Advertising
+NAICS,	54187,Advertising Material Distribution Services
+NAICS,	541870,Advertising Material Distribution Services
+NAICS,	54189,Other Services Related to Advertising
+NAICS,	541890,Other Services Related to Advertising
+NAICS,	5419,"Other Professional, Scientific, and Technical Services"
+NAICS,	54191,Marketing Research and Public Opinion Polling
+NAICS,	541910,Marketing Research and Public Opinion Polling
+NAICS,	54192,Photographic Services
+NAICS,	541921,"Photography Studios, Portrait"
+NAICS,	541922,Commercial Photography
+NAICS,	54193,Translation and Interpretation Services
+NAICS,	541930,Translation and Interpretation Services
+NAICS,	54194,Veterinary Services
+NAICS,	541940,Veterinary Services
+NAICS,	54199,"All Other Professional, Scientific, and Technical Services"
+NAICS,	541990,"All Other Professional, Scientific, and Technical Services"
+NAICS,	55,Management of Companies and Enterprises
+NAICS,	551,Management of Companies and Enterprises
+NAICS,	5511,Management of Companies and Enterprises
+NAICS,	55111,Management of Companies and Enterprises
+NAICS,	551111,Offices of Bank Holding Companies
+NAICS,	551112,Offices of Other Holding Companies
+NAICS,	551114,"Corporate, Subsidiary, and Regional Managing Offices"
+NAICS,	56,Administrative and Support and Waste Management and Remediation Services
+NAICS,	561,Administrative and Support Services
+NAICS,	5611,Office Administrative Services
+NAICS,	56111,Office Administrative Services
+NAICS,	561110,Office Administrative Services
+NAICS,	5612,Facilities Support Services
+NAICS,	56121,Facilities Support Services
+NAICS,	561210,Facilities Support Services
+NAICS,	5613,Employment Services
+NAICS,	56131,Employment Placement Agencies and Executive Search Services
+NAICS,	561311,Employment Placement Agencies
+NAICS,	561312,Executive Search Services
+NAICS,	56132,Temporary Help Services
+NAICS,	561320,Temporary Help Services
+NAICS,	56133,Professional Employer Organizations
+NAICS,	561330,Professional Employer Organizations
+NAICS,	5614,Business Support Services
+NAICS,	56141,Document Preparation Services
+NAICS,	561410,Document Preparation Services
+NAICS,	56142,Telephone Call Centers
+NAICS,	561421,Telephone Answering Services
+NAICS,	561422,Telemarketing Bureaus and Other Contact Centers
+NAICS,	56143,Business Service Centers
+NAICS,	561431,Private Mail Centers
+NAICS,	561439,Other Business Service Centers (including Copy Shops)
+NAICS,	56144,Collection Agencies
+NAICS,	561440,Collection Agencies
+NAICS,	56145,Credit Bureaus
+NAICS,	561450,Credit Bureaus
+NAICS,	56149,Other Business Support Services
+NAICS,	561491,Repossession Services
+NAICS,	561492,Court Reporting and Stenotype Services
+NAICS,	561499,All Other Business Support Services
+NAICS,	5615,Travel Arrangement and Reservation Services
+NAICS,	56151,Travel Agencies
+NAICS,	561510,Travel Agencies
+NAICS,	56152,Tour Operators
+NAICS,	561520,Tour Operators
+NAICS,	56159,Other Travel Arrangement and Reservation Services
+NAICS,	561591,Convention and Visitors Bureaus
+NAICS,	561599,All Other Travel Arrangement and Reservation Services
+NAICS,	5616,Investigation and Security Services
+NAICS,	56161,"Investigation, Guard, and Armored Car Services"
+NAICS,	561611,Investigation Services
+NAICS,	561612,Security Guards and Patrol Services
+NAICS,	561613,Armored Car Services
+NAICS,	56162,Security Systems Services
+NAICS,	561621,Security Systems Services (except Locksmiths)
+NAICS,	561622,Locksmiths
+NAICS,	5617,Services to Buildings and Dwellings
+NAICS,	56171,Exterminating and Pest Control Services
+NAICS,	561710,Exterminating and Pest Control Services
+NAICS,	56172,Janitorial Services
+NAICS,	561720,Janitorial Services
+NAICS,	56173,Landscaping Services
+NAICS,	561730,Landscaping Services
+NAICS,	56174,Carpet and Upholstery Cleaning Services
+NAICS,	561740,Carpet and Upholstery Cleaning Services
+NAICS,	56179,Other Services to Buildings and Dwellings
+NAICS,	561790,Other Services to Buildings and Dwellings
+NAICS,	5619,Other Support Services
+NAICS,	56191,Packaging and Labeling Services
+NAICS,	561910,Packaging and Labeling Services
+NAICS,	56192,Convention and Trade Show Organizers
+NAICS,	561920,Convention and Trade Show Organizers
+NAICS,	56199,All Other Support Services
+NAICS,	561990,All Other Support Services
+NAICS,	562,Waste Management and Remediation Services
+NAICS,	5621,Waste Collection
+NAICS,	56211,Waste Collection
+NAICS,	562111,Solid Waste Collection
+NAICS,	562112,Hazardous Waste Collection
+NAICS,	562119,Other Waste Collection
+NAICS,	5622,Waste Treatment and Disposal
+NAICS,	56221,Waste Treatment and Disposal
+NAICS,	562211,Hazardous Waste Treatment and Disposal
+NAICS,	562212,Solid Waste Landfill
+NAICS,	562213,Solid Waste Combustors and Incinerators
+NAICS,	562219,Other Nonhazardous Waste Treatment and Disposal
+NAICS,	5629,Remediation and Other Waste Management Services
+NAICS,	56291,Remediation Services
+NAICS,	562910,Remediation Services
+NAICS,	56292,Materials Recovery Facilities
+NAICS,	562920,Materials Recovery Facilities
+NAICS,	56299,All Other Waste Management Services
+NAICS,	562991,Septic Tank and Related Services
+NAICS,	562998,All Other Miscellaneous Waste Management Services
+NAICS,	61,Educational Services
+NAICS,	611,Educational Services
+NAICS,	6111,Elementary and Secondary Schools
+NAICS,	61111,Elementary and Secondary Schools
+NAICS,	611110,Elementary and Secondary Schools
+NAICS,	6112,Junior Colleges
+NAICS,	61121,Junior Colleges
+NAICS,	611210,Junior Colleges
+NAICS,	6113,"Colleges, Universities, and Professional Schools"
+NAICS,	61131,"Colleges, Universities, and Professional Schools"
+NAICS,	611310,"Colleges, Universities, and Professional Schools"
+NAICS,	6114,Business Schools and Computer and Management Training
+NAICS,	61141,Business and Secretarial Schools
+NAICS,	611410,Business and Secretarial Schools
+NAICS,	61142,Computer Training
+NAICS,	611420,Computer Training
+NAICS,	61143,Professional and Management Development Training
+NAICS,	611430,Professional and Management Development Training
+NAICS,	6115,Technical and Trade Schools
+NAICS,	61151,Technical and Trade Schools
+NAICS,	611511,Cosmetology and Barber Schools
+NAICS,	611512,Flight Training
+NAICS,	611513,Apprenticeship Training
+NAICS,	611519,Other Technical and Trade Schools
+NAICS,	6116,Other Schools and Instruction
+NAICS,	61161,Fine Arts Schools
+NAICS,	611610,Fine Arts Schools
+NAICS,	61162,Sports and Recreation Instruction
+NAICS,	611620,Sports and Recreation Instruction
+NAICS,	61163,Language Schools
+NAICS,	611630,Language Schools
+NAICS,	61169,All Other Schools and Instruction
+NAICS,	611691,Exam Preparation and Tutoring
+NAICS,	611692,Automobile Driving Schools
+NAICS,	611699,All Other Miscellaneous Schools and Instruction
+NAICS,	6117,Educational Support Services
+NAICS,	61171,Educational Support Services
+NAICS,	611710,Educational Support Services
+NAICS,	62,Health Care and Social Assistance
+NAICS,	621,Ambulatory Health Care Services
+NAICS,	6211,Offices of Physicians
+NAICS,	62111,Offices of Physicians
+NAICS,	621111,Offices of Physicians (except Mental Health Specialists)
+NAICS,	621112,"Offices of Physicians, Mental Health Specialists"
+NAICS,	6212,Offices of Dentists
+NAICS,	62121,Offices of Dentists
+NAICS,	621210,Offices of Dentists
+NAICS,	6213,Offices of Other Health Practitioners
+NAICS,	62131,Offices of Chiropractors
+NAICS,	621310,Offices of Chiropractors
+NAICS,	62132,Offices of Optometrists
+NAICS,	621320,Offices of Optometrists
+NAICS,	62133,Offices of Mental Health Practitioners (except Physicians)
+NAICS,	621330,Offices of Mental Health Practitioners (except Physicians)
+NAICS,	62134,"Offices of Physical, Occupational and Speech Therapists, and Audiologists"
+NAICS,	621340,"Offices of Physical, Occupational and Speech Therapists, and Audiologists"
+NAICS,	62139,Offices of All Other Health Practitioners
+NAICS,	621391,Offices of Podiatrists
+NAICS,	621399,Offices of All Other Miscellaneous Health Practitioners
+NAICS,	6214,Outpatient Care Centers
+NAICS,	62141,Family Planning Centers
+NAICS,	621410,Family Planning Centers
+NAICS,	62142,Outpatient Mental Health and Substance Abuse Centers
+NAICS,	621420,Outpatient Mental Health and Substance Abuse Centers
+NAICS,	62149,Other Outpatient Care Centers
+NAICS,	621491,HMO Medical Centers
+NAICS,	621492,Kidney Dialysis Centers
+NAICS,	621493,Freestanding Ambulatory Surgical and Emergency Centers
+NAICS,	621498,All Other Outpatient Care Centers
+NAICS,	6215,Medical and Diagnostic Laboratories
+NAICS,	62151,Medical and Diagnostic Laboratories
+NAICS,	621511,Medical Laboratories
+NAICS,	621512,Diagnostic Imaging Centers
+NAICS,	6216,Home Health Care Services
+NAICS,	62161,Home Health Care Services
+NAICS,	621610,Home Health Care Services
+NAICS,	6219,Other Ambulatory Health Care Services
+NAICS,	62191,Ambulance Services
+NAICS,	621910,Ambulance Services
+NAICS,	62199,All Other Ambulatory Health Care Services
+NAICS,	621991,Blood and Organ Banks
+NAICS,	621999,All Other Miscellaneous Ambulatory Health Care Services
+NAICS,	622,Hospitals
+NAICS,	6221,General Medical and Surgical Hospitals
+NAICS,	62211,General Medical and Surgical Hospitals
+NAICS,	622110,General Medical and Surgical Hospitals
+NAICS,	6222,Psychiatric and Substance Abuse Hospitals
+NAICS,	62221,Psychiatric and Substance Abuse Hospitals
+NAICS,	622210,Psychiatric and Substance Abuse Hospitals
+NAICS,	6223,Specialty (except Psychiatric and Substance Abuse) Hospitals
+NAICS,	62231,Specialty (except Psychiatric and Substance Abuse) Hospitals
+NAICS,	622310,Specialty (except Psychiatric and Substance Abuse) Hospitals
+NAICS,	623,Nursing and Residential Care Facilities
+NAICS,	6231,Nursing Care Facilities (Skilled Nursing Facilities)
+NAICS,	62311,Nursing Care Facilities (Skilled Nursing Facilities)
+NAICS,	623110,Nursing Care Facilities (Skilled Nursing Facilities)
+NAICS,	6232,"Residential Intellectual and Developmental Disability, Mental Health, and Substance Abuse Facilities"
+NAICS,	62321,Residential Intellectual and Developmental Disability Facilities
+NAICS,	623210,Residential Intellectual and Developmental Disability Facilities
+NAICS,	62322,Residential Mental Health and Substance Abuse Facilities
+NAICS,	623220,Residential Mental Health and Substance Abuse Facilities
+NAICS,	6233,Continuing Care Retirement Communities and Assisted Living Facilities for the Elderly
+NAICS,	62331,Continuing Care Retirement Communities and Assisted Living Facilities for the Elderly
+NAICS,	623311,Continuing Care Retirement Communities
+NAICS,	623312,Assisted Living Facilities for the Elderly
+NAICS,	6239,Other Residential Care Facilities
+NAICS,	62399,Other Residential Care Facilities
+NAICS,	623990,Other Residential Care Facilities
+NAICS,	624,Social Assistance
+NAICS,	6241,Individual and Family Services
+NAICS,	62411,Child and Youth Services
+NAICS,	624110,Child and Youth Services
+NAICS,	62412,Services for the Elderly and Persons with Disabilities
+NAICS,	624120,Services for the Elderly and Persons with Disabilities
+NAICS,	62419,Other Individual and Family Services
+NAICS,	624190,Other Individual and Family Services
+NAICS,	6242,"Community Food and Housing, and Emergency and Other Relief Services"
+NAICS,	62421,Community Food Services
+NAICS,	624210,Community Food Services
+NAICS,	62422,Community Housing Services
+NAICS,	624221,Temporary Shelters
+NAICS,	624229,Other Community Housing Services
+NAICS,	62423,Emergency and Other Relief Services
+NAICS,	624230,Emergency and Other Relief Services
+NAICS,	6243,Vocational Rehabilitation Services
+NAICS,	62431,Vocational Rehabilitation Services
+NAICS,	624310,Vocational Rehabilitation Services
+NAICS,	6244,Child Day Care Services
+NAICS,	62441,Child Day Care Services
+NAICS,	624410,Child Day Care Services
+NAICS,	71,"Arts, Entertainment, and Recreation"
+NAICS,	711,"Performing Arts, Spectator Sports, and Related Industries"
+NAICS,	7111,Performing Arts Companies
+NAICS,	71111,Theater Companies and Dinner Theaters
+NAICS,	711110,Theater Companies and Dinner Theaters
+NAICS,	71112,Dance Companies
+NAICS,	711120,Dance Companies
+NAICS,	71113,Musical Groups and Artists
+NAICS,	711130,Musical Groups and Artists
+NAICS,	71119,Other Performing Arts Companies
+NAICS,	711190,Other Performing Arts Companies
+NAICS,	7112,Spectator Sports
+NAICS,	71121,Spectator Sports
+NAICS,	711211,Sports Teams and Clubs
+NAICS,	711212,Racetracks
+NAICS,	711219,Other Spectator Sports
+NAICS,	7113,"Promoters of Performing Arts, Sports, and Similar Events"
+NAICS,	71131,"Promoters of Performing Arts, Sports, and Similar Events with Facilities"
+NAICS,	711310,"Promoters of Performing Arts, Sports, and Similar Events with Facilities"
+NAICS,	71132,"Promoters of Performing Arts, Sports, and Similar Events without Facilities"
+NAICS,	711320,"Promoters of Performing Arts, Sports, and Similar Events without Facilities"
+NAICS,	7114,"Agents and Managers for Artists, Athletes, Entertainers, and Other Public Figures"
+NAICS,	71141,"Agents and Managers for Artists, Athletes, Entertainers, and Other Public Figures"
+NAICS,	711410,"Agents and Managers for Artists, Athletes, Entertainers, and Other Public Figures"
+NAICS,	7115,"Independent Artists, Writers, and Performers"
+NAICS,	71151,"Independent Artists, Writers, and Performers"
+NAICS,	711510,"Independent Artists, Writers, and Performers"
+NAICS,	712,"Museums, Historical Sites, and Similar Institutions"
+NAICS,	7121,"Museums, Historical Sites, and Similar Institutions"
+NAICS,	71211,Museums
+NAICS,	712110,Museums
+NAICS,	71212,Historical Sites
+NAICS,	712120,Historical Sites
+NAICS,	71213,Zoos and Botanical Gardens
+NAICS,	712130,Zoos and Botanical Gardens
+NAICS,	71219,Nature Parks and Other Similar Institutions
+NAICS,	712190,Nature Parks and Other Similar Institutions
+NAICS,	713,"Amusement, Gambling, and Recreation Industries"
+NAICS,	7131,Amusement Parks and Arcades
+NAICS,	71311,Amusement and Theme Parks
+NAICS,	713110,Amusement and Theme Parks
+NAICS,	71312,Amusement Arcades
+NAICS,	713120,Amusement Arcades
+NAICS,	7132,Gambling Industries
+NAICS,	71321,Casinos (except Casino Hotels)
+NAICS,	713210,Casinos (except Casino Hotels)
+NAICS,	71329,Other Gambling Industries
+NAICS,	713290,Other Gambling Industries
+NAICS,	7139,Other Amusement and Recreation Industries
+NAICS,	71391,Golf Courses and Country Clubs
+NAICS,	713910,Golf Courses and Country Clubs
+NAICS,	71392,Skiing Facilities
+NAICS,	713920,Skiing Facilities
+NAICS,	71393,Marinas
+NAICS,	713930,Marinas
+NAICS,	71394,Fitness and Recreational Sports Centers
+NAICS,	713940,Fitness and Recreational Sports Centers
+NAICS,	71395,Bowling Centers
+NAICS,	713950,Bowling Centers
+NAICS,	71399,All Other Amusement and Recreation Industries
+NAICS,	713990,All Other Amusement and Recreation Industries
+NAICS,	72,Accommodation and Food Services
+NAICS,	721,Accommodation
+NAICS,	7211,Traveler Accommodation
+NAICS,	72111,Hotels (except Casino Hotels) and Motels
+NAICS,	721110,Hotels (except Casino Hotels) and Motels
+NAICS,	72112,Casino Hotels
+NAICS,	721120,Casino Hotels
+NAICS,	72119,Other Traveler Accommodation
+NAICS,	721191,Bed-and-Breakfast Inns
+NAICS,	721199,All Other Traveler Accommodation
+NAICS,	7212,RV (Recreational Vehicle) Parks and Recreational Camps
+NAICS,	72121,RV (Recreational Vehicle) Parks and Recreational Camps
+NAICS,	721211,RV (Recreational Vehicle) Parks and Campgrounds
+NAICS,	721214,Recreational and Vacation Camps (except Campgrounds)
+NAICS,	7213,"Rooming and Boarding Houses, Dormitories, and Workers' Camps"
+NAICS,	72131,"Rooming and Boarding Houses, Dormitories, and Workers' Camps"
+NAICS,	721310,"Rooming and Boarding Houses, Dormitories, and Workers' Camps"
+NAICS,	722,Food Services and Drinking Places
+NAICS,	7223,Special Food Services
+NAICS,	72231,Food Service Contractors
+NAICS,	722310,Food Service Contractors
+NAICS,	72232,Caterers
+NAICS,	722320,Caterers
+NAICS,	72233,Mobile Food Services
+NAICS,	722330,Mobile Food Services
+NAICS,	7224,Drinking Places (Alcoholic Beverages)
+NAICS,	72241,Drinking Places (Alcoholic Beverages)
+NAICS,	722410,Drinking Places (Alcoholic Beverages)
+NAICS,	7225,Restaurants and Other Eating Places
+NAICS,	72251,Restaurants and Other Eating Places
+NAICS,	722511,Full-Service Restaurants
+NAICS,	722513,Limited-Service Restaurants
+NAICS,	722514,"Cafeterias, Grill Buffets, and Buffets"
+NAICS,	722515,Snack and Nonalcoholic Beverage Bars
+NAICS,	81,Other Services (except Public Administration)
+NAICS,	811,Repair and Maintenance
+NAICS,	8111,Automotive Repair and Maintenance
+NAICS,	81111,Automotive Mechanical and Electrical Repair and Maintenance
+NAICS,	811111,General Automotive Repair
+NAICS,	811112,Automotive Exhaust System Repair
+NAICS,	811113,Automotive Transmission Repair
+NAICS,	811118,Other Automotive Mechanical and Electrical Repair and Maintenance
+NAICS,	81112,"Automotive Body, Paint, Interior, and Glass Repair"
+NAICS,	811121,"Automotive Body, Paint, and Interior Repair and Maintenance"
+NAICS,	811122,Automotive Glass Replacement Shops
+NAICS,	81119,Other Automotive Repair and Maintenance
+NAICS,	811191,Automotive Oil Change and Lubrication Shops
+NAICS,	811192,Car Washes
+NAICS,	811198,All Other Automotive Repair and Maintenance
+NAICS,	8112,Electronic and Precision Equipment Repair and Maintenance
+NAICS,	81121,Electronic and Precision Equipment Repair and Maintenance
+NAICS,	811211,Consumer Electronics Repair and Maintenance
+NAICS,	811212,Computer and Office Machine Repair and Maintenance
+NAICS,	811213,Communication Equipment Repair and Maintenance
+NAICS,	811219,Other Electronic and Precision Equipment Repair and Maintenance
+NAICS,	8113,Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance
+NAICS,	81131,Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance
+NAICS,	811310,Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance
+NAICS,	8114,Personal and Household Goods Repair and Maintenance
+NAICS,	81141,Home and Garden Equipment and Appliance Repair and Maintenance
+NAICS,	811411,Home and Garden Equipment Repair and Maintenance
+NAICS,	811412,Appliance Repair and Maintenance
+NAICS,	81142,Reupholstery and Furniture Repair
+NAICS,	811420,Reupholstery and Furniture Repair
+NAICS,	81143,Footwear and Leather Goods Repair
+NAICS,	811430,Footwear and Leather Goods Repair
+NAICS,	81149,Other Personal and Household Goods Repair and Maintenance
+NAICS,	811490,Other Personal and Household Goods Repair and Maintenance
+NAICS,	812,Personal and Laundry Services
+NAICS,	8121,Personal Care Services
+NAICS,	81211,"Hair, Nail, and Skin Care Services"
+NAICS,	812111,Barber Shops
+NAICS,	812112,Beauty Salons
+NAICS,	812113,Nail Salons
+NAICS,	81219,Other Personal Care Services
+NAICS,	812191,Diet and Weight Reducing Centers
+NAICS,	812199,Other Personal Care Services
+NAICS,	8122,Death Care Services
+NAICS,	81221,Funeral Homes and Funeral Services
+NAICS,	812210,Funeral Homes and Funeral Services
+NAICS,	81222,Cemeteries and Crematories
+NAICS,	812220,Cemeteries and Crematories
+NAICS,	8123,Drycleaning and Laundry Services
+NAICS,	81231,Coin-Operated Laundries and Drycleaners
+NAICS,	812310,Coin-Operated Laundries and Drycleaners
+NAICS,	81232,Drycleaning and Laundry Services (except Coin-Operated)
+NAICS,	812320,Drycleaning and Laundry Services (except Coin-Operated)
+NAICS,	81233,Linen and Uniform Supply
+NAICS,	812331,Linen Supply
+NAICS,	812332,Industrial Launderers
+NAICS,	8129,Other Personal Services
+NAICS,	81291,Pet Care (except Veterinary) Services
+NAICS,	812910,Pet Care (except Veterinary) Services
+NAICS,	81292,Photofinishing
+NAICS,	812921,Photofinishing Laboratories (except One-Hour)
+NAICS,	812922,One-Hour Photofinishing
+NAICS,	81293,Parking Lots and Garages
+NAICS,	812930,Parking Lots and Garages
+NAICS,	81299,All Other Personal Services
+NAICS,	812990,All Other Personal Services
+NAICS,	813,"Religious, Grantmaking, Civic, Professional, and Similar Organizations"
+NAICS,	8131,Religious Organizations
+NAICS,	81311,Religious Organizations
+NAICS,	813110,Religious Organizations
+NAICS,	8132,Grantmaking and Giving Services
+NAICS,	81321,Grantmaking and Giving Services
+NAICS,	813211,Grantmaking Foundations
+NAICS,	813212,Voluntary Health Organizations
+NAICS,	813219,Other Grantmaking and Giving Services
+NAICS,	8133,Social Advocacy Organizations
+NAICS,	81331,Social Advocacy Organizations
+NAICS,	813311,Human Rights Organizations
+NAICS,	813312,"Environment, Conservation and Wildlife Organizations"
+NAICS,	813319,Other Social Advocacy Organizations
+NAICS,	8134,Civic and Social Organizations
+NAICS,	81341,Civic and Social Organizations
+NAICS,	813410,Civic and Social Organizations
+NAICS,	8139,"Business, Professional, Labor, Political, and Similar Organizations"
+NAICS,	81391,Business Associations
+NAICS,	813910,Business Associations
+NAICS,	81392,Professional Organizations
+NAICS,	813920,Professional Organizations
+NAICS,	81393,Labor Unions and Similar Labor Organizations
+NAICS,	813930,Labor Unions and Similar Labor Organizations
+NAICS,	81394,Political Organizations
+NAICS,	813940,Political Organizations
+NAICS,	81399,"Other Similar Organizations (except Business, Professional, Labor, and Political Organizations)"
+NAICS,	813990,"Other Similar Organizations (except Business, Professional, Labor, and Political Organizations)"
+NAICS,	814,Private Households
+NAICS,	8141,Private Households
+NAICS,	81411,Private Households
+NAICS,	814110,Private Households
+NAICS,	92,Public Administration
+NAICS,	921,"Executive, Legislative, and Other General Government Support"
+NAICS,	9211,"Executive, Legislative, and Other General Government Support"
+NAICS,	92111,Executive Offices
+NAICS,	921110,Executive Offices
+NAICS,	92112,Legislative Bodies
+NAICS,	921120,Legislative Bodies
+NAICS,	92113,Public Finance Activities
+NAICS,	921130,Public Finance Activities
+NAICS,	92114,"Executive and Legislative Offices, Combined"
+NAICS,	921140,"Executive and Legislative Offices, Combined"
+NAICS,	92115,American Indian and Alaska Native Tribal Governments
+NAICS,	921150,American Indian and Alaska Native Tribal Governments
+NAICS,	92119,Other General Government Support
+NAICS,	921190,Other General Government Support
+NAICS,	922,"Justice, Public Order, and Safety Activities"
+NAICS,	9221,"Justice, Public Order, and Safety Activities"
+NAICS,	92211,Courts
+NAICS,	922110,Courts
+NAICS,	92212,Police Protection
+NAICS,	922120,Police Protection
+NAICS,	92213,Legal Counsel and Prosecution
+NAICS,	922130,Legal Counsel and Prosecution
+NAICS,	92214,Correctional Institutions
+NAICS,	922140,Correctional Institutions
+NAICS,	92215,Parole Offices and Probation Offices
+NAICS,	922150,Parole Offices and Probation Offices
+NAICS,	92216,Fire Protection
+NAICS,	922160,Fire Protection
+NAICS,	92219,"Other Justice, Public Order, and Safety Activities"
+NAICS,	922190,"Other Justice, Public Order, and Safety Activities"
+NAICS,	923,Administration of Human Resource Programs
+NAICS,	9231,Administration of Human Resource Programs
+NAICS,	92311,Administration of Education Programs
+NAICS,	923110,Administration of Education Programs
+NAICS,	92312,Administration of Public Health Programs
+NAICS,	923120,Administration of Public Health Programs
+NAICS,	92313,"Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)"
+NAICS,	923130,"Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)"
+NAICS,	92314,Administration of Veterans' Affairs
+NAICS,	923140,Administration of Veterans' Affairs
+NAICS,	924,Administration of Environmental Quality Programs
+NAICS,	9241,Administration of Environmental Quality Programs
+NAICS,	92411,Administration of Air and Water Resource and Solid Waste Management Programs
+NAICS,	924110,Administration of Air and Water Resource and Solid Waste Management Programs
+NAICS,	92412,Administration of Conservation Programs
+NAICS,	924120,Administration of Conservation Programs
+NAICS,	925,"Administration of Housing Programs, Urban Planning, and Community Development"
+NAICS,	9251,"Administration of Housing Programs, Urban Planning, and Community Development"
+NAICS,	92511,Administration of Housing Programs
+NAICS,	925110,Administration of Housing Programs
+NAICS,	92512,Administration of Urban Planning and Community and Rural Development
+NAICS,	925120,Administration of Urban Planning and Community and Rural Development
+NAICS,	926,Administration of Economic Programs
+NAICS,	9261,Administration of Economic Programs
+NAICS,	92611,Administration of General Economic Programs
+NAICS,	926110,Administration of General Economic Programs
+NAICS,	92612,Regulation and Administration of Transportation Programs
+NAICS,	926120,Regulation and Administration of Transportation Programs
+NAICS,	92613,"Regulation and Administration of Communications, Electric, Gas, and Other Utilities"
+NAICS,	926130,"Regulation and Administration of Communications, Electric, Gas, and Other Utilities"
+NAICS,	92614,Regulation of Agricultural Marketing and Commodities
+NAICS,	926140,Regulation of Agricultural Marketing and Commodities
+NAICS,	92615,"Regulation, Licensing, and Inspection of Miscellaneous Commercial Sectors"
+NAICS,	926150,"Regulation, Licensing, and Inspection of Miscellaneous Commercial Sectors"
+NAICS,	927,Space Research and Technology
+NAICS,	9271,Space Research and Technology
+NAICS,	92711,Space Research and Technology
+NAICS,	927110,Space Research and Technology
+NAICS,	928,National Security and International Affairs
+NAICS,	9281,National Security and International Affairs
+NAICS,	92811,National Security
+NAICS,	928110,National Security
+NAICS,	92812,International Affairs
+NAICS,	928120,International Affairs
+SIC,	0111,Wheat Farming
+SIC,	0112,Rice Farming
+SIC,	0115,Corn Farming
+SIC,	0116,Soybean Farming
+SIC,	0119,Dry Pea and Bean Farming
+SIC,	0131,Cotton Farming
+SIC,	0132,Tobacco Farming
+SIC,	0133,Sugar Beet Farming
+SIC,	0134,Potato Farming
+SIC,	0139,All Other Misc. Crop Farming
+SIC,	0161,Other Vegetable (Except Potato) and Melon Farming
+SIC,	0171,Berry (Except Strawberry) Farming
+SIC,	0172,Grape Vineyards
+SIC,	0173,Tree Nut Farming
+SIC,	0174,Citrus (Except Orange) Groves
+SIC,	0175,Apple Orchards
+SIC,	0179,Fruit and Tree Nut Combination Farming
+SIC,	0181,Nursery and Tree Production
+SIC,	0182,Mushroom Production
+SIC,	0191,All Other Misc. Crop Farming
+SIC,	0211,Cattle Feedlots
+SIC,	0212,Support Activities for Animal Production
+SIC,	0213,Hog and Pig Farming
+SIC,	0214,Goat Farming
+SIC,	0219,Animal Production NOC
+SIC,	0241,Dairy Cattle and Milk Production
+SIC,	0251,Broilers and Other Meat Type Chicken Production
+SIC,	0252,Chicken Egg Production
+SIC,	0253,Turkey Production
+SIC,	0254,Poultry Hatcheries
+SIC,	0259,Other Poultry Production
+SIC,	0271,Fur-Bearing Animal and Rabbit Production
+SIC,	0272,Horses and Other Equine Production
+SIC,	0279,Apiculture
+SIC,	0721,"Soil Preparation, Planting, and Cultivating"
+SIC,	0722,"Crop Harvesting, Primarily by Machine"
+SIC,	0723,Postharvest Crop Activities (Except Cotton Ginning)
+SIC,	0724,Cotton Ginning
+SIC,	0741,Veterinary Services
+SIC,	0742,Veterinary Services
+SIC,	0752,Pet Care (Except Veterinary) Services
+SIC,	0761,Farm Labor Contractors and Crew Leaders
+SIC,	0762,Farm Management Services
+SIC,	0781,Landscape Architectural Services
+SIC,	0782,Landscaping Services
+SIC,	0783,Landscaping Services
+SIC,	0811,Timber Tract Operations
+SIC,	0831,Forest Nurseries and Gathering of Forest Products
+SIC,	0851,Support Activities for Forestry
+SIC,	0912,Finfish Fishing
+SIC,	0913,Shellfish Fishing
+SIC,	0919,Other Marine Fishing
+SIC,	0921,Finfish Farming and Fish Hatcheries
+SIC,	0971,Hunting and Trapping
+SIC,	1011,Iron Ore Mining
+SIC,	1021,Copper Ore and Nickel Ore Mining
+SIC,	1031,Lead Ore and Zinc Ore Mining
+SIC,	1041,Gold Ore Mining
+SIC,	1044,Silver Ore Mining
+SIC,	1081,Dredging: Gold--Endless Bucket or Ladder Type
+SIC,	1094,"Uranium, Radium, Vanadium Ore Mining"
+SIC,	1099,All Other Metal Ore Mining
+SIC,	1221,Bituminous Coal and Lignite Surface Mining
+SIC,	1222,Bituminous Coal Underground Mining
+SIC,	1231,Anthracite Mining
+SIC,	1241,Support Activities for Coal Mining
+SIC,	1311,Natural Gas Liquid Extraction
+SIC,	1321,Natural Gas Liquid Extraction
+SIC,	1381,Drilling Oil and Gas Wells
+SIC,	1382,Geophysical Surveying and Mapping Services
+SIC,	1389,Support Activities for Oil and Gas Operations
+SIC,	1411,Dimension Stone Mining and Quarrying
+SIC,	1422,Crushed and Broken Limestone Mining and Quarrying
+SIC,	1423,Crushed and Broken Granite Mining and Quarrying
+SIC,	1429,Other Crushed and Broken Stone Mining and Quarrying
+SIC,	1442,Construction Sand and Gravel Mining
+SIC,	1446,Industrial Sand Mining
+SIC,	1459,Clay and Ceramic and Refractory Minerals Mining
+SIC,	1474,"Potash, Soda, and Borate Mineral Mining"
+SIC,	1475,Phosphate Rock Mining
+SIC,	1481,Support Activities for Nonmetallic Minerals (Except Fuels) Mining
+SIC,	1499,All Other Nonmetallic Mineral Mining
+SIC,	1521,Residential Remodelers
+SIC,	1522,New Multifamily Housing Construction (Except For-Sale Builders)
+SIC,	1531,New Housing For-Sale Builders
+SIC,	1611,Poured Concrete Foundation and Structure Contractors
+SIC,	1622,"Highway, Street, and Bridge Construction"
+SIC,	1623,Power and Communication Line and Related Structures Construction
+SIC,	1629,Site Preparation Contractors
+SIC,	1711,"Plumbing, Heating, and Air Conditioning Contractors"
+SIC,	1721,"Highway, Street, and Bridge Construction"
+SIC,	1731,Electrical Contractors and Other Wiring Installation Contractors
+SIC,	1741,Masonry Contractors
+SIC,	1742,Drywall and Insulation Contractors
+SIC,	1743,Tile and Terrazzo Contractors
+SIC,	1751,Framing Contractors
+SIC,	1752,Flooring Contractors
+SIC,	1761,Siding Contractors
+SIC,	1771,Masonry Contractors
+SIC,	1781,Water and Sewer Line and Related Structures Construction
+SIC,	1791,Structural Steel and Precast Concrete Contractors
+SIC,	1793,Glass and Glazing Contractors
+SIC,	1794,Site Preparation Contractors
+SIC,	1795,Site Preparation Contractors
+SIC,	1796,Other Building Equipment Contractors
+SIC,	1799,Other Building Finishing Contractors
+SIC,	2011,Animal (Except Poultry) Slaughtering
+SIC,	2013,Meat Processed from Carcasses
+SIC,	2015,Poultry Processing
+SIC,	2021,Creamery Butter Mfg.
+SIC,	2022,Cheese Mfg.
+SIC,	2023,"Dry, Condensed, and Evaporated Dairy Product Mfg."
+SIC,	2024,Ice Cream and Frozen Dessert Mfg.
+SIC,	2026,Fluid Milk Mfg.
+SIC,	2032,All Other Misc. Food Mfg.
+SIC,	2033,Fruit and Vegetable Canning
+SIC,	2034,Dried and Dehydrated Food Mfg.
+SIC,	2035,Fruit and Vegetable Canning
+SIC,	2037,"Frozen Fruit, Juice, and Vegetable Mfg."
+SIC,	2038,Frozen Specialty Food Mfg.
+SIC,	2041,Flour Milling
+SIC,	2043,Breakfast Cereal Mfg.
+SIC,	2044,Rice Milling
+SIC,	2045,"Dry Pasta, Dough, and Flour Mixes Mfg. from Purchased Flour"
+SIC,	2046,Wet Corn Milling
+SIC,	2047,Dog and Cat Food Mfg.
+SIC,	2048,Other Animal Food Mfg.
+SIC,	2051,Commercial Bakeries
+SIC,	2052,Cookie and Cracker Mfg.
+SIC,	2061,Cane Sugar Mfg.
+SIC,	2062,Cane Sugar Mfg.
+SIC,	2063,Beet Sugar Mfg.
+SIC,	2064,Nonchocolate Confectionery Mfg.
+SIC,	2066,Chocolate and Confectionery Mfg. from Cacao Beans
+SIC,	2067,Nonchocolate Confectionery Mfg.
+SIC,	2068,Roasted Nuts and Peanut Butter Mfg.
+SIC,	2074,Soybean and Other Oilseed Processing
+SIC,	2075,Soybean and Other Oilseed Processing
+SIC,	2076,Soybean and Other Oilseed Processing
+SIC,	2077,Rendering and Meat Byproduct Processing
+SIC,	2079,Fats and Oils Refining and Blending
+SIC,	2082,Breweries
+SIC,	2083,Malt Mfg.
+SIC,	2084,Wineries
+SIC,	2085,Distilleries
+SIC,	2086,Soft Drink Mfg.
+SIC,	2087,Flavoring Syrup and Concentrate Mfg.
+SIC,	2091,Seafood Product Preparation and Packaging
+SIC,	2092,Seafood Product Preparation and Packaging
+SIC,	2095,Coffee and Tea Mfg.
+SIC,	2096,Other Snack Food Mfg.
+SIC,	2097,Ice Mfg.
+SIC,	2098,"Dry Pasta, Dough, and Flour Mixes Mfg. from Purchased Flour"
+SIC,	2099,All Other Misc. Food Mfg.
+SIC,	2111,Tobacco Mfg.
+SIC,	2121,Tobacco Mfg.
+SIC,	2131,Tobacco Mfg.
+SIC,	2141,Tobacco Mfg.
+SIC,	2211,Broadwoven Fabric Mills
+SIC,	2221,Broadwoven Fabric Mills
+SIC,	2231,Broadwoven Fabric Mills
+SIC,	2241,Narrow Fabric Mills and Schiffli Machine Embroidery
+SIC,	2251,Hosiery and Sock Mills
+SIC,	2252,Hosiery and Sock Mills
+SIC,	2253,Other Apparel Knitting Mills
+SIC,	2254,Other Apparel Knitting Mills
+SIC,	2258,Knit Fabric Mills
+SIC,	2259,Other Apparel Knitting Mills
+SIC,	2269,Textile and Fabric Finishing Mills
+SIC,	2273,Carpet and Rug Mills
+SIC,	2281,"Fiber, Yarn, and Thread Mills"
+SIC,	2282,"Fiber, Yarn, and Thread Mills"
+SIC,	2284,"Fiber, Yarn, and Thread Mills"
+SIC,	2295,Fabric Coating Mills
+SIC,	2296,"Rope, Cordage, Twine, Tire Cord, and Tire Fabric Mills"
+SIC,	2298,"Rope, Cordage, Twine, Tire Cord, and Tire Fabric Mills"
+SIC,	2299,All Other Misc. Textile Product Mills
+SIC,	2321,Men's and Boys' Cut and Sew Apparel Mfg.
+SIC,	2323,Apparel Accessories and Other Apparel Mfg.
+SIC,	2326,Men's and Boys' Cut and Sew Apparel Mfg.
+SIC,	2329,Men's and Boys' Cut and Sew Apparel Mfg.
+SIC,	2331,"Women's, Girls', and Infants' Cut and Sew Apparel Mfg."
+SIC,	2353,Apparel Accessories and Other Apparel Mfg.
+SIC,	2371,Other Cut and Sew Apparel Mfg.
+SIC,	2381,Apparel Accessories and Other Apparel Mfg.
+SIC,	2389,Other Cut and Sew Apparel Mfg.
+SIC,	2391,Curtain and Linen Mills
+SIC,	2392,Curtain and Linen Mills
+SIC,	2393,Textile Bag and Canvas Mills
+SIC,	2394,Textile Bag and Canvas Mills
+SIC,	2396,Apparel Accessories and Other Apparel Mfg.
+SIC,	2397,Narrow Fabric Mills and Schiffli Machine Embroidery
+SIC,	2399,All Other Misc. Textile Product Mills
+SIC,	2411,Logging
+SIC,	2421,Sawmills
+SIC,	2426,All Other Misc. Wood Product Mfg.
+SIC,	2429,All Other Misc. Wood Product Mfg.
+SIC,	2431,Wood Window and Door Mfg.
+SIC,	2434,Wood Kitchen Cabinet and Countertop Mfg.
+SIC,	2435,Hardwood Veneer and Plywood Mfg.
+SIC,	2436,Softwood Veneer and Plywood Mfg.
+SIC,	2439,Engineered Wood Member (Except Truss) Mfg.
+SIC,	2441,Wood Container and Pallet Mfg.
+SIC,	2448,Wood Container and Pallet Mfg.
+SIC,	2449,Wood Container and Pallet Mfg.
+SIC,	2451,Manufactured Home (Mobile Home) Mfg.
+SIC,	2452,Prefabricated Wood Building Mfg.
+SIC,	2491,Wood Preservation
+SIC,	2493,Reconstituted Wood Product Mfg.
+SIC,	2499,All Other Misc. Wood Product Mfg.
+SIC,	2511,Custom Architectural Woodwork and Millwork Mfg.
+SIC,	2514,Metal Household Furniture Mfg.
+SIC,	2515,Mattress Mfg.
+SIC,	2517,Nonupholstered Wood Household Furniture Mfg.
+SIC,	2519,Household Furniture (Except Wood and Metal) Mfg.
+SIC,	2521,Wood Office Furniture Mfg.
+SIC,	2522,Office Furniture (Except Wood) Mfg.
+SIC,	2531,Office Supplies (Except Paper) Mfg.
+SIC,	2591,Blind and Shade Mfg.
+SIC,	2611,Pulp Mills
+SIC,	2621,Paper (Except Newsprint) Mills
+SIC,	2631,Paperboard Mills
+SIC,	2652,Other Paperboard Container Mfg.
+SIC,	2653,Corrugated and Solid Fiber Box Mfg.
+SIC,	2655,Other Paperboard Container Mfg.
+SIC,	2656,Other Paperboard Container Mfg.
+SIC,	2657,Folding Paperboard Box Mfg.
+SIC,	2671,Paper Bag and Coated and Treated Paper Mfg.
+SIC,	2672,Paper Bag and Coated and Treated Paper Mfg.
+SIC,	2673,Plastics Bag and Pouch Mfg.
+SIC,	2674,Paper Bag and Coated and Treated Paper Mfg.
+SIC,	2675,Paper Bag and Coated and Treated Paper Mfg.
+SIC,	2676,Sanitary Paper Product Mfg.
+SIC,	2677,Stationery Product Mfg.
+SIC,	2678,Stationery Product Mfg.
+SIC,	2679,All Other Converted Paper Product Mfg.
+SIC,	2711,Newspaper Publishers
+SIC,	2721,Periodical Publishers
+SIC,	2731,Book Publishers
+SIC,	2732,Books Printing
+SIC,	2741,All Other Publishers
+SIC,	2752,Commercial Printing (Except Screen and Books)
+SIC,	2754,Commercial Printing (Except Screen and Books)
+SIC,	2759,Commercial Printing (Except Screen and Books)
+SIC,	2761,Commercial Printing (Except Screen and Books)
+SIC,	2771,Greeting Card Publishers
+SIC,	2782,Books Printing
+SIC,	2789,Support Activities for Printing
+SIC,	2791,Support Activities for Printing
+SIC,	2812,Other Basic Inorganic Chemical Mfg.
+SIC,	2813,Industrial Gas Mfg.
+SIC,	2816,Synthetic Dye and Pigment Mfg.
+SIC,	2819,Alumina Refining and Primary Aluminum Production
+SIC,	2821,Plastics Material and Resin Mfg.
+SIC,	2822,Synthetic Rubber Mfg.
+SIC,	2823,Artificial and Synthetic Fibers and Filaments Mfg.
+SIC,	2824,Artificial and Synthetic Fibers and Filaments Mfg.
+SIC,	2833,Medicinal and Botanical Mfg.
+SIC,	2834,Pharmaceutical Preparation Mfg.
+SIC,	2835,In-Vitro Diagnostic Substance Mfg.
+SIC,	2836,Biological Product (Except Diagnostic) Mfg.
+SIC,	2841,Soap and Other Detergent Mfg.
+SIC,	2842,Polish and Other Sanitation Good Mfg.
+SIC,	2843,Surface Active Agent Mfg.
+SIC,	2844,Toilet Preparation Mfg.
+SIC,	2851,Paint and Coating Mfg.
+SIC,	2861,"Cyclic Crude, Intermediate, and Gum and Wood Chemical Mfg."
+SIC,	2865,"Cyclic Crude, Intermediate, and Gum and Wood Chemical Mfg."
+SIC,	2869,Ethyl Alcohol Mfg.
+SIC,	2873,Nitrogenous Fertilizer Mfg.
+SIC,	2874,Phosphatic Fertilizer Mfg.
+SIC,	2875,Fertilizer (Mixing Only) Mfg.
+SIC,	2879,Pesticide and Other Agricultural Chemical Mfg.
+SIC,	2891,Adhesive Mfg.
+SIC,	2892,Explosives Mfg.
+SIC,	2893,Printing Ink Mfg.
+SIC,	2899,All Other Misc. Chemical Product and Preparation Mfg.
+SIC,	2911,Petroleum Refineries
+SIC,	2951,Asphalt Paving Mixture and Block Mfg.
+SIC,	2952,Asphalt Shingle and Coating Materials Mfg.
+SIC,	2992,Petroleum Lubricating Oil and Grease Mfg.
+SIC,	2999,All Other Petroleum and Coal Products Mfg.
+SIC,	3011,Tire Mfg. (Except Retreading)
+SIC,	3021,Footwear Mfg.
+SIC,	3052,Rubber and Plastics Hoses and Belting Mfg.
+SIC,	3053,"Gasket, Packing, and Sealing Device Mfg."
+SIC,	3061,Rubber Product Mfg. for Mechanical Use
+SIC,	3069,All Other Rubber Product Mfg.
+SIC,	3081,Unlaminated Plastics Film and Sheet (Except Packaging) Mfg.
+SIC,	3082,Unlaminated Plastics Profile Shape Mfg.
+SIC,	3083,"Laminated Plastics Plate, Sheet (Except Packaging), and Shape Mfg."
+SIC,	3084,Plastics Pipe and Pipe Fitting Mfg.
+SIC,	3085,Plastics Bottle Mfg.
+SIC,	3086,Urethane and Other Foam Product (Except Polystyrene) Mfg.
+SIC,	3087,Custom Compounding of Purchased Resins
+SIC,	3088,Plastics Plumbing Fixture Mfg.
+SIC,	3089,All Other Plastics Product Mfg.
+SIC,	3111,Leather and Hide Tanning and Finishing
+SIC,	3131,All Other Leather Good and Allied Product Mfg.
+SIC,	3142,Footwear Mfg.
+SIC,	3143,Footwear Mfg.
+SIC,	3144,Footwear Mfg.
+SIC,	3149,Footwear Mfg.
+SIC,	3151,Apparel Accessories and Other Apparel Mfg.
+SIC,	3161,All Other Leather Good and Allied Product Mfg.
+SIC,	3171,Women's Handbag and Purse Mfg.
+SIC,	3172,All Other Leather Good and Allied Product Mfg.
+SIC,	3199,All Other Leather Good and Allied Product Mfg.
+SIC,	3211,Flat Glass Mfg.
+SIC,	3221,Glass Container Mfg.
+SIC,	3229,Other Pressed and Blown Glass and Glassware Mfg.
+SIC,	3231,Glass Product Mfg. Made of Purchased Glass
+SIC,	3241,Cement Mfg.
+SIC,	3251,Clay Building Material and Refractories Mfg.
+SIC,	3253,Clay Building Material and Refractories Mfg.
+SIC,	3255,Clay Building Material and Refractories Mfg.
+SIC,	3259,Clay Building Material and Refractories Mfg.
+SIC,	3261,"Pottery, Ceramics, and Plumbing Fixture Mfg."
+SIC,	3263,"Pottery, Ceramics, and Plumbing Fixture Mfg."
+SIC,	3264,"Pottery, Ceramics, and Plumbing Fixture Mfg."
+SIC,	3269,"Pottery, Ceramics, and Plumbing Fixture Mfg."
+SIC,	3271,Concrete Block and Brick Mfg.
+SIC,	3272,Concrete Pipe Mfg.
+SIC,	3273,Ready-Mix Concrete Mfg.
+SIC,	3274,Lime Mfg.
+SIC,	3281,Cut Stone and Stone Product Mfg.
+SIC,	3291,Abrasive Product Mfg.
+SIC,	3292,All Other Misc. Nonmetallic Mineral Product Mfg.
+SIC,	3295,Ground or Treated Mineral and Earth Mfg.
+SIC,	3296,Mineral Wool Mfg.
+SIC,	3297,Clay Building Material and Refractories Mfg.
+SIC,	3299,All Other Misc. Nonmetallic Mineral Product Mfg.
+SIC,	3312,All Other Petroleum and Coal Products Mfg.
+SIC,	3313,"Secondary Smelting, Refining, and Alloying of Nonferrous Metal (Except Copper and Aluminum)"
+SIC,	3315,Other Fabricated Wire Product Mfg.
+SIC,	3316,Rolled Steel Shape Mfg.
+SIC,	3317,Iron and Steel Pipe and Tube Mfg. from Purchased Steel
+SIC,	3321,Iron Foundries
+SIC,	3322,Iron Foundries
+SIC,	3324,Steel Investment Foundries
+SIC,	3325,Steel Foundries (Except Investment)
+SIC,	3331,Nonferrous Metal (Except Aluminum) Smelting and Refining
+SIC,	3334,Alumina Refining and Primary Aluminum Production
+SIC,	3339,Nonferrous Metal (Except Aluminum) Smelting and Refining
+SIC,	3341,Secondary Smelting and Alloying of Aluminum
+SIC,	3351,"Copper Rolling, Drawing, Extruding, and Alloying"
+SIC,	3353,"Aluminum Sheet, Plate, and Foil Mfg."
+SIC,	3354,"Other Aluminum Rolling, Drawing, and Extruding"
+SIC,	3356,"Nonferrous Metal (Except Copper and Aluminum) Rolling, Drawing, and Extruding"
+SIC,	3357,"Nonferrous Metal (Except Copper and Aluminum) Rolling, Drawing, and Extruding"
+SIC,	3363,Aluminum Die-Casting Foundries
+SIC,	3364,Nonferrous Metal Die-Casting Foundries
+SIC,	3365,Aluminum Foundries (Except Die-Casting)
+SIC,	3366,Other Nonferrous Metal Foundries (Except Die-Casting)
+SIC,	3369,Other Nonferrous Metal Foundries (Except Die-Casting)
+SIC,	3398,Metal Heat Treating
+SIC,	3411,Metal Can Mfg.
+SIC,	3412,Other Metal Container Mfg.
+SIC,	3421,"Metal Kitchen Cookware, Utensil, Cutlery, and Flatware (Except Precious) Mfg."
+SIC,	3423,Saw Blade and Handtool Mfg.
+SIC,	3425,Saw Blade and Handtool Mfg.
+SIC,	3429,Hardware Mfg.
+SIC,	3431,All Other Misc. Fabricated Metal Product Mfg.
+SIC,	3432,Plumbing Fixture Fitting and Trim Mfg.
+SIC,	3433,Heating Equipment (Except Warm Air Furnaces) Mfg.
+SIC,	3441,Fabricated Structural Metal Mfg.
+SIC,	3442,Metal Window and Door Mfg.
+SIC,	3443,Plate Work Mfg.
+SIC,	3444,Sheet Metal Work Mfg.
+SIC,	3446,Ornamental and Architectural Metal Work Mfg.
+SIC,	3448,Prefabricated Metal Building and Component Mfg.
+SIC,	3449,Fabricated Structural Metal Mfg.
+SIC,	3451,Precision Turned Product Mfg.
+SIC,	3452,"Bolt, Nut, Screw, Rivet, and Washer Mfg."
+SIC,	3462,Iron and Steel Forging
+SIC,	3463,Nonferrous Forging
+SIC,	3465,Motor Vehicle Metal Stamping
+SIC,	3466,"Metal Crown, Closure, and Other Metal Stamping (Except Automotive)"
+SIC,	3469,"Metal Kitchen Cookware, Utensil, Cutlery, and Flatware (Except Precious) Mfg."
+SIC,	3471,"Electroplating, Plating, Polishing, Anodizing, and Coloring"
+SIC,	3479,"Metal Coating, Engraving (Except Jewelry and Silverware), and Allied Services to Manufacturers"
+SIC,	3482,Small Arms Ammunition Mfg.
+SIC,	3483,Ammunition (Except Small Arms) Mfg.
+SIC,	3484,"Small Arms, Ordnance, and Ordnance Accessories Mfg."
+SIC,	3489,"Small Arms, Ordnance, and Ordnance Accessories Mfg."
+SIC,	3491,Industrial Valve Mfg.
+SIC,	3492,Fluid Power Valve and Hose Fitting Mfg.
+SIC,	3493,Spring Mfg.
+SIC,	3495,Spring Mfg.
+SIC,	3497,All Other Misc. Fabricated Metal Product Mfg.
+SIC,	3498,Fabricated Pipe and Pipe Fitting Mfg.
+SIC,	3499,All Other Misc. Fabricated Metal Product Mfg.
+SIC,	3511,Turbine and Turbine Generator Set Units Mfg.
+SIC,	3519,Other Engine Equipment Mfg.
+SIC,	3523,Farm Machinery and Equipment Mfg.
+SIC,	3524,Lawn and Garden Tractor and Home Lawn and Garden Equipment Mfg.
+SIC,	3531,Construction Machinery Mfg.
+SIC,	3532,Mining Machinery and Equipment Mfg.
+SIC,	3533,Oil and Gas Field Machinery and Equipment Mfg.
+SIC,	3534,Elevator and Moving Stairway Mfg.
+SIC,	3535,Conveyor and Conveying Equipment Mfg.
+SIC,	3536,"Overhead Traveling Crane, Hoist, and Monorail System Mfg."
+SIC,	3537,"Industrial Truck, Tractor, Trailer, and Stacker Machinery Mfg."
+SIC,	3541,Machine Tool Mfg.
+SIC,	3542,Machine Tool Mfg.
+SIC,	3543,All Other Misc. Wood Product Mfg.
+SIC,	3544,Industrial Mold Mfg.
+SIC,	3545,Cutting Tool and Machine Tool Accessory Mfg.
+SIC,	3546,Power-Driven Handtool Mfg.
+SIC,	3547,Rolling Mill and Other Metalworking Machinery Mfg.
+SIC,	3549,Rolling Mill and Other Metalworking Machinery Mfg.
+SIC,	3552,Other Industrial Machinery Mfg.
+SIC,	3553,"Sawmill, Woodworking, and Paper Machinery Mfg."
+SIC,	3554,"Sawmill, Woodworking, and Paper Machinery Mfg."
+SIC,	3555,Printing Machinery and Equipment Mfg.
+SIC,	3556,Food Product Machinery Mfg.
+SIC,	3559,Other Industrial Machinery Mfg.
+SIC,	3561,Pump and Pumping Equipment Mfg.
+SIC,	3562,Ball and Roller Bearing Mfg.
+SIC,	3563,Air and Gas Compressor Mfg.
+SIC,	3564,Industrial and Commercial Fan and Blower and Air Purification Equipment Mfg.
+SIC,	3565,Packaging Machinery Mfg.
+SIC,	3566,"Speed Changer, Industrial High-Speed Drive, and Gear Mfg."
+SIC,	3567,Industrial Process Furnace and Oven Mfg.
+SIC,	3568,Mechanical Power Transmission Equipment Mfg.
+SIC,	3571,Electronic Computer Mfg.
+SIC,	3572,Computer Storage Device Mfg.
+SIC,	3575,Computer Terminal and Other Computer Peripheral Equipment Mfg.
+SIC,	3579,Computer and Peripheral Equipment Mfg.
+SIC,	3581,Other Commercial and Service Industry Machinery Mfg.
+SIC,	3582,Other Commercial and Service Industry Machinery Mfg.
+SIC,	3585,Air Conditioning and Warm Air Heating Equipment and Commercial and Industrial Refrigeration Equipment Mfg.
+SIC,	3586,Measuring and Dispensing Pump Mfg.
+SIC,	3589,Other Commercial and Service Industry Machinery Mfg.
+SIC,	3592,Motor Vehicle Gasoline Engine and Engine Parts Mfg.
+SIC,	3593,Fluid Power Cylinder and Actuator Mfg.
+SIC,	3594,Fluid Power Pump and Motor Mfg.
+SIC,	3596,Scale and Balance Mfg.
+SIC,	3599,Machine Shops
+SIC,	3612,"Power, Distribution, and Specialty Transformer Mfg."
+SIC,	3613,Switchgear and Switchboard Apparatus Mfg.
+SIC,	3621,Motor and Generator Mfg.
+SIC,	3624,Carbon and Graphite Product Mfg.
+SIC,	3625,Relay and Industrial Control Mfg.
+SIC,	3629,All Other Misc. Electrical Equipment and Component Mfg.
+SIC,	3631,Household Cooking Appliance Mfg.
+SIC,	3632,Household Refrigerator and Home Freezer Mfg.
+SIC,	3633,Household Laundry Equipment Mfg.
+SIC,	3634,Small Electrical Appliance Mfg.
+SIC,	3635,"Software and Other Prerecorded Compact Disc, Tape, and Record Reproducing"
+SIC,	3639,Other Major Household Appliance Mfg.
+SIC,	3641,Electric Lamp Bulb and Part Mfg.
+SIC,	3643,Current-Carrying Wiring Device Mfg.
+SIC,	3644,Noncurrent-Carrying Wiring Device Mfg.
+SIC,	3645,Residential Electric Lighting Fixture Mfg.
+SIC,	3646,"Commercial, Industrial, and Institutional Electric Lighting Fixture Mfg."
+SIC,	3647,Motor Vehicle Electrical and Electronic Equipment Mfg.
+SIC,	3648,Other Lighting Equipment Mfg.
+SIC,	3651,Audio and Video Equipment Mfg.
+SIC,	3652,Integrated Record Production/Distribution
+SIC,	3661,Telephone Apparatus Mfg.
+SIC,	3663,Radio and Television Broadcasting and Wireless Communications Equipment Mfg.
+SIC,	3669,Other Communications Equipment Mfg.
+SIC,	3671,Other Electronic Component Mfg.
+SIC,	3672,Bare Printed Circuit Board Mfg.
+SIC,	3674,Semiconductor and Related Device Mfg.
+SIC,	3675,"Capacitor, Resistor, Coil, Transformer, and Other Inductor Mfg."
+SIC,	3676,"Capacitor, Resistor, Coil, Transformer, and Other Inductor Mfg."
+SIC,	3677,"Electronic Coil, Transformer, and Other Inductor Mfg."
+SIC,	3678,Electronic Connector Mfg.
+SIC,	3679,Other Electronic Component Mfg.
+SIC,	3691,Storage Battery Mfg.
+SIC,	3692,Primary Battery Mfg.
+SIC,	3695,Blank Magnetic and Optical Recording Media Mfg.
+SIC,	3699,All Other Misc. Electrical Equipment and Component Mfg.
+SIC,	3711,Automobile Mfg.
+SIC,	3714,Other Motor Vehicle Parts Mfg.
+SIC,	3715,Truck Trailer Mfg.
+SIC,	3716,Motor Home Mfg.
+SIC,	3721,Airplane Mfg.
+SIC,	3724,Aircraft Engine and Engine Parts Mfg.
+SIC,	3728,Other Aircraft Parts and Auxiliary Equipment Mfg.
+SIC,	3731,Ship Building and Repairing
+SIC,	3732,Boat Building
+SIC,	3743,Railroad Rolling Stock Mfg.
+SIC,	3751,"Motorcycle, Bicycle, and Parts Mfg."
+SIC,	3761,Guided Missile and Space Vehicle Mfg.
+SIC,	3764,Guided Missile and Space Vehicle Propulsion Unit and Propulsion Unit Parts Mfg.
+SIC,	3769,Other Guided Missile and Space Vehicle Parts and Auxiliary Equipment Mfg.
+SIC,	3792,Travel Trailer and Camper Mfg.
+SIC,	3795,"Military Armored Vehicle, Tank, and Tank Component Mfg."
+SIC,	3799,All Other Transportation Equipment Mfg.
+SIC,	3812,"Search, Detection, Navigation, Guidance, Aeronautical, and Nautical System and Instrument Mfg."
+SIC,	3822,"Automatic Environment Control Mfg. for Residential, Commercial and Appliance Use"
+SIC,	3823,"Instruments and Related Products Mfg. for Measuring, Displaying, and Controlling Industrial Process Variables"
+SIC,	3824,Totalizing Fluid Meter and Counting Device Mfg.
+SIC,	3825,Instrument Mfg. for Measuring and Testing Electricity and Electrical Signals
+SIC,	3826,Analytical Laboratory Instrument Mfg.
+SIC,	3827,Optical Instrument and Lens Mfg.
+SIC,	3829,"Instruments and Related Products Mfg. for Measuring, Displaying, and Controlling Industrial Process Variables"
+SIC,	3841,Surgical and Medical Instrument Mfg.
+SIC,	3842,Surgical Appliance and Supplies Mfg.
+SIC,	3844,Irradiation Apparatus Mfg.
+SIC,	3845,Dental Equipment and Supplies Mfg.
+SIC,	3851,Ophthalmic Goods Mfg.
+SIC,	3861,Photographic and Photocopying Equipment Mfg.
+SIC,	3873,Other Measuring and Controlling Device Mfg.
+SIC,	3911,Jewelry and Silverware Mfg.
+SIC,	3914,Jewelry and Silverware Mfg.
+SIC,	3915,Jewelry and Silverware Mfg.
+SIC,	3931,Musical Instrument Mfg.
+SIC,	3942,"Doll, Toy, and Game Mfg."
+SIC,	3944,"Doll, Toy, and Game Mfg."
+SIC,	3949,Sporting and Athletic Goods Mfg.
+SIC,	3951,Office Supplies (Except Paper) Mfg.
+SIC,	3952,Office Supplies (Except Paper) Mfg.
+SIC,	3953,Office Supplies (Except Paper) Mfg.
+SIC,	3955,Office Supplies (Except Paper) Mfg.
+SIC,	3965,"Fastener, Button, Needle, and Pin Mfg."
+SIC,	3991,"Broom, Brush, and Mop Mfg."
+SIC,	3993,Sign Mfg.
+SIC,	3995,Burial Casket Mfg.
+SIC,	3996,All Other Plastics Product Mfg.
+SIC,	3999,All Other Misc. Mfg.
+SIC,	4011,Line-Haul Railroads
+SIC,	4013,Short Line Railroads
+SIC,	4111,All Other Transit and Ground Transportation
+SIC,	4119,Limousine Service
+SIC,	4121,Taxi Service
+SIC,	4131,Interurban and Rural Bus Transportation
+SIC,	4151,School and Employee Bus Transportation
+SIC,	4212,"Specialized Freight (Except Used Goods) Trucking, Local"
+SIC,	4213,"Specialized Freight (Except Used Goods) Trucking, Long Distance"
+SIC,	4215,Local Messengers and Local Delivery
+SIC,	4221,Farm Product Warehousing and Storage
+SIC,	4222,Refrigerated Warehousing and Storage
+SIC,	4225,General Warehousing and Storage
+SIC,	4226,Other Warehousing and Storage
+SIC,	4412,Deep Sea Freight Transportation
+SIC,	4449,Inland Water Freight Transportation
+SIC,	4481,Deep Sea Passenger Transportation
+SIC,	4482,Coastal and Great Lakes Passenger Transportation
+SIC,	4489,Inland Water Passenger Transportation
+SIC,	4491,Marine Cargo Handling
+SIC,	4493,Marinas
+SIC,	4499,Other Support Activities for Water Transportation
+SIC,	4512,Scheduled Passenger Air Transportation
+SIC,	4522,"Scenic and Sightseeing Transportation, Other"
+SIC,	4581,Other Support Activities for Air Transportation
+SIC,	4612,Pipeline Transportation of Crude Oil
+SIC,	4613,Pipeline Transportation of Refined Petroleum Products
+SIC,	4619,All Other Pipeline Transportation
+SIC,	4724,Travel Agencies
+SIC,	4725,Tour Operators
+SIC,	4729,All Other Travel Arrangement and Reservation Services
+SIC,	4731,Freight Transportation Arrangement
+SIC,	4783,Packing and Crating
+SIC,	4785,Other Support Activities for Water Transportation
+SIC,	4789,Support Activities for Rail Transportation
+SIC,	4812,Wireless Telecommunications Carriers (Except Satellite)
+SIC,	4813,Telecommunications Resellers
+SIC,	4822,Wired Telecommunications Carriers
+SIC,	4832,Radio Stations
+SIC,	4833,Television Broadcasting
+SIC,	4841,Cable and Other Subscription Programming
+SIC,	4899,Satellite Telecommunications
+SIC,	4911,Electric Power Distribution
+SIC,	4922,Pipeline Transportation of Natural Gas
+SIC,	4924,Natural Gas Distribution
+SIC,	4941,Water Supply and Irrigation Systems
+SIC,	4952,Sewage Treatment Facilities
+SIC,	4953,Hazardous Waste Treatment and Disposal
+SIC,	4959,Exterminating and Pest Control Services
+SIC,	4961,Steam and Air Conditioning Supply
+SIC,	4971,Water Supply and Irrigation Systems
+SIC,	5012,Automobile and Other Motor Vehicle Merchant Wholesalers
+SIC,	5013,Motor Vehicle Supplies and New Parts Merchant Wholesalers
+SIC,	5014,Tire and Tube Merchant Wholesalers
+SIC,	5015,Motor Vehicle Parts (Used) Merchant Wholesalers
+SIC,	5021,Furniture Merchant Wholesalers
+SIC,	5023,Home Furnishing Merchant Wholesalers
+SIC,	5031,"Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers"
+SIC,	5032,"Brick, Stone, and Related Construction Material Merchant Wholesalers"
+SIC,	5033,"Roofing, Siding, and Insulation Material Merchant Wholesalers"
+SIC,	5039,"Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers"
+SIC,	5043,Photographic Equipment and Supplies Merchant Wholesalers
+SIC,	5044,Office Equipment Merchant Wholesalers
+SIC,	5045,Electronics Stores
+SIC,	5046,Other Commercial Equipment Merchant Wholesalers
+SIC,	5047,"Medical, Dental, and Hospital Equipment and Supplies Merchant Wholesalers"
+SIC,	5048,Ophthalmic Goods Merchant Wholesalers
+SIC,	5049,Other Professional Equipment and Supplies Merchant Wholesalers
+SIC,	5051,Metal Service Centers and Other Metal Merchant Wholesalers
+SIC,	5052,Coal and Other Mineral and Ore Merchant Wholesalers
+SIC,	5063,"Electrical Apparatus and Equipment, Wiring Supplies, and Related Equipment Merchant Wholesalers"
+SIC,	5064,"Household Appliances, Electric Housewares, and Consumer Electronics Merchant Wholesalers"
+SIC,	5065,Other Electronic Parts and Equipment Merchant Wholesalers
+SIC,	5072,Hardware Merchant Wholesalers
+SIC,	5074,Other Building Material Dealers
+SIC,	5075,Warm Air Heating and Air-Conditioning Equipment and Supplies Merchant Wholesalers
+SIC,	5078,Refrigeration Equipment and Supplies Merchant Wholesalers
+SIC,	5082,Construction and Mining (Except Oil Well) Machinery and Equipment Merchant Wholesalers
+SIC,	5083,Farm and Garden Machinery and Equipment Merchant Wholesalers
+SIC,	5084,Industrial Machinery and Equipment Merchant Wholesalers
+SIC,	5085,Industrial Supplies Merchant Wholesalers
+SIC,	5087,Service Establishment Equipment and Supplies Merchant Wholesalers
+SIC,	5088,Transportation Equipment and Supplies (Except Motor Vehicles) Merchant Wholesalers
+SIC,	5091,Sporting and Recreational Goods and Supplies Merchant Wholesalers
+SIC,	5092,Toy and Hobby Goods and Supplies Merchant Wholesalers
+SIC,	5093,Recyclable Material Merchant Wholesalers
+SIC,	5094,"Jewelry, Watch, Precious Stone, and Precious Metal Merchant Wholesalers"
+SIC,	5099,Other Misc. Durable Goods Merchant Wholesalers
+SIC,	5111,Printing and Writing Paper Merchant Wholesalers
+SIC,	5112,Office Supplies and Stationery Stores
+SIC,	5113,Industrial and Personal Service Paper Merchant Wholesalers
+SIC,	5122,Drugs and Druggists' Sundries Merchant Wholesalers
+SIC,	5131,"Piece Goods, Notions, and Other Dry Goods Merchant Wholesalers"
+SIC,	5136,Mens and Boys Clothing and Furnishings Merchant Wholesalers
+SIC,	5137,"Womens, Childrens, and Infants Clothing and Accessories Merchant Wholesalers"
+SIC,	5139,Footwear Merchant Wholesalers
+SIC,	5141,General Line Grocery Merchant Wholesalers
+SIC,	5142,Packaged Frozen Food Merchant Wholesalers
+SIC,	5143,Dairy Product (Except Dried or Canned) Merchant Wholesalers
+SIC,	5144,Poultry and Poultry Product Merchant Wholesalers
+SIC,	5145,Confectionery Merchant Wholesalers
+SIC,	5146,Fish and Seafood Merchant Wholesalers
+SIC,	5147,Meat and Meat Product Merchant Wholesalers
+SIC,	5148,Fresh Fruit and Vegetable Merchant Wholesalers
+SIC,	5149,Other Grocery and Related Products Merchant Wholesalers
+SIC,	5153,Grain and Field Bean Merchant Wholesalers
+SIC,	5154,Livestock Merchant Wholesalers
+SIC,	5159,Other Farm Product Raw Material Merchant Wholesalers
+SIC,	5162,Plastics Materials and Basic Forms and Shapes Merchant Wholesalers
+SIC,	5169,Other Chemical and Allied Products Merchant Wholesalers
+SIC,	5171,Fuel Dealers
+SIC,	5172,Petroleum and Petroleum Products Merchant Wholesalers (Except Bulk Stations and Terminals)
+SIC,	5181,Beer and Ale Merchant Wholesalers
+SIC,	5182,Wine and Distilled Alcoholic Beverage Merchant Wholesalers
+SIC,	5191,Farm Supplies Merchant Wholesalers
+SIC,	5192,"Book, Periodical, and Newspaper Merchant Wholesalers"
+SIC,	5193,"Flower, Nursery Stock, and Florists Supplies Merchant Wholesalers"
+SIC,	5194,Tobacco and Tobacco Product Merchant Wholesalers
+SIC,	5198,"Paint, Varnish, and Supplies Merchant Wholesalers"
+SIC,	5199,Other Misc. Nondurable Goods Merchant Wholesalers
+SIC,	5211,Other Building Material Dealers
+SIC,	5231,Other Building Material Dealers
+SIC,	5251,Hardware Stores
+SIC,	5261,Farm Supplies Merchant Wholesalers
+SIC,	5271,Manufactured (Mobile) Home Dealers
+SIC,	5311,Department Stores (Except Discount Department Stores)
+SIC,	5331,All Other General Merchandise Stores
+SIC,	5399,All Other General Merchandise Stores
+SIC,	5411,Convenience Stores
+SIC,	5421,Fish and Seafood Markets
+SIC,	5431,Fruit and Vegetable Markets
+SIC,	5441,Confectionery and Nut Stores
+SIC,	5451,All Other Specialty Food Stores
+SIC,	5461,Retail Bakeries
+SIC,	5499,All Other Specialty Food Stores
+SIC,	5511,New Car Dealers
+SIC,	5521,Used Car Dealers
+SIC,	5531,Automotive Parts and Accessories Stores
+SIC,	5541,Gasoline Stations with Convenience Stores
+SIC,	5551,Boat Dealers
+SIC,	5561,Recreational Vehicle Dealers
+SIC,	5571,"Motorcycle, ATV, and All Other Motor Vehicle Dealers"
+SIC,	5599,"Motorcycle, ATV, and All Other Motor Vehicle Dealers"
+SIC,	5611,Mens Clothing Stores
+SIC,	5621,Womens Clothing Stores
+SIC,	5641,Childrens and Infants Clothing Stores
+SIC,	5651,Family Clothing Stores
+SIC,	5661,Shoe Stores
+SIC,	5699,Other Clothing Stores
+SIC,	5712,Furniture Stores
+SIC,	5713,Floor Covering Stores
+SIC,	5714,Window Treatment Stores
+SIC,	5722,Household Appliance Stores
+SIC,	5731,Electronics Stores
+SIC,	5734,Electronics Stores
+SIC,	5735,Musical Instrument and Supplies Stores
+SIC,	5736,Musical Instrument and Supplies Stores
+SIC,	5812,Snack and Nonalcoholic Beverage Bars
+SIC,	5813,Drinking Places (Alcoholic Beverages)
+SIC,	5912,Pharmacies and Drug Stores
+SIC,	5921,"Beer, Wine, and Liquor Stores"
+SIC,	5932,All Other Nondepository Credit Intermediation
+SIC,	5941,Sporting Goods Stores
+SIC,	5942,Book Stores
+SIC,	5944,Jewelry Stores
+SIC,	5945,"Hobby, Toy, and Game Stores"
+SIC,	5946,Electronics Stores
+SIC,	5947,"Gift, Novelty, and Souvenir Stores"
+SIC,	5948,Luggage and Leather Goods Stores
+SIC,	5949,"Sewing, Needlewoork, and Piece Goods Stores"
+SIC,	5961,Electronic Auctions
+SIC,	5962,Vending Machine Operators
+SIC,	5963,Other Direct Selling Establishments
+SIC,	5983,Fuel Dealers
+SIC,	5984,Fuel Dealers
+SIC,	5989,Fuel Dealers
+SIC,	5992,Florists
+SIC,	5993,Tobacco Stores
+SIC,	5994,News Dealers and Newsstands
+SIC,	5995,Optical Goods Stores
+SIC,	5999,All Other Health and Personal Care Stores
+SIC,	6011,Monetary Authorities--Central Bank
+SIC,	6022,Depository Credit Intermediation
+SIC,	6029,Commercial Banking
+SIC,	6061,Credit Unions
+SIC,	6099,Other Activities Related to Credit Intermediation
+SIC,	6141,Consumer Lending
+SIC,	6162,Real Estate Credit
+SIC,	6163,Mortgage and Nonmortgage Loan Brokers
+SIC,	6211,Securities Brokerage
+SIC,	6221,Commodity Contracts Brokerage
+SIC,	6231,Securities and Commodity Exchanges
+SIC,	6282,Investment Advice
+SIC,	6311,Direct Life Insurance Carriers
+SIC,	6331,Direct Property and Casualty Insurance Carriers
+SIC,	6361,Direct Title Insurance Carriers
+SIC,	6371,Health and Welfare Funds
+SIC,	6411,Claims Adjusting
+SIC,	6512,Lessors of Nonresidential Buildings (Except Miniwarehouses)
+SIC,	6513,Lessors of Residential Buildings and Dwellings
+SIC,	6514,Lessors of Residential Buildings and Dwellings
+SIC,	6515,Lessors of Other Real Estate Property
+SIC,	6519,Lessors of Other Real Estate Property
+SIC,	6531,Other Activities Related to Real Estate
+SIC,	6541,Title Abstract and Settlement Offices
+SIC,	6552,Land Subdivision
+SIC,	6553,Cemeteries and Crematories
+SIC,	6712,Offices of Bank Holding Cos.
+SIC,	6719,Offices of Other Holding Cos.
+SIC,	6722,Open-End Investment Funds
+SIC,	6732,Grantmaking Foundations
+SIC,	6733,"Trusts, Estates, and Agency Accounts"
+SIC,	7011,Casino Hotels
+SIC,	7021,Rooming and Boarding Houses
+SIC,	7032,Recreational and Vacation Camps (Except Campgrounds)
+SIC,	7033,RV (Recreational Vehicle) Parks and Campgrounds
+SIC,	7048,Other Spectator Sports
+SIC,	7211,Drycleaning and Laundry Services (Except Coin-Operated)
+SIC,	7213,Linen Supply
+SIC,	7215,Coin-Operated Laundries and Drycleaners
+SIC,	7216,Drycleaning and Laundry Services (Except Coin-Operated)
+SIC,	7217,Carpet and Upholstery Cleaning Services
+SIC,	7218,Industrial Launderers
+SIC,	7219,Linen Supply
+SIC,	7221,"Photography Studios, Portrait"
+SIC,	7231,Cosmetology and Barber Schools
+SIC,	7241,Barber Shops
+SIC,	7251,Footwear and Leather Goods Repair
+SIC,	7261,Cemeteries and Crematories
+SIC,	7291,Tax Preparation Services
+SIC,	7299,Formal Wear and Costume Rental
+SIC,	7311,Advertising Agencies
+SIC,	7312,Outdoor Advertising
+SIC,	7313,Media Representatives
+SIC,	7319,Media Buying Agencies
+SIC,	7322,Collection Agencies
+SIC,	7323,Credit Bureaus
+SIC,	7331,Direct Mail Advertising
+SIC,	7334,Other Business Service Centers (Including Copy Shops)
+SIC,	7335,Other Nonscheduled Air Transportation
+SIC,	7338,Court Reporting and Stenotype Services
+SIC,	7342,Exterminating and Pest Control Services
+SIC,	7349,Janitorial Services
+SIC,	7352,Home Health Equipment Rental
+SIC,	7353,All Other Specialty Trade Contractors
+SIC,	7359,General Rental Centers
+SIC,	7363,Temporary Help Services
+SIC,	7371,Custom Computer Programming Services
+SIC,	7372,"Software and Other Prerecorded Compact Disc, Tape, and Record Reproducing"
+SIC,	7373,Computer Systems Design Services
+SIC,	7374,"Data Processing, Hosting, and Related Services"
+SIC,	7376,Computer Facilities Management Services
+SIC,	7378,Computer and Office Machine Repair and Maintenance
+SIC,	7379,Other Computer Related Services
+SIC,	7381,Security Guards and Patrol Services
+SIC,	7382,Security Systems Services (Except Locksmiths)
+SIC,	7383,News Syndicates
+SIC,	7384,Photofinishing Laboratories (Except One-Hour)
+SIC,	7389,All Other Misc. Chemical Product and Preparation Mfg.
+SIC,	7513,"Truck, Utility Trailer, and RV (Recreational Vehicle) Rental and Leasing"
+SIC,	7514,Passenger Car Rental
+SIC,	7515,Passenger Car Leasing
+SIC,	7519,"Truck, Utility Trailer, and RV (Recreational Vehicle) Rental and Leasing"
+SIC,	7521,Parking Lots and Garages
+SIC,	7532,"Automotive Body, Paint, and Interior Repair and Maintenance"
+SIC,	7533,Automotive Exhaust System Repair
+SIC,	7534,Tire Retreading
+SIC,	7536,Automotive Glass Replacement Shops
+SIC,	7537,Automotive Transmission Repair
+SIC,	7538,General Automotive Repair
+SIC,	7539,Other Automotive Mechanical and Electrical Repair and Maintenance
+SIC,	7542,Car Washes
+SIC,	7549,Motor Vehicle Towing
+SIC,	7622,Communication Equipment Repair and Maintenance
+SIC,	7623,Commercial and Industrial Machinery and Equipment (Except Automotive and Electronic) Repair and Maintenance
+SIC,	7629,Consumer Electronics Repair and Maintenance
+SIC,	7641,Reupholstery and Furniture Repair
+SIC,	7692,Other Personal and Household Goods Repair and Maintenance
+SIC,	7699,Support Activities for Animal Production
+SIC,	7812,Motion Picture and Video Production
+SIC,	7819,Teleproduction and Other Postproduction Services
+SIC,	782,Landscaping Services
+SIC,	7822,Motion Picture and Video Distribution
+SIC,	7829,Motion Picture and Video Distribution
+SIC,	7832,Motion Picture Theaters (Except Drive-Ins)
+SIC,	7833,Drive-in Motion Picture Theaters
+SIC,	7841,Video Tape and Disc Rental
+SIC,	7911,All Other Amusement and Recreation Industries
+SIC,	7922,Theater Cos. and Dinner Theaters
+SIC,	7933,Bowling Centers
+SIC,	7941,"Promoters of Performing Arts, Sports, and Similar Events with Facilities"
+SIC,	7948,Racetracks
+SIC,	7991,Fitness and Recreational Sports Centers
+SIC,	7992,Golf Courses and Country Clubs
+SIC,	7993,Amusement Arcades
+SIC,	7996,Amusement and Theme Parks
+SIC,	7997,All Other Amusement and Recreation Industries
+SIC,	7999,All Other Amusement and Recreation Industries
+SIC,	8011,Freestanding Ambulatory Surgical and Emergency Centers
+SIC,	8021,Offices of Dentists
+SIC,	8041,Offices of Chiropractors
+SIC,	8042,Offices of Optometrists
+SIC,	8043,Offices of Podiatrists
+SIC,	8049,Offices of Mental Health Practitioners (Except Physicians)
+SIC,	8051,Nursing Care Facilities (Skilled Nursing Facilities)
+SIC,	8052,Nursing Care Facilities (Skilled Nursing Facilities)
+SIC,	8059,Continuing Care Retirement Centers
+SIC,	8062,General Medical and Surgical Hospitals
+SIC,	8063,Psychiatric and Substance Abuse Hospitals
+SIC,	8069,Psychiatric and Substance Abuse Hospitals
+SIC,	8071,Diagnostic Imaging Centers
+SIC,	8072,Dental Laboratories
+SIC,	8082,Home Health Care Services
+SIC,	8092,Kidney Dialysis Centers
+SIC,	8093,Family Planning Centers
+SIC,	8099,All Other Misc. Ambulatory Health Care Services
+SIC,	8111,Offices of Lawyers
+SIC,	8211,Elementary and Secondary Schools
+SIC,	8221,"Colleges, Universities, and Professional Schools"
+SIC,	8231,Libraries and Archives
+SIC,	8243,Computer Training
+SIC,	8249,Flight Training
+SIC,	8299,Professional and Management Development Training
+SIC,	8322,Temporary Shelters
+SIC,	8331,Vocational Rehabilitation Services
+SIC,	8351,Child Day Care Services
+SIC,	8361,Other Residential Care Facilities
+SIC,	8399,"Environment, Conservation, and Wildlife Organizations"
+SIC,	8412,Museums
+SIC,	8422,Zoos and Botanical Gardens
+SIC,	8621,Professional Organizations
+SIC,	8631,Labor Unions and Similar Labor Organizations
+SIC,	8641,Civic and Social Organizations
+SIC,	8651,Political Organizations
+SIC,	8661,Religious Organizations
+SIC,	8699,"Other Similar Organizations (Except Business, Professional, Labor, and Political Organizations)"
+SIC,	8711,Engineering Services
+SIC,	8712,Architectural Services
+SIC,	8713,Surveying and Mapping (Except Geophysical) Services
+SIC,	8721,Other Accounting Services
+SIC,	8732,Research and Development in Biotechnology
+SIC,	8734,Testing Laboratories
+SIC,	8741,Other Heavy and Civil Engineering Construction
+SIC,	8742,Administrative Management and General Management Consulting Services
+SIC,	8743,Public Relations Agencies
+SIC,	8744,Facilities Support Services
+SIC,	8748,Other Management Consulting Services
+SIC,	8811,Private Households
+SIC,	8999,Record Production
+SIC,	9199,Other General Government Support
+SIC,	9221,Police Protection
+SIC,	9223,Correctional Institutions
+SIC,	9224,Fire Protection
+SIC,	9511,Administration of Air and Water Resource and Solid Waste Management Programs
+SIC,	9531,Administration of Housing Programs
+SIC,	9661,Space Research and Technology
+SIC,	9711,National Security

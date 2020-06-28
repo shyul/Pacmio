@@ -1,0 +1,517 @@
+Index,Type
+0,"Consumer, Cyclical"
+0.0,Auto Parts&Equipment
+0.0.0,Auto/Trk Prts&Equip-Orig
+0.0.1,Auto/Trk Prts&Equip-Repl
+0.0.2,Rubber-Tires
+0.1,Retail
+0.1.0,Retail-Jewelry
+0.1.1,Retail-Building Products
+0.1.2,Retail-Major Dept Store
+0.1.3,Retail-Discount
+0.1.4,Retail-Consumer Electron
+0.1.5,Retail-Restaurants
+0.1.6,Retail-Misc/Diversified
+0.1.7,Retail-Vision Serv Cntr
+0.1.8,Retail-Drug Store
+0.1.9,Retail-Convenience Store
+0.1.10,Retail-Apparel/Shoe
+0.1.11,Retail-Automobile
+0.1.12,Retail-Auto Parts
+0.1.13,Retail-Regnl Dept Store
+0.1.14,Retail-Home Furnishings
+0.1.15,Retail-Office Supplies
+0.1.16,Retail-Sporting Goods
+0.1.17,Retail-Petroleum Prod
+0.1.18,Retail-Vitamins/Nutr Sup
+0.1.19,Retail-Propane Distrib
+0.1.20,Film Processing
+0.1.21,Retail-Gardening Prod
+0.1.22,Retail-Bookstore
+0.1.23,Retail-Hypermarkets
+0.1.24,Retail-Catalog Shopping
+0.1.25,Retail-Perfume&Cosmetics
+0.1.26,Retail-Pubs
+0.1.27,Retail-Pet Food&Supplies
+0.1.28,Retail-Hair Salons
+0.1.29,Retail-Leisure Products
+0.1.30,Retail-Toy Store
+0.1.31,Retail-Floor Coverings
+0.1.32,Retail-Bedding
+0.1.33,Retail-Appliances
+0.1.34,Retail-Computer Equip
+0.1.35,Retail-Variety Store
+0.1.36,Retail-Pawn Shops
+0.1.37,Retail-Arts&Crafts
+0.1.38,Multilevel Dir Selling
+0.1.39,Retail-Mail Order
+0.2,Textiles
+0.2.0,Textile-Products
+0.2.1,Linen Supply&Rel Items
+0.2.2,Textile-Home Furnishings
+0.3,Leisure Time
+0.3.0,Travel Services
+0.3.1,Athletic Equipment
+0.3.2,Cruise Lines
+0.3.3,Leisure&Rec Products
+0.3.4,Golf
+0.3.5,Bicycle Manufacturing
+0.3.6,Motorcycle/Motor Scooter
+0.3.7,Recreational Vehicles
+0.3.8,Recreational Centers
+0.3.9,Leisure&Rec/Games
+0.4,Home Furnishings
+0.4.0,Audio/Video Products
+0.4.1,Home Furnishings
+0.4.2,Appliances
+0.5,Housewares
+0.5.0,Housewares
+0.5.1,Home Decoration Products
+0.5.2,Garden Products
+0.5.3,Crystal&Giftware
+0.6,Entertainment
+0.6.0,Racetracks
+0.6.1,Motion Pictures&Services
+0.6.2,Gambling (Non-Hotel)
+0.6.3,Internet Gambling
+0.6.4,Resorts/Theme Parks
+0.6.5,Casino Services
+0.6.6,Lottery Services
+0.6.7,Music
+0.6.8,Theaters
+0.6.9,Professional Sports
+0.6.10,Night Clubs
+0.7,Distribution/Wholesale
+0.7.0,Distribution/Wholesale
+0.7.1,Import/Export
+0.8,Airlines
+0.8.0,Airlines
+0.9,Lodging
+0.9.0,Casino Hotels
+0.9.1,Hotels&Motels
+0.10,Auto Manufacturers
+0.10.0,Auto-Cars/Light Trucks
+0.10.1,Auto-Med&Heavy Duty Trks
+0.10.2,Auto-Truck Trailers
+0.11,Home Builders
+0.11.0,Bldg-Residential/Commer
+0.11.1,Bldg-Mobil Home/Mfd Hous
+0.12,Apparel
+0.12.0,Apparel Manufacturers
+0.12.1,Footwear&Related Apparel
+0.12.2,Textile-Apparel
+0.12.3,Athletic Footwear
+0.12.4,Intimate Apparel
+0.13,Storage/Warehousing
+0.13.0,Storage/Warehousing
+0.14,Toys/Games/Hobbies
+0.14.0,Toys
+0.15,Office Furnishings
+0.15.0,Office Furnishings-Orig
+0.16,Food Service
+0.16.0,Food-Catering
+1,"Consumer, Non-cyclical"
+1.0,Biotechnology
+1.0.0,Medical-Biomedical/Gene
+1.0.1,Agricultural Biotech
+1.1,Healthcare-Services
+1.1.0,Dialysis Centers
+1.1.1,Medical-Outptnt/Home Med
+1.1.2,Medical Labs&Testing Srv
+1.1.3,Medical-HMO
+1.1.4,Medical-Nursing Homes
+1.1.5,MRI/Medical Diag Imaging
+1.1.6,Medical-Hospitals
+1.1.7,Phys Therapy/Rehab Cntrs
+1.1.8,Retirement/Aged Care
+1.1.9,Phys Practice Mgmnt
+1.1.10,Blood Collection Banking
+1.2,Commercial Services
+1.2.0,Inactive/Unknown
+1.2.1,Rental Auto/Equipment
+1.2.2,Schools
+1.2.3,Building-Maint&Service
+1.2.4,Commercial Serv-Finance
+1.2.5,Commercial Services
+1.2.6,Extended Serv Contracts
+1.2.7,Protection-Safety
+1.2.8,Health Care Cost Contain
+1.2.9,Whsing&Harbor Trans Serv
+1.2.10,Security Services
+1.2.11,Human Resources
+1.2.12,Funeral Serv&Rel Items
+1.2.13,Consulting Services
+1.2.14,Auto Repair Centers
+1.2.15,Divers Oper/Commer Serv
+1.2.16,Printing-Commercial
+1.2.17,Auction House/Art Dealer
+1.2.18,Public Thoroughfares
+1.2.19,Research&Development
+1.2.20,Traffic Management Sys
+1.2.21,Private Corrections
+1.2.22,Marine Services
+1.2.23,Schools-Day Care
+1.2.24,Interior Design/Architec
+1.3,Food
+1.3.0,Food-Wholesale/Distrib
+1.3.1,Food-Dairy Products
+1.3.2,Food-Retail
+1.3.3,Food-Misc/Diversified
+1.3.4,Food-Meat Products
+1.3.5,Food-Flour&Grain
+1.3.6,Food-Confectionery
+1.3.7,Poultry
+1.3.8,Food-Baking
+1.3.9,Fisheries
+1.3.10,Food-Canned
+1.3.11,Sugar
+1.4,Cosmetics/Personal Care
+1.4.0,Cosmetics&Toiletries
+1.5,Pharmaceuticals
+1.5.0,Medical-Drugs
+1.5.1,Medical-Generic Drugs
+1.5.2,Medical-Whsle Drug Dist
+1.5.3,Therapeutics
+1.5.4,Vitamins&Nutrition Prod
+1.5.5,Drug Delivery Systems
+1.5.6,Pharmacy Services
+1.5.7,Veterinary Products
+1.5.8,Wound/Burn & Skin Care
+1.5.9,Veterinary Diagnostics
+1.6,Healthcare-Products
+1.6.0,Medical Products
+1.6.1,Diagnostic Equipment
+1.6.2,Medical Instruments
+1.6.3,Diagnostic Kits
+1.6.4,Medical Imaging Systems
+1.6.5,Optical Supplies
+1.6.6,Medical Laser Systems
+1.6.7,Disposable Medical Prod
+1.6.8,Healthcare Safety Device
+1.6.9,Respiratory Products
+1.6.10,Ultra Sound Imaging Sys
+1.6.11,Drug Detection Systems
+1.6.12,Feminine Health Care Prd
+1.6.13,Dental Supplies&Equip
+1.6.14,Medical Steriliz Product
+1.6.15,X-Ray Equipment
+1.6.16,Heart Monitors
+1.6.17,Patient Monitoring Equip
+1.7,Agriculture
+1.7.0,Agricultural Operations
+1.7.1,Tobacco
+1.7.2,Pastoral&Agricultural
+1.8,Beverages
+1.8.0,Beverages-Non-alcoholic
+1.8.1,Beverages-Wine/Spirits
+1.8.2,Brewery
+1.8.3,Coffee
+1.8.4,Tea
+1.9,Household Products/Wares
+1.9.0,Consumer Products-Misc
+1.9.1,Soap&Cleaning Prepar
+1.9.2,Office Supplies&Forms
+2,Financial
+2.0,Banks
+2.0.0,Commer Banks Non-US
+2.0.1,Commer Banks-Western US
+2.0.2,Commer Banks-Eastern US
+2.0.3,Commer Banks-Southern US
+2.0.4,Regional Banks-Non US
+2.0.5,Commer Banks-Central US
+2.0.6,Diversified Banking Inst
+2.0.7,Super-Regional Banks-US
+2.0.8,Central Bank
+2.0.9,Mortgage Banks
+2.0.10,Fiduciary Banks
+2.0.11,Special Purpose Banks
+2.0.12,Money Center Banks
+2.0.13,Cooperative Banks
+2.1,Insurance
+2.1.0,Life/Health Insurance
+2.1.1,Property/Casualty Ins
+2.1.2,Multi-line Insurance
+2.1.3,Financial Guarantee Ins
+2.1.4,Reinsurance
+2.1.5,Insurance Brokers
+2.2,Diversified Finan Serv
+2.2.0,Finance-Invest Bnkr/Brkr
+2.2.1,Invest Mgmnt/Advis Serv
+2.2.2,Finance-Mtge Loan/Banker
+2.2.3,Diversified Finan Serv
+2.2.4,Finance-Other Services
+2.2.5,Finance-Consumer Loans
+2.2.6,Special Purpose Entity
+2.2.7,Finance-Auto Loans
+2.2.8,Finance-Credit Card
+2.2.9,Finance-Leasing Compan
+2.2.10,Finance-Commercial
+2.3,Investment Companies
+2.3.0,Investment Companies
+2.3.1,Capital Pools
+2.3.2,Invest Comp - Resources
+2.3.3,Internet Investment
+2.4,Real Estate
+2.4.0,Real Estate Oper/Develop
+2.4.1,Real Estate Mgmnt/Servic
+2.5,REITS
+2.5.0,REITS-Diversified
+2.5.1,REITS-Mortgage
+2.5.2,REITS-Warehouse/Industr
+2.5.3,REITS-Health Care
+2.5.4,REITS-Regional Malls
+2.5.5,REITS-Office Property
+2.5.6,REITS-Shopping Centers
+2.5.7,REITS-Apartments
+2.5.8,REITS-Manufactured Homes
+2.5.9,REITS-Hotels
+2.5.10,REITS-Storage
+2.5.11,REITS-Single Tenant
+2.5.12,REITS-Whole Loans
+2.6,Private Equity
+2.6.0,Private Equity
+2.6.1,Venture Capital
+2.7,Savings&Loans
+2.7.0,S&L/Thrifts-Eastern US
+2.7.1,S&L/Thrifts-Central US
+2.7.2,S&L/Thrifts-Southern US
+2.7.3,S&L/Thrifts-Western US
+2.8,Closed-end Funds
+2.8.0,Closed-end Funds
+3,Industrial
+3.0,Environmental Control
+3.0.0,Water Treatment Systems
+3.0.1,Recycling
+3.0.2,Non-hazardous Waste Disp
+3.0.3,Hazardous Waste Disposal
+3.0.4,Air Pollution Control Eq
+3.0.5,Pollution Control
+3.0.6,Remediation Services
+3.0.7,Environ Consulting&Eng
+3.0.8,Alternative Waste Tech
+3.1,Machinery-Diversified
+3.1.0,Machinery-Pumps
+3.1.1,Machinery-General Indust
+3.1.2,Machinery-Farm
+3.1.3,Machinery-Print Trade
+3.1.4,Industrial Automat/Robot
+3.1.5,Machinery-Material Handl
+3.1.6,Engines-Internal Combust
+3.1.7,Machinery-Therml Process
+3.2,Building Materials
+3.2.0,Bldg&Construct Prod-Misc
+3.2.1,Bldg Prod-Cement/Aggreg
+3.2.2,Bldg Prod-Wood
+3.2.3,Bldg Prod-Air&Heating
+3.2.4,Bldg Prod-Doors&Windows
+3.2.5,Ceramic Products
+3.2.6,Bldg Prod-Light Fixtures
+3.3,Metal Fabricate/Hardware
+3.3.0,Steel Pipe&Tube
+3.3.1,Metal Processors&Fabrica
+3.3.2,Metal Products-Fasteners
+3.3.3,Metal Products-Distrib
+3.4,Hand/Machine Tools
+3.4.0,Tools-Hand Held
+3.4.1,Mach Tools&Rel Products
+3.4.2,Machinery-Electrical
+3.5,Packaging&Containers
+3.5.0,Containers-Paper/Plastic
+3.5.1,Containers-Metal/Glass
+3.6,Aerospace/Defense
+3.6.0,Aerospace/Defense
+3.6.1,Aerospace/Defense-Equip
+3.6.2,Electronics-Military
+3.7,Electrical Compo&Equip
+3.7.0,Wire&Cable Products
+3.7.1,Electric Products-Misc
+3.7.2,Power Conv/Supply Equip
+3.7.3,Batteries/Battery Sys
+3.7.4,Lighting Products&Sys
+3.7.5,Superconductor Prod&Sys
+3.8,Engineering&Construction
+3.8.0,Building-Heavy Construct
+3.8.1,Engineering/R&D Services
+3.8.2,Building&Construct-Misc
+3.8.3,Airport Develop/Maint
+3.9,Electronics
+3.9.0,Electronic Measur Instr
+3.9.1,Industr Audio&Video Prod
+3.9.2,Electronic Secur Devices
+3.9.3,Instruments-Controls
+3.9.4,Electronic Compo-Misc
+3.9.5,Circuit Boards
+3.9.6,Electronic Connectors
+3.9.7,Electronic Parts Distrib
+3.9.8,Identification Sys/Dev
+3.9.9,Lasers-Syst/Components
+3.9.10,Instruments-Scientific
+3.9.11,Capacitors
+3.10,Miscellaneous Manufactur
+3.10.0,Diversified Manufact Op
+3.10.1,Explosives
+3.10.2,Miscellaneous Manufactur
+3.10.3,Rubber/Plastic Products
+3.10.4,Advanced Materials/Prd
+3.10.5,Firearms&Ammunition
+3.10.6,Photo Equipment&Supplies
+3.10.7,Filtration/Separat Prod
+3.11,Transportation
+3.11.0,Transport-Air Freight
+3.11.1,Transport-Rail
+3.11.2,Transport-Services
+3.11.3,Transport-Marine
+3.11.4,Transport-Truck
+3.12,Machinery-Constr&Mining
+3.12.0,Machinery-Constr&Mining
+3.12.1,Machinery-Electric Util
+3.13,Shipbuilding
+3.13.0,Shipbuilding
+3.14,Trucking&Leasing
+3.14.0,Transport-Equip&Leasng
+4,Communications
+4.0,Media
+4.0.0,Multimedia
+4.0.1,Television
+4.0.2,Cable/Satellite TV
+4.0.3,Radio
+4.0.4,Broadcast Serv/Program
+4.0.5,Publishing-Newspapers
+4.0.6,Publishing-Books
+4.0.7,Publishing-Periodicals
+4.1,Telecommunications
+4.1.0,Telephone-Integrated
+4.1.1,Telecom Services
+4.1.2,Cellular Telecom
+4.1.3,Telecommunication Equip
+4.1.4,Networking Products
+4.1.5,Satellite Telecom
+4.1.6,Wireless Equipment
+4.1.7,Telecom Eq Fiber Optics
+4.2,Internet
+4.2.0,Internet Content-Entmnt
+4.2.1,Web Portals/ISP
+4.2.2,Internet Security
+4.2.3,E-Commerce/Services
+4.2.4,Internet Content-Info/Ne
+4.2.5,Internet Applic Sftwr
+4.2.6,E-Commerce/Products
+4.2.7,E-Services/Consulting
+4.2.8,Internet Infrastr Sftwr
+4.2.9,Internet Brokers
+4.2.10,Internet Connectiv Svcs
+4.2.11,E-Marketing/Info
+4.2.12,Internet Telephony
+4.2.13,Web Hosting/Design
+4.2.14,Internet Financial Svcs
+4.2.15,B2B/E-Commerce
+4.2.16,Internet Incubators
+4.3,Advertising
+4.3.0,Direct Marketing
+4.3.1,Advertising Sales
+4.3.2,Advertising Agencies
+4.3.3,Advertising Services
+5,Utilities
+5.0,Electric
+5.0.0,Electric-Integrated
+5.0.1,Electric-Distribution
+5.0.2,Electric-Generation
+5.0.3,Electric-Transmission
+5.0.4,Independ Power Producer
+5.1,Water
+5.1.0,Water
+5.2,Gas
+5.2.0,Gas-Distribution
+5.2.1,Gas-Transportation
+6,Technology
+6.0,Software
+6.0.0,Enterprise Software/Serv
+6.0.1,Medical Information Sys
+6.0.2,Entertainment Software
+6.0.3,Applications Software
+6.0.4,Computer Software
+6.0.5,Data Processing/Mgmt
+6.0.6,Computer Aided Design
+6.0.7,Educational Software
+6.0.8,Communications Software
+6.0.9,Electronic Forms
+6.0.10,Decision Support Softwar
+6.0.11,Software Tools
+6.0.12,Transactional Software
+6.1,Semiconductors
+6.1.0,Electronic Compo-Semicon
+6.1.1,Semiconductor Equipment
+6.1.2,Semicon Compo-Intg Circu
+6.2,Computers
+6.2.0,Computer Data Security
+6.2.1,Computers
+6.2.2,Computer Services
+6.2.3,Computers-Integrated Sys
+6.2.4,Computers-Memory Devices
+6.2.5,Computers-Peripher Equip
+6.2.6,Computers-Other
+6.2.7,Optical Recognition Equi
+6.2.8,Computers-Voice Recogn
+6.2.9,Virtual Reality Products
+6.2.10,Electronic Design Automa
+6.3,Office/Business Equip
+6.3.0,Office Automation&Equip
+7,Energy
+7.0,Oil&Gas
+7.0.0,Oil Comp-Explor&Prodtn
+7.0.1,Oil Comp-Integrated
+7.0.2,Oil Refining&Marketing
+7.0.3,Oil&Gas Drilling
+7.0.4,Oil-US Royalty Trusts
+7.1,Oil&Gas Services
+7.1.0,Oil Field Mach&Equip
+7.1.1,Oil-Field Services
+7.1.2,Seismic Data Collection
+7.2,Energy-Alternate Sources
+7.2.0,Energy-Alternate Sources
+7.3,Pipelines
+7.3.0,Pipelines
+7.4,Coal
+7.4.0,Coal
+8,Basic Materials
+8.0,Mining
+8.0.0,Diversified Minerals
+8.0.1,Metal-Diversified
+8.0.2,Precious Metals
+8.0.3,Gold Mining
+8.0.4,Non-Ferrous Metals
+8.0.5,Metal-Copper
+8.0.6,Diamonds/Precious Stones
+8.0.7,Mining Services
+8.0.8,Metal-Aluminum
+8.0.9,Silver Mining
+8.0.10,Platinum
+8.0.11,Quarrying
+8.1,Forest Products&Paper
+8.1.0,Paper&Related Products
+8.1.1,Forestry
+8.2,Chemicals
+8.2.0,Chemicals-Diversified
+8.2.1,Chemicals-Specialty
+8.2.2,Industrial Gases
+8.2.3,Chemicals-Other
+8.2.4,Agricultural Chemicals
+8.2.5,Coatings/Paint
+8.2.6,Chemicals-Fibers
+8.2.7,Petrochemicals
+8.2.8,Chemicals-Plastics
+8.3,Iron/Steel
+8.3.0,Steel-Producers
+8.3.1,Metal-Iron
+8.3.2,Steel-Specialty
+9,Diversified
+9.0,Holding Companies-Divers
+9.0.0,Specified Purpose Acquis
+9.0.1,Diversified Operations
+10,Government
+10.0,Multi-National
+10.0.0,Supranational Bank
+10.1,Sovereign
+10.1.0,Sovereign Agency
+10.2,Municipal
+10.2.0,Municipal-Education

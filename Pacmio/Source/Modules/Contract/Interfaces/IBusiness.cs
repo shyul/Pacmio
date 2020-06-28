@@ -20,6 +20,12 @@ namespace Pacmio
 
         string FullName { get; }
 
+        string Industry { get; set; }
+
+        string Category { get; set; }
+
+        string Subcategory { get; set; }
+
         string ISIN { get; set; }
 
         BusinessInfo BusinessInfo { get; }

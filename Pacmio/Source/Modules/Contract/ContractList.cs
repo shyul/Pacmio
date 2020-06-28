@@ -61,6 +61,9 @@ namespace Pacmio
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols, string countryCode)
             => GetList(symbols, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
 
+        private static IEnumerable<Contract> GetListByCountry(string countryCode)
+            => Values.AsParallel().Where(val => Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode).Contains(val.Exchange));
+
         #region Fetch / Update
 
         public static Contract[] Fetch(string symbol, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractSamples(symbol, cts);
@@ -220,18 +223,30 @@ namespace Pacmio
         /// </summary>
         /// <param name="cts"></param>
         /// <param name="progress"></param>
-        public static void UpdateContractData(CancellationTokenSource cts, IProgress<float> progress)
+        public static void UpdateContractData(string countryCode, Func<Contract, bool> searchFunc, CancellationTokenSource cts, IProgress<float> progress)
         {
-            var cList = Values.Where(n => n.NeedUpdate);
+            var c0List = string.IsNullOrWhiteSpace(countryCode) ? Values : GetListByCountry(countryCode);
+            var cList = searchFunc is null ? c0List.AsParallel().Where(n => n.NeedUpdate) : c0List.AsParallel().Where(searchFunc);
+
+            
+            //var cList = GetListByCountry("US").Where(n => (DateTime.Now - n.UpdateTime).Minutes > 150);
+            //var cList = GetListByCountry("US").Where(n => n is IBusiness ib && ib.Industry is null);// string.IsNullOrWhiteSpace( stk.Industry));
+            //Console.WriteLine("Update time based count = " + tlist.Count() + "; Industry File Check count = " + t2list.Count());
+            
 
             int count = cList.Count();
+
+            Console.WriteLine("\nUpdate count = " + count + "\n");
+
             int i = 0;
 
             foreach (Contract c in cList)
             {
                 if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                if (c is IBusiness ib) { ib.Industry = string.Empty; ib.Category = string.Empty; ib.Subcategory = string.Empty; }
+
                 Thread.Sleep(10);
-                Fetch(c.Name, cts);
+                //Fetch(c.Name, cts);
                 Fetch(c, cts);
                 i++;
                 progress?.Report(i * 100.0f / count);

@@ -23,7 +23,7 @@ namespace Pacmio
         Delist = -100,
 
         [EnumMember, Description("Phase out")]
-        Value = -50,
+        Incomplete = -50,
 
         [EnumMember, Description("Unknown")]
         Unknown = 0,

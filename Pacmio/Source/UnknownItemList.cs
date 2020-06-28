@@ -27,7 +27,7 @@ namespace Pacmio
     /// </summary>
     public static class UnknownItemList
     {
-        public static Dictionary<string, Dictionary<string, HashSet<string>>> Industry { get; private set; } = new Dictionary<string, Dictionary<string, HashSet<string>>>();
+        //public static Dictionary<string, Dictionary<string, HashSet<string>>> Industry { get; private set; } = new Dictionary<string, Dictionary<string, HashSet<string>>>();
 
 
         /// <summary>
@@ -110,7 +110,44 @@ namespace Pacmio
 
         public static void Save()
         {
+            /*
             Industry.SerializeJsonFile(Root.ResourcePath + "Industry.Json");
+
+            StringBuilder sb0 = new StringBuilder("Index,Type\n");
+
+            int industry_index = 0;
+            foreach (string industry in Industry.Keys) 
+            {
+                if (!string.IsNullOrWhiteSpace(industry.Trim()))
+                {
+                    sb0.AppendLine(industry_index + "," + industry.CsvEncode());
+
+                    Dictionary<string, HashSet<string>> catgoryList = Industry[industry];
+                    int catgory_index = 0;
+                    foreach (string category in catgoryList.Keys)
+                    {
+                        if (!string.IsNullOrWhiteSpace(category.Trim())) 
+                        {
+                            sb0.AppendLine(industry_index + "." + catgory_index + "," + category.CsvEncode());
+
+                            HashSet<string> subCatgoryList = catgoryList[category];
+                            int subCatgory_index = 0;
+                            foreach (string subCategory in subCatgoryList)
+                            {
+                                if (!string.IsNullOrWhiteSpace(subCategory.Trim())) 
+                                {
+                                    sb0.AppendLine(industry_index + "." + catgory_index + "." + subCatgory_index + "," + subCategory.CsvEncode());
+                                    subCatgory_index++;
+                                }
+                            }
+                            catgory_index++;
+                        } 
+                    }
+                    industry_index++;
+                }
+            }
+
+            sb0.ToFile(Root.ResourcePath + "Industry.csv");*/
 
             StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
 
@@ -137,10 +174,11 @@ namespace Pacmio
 
         public static void Load()
         {
+            /*
             if (File.Exists(Root.ResourcePath + "Industry.Json"))
             {
                 Industry = Serialization.DeserializeJsonFile<Dictionary<string, Dictionary<string, HashSet<string>>>>(Root.ResourcePath + "Industry.Json");
-            }
+            }*/
 
             if (File.Exists(FileName))
             {

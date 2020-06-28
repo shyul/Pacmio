@@ -46,6 +46,10 @@ namespace Pacmio
 
         public BusinessInfo BusinessInfo => throw new NotImplementedException();
 
+        public string Industry { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Category { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Subcategory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public override void LoadMarketData()
         {
             throw new NotImplementedException();

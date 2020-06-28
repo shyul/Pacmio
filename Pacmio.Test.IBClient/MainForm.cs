@@ -450,12 +450,7 @@ namespace TestClient
 
 
 
-        private void BtnMatchSymbols_Click(object sender, EventArgs e)
-        {
-            Cts = new CancellationTokenSource();
-            Task m = new Task(() => { ContractList.UpdateContractData(Cts, Progress); });
-            m.Start();
-        }
+
 
 
 
@@ -617,11 +612,20 @@ namespace TestClient
             }
         }
 
+        private void BtnMatchSymbols_Click(object sender, EventArgs e)
+        {
+            Cts = new CancellationTokenSource();
+            Task.Run(() => {
+                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && (DateTime.Now - n.UpdateTime).Days > 7, Cts, Progress);
+            }, Cts.Token);
+        }
+
         private void BtnUpdateContracts_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
             Task.Run(() => {
-                ContractList.UpdateContractData(Cts, Progress);
+                //ContractList.UpdateContractData("US", n => (DateTime.Now - n.UpdateTime).Minutes > 180, Cts, Progress);
+                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && string.IsNullOrWhiteSpace(ib.Industry), Cts, Progress);
             }, Cts.Token);
         }
 

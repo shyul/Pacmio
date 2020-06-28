@@ -144,17 +144,20 @@ namespace Pacmio.IB
                     c.MarketData.OrderTypes.FromString(fields[17], ',');
                     c.MarketData.ValidExchanges.FromString(fields[18], ',');
 
-                    string industry = fields[24];
-                    string category = fields[25];
-                    string subcategory = fields[26];
+                    if(c is IBusiness ib) 
+                    {
+                        ib.Industry =  fields[24];
+                        ib.Category = fields[25];
+                        ib.Subcategory = fields[26];
+                        /*
+                        if (!UnknownItemList.Industry.ContainsKey(ib.Industry))
+                            UnknownItemList.Industry.Add(ib.Industry, new Dictionary<string, HashSet<string>>());
 
-                    if (!UnknownItemList.Industry.ContainsKey(industry))
-                        UnknownItemList.Industry.Add(industry, new Dictionary<string, HashSet<string>>());
+                        if (!UnknownItemList.Industry[ib.Industry].ContainsKey(ib.Category))
+                            UnknownItemList.Industry[ib.Industry].Add(ib.Category, new HashSet<string>());
 
-                    if (!UnknownItemList.Industry[industry].ContainsKey(category))
-                        UnknownItemList.Industry[industry].Add(category, new HashSet<string>());
-
-                    UnknownItemList.Industry[industry][category].CheckAdd(subcategory);
+                        UnknownItemList.Industry[ib.Industry][ib.Category].CheckAdd(ib.Subcategory);*/
+                    }
 
                     c.MarketData.TradingPeriods.Clear();
                     ApplyTradingPeriods(c.MarketData, fields[28]);
@@ -236,7 +239,7 @@ namespace Pacmio.IB
 
             if (active_ContractData is Contract c)
             {
-                c.Status = ContractStatus.Unknown;
+                c.Status = ContractStatus.Incomplete;
                 c.UpdateTime = DateTime.Now;
             }
             active_ContractData = null;

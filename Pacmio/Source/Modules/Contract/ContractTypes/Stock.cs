@@ -66,8 +66,6 @@ namespace Pacmio
         [IgnoreDataMember]
         public override MarketData MarketData => StockData;
 
-
-
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";
 
@@ -117,7 +115,14 @@ namespace Pacmio
         [IgnoreDataMember]
         public BusinessInfo BusinessInfo => BusinessInfoList.GetOrAdd(ISIN);
 
-        //public (bool valid, BusinessInfo bi) GetBusinessInfo() => BusinessInfoList.GetOrAdd(this);
+        [DataMember]
+        public string Industry { get; set; }
+
+        [DataMember]
+        public string Category { get; set; }
+
+        [DataMember]
+        public string Subcategory { get; set; }
 
         #endregion Identification
 
