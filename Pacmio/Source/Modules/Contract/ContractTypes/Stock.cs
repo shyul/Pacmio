@@ -73,10 +73,10 @@ namespace Pacmio
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Stock";
-
+        /*
         [DataMember]
         public bool IsETF { get; set; } = false;
-
+        */
         #endregion Ctor
 
         [IgnoreDataMember]

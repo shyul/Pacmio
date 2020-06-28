@@ -188,13 +188,9 @@ namespace Pacmio
             return GetList(symbols, countryCode);
         }
 
-
-
         #endregion Fetch / Update
 
         #region Database Tools
-
-
 
         /// <summary>
         /// TODO: Test
@@ -218,6 +214,110 @@ namespace Pacmio
                 progress?.Report(i * 100.0f / count);
             }
         }
+
+        public static IEnumerable<Stock> RemoveDuplicateStock(string countryCode)
+        {
+            IEnumerable<Stock> cList = Values.AsParallel().Where(n => n is Stock s && s.Country == countryCode).Select(n => (Stock)n); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
+
+            Dictionary<string, int> duplicate = new Dictionary<string, int>();
+
+            foreach (Stock c in cList)
+            {
+                string name = c.Name;
+
+                if (!duplicate.ContainsKey(name))
+                    duplicate.Add(name, 1);
+                else
+                    duplicate[name]++;
+            }
+
+            var result = duplicate.AsParallel().Where(n => n.Value > 1).SelectMany(n => cList.Where(c => c.Name == n.Key));
+            var toDelete = result.AsParallel().Where(n => n.Status != ContractStatus.Alive).ToList();
+
+            foreach (Stock s in toDelete)
+            {
+                Remove(s.Info);
+                Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
+            }
+
+            foreach (Stock s in result)
+            {
+                Console.WriteLine(s.Status + " | " + s.ToString());
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// ftp://ftp.nasdaqtrader.com/symboldirectory/
+        /// nasdaqtraded.txt
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="cts"></param>
+        /// <param name="progress"></param>
+        public static void ImportNasdaq(string fileName, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            if (File.Exists(fileName))
+            {
+                var regexItem = new System.Text.RegularExpressions.Regex("^[A-Z0-9 ]*$");
+
+                long totalSize = new FileInfo(fileName).Length;
+                using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using StreamReader sr = new StreamReader(fs);
+                string[] headers = sr.ReadLine().Split('|');
+
+                long byteread = 0;
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    byteread += line.Length + 1;
+
+                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
+                    progress?.Report(byteread * 100.0f / totalSize);
+
+                    string[] fields = line.Split('|');
+
+                    if (fields.Length == 12 && (fields[5] == "Y" || fields[5] == "N") && fields[1] != "ZEXIT" && fields[1] != "ZIEXT" && fields[1] != "ZXIET")
+                    {
+                        bool isETF = fields[5] == "Y";
+
+                        string symbolName = fields[1];
+                        string fullName = fields[2];
+
+                        if (regexItem.IsMatch(symbolName))
+                        {
+                            fullName = fullName.Replace(" - Common Stock", "").Replace(" Common Stock", "");
+                        }
+
+                        symbolName = symbolName.Replace("$", " PR").Replace(".", " ");
+                        Exchange exchange = fields[3] switch
+                        {
+                            "N" => Exchange.NYSE,
+                            "P" => Exchange.ARCA,
+                            "Q" => Exchange.NASDAQ,
+                            "A" => Exchange.AMEX,
+                            "Z" => Exchange.BATS,
+                            "V" => Exchange.IEX,
+                            _ => throw new Exception("Unknown exchange"),
+                        };
+
+                        var searchList = GetOrFetch(symbolName, "US", false, cts).Where(n => n is Stock && n.Exchange == exchange);
+
+                        if (searchList.Count() > 0 && searchList.First() is Stock stk)
+                        {
+                            stk.FullName = fullName;
+                            if (isETF && !stk.NameSuffix.Contains("ETN") && !stk.NameSuffix.Contains("ETF")) stk.NameSuffix.Add("ETF");
+
+                            stk.UpdateTime = DateTime.Now;
+                        }
+
+                        //if (!regexItem.IsMatch(symbolName)) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
+                        //if(symbolName.Any(n => !char.IsLetterOrDigit(n))) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
+                    }
+                }
+            }
+        }
+
 
         #region File Operation
 
@@ -285,13 +385,39 @@ namespace Pacmio
                 {
                     case Stock stk:
                         string cusip = (stk.BusinessInfo is BusinessInfo bi) ? bi.CUSIP : string.Empty;
+
+                        /*
+                        if (stk.Exchange == Exchange.NASDAQ)
+                        {
+                            if (stk.ExchangeSuffix != "NMS" && stk.ExchangeSuffix != "SCM")
+                            {
+                                stk.ExchangeSuffix = string.Empty;
+                            }
+                        }
+                        else if (stk.Exchange == Exchange.OTCMKT)
+                        {
+                            if (stk.ExchangeSuffix != "CURRENT" && stk.ExchangeSuffix != "LIMITED" && stk.ExchangeSuffix != "NOINFO")
+                            {
+                                stk.ExchangeSuffix = string.Empty;
+                            }
+                        }
+                        else
+                        {
+                            stk.ExchangeSuffix = string.Empty;
+                        }
+
+                        if (stk.NameSuffix.Contains(string.Empty)) stk.NameSuffix.Remove(string.Empty);
+                        */
+
+
+
                         string[] items = {
                             stk.Status.ToString(),
                             stk.TypeName.ToString(),
                             stk.ConId.ToString(),
                             stk.Name.CsvEncode(),
                             stk.Exchange.ToString(),
-                            stk.ExchangeSuffix.CsvEncode(),
+                            stk.ExchangeSuffix.ToString(),
                             stk.FullName.CsvEncode(),
                             CollectionTool.ToString(stk.NameSuffix),
                             stk.ISIN.CsvEncode(),
@@ -306,79 +432,6 @@ namespace Pacmio
             }
 
             return sb.ToFile(fileName);
-        }
-
-        /// <summary>
-        /// ftp://ftp.nasdaqtrader.com/symboldirectory/
-        /// nasdaqtraded.txt
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="cts"></param>
-        /// <param name="progress"></param>
-        public static void ImportNasdaq(string fileName, CancellationTokenSource cts, IProgress<float> progress)
-        {
-            if (File.Exists(fileName))
-            {
-                var regexItem = new System.Text.RegularExpressions.Regex("^[A-Z0-9 ]*$");
-
-                long totalSize = new FileInfo(fileName).Length;
-                using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader sr = new StreamReader(fs);
-                string[] headers = sr.ReadLine().Split('|');
-
-                long byteread = 0;
-                while (!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    byteread += line.Length + 1;
-
-                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                    progress?.Report(byteread * 100.0f / totalSize);
-
-                    string[] fields = line.Split('|');
-
-                    //Console.WriteLine("fields.Length = " + fields.Length);
-                    if (fields.Length == 12 && (fields[5] == "Y" || fields[5] == "N") && fields[1] != "ZEXIT" && fields[1] != "ZIEXT" && fields[1] != "ZXIET")
-                    {
-                        bool isETF = fields[5] == "Y";
-
-                        string symbolName = fields[1];
-                        string fullName = fields[2];
-
-                        if (regexItem.IsMatch(symbolName)) 
-                        {
-                            fullName = fullName.Replace(" - Common Stock", "").Replace(" Common Stock", "");
-                        }
-
-                        symbolName = symbolName.Replace("$", " PR").Replace(".", " ");
-                        Exchange exchange = fields[3] switch
-                        {
-                            "N" => Exchange.NYSE,
-                            "P" => Exchange.ARCA,
-                            "Q" => Exchange.NASDAQ,
-                            "A" => Exchange.AMEX,
-                            "Z" => Exchange.BATS,
-                            "V" => Exchange.IEX,
-                            _ => throw new Exception("Unknown exchange"),
-                        };
-
-                        var searchList = GetOrFetch(symbolName, "US", false, cts).Where(n => n is Stock && n.Exchange == exchange);
-
-                        if(searchList.Count() > 0 && searchList.First() is Stock stk) 
-                        {
-                            stk.FullName = fullName;
-                            stk.IsETF = isETF;
-                        }
-
-                        //if (!regexItem.IsMatch(symbolName)) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
-                        //if(symbolName.Any(n => !char.IsLetterOrDigit(n))) Console.WriteLine(symbolName + ",\t" + exchange + ",\t" + isETF + ",\t" + fullName);
-                    }
-
-
-                }
-            }
-            //Console.WriteLine("\nExchanges are: ");
-            //foreach(string s in exchangeTypes) { Console.Write(s + " ");
         }
 
         public static void ImportCSV(string fileName, CancellationTokenSource cts, IProgress<float> progress)

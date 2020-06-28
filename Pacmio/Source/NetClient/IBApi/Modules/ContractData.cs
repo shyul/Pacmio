@@ -135,7 +135,7 @@ namespace Pacmio.IB
                 string symbolStr = fields[3];
                 string conIdStr = fields[13];
                 string secTypeCode = fields[4];
-                string exchangeStr = fields[22] + "." + fields[12];
+                string exchangeStr = fields[22]; // + "." + fields[11];
 
                 (bool contractValid, Contract c) = Util.GetContractByIbCode(symbolStr, exchangeStr, secTypeCode, conIdStr);
 

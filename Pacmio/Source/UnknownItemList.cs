@@ -142,7 +142,7 @@ namespace Pacmio
                 Industry = Serialization.DeserializeJsonFile<Dictionary<string, Dictionary<string, HashSet<string>>>>(Root.ResourcePath + "Industry.Json");
             }
 
-                if (File.Exists(FileName))
+            if (File.Exists(FileName))
             {
                 lock (List)
                     using (var fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -186,7 +186,7 @@ namespace Pacmio
                                 {
                                     try
                                     {
-                                        switch (typeCode) 
+                                        switch (typeCode)
                                         {
                                             case ("STOCK"):
                                                 Exchange exchange = exchangeCode.ParseEnum<Exchange>();
@@ -217,7 +217,7 @@ namespace Pacmio
                                             default:
 
                                                 break;
-                                        }                                        
+                                        }
                                     }
                                     catch (Exception e) when (e is IOException || e is FormatException)
                                     {

@@ -484,20 +484,7 @@ namespace TestClient
 
         private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
         {
-            var result = ContractTools.FindDuplicateStock("US");
-
-            var toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
-
-            foreach (Stock s in toDelete)
-            {
-                ContractList.Remove(s.Info);
-                Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
-            }
-
-            foreach (Stock s in result)
-            {
-                Console.WriteLine(s.Status + " | " + s.ToString());
-            }
+            ContractList.RemoveDuplicateStock("US");
         }
 
         #region Quandl Tools
