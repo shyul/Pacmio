@@ -180,6 +180,7 @@ namespace Pacmio
                                     // !! Please check if the file is locked or now before saving.
                                     btd.SerializeJsonFile(btd.FileName);
 
+                                    if (currentContract is Stock stk) stk.SaveMarketData();
 
                                     Console.Write(btd.Contract.name + ". ");
                                     pd.Reset();

@@ -470,7 +470,7 @@ namespace TestClient
 
             string symbolText = TextBoxMultiContracts.Text;
             DownloadBarTable.SymbolList.Clear();
-            DownloadBarTable.SymbolList.AddRange(ContractTools.GetSymbolList(ref symbolText));
+            DownloadBarTable.SymbolList.AddRange(ContractList.GetSymbolList(ref symbolText));
             TextBoxMultiContracts.Text = symbolText;
 
             DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
@@ -484,7 +484,8 @@ namespace TestClient
 
         private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
         {
-            ContractList.RemoveDuplicateStock("US");
+            Cts = new CancellationTokenSource();
+            Task.Run(() => { ContractList.RemoveDuplicateStock("US", Cts); });
         }
 
         #region Quandl Tools
@@ -653,7 +654,7 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var SymbolList = ContractTools.GetSymbolList(ref symbolText);
+            var SymbolList = ContractList.GetSymbolList(ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
             Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
             var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
@@ -729,7 +730,7 @@ namespace TestClient
 
 
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractTools.GetSymbolList(ref symbolText);
+            var symbols = ContractList.GetSymbolList(ref symbolText);
             /*
             string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
             "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };*/

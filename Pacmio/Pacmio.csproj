@@ -123,7 +123,6 @@
     <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
-    <Compile Include="Source\Modules\Contract\ContractTools.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\BarTable\TableList.cs" />

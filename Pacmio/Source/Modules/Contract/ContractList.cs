@@ -13,6 +13,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
+using IbXmlAE;
 
 namespace Pacmio
 {
@@ -188,9 +189,31 @@ namespace Pacmio
             return GetList(symbols, countryCode);
         }
 
+        public static HashSet<string> GetSymbolList(ref string text)
+        {
+            string[] symbolFields = text.CsvReadFields();
+            HashSet<string> symbolItemList = new HashSet<string>();
+            HashSet<string> symbolList = new HashSet<string>();
+            foreach (string field in symbolFields)
+            {
+                string symbol = field.TrimCsvValueField();
+
+                if (!string.IsNullOrWhiteSpace(symbol))
+                {
+                    symbolItemList.CheckAdd("\"" + symbol + "\"");
+                    symbolList.CheckAdd(symbol);
+                }
+
+            }
+            text = symbolItemList.ToString(", ");
+            return symbolList;
+        }
+
         #endregion Fetch / Update
 
         #region Database Tools
+
+        // Download Nasdaq traded list, Update Contract data, Remove duplicated stocks (and its BarTable maybe???)
 
         /// <summary>
         /// TODO: Test
@@ -215,7 +238,7 @@ namespace Pacmio
             }
         }
 
-        public static IEnumerable<Stock> RemoveDuplicateStock(string countryCode)
+        public static IEnumerable<Stock> RemoveDuplicateStock(string countryCode, CancellationTokenSource cts)
         {
             IEnumerable<Stock> cList = Values.AsParallel().Where(n => n is Stock s && s.Country == countryCode).Select(n => (Stock)n); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
 
@@ -232,17 +255,23 @@ namespace Pacmio
             }
 
             var result = duplicate.AsParallel().Where(n => n.Value > 1).SelectMany(n => cList.Where(c => c.Name == n.Key));
+
+            foreach (Stock s in result)
+            {
+                if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested)
+                    break;
+                else
+                    Fetch(s, cts);
+
+                Console.WriteLine(s.Status + " | " + s.ToString());
+            }
+
             var toDelete = result.AsParallel().Where(n => n.Status != ContractStatus.Alive).ToList();
 
             foreach (Stock s in toDelete)
             {
                 Remove(s.Info);
                 Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
-            }
-
-            foreach (Stock s in result)
-            {
-                Console.WriteLine(s.Status + " | " + s.ToString());
             }
 
             return result;
@@ -409,7 +438,36 @@ namespace Pacmio
                         if (stk.NameSuffix.Contains(string.Empty)) stk.NameSuffix.Remove(string.Empty);
                         */
 
+                        string[] name_fields = stk.Name.Split(' ');
+                        if (name_fields.Length == 2 && name_fields[1].Length > 0)
+                        {
+                            stk.NameSuffix.CheckAdd(name_fields[1]);
+                        }
 
+                        if (stk.FullName.EndsWith(" ETF"))
+                        {
+                            stk.NameSuffix.CheckAdd("ETF");
+                            stk.FullName = stk.FullName.ReplaceEnd(" ETF", "");
+                            stk.NameSuffix.CheckRemove("ETN");
+                        }
+
+                        if (stk.FullName.EndsWith(" ETN"))
+                        {
+                            stk.NameSuffix.CheckAdd("ETN");
+                            stk.FullName = stk.FullName.ReplaceEnd(" ETN", "");
+                            stk.NameSuffix.CheckRemove("ETF");
+                        }
+
+                        if (stk.FullName.Contains("American Depository Receipt") || stk.FullName.Contains(" ADR "))
+                        {
+                            stk.NameSuffix.CheckAdd("ADR");
+                        }
+
+                        if (stk.FullName.EndsWith(" ADR"))
+                        {
+                            stk.FullName = stk.FullName.ReplaceEnd(" ADR", "");
+                            stk.NameSuffix.CheckAdd("ADR");
+                        }
 
                         string[] items = {
                             stk.Status.ToString(),
