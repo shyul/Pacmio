@@ -27,10 +27,10 @@ namespace Pacmio.TradeCAD
             var siList = ContractList.GetOrFetch("AAPL", "US");
             Contract c = siList.First();
 
-            BarTable bt_high = c.GetTable(BarFreq.Daily, BarType.Trades);
+            BarTable bt_high = c.GetTableOld(BarFreq.Daily, BarType.Trades);
             bt_high.Reset(new Period(DateTime.MinValue, DateTime.Now), null, null);
 
-            BarTable bt = c.GetTable(BarFreq.Minute, BarType.Trades);
+            BarTable bt = c.GetTableOld(BarFreq.Minute, BarType.Trades);
             bt.Reset(new Period(DateTime.Now.AddDays(-20), DateTime.Now), null, null);
 
 
@@ -45,7 +45,7 @@ namespace Pacmio.TradeCAD
         {
             var siList = ContractList.GetOrFetch("AAPL", "US");
             Contract c = siList.First();
-            BarTable bt = c.GetTable(BarFreq.Minute, BarType.Trades);
+            BarTable bt = c.GetTableOld(BarFreq.Minute, BarType.Trades);
             Period pd = new Period(DateTime.Now.AddDays(-3), DateTime.Now);
 
             bt.Reset(pd, null, null);

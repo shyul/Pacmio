@@ -37,11 +37,8 @@ namespace Pacmio
             foreach (Stock stk in list)
             {
                 if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                BarTable bt = stk.GetTable(BarFreq.Daily, BarType.Trades);//, pd);
-                if (Root.IBConnected)
-                {
-                    bt.Reset(new Period(new DateTime(1900, 1, 1), DateTime.Now), cts, null);
-                }
+                BarTable bt = stk.GetTableOld(BarFreq.Daily, BarType.Trades);//, pd);
+                bt.LoadOnly(new Period(new DateTime(1900, 1, 1), DateTime.Now));
                 i++;
                 progress?.Report(i * 100.0f / count);
             }

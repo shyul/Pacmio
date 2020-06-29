@@ -41,7 +41,7 @@ namespace Pacmio
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            BarTable bt_high = bt.Contract.GetTable(SourceBarFreq, bt.Type);
+            BarTable bt_high = bt.Contract.GetTableOld(SourceBarFreq, bt.Type);
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {

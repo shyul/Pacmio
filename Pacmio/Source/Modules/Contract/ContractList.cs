@@ -30,8 +30,14 @@ namespace Pacmio
 
         public static int Count => List.Count;
         public static bool IsEmpty => Count == 0;
-        public static bool Remove((string name, Exchange exchange, string typeName) info) => List.TryRemove(info, out _);
         public static IEnumerable<Contract> Values => List.Values;
+
+        public static bool Remove((string name, Exchange exchange, string typeName) info) 
+        {
+            bool successful = List.TryRemove(info, out _);
+            return successful;
+        }
+
         public static T GetOrAdd<T>(T c) where T : Contract
         {
             if (!List.ContainsKey(c.Info))
@@ -542,7 +548,7 @@ namespace Pacmio
 
                                     Console.Write(stk.Name + ". ");
 
-                                    if (stk.Status != ContractStatus.Alive)
+                                    if (stk.Status == ContractStatus.Unknown)
                                     {
                                         // stk.Status = fields[0].ParseEnum<ContractStatus>(); // ContractStatus.Unknown;
                                         stk.ConId = fields[2].TrimCsvValueField().ToInt32(0);
@@ -567,6 +573,7 @@ namespace Pacmio
                                     }
                                     else
                                     {
+                                        //if (stk.Status == ContractStatus.Alive) stk.Status = ContractStatus.Unknown;
                                         if (stk.ISIN.Length < 2) stk.ISIN = fields[8].TrimCsvValueField();
                                         if (stk.FullName.Length < 4) stk.FullName = fields[6].TrimCsvValueField();
                                     }

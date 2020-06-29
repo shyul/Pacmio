@@ -26,8 +26,15 @@ namespace Pacmio
             = new ConcurrentDictionary<(Contract c, BarFreq barFreq, BarType type), BarTable>();
 
         private static int Count => List.Count;
-        public static bool IsEmpty => Count == 0;
+        public static bool IsEmpty => Count == 0; 
         public static IEnumerable<BarTable> Values => List.Values;
+
+        public static bool Remove((Contract c, BarFreq barFreq, BarType type) info)
+        {
+            bool successful = List.TryRemove(info, out _);
+            return successful;
+        }
+
 
         /// <summary>
         /// Use Download Worker for this one please....
@@ -35,7 +42,7 @@ namespace Pacmio
         /// <param name="c"></param>
         /// <param name="barFreq"></param>
         /// <param name="type"></param>
-        public static BarTable GetTable(this Contract c, BarFreq barFreq, BarType type)
+        public static BarTable GetTableOld(this Contract c, BarFreq barFreq, BarType type)
         {
             if (!List.ContainsKey((c, barFreq, type)))
                 List.TryAdd((c, barFreq, type), new BarTable(c, barFreq, type));
@@ -49,7 +56,7 @@ namespace Pacmio
 
         public static BarTable GetTable(this Contract c, BarFreq barFreq, BarType type, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
-            BarTable bt = GetTable(c, barFreq, type);
+            BarTable bt = GetTableOld(c, barFreq, type);
             bt.Reset(period, cts, progress);
             return bt;
         }
@@ -80,6 +87,29 @@ namespace Pacmio
             });
         }
 
+        public static void LoadOnly(this BarTable bt, Period period)
+        {
+            Console.WriteLine("Load Table: " + bt.Name + " Period = " + period);
+
+            bt.ReadyForTickCalculation = false;
+
+            LocalRequestAction.Enqueue(new Action(() => {
+                bt.LoadJsonFileToFileData(); // Blocking the process first
+                // Then add the Bar to the Data Object
+                InboundDataActions.Enqueue(new Action(() => {
+                    bt.TransferActualValuesFromBarsToFileData();
+                    bt.TransferActualValuesFromFileDataToBars(period);
+                }));
+            }));
+        }
+
+        /// <summary>
+        /// TODO: Table Download using IB.CLient.DataRequest
+        /// </summary>
+        /// <param name="bt"></param>
+        /// <param name="period"></param>
+        /// <param name="cts"></param>
+        /// <param name="progress"></param>
         public static void Reset(this BarTable bt, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             Console.WriteLine("Reset Table: " + bt.Name + " Period = " + period);

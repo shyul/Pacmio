@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization;
 using Xu;
@@ -52,14 +52,21 @@ namespace Pacmio
         {
             m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
             m_StockData.Status = MarketTickStatus.Unknown;
+            if (m_StockData.BarTables is null) m_StockData.BarTables = new ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable>();
         }
 
         public override void SaveMarketData()
         {
-            if(m_StockData is StockData sd) 
+            if (m_StockData is StockData sd)
             {
                 if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
                 sd.SerializeJsonFile(MarketDataFileName);
+                if (m_StockData.BarTables is ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> list)
+                    Parallel.ForEach(list.Values, bt => {
+                        bt.LoadJsonFileToFileData();
+                        bt.TransferActualValuesFromBarsToFileData();
+                        bt.SaveFileDataToJsonFile();
+                    });
             }
         }
 
@@ -146,9 +153,16 @@ namespace Pacmio
         #region Historical Bar
 
         [IgnoreDataMember]
-        public BarTable DailyBarTable => this.GetTable(BarFreq.Daily, BarType.Trades);
+        public BarTable DailyBarTable => GetTable(BarFreq.Daily, BarType.Trades);
 
-        //public double ClosePrice(DateTime date) { return DailyBarTable.LastClose; }
+        public BarTable GetTable(BarFreq barFreq, BarType type)
+        {
+            if (m_StockData is null) LoadMarketData();
+            if (m_StockData.BarTables.ContainsKey((barFreq, type))) m_StockData.BarTables.TryAdd((barFreq, type), new BarTable(this, barFreq, type));
+            BarTable bt = m_StockData.BarTables[(barFreq, type)];
+            Console.WriteLine("TableList Get Table: " + bt.Name);
+            return bt;
+        }
 
         #endregion Historical Bar
 

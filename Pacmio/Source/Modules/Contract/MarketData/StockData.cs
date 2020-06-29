@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Runtime.Serialization;
 using Xu;
 
@@ -38,5 +39,10 @@ namespace Pacmio
 
         [DataMember]
         public Dictionary<DateTime, (DataSource DataSource, double Target)> TargetPriceList { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double Target)>();
+
+        [IgnoreDataMember]
+        public ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> BarTables { get; set; }
+
+
     }
 }

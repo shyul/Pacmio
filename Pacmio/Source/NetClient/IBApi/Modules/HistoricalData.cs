@@ -87,7 +87,6 @@ namespace Pacmio.IB
         private static BarTable active_HistoricalDataBarTable;
         private static TimeZoneInfo ActiveTimeZone_HistoricalData => active_HistoricalDataBarTable.Contract.TimeZone;
 
-
         /// <summary>
         /// At this time Historical Data Limitations for barSize = "1 mins" and greater have been lifted. 
         /// However, please use caution when requesting large amounts of historical data or sending historical data requests too frequently. 
@@ -187,7 +186,6 @@ namespace Pacmio.IB
                 LastDataRequestTime = DateTime.Now;
             }
         }
-
 
         private static void SendCancel_HistoricalData()
         {

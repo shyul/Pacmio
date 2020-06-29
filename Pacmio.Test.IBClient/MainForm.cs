@@ -181,7 +181,7 @@ namespace TestClient
 
 
 
-                BarTable bt = ContractTest.ActiveContract.GetTable(BarFreq, BarType);//, pd);
+                BarTable bt = ContractTest.ActiveContract.GetTableOld(BarFreq, BarType);//, pd);
                 bt.Reset(HistoricalPeriod, null, null);
                 ChartList.GetForm(bt, ChartList.SampleChartConfig());
                 Root.Form.Show();
@@ -206,7 +206,7 @@ namespace TestClient
         {
             Cts = new CancellationTokenSource();
             Task.Run(() => {
-                var list = ContractList.GetListByCountry("US").AsParallel().Where(n => n is Stock && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN")).Select(n => (Stock)n);
+                var list = ContractList.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
                 Strategy.GetWatchList(list, Cts, Progress);
             }, Cts.Token);
         }
@@ -629,7 +629,8 @@ namespace TestClient
             Cts = new CancellationTokenSource();
             Task.Run(() => {
                 //ContractList.UpdateContractData("US", n => (DateTime.Now - n.UpdateTime).Minutes > 180, Cts, Progress);
-                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && string.IsNullOrWhiteSpace(ib.Industry), Cts, Progress);
+                //ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && string.IsNullOrWhiteSpace(ib.Industry), Cts, Progress);
+                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && ib.Industry is null, Cts, Progress);
             }, Cts.Token);
         }
 
