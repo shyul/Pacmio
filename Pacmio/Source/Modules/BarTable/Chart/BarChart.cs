@@ -95,9 +95,15 @@ namespace Pacmio
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 
+        public IEnumerable<BarAnalysis> bas ChartOverlay { get; private set; } 
+
         public void ConfigChartSeries(IEnumerable<BarAnalysis> bas)
         {
             IEnumerable<IChartSeries> ics = bas.Where(n => n is IChartSeries ic && ic.ChartEnabled).Select(n => (IChartSeries)n);
+
+            // ChartOverlay = bas.Where(n => n is IChartOverlay);
+
+
             ConfigChartSeries(ics);
         }
 

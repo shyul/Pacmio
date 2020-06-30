@@ -19,7 +19,6 @@ using System.Text;
 using System.IO;
 using Xu;
 using Xu.Chart;
-using System.Diagnostics.Eventing.Reader;
 using System.Windows.Forms;
 
 namespace Pacmio
