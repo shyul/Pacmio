@@ -7,8 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
+
 
 namespace Pacmio
 {
@@ -43,6 +45,44 @@ namespace Pacmio
         [IgnoreDataMember]
         public ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> BarTables { get; set; }
 
+        public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
+        {
+            MultiPeriod<(double Price, double Volume)> list = new MultiPeriod<(double Price, double Volume)>();
 
+            var split_list = SplitTable.Select(n => (n.Key, true, n.Value.Split));
+            var dividend_list = DividendTable.Select(n => (n.Key, false, n.Value.Dividend / n.Value.Close));
+            var split_dividend_list = split_list.Concat(dividend_list).OrderByDescending(n => n.Key);
+
+            DateTime latestTime = DateTime.MaxValue;
+            double adj_price = 1;
+            double adj_vol = 1;
+
+            foreach (var pair in split_dividend_list)
+            {
+                DateTime time = pair.Key;
+                double value = pair.Item3;
+
+                //Console.WriteLine("->> Loading: " + time + " / " + pair.Key.Type + " / " + pair.Value.Value);
+
+                if (pair.Item2 && value != 1)
+                {
+                    list.Add(time, latestTime, (adj_price, adj_vol));
+                    adj_price /= value;
+                    adj_vol /= value;
+                    latestTime = time;
+                }
+
+                if (!pair.Item2 && value != 0 && includeDividend)
+                {
+                    list.Add(time, latestTime, (adj_price, adj_vol));
+                    adj_price *= 1 / (1 + value);
+                    latestTime = time;
+                }
+            }
+
+            list.Add(latestTime, DateTime.MinValue, (adj_price, adj_vol));
+
+            return list;
+        }
     }
 }

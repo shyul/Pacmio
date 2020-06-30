@@ -25,16 +25,70 @@ namespace Pacmio
     {
         private static PacmioForm Form => Root.Form;
 
-        public static List<BarChart> List { get; } = new List<BarChart>();
+        //public static List<BarChart> List { get; } = new List<BarChart>();
 
-        public static BarChart GetForm(BarTable bt, List<BarAnalysis> bas)
+        public static Dictionary<BarTable, IEnumerable<IDataView>> Table = new Dictionary<BarTable, IEnumerable<IDataView>>();
+
+        public static void RefreshDataView(BarTable bt)
+        {
+            if (Table.ContainsKey(bt)) 
+            {
+
+
+                if(bt.Status != BarTableStatus.Ready) 
+                {
+                    Table[bt].AsParallel().ForAll(n => n.SetRefreshUI()); 
+                }
+
+            }
+        }
+
+        /*
+        public void SuspendCharts()
+        {
+            Children.Where(c => c is ChartWidget).Select(n => (ChartWidget)n).ToList().ForEach(n =>
+            {
+                n.ReadyToShow = false;
+            });
+        }
+
+        public void RefreshChartToEnd()
+        {
+            // Update All Charts
+            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
+            {
+                n.StopPt = LastIndex;
+                n.ReadyToShow = true;
+
+                n.SetRefreshUI();
+            });
+        }
+
+        public void RefreshChartNextTick()
+        {
+            // Update All Charts
+            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
+            {
+                n.ReadyToShow = true;
+
+                if (n.StopPt == Count - 1)
+                {
+                    n.StopPt++;
+                }
+
+                n.SetRefreshUI();
+            });
+        }
+        */
+
+
+        public static BarChart GetForm(BarTable bt, IEnumerable<BarAnalysis> bas)
         {
             BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
 
-            IEnumerable<IChartSeries> ics = bas.Where(n => n is IChartSeries ic && ic.ChartEnabled).Select(n => (IChartSeries)n);
-            bc.Config(ics);
-
+            bc.ConfigChartSeries(bas);
             bt.ConfigBarAnalysis(bas);
+
             bc.BarTable = bt;
             List.Add(bc);
             Form.AddForm(DockStyle.Fill, 0, bc);

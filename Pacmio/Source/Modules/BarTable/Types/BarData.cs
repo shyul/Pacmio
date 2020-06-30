@@ -13,9 +13,8 @@ namespace Pacmio
 {
     public struct BarData
     {
-        public BarData(BarTable bt, DataSource source, DateTime time, TimeSpan span, double open, double high, double low, double close, double volume, bool isAdjusted)
+        public BarData(DataSource source, DateTime time, TimeSpan span, double open, double high, double low, double close, double volume, bool isAdjusted)
         {
-            Table = bt;
             Source = source;
             Time = time;
             Span = span;
@@ -27,7 +26,6 @@ namespace Pacmio
             IsAdjusted = isAdjusted;
         }
 
-        public BarTable Table { get; private set; }
         public DataSource Source { get; private set; }
         public DateTime Time { get; private set; }
         public TimeSpan Span { get; private set; }
@@ -40,7 +38,7 @@ namespace Pacmio
 
         public override bool Equals(object obj) => (obj is BarData bd) ? this == bd : false;
 
-        public override int GetHashCode() => Table.GetHashCode() ^ Source.GetHashCode() ^ Span.GetHashCode() ^ Time.GetHashCode();
+        public override int GetHashCode() => Source.GetHashCode() ^ Span.GetHashCode() ^ Time.GetHashCode();
         public static bool operator ==(BarData left, BarData right) => left.GetHashCode() == right.GetHashCode();
         public static bool operator !=(BarData left, BarData right) => left.GetHashCode() != right.GetHashCode();
     }

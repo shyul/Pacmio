@@ -26,21 +26,11 @@ namespace Pacmio
 
         public bool Enabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public ICollection<IDependable> Children => throw new NotImplementedException();
-
-        public ICollection<IDependable> Parents => throw new NotImplementedException();
 
         public string this[int i, StringColumn column] => throw new NotImplementedException();
 
         public double this[int i, NumericColumn column] => throw new NotImplementedException();
 
         public Contract this[int i, ContractColumn column] => throw new NotImplementedException();
-
-
-
-        public void Remove(bool recursive)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

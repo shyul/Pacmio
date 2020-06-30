@@ -125,6 +125,8 @@ namespace Pacmio
 
         public bool ChartEnabled { get => Enabled && SMA.ChartEnabled && BandSeries.Enabled; set => SMA.ChartEnabled = BandSeries.Enabled = value; }
 
+        public int ChartOrder { get => BandSeries.Order; set => BandSeries.Order = value; }
+
         public bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; private set; } = MainArea.DefaultName;

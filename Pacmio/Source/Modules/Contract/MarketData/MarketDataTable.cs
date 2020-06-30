@@ -64,41 +64,5 @@ namespace Pacmio
         public string Name { get; set; }
 
         public bool Enabled { get; set; } = true;
-
-        #region IDependable
-
-        public ICollection<IDependable> Children { get; } = new HashSet<IDependable>();
-
-        public ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
-
-        public void Remove(bool recursive)
-        {
-            if (recursive || Children.Count == 0)
-            {
-                foreach (IDependable child in Children)
-                    child.Remove(true);
-
-                foreach (IDependable parent in Parents)
-                    parent.CheckRemove(this);
-
-                if (Children.Count > 0) throw new Exception("Still have children in this BarTable");
-
-                //Table.RemoveAnalysis(this);
-            }
-            else
-            {
-                if (Children.Count > 0)
-                {
-                    foreach (var child in Children)
-                        child.Enabled = false;
-                }
-                Enabled = false;
-            }
-        }
-
-        #endregion IDependable
-
-
-
     }
 }

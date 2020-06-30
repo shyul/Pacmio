@@ -88,9 +88,9 @@ namespace Pacmio
                                         //double dividend_percent = fields[6].ToDouble(0) / close;
                                         //double split = fields[7].ToDouble(1);
 
-                                        TableList.Inbound(new BarData(
-                                             bt, DataSource.Quandl, time, ts,
+                                        bt.Add(new BarData(DataSource.Quandl, time, ts,
                                              open, high, low, close, volume, false));
+
 
                                         //// Add Split and dividend to FundamentalData Table in BusinessInfo
                                         if (c.MarketData is StockData sd)

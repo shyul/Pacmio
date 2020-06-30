@@ -40,9 +40,6 @@ namespace Pacmio
         Norgate = Manual + 25,
 
         [EnumMember]
-        Realtime = Manual + 50,
-
-        [EnumMember]
         IB = Manual + 100,
 
         [EnumMember]
@@ -50,6 +47,9 @@ namespace Pacmio
 
         [EnumMember]
         Google = Manual + 1010,
+
+        [EnumMember]
+        Realtime = -100,
 
         [EnumMember]
         Tick = -10,

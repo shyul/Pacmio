@@ -77,6 +77,7 @@ namespace Pacmio
             }
         }
 
+        /*
         public void Update(BarTable bt) // Cancellation Token should be used
         {
             BarAnalysisPointer bap = bt.GetBarAnalysisPointer(this);
@@ -91,7 +92,7 @@ namespace Pacmio
                 Calculate(bap);
                 bap.StartPt = bap.StopPt;
             }
-        }
+        }*/
 
         protected abstract void Calculate(BarAnalysisPointer bap);
 

@@ -23,7 +23,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class BarChart : ChartWidget, IDependable
+    public sealed class BarChart : ChartWidget//, IDependable
     {
         public BarChart(string name, OhlcType type) : base(name)
         {
@@ -54,14 +54,14 @@ namespace Pacmio
 
         protected override void Dispose(bool disposing)
         {
-            Remove(true);
+            //Remove(true);
             GC.Collect();
         }
 
-        public ICollection<IDependable> Children { get; } = new HashSet<IDependable>();
+        //public ICollection<IDependable> Children { get; } = new HashSet<IDependable>();
 
-        public ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
-
+        //public ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
+        /*
         public void Remove(bool recursive)
         {
             if (recursive || Children.Count == 0)
@@ -83,7 +83,7 @@ namespace Pacmio
                 }
                 Enabled = false;
             }
-        }
+        }*/
 
         public string Title { get => MainArea.PriceSeries.Legend.Label; set => MainArea.PriceSeries.Legend.Label = value; }
 
@@ -95,30 +95,40 @@ namespace Pacmio
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 
-        public void Config(IEnumerable<IChartSeries> ics)
+        public void ConfigChartSeries(IEnumerable<BarAnalysis> bas)
+        {
+            IEnumerable<IChartSeries> ics = bas.Where(n => n is IChartSeries ic && ic.ChartEnabled).Select(n => (IChartSeries)n);
+            ConfigChartSeries(ics);
+        }
+
+        public void ConfigChartSeries(IEnumerable<IChartSeries> ics)
+        {
+            RemoveAllChartSeries();
+            foreach (var ic in ics.OrderBy(n => n.ChartOrder))
+                ic.ConfigChart(this);
+        }
+
+        public void RemoveAllChartSeries() 
         {
             // Remove all areas and series.
             List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
-            foreach (var ic in ics)
-                ic.ConfigChart(this);
         }
-        
+
         public BarTable BarTable
         {
-            get
-            {
-                return m_barTable;
-            }
+            get => m_barTable;
+
             set
             {
+                /*
                 if (m_barTable is BarTable bt)
                 {
                     bt.RemoveChild(this);
-                }
+                }*/
 
                 m_barTable = value;
-                m_barTable.AddChild(this);
+                // m_barTable.AddChild(this);
                 StopPt = m_barTable.LastIndex;
                 TabName = Name = m_barTable.Name;
             }

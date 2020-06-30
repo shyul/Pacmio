@@ -12,11 +12,13 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-   public interface IChartSeries
+    public interface IChartSeries
     {
         Color Color { get; }
 
         bool ChartEnabled { get; set; }
+
+        int ChartOrder { get; set; }
 
         bool HasXAxisBar { get; set; }
 

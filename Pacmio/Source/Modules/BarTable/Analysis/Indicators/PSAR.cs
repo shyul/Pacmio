@@ -235,6 +235,8 @@ namespace Pacmio
 
         public bool ChartEnabled { get => Enabled && DotSeries.Enabled; set => DotSeries.Enabled = value; }
 
+        public int ChartOrder { get => DotSeries.Order; set => DotSeries.Order = value; }
+
         public bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; private set; } = MainArea.DefaultName;

@@ -386,5 +386,13 @@ namespace Pacmio
         }
 
         #endregion Position / Simulation Information
+
+        public void ClearAllCalculationData() 
+        {
+            NumericDatums.Clear();
+            TagDatums.Clear();
+            SignalDatums.Clear();
+            SimulationDatums.Clear();
+        }
     }
 }

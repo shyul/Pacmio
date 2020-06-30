@@ -248,8 +248,7 @@ namespace Pacmio.IB
 
                     if (open != -1 && high != -1 && low != -1 && close != -1 && volume > 0)
                     {
-                        TableList.Inbound(new BarData(
-                            active_HistoricalDataBarTable, DataSource.IB, time, ts,
+                        active_HistoricalDataBarTable.Add(new BarData(DataSource.IB, time, ts,
                             open, high, low, close, volume, true));
                     }
                 }

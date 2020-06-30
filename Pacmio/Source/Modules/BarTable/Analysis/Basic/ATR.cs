@@ -89,6 +89,8 @@ namespace Pacmio
 
         public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
 
+        public int ChartOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
+
         public virtual bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; protected set; }
