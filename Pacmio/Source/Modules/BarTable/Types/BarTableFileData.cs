@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class BarTableFileData : IEquatable<BarTableFileData>, IEquatable<BarTable>
+    public class BarTableFileData : IEquatable<BarTableFileData>, IEquatable<BarTable>, IDisposable
     {
         public BarTableFileData(Contract c, BarFreq freq, BarType type)
         {
@@ -34,6 +35,11 @@ namespace Pacmio
             EarliestTime = bt.Contract.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
             LastUpdateTime = bt.LastDownloadRequestTime;
             //DataSourceSegments = bt.DataSourceSegments;
+        }
+
+        public void Dispose()
+        {
+            //Bars.Clear();
         }
 
         [DataMember]
@@ -58,6 +64,8 @@ namespace Pacmio
         public Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)> Bars { get; set; } 
             = new Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)>();
 
+        #region File Operation
+
         [IgnoreDataMember]
         public string FileName => GetFileName((Contract, BarFreq, Type));
 
@@ -69,6 +77,8 @@ namespace Pacmio
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             return path + prefix + info.Contract.name + ".json";
         }
+
+        #endregion File Operation
 
         #region Equality
         public bool Equals(BarTableFileData other) => (Contract == other.Contract) && (BarFreq == other.BarFreq) && (Type == other.Type);
@@ -94,6 +104,7 @@ namespace Pacmio
                 return false;
         }
         public override int GetHashCode() => Contract.GetHashCode() ^ BarFreq.GetHashCode() ^ Type.GetHashCode();
+
         #endregion Equality
     }
 }
