@@ -25,7 +25,7 @@ namespace Pacmio
         public string Name => throw new NotImplementedException();
 
         public bool Enabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
+        public TableStatus Status { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string this[int i, StringColumn column] => throw new NotImplementedException();
 

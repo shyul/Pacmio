@@ -20,6 +20,7 @@ using System.IO;
 using Xu;
 using Xu.Chart;
 using System.Windows.Forms;
+using System.Web.UI.WebControls;
 
 namespace Pacmio
 {
@@ -41,7 +42,10 @@ namespace Pacmio
 
         public void Dispose()
         {
-            //Remove(true);
+            IsLive = false;
+            if (Contract.MarketData is HistoricalData hd) { hd.LiveBarTables.CheckRemove(this); }
+            lock (Rows) Rows.Clear();
+            lock (TimeToRows) TimeToRows.Clear();
             GC.Collect();
         }
 
@@ -881,14 +885,20 @@ namespace Pacmio
 
         #endregion Position / Simulation Information
 
+        #region BarChart / DataView
+
+        public readonly List<IDataView> DataViews = new List<IDataView>();
+
+        public Portfolio Portfolio { get; set; }
+
+        #endregion BarChart / DataView
+
         #region Operations
 
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
         private object DataLockObject { get; } = new object();
-
-        private bool m_IsLive = false;
 
         public bool IsLive
         {
@@ -897,44 +907,65 @@ namespace Pacmio
             private set
             {
                 m_IsLive = value;
-                if (m_IsLive)
-                {
-                    // Add BarTable to the tick receiver
-                }
-                else
-                {
-                    // Remove BarTable from the tick receiver
-                }
+
+                if (Contract.MarketData is HistoricalData hd)
+                    if (m_IsLive)
+                    {
+                        // Add BarTable to the tick receiver
+                        hd.LiveBarTables.CheckAdd(this);
+                    }
+                    else
+                    {
+                        // Remove BarTable from the tick receiver
+                        hd.LiveBarTables.CheckRemove(this);
+                    }
             }
         }
 
-        private BarTableStatus m_Status = BarTableStatus.Ready;
+        private bool m_IsLive = false;
 
-        public BarTableStatus Status
+        public TableStatus Status
         {
             get => m_Status;
 
             set
             {
                 m_Status = value;
-                ChartList.RefreshDataView(this);
+                DataViews.ForEach(n => {
+                    switch (m_Status) 
+                    {
+                        case TableStatus.LoadFinished when Portfolio is Portfolio pf:
+                            if(pf.Settings.ContainsKey((Contract, BarFreq, Type))) 
+                            {
+                                Calculate(pf.Settings[(Contract, BarFreq, Type)].barAnalyses.List);
+                                //Status = TableStatus.CalculateFinished;
+                                m_Status = TableStatus.Ready;
+                            }
+                            break;
+                        default: break;
+                    }
+
+                    n.SetRefreshUI();
+                });
             }
         }
 
-        public void Load() => Load(new Period(DateTime.MinValue, DateTime.MaxValue));
+        private TableStatus m_Status = TableStatus.Ready;
+
+        public void Load() => Load(Period.Full);
 
         public void Load(Period period)
         {
             if (Enabled)
                 lock (DataLockObject)
                 {
-                    Status = BarTableStatus.Loading;
+                    Status = TableStatus.Loading;
 
                     SyncFile(period);
                     Sort();
                     Adjust(); // Forward Adjust
 
-                    Status = BarTableStatus.LoadFinished;
+                    Status = TableStatus.LoadFinished;
                     // lead it to calculation... here
                 }
         }
@@ -944,13 +975,13 @@ namespace Pacmio
             if (Enabled)
                 lock (DataLockObject)
                 {
-                    Status = BarTableStatus.Calculating;
+                    Status = TableStatus.Calculating;
                     // Send Signal
 
                     Calculate(analyses);
 
-                    Status = BarTableStatus.CalculateFinished;
-                    Status = BarTableStatus.Ready;
+                    Status = TableStatus.CalculateFinished;
+                    Status = TableStatus.Ready;
                     // Send Signal
                 }
         }
@@ -960,15 +991,15 @@ namespace Pacmio
             if (Enabled && IsLive)
                 lock (DataLockObject)
                 {
-                    BarTableStatus last_status = Status;
-                    Status = BarTableStatus.Ticking;
+                    TableStatus last_status = Status;
+                    Status = TableStatus.Ticking;
                     Add(mt.Time, mt.Price, mt.Size);
 
-                    if (last_status == BarTableStatus.Ready)
+                    if (last_status == TableStatus.Ready)
                     {
                         SetCalculationPointer(LatestCalculatePointer - 2);
                         Calculate(BarAnalysisPointerList.Keys);
-                        Status = BarTableStatus.TickingFinished;
+                        Status = TableStatus.TickingFinished;
                         // lead it to calculation... here
                     }
 
@@ -981,10 +1012,10 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
-                while (Status != BarTableStatus.Ready && Status != BarTableStatus.LoadFinished) ;
+                while (Status != TableStatus.Ready && Status != TableStatus.LoadFinished) ;
 
-                BarTableStatus last_status = Status;
-                Status = BarTableStatus.Maintaining;
+                TableStatus last_status = Status;
+                Status = TableStatus.Maintaining;
                 //ResetCalculationPointer();
                 // Remove any non-existing analysis
                 //var non_existing_list = BarAnalysisPointerList.Keys.Where(n => !analyses.Contains(n)).ToList();
@@ -1000,8 +1031,8 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
-                BarTableStatus last_status = Status;
-                Status = BarTableStatus.Saving;
+                TableStatus last_status = Status;
+                Status = TableStatus.Saving;
                 SaveFile();
                 Status = last_status;
             }
@@ -1012,7 +1043,7 @@ namespace Pacmio
             if (Enabled)
                 lock (DataLockObject)
                 {
-                    Status = BarTableStatus.Downloading;
+                    Status = TableStatus.Downloading;
 
                     ResetCalculationPointer();
                     SyncFile(period);
@@ -1110,7 +1141,7 @@ namespace Pacmio
                         }
                     }
 
-                    Status = BarTableStatus.LoadFinished;
+                    Status = TableStatus.LoadFinished;
                 }
         }
 

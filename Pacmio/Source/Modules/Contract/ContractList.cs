@@ -138,7 +138,6 @@ namespace Pacmio
                         break;
                     else
                     {
-                        progress?.Report(100.0f * i / count);
                         Thread.Sleep(10);
                         if (Fetch(symbol, cts) is Contract[] cx)
                         {
@@ -152,6 +151,7 @@ namespace Pacmio
                             }
 
                         }
+                        progress?.Report(100.0f * i / count);
                         i++;
                     }
                 }
@@ -177,7 +177,6 @@ namespace Pacmio
                         break;
                     else
                     {
-                        progress?.Report(100.0f * i / count);
                         Thread.Sleep(10);
                         if(Fetch(symbol, cts) is Contract[] cx) 
                         {
@@ -190,6 +189,7 @@ namespace Pacmio
                                     Fetch(c, cts);
                             }
                         }
+                        progress?.Report(100.0f * i / count);
                         i++;
                     }
                 }

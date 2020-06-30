@@ -52,7 +52,7 @@ namespace Pacmio
         {
             m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
             m_StockData.Status = MarketTickStatus.Unknown;
-            if (m_StockData.BarTables is null) m_StockData.BarTables = new ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable>();
+            if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new HashSet<BarTable>();
         }
 
         public override void SaveMarketData()
@@ -61,8 +61,9 @@ namespace Pacmio
             {
                 if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
                 sd.SerializeJsonFile(MarketDataFileName);
+                /*
                 if (m_StockData.BarTables is ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> list)
-                    Parallel.ForEach(list.Values, bt => bt.Save());
+                    Parallel.ForEach(list.Values, bt => bt.Save());*/
             }
         }
 

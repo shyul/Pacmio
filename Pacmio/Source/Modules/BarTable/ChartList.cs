@@ -35,7 +35,7 @@ namespace Pacmio
             {
 
 
-                if(bt.Status != BarTableStatus.Ready) 
+                if(bt.Status != TableStatus.Ready) 
                 {
                     Table[bt].AsParallel().ForAll(n => n.SetRefreshUI()); 
                 }

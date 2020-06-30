@@ -39,7 +39,8 @@ namespace Pacmio
 
         public void Dispose()
         {
-            //Bars.Clear();
+            Bars.Clear();
+            GC.Collect();
         }
 
         [DataMember]

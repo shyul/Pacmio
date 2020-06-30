@@ -82,11 +82,9 @@ namespace Pacmio
             return list;
         }
 
-        //public HashSet<BarTable> LiveBarTables { get; set; } = new HashSet<BarTable>();
-
-        public void InboundLiveTick(MarketTick mt) => Parallel.ForEach(BarTables.Values.Where(n => n.IsLive), n => n.AddPriceTick(mt));
+        public void InboundLiveTick(MarketTick mt) => Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(mt));
 
         [IgnoreDataMember]
-        public ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> BarTables { get; set; }
+        public HashSet<BarTable> LiveBarTables { get; set; } = new HashSet<BarTable>();
     }
 }
