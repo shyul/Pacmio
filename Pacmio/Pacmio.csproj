@@ -127,7 +127,6 @@
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
-    <Compile Include="Source\Modules\BarTable\TableList.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
@@ -142,7 +141,7 @@
     <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\BidAskData.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketData.cs" />
-    <Compile Include="Source\Modules\Contract\MarketData\StockData.cs" />
+    <Compile Include="Source\Modules\Contract\MarketData\HistoricalData.cs" />
     <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataTable.cs" />

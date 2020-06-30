@@ -173,9 +173,13 @@ namespace Pacmio // Can be derived from SMA
 
         public bool ChartEnabled { get => Enabled && EMA_TCI.ChartEnabled; set => EMA_TCI.ChartEnabled = ColumnSeries.Enabled = DotSeries.Enabled = value; }
 
+        public int SeriesOrder { get => EMA_TCI.LineSeries.Order; set => EMA_TCI.LineSeries.Order = value; }
+
         public bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; }
+
+        public int AreaOrder { get; } = 0;
 
         public void ConfigChart(BarChart bc)
         {
@@ -183,6 +187,7 @@ namespace Pacmio // Can be derived from SMA
             {
                 OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, 10)
                 {
+                    Order = AreaOrder,
                     HasXAxisBar = HasXAxisBar,
                     Reference = Reference,
                     UpperLimit = UpperLimit,

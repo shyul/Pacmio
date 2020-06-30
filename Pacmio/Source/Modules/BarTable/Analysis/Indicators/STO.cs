@@ -104,13 +104,14 @@ namespace Pacmio
 
         public bool ChartEnabled { get => Enabled && SL.ChartEnabled; set => SL.ChartEnabled = SL_FULL.ChartEnabled = value; }
 
+        public int SeriesOrder { get => SL.LineSeries.Order; set => SL.LineSeries.Order = value; }
+
         public bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; }
-        /*
-        public LineSeries LineSeries_H { get; private set; }
-        public LineSeries LineSeries_L { get; private set; }
-        */
+
+        public int AreaOrder { get; } = 0;
+
         public void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
@@ -118,6 +119,7 @@ namespace Pacmio
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
                     bc.AddArea(new OscillatorArea(bc, AreaName, 10)
                     {
+                        Order = AreaOrder,
                         HasXAxisBar = HasXAxisBar,
                         Reference = Reference,
                         UpperLimit = UpperLimit,

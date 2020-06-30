@@ -13,7 +13,7 @@ namespace Pacmio
 {
     [Serializable, DataContract]
     [KnownType(typeof(BidAskData))]
-    [KnownType(typeof(StockData))]
+    [KnownType(typeof(HistoricalData))]
     public class MarketData
     {
         #region Basic Info  

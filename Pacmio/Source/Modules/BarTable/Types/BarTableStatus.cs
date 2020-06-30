@@ -28,5 +28,7 @@ namespace Pacmio
         LoadFinished = 10,
 
         TickingFinished = 11,
+
+        CalculateFinished = 12,
     }
 }

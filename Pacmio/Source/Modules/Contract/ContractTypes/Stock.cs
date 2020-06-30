@@ -36,7 +36,7 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public StockData StockData
+        public HistoricalData StockData
         {
             get
             {
@@ -46,27 +46,23 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        private StockData m_StockData = null;
+        private HistoricalData m_StockData = null;
 
         public override void LoadMarketData() 
         {
-            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
+            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
             m_StockData.Status = MarketTickStatus.Unknown;
             if (m_StockData.BarTables is null) m_StockData.BarTables = new ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable>();
         }
 
         public override void SaveMarketData()
         {
-            if (m_StockData is StockData sd)
+            if (m_StockData is HistoricalData sd)
             {
                 if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
                 sd.SerializeJsonFile(MarketDataFileName);
                 if (m_StockData.BarTables is ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> list)
-                    Parallel.ForEach(list.Values, bt => {
-                        bt.LoadJsonFileToFileData();
-                        bt.TransferActualValuesFromBarsToFileData();
-                        bt.SaveFileDataToJsonFile();
-                    });
+                    Parallel.ForEach(list.Values, bt => bt.Save());
             }
         }
 

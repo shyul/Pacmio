@@ -168,6 +168,8 @@ namespace Pacmio
 
         public override bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => ColumnSeries.Enabled = LineSeries.Enabled = value; }
 
+        public int AreaOrder { get; } = 0;
+
         public override void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
@@ -175,6 +177,7 @@ namespace Pacmio
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
                     bc.AddArea(new OscillatorArea(bc, AreaName, 10)
                     {
+                        Order = AreaOrder,
                         Reference = Reference,
                         UpperLimit = UpperLimit,
                         LowerLimit = LowerLimit,

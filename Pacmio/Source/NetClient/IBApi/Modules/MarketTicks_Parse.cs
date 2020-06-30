@@ -222,7 +222,7 @@ namespace Pacmio.IB
                             q.Volume = size * 100;
                             break;
 
-                        case TickType.ShortableShares when c.MarketData is StockData q:
+                        case TickType.ShortableShares when c.MarketData is HistoricalData q:
                             q.ShortableShares = size;
                             break;
 
@@ -308,7 +308,7 @@ namespace Pacmio.IB
 
                             https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                         */
-                        case TickType.RTVolumeTimeSales:
+                        case TickType.RTVolumeTimeSales when c.MarketData is HistoricalData hd:
                             Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
                             break;
 
@@ -316,11 +316,11 @@ namespace Pacmio.IB
                             The RT Trade Volume is similar to RT Volume, but designed to avoid relaying back "Unreportable Trades" shown in TWS Time&Sales via the API.
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
-                        case TickType.RTTradeVolume:
+                        case TickType.RTTradeVolume when c.MarketData is HistoricalData hd:
                             string[] volFields = fields[4].Split(';');
 
                             double last = volFields[0].ToDouble();
-                            if (double.IsNaN(last) && c.MarketData is BidAskData baq) last = baq.LastPrice;
+                            if (double.IsNaN(last)) last = hd.LastPrice;
 
                             double vol = volFields[1].ToDouble() * 100;
                             if (vol == 0) vol = 20;
@@ -329,7 +329,9 @@ namespace Pacmio.IB
                             DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
 
                             //double totalVol = volFields[3].ToDouble() * 100;
-                            TableList.Inbound(new MarketTick(c, time, last, vol));
+                            hd.InboundLiveTick(new MarketTick(c, time, last, vol));
+
+
                             /*
                             if (!TicksList.ContainsKey(c)) 
                                 TicksList[c] = new StringBuilder();
@@ -372,7 +374,7 @@ namespace Pacmio.IB
 
                     switch (tickType)
                     {
-                        case TickType.Shortable when c.MarketData is StockData q:
+                        case TickType.Shortable when c.MarketData is HistoricalData q:
                             q.ShortStatus = fields[4].ToDouble(-1);
                             break;
 

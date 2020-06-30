@@ -25,5 +25,7 @@ namespace Pacmio
         Color UpperColor { get; }
 
         string AreaName { get; }
+
+        int AreaOrder { get; }
     }
 }

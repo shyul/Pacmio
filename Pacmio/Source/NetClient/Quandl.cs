@@ -93,7 +93,7 @@ namespace Pacmio
 
 
                                         //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                        if (c.MarketData is StockData sd)
+                                        if (c.MarketData is HistoricalData sd)
                                         {
                                             double dividend = fields[6].ToDouble(0);
                                             if (dividend != 0)
@@ -192,7 +192,7 @@ namespace Pacmio
                                 {
                                     currentContract = symbolList[currentSymbolName];
 
-                                    if (currentContract.MarketData is StockData sd0)
+                                    if (currentContract.MarketData is HistoricalData sd0)
                                     {
                                         sd0.DividendTable.Clear();
                                         sd0.SplitTable.Clear();
@@ -231,7 +231,7 @@ namespace Pacmio
                                     }
 
                                     //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                    if (currentContract.MarketData is StockData sd)
+                                    if (currentContract.MarketData is HistoricalData sd)
                                     {
                                         double dividend = fields[7].ToDouble(0);
                                         if (dividend != 0)

@@ -18,7 +18,7 @@ namespace Pacmio
 
         bool ChartEnabled { get; set; }
 
-        int ChartOrder { get; set; }
+        int SeriesOrder { get; set; }
 
         bool HasXAxisBar { get; set; }
 

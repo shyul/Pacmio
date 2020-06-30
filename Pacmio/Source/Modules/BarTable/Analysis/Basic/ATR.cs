@@ -89,11 +89,13 @@ namespace Pacmio
 
         public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
 
-        public int ChartOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
+        public int SeriesOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
 
         public virtual bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; protected set; }
+
+        public int AreaOrder { get; } = 0;
 
         public virtual void ConfigChart(BarChart bc)
         {
@@ -101,6 +103,7 @@ namespace Pacmio
             {
                 Area a = bc.AddArea(new Area(bc, AreaName, 10)
                 {
+                    Order = AreaOrder,
                     HasXAxisBar = HasXAxisBar,
                 });
                 a.AddSeries(LineSeries);

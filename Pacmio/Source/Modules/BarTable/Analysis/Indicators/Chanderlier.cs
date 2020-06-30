@@ -107,7 +107,7 @@ namespace Pacmio
 
         public bool ChartEnabled { get => Enabled && LineSeries_H.Enabled && LineSeries_L.Enabled; set => LineSeries_H.Enabled = LineSeries_L.Enabled = value; }
 
-        public int ChartOrder { get => LineSeries_H.Order; set => LineSeries_H.Order = LineSeries_L.Order = value; }
+        public int SeriesOrder { get => LineSeries_H.Order; set => LineSeries_H.Order = LineSeries_L.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 

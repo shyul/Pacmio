@@ -205,9 +205,13 @@ namespace Pacmio
 
         public bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => ColumnSeries.Enabled = LineSeries.Enabled = MA_SL.LineSeries.Enabled = value; }
 
+        public int SeriesOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
+
         public bool HasXAxisBar { get; set; } = false;
 
         public string AreaName { get; }
+
+        public int AreaOrder { get; } = 0;
 
         public void ConfigChart(BarChart bc)
         {
@@ -216,6 +220,7 @@ namespace Pacmio
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
                     bc.AddArea(new OscillatorArea(bc, AreaName, 10)
                     {
+                        Order = AreaOrder,
                         Reference = Reference,
                         UpperLimit = UpperLimit,
                         LowerLimit = LowerLimit,

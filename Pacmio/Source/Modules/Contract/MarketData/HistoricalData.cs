@@ -10,12 +10,12 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
-
+using System.Threading.Tasks;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class StockData : BidAskData
+    public class HistoricalData : BidAskData
     {
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
@@ -41,9 +41,6 @@ namespace Pacmio
 
         [DataMember]
         public Dictionary<DateTime, (DataSource DataSource, double Target)> TargetPriceList { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double Target)>();
-
-        [IgnoreDataMember]
-        public ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> BarTables { get; set; }
 
         public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
         {
@@ -84,5 +81,12 @@ namespace Pacmio
 
             return list;
         }
+
+        //public HashSet<BarTable> LiveBarTables { get; set; } = new HashSet<BarTable>();
+
+        public void InboundLiveTick(MarketTick mt) => Parallel.ForEach(BarTables.Values.Where(n => n.IsLive), n => n.AddPriceTick(mt));
+
+        [IgnoreDataMember]
+        public ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> BarTables { get; set; }
     }
 }

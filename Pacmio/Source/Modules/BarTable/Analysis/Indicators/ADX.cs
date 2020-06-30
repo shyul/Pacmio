@@ -251,6 +251,7 @@ namespace Pacmio
             {
                 OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, 10)
                 {
+                    Order = AreaOrder,
                     Reference = Reference,
                     HasXAxisBar = HasXAxisBar,
                     //UpperColor = Color.YellowGreen,

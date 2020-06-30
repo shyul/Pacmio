@@ -110,7 +110,7 @@ namespace Pacmio
         public void ConfigChartSeries(IEnumerable<IChartSeries> ics)
         {
             RemoveAllChartSeries();
-            foreach (var ic in ics.OrderBy(n => n.ChartOrder))
+            foreach (var ic in ics.OrderBy(n => n.SeriesOrder))
                 ic.ConfigChart(this);
         }
 

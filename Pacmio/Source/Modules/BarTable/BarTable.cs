@@ -294,64 +294,61 @@ namespace Pacmio
         private bool Add(DateTime tickTime, double last, double volume)
         {
             bool isModified = false;
+            DateTime time = Frequency.Align(tickTime, 0);
 
-            if (IsAcceptingTicks)
+            if (!Contains(time))
             {
-                DateTime time = Frequency.Align(tickTime, 0);
+                if (Count > 0 && LastBar.Source == DataSource.Tick)
+                    LastBar.Source = DataSource.Realtime;
 
-                if (!Contains(time))
+                Bar nb = new Bar(this, time, DataSource.Tick,
+                            last, last, last, last, volume, // - 1, -1, -1, -1, -1, // Ticks are actual trade values
+                            last, last, last, last, volume)
                 {
-                    if (Count > 0 && LastBar.Source == DataSource.Tick)
-                        LastBar.Source = DataSource.Realtime;
+                    DataSourcePeriod = new Period(time) // Make sure it knows the Bar data sample time is shorter than the BarSize
+                };
 
-                    Bar nb = new Bar(this, time, DataSource.Tick,
-                                last, last, last, last, volume, // - 1, -1, -1, -1, -1, // Ticks are actual trade values
-                                last, last, last, last, volume)
-                    {
-                        DataSourcePeriod = new Period(time) // Make sure it knows the Bar data sample time is shorter than the BarSize
-                    };
+                isModified = Add(nb);
+            }
+            else
+            {
+                Bar nb = this[time];
 
-                    isModified = Add(nb);
-                }
-                else
+                if (nb.Source >= DataSource.Realtime)
                 {
-                    Bar nb = this[time];
-
-                    if (nb.Source >= DataSource.Realtime)
+                    if (last > nb.High) // New High
                     {
-                        if (last > nb.High) // New High
-                        {
-                            nb.Actual_High = nb.High = last; // Also update 
-                            isModified = true;
-                        }
-
-                        if (last < nb.Low) // New Low
-                        {
-                            nb.Actual_Low = nb.Low = last;
-                            isModified = true;
-                        }
-
-                        if (tickTime <= nb.DataSourcePeriod.Start) // Eariler Open
-                        {
-                            nb.Actual_Open = nb.Open = last;
-                            nb.DataSourcePeriod.Insert(tickTime);
-                            isModified = true;
-                        }
-
-                        if (tickTime >= nb.DataSourcePeriod.Stop) // Later Close
-                        {
-                            nb.Actual_Close = nb.Close = last;
-                            nb.DataSourcePeriod.Insert(tickTime);
-                            isModified = true;
-                        }
-
-                        nb.Volume += volume;
-                        nb.Actual_Volume = nb.Volume;
-
-                        nb.Source = DataSource.Realtime;
+                        nb.Actual_High = nb.High = last; // Also update 
+                        isModified = true;
                     }
+
+                    if (last < nb.Low) // New Low
+                    {
+                        nb.Actual_Low = nb.Low = last;
+                        isModified = true;
+                    }
+
+                    if (tickTime <= nb.DataSourcePeriod.Start) // Eariler Open
+                    {
+                        nb.Actual_Open = nb.Open = last;
+                        nb.DataSourcePeriod.Insert(tickTime);
+                        isModified = true;
+                    }
+
+                    if (tickTime >= nb.DataSourcePeriod.Stop) // Later Close
+                    {
+                        nb.Actual_Close = nb.Close = last;
+                        nb.DataSourcePeriod.Insert(tickTime);
+                        isModified = true;
+                    }
+
+                    nb.Volume += volume;
+                    nb.Actual_Volume = nb.Volume;
+
+                    nb.Source = DataSource.Realtime;
                 }
             }
+
             return isModified;
         }
 
@@ -598,78 +595,52 @@ namespace Pacmio
 
         #endregion Time
 
-        #region Data/Bar Analysis (TA) Calculation
+        #region Sort / Intrinsic Data Prepare before Technical Analysis
 
-        private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
-
-        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
+        /// Always refresh gain
+        /// Always clear all Analysis Pointers.
+        /// Triggering conditions --> Split != 1, Dividend !=0 && adj_div == true
+        private void Adjust(bool forwardAdjust = true)
         {
-            if (!BarAnalysisPointerList.ContainsKey(ba))
-                BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
-
-            return BarAnalysisPointerList[ba];
-        }
-
-        private void ResetCalculationPointer() => SetCalculationPointer(0);
-
-        private void SetCalculationPointer(int pt)
-        {
-            if (pt < 0)
-                pt = 0;
-
-            if (BasicData_StartPt > pt)
-                BasicData_StartPt = pt;
-
-            foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
-                if (bap.StartPt > pt)
-                    bap.StartPt = pt;
-        }
-
-        /*
-        public void SetCalculationPointer(ref DateTime time)
-        {
-            int pt = IndexOf(ref time) - 1;
-            if (pt < 0) pt = 0;
-            SetCalculationPointer(pt);
-        }*/
-
-        public int LatestCalculatePointer { get; private set; } = 0;
-
-        /// <summary>
-        /// The mighty calculate for all technicial analysis
-        /// </summary>
-        private void Calculate(IEnumerable<BarAnalysis> analyses)
-        {
-            Console.WriteLine("\n==================");
-            Console.WriteLine("Table: " + Name + " | Count: " + Count);
-            DateTime total_time = DateTime.Now;
-
-            int startPt = BasicData_StopPt = Count;
-            if (Count > 0)
+            //Sort();
+            if (Contract.MarketData is HistoricalData sd)
             {
-                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
-                BasicData_Calculate();
-                BasicData_StartPt = BasicData_StopPt;
+                MultiPeriod<(double Price, double Volume)> barTableAdjust = sd.BarTableAdjust(AdjustDividend);
 
-                foreach (BarAnalysis ba in analyses) //BarAnalysisPointerList.Keys)
+                // Please notice b.Time is the start time of the Bar
+                // When the adjust event (split or dividend) happens at d 
+                // The adjust will happen in d-1, which belongs to the
+                // prior adjust segment.
+                //                    S
+                // ---------------------------------------
+                //                   AD
+                // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+                for (int i = 0; i < Count; i++)
                 {
-                    DateTime single_time = DateTime.Now;
+                    Bar b = this[i];
 
-                    BarAnalysisPointer bap = GetBarAnalysisPointer(ba);
-                    int original_start = bap.StartPt;
-                    int original_stop = bap.StopPt;
-                    ba.Update(bap);
-                    startPt = Math.Min(startPt, bap.StartPt);
-
-                    Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                    var (adj_price, adj_vol) = barTableAdjust[b.Time];
+                    b.Adjust(adj_price, adj_vol, forwardAdjust);
                 }
             }
-            LatestCalculatePointer = startPt;
-
-            Console.WriteLine("------------------");
-            Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
-            Console.WriteLine("==================\n");
+            //ResetCalculationPointer();
         }
+
+        private void Sort()
+        {
+            TimeToRows.Clear();
+            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
+            for (int i = 0; i < Count; i++)
+            {
+                Bar b = Rows[i];
+                TimeToRows[b.Time] = i;
+                b.Index = i;
+            }
+            //ResetCalculationPointer();
+            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
+        }
+
+        #endregion Sort / Intrinsic Data Prepare before Technical Analysis
 
         #region Basic Data
 
@@ -829,7 +800,78 @@ namespace Pacmio
 
         #endregion Basic Data
 
+        #region Data/Bar Analysis (TA) Calculation
 
+        private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
+
+        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
+        {
+            if (!BarAnalysisPointerList.ContainsKey(ba))
+                BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
+
+            return BarAnalysisPointerList[ba];
+        }
+
+        private void ResetCalculationPointer() => SetCalculationPointer(0);
+
+        private void SetCalculationPointer(int pt)
+        {
+            if (pt < 0)
+                pt = 0;
+
+            if (BasicData_StartPt > pt)
+                BasicData_StartPt = pt;
+
+            foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
+                if (bap.StartPt > pt)
+                    bap.StartPt = pt;
+        }
+
+        /*
+        public void SetCalculationPointer(ref DateTime time)
+        {
+            int pt = IndexOf(ref time) - 1;
+            if (pt < 0) pt = 0;
+            SetCalculationPointer(pt);
+        }*/
+
+        public int LatestCalculatePointer { get; private set; } = 0;
+
+        /// <summary>
+        /// The mighty calculate for all technicial analysis
+        /// </summary>
+        private void Calculate(IEnumerable<BarAnalysis> analyses)
+        {
+            Console.WriteLine("\n==================");
+            Console.WriteLine("Table: " + Name + " | Count: " + Count);
+            DateTime total_time = DateTime.Now;
+
+            int startPt = BasicData_StopPt = Count;
+            if (Count > 0)
+            {
+                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
+                BasicData_Calculate();
+                BasicData_StartPt = BasicData_StopPt;
+
+                foreach (BarAnalysis ba in analyses) //BarAnalysisPointerList.Keys)
+                {
+                    DateTime single_time = DateTime.Now;
+
+                    BarAnalysisPointer bap = GetBarAnalysisPointer(ba);
+                    int original_start = bap.StartPt;
+                    int original_stop = bap.StopPt;
+                    ba.Update(bap);
+                    startPt = Math.Min(startPt, bap.StartPt);
+
+                    Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                }
+            }
+            LatestCalculatePointer = startPt;
+
+            Console.WriteLine("------------------");
+            Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
+            Console.WriteLine("==================\n");
+        }
 
         #endregion Data/Bar Analysis (TA) Calculation
 
@@ -839,61 +881,6 @@ namespace Pacmio
 
         #endregion Position / Simulation Information
 
-        #region Download / Update / Append New Bar
-
-
-
-
-
-        #region Intrinsic Data Prepare before Technical Analysis
-
-        /// Always refresh gain
-        /// Always clear all Analysis Pointers.
-        /// Triggering conditions --> Split != 1, Dividend !=0 && adj_div == true
-        private void Adjust(bool forwardAdjust = true)
-        {
-            //Sort();
-            if (Contract.MarketData is StockData sd)
-            {
-                MultiPeriod<(double Price, double Volume)> barTableAdjust = sd.BarTableAdjust(AdjustDividend);
-
-                // Please notice b.Time is the start time of the Bar
-                // When the adjust event (split or dividend) happens at d 
-                // The adjust will happen in d-1, which belongs to the
-                // prior adjust segment.
-                //                    S
-                // ---------------------------------------
-                //                   AD
-                // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
-                for (int i = 0; i < Count; i++)
-                {
-                    Bar b = this[i];
-
-                    var (adj_price, adj_vol) = barTableAdjust[b.Time];
-                    b.Adjust(adj_price, adj_vol, forwardAdjust);
-                }
-            }
-            //ResetCalculationPointer();
-        }
-
-        private void Sort()
-        {
-            TimeToRows.Clear();
-            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
-            for (int i = 0; i < Count; i++)
-            {
-                Bar b = Rows[i];
-                TimeToRows[b.Time] = i;
-                b.Index = i;
-            }
-            //ResetCalculationPointer();
-            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
-        }
-
-        #endregion Intrinsic Data Prepare before Technical Analysis
-
-        #endregion Download / Update / Append New Bar
-
         #region Operations
 
         /// <summary>
@@ -901,11 +888,27 @@ namespace Pacmio
         /// </summary>
         private object DataLockObject { get; } = new object();
 
-        public bool IsLive { get; private set; } = false;
+        private bool m_IsLive = false;
 
-        public bool ReadyForTickCalculation { get; set; } = false;
+        public bool IsLive
+        {
+            get => m_IsLive;
 
-        public bool IsAcceptingTicks { get; private set; } = false;
+            private set
+            {
+                m_IsLive = value;
+                if (m_IsLive)
+                {
+                    // Add BarTable to the tick receiver
+                }
+                else
+                {
+                    // Remove BarTable from the tick receiver
+                }
+            }
+        }
+
+        private BarTableStatus m_Status = BarTableStatus.Ready;
 
         public BarTableStatus Status
         {
@@ -918,24 +921,21 @@ namespace Pacmio
             }
         }
 
-        private BarTableStatus m_Status = BarTableStatus.Ready;
+        public void Load() => Load(new Period(DateTime.MinValue, DateTime.MaxValue));
 
         public void Load(Period period)
         {
             if (Enabled)
                 lock (DataLockObject)
                 {
-                    ReadyForTickCalculation = false;
                     Status = BarTableStatus.Loading;
 
-
-                    ResetCalculationPointer();
                     SyncFile(period);
                     Sort();
                     Adjust(); // Forward Adjust
 
                     Status = BarTableStatus.LoadFinished;
-                    //Status = BarTableStatus.Ready;
+                    // lead it to calculation... here
                 }
         }
 
@@ -949,7 +949,7 @@ namespace Pacmio
 
                     Calculate(analyses);
 
-                    //Status = BarTableStatus.LoadFinished;
+                    Status = BarTableStatus.CalculateFinished;
                     Status = BarTableStatus.Ready;
                     // Send Signal
                 }
@@ -969,6 +969,7 @@ namespace Pacmio
                         SetCalculationPointer(LatestCalculatePointer - 2);
                         Calculate(BarAnalysisPointerList.Keys);
                         Status = BarTableStatus.TickingFinished;
+                        // lead it to calculation... here
                     }
 
                     Status = last_status;
@@ -980,6 +981,8 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
+                while (Status != BarTableStatus.Ready && Status != BarTableStatus.LoadFinished) ;
+
                 BarTableStatus last_status = Status;
                 Status = BarTableStatus.Maintaining;
                 //ResetCalculationPointer();
@@ -1009,7 +1012,6 @@ namespace Pacmio
             if (Enabled)
                 lock (DataLockObject)
                 {
-                    ReadyForTickCalculation = false;
                     Status = BarTableStatus.Downloading;
 
                     ResetCalculationPointer();
@@ -1111,6 +1113,10 @@ namespace Pacmio
                     Status = BarTableStatus.LoadFinished;
                 }
         }
+
+        #endregion Operations
+
+        #region Download
 
         private static bool Fetch_Daily(BarTable bt, Period period, CancellationTokenSource cts)
         {
@@ -1253,11 +1259,11 @@ namespace Pacmio
             return isModified;
         }
 
-        #endregion Operations
+        #endregion Download
 
         #region File Operation
 
-        public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
+        public DateTime EarliestTime => (Contract.MarketData is HistoricalData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
@@ -1292,12 +1298,12 @@ namespace Pacmio
                 return new BarTableFileData(this);
             }
         }
-
+        /*
         private void LoadFile(Period pd)
         {
             using BarTableFileData btd = BarTableFileData;
             LoadFile(btd, pd);
-        }
+        }*/
 
         private void LoadFile(BarTableFileData btd, Period pd)
         {
@@ -1352,78 +1358,6 @@ namespace Pacmio
             SaveFile(btd);
             LoadFile(btd, pd);
         }
-
-        /*
-
-        public string BarTableFileName => BarTableFileData.GetFileName((Contract.Info, BarFreq, Type));
-
-        private BarTableFileData BarTableFileData { get; set; }
-
-        /// <summary>
-        /// This function won't adjust bars
-        /// </summary>
-        /// <param name="load_period"></param>
-        private void TransferActualValuesFromFileDataToBars(Period load_period)
-        {
-            IsAcceptingTicks = load_period.IsCurrent;
-            ResetCalculationPointer();
-            Rows.Clear();
-            TimeToRows.Clear();
-
-            var bars = BarTableFileData.Bars.Where(n => load_period.Contains(n.Key)).OrderBy(n => n.Key);
-
-            foreach (var pb in bars)
-            {
-                Bar b = GetOrAdd(pb.Key);
-                b.Source = pb.Value.SRC;
-                b.Actual_Open = pb.Value.O;
-                b.Actual_High = pb.Value.H;
-                b.Actual_Low = pb.Value.L;
-                b.Actual_Close = pb.Value.C;
-                b.Actual_Volume = pb.Value.V;
-            }
-        }
-
-        private void TransferActualValuesFromBarsToFileData()
-        {
-            foreach (var b in Rows.Where(n => n.Source < DataSource.Tick))
-                if (!BarTableFileData.Bars.ContainsKey(b.Time) || b.Source < BarTableFileData.Bars[b.Time].SRC)
-                    BarTableFileData.Bars[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
-
-            if (BarTableFileData.EarliestTime < EarliestTime)
-                BarTableFileData.EarliestTime = EarliestTime;
-
-            if (BarTableFileData.LastUpdateTime < LastDownloadRequestTime)
-                BarTableFileData.LastUpdateTime = LastDownloadRequestTime;
-        }
-
-        private void LoadJsonFileToFileData()
-        {
-            if (BarTableFileData is null)
-            {
-                if (File.Exists(BarTableFileName))
-                {
-                    BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(BarTableFileName);
-
-                    if (btd == this)
-                        BarTableFileData = btd;
-                    else
-                        BarTableFileData = new BarTableFileData(this);
-                }
-                else
-                {
-                    BarTableFileData = new BarTableFileData(this);
-                }
-            }
-        }
-
-        private void SaveFileDataToJsonFile()
-        {
-            if (!(BarTableFileData is null) && BarTableFileData == this)
-                BarTableFileData.SerializeJsonFile(BarTableFileName);
-        }
-
-        */
 
         #endregion File Operation
 

@@ -22,7 +22,7 @@ namespace Pacmio
             BarFreq = freq;
             Type = type;
 
-            EarliestTime = c.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; // c.BarTableEarliestTime;
+            EarliestTime = c.MarketData is HistoricalData sd ? sd.BarTableEarliestTime : DateTime.MinValue; // c.BarTableEarliestTime;
             //DataSourceSegments = new MultiPeriod<DataSource>();
         }
 
@@ -32,7 +32,7 @@ namespace Pacmio
             BarFreq = bt.BarFreq;
             Type = bt.Type;
 
-            EarliestTime = bt.Contract.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
+            EarliestTime = bt.Contract.MarketData is HistoricalData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
             LastUpdateTime = bt.LastDownloadRequestTime;
             //DataSourceSegments = bt.DataSourceSegments;
         }
