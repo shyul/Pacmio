@@ -183,7 +183,7 @@ namespace TestClient
 
                 BarTable bt = ContractTest.ActiveContract.GetTableOld(BarFreq, BarType);//, pd);
                 bt.Reset(HistoricalPeriod, null, null);
-                BarChartTools.GetForm(bt, BarChartTools.SampleChartConfig());
+                BarChartSet.GetForm(bt, BarChartSet.SampleChartConfig());
                 Root.Form.Show();
             }
         }
@@ -193,9 +193,9 @@ namespace TestClient
 
         }
 
-        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartTools.ResetAllChartsPointer();
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartSet.ResetAllChartsPointer();
 
-        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => BarChartTools.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => BarChartSet.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
 
 
         #endregion Bar Chart

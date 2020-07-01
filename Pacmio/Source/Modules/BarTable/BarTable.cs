@@ -769,11 +769,11 @@ namespace Pacmio
 
                 if (peak_result > MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, BarChartTools.Upper_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, BarChartSet.Upper_TextTheme);
                 }
                 else if (peak_result < -MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, BarChartTools.Lower_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, BarChartSet.Lower_TextTheme);
                 }
 
                 b.TrendStrength = trend_1 = trend;
@@ -808,7 +808,7 @@ namespace Pacmio
 
         private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
 
-        public BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
+        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
             if (!BarAnalysisPointerList.ContainsKey(ba))
                 BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
@@ -889,8 +889,6 @@ namespace Pacmio
 
         public readonly List<IDataView> DataViews = new List<IDataView>();
 
-        public BarTableSet Portfolio { get; set; }
-
         #endregion BarChart / DataView
 
         #region Operations
@@ -931,23 +929,23 @@ namespace Pacmio
             set
             {
                 m_Status = value;
-                DataViews.ForEach(n => {
-                    /*
-                    switch (m_Status) 
-                    {
-                        case TableStatus.LoadFinished when Portfolio is Portfolio pf:
-                            if(pf.Settings.ContainsKey((Contract, BarFreq, Type))) 
-                            {
-                                Calculate(pf.Settings[(Contract, BarFreq, Type)].barAnalyses.List);
-                                //Status = TableStatus.CalculateFinished;
-                                m_Status = TableStatus.Ready;
-                            }
-                            break;
-                        default: break;
-                    }*/
 
-                    n.SetRefreshUI();
-                });
+                if (m_Status == TableStatus.CalculateFinished)
+                {
+                    lock (DataViews)
+                        DataViews.ForEach(n => { n.SetRefreshUI(); });
+                }
+                else if(m_Status == TableStatus.TickingFinished) 
+                {
+                    lock (DataViews)
+                        DataViews.ForEach(n => {
+                            if (n.StopPt == Count - 1)
+                            {
+                                n.StopPt++;
+                            }
+                            n.SetRefreshUI(); 
+                        });
+                }
             }
         }
 

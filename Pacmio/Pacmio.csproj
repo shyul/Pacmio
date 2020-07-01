@@ -194,7 +194,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IDeltaNeutral.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IOption.cs" />
     <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfo.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\BarChartTools.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\BarChartSet.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />

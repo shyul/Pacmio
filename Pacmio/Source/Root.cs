@@ -119,8 +119,8 @@ namespace Pacmio
             else
                 Settings = new PacSettings();
 
-            BarChartTools.UpperColor = Color.Green;
-            BarChartTools.LowerColor = Color.Red;
+            BarChartSet.UpperColor = Color.Green;
+            BarChartSet.LowerColor = Color.Red;
 
             // Build essential directories
             if (!Directory.Exists(ResourcePath)) Directory.CreateDirectory(ResourcePath);

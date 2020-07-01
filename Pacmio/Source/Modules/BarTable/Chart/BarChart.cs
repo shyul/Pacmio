@@ -54,8 +54,23 @@ namespace Pacmio
 
         protected override void Dispose(bool disposing)
         {
-            //Remove(true);
+            Close();
             GC.Collect();
+        }
+
+        public override void Close()
+        {
+            Console.WriteLine(TabName + ": The Tab is closing");
+            if (m_barTable is BarTable)
+            {
+                lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
+            }
+            UpdateUITask_Cts.Cancel();
+            HostContainer.Remove(this);
+
+            /*
+            Dispose();
+            while (Disposing) ;*/
         }
 
         public string Title { get => MainArea.PriceSeries.Legend.Label; set => MainArea.PriceSeries.Legend.Label = value; }
@@ -70,26 +85,16 @@ namespace Pacmio
 
         public void ConfigChart(BarTable bt, BarAnalysisSet bas)
         {
-            lock (GraphicsLockObject) 
+            ReadyToShow = false;
+            lock (GraphicsLockObject)
             {
-                ReadyToShow = false;
-
-                m_barTable = bt;
-                StopPt = m_barTable.LastIndex;
-                TabName = Name = m_barTable.Name;
-
-                RemoveAllChartSeries();
-                m_barAnalysisSet = bas;
-                foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
-                {
-                    ic.ConfigChart(this);
-                }
-                ReadyToShow = true;
+                BarTable = bt;
+                BarAnalysisSet = bas;
             }
             SetRefreshUI();
         }
 
-        public void CalculateOnly() 
+        public void CalculateOnly()
         {
             if (m_barTable is BarTable bt && m_barAnalysisSet is BarAnalysisSet bas)
             {
@@ -97,15 +102,18 @@ namespace Pacmio
                 SetRefreshUI();
             }
         }
-        
-        private void RemoveAllChartSeries() 
+
+        private void RemoveAllChartSeries()
         {
             // Remove all areas and series.
             List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
 
-        public IEnumerable<(IChartOverlay, BarAnalysisPointer)> IChartOverlays => m_barAnalysisSet.List.Where(n => n is IChartOverlay).Select(n => ((IChartOverlay)n, m_barTable.GetBarAnalysisPointer(n)));
+        public IEnumerable<IChartOverlay> ChartOverlays
+            => m_barAnalysisSet.List
+            .Where(n => n is IChartOverlay)
+            .Select(n => (IChartOverlay)n);
 
         public BarAnalysisSet BarAnalysisSet
         {
@@ -118,13 +126,13 @@ namespace Pacmio
                     ReadyToShow = false;
                     RemoveAllChartSeries();
                     m_barAnalysisSet = value;
-                    foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder)) 
+                    foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
                     {
                         ic.ConfigChart(this);
                     }
                     ReadyToShow = true;
                 }
-                SetRefreshUI();
+                //SetRefreshUI();
             }
         }
 
@@ -139,12 +147,29 @@ namespace Pacmio
                 lock (GraphicsLockObject)
                 {
                     ReadyToShow = false;
+
+                    if (m_barTable is BarTable)
+                    {
+                        lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
+                    }
+
                     m_barTable = value;
-                    StopPt = m_barTable.LastIndex;
-                    TabName = Name = m_barTable.Name;
+
+                    if (m_barTable is BarTable)
+                    {
+                        lock (m_barTable.DataViews) m_barTable.DataViews.CheckAdd(this);
+
+                        StopPt = m_barTable.LastIndex;
+                        TabName = Name = m_barTable.Name;
+                    }
+                    else
+                    {
+                        StopPt = 0;
+                        TabName = "No BarTable";
+                    }
                     ReadyToShow = true;
                 }
-                SetRefreshUI();
+                //SetRefreshUI();
             }
         }
 
@@ -153,6 +178,34 @@ namespace Pacmio
         public override ITable Table => m_barTable;
 
         public override int DataCount => m_barTable.Count;
+
+        public void RefreshChartToEnd()
+        {
+            if(m_barTable is BarTable bt) 
+            {
+                StopPt = bt.LastIndex;
+                SetRefreshUI();
+            }
+            else
+            {
+                StopPt = 0;
+            }
+        }
+
+        public void RefreshChartNextTick()
+        {
+            //   if (n.StopPt == Count - 1)  n.StopPt++;
+            if (m_barTable is BarTable bt && StopPt > bt.LastIndex - 3)
+            {
+                StopPt = bt.LastIndex;
+                SetRefreshUI();
+            }
+            else
+            {
+                StopPt = 0;
+            }
+        }
+
 
         public override string this[int i]
         {
@@ -211,6 +264,7 @@ namespace Pacmio
             ResumeLayout(true);
             if (ReadyToShow && m_barTable is BarTable bt)
             {
+                // TODO: Change the view enable method here.
                 SignalArea.Visible = BarTable.CurrentTradeSetting is TradeRule; // BarTable.HasSignalAnalysis;
                 PositionArea.Visible = BarTable.CurrentTradeSetting is ITradeSetting; //BarTable.HasSignalAnalysis;
 
@@ -427,7 +481,7 @@ namespace Pacmio
                         }
                     }
             }
-            else 
+            else
             {
                 Title = "No Data";
             }
@@ -436,7 +490,7 @@ namespace Pacmio
 
         protected override void OnPaint(PaintEventArgs pe)
         {
-            Graphics g = pe.Graphics; 
+            Graphics g = pe.Graphics;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
             if (DataCount < 1)
@@ -476,10 +530,9 @@ namespace Pacmio
                             }
                         }
 
-                        var overlayList = IChartOverlays.ToArray();
-                        foreach (var (ic, bap) in overlayList)
+                        foreach (var ic in ChartOverlays)
                         {
-                            ic.Draw(g, this, bap);
+                            ic.Draw(g, this, m_barTable);
                         }
                     }
             }

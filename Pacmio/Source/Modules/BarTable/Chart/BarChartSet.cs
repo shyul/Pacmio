@@ -21,11 +21,21 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public static class BarChartTools
+    public class BarChartSet
     {
         private static PacmioForm Form => Root.Form;
 
-        //public static List<BarChart> List { get; } = new List<BarChart>();
+        public readonly List<BarChart> List = new List<BarChart>();
+
+
+        public void RemoveChart(BarChart bc) 
+        {
+            List.CheckRemove(bc);
+            bc.Close();
+        }
+
+
+
 
         public static Dictionary<BarTable, IEnumerable<IDataView>> Table = new Dictionary<BarTable, IEnumerable<IDataView>>();
 
@@ -43,43 +53,7 @@ namespace Pacmio
             }
         }
 
-        /*
-        public void SuspendCharts()
-        {
-            Children.Where(c => c is ChartWidget).Select(n => (ChartWidget)n).ToList().ForEach(n =>
-            {
-                n.ReadyToShow = false;
-            });
-        }
 
-        public void RefreshChartToEnd()
-        {
-            // Update All Charts
-            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
-            {
-                n.StopPt = LastIndex;
-                n.ReadyToShow = true;
-
-                n.SetRefreshUI();
-            });
-        }
-
-        public void RefreshChartNextTick()
-        {
-            // Update All Charts
-            Children.Where(c => c is IDataView).Select(n => (IDataView)n).ToList().ForEach(n =>
-            {
-                n.ReadyToShow = true;
-
-                if (n.StopPt == Count - 1)
-                {
-                    n.StopPt++;
-                }
-
-                n.SetRefreshUI();
-            });
-        }
-        */
 
 
         public static BarChart GetForm(BarTable bt, IEnumerable<BarAnalysis> bas)
