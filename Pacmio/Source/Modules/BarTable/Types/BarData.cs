@@ -36,7 +36,7 @@ namespace Pacmio
         public double Volume { get; private set; }
         public bool IsAdjusted { get; private set; }
 
-        public override bool Equals(object obj) => (obj is BarData bd) ? this == bd : false;
+        public override bool Equals(object obj) => obj is BarData bd && this == bd;
 
         public override int GetHashCode() => Source.GetHashCode() ^ Span.GetHashCode() ^ Time.GetHashCode();
         public static bool operator ==(BarData left, BarData right) => left.GetHashCode() == right.GetHashCode();

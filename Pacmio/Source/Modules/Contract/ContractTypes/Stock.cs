@@ -147,22 +147,6 @@ namespace Pacmio
 
         #endregion Market Depth
 
-        #region Historical Bar
-
-        [IgnoreDataMember]
-        public BarTable DailyBarTable => GetTable(BarFreq.Daily, BarType.Trades);
-
-        public BarTable GetTable(BarFreq barFreq, BarType type)
-        {
-            if (m_StockData is null) LoadMarketData();
-            if (m_StockData.BarTables.ContainsKey((barFreq, type))) m_StockData.BarTables.TryAdd((barFreq, type), new BarTable(this, barFreq, type));
-            BarTable bt = m_StockData.BarTables[(barFreq, type)];
-            Console.WriteLine("TableList Get Table: " + bt.Name);
-            return bt;
-        }
-
-        #endregion Historical Bar
-
         #region Equality
 
         public bool Equals(BusinessInfo other) => ISIN == other.ISIN;

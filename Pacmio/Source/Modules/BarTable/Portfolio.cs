@@ -27,72 +27,92 @@ namespace Pacmio
 {
     public class Portfolio : IDisposable
     {
-        public readonly ConcurrentDictionary<(Contract c, BarFreq barFreq, BarType barType), (Period period, BarAnalysisList barAnalyses)> Settings = new ConcurrentDictionary<(Contract c, BarFreq barFreq, BarType barType), (Period period, BarAnalysisList barAnalyses)>();
+        public readonly Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
 
-        public readonly ConcurrentDictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable> BarTables = new ConcurrentDictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable>();
+        public readonly Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisList> AnalysisSettings = new Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisList>();
+
+        public readonly Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable> BarTables = new Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable>();
+
+        private object DataLockObject { get; } = new object();
 
         public void SaveBarTables() => BarTables.Values.AsParallel().ForAll(n => { n.Save(); n.Dispose(); });
 
-        public void Fetch(CancellationTokenSource cts, IProgress<float> progress)
+        public void AddBarTable(BarTable bt, CancellationTokenSource cts)
         {
-            Task.Run(() => {
-                lock (Settings)
-                {
-                    SaveBarTables();
-                    BarTables.Clear();
+            lock (DataLockObject)
+            {
+                if (!PeriodSettings.ContainsKey((bt.BarFreq, bt.Type)))
+                    PeriodSettings[(bt.BarFreq, bt.Type)] = bt.Period;
+                else if (bt.Period != PeriodSettings[(bt.BarFreq, bt.Type)])
+                    bt.Fetch(PeriodSettings[(bt.BarFreq, bt.Type)], cts);
 
-                    int i = 0, count = Settings.Count;
-                    Parallel.ForEach(Settings.Keys, n => {
-                        var (c, barFreq, barType) = n;
-                        BarTable bt = new BarTable(c, barFreq, barType) { Portfolio = this };
-                        BarTables.TryAdd((c, barFreq, barType), bt);
-
-                        BarTables[(c, barFreq, barType)].Fetch(Settings[(c, barFreq, barType)].period, cts);
-
-                        progress?.Report(100.0f * i / count);
-                        i++;
-                    });
-                    /*
-                    foreach (var (c, barFreq, barType) in Settings.Keys)
-                    {
-                        BarTable bt = new BarTable(c, barFreq, barType) { Portfolio = this };
-                        BarTables.TryAdd((c, barFreq, barType), bt);
-
-                        BarTables[(c, barFreq, barType)].Fetch(Settings[(c, barFreq, barType)].period, cts);
-
-                        progress?.Report(100.0f * i / count);
-                        i++;
-                    }*/
-                }
-            }, cts.Token);
+                BarTables.Add(bt.Info, bt);
+            }
         }
 
-        public void Calculate(CancellationTokenSource cts, IProgress<float> progress)
+        public void AddBarTable(BarTable bt, BarAnalysisList bas, CancellationTokenSource cts)
         {
-            Task.Run(() => {
-                lock (Settings)
-                {
-                    int i = 0, count = Settings.Count;
-                    Parallel.ForEach(Settings.Keys, n => {
-                        var (c, barFreq, barType) = n;
-                        if (BarTables.ContainsKey((c, barFreq, barType)))
-                        {
-                            BarTables[(c, barFreq, barType)].CalculateOnly(Settings[(c, barFreq, barType)].barAnalyses.List);
-                        }
-                        progress?.Report(100.0f * i / count);
-                        i++;
-                    });
-                }
-            }, cts.Token);
+            lock (DataLockObject)
+            {
+                AddBarTable(bt, cts);
+                AnalysisSettings[bt.Info] = bas;
+                bt.CalculateOnly(bas);
+            }
         }
 
+        public void UpdateContract(BarFreq barFreq, BarType barType, IEnumerable<(Contract, BarAnalysisList)> contracts)
+        {
+            lock (DataLockObject)
+            {
+                var to_delete_analyses = AnalysisSettings.Where(n => n.Key.barFreq == barFreq && n.Key.barType == barType && !contracts.Select(n => n.Item1).Contains(n.Key.c)).ToList();
+                to_delete_analyses.ForEach(n => AnalysisSettings.Remove(n.Key));
+
+                var to_delete_tables = BarTables.Where(n => n.Key.barFreq == barFreq && n.Key.barType == barType && !contracts.Select(n => n.Item1).Contains(n.Key.c)).ToList();
+
+                to_delete_tables.ForEach(n => {
+                    BarTable bt = BarTables[n.Key];
+                    BarTables.Remove(n.Key);
+                    bt.Save();
+                    bt.Dispose();
+                });
+
+                foreach (var (c, bas) in contracts)
+                {
+                    var key = (c, barFreq, barType);
+                    AnalysisSettings[key] = bas;
+                    if (!BarTables.ContainsKey(key))
+                        BarTables[key] = new BarTable(c, barFreq, barType);
+                }
+            }
+        }
+
+        public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            lock (DataLockObject)
+            {
+                PeriodSettings[(barFreq, barType)] = period;
+                var tables = BarTables.Where(n => n.Key.barFreq == barFreq && n.Key.barType == barType).Select(n => n.Value);
+
+                ParallelOptions po = new ParallelOptions()
+                {
+                    CancellationToken = cts.Token,
+                    MaxDegreeOfParallelism = 8
+                };
+
+                int i = 0, count = tables.Count();
+                Parallel.ForEach(tables, po, n =>
+                {
+                    n.Fetch(period, cts);
+                    if (AnalysisSettings.ContainsKey((n.Contract, barFreq, barType)))
+                        n.CalculateOnly(AnalysisSettings[(n.Contract, barFreq, barType)]);
+
+                    progress?.Report(100.0f * i / count);
+                    i++;
+                });
+            }
+        }
 
         #region Charts
-
-
-
-
-        private static PacmioForm Form => Root.Form;
 
         public void GetChart()
         {

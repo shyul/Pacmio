@@ -932,6 +932,7 @@ namespace Pacmio
             {
                 m_Status = value;
                 DataViews.ForEach(n => {
+                    /*
                     switch (m_Status) 
                     {
                         case TableStatus.LoadFinished when Portfolio is Portfolio pf:
@@ -943,7 +944,7 @@ namespace Pacmio
                             }
                             break;
                         default: break;
-                    }
+                    }*/
 
                     n.SetRefreshUI();
                 });
@@ -970,7 +971,7 @@ namespace Pacmio
                 }
         }
 
-        public void CalculateOnly(IEnumerable<BarAnalysis> analyses)
+        public void CalculateOnly(BarAnalysisList bas)
         {
             if (Enabled)
                 lock (DataLockObject)
@@ -978,7 +979,7 @@ namespace Pacmio
                     Status = TableStatus.Calculating;
                     // Send Signal
 
-                    Calculate(analyses);
+                    Calculate(bas.List);
 
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
