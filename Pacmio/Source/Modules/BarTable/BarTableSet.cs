@@ -25,11 +25,11 @@ using System.Windows.Forms;
 
 namespace Pacmio
 {
-    public class Portfolio : IDisposable
+    public class BarTableSet : IDisposable
     {
         public readonly Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
 
-        public readonly Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisList> AnalysisSettings = new Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisList>();
+        public readonly Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisSet> AnalysisSettings = new Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarAnalysisSet>();
 
         public readonly Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable> BarTables = new Dictionary<(Contract c, BarFreq barFreq, BarType barType), BarTable>();
 
@@ -50,7 +50,7 @@ namespace Pacmio
             }
         }
 
-        public void AddBarTable(BarTable bt, BarAnalysisList bas, CancellationTokenSource cts)
+        public void AddBarTable(BarTable bt, BarAnalysisSet bas, CancellationTokenSource cts)
         {
             lock (DataLockObject)
             {
@@ -60,7 +60,7 @@ namespace Pacmio
             }
         }
 
-        public void UpdateContract(BarFreq barFreq, BarType barType, IEnumerable<(Contract, BarAnalysisList)> contracts)
+        public void UpdateContract(BarFreq barFreq, BarType barType, IEnumerable<(Contract, BarAnalysisSet)> contracts)
         {
             lock (DataLockObject)
             {

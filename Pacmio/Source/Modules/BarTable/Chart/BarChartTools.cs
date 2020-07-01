@@ -21,7 +21,7 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public static class ChartList
+    public static class BarChartTools
     {
         private static PacmioForm Form => Root.Form;
 

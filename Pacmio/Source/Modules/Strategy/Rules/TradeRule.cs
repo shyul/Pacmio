@@ -21,44 +21,28 @@ namespace Pacmio
     {
         public TradeRule(string name)
         {
-
-            //Column_PnL = new NumericColumn(Name + "_PnL", "PnL");
+            Name = name;
         }
 
-        public string Name => Indicator.Name;
+        public string Name { get; set; } = "Default TradeRule";
 
-        public BarFreq BarFreq { get; private set; }
+        public int Order { get; set; } = 0;
 
+        public Dictionary<BarFreq, BarAnalysisSet> TimeFrameList { get; set; } = new Dictionary<BarFreq, BarAnalysisSet>();
 
+        #region Trading Timing
 
         public int TrainingDays { get; set; } = 2;
 
         public int TradingDays { get; set; } = 1;
 
+        /// <summary>
+        /// Use MultiTime here.
+        /// </summary>
+        public Range<Time> TradingTimeRange { get; set; } = new Range<Time>(new Time(9, 30), new Time(16, 0));
 
-        //public NumericColumn Column_PnL { get; }
-
-        public Range<Time> TimeRange { get; set; } = new Range<Time>(new Time(9, 30), new Time(16, 0));
-
-        // Time Period
-
-        public Indicator Indicator { get; set; } = new Indicator();
-
-
-        public IndicatorParameter Parameter { get; } = new IndicatorParameter();
-
-
-
-
-        public int Order { get => IsManuallyAdded ? m_order : int.MinValue; set => m_order = IsManuallyAdded ? value : int.MinValue; }
-        private int m_order = int.MinValue;
-
-        public bool IsManuallyAdded { get; set; } = false;
+        #endregion Trading Timing
 
         public bool Equals(TradeRule other) => Name == other.Name;
-
-
-
-        //public SimulationResult SimulationResult 
     }
 }

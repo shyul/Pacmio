@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace Pacmio
 {
-    public class SimulationSet
+    public class SimulationSet : IEquatable<SimulationSet>
     {
         public SimulationSet(Contract c, TradeRule tr)
         {
@@ -34,14 +34,7 @@ namespace Pacmio
 
         public readonly SimulationResult Result = new SimulationResult();
 
-        #region Simulation Settings
-
-        public double SlippageRatio { get; set; } = 0.0001;
-
-
-        #endregion Simulation Settings
-
-
+        #region Simulation Actions
 
         public void AddLiquidity(DateTime time, double quantity)
         {
@@ -54,6 +47,8 @@ namespace Pacmio
 
 
         }
+
+        public double SlippageRatio { get; set; } = 0.0001;
 
         /// <summary>
         /// Commission Calculator based on IB Tiered Fee Structure.
@@ -77,5 +72,9 @@ namespace Pacmio
 
             return comms + exchange_fee + transaction_fee + finra_fee + nyse_pass_fee;
         }
+
+        #endregion Simulation Actions
+
+        public bool Equals(SimulationSet other) => Contract == other.Contract && TradeRule == other.TradeRule;
     }
 }

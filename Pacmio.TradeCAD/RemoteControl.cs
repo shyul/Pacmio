@@ -38,7 +38,7 @@ namespace Pacmio.TradeCAD
             Thread.Sleep(1000);
 
             //BarChartManager.GetForm(bt, BarChartManager.SampleChartConfig());
-            ChartList.GetForm(bt_high, ChartList.SampleChartConfig());
+            BarChartTools.GetForm(bt_high, BarChartTools.SampleChartConfig());
         }
 
         private void BtnTestData_Click(object sender, EventArgs e)

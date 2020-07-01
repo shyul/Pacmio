@@ -32,16 +32,17 @@ namespace Pacmio
 
         public static void GetWatchList(IEnumerable<Stock> list, CancellationTokenSource cts, IProgress<float> progress) // Get it from the Market Scanner
         {
+            /*
             int count = list.Count();
             int i = 0;
             foreach (Stock stk in list)
             {
                 if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                BarTable bt = stk.GetTableOld(BarFreq.Daily, BarType.Trades);//, pd);
+                BarTable bt = stk.GetTableOld(BarFreq.Daily, BarType.Trades);
                 bt.LoadOnly(new Period(new DateTime(1900, 1, 1), DateTime.Now));
                 i++;
                 progress?.Report(i * 100.0f / count);
-            }
+            }*/
         }
         
         public static void GetWatchList(List<Contract> list) 

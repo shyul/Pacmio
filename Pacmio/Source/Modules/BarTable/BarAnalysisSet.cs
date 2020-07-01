@@ -23,12 +23,11 @@ using System.Windows.Forms;
 
 namespace Pacmio
 {
-    public class BarAnalysisList
+    public class BarAnalysisSet
     {
-
-        //public IEnumerable<(IChartOverlay, BarAnalysisPointer)> IChartOverlays => BarAnalysisPointerList.Keys.Where(n => n is IChartOverlay).Select(n => ((IChartOverlay)n, BarAnalysisPointerList[n]));
-
         public string Name { get; set; } = "Default BarAnalysisGroup";
+
+        public int Order { get; set; } = 0;
 
         public IEnumerable<BarAnalysis> List
         {
@@ -50,6 +49,7 @@ namespace Pacmio
                 }
             }
         }
+
 
         private readonly List<BarAnalysis> m_List = new List<BarAnalysis>();
 

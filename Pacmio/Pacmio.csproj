@@ -120,7 +120,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
-    <Compile Include="Source\Modules\BarTable\BarAnalysisList.cs" />
+    <Compile Include="Source\Modules\BarTable\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
@@ -145,7 +145,7 @@
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataTable.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataManager.cs" />
-    <Compile Include="Source\Modules\BarTable\Portfolio.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\Types\SimulationResult.cs" />
@@ -194,7 +194,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IDeltaNeutral.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IOption.cs" />
     <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfo.cs" />
-    <Compile Include="Source\Modules\BarTable\ChartList.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\BarChartTools.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />

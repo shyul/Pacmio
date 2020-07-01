@@ -769,11 +769,11 @@ namespace Pacmio
 
                 if (peak_result > MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, ChartList.Upper_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, BarChartTools.Upper_TextTheme);
                 }
                 else if (peak_result < -MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, ChartList.Lower_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, BarChartTools.Lower_TextTheme);
                 }
 
                 b.TrendStrength = trend_1 = trend;
@@ -808,7 +808,7 @@ namespace Pacmio
 
         private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
 
-        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
+        public BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
             if (!BarAnalysisPointerList.ContainsKey(ba))
                 BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
@@ -889,7 +889,7 @@ namespace Pacmio
 
         public readonly List<IDataView> DataViews = new List<IDataView>();
 
-        public Portfolio Portfolio { get; set; }
+        public BarTableSet Portfolio { get; set; }
 
         #endregion BarChart / DataView
 
@@ -971,7 +971,7 @@ namespace Pacmio
                 }
         }
 
-        public void CalculateOnly(BarAnalysisList bas)
+        public void CalculateOnly(BarAnalysisSet bas)
         {
             if (Enabled)
                 lock (DataLockObject)

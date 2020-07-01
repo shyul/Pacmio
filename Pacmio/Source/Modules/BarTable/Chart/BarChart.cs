@@ -23,7 +23,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class BarChart : ChartWidget//, IDependable
+    public sealed class BarChart : ChartWidget
     {
         public BarChart(string name, OhlcType type) : base(name)
         {
@@ -58,33 +58,6 @@ namespace Pacmio
             GC.Collect();
         }
 
-        //public ICollection<IDependable> Children { get; } = new HashSet<IDependable>();
-
-        //public ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
-        /*
-        public void Remove(bool recursive)
-        {
-            if (recursive || Children.Count == 0)
-            {
-                foreach (IDependable child in Children)
-                    child.Remove(true);
-
-                foreach (IDependable parent in Parents)
-                    parent.CheckRemove(this);
-
-                if (Children.Count > 0) throw new Exception("Still have children in this BarChart");
-            }
-            else
-            {
-                if (Children.Count > 0)
-                {
-                    foreach (var child in Children)
-                        child.Enabled = false;
-                }
-                Enabled = false;
-            }
-        }*/
-
         public string Title { get => MainArea.PriceSeries.Legend.Label; set => MainArea.PriceSeries.Legend.Label = value; }
 
         public override string Label { get => MainArea.PriceSeries.Label; set => MainArea.PriceSeries.Label = value; }
@@ -95,31 +68,67 @@ namespace Pacmio
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 
-        public IEnumerable<BarAnalysis>  ChartOverlay { get; private set; } 
-
-        public void ConfigChartSeries(IEnumerable<BarAnalysis> bas)
+        public void ConfigChart(BarTable bt, BarAnalysisSet bas)
         {
-            IEnumerable<IChartSeries> ics = bas.Where(n => n is IChartSeries ic && ic.ChartEnabled).Select(n => (IChartSeries)n);
+            lock (GraphicsLockObject) 
+            {
+                ReadyToShow = false;
 
-            // ChartOverlay = bas.Where(n => n is IChartOverlay);
+                m_barTable = bt;
+                StopPt = m_barTable.LastIndex;
+                TabName = Name = m_barTable.Name;
 
-
-            ConfigChartSeries(ics);
+                RemoveAllChartSeries();
+                m_barAnalysisSet = bas;
+                foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                {
+                    ic.ConfigChart(this);
+                }
+                ReadyToShow = true;
+            }
+            SetRefreshUI();
         }
 
-        public void ConfigChartSeries(IEnumerable<IChartSeries> ics)
+        public void CalculateOnly() 
         {
-            RemoveAllChartSeries();
-            foreach (var ic in ics.OrderBy(n => n.SeriesOrder))
-                ic.ConfigChart(this);
+            if (m_barTable is BarTable bt && m_barAnalysisSet is BarAnalysisSet bas)
+            {
+                bt.CalculateOnly(bas);
+                SetRefreshUI();
+            }
         }
-
-        public void RemoveAllChartSeries() 
+        
+        private void RemoveAllChartSeries() 
         {
             // Remove all areas and series.
             List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
+
+        public IEnumerable<(IChartOverlay, BarAnalysisPointer)> IChartOverlays => m_barAnalysisSet.List.Where(n => n is IChartOverlay).Select(n => ((IChartOverlay)n, m_barTable.GetBarAnalysisPointer(n)));
+
+        public BarAnalysisSet BarAnalysisSet
+        {
+            get => m_barAnalysisSet;
+
+            set
+            {
+                lock (GraphicsLockObject)
+                {
+                    ReadyToShow = false;
+                    RemoveAllChartSeries();
+                    m_barAnalysisSet = value;
+                    foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder)) 
+                    {
+                        ic.ConfigChart(this);
+                    }
+                    ReadyToShow = true;
+                }
+                SetRefreshUI();
+            }
+        }
+
+        private BarAnalysisSet m_barAnalysisSet = null;
 
         public BarTable BarTable
         {
@@ -127,16 +136,15 @@ namespace Pacmio
 
             set
             {
-                /*
-                if (m_barTable is BarTable bt)
+                lock (GraphicsLockObject)
                 {
-                    bt.RemoveChild(this);
-                }*/
-
-                m_barTable = value;
-                // m_barTable.AddChild(this);
-                StopPt = m_barTable.LastIndex;
-                TabName = Name = m_barTable.Name;
+                    ReadyToShow = false;
+                    m_barTable = value;
+                    StopPt = m_barTable.LastIndex;
+                    TabName = Name = m_barTable.Name;
+                    ReadyToShow = true;
+                }
+                SetRefreshUI();
             }
         }
 
@@ -201,7 +209,7 @@ namespace Pacmio
         protected override void CoordinateLayout()
         {
             ResumeLayout(true);
-            if (IsActive && ReadyToShow && m_barTable is BarTable bt)
+            if (ReadyToShow && m_barTable is BarTable bt)
             {
                 SignalArea.Visible = BarTable.CurrentTradeSetting is TradeRule; // BarTable.HasSignalAnalysis;
                 PositionArea.Visible = BarTable.CurrentTradeSetting is ITradeSetting; //BarTable.HasSignalAnalysis;
@@ -435,11 +443,11 @@ namespace Pacmio
             {
                 g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
             }
-            else if (IsActive && !ReadyToShow)
+            else if (!ReadyToShow)
             {
                 g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
             }
-            else if (IsActive && ReadyToShow && ChartBounds.Width > 0 && m_barTable is BarTable bt)
+            else if (ReadyToShow && ChartBounds.Width > 0 && m_barTable is BarTable bt)
             {
                 lock (bt.DataLockObject)
                     lock (GraphicsLockObject)
@@ -468,7 +476,7 @@ namespace Pacmio
                             }
                         }
 
-                        var overlayList = BarTable.IChartOverlays;
+                        var overlayList = IChartOverlays.ToArray();
                         foreach (var (ic, bap) in overlayList)
                         {
                             ic.Draw(g, this, bap);
