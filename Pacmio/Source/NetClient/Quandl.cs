@@ -39,6 +39,7 @@ namespace Pacmio
 
         public static bool Download(BarTable bt, Period period, bool GetAll = false)
         {
+
             bool success = false;
 
             if (bt.LastTimeBy(DataSource.Quandl) >= Frequency.Daily.Align(period.Stop)) return true;
@@ -64,57 +65,58 @@ namespace Pacmio
           
                 try
                 {
-                    using (MemoryStream stream = new MemoryStream(Client.DownloadData(url)))
-                    using (StreamReader sr = new StreamReader(stream))
-                    {
-                        string[] headers = sr.CsvReadFields();
-                        if (headers.Length == 13)
-                            while (!sr.EndOfStream)
-                            {
-                                string[] fields = sr.CsvReadFields();
-                                if (fields.Length == 13)
+                    lock (Client)
+                        using (MemoryStream stream = new MemoryStream(Client.DownloadData(url)))
+                        using (StreamReader sr = new StreamReader(stream))
+                        {
+                            string[] headers = sr.CsvReadFields();
+                            if (headers.Length == 13)
+                                while (!sr.EndOfStream)
                                 {
-                                    double close = fields[4].ToDouble(0);
-                                    if (close > 0)
+                                    string[] fields = sr.CsvReadFields();
+                                    if (fields.Length == 13)
                                     {
-                                        DateTime time = DateTime.Parse(fields[0]);
-                                        period.Insert(time);
-
-                                        double open = fields[1].ToDouble(0);
-                                        double high = fields[2].ToDouble(0);
-                                        double low = fields[3].ToDouble(0);
-                                        double volume = fields[5].ToDouble(0);
-
-                                        //double dividend_percent = fields[6].ToDouble(0) / close;
-                                        //double split = fields[7].ToDouble(1);
-
-                                        bt.Add(new BarData(DataSource.Quandl, time, ts,
-                                             open, high, low, close, volume, false));
-
-
-                                        //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                        if (c.MarketData is HistoricalData sd)
+                                        double close = fields[4].ToDouble(0);
+                                        if (close > 0)
                                         {
-                                            double dividend = fields[6].ToDouble(0);
-                                            if (dividend != 0)
-                                            {
-                                                //Console.WriteLine("Add Dividend: " + dividend);
-                                                sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
-                                            }
+                                            DateTime time = DateTime.Parse(fields[0]);
+                                            period.Insert(time);
 
-                                            double split = fields[7].ToDouble(1);
-                                            if (split != 1)
+                                            double open = fields[1].ToDouble(0);
+                                            double high = fields[2].ToDouble(0);
+                                            double low = fields[3].ToDouble(0);
+                                            double volume = fields[5].ToDouble(0);
+
+                                            //double dividend_percent = fields[6].ToDouble(0) / close;
+                                            //double split = fields[7].ToDouble(1);
+
+                                            bt.Add(new BarData(DataSource.Quandl, time, ts,
+                                                 open, high, low, close, volume, false));
+
+
+                                            //// Add Split and dividend to FundamentalData Table in BusinessInfo
+                                            if (c.MarketData is HistoricalData sd)
                                             {
-                                                //Console.WriteLine("Add Split: " + split);
-                                                sd.SplitTable[time] = (DataSource.Quandl, split);
+                                                double dividend = fields[6].ToDouble(0);
+                                                if (dividend != 0)
+                                                {
+                                                    //Console.WriteLine("Add Dividend: " + dividend);
+                                                    sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
+                                                }
+
+                                                double split = fields[7].ToDouble(1);
+                                                if (split != 1)
+                                                {
+                                                    //Console.WriteLine("Add Split: " + split);
+                                                    sd.SplitTable[time] = (DataSource.Quandl, split);
+                                                }
                                             }
                                         }
                                     }
+                                    else
+                                        Console.WriteLine(fields);
                                 }
-                                else
-                                    Console.WriteLine(fields);
-                            }
-                    }
+                        }
 
                     bt.LastDownloadRequestTime = DateTime.Now;
                     bt.AddDataSourceSegment(period, DataSource.Quandl);

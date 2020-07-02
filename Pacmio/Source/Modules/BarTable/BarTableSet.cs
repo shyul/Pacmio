@@ -91,14 +91,16 @@ namespace Pacmio
             }
         }
 
-        public BarChart AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts)
+        public void AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts)
         {
             BarTable bt = AddContract(c, bas, barFreq, barType, period, cts);
             BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
             bc.ConfigChart(bt, bas);
-            Root.Form.AddForm(DockStyle.Fill, 0, bc);
-            return bc;
+
+            AddForm(0, bc);
         }
+
+
 
         private List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType)
         {
@@ -129,18 +131,17 @@ namespace Pacmio
             return add_tables;
         }
 
-        public List<BarChart> AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             List<BarTable> barTables = AddContract(contracts, barFreq, barType, period, cts, progress);
-            List<BarChart> barCharts = new List<BarChart>();
+            int pt = 0;
             foreach (BarTable bt in barTables) 
             {
                 BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
                 bc.ConfigChart(bt, BarTables[bt]);
-                Root.Form.AddForm(DockStyle.Fill, 0, bc);
-                barCharts.Add(bc);
+                AddForm(0, bc);
+                pt++;
             }
-            return barCharts;
         }
 
         public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
@@ -158,7 +159,7 @@ namespace Pacmio
 
                 int i = 0, count = tables.Count();
                 Parallel.ForEach(tables, po, n => {
-                    if (!cts.IsCancellationRequested)
+                    if (cts is CancellationTokenSource cs && !cts.IsCancellationRequested)
                     {
                         n.Key.Fetch(period, cts);
                         n.Key.CalculateOnly(n.Value);
@@ -166,6 +167,21 @@ namespace Pacmio
                         i++;
                     }
                 });
+            }
+        }
+
+        private static void AddForm(int index, BarChart bc)
+        {
+            if (Root.Form.InvokeRequired)
+            {
+                Root.Form.Invoke((MethodInvoker)delegate
+                {
+                    Root.Form.AddForm(DockStyle.Fill, index, bc);
+                });
+            }
+            else
+            {
+                Root.Form.AddForm(DockStyle.Fill, index, bc);
             }
         }
     }

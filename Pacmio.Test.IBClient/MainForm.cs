@@ -177,19 +177,45 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
+                BarFreq freq = BarFreq;
+                BarType type = BarType;
                 Cts = new CancellationTokenSource();
-                BarChart bc = BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, BarFreq, BarType, HistoricalPeriod, Cts);
+                Task.Run(() =>
+                {
+                    BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, HistoricalPeriod, Cts);
+                }, Cts.Token);
+                Root.Form.Show();
             }
         }
 
         private void BtnLoadMultiHistoricalChart_Click(object sender, EventArgs e)
         {
+            string symbolText = TextBoxMultiContracts.Text;
+            var symbols = ContractList.GetSymbolList(ref symbolText);
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
+            BarFreq freq = BarFreq;
+            BarType type = BarType;
+            Cts = new CancellationTokenSource();
 
+            Task.Run(() =>
+            {
+                BarTableTest.BarTableSet.AddChart(cList, freq, type, HistoricalPeriod, Cts, Progress);
+            }, Cts.Token);
+            Root.Form.Show();
         }
 
-        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartList.ResetAllChartsPointer();
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChart.PointerToEndAll();
 
-        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => BarChartList.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
+        {
+            BarFreq freq = BarFreq;
+            BarType type = BarType;
+            Cts = new CancellationTokenSource();
+            Task.Run(() =>
+            {
+                BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
+            }, Cts.Token);
+        }
 
 
         #endregion Bar Chart

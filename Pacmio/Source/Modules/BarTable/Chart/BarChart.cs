@@ -29,39 +29,15 @@ namespace Pacmio
 
         public static readonly List<BarChart> List = new List<BarChart>();
 
-        /*
-
-
-        public void RemoveChart(BarChart bc) 
+        public static void RemoveAll() 
         {
-            List.CheckRemove(bc);
-            bc.Close();
+            lock (List) List.ForEach(n => n.Close());
         }
 
-        public void UpdateAllCharts(Period pd, CancellationTokenSource cts, IProgress<float> progress)
+        public static void PointerToEndAll()
         {
-            List.ForEach(n => {
-                if (!cts.IsCancellationRequested)
-                {
-                    BarTable bt = n.BarTable;
-                    bt.Fetch(pd, cts);
-                }
-            });
+            lock (List) List.ForEach(bc => { bc.PointerToEnd(); });
         }
-
-        public void ResetAllChartsPointer()
-        {
-            List.ForEach(bc => {
-                bc.StopPt = bc.BarTable.LastIndex;
-
-                if (bc.IsActive)
-                {
-                    bc.UpdateUI();
-                }
-            });
-        }
-        */
-
 
         public BarChart(string name, OhlcType type) : base(name)
         {
@@ -85,7 +61,7 @@ namespace Pacmio
             AddArea(MainArea = new MainArea(this, MainArea.DefaultName, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
-
+            lock (List) List.CheckAdd(this);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -100,7 +76,7 @@ namespace Pacmio
         {
             Console.WriteLine(TabName + ": The BarChart is closing");
 
-
+            lock(List) List.CheckRemove(this);
             if (m_barTable is BarTable)
             {
                 lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
@@ -130,6 +106,7 @@ namespace Pacmio
             {
                 BarTable = bt;
                 BarAnalysisSet = bas;
+                bt.CalculateOnly(BarAnalysisSet);
             }
             SetAsyncUpdateUI();
         }

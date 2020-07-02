@@ -229,7 +229,7 @@ namespace Pacmio.IB
                     while (!DataRequestReady)
                     {
                         time++;
-                        Thread.Sleep(10);
+                        Thread.Sleep(50);
 
                         if (time > Timeout) // Handle Time out here.
                         {

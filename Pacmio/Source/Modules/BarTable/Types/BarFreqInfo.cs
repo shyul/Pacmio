@@ -30,8 +30,8 @@ namespace Pacmio
 
             if (unit == TimeUnit.Minutes && length == 1)
             {
-                Duration = new Frequency(TimeUnit.Days, 5);// new TimeSpan(days, 0, 0, 0);
-                DurationString = "5 D";
+                Duration = new Frequency(TimeUnit.Days, 2);// new TimeSpan(days, 0, 0, 0);
+                DurationString = "2 D";
             }
             else if (unit == TimeUnit.Seconds && length == 30)
             {

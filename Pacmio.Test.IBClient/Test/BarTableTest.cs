@@ -39,7 +39,7 @@ namespace TestClient
             foreach (BarFreq freq in BarFreqs) 
             {
                 foreach (Contract c in list)
-                {
+                {/*
                     BarTable bt = new BarTable(c, freq, BarType.Trades);
                     bt.Reset(Period, DownloadCancellationTokenSource, DetailedProgress);
 
@@ -51,7 +51,7 @@ namespace TestClient
 
                     bt.LoadJsonFileToFileData();
                     bt.TransferActualValuesFromBarsToFileData();
-                    bt.SaveFileDataToJsonFile();
+                    bt.SaveFileDataToJsonFile();*/
 
                     pt++;
                     DownloadProgress?.Report(100.0f * pt / total_downloads);
