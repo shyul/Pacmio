@@ -23,10 +23,10 @@ namespace Pacmio
 {
     public class BarChartSet
     {
+        /*
         private static PacmioForm Form => Root.Form;
 
         public readonly List<BarChart> List = new List<BarChart>();
-
 
         public void RemoveChart(BarChart bc) 
         {
@@ -34,53 +34,18 @@ namespace Pacmio
             bc.Close();
         }
 
-
-
-
-        public static Dictionary<BarTable, IEnumerable<IDataView>> Table = new Dictionary<BarTable, IEnumerable<IDataView>>();
-
-        public static void RefreshDataView(BarTable bt)
-        {
-            if (Table.ContainsKey(bt)) 
-            {
-
-
-                if(bt.Status != TableStatus.Ready) 
-                {
-                    Table[bt].AsParallel().ForAll(n => n.SetRefreshUI()); 
-                }
-
-            }
-        }
-
-
-
-
-        public static BarChart GetForm(BarTable bt, IEnumerable<BarAnalysis> bas)
-        {
-            BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-
-            bc.ConfigChartSeries(bas);
-            bt.ConfigBarAnalysis(bas);
-
-            bc.BarTable = bt;
-            List.Add(bc);
-            Form.AddForm(DockStyle.Fill, 0, bc);
-            return bc;
-        }
-
-        public static void UpdateAllCharts(Period pd, CancellationTokenSource cts, IProgress<float> progress)
+        public void UpdateAllCharts(Period pd, CancellationTokenSource cts, IProgress<float> progress)
         {
             List.ForEach(n => {
                 if (!cts.IsCancellationRequested)
                 {
                     BarTable bt = n.BarTable;
-                    bt.Reset(pd, cts, progress);
+                    bt.Fetch(pd, cts);
                 }
             });
         }
 
-        public static void ResetAllChartsPointer()
+        public void ResetAllChartsPointer()
         {
             List.ForEach(bc => {
                 bc.StopPt = bc.BarTable.LastIndex;
@@ -91,47 +56,7 @@ namespace Pacmio
                 }
             });
         }
-
-        public static readonly ColorTheme Upper_Theme = new ColorTheme();
-
-        public static readonly ColorTheme Upper_TextTheme = new ColorTheme();
-
-        public static readonly ColorTheme Lower_Theme = new ColorTheme();
-
-        public static readonly ColorTheme Lower_TextTheme = new ColorTheme();
-
-        public static Color UpperColor
-        {
-            get
-            {
-                return Upper_Theme.ForeColor;
-            }
-            set
-            {
-                Upper_Theme.ForeColor = value;
-
-                Upper_TextTheme.EdgeColor = value.Opaque(255);
-                Upper_TextTheme.FillColor = Upper_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Upper_TextTheme.EdgeColor.Brightness(0.85f) : Upper_TextTheme.EdgeColor.Brightness(-0.85f);
-                Upper_TextTheme.ForeColor = Upper_TextTheme.EdgeColor;
-            }
-        }
-
-        public static Color LowerColor
-        {
-            get
-            {
-                return Lower_Theme.ForeColor;
-            }
-            set
-            {
-                Lower_Theme.ForeColor = value;
-
-                Lower_TextTheme.EdgeColor = value.Opaque(255);
-                Lower_TextTheme.FillColor = Lower_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Lower_TextTheme.EdgeColor.Brightness(0.85f) : Lower_TextTheme.EdgeColor.Brightness(-0.85f);
-                Lower_TextTheme.ForeColor = Lower_TextTheme.EdgeColor;
-            }
-        }
-
+        */
         public static List<BarAnalysis> SampleChartConfig()
         {
             var volumeEma = new EMA(Bar.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };

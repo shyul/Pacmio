@@ -95,13 +95,11 @@ namespace Pacmio
         public static void StartTask()
         {
             BackgroundTaskCancellationTokenSource = new CancellationTokenSource();
-            TableList.StartTask(BackgroundTaskCancellationTokenSource);
         }
 
         public static void StopTask()
         {
             if (!(BackgroundTaskCancellationTokenSource is null)) BackgroundTaskCancellationTokenSource.Cancel();
-            TableList.StopTask();
         }
 
         #endregion Background Tasks
@@ -119,8 +117,8 @@ namespace Pacmio
             else
                 Settings = new PacSettings();
 
-            BarChartSet.UpperColor = Color.Green;
-            BarChartSet.LowerColor = Color.Red;
+            BarTable.UpperColor = Color.Green;
+            BarTable.LowerColor = Color.Red;
 
             // Build essential directories
             if (!Directory.Exists(ResourcePath)) Directory.CreateDirectory(ResourcePath);
@@ -145,7 +143,6 @@ namespace Pacmio
             // Save settings
             Settings.SerializeJsonFile(SettingFile);
 
-            TableList.Save();
             BusinessInfoList.Save();
             ContractList.Save();
             OrderManager.Save();

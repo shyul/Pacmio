@@ -43,6 +43,6 @@ namespace Pacmio
 
         #endregion Trading Timing
 
-        public bool Equals(TradeRule other) => Name == other.Name;
+        public bool Equals(TradeRule other) => other is TradeRule tr && Name == tr.Name;
     }
 }

@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace Pacmio
 {
-    public class BarAnalysisSet
+    public class BarAnalysisSet : IEquatable<BarAnalysisSet>
     {
         public string Name { get; set; } = "Default BarAnalysisGroup";
 
@@ -43,13 +43,13 @@ namespace Pacmio
                     value.ToList().ForEach(n => {
                         SetBarAnalysisParents(n);
                         m_List.CheckAdd(n);
-                        Console.WriteLine(Name + " | Added BA: " + n.Name);
                         SetBarAnalysisChildren(n);
                     });
                 }
+
+                PrintList();
             }
         }
-
 
         private readonly List<BarAnalysis> m_List = new List<BarAnalysis>();
 
@@ -59,7 +59,6 @@ namespace Pacmio
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);
-                Console.WriteLine(Name + " | Added BA: " + n.Name);
             });
         }
 
@@ -68,11 +67,17 @@ namespace Pacmio
             ba.Children.Where(n => n is BarAnalysis).Select(n => (BarAnalysis)n).ToList().ForEach(n =>
             {
                 m_List.CheckAdd(n);
-                Console.WriteLine(Name + " | Added BA: " + n.Name);
                 SetBarAnalysisChildren(n);
             });
         }
 
+        public void PrintList()
+        {
+            List.ToList().ForEach(n => {
+                Console.WriteLine(Name + " | Added BA: " + n.Name);
+            });
+        }
 
+        public bool Equals(BarAnalysisSet other) => other is BarAnalysisSet bas && Name == bas.Name;
     }
 }

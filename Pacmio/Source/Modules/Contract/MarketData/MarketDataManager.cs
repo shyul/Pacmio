@@ -39,7 +39,7 @@ namespace Pacmio
         {
             Task.Run(() =>
             {
-                List.Where(n => n.MarketDataTable.Contains(c)).ToList().ForEach(n => n.SetRefreshUI());
+                List.Where(n => n.MarketDataTable.Contains(c)).ToList().ForEach(n => n.SetAsyncUpdateUI());
             });
         }
 

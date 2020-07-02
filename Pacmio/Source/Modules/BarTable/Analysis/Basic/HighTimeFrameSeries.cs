@@ -19,10 +19,15 @@ using Xu.Chart;
 
 namespace Pacmio
 {
+    /// <summary>
+    /// TODO: make this a specical case.......
+    /// TODO: Do we really need this ???
+    /// </summary>
     public sealed class HighTimeFrameSeries : BarAnalysis
     {
-        public HighTimeFrameSeries(BarFreq sourceBarFreq, NumericColumn source_column) 
+        public HighTimeFrameSeries(BarTableSet bts, BarFreq sourceBarFreq, NumericColumn source_column) 
         {
+            BarTableSet = bts;
             SourceBarFreq = sourceBarFreq;
             SourceFrequency = SourceBarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
             Source_Column = source_column;
@@ -38,22 +43,24 @@ namespace Pacmio
 
         public NumericColumn Result_Column { get; }
 
+        public BarTableSet BarTableSet { get; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            BarTable bt_high = bt.Contract.GetTableOld(SourceBarFreq, bt.Type);
-
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            if (BarTableSet.Get(bt.Contract, SourceBarFreq, bt.Type) is BarTable bt_high)
             {
-                Bar b = bt[i];
-                DateTime time = SourceFrequency.Align(b.Time);
+                for (int i = bap.StartPt; i < bap.StopPt; i++)
+                {
+                    Bar b = bt[i];
+                    DateTime time = SourceFrequency.Align(b.Time);
 
-                Bar b_high = bt_high[time];
+                    Bar b_high = bt_high[time];
 
-                b[Result_Column] = b_high[Source_Column];
+                    b[Result_Column] = b_high[Source_Column];
 
+                }
             }
-
         }
     }
 }

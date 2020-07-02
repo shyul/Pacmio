@@ -7,20 +7,16 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Xu;
-using Xu.Chart;
+using System.Drawing;
 using System.Windows.Forms;
-using System.Web.UI.WebControls;
+using Xu;
 
 namespace Pacmio
 {
@@ -69,32 +65,6 @@ namespace Pacmio
         public (Contract c, BarFreq barFreq, BarType type) Info => (Contract, BarFreq, Type);
 
         #endregion Ctor
-
-        #region Equality
-
-        public bool Equals(BarTable other) => Info == other.Info;
-        public bool Equals((Contract c, BarFreq barFreq, BarType type) other) => Info == other;
-
-        public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);
-        public static bool operator !=(BarTable s1, BarTable s2) => !s1.Equals(s2);
-        public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
-        public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
-
-        public override bool Equals(object other)
-        {
-            if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-                return false;
-            else if (other is BarTable bt)
-                return Equals(bt);
-            else if (other.GetType() == typeof((Contract c, BarFreq barFreq, BarType type)))
-                return Equals(((Contract c, BarFreq barFreq, BarType type))other);
-            else
-                return false;
-        }
-
-        public override int GetHashCode() => Info.GetHashCode();
-
-        #endregion Equality
 
         #region Bars Properties and Methods
 
@@ -769,11 +739,11 @@ namespace Pacmio
 
                 if (peak_result > MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, BarChartSet.Upper_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, Upper_TextTheme);
                 }
                 else if (peak_result < -MinimumTagPeakProminence)
                 {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, BarChartSet.Lower_TextTheme);
+                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, Lower_TextTheme);
                 }
 
                 b.TrendStrength = trend_1 = trend;
@@ -896,7 +866,7 @@ namespace Pacmio
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
-        private object DataLockObject { get; } = new object();
+        public object DataLockObject { get; } = new object();
 
         public bool IsLive
         {
@@ -922,6 +892,8 @@ namespace Pacmio
 
         private bool m_IsLive = false;
 
+        public bool ReadyToShow => Count > 0 && (Status == TableStatus.Ready || Status == TableStatus.CalculateFinished || Status == TableStatus.TickingFinished);
+
         public TableStatus Status
         {
             get => m_Status;
@@ -932,24 +904,20 @@ namespace Pacmio
 
                 if (m_Status == TableStatus.CalculateFinished)
                 {
-                    lock (DataViews)
-                        DataViews.ForEach(n => { n.SetRefreshUI(); });
+                    lock (DataViews) DataViews.ForEach(n => { n.PointerToEnd(); });
                 }
-                else if(m_Status == TableStatus.TickingFinished) 
+                else if (m_Status == TableStatus.TickingFinished)
                 {
-                    lock (DataViews)
-                        DataViews.ForEach(n => {
-                            if (n.StopPt == Count - 1)
-                            {
-                                n.StopPt++;
-                            }
-                            n.SetRefreshUI(); 
-                        });
+                    lock (DataViews) DataViews.ForEach(n => { n.PointerToNextTick(); });
+                }
+                else
+                {
+                    lock (DataViews) DataViews.ForEach(n => { n.SetAsyncUpdateUI(); });
                 }
             }
         }
 
-        private TableStatus m_Status = TableStatus.Ready;
+        private TableStatus m_Status = TableStatus.Default;
 
         public void Load() => Load(Period.Full);
 
@@ -1448,5 +1416,71 @@ namespace Pacmio
                     return sb.ToFile(fileName);
                 }
         }*/
+
+        public static readonly ColorTheme Upper_Theme = new ColorTheme();
+
+        public static readonly ColorTheme Upper_TextTheme = new ColorTheme();
+
+        public static readonly ColorTheme Lower_Theme = new ColorTheme();
+
+        public static readonly ColorTheme Lower_TextTheme = new ColorTheme();
+
+        public static Color UpperColor
+        {
+            get
+            {
+                return Upper_Theme.ForeColor;
+            }
+            set
+            {
+                Upper_Theme.ForeColor = value;
+
+                Upper_TextTheme.EdgeColor = value.Opaque(255);
+                Upper_TextTheme.FillColor = Upper_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Upper_TextTheme.EdgeColor.Brightness(0.85f) : Upper_TextTheme.EdgeColor.Brightness(-0.85f);
+                Upper_TextTheme.ForeColor = Upper_TextTheme.EdgeColor;
+            }
+        }
+
+        public static Color LowerColor
+        {
+            get
+            {
+                return Lower_Theme.ForeColor;
+            }
+            set
+            {
+                Lower_Theme.ForeColor = value;
+
+                Lower_TextTheme.EdgeColor = value.Opaque(255);
+                Lower_TextTheme.FillColor = Lower_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Lower_TextTheme.EdgeColor.Brightness(0.85f) : Lower_TextTheme.EdgeColor.Brightness(-0.85f);
+                Lower_TextTheme.ForeColor = Lower_TextTheme.EdgeColor;
+            }
+        }
+
+        #region Equality
+
+        public bool Equals(BarTable other) => Info == other.Info;
+        public bool Equals((Contract c, BarFreq barFreq, BarType type) other) => Info == other;
+
+        public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);
+        public static bool operator !=(BarTable s1, BarTable s2) => !s1.Equals(s2);
+        public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
+        public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
+
+        public override bool Equals(object other)
+        {
+            if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+                return false;
+            else if (other is BarTable bt)
+                return Equals(bt);
+            else if (other.GetType() == typeof((Contract c, BarFreq barFreq, BarType type)))
+                return Equals(((Contract c, BarFreq barFreq, BarType type))other);
+            else
+                return false;
+        }
+
+        public override int GetHashCode() => Info.GetHashCode();
+
+        #endregion Equality
     }
 }
