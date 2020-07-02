@@ -25,7 +25,12 @@ namespace Pacmio
 {
     public class BarAnalysisSet : IEquatable<BarAnalysisSet>
     {
-        public string Name { get; set; } = "Default BarAnalysisGroup";
+        public BarAnalysisSet(string name) 
+        {
+            Name = name;
+        }
+
+        public string Name { get; }
 
         public int Order { get; set; } = 0;
 

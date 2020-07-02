@@ -177,14 +177,8 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-
-
-
-
-                BarTable bt = ContractTest.ActiveContract.GetTableOld(BarFreq, BarType);//, pd);
-                bt.Reset(HistoricalPeriod, null, null);
-                BarChartSet.GetForm(bt, BarChartSet.SampleChartConfig());
-                Root.Form.Show();
+                Cts = new CancellationTokenSource();
+                BarChart bc = BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, BarFreq, BarType, HistoricalPeriod, Cts);
             }
         }
 
@@ -193,9 +187,9 @@ namespace TestClient
 
         }
 
-        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartSet.ResetAllChartsPointer();
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartList.ResetAllChartsPointer();
 
-        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => BarChartSet.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e) => BarChartList.UpdateAllCharts(HistoricalPeriod, Cts = new CancellationTokenSource(), null);
 
 
         #endregion Bar Chart
@@ -460,23 +454,23 @@ namespace TestClient
 
         private void BtnDownloadTables_Click(object sender, EventArgs e)
         {
-            DownloadBarTable.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
-            DownloadBarTable.DownloadProgress = Progress;
-            DownloadBarTable.DetailedProgress = Detailed_Progress;
+            BarTableTest.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
+            BarTableTest.DownloadProgress = Progress;
+            BarTableTest.DetailedProgress = Detailed_Progress;
 
-            DownloadBarTable.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+            BarTableTest.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
                 new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
 
             string symbolText = TextBoxMultiContracts.Text;
-            DownloadBarTable.SymbolList.Clear();
-            DownloadBarTable.SymbolList.AddRange(ContractList.GetSymbolList(ref symbolText));
+            BarTableTest.SymbolList.Clear();
+            BarTableTest.SymbolList.AddRange(ContractList.GetSymbolList(ref symbolText));
             TextBoxMultiContracts.Text = symbolText;
 
-            DownloadBarTable.BarFreqs.Add(BarFreq.Daily);
-            DownloadBarTable.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
+            BarTableTest.BarFreqs.Add(BarFreq.Daily);
+            BarTableTest.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
             //DownloadBarTable.BarFreqs.Add(BarFreq.HalfMinute);
 
-            Task.Run(() => { DownloadBarTable.Worker(); });
+            Task.Run(() => { BarTableTest.Worker(); });
         }
 
         public static Progress<float> Detailed_Progress;

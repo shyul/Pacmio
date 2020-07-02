@@ -25,6 +25,44 @@ namespace Pacmio
 {
     public sealed class BarChart : ChartWidget
     {
+        //private static PacmioForm Form => Root.Form;
+
+        public static readonly List<BarChart> List = new List<BarChart>();
+
+        /*
+
+
+        public void RemoveChart(BarChart bc) 
+        {
+            List.CheckRemove(bc);
+            bc.Close();
+        }
+
+        public void UpdateAllCharts(Period pd, CancellationTokenSource cts, IProgress<float> progress)
+        {
+            List.ForEach(n => {
+                if (!cts.IsCancellationRequested)
+                {
+                    BarTable bt = n.BarTable;
+                    bt.Fetch(pd, cts);
+                }
+            });
+        }
+
+        public void ResetAllChartsPointer()
+        {
+            List.ForEach(bc => {
+                bc.StopPt = bc.BarTable.LastIndex;
+
+                if (bc.IsActive)
+                {
+                    bc.UpdateUI();
+                }
+            });
+        }
+        */
+
+
         public BarChart(string name, OhlcType type) : base(name)
         {
             Margin = new Padding(5, 15, 5, 5);
@@ -60,7 +98,9 @@ namespace Pacmio
 
         public override void Close()
         {
-            Console.WriteLine(TabName + ": The Tab is closing");
+            Console.WriteLine(TabName + ": The BarChart is closing");
+
+
             if (m_barTable is BarTable)
             {
                 lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
