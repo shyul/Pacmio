@@ -19,8 +19,6 @@ using System.Text;
 using System.IO;
 using Xu;
 using Xu.Chart;
-using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Pacmio
@@ -150,21 +148,21 @@ namespace Pacmio
             {
                 PeriodSettings[(barFreq, barType)] = period;
                 var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);
-
+                /*
                 ParallelOptions po = new ParallelOptions()
                 {
                     CancellationToken = cts.Token,
                     MaxDegreeOfParallelism = 8
-                };
+                };*/
 
                 int i = 0, count = tables.Count();
-                Parallel.ForEach(tables, po, n => {
+                Parallel.ForEach(tables,  n => {
                     if (cts is CancellationTokenSource cs && !cts.IsCancellationRequested)
                     {
                         n.Key.Fetch(period, cts);
                         n.Key.CalculateOnly(n.Value);
-                        progress?.Report(100.0f * i / count);
                         i++;
+                        progress?.Report(100.0f * i / count);
                     }
                 });
             }
