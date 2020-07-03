@@ -215,35 +215,36 @@ namespace Pacmio.IB
         {
             var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
 
-            lock (RequestLockObject)
-                if (DataRequestReady && HistoricalData_Connected && bfi_valid)
-                {
-                    // We will download, but won't log the period if the stop may extended to the future.
-                    IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
-                    LastRequestedHistoricalDataPeriod = period;
-
-                StartDownload:
-                    SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
-
-                    int time = 0; // Wait the last transmit is over.
-                    while (!DataRequestReady)
+            if (!(IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested)))
+                lock (RequestLockObject)
+                    if (DataRequestReady && HistoricalData_Connected && bfi_valid && period.Start < DateTime.Now)
                     {
-                        time++;
-                        Thread.Sleep(50);
+                        // We will download, but won't log the period if the stop may extended to the future.
+                        IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
+                        LastRequestedHistoricalDataPeriod = period;
 
-                        if (time > Timeout) // Handle Time out here.
+                    StartDownload:
+                        SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
+
+                        int time = 0; // Wait the last transmit is over.
+                        while (!DataRequestReady)
                         {
-                            SendCancel_HistoricalData();
-                            Thread.Sleep(100);
-                            goto StartDownload;
-                        }
-                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
-                        {
-                            SendCancel_HistoricalData();
-                            return;
+                            time++;
+                            Thread.Sleep(50);
+
+                            if (time > Timeout) // Handle Time out here.
+                            {
+                                SendCancel_HistoricalData();
+                                Thread.Sleep(100);
+                                goto StartDownload;
+                            }
+                            else if (IsCancelled || (cts is CancellationTokenSource cs2 && cs2.IsCancellationRequested))
+                            {
+                                SendCancel_HistoricalData();
+                                return;
+                            }
                         }
                     }
-                }
         }
 
         #endregion Fetch Historical Data

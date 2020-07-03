@@ -143,10 +143,13 @@ namespace Pacmio
                     ReadyToShow = false;
                     RemoveAllChartSeries();
                     m_barAnalysisSet = value;
-                    foreach (var ic in m_barAnalysisSet.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
-                    {
-                        ic.ConfigChart(this);
-                    }
+
+                    if (m_barAnalysisSet is BarAnalysisSet bas)
+                        foreach (var ic in bas.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                        {
+                            ic.ConfigChart(this);
+                        }
+
                     ReadyToShow = true;
                 }
                 //SetRefreshUI();

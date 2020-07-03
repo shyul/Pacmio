@@ -190,12 +190,13 @@ namespace TestClient
 
         private void BtnLoadMultiHistoricalChart_Click(object sender, EventArgs e)
         {
+            BarAnalysisSet bas = BarTableTest.TestBarAnalysisSet;
             string symbolText = TextBoxMultiContracts.Text;
             var symbols = ContractList.GetSymbolList(ref symbolText);
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, bas));
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            Cts = new CancellationTokenSource();
+            if(Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>
             {
@@ -210,13 +211,29 @@ namespace TestClient
         {
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            Cts = new CancellationTokenSource();
+            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
             Task.Run(() =>
             {
                 BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
             }, Cts.Token);
         }
 
+        private void BtnDownloadTables_Click(object sender, EventArgs e)
+        {
+            BarAnalysisSet bas = null;
+            string symbolText = TextBoxMultiContracts.Text;
+            var symbols = ContractList.GetSymbolList(ref symbolText);
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, bas));
+            BarFreq freq = BarFreq;
+            BarType type = BarType;
+            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+
+            Task.Run(() =>
+            {
+                BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
+                BarTableTest.BarTableSet.AddContract(cList, freq, type, HistoricalPeriod, Cts, Progress);
+            }, Cts.Token);
+        }
 
         #endregion Bar Chart
 
@@ -478,26 +495,7 @@ namespace TestClient
 
 
 
-        private void BtnDownloadTables_Click(object sender, EventArgs e)
-        {
-            BarTableTest.DownloadCancellationTokenSource = Cts = new CancellationTokenSource();
-            BarTableTest.DownloadProgress = Progress;
-            BarTableTest.DetailedProgress = Detailed_Progress;
 
-            BarTableTest.Period = (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
-
-            string symbolText = TextBoxMultiContracts.Text;
-            BarTableTest.SymbolList.Clear();
-            BarTableTest.SymbolList.AddRange(ContractList.GetSymbolList(ref symbolText));
-            TextBoxMultiContracts.Text = symbolText;
-
-            BarTableTest.BarFreqs.Add(BarFreq.Daily);
-            BarTableTest.BarFreqs.Add(SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>());
-            //DownloadBarTable.BarFreqs.Add(BarFreq.HalfMinute);
-
-            Task.Run(() => { BarTableTest.Worker(); });
-        }
 
         public static Progress<float> Detailed_Progress;
 

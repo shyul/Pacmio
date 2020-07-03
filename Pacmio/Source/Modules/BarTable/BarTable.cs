@@ -939,7 +939,7 @@ namespace Pacmio
 
         public void CalculateOnly(BarAnalysisSet bas)
         {
-            if (Enabled)
+            if (Enabled && bas is BarAnalysisSet)
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
