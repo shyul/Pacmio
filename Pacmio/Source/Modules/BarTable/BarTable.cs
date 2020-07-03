@@ -1344,20 +1344,21 @@ namespace Pacmio
         {
             Range<DateTime> Invalid_Period = null;
 
-            foreach (var b in Rows.Where(n => n.Source < DataSource.Tick))
-            {
-                if (b.Actual_Open < 0 || b.Actual_High < 0 || b.Actual_Low < 0 || b.Actual_Close < 0 || b.Actual_Volume < 0)
+            lock (Rows)
+                foreach (var b in Rows.Where(n => n.Source < DataSource.Tick))
                 {
-                    if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(b.Period.Start, b.Period.Stop);
-                    else
+                    if (b.Actual_Open < 0 || b.Actual_High < 0 || b.Actual_Low < 0 || b.Actual_Close < 0 || b.Actual_Volume < 0)
                     {
-                        Invalid_Period.Insert(b.Period.Start);
-                        Invalid_Period.Insert(b.Period.Stop);
+                        if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(b.Period.Start, b.Period.Stop);
+                        else
+                        {
+                            Invalid_Period.Insert(b.Period.Start);
+                            Invalid_Period.Insert(b.Period.Stop);
+                        }
                     }
+                    else if (!btd.Bars.ContainsKey(b.Time) || b.Source < btd.Bars[b.Time].SRC)
+                        btd.Bars[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
                 }
-                else if (!btd.Bars.ContainsKey(b.Time) || b.Source < btd.Bars[b.Time].SRC)
-                    btd.Bars[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
-            }
 
             btd.DataSourceSegments.Merge(DataSourceSegments);
             if (Invalid_Period is Range<DateTime> rgt) btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
