@@ -85,6 +85,7 @@ namespace Pacmio
             {
                 BarTable bt = AddContract(c, bas, barFreq, barType);
                 bt.Fetch(period, cts);
+                //bt.Load(period);
                 return bt;
             }
         }
@@ -165,7 +166,8 @@ namespace Pacmio
                 Parallel.ForEach(tables, n => {
                     if (cts is CancellationTokenSource cs && !cts.IsCancellationRequested)
                     {
-                        n.Key.Fetch(period, cts);
+                        n.Key.Load(period);
+                        //n.Key.Fetch(period, cts);
                         n.Key.CalculateOnly(n.Value);
                         i++;
                         progress?.Report(100.0f * i / count);
