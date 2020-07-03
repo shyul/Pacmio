@@ -927,7 +927,7 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Loading;
-
+                    IsLive = period.IsCurrent;
                     SyncFile(period);
                     Sort();
                     Adjust(); // Forward Adjust
@@ -1010,6 +1010,7 @@ namespace Pacmio
             if (Enabled)
                 lock (DataLockObject)
                 {
+                    IsLive = period.IsCurrent;
                     Status = TableStatus.Downloading;
                     ResetCalculationPointer();
                     SyncFile(period);
@@ -1292,7 +1293,6 @@ namespace Pacmio
 
         private void LoadFile(BarTableFileData btd, Period pd)
         {
-            IsLive = pd.IsCurrent;
             ResetCalculationPointer();
             Rows.Clear();
             TimeToRows.Clear();
