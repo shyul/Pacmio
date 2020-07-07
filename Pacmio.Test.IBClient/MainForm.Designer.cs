@@ -176,6 +176,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -527,6 +528,7 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnMarketDataSyncTicks);
             this.tabMarketData.Controls.Add(this.BtnCancelAllScanner);
             this.tabMarketData.Controls.Add(this.BtnRequestMarketDepth);
             this.tabMarketData.Controls.Add(this.LabelWatchListName);
@@ -557,7 +559,7 @@ namespace TestClient
             // 
             // BtnRequestMarketDepth
             // 
-            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(262, 86);
+            this.BtnRequestMarketDepth.Location = new System.Drawing.Point(262, 70);
             this.BtnRequestMarketDepth.Name = "BtnRequestMarketDepth";
             this.BtnRequestMarketDepth.Size = new System.Drawing.Size(133, 23);
             this.BtnRequestMarketDepth.TabIndex = 5;
@@ -631,7 +633,7 @@ namespace TestClient
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(431, 41);
+            this.button4.Location = new System.Drawing.Point(273, 99);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(100, 23);
             this.button4.TabIndex = 3;
@@ -1712,6 +1714,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnMarketDataSyncTicks
+            // 
+            this.BtnMarketDataSyncTicks.Location = new System.Drawing.Point(82, 82);
+            this.BtnMarketDataSyncTicks.Name = "BtnMarketDataSyncTicks";
+            this.BtnMarketDataSyncTicks.Size = new System.Drawing.Size(100, 23);
+            this.BtnMarketDataSyncTicks.TabIndex = 50;
+            this.BtnMarketDataSyncTicks.Text = "Sync Ticks";
+            this.BtnMarketDataSyncTicks.UseVisualStyleBackColor = true;
+            this.BtnMarketDataSyncTicks.Click += new System.EventHandler(this.BtnMarketDataSyncTicks_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1912,5 +1924,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnUpdateContracts;
         private System.Windows.Forms.Button BtnImportNasdaq;
         private System.Windows.Forms.TextBox TextBoxValidCountryCode;
+        private System.Windows.Forms.Button BtnMarketDataSyncTicks;
     }
 }

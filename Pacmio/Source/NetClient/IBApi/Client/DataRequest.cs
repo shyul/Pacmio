@@ -187,11 +187,12 @@ namespace Pacmio.IB
 
         public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
-            Console.WriteLine("\n");
             lock (RequestLockObject)
             {
                 if (cts.Continue() && DataRequestReady && HistoricalData_Connected)
                 {
+                    if (cts.Cancelled() || IsCancelled)
+                        return bt.EarliestTime;
 
                 StartDownload:
                     SendRequest_HistoricalDataHeadTimestamp(bt);
@@ -230,14 +231,14 @@ namespace Pacmio.IB
                 IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
                 LastRequestedHistoricalDataPeriod = period;
 
-                Console.WriteLine("\n");
-
                 // RequestLockObject and DataRequestReady must happen in pairs
                 lock (RequestLockObject)
                     if (DataRequestReady)
                     {
 
-                    StartDownload:
+                        if (cts.Cancelled() || IsCancelled) return;
+
+                        StartDownload:
                         SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
 
                         int time = 0; // Wait the last transmit is over.

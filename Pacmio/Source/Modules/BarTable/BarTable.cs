@@ -491,7 +491,7 @@ namespace Pacmio
         {
             get
             {
-                if (Count > 0) 
+                if (Count > 0)
                 {
                     if (IsLive)
                         return new Period(FirstTime, true);
@@ -502,7 +502,7 @@ namespace Pacmio
                     return Period.Empty;
             }
         }
-   
+
 
         /// <summary>
         /// Last Most time including the Bar Period
@@ -1272,11 +1272,11 @@ namespace Pacmio
                 foreach (Period api_request_pd in api_request_pd_list.OrderBy(n => n.Start))
                 {
                     if (cts.Cancelled())
-                         goto End;
+                        goto End;
                     else
                         Thread.Sleep(2000);
 
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_pd);
+                    Console.WriteLine("\n" + MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_pd);
                     IB.Client.Fetch_HistoricalData(bt, api_request_pd, cts);
                 }
             }
@@ -1316,7 +1316,7 @@ namespace Pacmio
                 string fileName = BarTableFileData.GetFileName((Contract.Info, BarFreq, Type));
 
                 BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-                if (btd == this) 
+                if (btd == this)
                     return btd;
 
                 return new BarTableFileData(this);

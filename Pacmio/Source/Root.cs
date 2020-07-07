@@ -34,6 +34,8 @@ namespace Pacmio
 
         public static string CachePath => (Settings != null) ? Settings.CachePath : Path.GetTempPath() + "Pacmio\\";
 
+        public static int DegreeOfParallelism = 24;
+
         #region IB Client
 
         public static void IBConnectUpdate(ConnectionStatus status, DateTime time, string message = "")

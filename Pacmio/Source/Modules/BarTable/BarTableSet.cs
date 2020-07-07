@@ -95,14 +95,15 @@ namespace Pacmio
         {
             BarTable bt = AddContract(c, bas, barFreq, barType);
             AddChart(bt, bas);
-
-            if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period) 
+            if (cts.Continue())
             {
-                bt.Fetch(period, cts);
-                period = bt.Period;
+                if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period)
+                {
+                    bt.Fetch(period, cts);
+                    period = bt.Period;
+                }
+                bt.CalculateOnly(bas);
             }
-
-            bt.CalculateOnly(bas);
         }
 
         private List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType)
@@ -129,9 +130,13 @@ namespace Pacmio
 
         public List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
-            List<BarTable> add_tables = AddContract(contracts, barFreq, barType);
-            UpdatePeriod(barFreq, barType, period, cts, progress);
-            return add_tables;
+            if (cts.Continue())
+            {
+                List<BarTable> add_tables = AddContract(contracts, barFreq, barType);
+                UpdatePeriod(barFreq, barType, period, cts, progress);
+                return add_tables;
+            }
+            return new List<BarTable>();
         }
 
         public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
@@ -142,17 +147,17 @@ namespace Pacmio
             ParallelOptions po = new ParallelOptions()
             {
                 //CancellationToken = cts.Token,
-                MaxDegreeOfParallelism = 8
+                MaxDegreeOfParallelism = Math.Ceiling(Root.DegreeOfParallelism / 3D).ToInt32(1)
             };
 
             int i = 0, count = contracts.Count();
-            Parallel.ForEach(contracts, po,n  => {
+            Parallel.ForEach(contracts, po, n => {
                 if (cts.Continue())
                 {
                     var (c, bas) = n;
                     AddChart(c, bas, barFreq, barType, ref period, cts);
                     i++;
-                    progress?.Report(100.0f * i / count);
+                    if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
             });
 
@@ -197,40 +202,31 @@ namespace Pacmio
         /// <param name="progress"></param>
         public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
-            lock (DataLockObject)
-            {
-                progress?.Report(0);
-
-                PeriodSettings[(barFreq, barType)] = period;
-                var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
-
-                ParallelOptions po = new ParallelOptions()
+            progress?.Report(0);
+            if (cts.Continue())
+                lock (DataLockObject)
                 {
-                    //CancellationToken = cts.Token,
-                    MaxDegreeOfParallelism = 8
-                };
+                    PeriodSettings[(barFreq, barType)] = period;
+                    var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
 
-                int i = 0, count = tables.Count();
-                /*
-                foreach(var n in tables) 
-                    if (cts is CancellationTokenSource cs && !cts.IsCancellationRequested)
+                    ParallelOptions po = new ParallelOptions()
                     {
-                        n.Key.Fetch(period, cts);
-                        n.Key.CalculateOnly(n.Value);
-                        i++;
-                        progress?.Report(100.0f * i / count);
-                    }*/
-                Parallel.ForEach(tables, po, n => {
-                    if (cts.Continue())
-                    {
-                        //n.Key.Load(period);
-                        n.Key.Fetch(period, cts);
-                        n.Key.CalculateOnly(n.Value);
-                        i++;
-                        progress?.Report(100.0f * i / count);
-                    }
-                });
-            }
+                        //CancellationToken = cts.Token,
+                        MaxDegreeOfParallelism = Root.DegreeOfParallelism
+                    };
+
+                    int i = 0, count = tables.Count();
+                    Parallel.ForEach(tables, po, n => {
+                        if (cts.Continue())
+                        {
+                            //n.Key.Load(period);
+                            n.Key.Fetch(period, cts);
+                            n.Key.CalculateOnly(n.Value);
+                            i++;
+                            if (cts.Continue()) progress?.Report(100.0f * i / count);
+                        }
+                    });
+                }
         }
     }
 }

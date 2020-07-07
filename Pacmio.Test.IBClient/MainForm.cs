@@ -790,6 +790,14 @@ namespace TestClient
 
         #region Market Data
 
+        private void BtnMarketDataSyncTicks_Click(object sender, EventArgs e)
+        {
+            foreach(Contract c in Pacmio.IB.Client.ActiveMarketTicks.Values) 
+            {
+                MarketDataGridView.MarketDataTable.Add(c);
+            }
+        }
+
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected || !ValidateSymbol()) return;
@@ -943,6 +951,8 @@ namespace TestClient
         {
             Root.Form?.Hide();
         }
+
+
     }
     public static class DataGridHelper
     {
