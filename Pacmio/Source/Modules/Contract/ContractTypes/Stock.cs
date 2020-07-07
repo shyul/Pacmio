@@ -52,7 +52,7 @@ namespace Pacmio
         {
             m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
             m_StockData.Status = MarketTickStatus.Unknown;
-            if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new HashSet<BarTable>();
+            if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new List<BarTable>();
         }
 
         public override void SaveMarketData()

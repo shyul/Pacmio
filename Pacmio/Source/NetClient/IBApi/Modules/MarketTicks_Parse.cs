@@ -331,7 +331,6 @@ namespace Pacmio.IB
                             //double totalVol = volFields[3].ToDouble() * 100;
                             hd.InboundLiveTick(new MarketTick(c, time, last, vol));
 
-
                             /*
                             if (!TicksList.ContainsKey(c)) 
                                 TicksList[c] = new StringBuilder();

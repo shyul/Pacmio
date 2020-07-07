@@ -89,6 +89,6 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public HashSet<BarTable> LiveBarTables { get; set; } = new HashSet<BarTable>();
+        public List<BarTable> LiveBarTables { get; set; } = new List<BarTable>();
     }
 }

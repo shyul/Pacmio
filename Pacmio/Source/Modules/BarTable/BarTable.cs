@@ -914,7 +914,7 @@ namespace Pacmio
 
         private bool m_IsLive = false;
 
-        public bool ReadyToShow => Count > 0 && (Status == TableStatus.Ready || Status == TableStatus.CalculateFinished || Status == TableStatus.TickingFinished);
+        public bool ReadyToShow => Count > 0 && Status != TableStatus.Default && Status != TableStatus.Loading && Status != TableStatus.Downloading && Status != TableStatus.Maintaining;// (Status == TableStatus.Ready || Status == TableStatus.CalculateFinished || Status == TableStatus.TickingFinished);
 
         public TableStatus Status
         {
@@ -934,7 +934,7 @@ namespace Pacmio
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.PointerToNextTick(); });
                 }
-                else
+                else if (!ReadyToShow)//m_Status == TableStatus.Loading || m_Status == TableStatus.Downloading)
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.SetAsyncUpdateUI(); });
                 }
@@ -980,7 +980,7 @@ namespace Pacmio
         public void AddPriceTick(MarketTick mt)
         {
             if (Enabled && IsLive)
-                lock (DataLockObject)
+                //lock (DataLockObject)
                 {
                     TableStatus last_status = Status;
                     Status = TableStatus.Ticking;
@@ -1034,8 +1034,11 @@ namespace Pacmio
             if (cts.Continue() && Enabled)
                 lock (DataLockObject)
                 {
-                    IsLive = period.IsCurrent;
                     Status = TableStatus.Downloading;
+
+                    IsLive = period.IsCurrent;
+                    if (IsLive) Contract.Request_MarketTicks();
+
                     ResetCalculationPointer();
                     SyncFile(period);
                     Sort();
