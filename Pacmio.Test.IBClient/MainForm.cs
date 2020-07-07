@@ -14,6 +14,7 @@ using Pacmio;
 using Pacmio.IB;
 using System.Net.Http.Headers;
 using System.IO;
+using System.Reflection;
 
 namespace TestClient
 {
@@ -212,10 +213,28 @@ namespace TestClient
             BarFreq freq = BarFreq;
             BarType type = BarType;
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+
             Task.Run(() =>
             {
                 BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
             }, Cts.Token);
+        }
+
+        private void BtnDownloadBarTable_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                BarType type = BarType;
+                if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts);
+                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, freq, type, HistoricalPeriod, Cts);
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": Finished!");
+                }, Cts.Token);
+            }
         }
 
         private void BtnReDownloadBarTable_Click(object sender, EventArgs e)
@@ -229,6 +248,7 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
             var symbols = ContractList.GetSymbolList(ref symbolText);
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, bas));
+
             BarFreq freq = BarFreq;
             BarType type = BarType;
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
@@ -888,6 +908,7 @@ namespace TestClient
         {
             OrderManager.Request_CompleteOrders(false);
         }
+
 
 
 

@@ -116,8 +116,10 @@ namespace Pacmio.IB
         public static Contract Fetch_ContractData(int conId, CancellationTokenSource cts = null)
         {
             lock (RequestLockObject)
-                if (DataRequestReady)
+            {
+                if (cts.Continue() && DataRequestReady)
                 {
+
                 StartDownload:
                     SendRequest_ContractData(conId);
 
@@ -132,7 +134,7 @@ namespace Pacmio.IB
                             Thread.Sleep(100);
                             goto StartDownload;
                         }
-                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        else if (cts.Cancelled() || IsCancelled)
                         {
                             SendCancel_ContractData();
                             goto End;
@@ -142,16 +144,19 @@ namespace Pacmio.IB
                     var list = active_ContractData_ResultList.Where(n => n.ConId == conId);
                     return (list.Count() > 0) ? list.First() : null;
                 }
+            }
 
-            End:
+        End:
             return null;
         }
 
         public static void Fetch_ContractData(Contract c, CancellationTokenSource cts = null)
         {
             lock (RequestLockObject)
-                if (DataRequestReady)
+            {
+                if (cts.Continue() && DataRequestReady)
                 {
+
                 StartDownload:
                     SendRequest_ContractData(c);
 
@@ -166,13 +171,14 @@ namespace Pacmio.IB
                             Thread.Sleep(100);
                             goto StartDownload;
                         }
-                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        else if (cts.Cancelled() || IsCancelled)
                         {
                             SendCancel_ContractData();
                             return;
                         }
                     }
                 }
+            }
         }
 
         #endregion Fetch Contract
@@ -182,8 +188,10 @@ namespace Pacmio.IB
         public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
             lock (RequestLockObject)
-                if (DataRequestReady && HistoricalData_Connected)
+            {
+                if (cts.Continue() && DataRequestReady && HistoricalData_Connected)
                 {
+
                 StartDownload:
                     SendRequest_HistoricalDataHeadTimestamp(bt);
 
@@ -199,29 +207,32 @@ namespace Pacmio.IB
                             Thread.Sleep(100);
                             goto StartDownload;
                         }
-                        else if (IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested))
+                        else if (cts.Cancelled() || IsCancelled)
                         {
                             SendCancel_HistoricalHeadDataTimestamp();
                             goto End;
                         }
                     }
                 }
+            }
 
-            End:
+        End:
             return bt.EarliestTime;
         }
 
         public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)
         {
             var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
+            if (cts.Continue() && HistoricalData_Connected && bfi_valid && period.Start < DateTime.Now)
+            {            
+                // We will download, but won't log the period if the stop may extended to the future.
+                IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
+                LastRequestedHistoricalDataPeriod = period;
 
-            if (!(IsCancelled || (cts is CancellationTokenSource cs && cs.IsCancellationRequested)))
+                // RequestLockObject and DataRequestReady must happen in pairs
                 lock (RequestLockObject)
-                    if (DataRequestReady && HistoricalData_Connected && bfi_valid && period.Start < DateTime.Now)
+                    if (DataRequestReady)
                     {
-                        // We will download, but won't log the period if the stop may extended to the future.
-                        IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
-                        LastRequestedHistoricalDataPeriod = period;
 
                     StartDownload:
                         SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
@@ -235,16 +246,18 @@ namespace Pacmio.IB
                             if (time > Timeout) // Handle Time out here.
                             {
                                 SendCancel_HistoricalData();
-                                Thread.Sleep(100);
+                                Thread.Sleep(2000);
                                 goto StartDownload;
                             }
-                            else if (IsCancelled || (cts is CancellationTokenSource cs2 && cs2.IsCancellationRequested))
+                            else if (cts.Cancelled() || IsCancelled)
                             {
                                 SendCancel_HistoricalData();
                                 return;
                             }
                         }
                     }
+                
+            }
         }
 
         #endregion Fetch Historical Data

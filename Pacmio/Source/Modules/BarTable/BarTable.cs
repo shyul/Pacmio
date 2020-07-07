@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Xu;
 
@@ -154,6 +155,11 @@ namespace Pacmio
             }
         }
 
+        /// <summary>
+        /// TODO: delete
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         public (double bullish, double bearish) SignalScore(int i)
         {
             double bull = 0, bear = 0;
@@ -166,7 +172,23 @@ namespace Pacmio
             return (bull, bear);
         }
 
+        /// <summary>
+        /// TODO: delete
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         public readonly List<SignalColumn> SignalColumns = new List<SignalColumn>();
+
+        private void Clear()
+        {
+            lock (DataLockObject)
+            {
+                TimeToRows.Clear();
+                Rows.Clear();
+                ResetCalculationPointer();
+                DataSourceSegments.Clear();
+            }
+        }
 
         /// <summary>
         /// Returns if the BarTable is has no Bars.
@@ -1009,7 +1031,7 @@ namespace Pacmio
 
         public void Fetch(Period period, CancellationTokenSource cts)
         {
-            if (Enabled)
+            if (cts.Continue() && Enabled)
                 lock (DataLockObject)
                 {
                     IsLive = period.IsCurrent;
@@ -1047,13 +1069,13 @@ namespace Pacmio
 
                         SaveFile();
                     }
-                    else if (BarFreq > BarFreq.Minute || BarFreq < BarFreq.Daily) // TODO: TEST intraday BarFreq from 1 minute bars
+                    else if (BarFreq > BarFreq.Minute && BarFreq < BarFreq.Daily) // TODO: TEST intraday BarFreq from 1 minute bars
                     {
                         MultiPeriod missing_period_list = new MultiPeriod(period);
                         foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= DataSource.IB))
                         {
                             missing_period_list.Remove(existingPd);
-                            Console.WriteLine("RequestHistoricalData | Already Existing: " + existingPd);
+                            Console.WriteLine(MethodBase.GetCurrentMethod().Name + "(BarFreq > BarFreq.Minute || BarFreq < BarFreq.Daily) | Already Existing: " + existingPd);
                         }
 
                         // Now get the missing periods from reference table
@@ -1134,7 +1156,7 @@ namespace Pacmio
                     success = quandl_is_available = Quandl.Download(bt, download_time_period);
                 }
                 else
-                    Console.WriteLine("Quandl: We already have the latest data, no need to download.");
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl: We already have the latest data, no need to download.");
 
                 if (success)
                 {
@@ -1150,7 +1172,7 @@ namespace Pacmio
                 // Load IB Daily if Quandle fails
                 if (!quandl_is_available && Root.IBConnected)
                 {
-                    Console.WriteLine("Quandl is not available, try getting the Daily Bars from IB!");
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl is not available, try getting the Daily Bars from IB!");
                     Fetch_IB(bt, period, cts);
                     bt.Sort();
                     bt.Adjust(false);
@@ -1184,7 +1206,7 @@ namespace Pacmio
 
             if (bfi_valid && Root.IBConnected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
             {
-                Console.WriteLine("RequestHistoricalData | Initial Request: " + period);
+                Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request: " + period);
 
                 DateTime upToDate = bt.Contract.CurrentTime.AddMinutes(30);
                 //if (period.IsCurrent) period = new Period(period.Start, DateTime.Now.AddDays(1));
@@ -1195,14 +1217,13 @@ namespace Pacmio
                 foreach (Period existingPd in bt.DataSourceSegments.Keys.Where(n => bt.DataSourceSegments[n] <= DataSource.IB))
                 {
                     missing_period_list.Remove(existingPd);
-                    Console.WriteLine("RequestHistoricalData | Already Existing: " + existingPd);
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Already Existing: " + existingPd);
                 }
 
                 //If EarliestTime is unset, then request it here.
                 if (bt.EarliestTime == DateTime.MinValue)
                 {
-                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested)
-                        goto End;
+                    if (cts.Cancelled()) goto End;
 
                     IB.Client.Fetch_HistoricalDataHeadTimestamp(bt, cts);
                 }
@@ -1213,7 +1234,9 @@ namespace Pacmio
 
                 foreach (Period missing_period in missing_period_list)
                 {
-                    Console.WriteLine("RequestHistoricalData | This is what we miss: " + missing_period);
+                    if (cts.Cancelled()) goto End;
+
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
 
                     DateTime endTimeBound = DateTime.Now.AddDays(1);
 
@@ -1233,12 +1256,12 @@ namespace Pacmio
 
                 foreach (Period api_request_pd in api_request_pd_list.OrderBy(n => n.Start))
                 {
-                    if (cts is CancellationTokenSource cs && cs.IsCancellationRequested)
-                        goto End;
+                    if (cts.Cancelled())
+                         goto End;
                     else
                         Thread.Sleep(2000);
 
-                    Console.WriteLine("RequestHistoricalData: | Sending Api Request: " + api_request_pd);
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_pd);
                     IB.Client.Fetch_HistoricalData(bt, api_request_pd, cts);
                 }
             }
@@ -1372,6 +1395,28 @@ namespace Pacmio
             SaveFile(btd);
             LoadFile(btd, pd);
         }
+
+        private void ClearFile(Period pd)
+        {
+            using BarTableFileData btd = BarTableFileData;
+            btd.DataSourceSegments.Remove(pd);
+            var to_remove_list = btd.Bars.Where(n => pd.Contains(n.Key)).ToList();
+            to_remove_list.ForEach(n => btd.Bars.Remove(n.Key));
+            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+            Clear();
+
+        }
+
+        private void ClearFile()
+        {
+            using BarTableFileData btd = BarTableFileData;
+            btd.DataSourceSegments.Clear();
+            btd.Bars.Clear();
+            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+            Clear();
+        }
+
+
 
         #endregion File Operation
 

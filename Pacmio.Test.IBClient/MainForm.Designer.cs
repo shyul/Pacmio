@@ -1155,6 +1155,7 @@ namespace TestClient
             this.BtnDownloadBarTable.TabIndex = 54;
             this.BtnDownloadBarTable.Text = "Download BarTable";
             this.BtnDownloadBarTable.UseVisualStyleBackColor = true;
+            this.BtnDownloadBarTable.Click += new System.EventHandler(this.BtnDownloadBarTable_Click);
             // 
             // BtnReDownloadBarTable
             // 

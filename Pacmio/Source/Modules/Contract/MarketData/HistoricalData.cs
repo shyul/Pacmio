@@ -82,7 +82,11 @@ namespace Pacmio
             return list;
         }
 
-        public void InboundLiveTick(MarketTick mt) => Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(mt));
+        public void InboundLiveTick(MarketTick mt)
+        {
+            lock (LiveBarTables)
+                Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(mt));
+        }
 
         [IgnoreDataMember]
         public HashSet<BarTable> LiveBarTables { get; set; } = new HashSet<BarTable>();

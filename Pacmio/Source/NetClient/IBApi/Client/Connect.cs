@@ -75,7 +75,7 @@ namespace Pacmio.IB
 
         public static ConnectionStatus ApiStatus { get; private set; } = ConnectionStatus.Disconnected;
 
-        public static bool Connected => ApiStatus == ConnectionStatus.Connected && GatewayConnected;
+        public static bool Connected => ApiStatus == ConnectionStatus.Connected && GatewayConnected && (!IsCancelled);
 
         public static void Connect(int clientId = 180, int port = 15062, string address = "127.0.0.1", int timeout = 1000)
         {

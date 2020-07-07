@@ -150,14 +150,16 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
+                progress?.Report(0);
+
                 PeriodSettings[(barFreq, barType)] = period;
                 var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
-                /*
+                
                 ParallelOptions po = new ParallelOptions()
                 {
-                    CancellationToken = cts.Token,
+                    //CancellationToken = cts.Token,
                     MaxDegreeOfParallelism = 8
-                };*/
+                };
 
                 int i = 0, count = tables.Count();
                 /*
@@ -169,10 +171,8 @@ namespace Pacmio
                         i++;
                         progress?.Report(100.0f * i / count);
                     }*/
-
-                progress?.Report(0);
-                Parallel.ForEach(tables, n => {
-                    if (cts is CancellationTokenSource cs && !cts.IsCancellationRequested)
+                Parallel.ForEach(tables, po, n => {
+                    if (cts.Continue())
                     {
                         //n.Key.Load(period);
                         n.Key.Fetch(period, cts);
