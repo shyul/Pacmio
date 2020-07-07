@@ -218,7 +218,12 @@ namespace TestClient
             }, Cts.Token);
         }
 
-        private void BtnDownloadTables_Click(object sender, EventArgs e)
+        private void BtnReDownloadBarTable_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnDownloadMultiTables_Click(object sender, EventArgs e)
         {
             BarAnalysisSet bas = null;
             string symbolText = TextBoxMultiContracts.Text;
@@ -883,6 +888,7 @@ namespace TestClient
         {
             OrderManager.Request_CompleteOrders(false);
         }
+
 
 
 

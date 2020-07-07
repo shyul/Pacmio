@@ -1164,6 +1164,7 @@ namespace TestClient
             this.BtnReDownloadBarTable.TabIndex = 53;
             this.BtnReDownloadBarTable.Text = "Re-Download BarTable";
             this.BtnReDownloadBarTable.UseVisualStyleBackColor = true;
+            this.BtnReDownloadBarTable.Click += new System.EventHandler(this.BtnReDownloadBarTable_Click);
             // 
             // BtnCleanUpDuplicateStock
             // 
@@ -1267,7 +1268,7 @@ namespace TestClient
             this.BtnDownloadMultiTables.TabIndex = 10;
             this.BtnDownloadMultiTables.Text = "Download Multi Tables";
             this.BtnDownloadMultiTables.UseVisualStyleBackColor = true;
-            this.BtnDownloadMultiTables.Click += new System.EventHandler(this.BtnDownloadTables_Click);
+            this.BtnDownloadMultiTables.Click += new System.EventHandler(this.BtnDownloadMultiTables_Click);
             // 
             // BtnExportContracts
             // 

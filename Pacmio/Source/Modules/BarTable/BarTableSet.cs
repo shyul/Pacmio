@@ -138,6 +138,14 @@ namespace Pacmio
             }
         }
 
+        /// <summary>
+        /// TODO: The Cancellation is not efficient
+        /// </summary>
+        /// <param name="barFreq"></param>
+        /// <param name="barType"></param>
+        /// <param name="period"></param>
+        /// <param name="cts"></param>
+        /// <param name="progress"></param>
         public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             lock (DataLockObject)

@@ -902,6 +902,8 @@ namespace Pacmio
             {
                 m_Status = value;
 
+                // TODO: Verifiy 1. if the tick flickers
+                // TODO: Auto add Market Data Feed without overlapping existing requests
                 if (m_Status == TableStatus.CalculateFinished)
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.PointerToEnd(); });
@@ -1275,21 +1277,13 @@ namespace Pacmio
             {
                 string fileName = BarTableFileData.GetFileName((Contract.Info, BarFreq, Type));
 
-                if (File.Exists(fileName))
-                {
-                    BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-                    if (btd == this) return btd;
-                }
+                BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
+                if (btd == this) 
+                    return btd;
 
                 return new BarTableFileData(this);
             }
         }
-        /*
-        private void LoadFile(Period pd)
-        {
-            using BarTableFileData btd = BarTableFileData;
-            LoadFile(btd, pd);
-        }*/
 
         private void LoadFile(BarTableFileData btd, Period pd)
         {
