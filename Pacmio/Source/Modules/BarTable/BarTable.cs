@@ -446,11 +446,6 @@ namespace Pacmio
         }
 
         /// <summary>
-        /// Returns current BarTable's maximum time span
-        /// </summary>
-        public Period Period => new Period(FirstTime, LastTimeBound);
-
-        /// <summary>
         /// Returns if the Rows already has time stamp
         /// </summary>
         public bool Contains(DateTime time) //=> Rows.Where(n => n.Time == time).Count() > 0;
@@ -488,6 +483,26 @@ namespace Pacmio
                     return DateTime.MinValue.AddYears(500);
             }
         }
+
+        /// <summary>
+        /// Returns current BarTable's maximum time span
+        /// </summary>
+        public Period Period
+        {
+            get
+            {
+                if (Count > 0) 
+                {
+                    if (IsLive)
+                        return new Period(FirstTime, true);
+                    else
+                        return new Period(FirstTime, LastTimeBound);
+                }
+                else
+                    return Period.Empty;
+            }
+        }
+   
 
         /// <summary>
         /// Last Most time including the Bar Period

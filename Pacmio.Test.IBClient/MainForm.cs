@@ -24,10 +24,39 @@ namespace TestClient
 
         public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
 
-        public Period HistoricalPeriod => (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
-                        new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+        public Period HistoricalPeriod
+        {
+            get
+            {
+                return (CheckBoxChartToCurrent.Checked) ? new Period(DateTimePickerHistoricalDataStart.Value, true) :
+                    new Period(DateTimePickerHistoricalDataStart.Value, DateTimePickerHistoricalDataStop.Value);
+            }
+            set
+            {
+                this.Invoke(() => {
+                    DateTimePickerHistoricalDataStart.Value = value.Start;
+                    DateTimePickerHistoricalDataStop.Value = value.Stop;
+                });
+                /*
+                if (InvokeRequired)
+                {
+                    Invoke((MethodInvoker)delegate
+                    {
+                        DateTimePickerHistoricalDataStart.Value = value.Start;
+                        DateTimePickerHistoricalDataStop.Value = value.Stop;
+                    });
+                }
+                else
+                {
+                    DateTimePickerHistoricalDataStart.Value = value.Start;
+                    DateTimePickerHistoricalDataStop.Value = value.Stop;
+                }*/
+            }
+        }
 
         int MainProgBarValue = 0;
+
+        public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data", new MarketDataTable());
 
         public MainForm()
         {
@@ -42,7 +71,7 @@ namespace TestClient
             */
 
             AccountManager.UpdatedHandler += AccountUpdatedHandler;
-            //AccountManager.UpdatedHandler += PositionUpdatedHandler;
+            MarketDataManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
@@ -181,10 +210,13 @@ namespace TestClient
                 BarFreq freq = BarFreq;
                 BarType type = BarType;
                 Cts = new CancellationTokenSource();
+                Period pd = HistoricalPeriod;
                 Task.Run(() =>
                 {
-                    BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, HistoricalPeriod, Cts);
+                    BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
+                    HistoricalPeriod = pd;
                 }, Cts.Token);
+
                 Root.Form.Show();
             }
         }
@@ -197,7 +229,7 @@ namespace TestClient
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, bas));
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            if(Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>
             {
@@ -227,11 +259,14 @@ namespace TestClient
                 BarFreq freq = BarFreq;
                 BarType type = BarType;
                 if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+                Period pd = new Period(new DateTime(1000, 1, 1), DateTime.Now);
 
                 Task.Run(() =>
                 {
-                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts);
-                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, freq, type, HistoricalPeriod, Cts);
+                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, BarFreq.Daily, type, ref pd, Cts);
+                    pd = HistoricalPeriod;
+                    BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, null, freq, type, ref pd, Cts);
+                    HistoricalPeriod = pd;
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": Finished!");
                 }, Cts.Token);
             }
@@ -755,52 +790,35 @@ namespace TestClient
 
         #region Market Data
 
-        private void BtnMarketDataFormShow_Click(object sender, EventArgs e)
-        {
-            Root.Form?.Show();
-        }
-
-        private void BtnMarketDataFormHide_Click(object sender, EventArgs e)
-        {
-            Root.Form?.Hide();
-        }
-
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected || !ValidateSymbol()) return;
             ContractTest.ActiveContract.Request_MarketTicks(TextBoxGenericTickList.Text);
+            MarketDataGridView.MarketDataTable.Add(ContractTest.ActiveContract);
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
         {
             string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
-            /*
-            string[] symbols = new string[] { "XLNX", "FB" ,"AAPL", "LULU", "GOOGL", "NFLX", "NATI", "TSLA",
-                                            "EDU", "QQQ", "NIO", "KEYS", "A","DTSS","SINT", "HYG","SPY","NEAR",
-                                            "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
-                                            "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN" };*/
-
 
             string symbolText = TextBoxMultiContracts.Text;
             var symbols = ContractList.GetSymbolList(ref symbolText);
-            /*
-            string[] symbols = new string[] { "CCL", "DAL", "UAL", "HAL", "PINS", "RCL", "MGM", "CARR", "PCG", "VIAC", "CTL", "LYFT", "KEY",
-            "RF", "SYF", "MRVL", "WORK", "COG", "IMMU", "TLRY", "OSTK", "IO", "CHEF", "PLAY", "VVUS" };*/
 
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-            MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
+            //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
 
             foreach (Contract c in cList)
             {
                 Console.WriteLine("MarketQuote: " + c.Request_MarketTicks(tickList));
-
-                GridView.MarketDataTable.Add(c);
-
-
+                MarketDataGridView.MarketDataTable.Add(c);
             }
-            MarketDataManager.Add(GridView);
+
             Root.Form?.Show();
         }
+
+
+
+
 
         private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
         {
@@ -916,7 +934,15 @@ namespace TestClient
 
         #endregion Order
 
+        private void BtnMarketDataFormShow_Click(object sender, EventArgs e)
+        {
+            Root.Form?.Show();
+        }
 
+        private void BtnMarketDataFormHide_Click(object sender, EventArgs e)
+        {
+            Root.Form?.Hide();
+        }
     }
     public static class DataGridHelper
     {

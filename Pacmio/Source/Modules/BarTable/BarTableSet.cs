@@ -79,22 +79,29 @@ namespace Pacmio
             }
         }
 
-        public BarTable AddContract(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts)
+        public BarTable AddContract(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
             lock (DataLockObject)
             {
                 BarTable bt = AddContract(c, bas, barFreq, barType);
                 bt.Fetch(period, cts);
                 bt.CalculateOnly(bas);
+                period = bt.Period;
                 return bt;
             }
         }
 
-        public void AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts)
+        public void AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
-            BarTable bt = AddContract(c, bas, barFreq, barType); //, period, cts);
+            BarTable bt = AddContract(c, bas, barFreq, barType);
             AddChart(bt, bas);
-            bt.Fetch(period, cts);
+
+            if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period) 
+            {
+                bt.Fetch(period, cts);
+                period = bt.Period;
+            }
+
             bt.CalculateOnly(bas);
         }
 
@@ -129,6 +136,27 @@ namespace Pacmio
 
         public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
+            progress?.Report(0);
+            PeriodSettings[(barFreq, barType)] = period;
+
+            ParallelOptions po = new ParallelOptions()
+            {
+                //CancellationToken = cts.Token,
+                MaxDegreeOfParallelism = 8
+            };
+
+            int i = 0, count = contracts.Count();
+            Parallel.ForEach(contracts, po,n  => {
+                if (cts.Continue())
+                {
+                    var (c, bas) = n;
+                    AddChart(c, bas, barFreq, barType, ref period, cts);
+                    i++;
+                    progress?.Report(100.0f * i / count);
+                }
+            });
+
+            /*
             List<BarTable> barTables = AddContract(contracts, barFreq, barType); //, period, cts, progress);
             int pt = 0;
             foreach (BarTable bt in barTables)
@@ -136,7 +164,7 @@ namespace Pacmio
                 AddChart(bt, BarTables[bt]);
                 pt++;
             }
-            UpdatePeriod(barFreq, barType, period, cts, progress);
+            UpdatePeriod(barFreq, barType, period, cts, progress);*/
         }
 
         private void AddChart(BarTable bt, BarAnalysisSet bas)

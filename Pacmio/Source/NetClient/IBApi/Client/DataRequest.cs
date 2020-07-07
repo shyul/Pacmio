@@ -187,6 +187,7 @@ namespace Pacmio.IB
 
         public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
+            Console.WriteLine("\n");
             lock (RequestLockObject)
             {
                 if (cts.Continue() && DataRequestReady && HistoricalData_Connected)
@@ -224,10 +225,12 @@ namespace Pacmio.IB
         {
             var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
             if (cts.Continue() && HistoricalData_Connected && bfi_valid && period.Start < DateTime.Now)
-            {            
+            {
                 // We will download, but won't log the period if the stop may extended to the future.
                 IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
                 LastRequestedHistoricalDataPeriod = period;
+
+                Console.WriteLine("\n");
 
                 // RequestLockObject and DataRequestReady must happen in pairs
                 lock (RequestLockObject)
@@ -256,7 +259,7 @@ namespace Pacmio.IB
                             }
                         }
                     }
-                
+
             }
         }
 
