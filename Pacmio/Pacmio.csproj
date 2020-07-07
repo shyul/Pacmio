@@ -130,7 +130,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarData.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarDataRequest.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarTableFileData.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableFileData.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\SignalArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\SignalSeries.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />

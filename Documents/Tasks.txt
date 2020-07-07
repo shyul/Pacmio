@@ -1,7 +1,6 @@
-1. if the tick flickers
-2. Auto add Market Data Feed without overlapping existing requests
-3a. The Cancellation is not efficient
-3b. Pick up _backup Json data when the main data failed to save.
+1. Default Market Tick Data Group
+3. The Cancellation is not efficient
+
 
 Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
 Parse Errors: (0)"4"-(1)"2"-(2)"202"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 202"

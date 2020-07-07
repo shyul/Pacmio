@@ -85,18 +85,18 @@ namespace Pacmio
             {
                 BarTable bt = AddContract(c, bas, barFreq, barType);
                 bt.Fetch(period, cts);
-                //bt.Load(period);
+                bt.CalculateOnly(bas);
                 return bt;
             }
         }
 
         public void AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts)
         {
-            BarTable bt = AddContract(c, bas, barFreq, barType, period, cts);
+            BarTable bt = AddContract(c, bas, barFreq, barType); //, period, cts);
             AddChart(bt, bas);
+            bt.Fetch(period, cts);
+            bt.CalculateOnly(bas);
         }
-
-
 
         private List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType)
         {
@@ -129,12 +129,33 @@ namespace Pacmio
 
         public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
-            List<BarTable> barTables = AddContract(contracts, barFreq, barType, period, cts, progress);
+            List<BarTable> barTables = AddContract(contracts, barFreq, barType); //, period, cts, progress);
             int pt = 0;
-            foreach (BarTable bt in barTables) 
+            foreach (BarTable bt in barTables)
             {
                 AddChart(bt, BarTables[bt]);
                 pt++;
+            }
+            UpdatePeriod(barFreq, barType, period, cts, progress);
+        }
+
+        private void AddChart(BarTable bt, BarAnalysisSet bas)
+        {
+            if (BarChart.List.Where(n => n.BarTable == bt).Count() == 0)
+            {
+                BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
+                bc.ConfigChart(bt, bas);
+                if (Root.Form.InvokeRequired)
+                {
+                    Root.Form.Invoke((MethodInvoker)delegate
+                    {
+                        Root.Form.AddForm(DockStyle.Fill, 0, bc);
+                    });
+                }
+                else
+                {
+                    Root.Form.AddForm(DockStyle.Fill, 0, bc);
+                }
             }
         }
 
@@ -154,7 +175,7 @@ namespace Pacmio
 
                 PeriodSettings[(barFreq, barType)] = period;
                 var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
-                
+
                 ParallelOptions po = new ParallelOptions()
                 {
                     //CancellationToken = cts.Token,
@@ -181,26 +202,6 @@ namespace Pacmio
                         progress?.Report(100.0f * i / count);
                     }
                 });
-            }
-        }
-
-        private void AddChart(BarTable bt, BarAnalysisSet bas)
-        {
-            if (BarChart.List.Where(n => n.BarTable == bt).Count() == 0)
-            {
-                BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-                bc.ConfigChart(bt, bas);
-                if (Root.Form.InvokeRequired)
-                {
-                    Root.Form.Invoke((MethodInvoker)delegate
-                    {
-                        Root.Form.AddForm(DockStyle.Fill, 0, bc);
-                    });
-                }
-                else
-                {
-                    Root.Form.AddForm(DockStyle.Fill, 0, bc);
-                }
             }
         }
     }

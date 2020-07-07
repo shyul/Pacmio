@@ -294,7 +294,7 @@ namespace Pacmio
 
             if (!Contains(time))
             {
-                if (Count > 0 && LastBar.Source == DataSource.Tick)
+                if (Count > 0 && LastBar.Source >= DataSource.IB)
                     LastBar.Source = DataSource.Realtime;
 
                 Bar nb = new Bar(this, time, DataSource.Tick,
@@ -310,7 +310,7 @@ namespace Pacmio
             {
                 Bar nb = this[time];
 
-                if (nb.Source >= DataSource.Realtime)
+                if (nb.Source >= DataSource.IB)
                 {
                     if (last > nb.High) // New High
                     {
@@ -924,8 +924,6 @@ namespace Pacmio
             {
                 m_Status = value;
 
-                // TODO: Verifiy 1. if the tick flickers
-                // TODO: Auto add Market Data Feed without overlapping existing requests
                 if (m_Status == TableStatus.CalculateFinished)
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.PointerToEnd(); });
@@ -980,23 +978,22 @@ namespace Pacmio
         public void AddPriceTick(MarketTick mt)
         {
             if (Enabled && IsLive)
-                //lock (DataLockObject)
+            //lock (DataLockObject)
+            {
+                TableStatus last_status = Status;
+                Status = TableStatus.Ticking;
+                Add(mt.Time, mt.Price, mt.Size);
+
+                if (last_status == TableStatus.Ready)
                 {
-                    TableStatus last_status = Status;
-                    Status = TableStatus.Ticking;
-                    Add(mt.Time, mt.Price, mt.Size);
-
-                    if (last_status == TableStatus.Ready)
-                    {
-                        SetCalculationPointer(LatestCalculatePointer - 2);
-                        Calculate(BarAnalysisPointerList.Keys);
-                        Status = TableStatus.TickingFinished;
-                        // lead it to calculation... here
-                    }
-
-                    Status = last_status;
+                    SetCalculationPointer(LatestCalculatePointer - 2);
+                    Calculate(BarAnalysisPointerList.Keys);
+                    Status = TableStatus.TickingFinished;
+                    // lead it to calculation... here
                 }
 
+                Status = last_status;
+            }
         }
 
         public void ResetCalculateData()
