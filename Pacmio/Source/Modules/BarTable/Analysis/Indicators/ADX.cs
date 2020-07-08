@@ -249,7 +249,7 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, 10)
+                OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
                 {
                     Order = AreaOrder,
                     Reference = Reference,

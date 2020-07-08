@@ -109,11 +109,13 @@ namespace Pacmio
 
         public string AreaName { get; private set; } = MainArea.DefaultName;
 
+        public int AreaRatio { get; set; } = 8;
+
         public void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
             {
-                Area a = bc.AddArea(new Area(bc, AreaName, 10)
+                Area a = bc.AddArea(new Area(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });

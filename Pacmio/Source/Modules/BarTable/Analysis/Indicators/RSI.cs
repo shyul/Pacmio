@@ -34,10 +34,10 @@ namespace Pacmio
             AreaName = GroupName = GetType().Name;
             Description = "Relative Strength Index " + label;
 
-            AverageGain = new AverageGain(Interval);
+            AverageGain = new AverageGain(Interval) { ChartEnabled = false };
             AverageGain.AddChild(this);
 
-            AverageLoss = new AverageLoss(Interval);
+            AverageLoss = new AverageLoss(Interval) { ChartEnabled = false };
             AverageLoss.AddChild(this);
 
             Result_Column = new NumericColumn(Name);
@@ -89,8 +89,8 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa : 
-                    bc.AddArea(new OscillatorArea(bc, AreaName, 10)
+                OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
+                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Reference = Reference,
                         UpperLimit = UpperLimit,

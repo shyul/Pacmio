@@ -113,7 +113,7 @@ namespace Pacmio
             if (ChartEnabled)
             {
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, AreaName, 10)
+                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Reference = Reference,
                         UpperLimit = UpperLimit,

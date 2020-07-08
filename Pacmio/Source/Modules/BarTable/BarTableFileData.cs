@@ -62,7 +62,7 @@ namespace Pacmio
         public MultiPeriod<DataSource> DataSourceSegments { get; private set; } = new MultiPeriod<DataSource>();
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)> Bars { get; set; } 
+        public Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)> Bars { get; set; }
             = new Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)>();
 
         #region File Operation

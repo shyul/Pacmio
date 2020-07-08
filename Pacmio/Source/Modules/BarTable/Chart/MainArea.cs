@@ -31,7 +31,7 @@ namespace Pacmio
 
             // Configure Price series by assigning the chart type
             // ===================================================
-            AddSeries(PriceSeries = new OhlcSeries(Bar.Column_Open, Bar.Column_High, Bar.Column_Low, Bar.Column_Close, 
+            AddSeries(PriceSeries = new OhlcSeries(Bar.Column_Open, Bar.Column_High, Bar.Column_Low, Bar.Column_Close,
                 Bar.Column_Percent)
             {
                 Order = int.MaxValue,
@@ -51,9 +51,6 @@ namespace Pacmio
                 LegendName = "VOLUME",
                 LegendLabelFormat = "0.##"
             });
-
-            //Table.Column_SHAPE.BullishTheme = new ColorTheme(Color.DarkGray, Color.Gray);
-            //Table.Column_SHAPE.BearishTheme = PriceSeries.DownTheme;
         }
 
         public BarChart BarChart { get; private set; }

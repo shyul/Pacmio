@@ -26,6 +26,8 @@ namespace Pacmio
 
         string AreaName { get; }
 
-        int AreaOrder { get; }
+        int AreaRatio { get; set; }
+
+        int AreaOrder { get; set; }
     }
 }

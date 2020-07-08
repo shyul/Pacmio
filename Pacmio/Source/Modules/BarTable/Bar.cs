@@ -273,11 +273,11 @@ namespace Pacmio
             }
         }
 
-        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN") { Label = "O" };
-        public static readonly NumericColumn Column_High = new NumericColumn("HIGH") { Label = "H" };
-        public static readonly NumericColumn Column_Low = new NumericColumn("LOW") { Label = "L" };
-        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE") { Label = "C" };
-        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
+        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN", "O");
+        public static readonly NumericColumn Column_High = new NumericColumn("HIGH", "H");
+        public static readonly NumericColumn Column_Low = new NumericColumn("LOW", "L");
+        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE", "CLOSE");
+        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME", string.Empty);
 
         public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
         public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
@@ -377,7 +377,7 @@ namespace Pacmio
             }
         }
 
-        public void RemoveSimulation(ITradeSetting tr) 
+        public void RemoveSimulation(ITradeSetting tr)
         {
             if (SimulationDatums.ContainsKey(tr))
             {
@@ -387,7 +387,7 @@ namespace Pacmio
 
         #endregion Position / Simulation Information
 
-        public void ClearAllCalculationData() 
+        public void ClearAllCalculationData()
         {
             NumericDatums.Clear();
             TagDatums.Clear();

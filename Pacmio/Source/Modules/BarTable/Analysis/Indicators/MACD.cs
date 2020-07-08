@@ -168,14 +168,14 @@ namespace Pacmio
 
         public override bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => ColumnSeries.Enabled = LineSeries.Enabled = value; }
 
-        public int AreaOrder { get; } = 0;
+        public int AreaOrder { get; set; } = 0;
 
         public override void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
             {
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, AreaName, 10)
+                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Order = AreaOrder,
                         Reference = Reference,

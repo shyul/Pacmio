@@ -129,8 +129,12 @@ namespace TestClient
 
         private void BtnMasterCancel_Click(object sender, EventArgs e)
         {
-            if (!(Cts is null))
+            if (!(Cts is null)) 
+            {
+                Console.WriteLine("\n ##### Master Cancel !! \n");
                 Cts.Cancel();
+            }
+             
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)

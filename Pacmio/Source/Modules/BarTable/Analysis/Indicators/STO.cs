@@ -110,14 +110,16 @@ namespace Pacmio
 
         public string AreaName { get; }
 
-        public int AreaOrder { get; } = 0;
+        public int AreaRatio { get; set; } = 10;
+
+        public int AreaOrder { get; set; } = 0;
 
         public void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
             {
                 OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, AreaName, 10)
+                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Order = AreaOrder,
                         HasXAxisBar = HasXAxisBar,

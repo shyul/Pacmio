@@ -160,16 +160,6 @@ namespace Pacmio
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
             });
-
-            /*
-            List<BarTable> barTables = AddContract(contracts, barFreq, barType); //, period, cts, progress);
-            int pt = 0;
-            foreach (BarTable bt in barTables)
-            {
-                AddChart(bt, BarTables[bt]);
-                pt++;
-            }
-            UpdatePeriod(barFreq, barType, period, cts, progress);*/
         }
 
         private void AddChart(BarTable bt, BarAnalysisSet bas)

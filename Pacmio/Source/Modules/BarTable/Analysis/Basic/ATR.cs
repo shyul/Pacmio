@@ -1,4 +1,4 @@
-﻿ /// ***************************************************************************
+﻿/// ***************************************************************************
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
@@ -95,13 +95,15 @@ namespace Pacmio
 
         public string AreaName { get; protected set; }
 
-        public int AreaOrder { get; } = 0;
+        public int AreaRatio { get; set; } = 8;
+
+        public int AreaOrder { get; set; } = 0;
 
         public virtual void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
             {
-                Area a = bc.AddArea(new Area(bc, AreaName, 10)
+                Area a = bc.AddArea(new Area(bc, AreaName, AreaRatio)
                 {
                     Order = AreaOrder,
                     HasXAxisBar = HasXAxisBar,

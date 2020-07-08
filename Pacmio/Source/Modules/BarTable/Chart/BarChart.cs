@@ -25,11 +25,9 @@ namespace Pacmio
 {
     public sealed class BarChart : ChartWidget
     {
-        //private static PacmioForm Form => Root.Form;
-
         public static readonly List<BarChart> List = new List<BarChart>();
 
-        public static void RemoveAll() 
+        public static void RemoveAll()
         {
             lock (List) List.ForEach(n => n.Close());
         }
@@ -76,7 +74,7 @@ namespace Pacmio
         {
             Console.WriteLine(TabName + ": The BarChart is closing");
 
-            lock(List) List.CheckRemove(this);
+            lock (List) List.CheckRemove(this);
             if (m_barTable is BarTable)
             {
                 lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
@@ -488,7 +486,7 @@ namespace Pacmio
             Graphics g = pe.Graphics;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            if (ChartBounds.Width > 0 && ChartBounds.Height > 0) 
+            if (ChartBounds.Width > 0 && ChartBounds.Height > 0)
             {
                 if (m_barTable is null)
                 {

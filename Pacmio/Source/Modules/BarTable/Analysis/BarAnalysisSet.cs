@@ -25,7 +25,7 @@ namespace Pacmio
 {
     public class BarAnalysisSet : IEquatable<BarAnalysisSet>
     {
-        public BarAnalysisSet(string name) 
+        public BarAnalysisSet(string name)
         {
             Name = name;
         }

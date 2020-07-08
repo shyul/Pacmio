@@ -16,7 +16,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static int MaximumSubscription => 100;
+        public static int MaximumSubscription { get; set; } = 95;
 
         public static int ActiveSubscriptionCount => ActiveMarketTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
 
