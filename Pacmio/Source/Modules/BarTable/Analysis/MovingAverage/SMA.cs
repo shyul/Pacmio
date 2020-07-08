@@ -96,7 +96,7 @@ namespace Pacmio
 
         public string AreaName { get; protected set; } = MainArea.DefaultName;
 
-        public int AreaRatio { get; set; } = 12;
+        public float AreaRatio { get; set; } = 12;
 
         public virtual void ConfigChart(BarChart bc)
         {

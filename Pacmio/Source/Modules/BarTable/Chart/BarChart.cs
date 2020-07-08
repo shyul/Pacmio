@@ -80,7 +80,7 @@ namespace Pacmio
                 lock (m_barTable.DataViews) m_barTable.DataViews.CheckRemove(this);
             }
             AsyncUpdateUITask_Cts.Cancel();
-            HostContainer.Remove(this);
+            HostContainer?.Remove(this);
 
             /*
             Dispose();
@@ -438,7 +438,8 @@ namespace Pacmio
                             AxisX.IndexCount = IndexCount;
                             AxisX.Coordinate(ChartBounds.Width - RightBlankAreaWidth);
 
-                            int ptY = ChartBounds.Top, totalY = TotalAreaHeightRatio;
+                            int ptY = ChartBounds.Top;
+                            float totalY = TotalAreaHeightRatio;
 
                             if (AutoScaleFit)
                             {
@@ -448,13 +449,13 @@ namespace Pacmio
                                     {
                                         if (ca.HasXAxisBar)
                                         {
-                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight);
+                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight).ToInt32());
                                             ptY += ca.Bounds.Height + AxisXLabelHeight;
                                             ca.TimeLabelY = ca.Bounds.Bottom + AxisXLabelHeight / 2 + 1;
                                         }
                                         else
                                         {
-                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, ChartBounds.Height * ca.HeightRatio / totalY);
+                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY).ToInt32());
                                             ptY += ca.Bounds.Height;
                                         }
                                         ca.Coordinate();

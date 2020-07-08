@@ -127,7 +127,7 @@ namespace TestClient
                         //ema5_smma5_cross,
                         //divergence
 
-                        new WaveTrend(10, 21, 4, 0.015),
+                        new WaveTrend(10, 21, 4, 0.015){ AreaRatio = 15},
                         new ADX(14) { AreaRatio = 10 },
                         //new CCI(20, 0.015),
                         //new ADX(14) { Order = 100, HasXAxisBar = true },

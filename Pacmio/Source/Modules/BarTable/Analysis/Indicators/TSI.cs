@@ -211,7 +211,7 @@ namespace Pacmio
 
         public string AreaName { get; }
 
-        public int AreaRatio { get; set; } = 8;
+        public float AreaRatio { get; set; } = 8;
 
         public int AreaOrder { get; set; } = 0;
 

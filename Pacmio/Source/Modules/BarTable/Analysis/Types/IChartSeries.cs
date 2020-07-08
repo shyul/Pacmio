@@ -24,7 +24,7 @@ namespace Pacmio
 
         string AreaName { get; }
 
-        int AreaRatio { get; set; }
+        float AreaRatio { get; set; }
 
         void ConfigChart(BarChart bc);
     }
