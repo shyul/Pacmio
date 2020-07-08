@@ -86,11 +86,11 @@ namespace Pacmio
         public static bool operator ==(BarTableFileData left, BarTableFileData right) => left.Equals(right);
         public static bool operator !=(BarTableFileData left, BarTableFileData right) => !left.Equals(right);
         public bool Equals(BarTable other) => (Contract, BarFreq, Type) == (other.Contract.Info, other.BarFreq, other.Type);
-        public static bool operator ==(BarTableFileData left, BarTable right) => left.Equals(right);
-        public static bool operator !=(BarTableFileData left, BarTable right) => !left.Equals(right);
-        public bool Equals(Contract c) => c.Info == Contract;
-        public static bool operator ==(BarTableFileData left, Contract right) => left.Equals(right);
-        public static bool operator !=(BarTableFileData left, Contract right) => !left.Equals(right);
+        public static bool operator ==(BarTableFileData left, BarTable right) => left is BarTableFileData btd && btd.Equals(right);
+        public static bool operator !=(BarTableFileData left, BarTable right) => !(left == right);
+        public bool Equals(Contract other) => other is Contract c && c.Info == Contract;
+        public static bool operator ==(BarTableFileData left, Contract right) => left is BarTableFileData btd && btd.Equals(right);
+        public static bool operator !=(BarTableFileData left, Contract right) => !(left == right);
         public override bool Equals(object other)
         {
             if (other is null)

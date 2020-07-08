@@ -34,8 +34,15 @@ namespace TestClient
             set
             {
                 this.Invoke(() => {
-                    DateTimePickerHistoricalDataStart.Value = value.Start;
-                    DateTimePickerHistoricalDataStop.Value = value.Stop;
+                    try
+                    {
+                        DateTimePickerHistoricalDataStart.Value = value.Start;
+                        DateTimePickerHistoricalDataStop.Value = value.Stop;
+                    }
+                    catch (Exception e) when (e is ArgumentOutOfRangeException)
+                    {
+
+                    }
                 });
                 /*
                 if (InvokeRequired)

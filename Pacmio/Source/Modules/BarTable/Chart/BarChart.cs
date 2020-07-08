@@ -106,6 +106,8 @@ namespace Pacmio
                 BarAnalysisSet = bas;
                 bt.CalculateOnly(BarAnalysisSet);
             }
+            StopPt = bt.Count;
+            ReadyToShow = true;
             SetAsyncUpdateUI();
         }
 
@@ -249,7 +251,21 @@ namespace Pacmio
 
         public Range<double> ChartRange => MainArea.AxisY(AlignType.Right).Range;
 
+        public double ChartRangePercent => (ChartRange.Minimum != 0) ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
+
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_barTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
+
+        public override void CoordinateOverlay()
+        {
+            if (ReadyToShow)
+            {
+
+            }
+            else 
+            {
+        
+            }
+        }
 
         protected override void CoordinateLayout()
         {
@@ -270,8 +286,6 @@ namespace Pacmio
                 lock (m_barTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-
-
                         AxisX.TickList.Clear();
 
                         // Get Text Width Major: 1 ~ 10 
@@ -469,18 +483,17 @@ namespace Pacmio
 
                             }
                         }
-
-                        double ctr = (ChartRange.Minimum != 0) ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
-                        Title = m_barTable.Name + " | " + IndexCount + " Units | CTR: " + ctr.ToString("0.##") + "% | " + LastTimeString;
                     }
+
+                Title = m_barTable.Name + " | " + IndexCount + " Units | CTR: " + ChartRangePercent.ToString("0.##") + "% | " + LastTimeString;
             }
             else
             {
-                Title = "No Data";
+                Title = m_barTable.Name + " | " + IndexCount + " Units | " + LastTimeString;
             }
+
             PerformLayout();
         }
-
 
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -493,50 +506,58 @@ namespace Pacmio
                 {
                     g.DrawString("Not configured", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
                 }
-                else if (DataCount < 1)
+                else
                 {
-                    g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
-                }
-                else if (!m_barTable.ReadyToShow)
-                {
-                    g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
-                }
-                else if (ReadyToShow)
-                {
-                    lock (m_barTable.DataLockObject)
-                        lock (GraphicsLockObject)
-                        {
-                            for (int i = 0; i < Areas.Count; i++)
-                            {
-                                Area ca = Areas[i];
-                                if (ca.Visible && ca.Enabled)
-                                {
-                                    ca.Draw(g);
-                                    if (ca.HasXAxisBar)
-                                    {
-                                        for (int j = 0; j < IndexCount; j++)
-                                        {
-                                            int x = IndexToPixel(j);
-                                            int y = ca.Bottom;
-                                            g.DrawLine(ca.Theme.EdgePen, x, y, x, y + 1);
+                    g.DrawString(m_barTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
-                                            if (i < Areas.Count - 1)
+                    if (DataCount < 1)
+                    {
+                        g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
+                    }
+                    else if (!m_barTable.ReadyToShow)
+                    {
+                        g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
+                    }
+                    else if (ReadyToShow)
+                    {
+                        lock (m_barTable.DataLockObject)
+                            lock (GraphicsLockObject)
+                            {
+
+
+                                for (int i = 0; i < Areas.Count; i++)
+                                {
+                                    Area ca = Areas[i];
+                                    if (ca.Visible && ca.Enabled)
+                                    {
+                                        ca.Draw(g);
+                                        if (ca.HasXAxisBar)
+                                        {
+                                            for (int j = 0; j < IndexCount; j++)
                                             {
-                                                y = Areas[i + 1].Top;
-                                                g.DrawLine(ca.Theme.EdgePen, x, y, x, y - 1);
+                                                int x = IndexToPixel(j);
+                                                int y = ca.Bottom;
+                                                g.DrawLine(ca.Theme.EdgePen, x, y, x, y + 1);
+
+                                                if (i < Areas.Count - 1)
+                                                {
+                                                    y = Areas[i + 1].Top;
+                                                    g.DrawLine(ca.Theme.EdgePen, x, y, x, y - 1);
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
 
-                            foreach (var ic in ChartOverlays)
-                            {
-                                ic.Draw(g, this, m_barTable);
+                                foreach (var ic in ChartOverlays)
+                                {
+                                    ic.Draw(g, this, m_barTable);
+                                }
                             }
-                        }
-
+                    }
                 }
+
+
 
             }
 

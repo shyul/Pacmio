@@ -259,29 +259,29 @@ namespace Pacmio
                 return false;
         }
 
-        public void Add(BarData bd)
+        public void Add(DataSource Source, DateTime Time, TimeSpan Span, double Open, double High, double Low, double Close, double Volume, bool IsAdjusted)
         {
-            if (bd.Span == Frequency.Span)
+            if (Span == Frequency.Span)
             {
-                Bar b = GetOrAdd(bd.Time);
-                if (b.Source >= bd.Source)
+                Bar b = GetOrAdd(Time);
+                if (b.Source >= Source)
                 {
-                    b.Source = bd.Source;
-                    if (bd.IsAdjusted)
+                    b.Source = Source;
+                    if (IsAdjusted)
                     {
-                        b.Open = bd.Open;
-                        b.High = bd.High;
-                        b.Low = bd.Low;
-                        b.Close = bd.Close;
-                        b.Volume = bd.Volume;
+                        b.Open = Open;
+                        b.High = High;
+                        b.Low = Low;
+                        b.Close = Close;
+                        b.Volume = Volume;
                     }
                     else
                     {
-                        b.Actual_Open = bd.Open;
-                        b.Actual_High = bd.High;
-                        b.Actual_Low = bd.Low;
-                        b.Actual_Close = bd.Close;
-                        b.Actual_Volume = bd.Volume;
+                        b.Actual_Open = Open;
+                        b.Actual_High = High;
+                        b.Actual_Low = Low;
+                        b.Actual_Close = Close;
+                        b.Actual_Volume = Volume;
                     }
                 }
             }

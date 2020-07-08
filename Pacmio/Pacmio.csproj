@@ -127,8 +127,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarData.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarDataRequest.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableFileData.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\SignalArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\SignalSeries.cs" />
