@@ -103,6 +103,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IOscillator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Types\IPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
@@ -303,8 +306,6 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Modules\BarTable\Analysis\Patterns\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

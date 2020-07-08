@@ -200,12 +200,12 @@ namespace Pacmio
 
         public static HashSet<string> GetSymbolList(ref string text)
         {
-            string[] symbolFields = text.CsvReadFields();
+            string[] symbolFields = text.Replace('/', ',').CsvReadFields();
             HashSet<string> symbolItemList = new HashSet<string>();
             HashSet<string> symbolList = new HashSet<string>();
             foreach (string field in symbolFields)
             {
-                string symbol = field.TrimCsvValueField();
+                string symbol = field.TrimCsvValueField().ToUpper();
 
                 if (!string.IsNullOrWhiteSpace(symbol))
                 {

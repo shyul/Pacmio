@@ -64,6 +64,7 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
             this.BtnCancelAllScanner = new System.Windows.Forms.Button();
             this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
             this.LabelWatchListName = new System.Windows.Forms.Label();
@@ -176,7 +177,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -546,6 +546,16 @@ namespace TestClient
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
+            // 
+            // BtnMarketDataSyncTicks
+            // 
+            this.BtnMarketDataSyncTicks.Location = new System.Drawing.Point(82, 82);
+            this.BtnMarketDataSyncTicks.Name = "BtnMarketDataSyncTicks";
+            this.BtnMarketDataSyncTicks.Size = new System.Drawing.Size(100, 23);
+            this.BtnMarketDataSyncTicks.TabIndex = 50;
+            this.BtnMarketDataSyncTicks.Text = "Sync Ticks";
+            this.BtnMarketDataSyncTicks.UseVisualStyleBackColor = true;
+            this.BtnMarketDataSyncTicks.Click += new System.EventHandler(this.BtnMarketDataSyncTicks_Click);
             // 
             // BtnCancelAllScanner
             // 
@@ -1713,16 +1723,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnMarketDataSyncTicks
-            // 
-            this.BtnMarketDataSyncTicks.Location = new System.Drawing.Point(82, 82);
-            this.BtnMarketDataSyncTicks.Name = "BtnMarketDataSyncTicks";
-            this.BtnMarketDataSyncTicks.Size = new System.Drawing.Size(100, 23);
-            this.BtnMarketDataSyncTicks.TabIndex = 50;
-            this.BtnMarketDataSyncTicks.Text = "Sync Ticks";
-            this.BtnMarketDataSyncTicks.UseVisualStyleBackColor = true;
-            this.BtnMarketDataSyncTicks.Click += new System.EventHandler(this.BtnMarketDataSyncTicks_Click);
             // 
             // MainForm
             // 

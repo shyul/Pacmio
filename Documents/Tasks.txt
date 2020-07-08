@@ -1,3 +1,7 @@
+1. Order -> OrderInfo -> Trade Log -> Position
+2. Pattern:
+
+
 
 
 Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
