@@ -233,7 +233,6 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Peak => Peak,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == Column_ProfitChange => (Table.CurrentTradeRule is TradeRule tr) ? this[tr].PnL : 0,
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
 
                     _ => double.NaN,
@@ -261,8 +260,6 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_Peak: Peak = value; break;
                         case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value; break;
 
-                        case NumericColumn dc when dc == Column_ProfitChange: break;
-
                         default:
                             if (!NumericDatums.ContainsKey(column))
                                 NumericDatums.Add(column, value);
@@ -288,8 +285,6 @@ namespace Pacmio
 
         public static readonly NumericColumn Column_TrendStrength = new NumericColumn("TREND");
         public static readonly NumericColumn Column_Peak = new NumericColumn("PEAK");
-
-        public static readonly NumericColumn Column_ProfitChange = new NumericColumn("PCHG");
 
         #endregion Numeric Column
 
@@ -343,6 +338,7 @@ namespace Pacmio
             {
                 if (!TradeDatums.ContainsKey(tr))
                 {
+                    // TODO: Can not create BP like this !!!
                     TradeDatums.Add(tr, new BarPosition(this, tr));
                 }
 

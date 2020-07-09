@@ -32,7 +32,9 @@ namespace Pacmio
 
         public BarTable Table => BarChart.BarTable;
 
-        public IEnumerable<SignalColumn> SignalColumns => BarChart.TradeRule.Analyses[BarChart.BarFreq].SignalColumns;
+        public TradeRule TradeRule => BarChart.TradeRule;
+
+        public IEnumerable<SignalColumn> SignalColumns => TradeRule.Analyses[BarChart.BarFreq].SignalColumns;
 
         public override void RefreshAxis(IArea area, ITable table)
         {
@@ -42,7 +44,10 @@ namespace Pacmio
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    var (bullish, bearish) = Table.TotalSignalScore(i, SignalColumns);
+                    var (bullish, bearish) = Table[i, TradeRule];
+
+
+
                     axisY.Range.Insert(bullish);
                     axisY.Range.Insert(bearish);
                 }
@@ -84,7 +89,7 @@ namespace Pacmio
 
                     foreach (SignalColumn sc in SignalColumns)
                     {
-                        var (desc, score) = Table[i, sc];
+                        var (desc, score) = Table[i, TradeRule, sc];
 
                         Rectangle rect;
                         int height;

@@ -140,7 +140,8 @@ namespace Pacmio
             }
         }
         
-        public (string description, double score) this[int i, SignalColumn column]
+       
+        public (string description, double score) this[int i, TradeRule tr, SignalColumn column]
         {
             get
             {
@@ -152,7 +153,7 @@ namespace Pacmio
                     int k = i - j;
                     if (k >= 0 && k < Count)
                     {
-                        if (Rows[k][CurrentTradeRule][column] is SignalDatum sd)
+                        if (Rows[k][tr][column] is SignalDatum sd)
                         {
                             if (string.IsNullOrEmpty(description)) description = sd.Description;
                             score += sd.Scores[j];
@@ -164,16 +165,22 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) TotalSignalScore(int i, IEnumerable<SignalColumn> columns)
+        public (double bullish, double bearish) this[int i, TradeRule tr]
         {
-            double bull = 0, bear = 0;
-            foreach (SignalColumn sc in columns) //CurrentTradeRule.Analyses[BarFreq].SignalColumns)
+            get
             {
-                var (_, score) = this[i, sc];
-                if (score > 0) bull += score;
-                else if (score < 0) bear += score;
+                double bull = 0, bear = 0;
+
+                if (tr.Analyses.ContainsKey(BarFreq))
+                    foreach (SignalColumn sc in tr.Analyses[BarFreq].SignalColumns)
+                    {
+                        var (_, score) = this[i, tr, sc];
+                        if (score > 0) bull += score;
+                        else if (score < 0) bear += score;
+                    }
+
+                return (bull, bear);
             }
-            return (bull, bear);
         }
 
         private void Clear()
@@ -886,8 +893,6 @@ namespace Pacmio
         #region BarChart / DataView
 
         public readonly List<IDataView> DataViews = new List<IDataView>();
-
-        public TradeRule CurrentTradeRule { get; set; } = null;
 
         #endregion BarChart / DataView
 

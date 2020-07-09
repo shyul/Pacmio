@@ -244,7 +244,7 @@ namespace Pacmio
                 lock (BarTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        BarTable.CurrentTradeRule = TradeRule;
+                        //BarTable.CurrentTradeRule = TradeRule;
                         SignalArea.Visible = true;// HasSignalColumn;
                         //PositionArea.Visible = false;
 
@@ -470,7 +470,7 @@ namespace Pacmio
                 }
                 else
                 {
-                    BarTable.CurrentTradeRule = TradeRule;
+                    //BarTable.CurrentTradeRule = TradeRule;
 
                     g.DrawString(BarTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 

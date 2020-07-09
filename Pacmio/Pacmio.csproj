@@ -123,6 +123,7 @@
     <Compile Include="Source\Modules\BarTable\BarTableDownloader.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\PositionSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
