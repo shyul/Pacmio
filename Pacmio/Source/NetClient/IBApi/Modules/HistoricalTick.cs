@@ -23,6 +23,35 @@ namespace Pacmio.IB
         private static Contract active_HistoricalTick;
         public static DateTime LastTime_HistoricalTick { get; private set; }
 
+        public static void Request_HistoricalTick(Contract c, Period pd)
+        {
+            if (!TickList.ContainsKey(c)) TickList[c] = new List<(DateTime time, double price, double size)>();
+
+            if (TickList[c].Count > 0)
+            {
+                // Save the existing ticks
+            }
+
+            while (!IsReady_HistoricalTick)
+            {
+                Thread.Sleep(10);
+                // Handle Time out here.
+            }
+
+            DateTime time = pd.Start;
+
+            while (LastTime_HistoricalTick < pd.Stop)
+            {
+                SendRequest_HistoricalTick(c, time);
+                while (!IsReady_HistoricalTick)
+                {
+                    Thread.Sleep(10); // Handle Time out here.
+                }
+
+                time = LastTime_HistoricalTick.AddSeconds(1);
+            }
+        }
+
         internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, BarType barType = BarType.Trades,
             int numberOfTicks = 1000, bool useRTH = true, bool ignoreSize = false, bool includeExpired = false,
             ICollection<(string, string)> options = null)
@@ -113,7 +142,7 @@ namespace Pacmio.IB
                     string exchange = fields[pt + 4];
                     string speical_condition = fields[pt + 5];
 
-                    InboundTick(new MarketTick(c, time, last, vol));
+                    InboundTick(c, time, last, vol);
                     Console.WriteLine(c.Name + " | " + time.ToString("yyyyMMdd HH:mm:ss") + " : " + last + " / " + vol + " / " + exchange + " / " + speical_condition);
 
                     if (i == num - 1) LastTime_HistoricalTick = time;
@@ -124,38 +153,9 @@ namespace Pacmio.IB
             }
             requestId_HistoricalTick = -1;
         }
-        
-        private static readonly ConcurrentDictionary<Contract, List<MarketTick>> TickList = new ConcurrentDictionary<Contract, List<MarketTick>>();
 
-        public static void InboundTick(MarketTick mt) => TickList[mt.Contract].Add(mt);
+        public static void InboundTick(Contract c, DateTime time, double price, double size) => TickList[c].Add((time, price, size));
 
-        public static void Request_HistoricalTick(Contract c, Period pd)
-        {
-            if (!TickList.ContainsKey(c)) TickList[c] = new List<MarketTick>();
-
-            if (TickList[c].Count > 0)
-            {
-                // Save the existing ticks
-            }
-
-            while (!IsReady_HistoricalTick)
-            {
-                Thread.Sleep(10);
-                // Handle Time out here.
-            }
-
-            DateTime time = pd.Start;
-
-            while (LastTime_HistoricalTick < pd.Stop)
-            {
-                SendRequest_HistoricalTick(c, time);
-                while (!IsReady_HistoricalTick)
-                {
-                    Thread.Sleep(10); // Handle Time out here.
-                }
-
-                time = LastTime_HistoricalTick.AddSeconds(1);
-            }
-        }
+        private static readonly ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>> TickList = new ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>>();
     }
 }

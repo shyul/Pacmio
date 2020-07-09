@@ -163,7 +163,6 @@
     <Compile Include="Source\Modules\Trade\Order\Types\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarType.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\MarketTick.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ADX.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageGain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Bollinger.cs" />
@@ -256,7 +255,7 @@
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfoList.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\ReutersXml.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\DataSource.cs" />
+    <Compile Include="Source\Modules\DataSource.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />

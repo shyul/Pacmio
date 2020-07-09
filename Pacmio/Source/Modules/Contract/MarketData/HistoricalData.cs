@@ -82,10 +82,10 @@ namespace Pacmio
             return list;
         }
 
-        public void InboundLiveTick(MarketTick mt)
+        public void InboundLiveTick(DateTime time, double price, double size)
         {
             lock (LiveBarTables)
-                Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(mt));
+                Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(time, price, size));
         }
 
         [IgnoreDataMember]

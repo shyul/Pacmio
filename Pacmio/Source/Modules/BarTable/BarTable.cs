@@ -988,14 +988,14 @@ namespace Pacmio
                 }
         }
 
-        public void AddPriceTick(MarketTick mt)
+        public void AddPriceTick(DateTime time, double price, double size)
         {
             if (Enabled && IsLive)
             //lock (DataLockObject)
             {
                 TableStatus last_status = Status;
                 Status = TableStatus.Ticking;
-                Add(mt.Time, mt.Price, mt.Size);
+                Add(time, price, size);
 
                 if (last_status == TableStatus.Ready)
                 {

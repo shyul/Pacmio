@@ -329,7 +329,7 @@ namespace Pacmio.IB
                             DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
 
                             //double totalVol = volFields[3].ToDouble() * 100;
-                            hd.InboundLiveTick(new MarketTick(c, time, last, vol));
+                            hd.InboundLiveTick(time, last, vol);
 
                             /*
                             if (!TicksList.ContainsKey(c)) 
