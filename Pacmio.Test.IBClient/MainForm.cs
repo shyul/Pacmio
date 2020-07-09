@@ -297,7 +297,6 @@ namespace TestClient
         private void BtnDownloadMultiTables_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractList.GetSymbolList(ref symbolText);
 
             BarFreq freq = BarFreq;
             BarType type = BarType;
@@ -305,9 +304,11 @@ namespace TestClient
 
             Task.Run(() =>
             {
+                var symbols = ContractList.GetSymbolList(ref symbolText);
                 var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-                BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
-                BarTableTest.BarTableSet.AddContract(cList, freq, type, HistoricalPeriod, Cts, Progress);
+                BarTableDownloader.Download(cList, new List<(BarFreq freq, BarType type, Period period)>() { (freq, type, HistoricalPeriod) }, Cts, Progress);
+                //BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
+                //BarTableTest.BarTableSet.AddContract(cList, freq, type, HistoricalPeriod, Cts, Progress);
             }, Cts.Token);
         }
 

@@ -197,14 +197,6 @@ namespace Pacmio
             }
         }
 
-        /// <summary>
-        /// TODO: The Cancellation is not efficient
-        /// </summary>
-        /// <param name="barFreq"></param>
-        /// <param name="barType"></param>
-        /// <param name="period"></param>
-        /// <param name="cts"></param>
-        /// <param name="progress"></param>
         public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
@@ -228,6 +220,8 @@ namespace Pacmio
                             i++;
                             if (cts.Continue()) progress?.Report(100.0f * i / count);
                         }
+                        else
+                            return;
                     });
                 }
         }

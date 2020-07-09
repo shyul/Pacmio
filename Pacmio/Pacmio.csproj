@@ -120,6 +120,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableDownloader.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
