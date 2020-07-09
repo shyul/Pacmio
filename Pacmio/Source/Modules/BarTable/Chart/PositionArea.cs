@@ -35,8 +35,8 @@ namespace Pacmio
             Reference = 0;
             //Visible = true;
             //FixedTickStep_Right = 2;
-            /*
-            AddSeries(AccumulationSeries = new LineSeries(Bar.Column_ProfitChange, LineType.Step)
+            
+            AddSeries(AccumulationSeries = new PositionSeries(BarChart)
             {
                 Color = Color.DimGray,
                 Order = int.MinValue,
@@ -44,18 +44,18 @@ namespace Pacmio
                 Name = "P Change",
                 LegendName = "PCHG",
                 LegendLabelFormat = "0.##"
-            });*/
+            });
         }
 
         public BarChart BarChart { get; }
 
         public BarTable BarTable => BarChart.BarTable;
 
-        public LineSeries AccumulationSeries { get; }
+        public PositionSeries AccumulationSeries { get; }
 
         public override void DrawCustomBackground(Graphics g)
         {
-            //DrawPosition(g, this, BarTable, BarChart.TradeRule);
+            DrawPosition(g, this, BarTable, BarChart.TradeRule);
         }
 
         public static Dictionary<TradeActionType, Brush> ColorPalette { get; } = new Dictionary<TradeActionType, Brush>()

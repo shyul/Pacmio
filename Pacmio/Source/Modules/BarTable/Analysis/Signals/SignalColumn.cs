@@ -26,9 +26,31 @@ namespace Pacmio
 
         #region Graphics Properties
 
-        public Color BullishColor { get; set; } = Color.Green;
+        public Color BullishColor
+        {
+            get
+            {
+                return BullishTheme.ForeColor;
+            }
+            set
+            {
+                BullishTheme.ForeColor = BullishTheme.FillColor = value;
+                BullishTheme.EdgeColor = value.Opaque(196);
+            }
+        } //= Color.Green;
 
-        public Color BearishColor { get; set; } = Color.Red;
+        public Color BearishColor
+        {
+            get
+            {
+                return BearishTheme.ForeColor;
+            }
+            set
+            {
+                BearishTheme.ForeColor = BearishTheme.FillColor = value;
+                BearishTheme.EdgeColor = value.Opaque(196);
+            }
+        } //= Color.Red;
 
         public ColorTheme BullishTheme { get; } = new ColorTheme();
 

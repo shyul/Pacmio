@@ -24,10 +24,9 @@ namespace Pacmio
         public BarPosition(Bar b, TradeRule tr)
         {
             Bar = b;
-            if (Bar.Table.LastBar_1 is Bar b_1)
-                Snapshot(b_1[tr]);
-            else
-                Reset();
+            TradeRule = tr;
+            //Snapshot();
+            Reset();
         }
 
         public void Reset()
@@ -38,17 +37,24 @@ namespace Pacmio
             SignalDatums.Clear();
         }
 
-        private void Snapshot(BarPosition bp_1)
+        public void Snapshot()
         {
-            Quantity = bp_1.Quantity;
-            AveragePrice = bp_1.AveragePrice;
+            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[TradeRule] is BarPosition bp_1) 
+            {
+                Quantity = bp_1.Quantity;
+                AveragePrice = bp_1.AveragePrice;
 
-            if (Quantity == 0)
-                ActionType = TradeActionType.None;
-            else if (Quantity > 0)
-                ActionType = TradeActionType.LongHold;
-            else if (Quantity < 0)
-                ActionType = TradeActionType.ShortHold;
+                if (Quantity == 0)
+                    ActionType = TradeActionType.None;
+                else if (Quantity > 0)
+                    ActionType = TradeActionType.LongHold;
+                else if (Quantity < 0)
+                    ActionType = TradeActionType.ShortHold;
+            }
+            else
+            {
+                Reset();
+            }
         }
 
         public void Snapshot(PositionStatus ps)
