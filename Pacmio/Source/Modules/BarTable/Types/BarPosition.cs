@@ -35,7 +35,7 @@ namespace Pacmio
             ActionType = TradeActionType.None;
             Quantity = 0;
             AveragePrice = double.NaN;
-            //SignalDatums.Clear();
+            SignalDatums.Clear();
         }
 
         private void Snapshot(BarPosition bp_1)
@@ -74,15 +74,17 @@ namespace Pacmio
         public Bar Bar { get; }
 
         public TradeRule TradeRule { get; }
-        /*
+        
         public readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
 
         public SignalDatum this[SignalColumn column]
         {
             get
             {
-                if (SignalDatums.ContainsKey(column)) return SignalDatums[column];
-                else return null;
+                if (SignalDatums.ContainsKey(column))
+                    return SignalDatums[column];
+                else
+                    return null;
             }
             set
             {
@@ -96,7 +98,7 @@ namespace Pacmio
                         SignalDatums[column] = value;
                 }
             }
-        }*/
+        }
 
         public TradeActionType ActionType { get; private set; } = TradeActionType.None;
 

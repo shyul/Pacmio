@@ -335,26 +335,26 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private readonly Dictionary<TradeRule, BarPosition> SimulationDatums = new Dictionary<TradeRule, BarPosition>();
+        private readonly Dictionary<TradeRule, BarPosition> TradeDatums = new Dictionary<TradeRule, BarPosition>();
 
         public BarPosition this[TradeRule tr]
         {
             get
             {
-                if (!SimulationDatums.ContainsKey(tr))
+                if (!TradeDatums.ContainsKey(tr))
                 {
-                    SimulationDatums.Add(tr, new BarPosition(this, tr));
+                    TradeDatums.Add(tr, new BarPosition(this, tr));
                 }
 
-                return SimulationDatums[tr];
+                return TradeDatums[tr];
             }
         }
 
-        public void RemoveSimulation(TradeRule tr)
+        public void RemoveTradeDatum(TradeRule tr)
         {
-            if (SimulationDatums.ContainsKey(tr))
+            if (TradeDatums.ContainsKey(tr))
             {
-                SimulationDatums.Remove(tr);
+                TradeDatums.Remove(tr);
             }
         }
 
@@ -364,7 +364,7 @@ namespace Pacmio
         {
             NumericDatums.Clear();
             TagDatums.Clear();
-            SimulationDatums.Clear();
+            TradeDatums.Clear();
         }
     }
 }

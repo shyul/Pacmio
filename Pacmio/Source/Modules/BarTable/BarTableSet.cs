@@ -158,10 +158,23 @@ namespace Pacmio
             });
         }
 
-        public void Calculate(TradeRule tr ) 
+        public void Calculate(TradeRule tr, CancellationTokenSource cts, IProgress<float> progress)
         {
-        
-        
+            progress?.Report(0);
+            ParallelOptions po = new ParallelOptions()
+            {
+                //CancellationToken = cts.Token,
+                MaxDegreeOfParallelism = Root.DegreeOfParallelism
+            };
+            int i = 0, count = BarTables.Count();
+            Parallel.ForEach(BarTables, po, bt => {
+                if (cts.Continue())
+                {
+                    bt.CalculateOnly(tr);
+                    i++;
+                    if (cts.Continue()) progress?.Report(100.0f * i / count);
+                }
+            });
         }
 
         private void AddChart(BarTable bt, TradeRule tr)
