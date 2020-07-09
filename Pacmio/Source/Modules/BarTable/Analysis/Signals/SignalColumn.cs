@@ -30,6 +30,10 @@ namespace Pacmio
 
         public Color BearishColor { get; set; } = Color.Red;
 
+        public ColorTheme BullishTheme { get; } = new ColorTheme();
+
+        public ColorTheme BearishTheme { get; } = new ColorTheme();
+
         #endregion Graphics Properties
     }
 }

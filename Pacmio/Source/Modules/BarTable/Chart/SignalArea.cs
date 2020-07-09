@@ -48,7 +48,7 @@ namespace Pacmio
 
         public BarTable BarTable => BarChart.BarTable;
 
-        public readonly SignalSeries SignalSeries;
+        public SignalSeries SignalSeries { get; }
 
         public override void DrawCustomBackground(Graphics g)
         {

@@ -139,7 +139,7 @@ namespace Pacmio
                     return Rows[i][column];
             }
         }
-        /*
+        
         public (string description, double score) this[int i, SignalColumn column]
         {
             get
@@ -152,11 +152,10 @@ namespace Pacmio
                     int k = i - j;
                     if (k >= 0 && k < Count)
                     {
-                        var sd = Rows[k][column];
-                        if (sd is SignalDatum sdd)
+                        if (Rows[k][CurrentTradeRule][column] is SignalDatum sd)
                         {
-                            if (string.IsNullOrEmpty(description)) description = sdd.Description;
-                            score += sdd.Scores[j];
+                            if (string.IsNullOrEmpty(description)) description = sd.Description;
+                            score += sd.Scores[j];
                         }
                     }
                 }
@@ -165,10 +164,10 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) SignalScore(int i)
+        public (double bullish, double bearish) TotalSignalScore(int i, IEnumerable<SignalColumn> columns)
         {
             double bull = 0, bear = 0;
-            foreach (SignalColumn sc in SignalColumns)
+            foreach (SignalColumn sc in columns) //CurrentTradeRule.Analyses[BarFreq].SignalColumns)
             {
                 var (_, score) = this[i, sc];
                 if (score > 0) bull += score;
@@ -176,8 +175,6 @@ namespace Pacmio
             }
             return (bull, bear);
         }
-
-        public readonly List<SignalColumn> SignalColumns = new List<SignalColumn>();*/
 
         private void Clear()
         {
@@ -972,13 +969,13 @@ namespace Pacmio
 
         public void CalculateOnly(TradeRule tr)
         {
-            if (Enabled && tr is TradeRule && tr.TimeFrameList.ContainsKey(BarFreq))
+            if (Enabled && tr is TradeRule && tr.Analyses.ContainsKey(BarFreq))
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
                     // Send Signal
 
-                    Calculate(tr.TimeFrameList[BarFreq].List);
+                    Calculate(tr.Analyses[BarFreq].List);
 
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
@@ -1290,8 +1287,6 @@ namespace Pacmio
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
         public MultiPeriod<DataSource> DataSourceSegments { get; } = new MultiPeriod<DataSource>(); // => BarTableFileData.DataSourceSegments;
-
-        //public ICollection<Period> DataSourcePeriods => DataSourceSegments.Keys;
 
         public void AddDataSourceSegment(Period pd, DataSource source)
         {

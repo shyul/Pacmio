@@ -17,7 +17,7 @@ namespace TestClient
     {
         public TestTradeRule(BarFreq freq) : base("TestTradeRule") 
         {
-            TimeFrameList.Add(freq, BarTableTest.TestBarAnalysisSet);
+            Analyses.Add(freq, BarTableTest.TestBarAnalysisSet);
         }
     }
 }

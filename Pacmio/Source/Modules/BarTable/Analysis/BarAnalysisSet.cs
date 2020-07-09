@@ -38,7 +38,7 @@ namespace Pacmio
         {
             get
             {
-                lock (m_List) return m_List;
+                return m_List;
             }
             set
             {
@@ -82,6 +82,8 @@ namespace Pacmio
                 Console.WriteLine(Name + " | Added BA: " + n.Name);
             });
         }
+
+        public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
 
         public bool Equals(BarAnalysisSet other) => other is BarAnalysisSet bas && Name == bas.Name;
     }

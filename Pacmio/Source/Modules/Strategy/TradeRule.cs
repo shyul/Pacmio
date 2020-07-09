@@ -28,7 +28,9 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        public Dictionary<BarFreq, BarAnalysisSet> TimeFrameList { get; set; } = new Dictionary<BarFreq, BarAnalysisSet>();
+        public Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
+
+        //public Dictionary<BarFreq, List<SignalColumn>> TimeFrameSignals { get; } = new Dictionary<BarFreq, List<SignalColumn>>();
 
         public void EvaluatePosition() 
         {

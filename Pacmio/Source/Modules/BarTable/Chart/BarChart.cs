@@ -55,7 +55,7 @@ namespace Pacmio
             Style[Importance.Minor].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
 
             //AddArea(PositionArea = new PositionArea(this));
-            //AddArea(SignalArea = new SignalArea(this));
+            AddArea(SignalArea = new SignalArea(this));
             AddArea(MainArea = new MainArea(this, MainArea.DefaultName, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
@@ -125,9 +125,9 @@ namespace Pacmio
                 }
 
                 TradeRule = tr;
-                if (TradeRule.TimeFrameList.ContainsKey(BarTable.BarFreq))
+                if (TradeRule.Analyses.ContainsKey(BarTable.BarFreq))
                 {
-                    BarAnalysisSet = TradeRule.TimeFrameList[BarTable.BarFreq];
+                    BarAnalysisSet = TradeRule.Analyses[BarTable.BarFreq];
 
                     if (BarAnalysisSet is BarAnalysisSet bas)
                         foreach (var ic in bas.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
@@ -225,6 +225,8 @@ namespace Pacmio
 
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
 
+        public bool HasSignalColumn => TradeRule is TradeRule tr && tr.Analyses.ContainsKey(BarFreq) && tr.Analyses[BarFreq].SignalColumns.Count() > 0;
+
         public override void CoordinateOverlay() { }
 
         protected override void CoordinateLayout()
@@ -239,13 +241,13 @@ namespace Pacmio
 
             if (ReadyToShow)
             {
-                // TODO: Change the view enable method here.
-                //SignalArea.Visible = false; // Pacmio.BarTable.CurrentTradeSetting is TradeRule; // BarTable.HasSignalAnalysis;
-                //PositionArea.Visible = false; // Pacmio.BarTable.CurrentTradeSetting is TradeRule; //BarTable.HasSignalAnalysis;
-
                 lock (BarTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
+                        BarTable.CurrentTradeRule = TradeRule;
+                        SignalArea.Visible = true;// HasSignalColumn;
+                        //PositionArea.Visible = false;
+
                         AxisX.TickList.Clear();
 
                         // Get Text Width Major: 1 ~ 10 
