@@ -27,11 +27,11 @@ namespace Pacmio
     {
         public readonly Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
 
-        public readonly Dictionary<BarTable, BarAnalysisSet> BarTables = new Dictionary<BarTable, BarAnalysisSet>();
+        public readonly HashSet<BarTable> BarTables = new HashSet<BarTable>();
 
         private object DataLockObject { get; } = new object();
 
-        public void SaveBarTables() => BarTables.Keys.AsParallel().ForAll(n => { n.Save(); n.Dispose(); });
+        public void SaveBarTables() => BarTables.AsParallel().ForAll(n => { n.Save(); n.Dispose(); });
 
         public void Clear()
         {
@@ -43,58 +43,54 @@ namespace Pacmio
 
         public BarTable Get(Contract c, BarFreq barFreq, BarType barType)
         {
-            var existing_tables = BarTables.Where(n => n.Key == (c, barFreq, barType));
+            var existing_tables = BarTables.Where(n => n == (c, barFreq, barType));
             if (existing_tables.Count() == 1)
-            {
-                return existing_tables.First().Key;
-            }
-
-            return null;
+                return existing_tables.First();
+            else
+                return null;
         }
 
-        private BarTable AddContract(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType)
+        private BarTable AddContract(Contract c, BarFreq barFreq, BarType barType)
         {
             lock (DataLockObject)
             {
-                var existing_tables = BarTables.Where(n => n.Key == (c, barFreq, barType));
+                var existing_tables = BarTables.Where(n => n == (c, barFreq, barType));
                 if (existing_tables.Count() == 1)
                 {
                     var to_keep_table = existing_tables.First();
-                    BarTables[to_keep_table.Key] = bas;
-                    return to_keep_table.Key;
+                    return to_keep_table;
                 }
                 else if (existing_tables.Count() > 1)
                 {
                     var to_keep_table = existing_tables.First();
-                    existing_tables.ToList().ForEach(n => BarTables.Remove(n.Key));
-                    BarTables.Add(to_keep_table.Key, bas);
-                    return to_keep_table.Key;
+                    existing_tables.ToList().ForEach(n => BarTables.Remove(n));
+                    BarTables.Add(to_keep_table);
+                    return to_keep_table;
                 }
                 else
                 {
                     BarTable bt = new BarTable(c, barFreq, barType);
-                    BarTables[bt] = bas;
+                    BarTables.Add(bt);
                     return bt;
                 }
             }
         }
 
-        public BarTable AddContract(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
+        public BarTable AddContract(Contract c, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
             lock (DataLockObject)
             {
-                BarTable bt = AddContract(c, bas, barFreq, barType);
+                BarTable bt = AddContract(c, barFreq, barType);
                 bt.Fetch(period, cts);
-                bt.CalculateOnly(bas);
                 period = bt.Period;
                 return bt;
             }
         }
 
-        public void AddChart(Contract c, BarAnalysisSet bas, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
+        public void AddChart(Contract c, TradeRule tr, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
-            BarTable bt = AddContract(c, bas, barFreq, barType);
-            AddChart(bt, bas);
+            BarTable bt = AddContract(c, barFreq, barType);
+            AddChart(bt, tr);
             if (cts.Continue())
             {
                 if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period)
@@ -102,33 +98,33 @@ namespace Pacmio
                     bt.Fetch(period, cts);
                     period = bt.Period;
                 }
-                bt.CalculateOnly(bas);
+                bt.CalculateOnly(tr);
             }
         }
 
-        private List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType)
+        private List<BarTable> AddContract(IEnumerable<Contract> contracts, BarFreq barFreq, BarType barType)
         {
             lock (DataLockObject)
             {
-                var to_delete_tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType && !contracts.Select(n => n.Item1).Contains(n.Key.Contract)).ToList();
+                var to_delete_tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType && !contracts.Contains(n.Contract)).ToList();
 
                 to_delete_tables.ForEach(n =>
                 {
-                    BarTable bt = n.Key;
+                    BarTable bt = n;
                     BarTables.Remove(bt);
                     bt.Save();
                     bt.Dispose();
                 });
                 List<BarTable> add_tables = new List<BarTable>();
-                foreach (var (c, bas) in contracts)
+                foreach (var c in contracts)
                 {
-                    add_tables.Add(AddContract(c, bas, barFreq, barType));
+                    add_tables.Add(AddContract(c, barFreq, barType));
                 }
                 return add_tables;
             }
         }
 
-        public List<BarTable> AddContract(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        public List<BarTable> AddContract(IEnumerable<Contract> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             if (cts.Continue())
             {
@@ -139,7 +135,7 @@ namespace Pacmio
             return new List<BarTable>();
         }
 
-        public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        public void AddChart(IEnumerable<(Contract, TradeRule)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             PeriodSettings[(barFreq, barType)] = period;
@@ -154,20 +150,26 @@ namespace Pacmio
             Parallel.ForEach(contracts, po, n => {
                 if (cts.Continue())
                 {
-                    var (c, bas) = n;
-                    AddChart(c, bas, barFreq, barType, ref period, cts);
+                    var (c, tr) = n;
+                    AddChart(c, tr, barFreq, barType, ref period, cts);
                     i++;
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
             });
         }
 
-        private void AddChart(BarTable bt, BarAnalysisSet bas)
+        public void Calculate(TradeRule tr ) 
+        {
+        
+        
+        }
+
+        private void AddChart(BarTable bt, TradeRule tr)
         {
             if (BarChart.List.Where(n => n.BarTable == bt).Count() == 0)
             {
                 BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-                bc.ConfigChart(bt, bas);
+                bc.ConfigChart(bt, tr);
                 if (Root.Form.InvokeRequired)
                 {
                     Root.Form.Invoke((MethodInvoker)delegate
@@ -197,7 +199,7 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     PeriodSettings[(barFreq, barType)] = period;
-                    var tables = BarTables.Where(n => n.Key.BarFreq == barFreq && n.Key.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
+                    var tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
 
                     ParallelOptions po = new ParallelOptions()
                     {
@@ -209,9 +211,7 @@ namespace Pacmio
                     Parallel.ForEach(tables, po, n => {
                         if (cts.Continue())
                         {
-                            //n.Key.Load(period);
-                            n.Key.Fetch(period, cts);
-                            n.Key.CalculateOnly(n.Value);
+                            n.Fetch(period, cts);
                             i++;
                             if (cts.Continue()) progress?.Report(100.0f * i / count);
                         }

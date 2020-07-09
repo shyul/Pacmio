@@ -27,12 +27,8 @@ namespace Pacmio
 
         public double Weight { get; }
 
-        
         public double Tolerance { get; }
 
-
         public string AreaName { get; }
-
-       
     }
 }

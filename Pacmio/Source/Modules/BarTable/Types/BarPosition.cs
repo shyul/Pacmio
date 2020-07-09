@@ -21,7 +21,7 @@ namespace Pacmio
 {
     public sealed class BarPosition
     {
-        public BarPosition(Bar b, ITradeSetting tr)
+        public BarPosition(Bar b, TradeRule tr)
         {
             Bar = b;
             if (Bar.Table.LastBar_1 is Bar b_1)
@@ -35,6 +35,7 @@ namespace Pacmio
             ActionType = TradeActionType.None;
             Quantity = 0;
             AveragePrice = double.NaN;
+            //SignalDatums.Clear();
         }
 
         private void Snapshot(BarPosition bp_1)
@@ -70,7 +71,32 @@ namespace Pacmio
             AveragePrice = ps.AveragePrice;
         }
 
-        private readonly Bar Bar;
+        public Bar Bar { get; }
+
+        public TradeRule TradeRule { get; }
+        /*
+        public readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
+
+        public SignalDatum this[SignalColumn column]
+        {
+            get
+            {
+                if (SignalDatums.ContainsKey(column)) return SignalDatums[column];
+                else return null;
+            }
+            set
+            {
+                if (!SignalDatums.ContainsKey(column))
+                    SignalDatums.Add(column, value);
+                else
+                {
+                    if (value is null)
+                        SignalDatums.Remove(column);
+                    else
+                        SignalDatums[column] = value;
+                }
+            }
+        }*/
 
         public TradeActionType ActionType { get; private set; } = TradeActionType.None;
 

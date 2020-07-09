@@ -17,7 +17,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class TradeRule : IEquatable<TradeRule>, ITradeSetting
+    public abstract class TradeRule : IEquatable<TradeRule>
     {
         public TradeRule(string name)
         {
@@ -29,6 +29,11 @@ namespace Pacmio
         public int Order { get; set; } = 0;
 
         public Dictionary<BarFreq, BarAnalysisSet> TimeFrameList { get; set; } = new Dictionary<BarFreq, BarAnalysisSet>();
+
+        public void EvaluatePosition() 
+        {
+        
+        }
 
         #region Trading Timing
 

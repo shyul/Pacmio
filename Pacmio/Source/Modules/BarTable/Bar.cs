@@ -233,7 +233,7 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Peak => Peak,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
 
-                    NumericColumn dc when dc == Column_ProfitChange => (Table.CurrentTradeSetting is ITradeSetting its) ? this[its].PnL : 0,
+                    NumericColumn dc when dc == Column_ProfitChange => (Table.CurrentTradeRule is TradeRule tr) ? this[tr].PnL : 0,
                     NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
 
                     _ => double.NaN,
@@ -330,41 +330,14 @@ namespace Pacmio
 
         #endregion Tag Column
 
-        #region Signal Score
-
-        private readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
-
-        public SignalDatum this[SignalColumn column]
-        {
-            get
-            {
-                if (SignalDatums.ContainsKey(column)) return SignalDatums[column];
-                else return null;
-            }
-            set
-            {
-                if (!SignalDatums.ContainsKey(column))
-                    SignalDatums.Add(column, value);
-                else
-                {
-                    if (value is null)
-                        SignalDatums.Remove(column);
-                    else
-                        SignalDatums[column] = value;
-                }
-            }
-        }
-
-        #endregion Signal Score
-
         #region Position / Simulation Information
 
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private readonly Dictionary<ITradeSetting, BarPosition> SimulationDatums = new Dictionary<ITradeSetting, BarPosition>();
+        private readonly Dictionary<TradeRule, BarPosition> SimulationDatums = new Dictionary<TradeRule, BarPosition>();
 
-        public BarPosition this[ITradeSetting tr]
+        public BarPosition this[TradeRule tr]
         {
             get
             {
@@ -377,7 +350,7 @@ namespace Pacmio
             }
         }
 
-        public void RemoveSimulation(ITradeSetting tr)
+        public void RemoveSimulation(TradeRule tr)
         {
             if (SimulationDatums.ContainsKey(tr))
             {
@@ -391,7 +364,6 @@ namespace Pacmio
         {
             NumericDatums.Clear();
             TagDatums.Clear();
-            SignalDatums.Clear();
             SimulationDatums.Clear();
         }
     }

@@ -16,7 +16,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class Account : IEquatable<Account>, IEquatable<string>, ITradeSetting
+    public sealed class Account : IEquatable<Account>, IEquatable<string>
     {
         public Account(string accountCode) 
         {

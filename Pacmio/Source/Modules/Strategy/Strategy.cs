@@ -64,7 +64,6 @@ namespace Pacmio
         }
 
 
-        public static List<Indicator> IndicatorList = new List<Indicator>();
 
         public static void Optimize() 
         {

@@ -43,6 +43,13 @@ namespace Pacmio.IB
 
         private static object RequestLockObject { get; } = new object();
 
+        #region Trade History
+
+
+
+
+        #endregion Trade History
+
         #region Fetch Contract
 
         public static Contract[] Fetch_ContractSamples(string symbol, CancellationTokenSource cts = null)

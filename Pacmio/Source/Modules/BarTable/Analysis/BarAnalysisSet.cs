@@ -38,7 +38,7 @@ namespace Pacmio
         {
             get
             {
-                lock (m_List) return m_List.ToArray();
+                lock (m_List) return m_List;
             }
             set
             {

@@ -52,7 +52,7 @@ namespace Pacmio
 
         public override void DrawCustomBackground(Graphics g)
         {
-            PositionArea.DrawPosition(g, this, BarTable);
+            //PositionArea.DrawPosition(g, this, BarTable, BarChart.TradeRule);
         }
     }
 }

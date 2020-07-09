@@ -40,7 +40,17 @@ namespace Pacmio
         public void Dispose()
         {
             IsLive = false;
+
+            lock(DataViews) 
+            {
+                foreach(IDataView dv in DataViews) 
+                {
+                    
+                }
+            }
+
             if (Contract.MarketData is HistoricalData hd) { hd.LiveBarTables.CheckRemove(this); }
+
             lock (Rows) Rows.Clear();
             lock (TimeToRows) TimeToRows.Clear();
             GC.Collect();
@@ -129,7 +139,7 @@ namespace Pacmio
                     return Rows[i][column];
             }
         }
-
+        /*
         public (string description, double score) this[int i, SignalColumn column]
         {
             get
@@ -155,11 +165,6 @@ namespace Pacmio
             }
         }
 
-        /// <summary>
-        /// TODO: delete
-        /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
         public (double bullish, double bearish) SignalScore(int i)
         {
             double bull = 0, bear = 0;
@@ -172,12 +177,7 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        /// <summary>
-        /// TODO: delete
-        /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
-        public readonly List<SignalColumn> SignalColumns = new List<SignalColumn>();
+        public readonly List<SignalColumn> SignalColumns = new List<SignalColumn>();*/
 
         private void Clear()
         {
@@ -853,8 +853,8 @@ namespace Pacmio
         /// </summary>
         private void Calculate(IEnumerable<BarAnalysis> analyses)
         {
-            Console.WriteLine("\n==================");
-            Console.WriteLine("Table: " + Name + " | Count: " + Count);
+            //Console.WriteLine("\n==================");
+            //Console.WriteLine("Table: " + Name + " | Count: " + Count);
             DateTime total_time = DateTime.Now;
 
             int startPt = BasicData_StopPt = Count;
@@ -874,27 +874,23 @@ namespace Pacmio
                     ba.Update(bap);
                     startPt = Math.Min(startPt, bap.StartPt);
 
-                    Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                    //Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
                 }
             }
             LatestCalculatePointer = startPt;
 
-            Console.WriteLine("------------------");
+            //Console.WriteLine("------------------");
             Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
-            Console.WriteLine("==================\n");
+            //Console.WriteLine("==================\n");
         }
 
         #endregion Data/Bar Analysis (TA) Calculation
 
-        #region Position / Simulation Information
-
-        public ITradeSetting CurrentTradeSetting { get; set; }
-
-        #endregion Position / Simulation Information
-
         #region BarChart / DataView
 
         public readonly List<IDataView> DataViews = new List<IDataView>();
+
+        public TradeRule CurrentTradeRule { get; set; } = null;
 
         #endregion BarChart / DataView
 
@@ -974,15 +970,15 @@ namespace Pacmio
                 }
         }
 
-        public void CalculateOnly(BarAnalysisSet bas)
+        public void CalculateOnly(TradeRule tr)
         {
-            if (Enabled && bas is BarAnalysisSet)
+            if (Enabled && tr is TradeRule && tr.TimeFrameList.ContainsKey(BarFreq))
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
                     // Send Signal
 
-                    Calculate(bas.List);
+                    Calculate(tr.TimeFrameList[BarFreq].List);
 
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;

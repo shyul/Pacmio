@@ -147,18 +147,15 @@
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationSet.cs" />
-    <Compile Include="Source\Modules\Strategy\Simulation\Types\SimulationResult.cs" />
-    <Compile Include="Source\Modules\Strategy\Indicator\Indicator.cs" />
-    <Compile Include="Source\Modules\Strategy\Indicator\IndicatorParameter.cs" />
-    <Compile Include="Source\Modules\Strategy\Rules\ITradeSetting.cs" />
+    <Compile Include="Source\Modules\Strategy\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\IBroker.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\PositionSimTools.cs" />
-    <Compile Include="Source\Modules\Strategy\Rules\TradeRule.cs" />
-    <Compile Include="Source\Modules\Trade\TradeLog\TradeLogManager.cs" />
+    <Compile Include="Source\Modules\Strategy\TradeRule.cs" />
+    <Compile Include="Source\Modules\Trade\Order\TradeLogManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\LiquidityType.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\TradeActionType.cs" />
@@ -197,7 +194,7 @@
     <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderTimeInForce.cs" />
-    <Compile Include="Source\Modules\Trade\TradeLog\TradeInfo.cs" />
+    <Compile Include="Source\Modules\Trade\Order\TradeInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\DataRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Completed.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\DeltaNeutralValidation.cs" />
@@ -306,6 +303,8 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Modules\Strategy\Rules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

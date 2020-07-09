@@ -34,7 +34,9 @@ namespace Pacmio
 
         public override void RefreshAxis(IArea area, ITable table)
         {
+            /*
             ContinuousAxis axisY = area.AxisY(Side);
+            
             for (int i = area.StartPt; i < area.StopPt; i++)
             {
                 var (bullish, bearish) = Table.SignalScore(i);
@@ -42,6 +44,7 @@ namespace Pacmio
                 axisY.Range.Insert(bearish);
             }
             axisY.Range.Insert(0);
+            */
         }
 
         public override List<(string text, Font font, Brush brush)> ValueLabels(ITable table, int pt)
@@ -55,6 +58,7 @@ namespace Pacmio
 
         public override void Draw(Graphics g, IArea area, ITable table)
         {
+            /*
             ContinuousAxis axisY = area.AxisY(Side);
 
             int pt = 0;
@@ -72,7 +76,7 @@ namespace Pacmio
                 {
                     int x = area.IndexToPixel(pt) - (tickWidth / 2);
                     int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
-                    /*
+                    
                     foreach (ISignalAnalysis ca in Table.SignalAnalyses)
                     {
                         if(Table[i][ca.Signal_Column] is ISignalDatum data) 
@@ -98,10 +102,11 @@ namespace Pacmio
                                 g.DrawRectangle(ca.BearishTheme.EdgePen, rect);
                             }
                         }
-                    }*/
+                    }
                 }
                 pt++;
             }
+            */
         }
     }
 }

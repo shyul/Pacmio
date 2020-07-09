@@ -82,6 +82,7 @@
     <Compile Include="MainForm_Tests.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\TestTradeRule.cs" />
     <Compile Include="Test\TradeTest.cs" />
   </ItemGroup>
   <ItemGroup>
