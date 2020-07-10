@@ -44,49 +44,34 @@ namespace Pacmio
         public string AccountCode { get; set; }
 
         [DataMember]
-        public int ConId { get; set; } = -1;
-
-        [DataMember]
-        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
-
-        [IgnoreDataMember]
-        public Contract Contract
+        public int ConId
         {
-            get
+            get 
             {
-                if (m_Contract is null || (ConId > 1 && m_Contract.ConId != ConId))
-                {
-                    var cList = ContractList.Values.Where(n => n.ConId == ConId);
-                    // Or we should go fetch it!
-                    // Can't block here actually, because this function blocks the decoding
-                    if (cList.Count() == 1)
-                    {
-
-                        m_Contract = cList.First();
-                        ContractInfo = m_Contract.Info;
-                    }
-                    else
-                    {
-                        // TODO: Need to handle no / duplicated contract cases
-                        throw new Exception("Need to handle no / duplicated contract cases | Error searching by ConId");
-                    }
-                }
-
-                return m_Contract;
+                if (Contract is Contract c) 
+                    return c.ConId;
+                else 
+                    return m_ConId;
             }
+            
             set
             {
-                ConId = value.ConId;
-                if (ConId < 1) throw new Exception("ConId can't be zero for order contract.");
-                ContractInfo = value.Info;
-                m_Contract = value;
+                if(value > 0) 
+                {
+                    m_ConId = value;
+                    if (Contract is null || Contract.ConId != m_ConId) 
+                    { 
+                        Contract = ContractList.GetOrFetch(m_ConId);
+                        Console.WriteLine("Added Contract to TradeInfo: " + Contract);
+                    }
+                }
             }
         }
 
-        // TODO: contract look up 
+        private int m_ConId = -1;
 
         [IgnoreDataMember]
-        private Contract m_Contract;
+        public Contract Contract { get; set; }
 
         /// <summary>
         /// Positive means long position
@@ -165,9 +150,9 @@ namespace Pacmio
 
         public bool Equals(OrderInfo other) => PermId == other.PermId;
 
-        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || ContractInfo == other.Info;
+        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || Contract == other;
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => ContractInfo == other;
+        public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Info == other;
 
         public static bool operator ==(TradeInfo left, TradeInfo right) => left.ExecId == right.ExecId;
         public static bool operator !=(TradeInfo left, TradeInfo right) => !(left == right);

@@ -163,7 +163,7 @@ namespace Pacmio.IB
                     if (j < Timeout)
                     {
                         Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
-                        // Get next valid Id
+
                         SendRequest_AccountSummary();
                         SendRequest_Postion();
                     }
@@ -256,10 +256,7 @@ namespace Pacmio.IB
             DataRequestID = -1;
             ReceivedMessageCount = 0;
 
-            //requestId_HistoricalData = -1;
-            //requestId_ContractData = -1;
-            //requestId_ContractSamples = -1;
-            //requestId_HistoricalDataHeadTimestamp = -1;
+
             requestId_HistoricalTick = -1;
         }
 

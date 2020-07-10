@@ -60,7 +60,7 @@ namespace Pacmio.IB
                 }
             }
 
-            Console.WriteLine("Parse Poistion | " + fields.ToStringWithIndex());
+            Console.WriteLine("\nParse Poistion | " + fields.ToStringWithIndex());
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Pacmio.IB
                 }
                 UpdatedPositions.Clear();
             }
-            AccountManager.Update(2, "Position updated by IBClient");
+            AccountManager.Update(2, "\nPosition End");
         }
 
         //

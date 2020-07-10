@@ -86,7 +86,7 @@ namespace TestClient
         {
             //Console.WriteLine("\n\nUpdating ########## " + od.ContractInfo.name);
 
-            string contractName = od.ContractInfo.name + " @ " + od.ContractInfo.exchange;
+            string contractName = od.Contract.ToString();
 
             string orderType = od.Type.ToString();
 

@@ -81,14 +81,6 @@ namespace Pacmio.IB
             OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
             od.ConId = fields[2].ToInt32(-1);
 
-            if (od.Contract is null)
-            {
-                string name = fields[3].ToUpper();
-                string secTypeCode = fields[4].ToUpper();
-
-                // Add match contract info task.
-            }
-
             int totalQuantity = fields[14].ToInt32(0);
             od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;
 

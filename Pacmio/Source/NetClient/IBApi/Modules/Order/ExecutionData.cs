@@ -117,11 +117,23 @@ namespace Pacmio.IB
                 PositionStatus ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
             }
 
-            TradeLogManager.Update(fields[0].ToInt32(-1), execId);
+            //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
             string evRule = fields[27];
             double evMultiplier = fields[28].ToDouble();
-            Console.WriteLine("Parse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
+            Console.WriteLine("\nParse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
+        }
+
+        private static void Parse_ExecutionDataEnd(string[] fields)
+        {
+            string msgVersion = fields[1];
+            int requestId = fields[2].ToInt32();
+            //if (requestId == requestId_ExecutionData) 
+            requestId_ExecutionData = -1;
+
+            //TradeLogManager.Update(fields[0].ToInt32(-1), requestId.ToString());
+
+            Console.WriteLine("\nParse Execution Data End | " + msgVersion + ": " + fields.ToStringWithIndex());
         }
 
         /// <summary>
@@ -139,7 +151,7 @@ namespace Pacmio.IB
             string pnlstring = fields[5];
             ti.RealizedPnL = pnlstring.Contains("1.7976931348623157E308") ? 0 : pnlstring.ToDouble();
 
-            TradeLogManager.Update(fields[0].ToInt32(-1), execId);
+            //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
             string currency = fields[4];
             double yield = fields[6].ToDouble();
@@ -148,19 +160,7 @@ namespace Pacmio.IB
             {
                 yieldRedemptionDate = fields[7].ToInt32();
             }
-            Console.WriteLine("Commissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
-        }
-
-        private static void Parse_ExecutionDataEnd(string[] fields)
-        {
-            string msgVersion = fields[1];
-            int requestId = fields[2].ToInt32();
-            //if (requestId == requestId_ExecutionData) 
-            requestId_ExecutionData = -1;
-
-            TradeLogManager.Update(fields[0].ToInt32(-1), requestId.ToString());
-
-            Console.WriteLine("Parse Execution Data End | " + msgVersion + ": " + fields.ToStringWithIndex());
+            Console.WriteLine("\nCommissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
         }
     }
 }

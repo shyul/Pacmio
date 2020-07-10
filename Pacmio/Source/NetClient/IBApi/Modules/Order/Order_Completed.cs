@@ -51,14 +51,6 @@ namespace Pacmio.IB
 
             od.ConId = fields[1].ToInt32(-1);
 
-            if (od.Contract is null)
-            {
-                string name = fields[2].ToUpper();
-                string secTypeCode = fields[3].ToUpper();
-
-                // Add match contract info task.
-            }
-
             int totalQuantity = fields[13].ToInt32(0);
             od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
 

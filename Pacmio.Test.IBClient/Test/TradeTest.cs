@@ -88,12 +88,12 @@ namespace TestClient
 
         public static void UpdateTable(TradeInfo ti)
         {
-            Console.WriteLine("\n\nUpdating ########## " + ti.ContractInfo.name);
+            Console.WriteLine("\n\nUpdating ########## " + ti.Contract);
 
             var rows = Table.AsEnumerable()
                 .Where(r => r.Field<string>("ExecId") == ti.ExecId);
 
-            string contractName = ti.ContractInfo.name + " @ " + ti.ContractInfo.exchange;
+            string contractName = ti.Contract.ToString();
             /*
             if (rows.Count() > 0)
             {
