@@ -59,9 +59,5 @@ namespace Pacmio
         public bool Equals(TradeRule other) => other is TradeRule tr && Name == tr.Name;
 
         public bool Equals(IAnalysisSetting other) => other is IAnalysisSetting ias && Name == ias.Name;
-
-
     }
-
-
 }

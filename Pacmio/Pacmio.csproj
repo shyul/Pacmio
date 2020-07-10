@@ -106,6 +106,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\IAnalysisSetting.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\BasicSignal.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Basic\MovingAverageCrossSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -150,7 +152,7 @@
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\SimulationResult.cs" />
-    <Compile Include="Source\Modules\Strategy\Strategy.cs" />
+    <Compile Include="Source\Modules\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\IBroker.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />

@@ -12,12 +12,11 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public abstract class BasicSignal : IAnalysisSetting
+    public class MovingAverageCrossSignal : BasicSignal
     {
-        public string Name { get; private set; }
-
-        public abstract BarAnalysisSet BarAnalysisSet(BarFreq barFreq);
-
-        public bool Equals(IAnalysisSetting other) => other is BasicSignal bs && GetType() == bs.GetType() && Name == bs.Name;
+        public override BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
