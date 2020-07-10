@@ -155,6 +155,7 @@
     <Compile Include="Source\Modules\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\IBroker.cs" />
+    <Compile Include="Source\Modules\Contract\Types\TradeData.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\PositionSimTools.cs" />

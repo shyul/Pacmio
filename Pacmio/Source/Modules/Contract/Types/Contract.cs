@@ -7,6 +7,7 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using Xu;
 
@@ -200,19 +201,6 @@ namespace Pacmio
 
         #region Status and Market Data
 
-        [IgnoreDataMember]
-        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
-
-        [IgnoreDataMember]
-        public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
-
-        public abstract void LoadMarketData();
-
-        public abstract void SaveMarketData();
-
-        [IgnoreDataMember]
-        public virtual MarketData MarketData { get; }
-
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
         /// string genericTickList = "236,375";  // 292 is news
@@ -223,7 +211,58 @@ namespace Pacmio
 
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
+        [IgnoreDataMember]
+        public virtual MarketData MarketData { get; }
+
+        public abstract void LoadMarketData();
+
+        public abstract void SaveMarketData();
+
+        [IgnoreDataMember]
+        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
+
+        [IgnoreDataMember]
+        public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
+
         #endregion Status and Market Data
+
+        #region Order and Trade Data
+
+        [IgnoreDataMember]
+        public virtual TradeData TradeData
+        {
+            get
+            {
+                if (m_TradeData is null) LoadTradeData();
+                return m_TradeData;
+            }
+        }
+
+        [IgnoreDataMember]
+        private TradeData m_TradeData = null;
+
+        public virtual void LoadTradeData()
+        {
+            m_TradeData = File.Exists(TradeDataFileName) ? Serialization.DeserializeJsonFile<TradeData>(TradeDataFileName) : new TradeData();
+            m_TradeData.Setup();
+        }
+
+        public virtual void SaveTradeData()
+        {
+            if (m_TradeData is TradeData td)
+            {
+                if (!Directory.Exists(TradeDataFilePath)) Directory.CreateDirectory(TradeDataFilePath);
+                td.SerializeJsonFile(TradeDataFileName);
+            }
+        }
+
+        [IgnoreDataMember]
+        public virtual string TradeDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_TradeData\\";
+
+        [IgnoreDataMember]
+        public virtual string TradeDataFileName => TradeDataFilePath + "$" + Name + ".json";
+
+        #endregion Order and Trade Data
 
         #region Equality
 

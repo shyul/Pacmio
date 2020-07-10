@@ -48,7 +48,7 @@ namespace Pacmio
         [IgnoreDataMember]
         private HistoricalData m_StockData = null;
 
-        public override void LoadMarketData() 
+        public override void LoadMarketData()
         {
             m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
             m_StockData.Status = MarketTickStatus.Unknown;
@@ -130,11 +130,11 @@ namespace Pacmio
 
         #endregion Identification
 
-        #region Order and Trade
+        #region Order and Trade Data
 
 
 
-        #endregion
+        #endregion Order and Trade Data
 
         #region Market Depth
 

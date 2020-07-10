@@ -180,6 +180,11 @@ namespace Pacmio
                     lock (List) List[od.PermId] = od;
                     if (od.IsEditable)
                         od.Account.CurrentOrders[od.Contract] = od;
+                    /*
+                    if(od.Contract is Contract c) 
+                    {
+                        c.TradeData.Orders.CheckAdd(od);
+                    }*/
                 });
             }
         }
