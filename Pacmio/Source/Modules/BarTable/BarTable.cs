@@ -989,6 +989,8 @@ namespace Pacmio
 
                     Calculate(bas.List);
 
+                    // Calculate the signal and position and simulation result...
+
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
                     // Send Signal

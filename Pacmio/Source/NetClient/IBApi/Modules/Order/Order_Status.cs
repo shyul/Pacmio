@@ -43,8 +43,8 @@ namespace Pacmio.IB
 
             if (od.Status == OrderStatus.Filled || od.Status == OrderStatus.Cancelled)
             {
-                SendRequest_Postion();
-                SendRequest_AccountSummary();
+                RemoveRequest(orderId, false);
+   
             }
         }
     }

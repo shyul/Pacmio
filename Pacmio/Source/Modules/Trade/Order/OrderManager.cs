@@ -105,7 +105,7 @@ namespace Pacmio
 
         public static void PlaceOrder(OrderInfo od) 
         {
-            if(od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable) 
+            if(od.Account.CurrentOrders.ContainsKey(od.Contract) && od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable) 
             {
                 throw new Exception("There is an on-going order for this contract at the same account!");
             }

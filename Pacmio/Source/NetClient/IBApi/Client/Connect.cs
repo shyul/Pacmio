@@ -159,23 +159,13 @@ namespace Pacmio.IB
                         Thread.Sleep(1);
                         j++;
                     }
-                    /*
-                    if (IsReady_AccountSummary)
-                        SendRequest_AccountSummary();
-
-                    j = 0;
-                    while (j < Timeout)
-                    {
-                        if (IsReady_AccountSummary) break;
-                        Thread.Sleep(1);
-                        j++;
-                    }*/
 
                     if (j < Timeout)
                     {
-
-
                         Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
+                        // Get next valid Id
+                        SendRequest_AccountSummary();
+                        SendRequest_Postion();
                     }
                 }
 

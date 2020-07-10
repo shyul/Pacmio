@@ -25,14 +25,19 @@ namespace Pacmio.IB
     {
         private static void ParseError_PlaceOrder(string[] fields)
         {
-            int requestId = fields[2].ToInt32(-1);
+            int orderId = fields[2].ToInt32(-1);
+            string code = fields[3];
             string message = fields[4];
 
-            Console.WriteLine("PlaceOrder returned with errors: " + fields.ToStringWithIndex());
-            //Console.WriteLine("PlaceOrder Error !!!!!!!!!!!!! " + fields[2] + ": " + message);
-            
-
-            if (requestId > -1) RemoveRequest(requestId, false);
+            if(code == "2102" || code == "2109") 
+            {
+                Console.WriteLine(">>>>> PlaceOrder Warning: " + message);
+            }
+            else
+            {
+                Console.WriteLine(">>>>> PlaceOrder Error: " + fields.ToStringWithIndex());
+                if (orderId > -1) RemoveRequest(orderId, false);
+            }
         }
     }
 }

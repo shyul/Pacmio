@@ -23,17 +23,8 @@ using System.Windows.Forms;
 
 namespace Pacmio
 {
-    public class BarAnalysisSet : IEquatable<BarAnalysisSet>
+    public class BarAnalysisSet
     {
-        public BarAnalysisSet(string name)
-        {
-            Name = name;
-        }
-
-        public string Name { get; }
-
-        public int Order { get; set; } = 0;
-
         public IEnumerable<BarAnalysis> List
         {
             get
@@ -58,6 +49,8 @@ namespace Pacmio
 
         private readonly List<BarAnalysis> m_List = new List<BarAnalysis>();
 
+        public void Clear() => m_List.Clear();
+
         private void SetBarAnalysisParents(BarAnalysis ba)
         {
             ba.Parents.Where(n => n is BarAnalysis).Select(n => (BarAnalysis)n).ToList().ForEach(n =>
@@ -79,12 +72,10 @@ namespace Pacmio
         public void PrintList()
         {
             List.ToList().ForEach(n => {
-                Console.WriteLine(Name + " | Added BA: " + n.Name);
+                Console.WriteLine("BarAnalysisSet | Added BA: " + n.Name);
             });
         }
 
         public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
-
-        public bool Equals(BarAnalysisSet other) => other is BarAnalysisSet bas && Name == bas.Name;
     }
 }

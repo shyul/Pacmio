@@ -107,7 +107,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\BasicSignal.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Basic\MovingAverageCrossSignal.cs" />
+    <Compile Include="Source\Modules\Strategy\Rules\MovingAverageCrossSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -306,8 +306,6 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Modules\Strategy\Rules\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

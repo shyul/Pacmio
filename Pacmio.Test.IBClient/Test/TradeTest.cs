@@ -94,7 +94,7 @@ namespace TestClient
                 .Where(r => r.Field<string>("ExecId") == ti.ExecId);
 
             string contractName = ti.ContractInfo.name + " @ " + ti.ContractInfo.exchange;
-
+            /*
             if (rows.Count() > 0)
             {
                 DataRow row = rows.First();
@@ -119,7 +119,7 @@ namespace TestClient
                 Table?.Rows.Add(ti.ExecId, contractName, ti.TotalQuantity, ti.AveragePrice, ti.Quantity,
                     ti.Price, (ti.Quantity * ti.Price).ToString("0.000"), ti.Commissions, ti.RealizedPnL,
                     ti.LastLiquidity.ToString(), ti.ModeCode, ti.AccountCode, ti.PermId, ti.ExecuteTime);
-            }
+            }*/
         }
     }
 }

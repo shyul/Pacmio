@@ -312,6 +312,12 @@ namespace TestClient
             }, Cts.Token);
         }
 
+        private void BtnApplyDefaultDownloadPeriod_Click(object sender, EventArgs e)
+        {
+            HistoricalPeriod = new Period(new DateTime(2019, 7, 1), DateTime.Now.AddDays(1));
+            CheckBoxChartToCurrent.Checked = false;
+        }
+
         #endregion Bar Chart
 
         #region Simulation

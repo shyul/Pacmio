@@ -35,7 +35,7 @@ namespace TestClient
 
                 //var boll = new Bollinger(20, 2.0);
 
-                BarAnalysisSet bas = new BarAnalysisSet("Default BarAnalysisSet")
+                BarAnalysisSet bas = new BarAnalysisSet()
                 {
                     List = new List<BarAnalysis>
                     {                        
@@ -96,7 +96,7 @@ namespace TestClient
         {
             get
             {
-                BarAnalysisSet bas = new BarAnalysisSet("Default BarAnalysisSet")
+                BarAnalysisSet bas = new BarAnalysisSet()
                 {
                     List = new List<BarAnalysis>()
                 };

@@ -119,6 +119,7 @@ namespace TestClient
             this.BtnRequestPnL = new System.Windows.Forms.Button();
             this.TreeViewAccount = new System.Windows.Forms.TreeView();
             this.tabFileData = new System.Windows.Forms.TabPage();
+            this.BtnApplyDefaultDownloadPeriod = new System.Windows.Forms.Button();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
             this.BtnImportNasdaq = new System.Windows.Forms.Button();
             this.BtnUpdateContracts = new System.Windows.Forms.Button();
@@ -1100,6 +1101,7 @@ namespace TestClient
             // 
             // tabFileData
             // 
+            this.tabFileData.Controls.Add(this.BtnApplyDefaultDownloadPeriod);
             this.tabFileData.Controls.Add(this.BtnMatchSymbols);
             this.tabFileData.Controls.Add(this.BtnImportNasdaq);
             this.tabFileData.Controls.Add(this.BtnUpdateContracts);
@@ -1118,6 +1120,16 @@ namespace TestClient
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
+            // 
+            // BtnApplyDefaultDownloadPeriod
+            // 
+            this.BtnApplyDefaultDownloadPeriod.Location = new System.Drawing.Point(31, 34);
+            this.BtnApplyDefaultDownloadPeriod.Name = "BtnApplyDefaultDownloadPeriod";
+            this.BtnApplyDefaultDownloadPeriod.Size = new System.Drawing.Size(160, 23);
+            this.BtnApplyDefaultDownloadPeriod.TabIndex = 58;
+            this.BtnApplyDefaultDownloadPeriod.Text = "Default Download Setting";
+            this.BtnApplyDefaultDownloadPeriod.UseVisualStyleBackColor = true;
+            this.BtnApplyDefaultDownloadPeriod.Click += new System.EventHandler(this.BtnApplyDefaultDownloadPeriod_Click);
             // 
             // BtnMatchSymbols
             // 
@@ -1275,7 +1287,7 @@ namespace TestClient
             // 
             // BtnDownloadMultiTables
             // 
-            this.BtnDownloadMultiTables.Location = new System.Drawing.Point(31, 137);
+            this.BtnDownloadMultiTables.Location = new System.Drawing.Point(31, 155);
             this.BtnDownloadMultiTables.Name = "BtnDownloadMultiTables";
             this.BtnDownloadMultiTables.Size = new System.Drawing.Size(160, 23);
             this.BtnDownloadMultiTables.TabIndex = 10;
@@ -1925,5 +1937,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnImportNasdaq;
         private System.Windows.Forms.TextBox TextBoxValidCountryCode;
         private System.Windows.Forms.Button BtnMarketDataSyncTicks;
+        private System.Windows.Forms.Button BtnApplyDefaultDownloadPeriod;
     }
 }

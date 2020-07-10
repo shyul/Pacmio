@@ -41,7 +41,8 @@ namespace Pacmio.IB
                 {
                     (int requestId, _) = RegisterRequest(RequestType.PlaceOrder);
                     od.OrderId = requestId;
-                    if (!OrderManager.AddNew(od)) throw new Exception("Error adding new OrderInfo to OrderManager.ActiveList");
+                    if (!OrderManager.AddNew(od)) 
+                        throw new Exception("Error adding new OrderInfo to OrderManager.ActiveList");
                 }
 
                 string lastTradeDateOrContractMonth = "";
