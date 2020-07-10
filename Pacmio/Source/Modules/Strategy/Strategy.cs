@@ -2,6 +2,15 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// https://school.stockcharts.com/doku.php?id=trading_strategies:moving_momentum
+/// 
+/// Typically, chartists 
+/// first establish a trading bias or long-term perspective.
+/// Second, chartists wait for pullbacks or bounces that will improve the risk-reward ratio.
+/// Third, chartists look for a reversal that indicates a subsequent upturn or downturn in price.
+/// 
+/// Bearish signals are ignored when the bias is bullish. Bullish signals are ignored when the bias is bearish.
+/// 
 /// ***************************************************************************
 
 using System;

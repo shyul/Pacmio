@@ -306,7 +306,7 @@ namespace TestClient
             {
                 var symbols = ContractList.GetSymbolList(ref symbolText);
                 var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-                BarTableDownloader.Download(cList, new List<(BarFreq freq, BarType type, Period period)>() { (freq, type, HistoricalPeriod) }, Cts, Progress);
+                BarTable.Download(cList, new List<(BarFreq freq, BarType type, Period period)>() { (freq, type, HistoricalPeriod) }, Cts, Progress);
                 //BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
                 //BarTableTest.BarTableSet.AddContract(cList, freq, type, HistoricalPeriod, Cts, Progress);
             }, Cts.Token);

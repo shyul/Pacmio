@@ -120,10 +120,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
-    <Compile Include="Source\Modules\BarTable\BarTableDownloader.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\PositionArea.cs" />
+    <Compile Include="Source\Modules\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\PositionSeries.cs" />
+    <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
@@ -133,8 +132,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableFileData.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\SignalArea.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\SignalSeries.cs" />
+    <Compile Include="Source\Modules\Chart\SignalArea.cs" />
+    <Compile Include="Source\Modules\Chart\SignalSeries.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
@@ -178,7 +177,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\ATR.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\TSI.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\WMA.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\MainArea.cs" />
+    <Compile Include="Source\Modules\Chart\MainArea.cs" />
     <Compile Include="Source\Modules\BarTable\Bar.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\WaveTrend.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\ExchangeInfo.cs" />
@@ -270,7 +269,7 @@
     </Compile>
     <Compile Include="Source\Modules\BarTable\BarTable.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMA.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\BarChart.cs" />
+    <Compile Include="Source\Modules\Chart\BarChart.cs" />
     <Compile Include="Source\Root.cs" />
     <Compile Include="Source\Modules\Contract\ContractList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

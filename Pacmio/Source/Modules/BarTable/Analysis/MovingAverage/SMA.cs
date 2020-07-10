@@ -2,6 +2,14 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// https://school.stockcharts.com/doku.php?id=trading_strategies:moving_momentum
+/// 
+/// Moving averages are trend-following indicators that lag price. This means
+/// the actual trend changes before the moving averages generate a signal.
+/// Many traders are turned off by this lag, but this does not make them totally ineffective.
+/// Moving averages smooth prices and provide chartists with a cleaner price plot,
+/// which makes it easier to identify the general trend.
+/// 
 /// ***************************************************************************
 
 using System;

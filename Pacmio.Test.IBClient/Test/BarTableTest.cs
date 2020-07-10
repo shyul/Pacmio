@@ -55,9 +55,9 @@ namespace TestClient
                         //new SMA(5) { Color = Color.Blue },
                         //new SMA(20) { Color = Color.Green },
                         //new SMA(50) { Color = Color.Tomato },
-                        new EMA(200) { Color = Color.Salmon.Opaque(50), LineWidth = 10 },
-                        new EMA(50) { Color = Color.Tomato, LineWidth = 2 },
-                        new EMA(25) { Color = Color.DarkGreen, LineWidth = 1 },
+                        new EMA(200) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
+                        new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 },
+                        new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 },
                         //new HMA(16) { Color = Color.LimeGreen },
                         //new WMA(16) { Color = Color.LimeGreen },
                         //new EMA(5) { Color = Color.SteelBlue },
@@ -71,7 +71,7 @@ namespace TestClient
                 
                        
                         new PSAR(0.02, 0.2),
-                        new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.HotPink },
+                        new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
                         //new Pivot(BarFreq.Daily),
                         //ema5_smma5_cross,
                         //divergence

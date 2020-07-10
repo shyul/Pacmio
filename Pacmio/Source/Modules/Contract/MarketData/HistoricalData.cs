@@ -31,16 +31,20 @@ namespace Pacmio
         public double ShortableShares { get; set; } = double.NaN;
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)> DividendTable { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)>();
+        public Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)> DividendTable { get; private set; }
+            = new Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)>();
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource DataSource, double Split)> SplitTable { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double Split)>();
+        public Dictionary<DateTime, (DataSource DataSource, double Split)> SplitTable { get; private set; }
+            = new Dictionary<DateTime, (DataSource DataSource, double Split)>();
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource DataSource, double EPS)> EPSTable { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double EPS)>();
+        public Dictionary<DateTime, (DataSource DataSource, double EPS)> EPSTable { get; private set; }
+            = new Dictionary<DateTime, (DataSource DataSource, double EPS)>();
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource DataSource, double Target)> TargetPriceList { get; private set; } = new Dictionary<DateTime, (DataSource DataSource, double Target)>();
+        public Dictionary<DateTime, (DataSource DataSource, double Target)> TargetPriceList { get; private set; }
+            = new Dictionary<DateTime, (DataSource DataSource, double Target)>();
 
         public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
         {
