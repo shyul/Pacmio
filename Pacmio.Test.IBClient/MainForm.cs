@@ -86,7 +86,7 @@ namespace TestClient
 
             Root.OnIBConnectedHandler += IBClientOnConnectedHandler;
 
-            TradeLogManager.UpdatedHandler += TradeTableHandler;
+            TradeInfoManager.UpdatedHandler += TradeTableHandler;
 
             Progress = new Progress<float>(percent =>
             {
@@ -474,7 +474,7 @@ namespace TestClient
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected) return;
-            TradeLogManager.Request_Log();
+            TradeInfoManager.Request_Log();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
@@ -494,7 +494,7 @@ namespace TestClient
 
             if (Root.SaveFile.ShowDialog() == DialogResult.OK)
             {
-                TradeLogManager.ExportTradeLog(Root.SaveFile.FileName);
+                TradeInfoManager.ExportTradeLog(Root.SaveFile.FileName);
             }
         }
 
@@ -868,6 +868,7 @@ namespace TestClient
 
         private void BtnOrder_Click(object sender, EventArgs e)
         {
+
             if (Root.IBConnected && ValidateSymbol())
             {
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
@@ -893,6 +894,43 @@ namespace TestClient
 
                 OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
             }
+        }
+
+        private void BtnTestMassiveOrder_Click(object sender, EventArgs e)
+        {
+            string symbolText = TextBoxMultiContracts.Text;
+            OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
+            OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
+            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+
+            Task.Run(() =>
+            {
+                var symbols = ContractList.GetSymbolList(ref symbolText);
+                var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+
+                foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
+                {
+                    OrderInfo od = new OrderInfo()
+                    {
+                        Contract = c,
+                        Quantity = TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                        Type = orderType,
+                        LimitPrice = TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
+                        AuxPrice = TextBoxOrderSettingStopPrice.Text.ToDouble(0),
+                        TimeInForce = tif,
+                        AccountCode = "DU332281",
+                        OutsideRegularTradeHours = true,
+                    };
+
+                    if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
+                    {
+                        od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
+                        DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
+                    }
+
+                    OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                }
+            }, Cts.Token);
         }
 
         private void BtnOrderBraket_Click(object sender, EventArgs e)

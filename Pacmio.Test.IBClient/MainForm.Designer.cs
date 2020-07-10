@@ -178,6 +178,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnTestMassiveOrder = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -663,6 +664,7 @@ namespace TestClient
             // 
             // tabOrder
             // 
+            this.tabOrder.Controls.Add(this.BtnTestMassiveOrder);
             this.tabOrder.Controls.Add(this.GroupBoxOrderSetting);
             this.tabOrder.Controls.Add(this.GroupBoxPositions);
             this.tabOrder.Controls.Add(this.executionsGroup);
@@ -1736,6 +1738,19 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnTestMassiveOrder
+            // 
+            this.BtnTestMassiveOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnTestMassiveOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnTestMassiveOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnTestMassiveOrder.Location = new System.Drawing.Point(253, 33);
+            this.BtnTestMassiveOrder.Name = "BtnTestMassiveOrder";
+            this.BtnTestMassiveOrder.Size = new System.Drawing.Size(183, 29);
+            this.BtnTestMassiveOrder.TabIndex = 83;
+            this.BtnTestMassiveOrder.Text = "Test Massive Order";
+            this.BtnTestMassiveOrder.UseVisualStyleBackColor = false;
+            this.BtnTestMassiveOrder.Click += new System.EventHandler(this.BtnTestMassiveOrder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1938,5 +1953,6 @@ namespace TestClient
         private System.Windows.Forms.TextBox TextBoxValidCountryCode;
         private System.Windows.Forms.Button BtnMarketDataSyncTicks;
         private System.Windows.Forms.Button BtnApplyDefaultDownloadPeriod;
+        private System.Windows.Forms.Button BtnTestMassiveOrder;
     }
 }

@@ -31,18 +31,21 @@ namespace Pacmio
         /// <summary>
         /// Perm Id to Order Information Lookup Table
         /// </summary>
-        private static readonly ConcurrentDictionary<int, OrderInfo> List = new ConcurrentDictionary<int, OrderInfo>();
+        private static readonly Dictionary<int, OrderInfo> List = new Dictionary<int, OrderInfo>();
 
         public static int Count => List.Count;
 
         public static OrderInfo GetOrAdd(int permId)
         {
-            if (!List.ContainsKey(permId))
+            lock (List)
             {
-                List.TryAdd(permId, new OrderInfo() { PermId = permId });
-            }
+                if (!List.ContainsKey(permId))
+                {
+                    List.Add(permId, new OrderInfo() { PermId = permId });
+                }
 
-            return List[permId];
+                return List[permId];
+            }
         }
 
         public static OrderInfo GetOrAdd(OrderInfo od)
@@ -51,7 +54,7 @@ namespace Pacmio
 
             if (!List.ContainsKey(od.PermId))
             {
-                List.TryAdd(od.PermId, od);
+                List.Add(od.PermId, od);
             }
 
             return List[od.PermId];
@@ -61,7 +64,7 @@ namespace Pacmio
 
         private static readonly ConcurrentDictionary<int, OrderInfo> ActiveList = new ConcurrentDictionary<int, OrderInfo>();
 
-        public static bool AddNew(OrderInfo od) 
+        public static bool AddNew(OrderInfo od)
         {
             Account ac = od.Account;
             Contract c = od.Contract;
@@ -74,38 +77,32 @@ namespace Pacmio
 
         public static OrderInfo GetOrAdd(int orderId, int permId)
         {
-            if (ActiveList.ContainsKey(orderId))
-            {
-                OrderInfo od = ActiveList[orderId];
-                if (permId > 0)
+            lock (ActiveList)
+                if (ActiveList.ContainsKey(orderId))
                 {
-                    od.PermId = permId;
-                    ActiveList.TryRemove(orderId, out _);
-                    return GetOrAdd(od);
+                    OrderInfo od = ActiveList[orderId];
+                    if (permId > 0)
+                    {
+                        od.PermId = permId;
+                        ActiveList.TryRemove(orderId, out _);
+                        return GetOrAdd(od);
+                    }
+                    else
+                        return od;
                 }
                 else
-                    return od;
-            }
-            else
-            {
-                return GetOrAdd(permId);
-            }
+                {
+                    return GetOrAdd(permId);
+                }
         }
 
         #endregion Active List
 
-        /*
-        public static IEnumerable<OrderInfo> GetActiveOrder(Account ac, Contract c)
-        {
-            return List.Values.Where(od => od.IsEditable && od.AccountCode == ac.AccountCode && od.Contract == c);
-        }
-        */
-
         #region Order Actions
 
-        public static void PlaceOrder(OrderInfo od) 
+        public static void PlaceOrder(OrderInfo od)
         {
-            if(od.Account.CurrentOrders.ContainsKey(od.Contract) && od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable) 
+            if (od.Account.CurrentOrders.ContainsKey(od.Contract) && od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable)
             {
                 throw new Exception("There is an on-going order for this contract at the same account!");
             }
@@ -118,9 +115,9 @@ namespace Pacmio
 
         }
 
-        public static void CancelOrder(OrderInfo od) 
+        public static void CancelOrder(OrderInfo od)
         {
-        
+
         }
 
         public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
@@ -167,9 +164,7 @@ namespace Pacmio
         public static void Save()
         {
             lock (List)
-            {
-                List.Values.ToArray().SerializeJsonFile(FileName);
-            }
+                List.Values.ToList().SerializeJsonFile(FileName);
         }
 
         /// <summary>
@@ -179,14 +174,13 @@ namespace Pacmio
         {
             if (File.Exists(FileName))
             {
-                var list = Serialization.DeserializeJsonFile<OrderInfo[]>(FileName);
-                foreach (OrderInfo od in list)
-                {
-                    GetOrAdd(od);
+                List<OrderInfo> data = Serialization.DeserializeJsonFile<List<OrderInfo>>(FileName);
 
+                data.AsParallel().ForAll(od => {
+                    lock (List) List[od.PermId] = od;
                     if (od.IsEditable)
                         od.Account.CurrentOrders[od.Contract] = od;
-                }
+                });
             }
         }
 

@@ -106,7 +106,7 @@ namespace Pacmio
                     if (Contract is null || Contract.ConId != m_ConId)
                     {
                         Contract = ContractList.GetOrFetch(m_ConId);
-                        Console.WriteLine("Added Contract to OrderInfo: " + Contract);
+                        //Console.WriteLine("Added Contract to OrderInfo: " + Contract);
                     }
                 }
             }

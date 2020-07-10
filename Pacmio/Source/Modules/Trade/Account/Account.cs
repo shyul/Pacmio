@@ -87,6 +87,9 @@ namespace Pacmio
         {
             foreach (var item in Positions)
             {
+
+
+
                 Close(item.Key);
             }
         }
@@ -117,7 +120,23 @@ namespace Pacmio
         /// <param name="time"></param>
         public void Close(Contract c)
         {
+            double qty = -Positions[c].Quantity;
+            if (qty != 0) 
+            {
+                OrderInfo od = new OrderInfo()
+                {
+                    Contract = c,
+                    Quantity = qty,
+                    Type = OrderType.Market,
+                    LimitPrice = 0,
+                    AuxPrice = 0,
+                    TimeInForce = OrderTimeInForce.GoodUntilCanceled,
+                    AccountCode = AccountCode,
+                    OutsideRegularTradeHours = true,
+                };
 
+                OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+            }
         }
 
         /// <summary>

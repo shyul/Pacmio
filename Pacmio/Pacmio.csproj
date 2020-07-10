@@ -159,7 +159,7 @@
     <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
     <Compile Include="Source\Modules\Strategy\Simulation\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\TradeRule.cs" />
-    <Compile Include="Source\Modules\Trade\Order\TradeLogManager.cs" />
+    <Compile Include="Source\Modules\Trade\Order\TradeInfoManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionStatus.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\LiquidityType.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\TradeActionType.cs" />

@@ -119,6 +119,7 @@ namespace Pacmio
             else
                 Settings = new PacSettings();
 
+            // TODO: Set these from the Setting File
             BarTable.UpperColor = Color.Green;
             BarTable.LowerColor = Color.Red;
 
@@ -131,6 +132,7 @@ namespace Pacmio
             ContractList.Load();
             UnknownItemList.Load();
             AccountManager.Load();
+            TradeInfoManager.Load();
             OrderManager.Load();
 
             StartTask();
@@ -147,6 +149,7 @@ namespace Pacmio
 
             BusinessInfoList.Save();
             ContractList.Save();
+            TradeInfoManager.Save();
             OrderManager.Save();
             AccountManager.Save();
             UnknownItemList.Save();

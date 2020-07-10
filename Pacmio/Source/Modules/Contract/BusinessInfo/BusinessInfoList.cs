@@ -43,8 +43,13 @@ namespace Pacmio
             {
                 string fileName = BusinessInfoFile(isin);
                 BusinessInfo bi = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
-                List.Add(isin, bi);
-                return bi;
+
+                if (!List.ContainsKey(isin)) 
+                    List.Add(isin, bi);
+
+                //List[isin] = bi;
+
+                return List[isin];
             }
             else
                 return List[isin];

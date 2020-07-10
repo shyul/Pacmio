@@ -15,17 +15,20 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class TradeLogManager
+    public static class TradeInfoManager
     {
-        private static readonly ConcurrentDictionary<string, TradeInfo> List = new ConcurrentDictionary<string, TradeInfo>();
+        private static readonly Dictionary<string, TradeInfo> List = new Dictionary<string, TradeInfo>();
 
         public static TradeInfo GetOrAdd(string execId)
         {
-            if (!List.ContainsKey(execId)) List.TryAdd(execId, new TradeInfo(execId));
-            return List[execId];
+            lock (List)
+            {
+                if (!List.ContainsKey(execId)) List.Add(execId, new TradeInfo(execId));
+                return List[execId];
+            }
         }
 
-        public static void Add(TradeInfo ti) => List.TryAdd(ti.ExecId, ti);
+        //public static void Add(TradeInfo ti) => List.Add(ti.ExecId, ti);
 
         public static TradeInfo Get(string execId)
         {
@@ -72,16 +75,16 @@ namespace Pacmio
 
         public static void Save()
         {
-            List<TradeInfo> trades = List.Values.ToList();
-            trades.SerializeJsonFile(FileName);
+            lock (List)
+                List.Values.ToList().SerializeJsonFile(FileName);
         }
 
         public static void Load()
         {
-            if (File.Exists(FileName)) 
+            if (File.Exists(FileName))
             {
-                List<TradeInfo> trades = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
-                trades.ForEach(n => Add(n));
+                List<TradeInfo> data = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
+                data.AsParallel().ForAll(n => { lock (List) List[n.ExecId] = n; });
             }
         }
 
@@ -105,10 +108,10 @@ namespace Pacmio
                     action += "CLOSE|C";
                 }
 
-                if(ti.Contract is Contract)
+                if (ti.Contract is Contract)
 
-                sb.AppendLine("STK_TRD|" + ti.PermId + "|" + ti.Contract.Name + "|" + ti.Contract.FullName + "|" + ti.Contract.Exchange + "|" + action + "|" +
-                    ti.ExecuteTime.ToString("yyyyMMdd") + "|" + ti.ExecuteTime.ToString("HH:mm:ss") + "|USD|" + ti.Quantity + "|1.00|" + ti.Price + "|" + ti.Quantity * ti.Price + "|" + (-ti.Commissions) + "|1.00");
+                    sb.AppendLine("STK_TRD|" + ti.PermId + "|" + ti.Contract.Name + "|" + ti.Contract.FullName + "|" + ti.Contract.Exchange + "|" + action + "|" +
+                        ti.ExecuteTime.ToString("yyyyMMdd") + "|" + ti.ExecuteTime.ToString("HH:mm:ss") + "|USD|" + ti.Quantity + "|1.00|" + ti.Price + "|" + ti.Quantity * ti.Price + "|" + (-ti.Commissions) + "|1.00");
             }
             sb.AppendLine("\n\nEOF");
             sb.ToFile(fileName);
