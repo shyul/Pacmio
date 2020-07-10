@@ -44,6 +44,8 @@ namespace Pacmio
                     List.Add(permId, new OrderInfo() { PermId = permId });
                 }
 
+                
+
                 return List[permId];
             }
         }
@@ -56,6 +58,12 @@ namespace Pacmio
             {
                 List.Add(od.PermId, od);
             }
+            /*
+            OrderInfo od2 = List[od.PermId];
+            if(od2.Contract is Contract c)
+            {
+                c.TradeData.Add(od2);
+            }*/
 
             return List[od.PermId];
         }
@@ -68,6 +76,8 @@ namespace Pacmio
         {
             Account ac = od.Account;
             Contract c = od.Contract;
+
+            c.TradeData.Add(od);
 
             bool valid = ActiveList.TryAdd(od.OrderId, od);
             ac.CurrentOrders[c] = od;
@@ -181,9 +191,9 @@ namespace Pacmio
                     if (od.IsEditable)
                         od.Account.CurrentOrders[od.Contract] = od;
                     /*
-                    if(od.Contract is Contract c) 
+                    if (od.Contract is Contract c)
                     {
-                        c.TradeData.Orders.CheckAdd(od);
+                        c.TradeData.Add(od);
                     }*/
                 });
             }

@@ -17,6 +17,7 @@ namespace Pacmio
     [Serializable, DataContract(Name = "TradeData")]
     public class TradeData
     {
+        /*
         public TradeData()
         {
             Setup();
@@ -27,16 +28,24 @@ namespace Pacmio
             Positions = new Dictionary<string, PositionStatus>();
             Orders = new List<OrderInfo>();
             Trades = new List<TradeInfo>();
-        }
+        }*/
+
+
+        [DataMember]
+        public Dictionary<string, OrderInfo> CurrentOrder { get; private set; } = new Dictionary<string, OrderInfo>();
 
         [DataMember]
         public Dictionary<string, PositionStatus> Positions { get; private set; } = new Dictionary<string, PositionStatus>();
 
-        [DataMember]
-        public List<OrderInfo> Orders { get; private set; } = new List<OrderInfo>();
+        public void Add(OrderInfo od) => Orders.CheckAdd(od);
+
+        public void Add(TradeInfo ti) => Trades.CheckAdd(ti);
 
         [DataMember]
-        public List<TradeInfo> Trades { get; private set; } = new List<TradeInfo>();
+        public HashSet<OrderInfo> Orders { get; private set; } = new HashSet<OrderInfo>();
+
+        [DataMember]
+        public HashSet<TradeInfo> Trades { get; private set; } = new HashSet<TradeInfo>();
 
     }
 }

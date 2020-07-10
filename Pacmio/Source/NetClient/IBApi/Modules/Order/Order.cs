@@ -27,6 +27,9 @@ namespace Pacmio.IB
         public static void PlaceOrder(OrderInfo od, bool whatIf = false, bool modify = false, bool useSmart = true)
         {
             Contract c = od.Contract;
+
+            
+
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
             var (valid_orderType, orderTypeCode) = ApiCode.GetIbCode(od.Type);
             var (valid_tif, TifCode) = ApiCode.GetIbCode(od.TimeInForce);

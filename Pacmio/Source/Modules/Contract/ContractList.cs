@@ -32,7 +32,7 @@ namespace Pacmio
         public static bool IsEmpty => Count == 0;
         public static IEnumerable<Contract> Values => List.Values;
 
-        public static bool Remove((string name, Exchange exchange, string typeName) info) 
+        public static bool Remove((string name, Exchange exchange, string typeName) info)
         {
             bool successful = List.TryRemove(info, out _);
             return successful;
@@ -178,7 +178,7 @@ namespace Pacmio
                     else
                     {
                         Thread.Sleep(10);
-                        if(Fetch(symbol, cts) is Contract[] cx) 
+                        if (Fetch(symbol, cts) is Contract[] cx)
                         {
                             var clist = cx.Where(n => (DateTime.Now - n.UpdateTime).Days > 6);
                             foreach (Contract c in clist)
@@ -234,11 +234,11 @@ namespace Pacmio
             var c0List = string.IsNullOrWhiteSpace(countryCode) ? Values : GetListByCountry(countryCode);
             var cList = searchFunc is null ? c0List.AsParallel().Where(n => n.NeedUpdate) : c0List.AsParallel().Where(searchFunc);
 
-            
+
             //var cList = GetListByCountry("US").Where(n => (DateTime.Now - n.UpdateTime).Minutes > 150);
             //var cList = GetListByCountry("US").Where(n => n is IBusiness ib && ib.Industry is null);// string.IsNullOrWhiteSpace( stk.Industry));
             //Console.WriteLine("Update time based count = " + tlist.Count() + "; Industry File Check count = " + t2list.Count());
-            
+
 
             int count = cList.Count();
 
@@ -581,7 +581,7 @@ namespace Pacmio
                                 break;
                         }
                     }
-         
+
                 }
             }
         }

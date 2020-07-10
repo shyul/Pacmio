@@ -84,15 +84,12 @@ namespace Pacmio
             if (File.Exists(FileName))
             {
                 List<TradeInfo> data = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
-                data.AsParallel().ForAll(ti => { 
-                    lock (List) List[ti.ExecId] = ti; 
-                
-                    
+                data.AsParallel().ForAll(ti => {
+                    lock (List) List[ti.ExecId] = ti;
 
-                    if(ti.Contract is Contract c)
+                    if (ti.Contract is Contract c)
                     {
-                        c.LoadTradeData();
-                        c.TradeData.Trades.CheckAdd(ti);
+                        c.TradeData.Add(ti);
                     }
                 });
             }

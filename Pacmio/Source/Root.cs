@@ -132,8 +132,8 @@ namespace Pacmio
             ContractList.Load();
             UnknownItemList.Load();
             AccountManager.Load();
-            TradeInfoManager.Load();
-            OrderManager.Load();
+            //TradeInfoManager.Load();
+            //OrderManager.Load();
 
             StartTask();
 
@@ -149,8 +149,8 @@ namespace Pacmio
 
             BusinessInfoList.Save();
             ContractList.Save();
-            TradeInfoManager.Save();
-            OrderManager.Save();
+            //TradeInfoManager.Save();
+            //OrderManager.Save();
             AccountManager.Save();
             UnknownItemList.Save();
         }

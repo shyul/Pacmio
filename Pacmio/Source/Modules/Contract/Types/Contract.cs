@@ -244,7 +244,6 @@ namespace Pacmio
         public virtual void LoadTradeData()
         {
             m_TradeData = File.Exists(TradeDataFileName) ? Serialization.DeserializeJsonFile<TradeData>(TradeDataFileName) : new TradeData();
-            m_TradeData.Setup();
         }
 
         public virtual void SaveTradeData()

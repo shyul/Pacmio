@@ -51,6 +51,8 @@ namespace Pacmio.IB
 
             od.ConId = fields[1].ToInt32(-1);
 
+            if (od.Contract is Contract c) c.TradeData.Add(od);
+
             int totalQuantity = fields[13].ToInt32(0);
             od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
 

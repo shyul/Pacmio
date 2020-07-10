@@ -69,6 +69,9 @@ namespace Pacmio.IB
 
             ti.OrderId = fields[2].ToInt32();
             ti.ConId = fields[3].ToInt32();
+
+            if (ti.Contract is Contract c) c.TradeData.Add(ti);
+
             ti.PermId = fields[21].ToInt32();
             ti.ClientId = fields[22].ToInt32();
             ti.Description = fields[26];
