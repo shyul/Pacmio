@@ -32,7 +32,7 @@ namespace Pacmio
 
         public BarTable Table => BarChart.BarTable;
 
-        public TradeRule TradeRule => BarChart.TradeRule;
+        public IAnalysisSetting AnalysisSetting => BarChart.AnalysisSetting;
 
         public override List<(string text, Font font, Brush brush)> ValueLabels(ITable table, int pt)
         {
@@ -84,7 +84,7 @@ namespace Pacmio
                     break;
                 else if (i >= 0)
                 {
-                    double data = Table[i][BarChart.TradeRule].PnL;
+                    double data = Table[i][BarChart.AnalysisSetting].PnL;
                     if (!double.IsNaN(data))
                     {
                         int x = area.IndexToPixel(pt);

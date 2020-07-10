@@ -21,10 +21,10 @@ namespace Pacmio
 {
     public sealed class BarPosition
     {
-        public BarPosition(Bar b, TradeRule tr)
+        public BarPosition(Bar b, IAnalysisSetting ias)
         {
             Bar = b;
-            TradeRule = tr;
+            AnalysisSetting = ias;
             //Snapshot();
             Reset();
         }
@@ -39,7 +39,7 @@ namespace Pacmio
 
         public void Snapshot()
         {
-            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[TradeRule] is BarPosition bp_1) 
+            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[AnalysisSetting] is BarPosition bp_1) 
             {
                 Quantity = bp_1.Quantity;
                 AveragePrice = bp_1.AveragePrice;
@@ -79,7 +79,7 @@ namespace Pacmio
 
         public Bar Bar { get; }
 
-        public TradeRule TradeRule { get; }
+        public IAnalysisSetting AnalysisSetting { get; }
         
         public readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
 

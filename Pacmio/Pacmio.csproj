@@ -103,6 +103,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\IAnalysisSetting.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />

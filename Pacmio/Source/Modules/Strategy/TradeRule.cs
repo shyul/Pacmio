@@ -17,7 +17,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class TradeRule : IEquatable<TradeRule>
+    public abstract class TradeRule : IAnalysisSetting, IEquatable<TradeRule>
     {
         public TradeRule(string name)
         {
@@ -30,11 +30,17 @@ namespace Pacmio
 
         public Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
 
-        //public Dictionary<BarFreq, List<SignalColumn>> TimeFrameSignals { get; } = new Dictionary<BarFreq, List<SignalColumn>>();
-
-        public void EvaluatePosition() 
+        public BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
         {
-        
+            if (Analyses.ContainsKey(barFreq))
+                return Analyses[barFreq];
+            else
+                return null;
+        }
+
+        public void EvaluatePosition()
+        {
+
         }
 
         #region Trading Timing
@@ -51,5 +57,11 @@ namespace Pacmio
         #endregion Trading Timing
 
         public bool Equals(TradeRule other) => other is TradeRule tr && Name == tr.Name;
+
+        public bool Equals(IAnalysisSetting other) => other is IAnalysisSetting ias && Name == ias.Name;
+
+
     }
+
+
 }

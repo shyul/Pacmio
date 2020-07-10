@@ -32,9 +32,9 @@ namespace Pacmio
 
         public BarTable Table => BarChart.BarTable;
 
-        public TradeRule TradeRule => BarChart.TradeRule;
+        public IAnalysisSetting AnalysisSetting => BarChart.AnalysisSetting;
 
-        public IEnumerable<SignalColumn> SignalColumns => TradeRule.Analyses[BarChart.BarFreq].SignalColumns;
+        //public IEnumerable<SignalColumn> SignalColumns => AnalysisSetting.Analyses[BarChart.BarFreq].SignalColumns;
 
         public override void RefreshAxis(IArea area, ITable table)
         {
@@ -44,7 +44,7 @@ namespace Pacmio
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    var (bullish, bearish) = Table[i, TradeRule];
+                    var (bullish, bearish) = Table[i, AnalysisSetting];
 
 
 
@@ -72,47 +72,50 @@ namespace Pacmio
 
         public override void Draw(Graphics g, IArea area, ITable table)
         {
-            ContinuousAxis axisY = area.AxisY(Side);
-            int pt = 0;
-            int ref_pix = axisY.ValueToPixel(0);
-            int tickWidth = area.AxisX.TickWidth;
-            if (tickWidth > 6) tickWidth = (tickWidth * 0.8f).ToInt32();
-            if (tickWidth > Width) tickWidth = Width.ToInt32();
-
-            for (int i = area.StartPt; i < area.StopPt; i++)
+            if (BarChart.HasSignalColumn)
             {
-                if (i >= table.Count) break;
-                if (i >= 0)
+                ContinuousAxis axisY = area.AxisY(Side);
+                int pt = 0;
+                int ref_pix = axisY.ValueToPixel(0);
+                int tickWidth = area.AxisX.TickWidth;
+                if (tickWidth > 6) tickWidth = (tickWidth * 0.8f).ToInt32();
+                if (tickWidth > Width) tickWidth = Width.ToInt32();
+
+                for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    int x = area.IndexToPixel(pt) - (tickWidth / 2);
-                    int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
-
-                    foreach (SignalColumn sc in SignalColumns)
+                    if (i >= table.Count) break;
+                    if (i >= 0)
                     {
-                        var (desc, score) = Table[i, TradeRule, sc];
+                        int x = area.IndexToPixel(pt) - (tickWidth / 2);
+                        int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        Rectangle rect;
-                        int height;
+                        foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
+                        {
+                            var (desc, score) = Table[i, AnalysisSetting, sc];
 
-                        if (score > 0)
-                        {
-                            height = ref_pix - axisY.ValueToPixel(score);
-                            pos_base_pix -= height;
-                            rect = new Rectangle(x, pos_base_pix, tickWidth, height);
-                            g.FillRectangleE(sc.BullishTheme.FillBrush, rect);
-                            g.DrawRectangle(sc.BullishTheme.EdgePen, rect);
-                        }
-                        else if (score < 0)
-                        {
-                            height = axisY.ValueToPixel(-score) - ref_pix;
-                            rect = new Rectangle(x, neg_base_pix, tickWidth, height);
-                            neg_base_pix += height;
-                            g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
-                            g.DrawRectangle(sc.BearishTheme.EdgePen, rect);
+                            Rectangle rect;
+                            int height;
+
+                            if (score > 0)
+                            {
+                                height = ref_pix - axisY.ValueToPixel(score);
+                                pos_base_pix -= height;
+                                rect = new Rectangle(x, pos_base_pix, tickWidth, height);
+                                g.FillRectangleE(sc.BullishTheme.FillBrush, rect);
+                                g.DrawRectangle(sc.BullishTheme.EdgePen, rect);
+                            }
+                            else if (score < 0)
+                            {
+                                height = axisY.ValueToPixel(-score) - ref_pix;
+                                rect = new Rectangle(x, neg_base_pix, tickWidth, height);
+                                neg_base_pix += height;
+                                g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
+                                g.DrawRectangle(sc.BearishTheme.EdgePen, rect);
+                            }
                         }
                     }
+                    pt++;
                 }
-                pt++;
             }
         }
     }

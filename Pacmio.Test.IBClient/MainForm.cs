@@ -241,7 +241,7 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            TradeRule tr = new TestTradeRule(freq);
+            IAnalysisSetting tr = new TestTradeRule(freq);
 
             var symbols = ContractList.GetSymbolList(ref symbolText);
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, tr));

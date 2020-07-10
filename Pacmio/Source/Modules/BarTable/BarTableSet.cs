@@ -87,10 +87,10 @@ namespace Pacmio
             }
         }
 
-        public void AddChart(Contract c, TradeRule tr, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
+        public void AddChart(Contract c, IAnalysisSetting ias, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
             BarTable bt = AddContract(c, barFreq, barType);
-            AddChart(bt, tr);
+            AddChart(bt, ias);
             if (cts.Continue())
             {
                 if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period)
@@ -98,7 +98,7 @@ namespace Pacmio
                     bt.Fetch(period, cts);
                     period = bt.Period;
                 }
-                bt.CalculateOnly(tr);
+                bt.CalculateOnly(ias);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Pacmio
             return new List<BarTable>();
         }
 
-        public void AddChart(IEnumerable<(Contract, TradeRule)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        public void AddChart(IEnumerable<(Contract, IAnalysisSetting)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             PeriodSettings[(barFreq, barType)] = period;
@@ -150,15 +150,15 @@ namespace Pacmio
             Parallel.ForEach(contracts, po, n => {
                 if (cts.Continue())
                 {
-                    var (c, tr) = n;
-                    AddChart(c, tr, barFreq, barType, ref period, cts);
+                    var (c, ias) = n;
+                    AddChart(c, ias, barFreq, barType, ref period, cts);
                     i++;
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
             });
         }
 
-        public void Calculate(TradeRule tr, CancellationTokenSource cts, IProgress<float> progress)
+        public void Calculate(IAnalysisSetting ias, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             ParallelOptions po = new ParallelOptions()
@@ -170,19 +170,19 @@ namespace Pacmio
             Parallel.ForEach(BarTables, po, bt => {
                 if (cts.Continue())
                 {
-                    bt.CalculateOnly(tr);
+                    bt.CalculateOnly(ias);
                     i++;
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
             });
         }
 
-        private void AddChart(BarTable bt, TradeRule tr)
+        private void AddChart(BarTable bt, IAnalysisSetting ias)
         {
             if (BarChart.List.Where(n => n.BarTable == bt).Count() == 0)
             {
                 BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-                bc.ConfigChart(bt, tr);
+                bc.ConfigChart(bt, ias);
                 if (Root.Form.InvokeRequired)
                 {
                     Root.Form.Invoke((MethodInvoker)delegate

@@ -97,7 +97,7 @@ namespace Pacmio
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 
-        public void ConfigChart(BarTable bt, TradeRule tr)
+        public void ConfigChart(BarTable bt, IAnalysisSetting ias)
         {
             ReadyToShow = false;
             lock (GraphicsLockObject)
@@ -124,23 +124,20 @@ namespace Pacmio
                     TabName = "No BarTable";
                 }
 
-                TradeRule = tr;
-                if (TradeRule.Analyses.ContainsKey(BarTable.BarFreq))
+                AnalysisSetting = ias;
+                if (AnalysisSetting.BarAnalysisSet(BarTable.BarFreq) is BarAnalysisSet bas)
                 {
-                    BarAnalysisSet = TradeRule.Analyses[BarTable.BarFreq];
-
-                    if (BarAnalysisSet is BarAnalysisSet bas)
-                        foreach (var ic in bas.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
-                        {
-                            ic.ConfigChart(this);
-                        }
+                    BarAnalysisSet = bas;
+                    foreach (var ic in bas.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                    {
+                        ic.ConfigChart(this);
+                    }
+                    bt.CalculateOnly(BarAnalysisSet);
                 }
                 else
                 {
                     BarAnalysisSet = null;
                 }
-
-                bt.CalculateOnly(tr);
             }
             StopPt = bt.Count;
             ReadyToShow = (BarTable is BarTable);
@@ -154,7 +151,7 @@ namespace Pacmio
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
 
-        public TradeRule TradeRule { get; private set; } = null;
+        public IAnalysisSetting AnalysisSetting { get; private set; } = null;
 
         public BarAnalysisSet BarAnalysisSet { get; private set; } = null;
 
@@ -225,7 +222,7 @@ namespace Pacmio
 
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
 
-        public bool HasSignalColumn => TradeRule is TradeRule tr && tr.Analyses.ContainsKey(BarFreq) && tr.Analyses[BarFreq].SignalColumns.Count() > 0;
+        public bool HasSignalColumn => AnalysisSetting is IAnalysisSetting tr && tr.BarAnalysisSet(BarTable.BarFreq) is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
 
         public override void CoordinateOverlay() { }
 
@@ -244,7 +241,7 @@ namespace Pacmio
                 lock (BarTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        //BarTable.CurrentTradeRule = TradeRule;
+                        //BarTable.CurrentIAnalysisSetting = IAnalysisSetting;
                         SignalArea.Visible = true;// HasSignalColumn;
                         //PositionArea.Visible = false;
 
@@ -470,7 +467,7 @@ namespace Pacmio
                 }
                 else
                 {
-                    //BarTable.CurrentTradeRule = TradeRule;
+                    //BarTable.CurrentIAnalysisSetting = IAnalysisSetting;
 
                     g.DrawString(BarTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
