@@ -35,7 +35,7 @@ namespace Pacmio
             Reference = 0;
             //Visible = true;
             //FixedTickStep_Right = 2;
-            
+
             AddSeries(AccumulationSeries = new PositionSeries(BarChart)
             {
                 Color = Color.DimGray,
@@ -87,7 +87,7 @@ namespace Pacmio
 
                     TradeActionType this_Type = TradeActionType.None;
 
-                    if (bt[i][ias] is BarPosition bp) 
+                    if (bt[i][ias] is BarPosition bp)
                     {
                         this_Type = bp.ActionType;
                         if (i >= 0)

@@ -24,7 +24,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public static class Strategy
+    public static class StrategyManager
     {
         /// <summary>
         /// List of all available trade rules
@@ -53,47 +53,47 @@ namespace Pacmio
                 progress?.Report(i * 100.0f / count);
             }*/
         }
-        
-        public static void GetWatchList(List<Contract> list) 
+
+        public static void GetWatchList(List<Contract> list)
         {
-        
+
         }
 
 
         public static void GetWatchList(int daysSinceIPO, Range<double> priceRange, Range<double> volumeRange) // Types // Sinc 
         {
-        
-        
+
+
         }
 
-        public static void CleanUpWatchList() 
+        public static void CleanUpWatchList()
         {
-        
-        
+
+
         }
 
 
 
-        public static void Optimize() 
+        public static void Optimize()
         {
             // We have to run one symbol of a time, or the RAM is going to explode.
 
-        
+
         }
 
 
-        public static void Simulate() 
+        public static void Simulate()
         {
-        
-        
-        
+
+
+
         }
 
 
-        public static void LiveTrade() 
+        public static void LiveTrade()
         {
-        
-        
+
+
         }
 
 

@@ -2,25 +2,22 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// The trade rule applies to each contract
-/// 
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.IO;
+using System.Drawing;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface IAnalysisSetting : IEquatable<IAnalysisSetting>
+    public abstract class BasicSignal : IAnalysisSetting
     {
-        string Name { get; }
+        public string Name { get; private set; }
 
-        BarAnalysisSet BarAnalysisSet(BarFreq barFreq);
+        public abstract BarAnalysisSet BarAnalysisSet(BarFreq barFreq);
+
+        public bool Equals(IAnalysisSetting other) => other is IAnalysisSetting ias && Name == ias.Name;
     }
 }

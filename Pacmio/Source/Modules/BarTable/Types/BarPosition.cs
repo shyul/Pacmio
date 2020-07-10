@@ -39,7 +39,7 @@ namespace Pacmio
 
         public void Snapshot()
         {
-            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[AnalysisSetting] is BarPosition bp_1) 
+            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[AnalysisSetting] is BarPosition bp_1)
             {
                 Quantity = bp_1.Quantity;
                 AveragePrice = bp_1.AveragePrice;
@@ -52,9 +52,7 @@ namespace Pacmio
                     ActionType = TradeActionType.ShortHold;
             }
             else
-            {
                 Reset();
-            }
         }
 
         public void Snapshot(PositionStatus ps)
@@ -80,8 +78,8 @@ namespace Pacmio
         public Bar Bar { get; }
 
         public IAnalysisSetting AnalysisSetting { get; }
-        
-        public readonly Dictionary<SignalColumn, SignalDatum> SignalDatums = new Dictionary<SignalColumn, SignalDatum>();
+
+        public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
 
         public SignalDatum this[SignalColumn column]
         {

@@ -136,12 +136,12 @@ namespace TestClient
 
         private void BtnMasterCancel_Click(object sender, EventArgs e)
         {
-            if (!(Cts is null)) 
+            if (!(Cts is null))
             {
                 Console.WriteLine("\n ##### Master Cancel !! \n");
                 Cts.Cancel();
             }
-             
+
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)
@@ -225,7 +225,7 @@ namespace TestClient
                 TradeRule tr = new TestTradeRule(freq);
 
                 Cts = new CancellationTokenSource();
-       
+
                 Task.Run(() =>
                 {
                     BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, tr, freq, type, ref pd, Cts);
@@ -321,7 +321,7 @@ namespace TestClient
             Cts = new CancellationTokenSource();
             Task.Run(() => {
                 var list = ContractList.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
-                Strategy.GetWatchList(list, Cts, Progress);
+                StrategyManager.GetWatchList(list, Cts, Progress);
             }, Cts.Token);
         }
 
@@ -809,7 +809,7 @@ namespace TestClient
 
         private void BtnMarketDataSyncTicks_Click(object sender, EventArgs e)
         {
-            foreach(Contract c in Pacmio.IB.Client.ActiveMarketTicks.Values) 
+            foreach (Contract c in Pacmio.IB.Client.ActiveMarketTicks.Values)
             {
                 MarketDataGridView.MarketDataTable.Add(c);
             }

@@ -42,11 +42,11 @@ namespace Pacmio
         {
             IsLive = false;
 
-            lock(DataViews) 
+            lock (DataViews)
             {
-                foreach(IDataView dv in DataViews) 
+                foreach (IDataView dv in DataViews)
                 {
-                    
+
                 }
             }
 
@@ -140,8 +140,8 @@ namespace Pacmio
                     return Rows[i][column];
             }
         }
-        
-       
+
+
         public (string description, double score) this[int i, IAnalysisSetting ias, SignalColumn column]
         {
             get
@@ -946,7 +946,7 @@ namespace Pacmio
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.PointerToNextTick(); });
                 }
-                else if (!ReadyToShow)//m_Status == TableStatus.Loading || m_Status == TableStatus.Downloading)
+                else if (!ReadyToShow)
                 {
                     lock (DataViews) DataViews.ForEach(n => { n.SetAsyncUpdateUI(); });
                 }
