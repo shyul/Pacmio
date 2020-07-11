@@ -106,7 +106,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\IAnalysisSetting.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossSignal.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -148,10 +148,11 @@
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataTable.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\SimulationManager.cs" />
+    <Compile Include="Source\Modules\Research\SimulationManager.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\SimulationSet.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\SimulationResult.cs" />
+    <Compile Include="Source\Modules\Research\SimulationResult.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\StrategyManager.cs" />
+    <Compile Include="Source\Modules\Research\ResearchManager.cs" />
     <Compile Include="Source\Modules\Trade\Account\Account.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\IBroker.cs" />
     <Compile Include="Source\Modules\Contract\Types\TradeData.cs" />
@@ -210,7 +211,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\Account\AccountManager.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\ScannerManager.cs" />
+    <Compile Include="Source\Modules\Research\ScannerManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\Types\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\ExecutionData.cs" />
@@ -249,7 +250,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\ScannerInfo.cs" />
+    <Compile Include="Source\Modules\Research\ScannerInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />

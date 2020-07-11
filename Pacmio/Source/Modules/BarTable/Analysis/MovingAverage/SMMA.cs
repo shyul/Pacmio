@@ -5,7 +5,13 @@
 /// Ref 1: https://www.forex.in.rs/smoothed-moving-average/
 /// 
 /// ***************************************************************************
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Drawing;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {

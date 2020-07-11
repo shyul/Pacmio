@@ -35,8 +35,6 @@ namespace Pacmio
 
         public static TradeInfo AddLiquidity(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
 
-
-
         public static TradeInfo Close(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
 
         public static TradeInfo Trade(this PositionStatus ps, double quantity, double price)

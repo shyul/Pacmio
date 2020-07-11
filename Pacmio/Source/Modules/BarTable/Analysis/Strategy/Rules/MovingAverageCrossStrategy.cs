@@ -4,13 +4,18 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Drawing;
+using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
-    public class MovingAverageCrossSignal : Strategy
+    public class MovingAverageCrossStrategy : Strategy
     {
-        public MovingAverageCrossSignal(string name) : base(name)
+        public MovingAverageCrossStrategy(string name) : base(name)
         {
             Name = name;
             SignalColumn = new SignalColumn(Name);
@@ -70,6 +75,8 @@ namespace Pacmio
 
         private readonly BarAnalysisSet m_barAnalysisSet = new BarAnalysisSet();
 
+
+        // Make this part to research manager...
         public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
         {
 
@@ -81,6 +88,10 @@ namespace Pacmio
 
         }
 
+        /// <summary>
+        /// !!! The Function Actually Makes The Purchase
+        /// </summary>
+        /// <param name="bt"></param>
         public void Evaluate(BarTable bt)
         {
 

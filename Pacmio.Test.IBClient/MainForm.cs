@@ -219,7 +219,7 @@ namespace TestClient
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
 
-                Strategy tr = new TestTradeRule(freq);
+                Strategy tr = new TestStrategy(freq);
 
                 Cts = new CancellationTokenSource();
 
@@ -238,7 +238,7 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            IAnalysisSetting tr = new TestTradeRule(freq);
+            IAnalysisSetting tr = new TestStrategy(freq);
 
             var symbols = ContractList.GetSymbolList(ref symbolText);
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, tr));

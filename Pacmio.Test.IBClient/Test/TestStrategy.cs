@@ -4,14 +4,16 @@
 /// 
 /// ***************************************************************************
 
-namespace Pacmio
+using System;
+using Pacmio;
+
+namespace TestClient
 {
-    public enum MovingAverageType : int
+    public class TestStrategy : Strategy
     {
-        Simple = 0,
-        Smoothed = 1,
-        Exponential = 2,
-        Weighted = 3,
-        Hull = 4,
+        public TestStrategy(BarFreq freq) : base("TestTradeRule")
+        {
+            Analyses.Add(freq, BarTableTest.TestBarAnalysisSet);
+        }
     }
 }
