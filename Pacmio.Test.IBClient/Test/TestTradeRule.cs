@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using Xu;
-using Xu.Chart;
-using Pacmio;
-using Pacmio.IB;
-using System.Threading;
-using IbXmlScannerParameter;
+﻿using Pacmio;
 
 namespace TestClient
 {
-    public class TestTradeRule : TradeRule
+    public class TestTradeRule : Strategy
     {
-        public TestTradeRule(BarFreq freq) : base("TestTradeRule") 
+        public TestTradeRule(BarFreq freq) : base("TestTradeRule")
         {
             Analyses.Add(freq, BarTableTest.TestBarAnalysisSet);
         }

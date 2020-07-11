@@ -7,19 +7,9 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.IO;
 using Xu;
-using Xu.Chart;
-using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -36,7 +26,8 @@ namespace Pacmio
                 lock (m_List)
                 {
                     m_List.Clear();
-                    value.ToList().ForEach(n => {
+                    value.ToList().ForEach(n =>
+                    {
                         SetBarAnalysisParents(n);
                         m_List.CheckAdd(n);
                         SetBarAnalysisChildren(n);
@@ -71,7 +62,8 @@ namespace Pacmio
 
         public void PrintList()
         {
-            List.ToList().ForEach(n => {
+            List.ToList().ForEach(n =>
+            {
                 Console.WriteLine("BarAnalysisSet | Added BA: " + n.Name);
             });
         }

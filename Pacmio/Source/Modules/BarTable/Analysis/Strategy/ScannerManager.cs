@@ -5,46 +5,40 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
-using Xu;
 
 namespace Pacmio
 {
     public static class ScannerManager
     {
-        public static readonly ConcurrentDictionary<ScannerInfo, Dictionary<int, (int ConId, string Name, DateTime time)>> List 
+        public static readonly ConcurrentDictionary<ScannerInfo, Dictionary<int, (int ConId, string Name, DateTime time)>> List
             = new ConcurrentDictionary<ScannerInfo, Dictionary<int, (int ConId, string Name, DateTime time)>>();
 
-        public static ScannerInfo GetOrAdd(ScannerInfo info) 
+        public static ScannerInfo GetOrAdd(ScannerInfo info)
         {
             if (!List.ContainsKey(info))
             {
-                if(List.TryAdd(info, new Dictionary<int, (int ConId, string Name, DateTime time)>())) 
+                if (List.TryAdd(info, new Dictionary<int, (int ConId, string Name, DateTime time)>()))
                 {
                     IB.Client.SendRequest_ScannerSubscription(info);
                 }
             }
 
-            if (!List.ContainsKey(info)) 
+            if (!List.ContainsKey(info))
             {
                 return null;
             }
-            else 
+            else
             {
                 return List.Keys.Where(n => n == info).First();
             }
         }
 
-        public static void Remove(ScannerInfo info) 
+        public static void Remove(ScannerInfo info)
         {
-            if (List.ContainsKey(info)) 
+            if (List.ContainsKey(info))
             {
                 List.TryRemove(info, out _);
                 IB.Client.SendCancel_ScannerSubscription(info.RequestId);
@@ -71,9 +65,9 @@ namespace Pacmio
         /// Do not call any IB function in this method... or it is going to lock up.
         /// </summary>
         /// <param name="info"></param>
-        public static void Updated(ScannerInfo info) 
+        public static void Updated(ScannerInfo info)
         {
-            if (List.ContainsKey(info)) 
+            if (List.ContainsKey(info))
             {
                 //var clist = ;
 
@@ -92,7 +86,7 @@ namespace Pacmio
                 Console.WriteLine("\nScanner Result: " + info.Code);
                 foreach (var i in conList)
                 {
-                    if (i.Item2  is Contract c) 
+                    if (i.Item2 is Contract c)
                     {
                         if (c is IBusiness it)
                         {
@@ -106,7 +100,7 @@ namespace Pacmio
                                 bt.Fetch(new Period(DateTime.Now.AddHours(8), DateTime.Now.AddDays(-7)), true);
                             }));
                             */
-                    
+
 
 
                             /*

@@ -4,21 +4,11 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using System.Data;
-using System.Drawing.Text;
-using System.Windows.Forms;
-using Xu;
 using Pacmio;
-using Pacmio.IB;
-using System.Threading.Tasks;
-using System.Threading;
+using System;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace TestClient
 {
@@ -90,7 +80,7 @@ namespace TestClient
                 ContractList.Values.Where(all) :
                 ContractList.Values.Where(searchName);
 
-           var rows = result.Select(selector).ToArray();
+            var rows = result.Select(selector).ToArray();
 
             foreach (var rowLine in rows)
             {

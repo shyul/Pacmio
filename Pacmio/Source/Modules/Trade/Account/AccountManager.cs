@@ -5,14 +5,10 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using Xu;
-using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -85,7 +81,7 @@ namespace Pacmio
             if (File.Exists(FileName))
             {
                 var list = Serialization.DeserializeJsonFile<Account[]>(FileName);
-                foreach(Account ac in list) 
+                foreach (Account ac in list)
                 {
                     ac.Setup();
                     List.CheckAdd(ac);

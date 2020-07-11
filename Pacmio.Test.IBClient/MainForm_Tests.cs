@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Pacmio;
+using Pacmio.IB;
+using System;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
-using Pacmio;
-using Pacmio.IB;
 
 namespace TestClient
 {
@@ -48,8 +45,10 @@ namespace TestClient
 
         public void IBClientOnConnectedHandler(ConnectionStatus status, DateTime time, string msg)
         {
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
+            Task UpdateUI = new Task(() =>
+            {
+                Invoke((MethodInvoker)delegate
+                {
                     ToggleConnect();
                 });
             });
@@ -58,8 +57,10 @@ namespace TestClient
 
         public void AccountUpdatedHandler(int status, DateTime time, string msg)
         {
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
+            Task UpdateUI = new Task(() =>
+            {
+                Invoke((MethodInvoker)delegate
+                {
                     UpdateAccountList();
                     tabAccount.Invalidate(true);
                 });
@@ -106,8 +107,10 @@ namespace TestClient
 
         public void TradeTableHandler(int status, DateTime time, string msg)
         {
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
+            Task UpdateUI = new Task(() =>
+            {
+                Invoke((MethodInvoker)delegate
+                {
 
                     if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
                     {
@@ -153,10 +156,10 @@ namespace TestClient
                     (bool IsValid, DisplayNameAttribute Result) = p.GetAttribute<DisplayNameAttribute>();
                     if (IsValid) tagName = Result.DisplayName + " = ";
 
-                    if (p.PropertyType == typeof(double)) 
+                    if (p.PropertyType == typeof(double))
                     {
                         double v = (double)p.GetValue(a);
-                        if (!double.IsNaN(v)) 
+                        if (!double.IsNaN(v))
                         {
                             tagName += v.ToString();
                             tr.Nodes.Add(tagName);
@@ -174,7 +177,7 @@ namespace TestClient
 
         public void ToggleConnect()
         {
-      
+
 
             if (!Root.IBConnected)
             {

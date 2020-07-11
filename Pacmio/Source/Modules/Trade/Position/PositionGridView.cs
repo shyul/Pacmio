@@ -5,12 +5,7 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Drawing;
 using Xu;
 using Xu.GridView;
 
@@ -21,7 +16,7 @@ namespace Pacmio
     {
         public PositionGridView(string name, MarketDataTable mdt) : base(name)
         {
- 
+
 
         }
 

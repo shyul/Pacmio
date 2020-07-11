@@ -4,27 +4,15 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Text;
-using System.Data;
-using System.Linq;
-using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text.RegularExpressions;
-using Xu;
 using Pacmio;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using Xu;
 
 namespace TestConsole
 {
@@ -70,7 +58,7 @@ namespace TestConsole
             //m.Merge(m2);
 
             Console.WriteLine("#### Test  MultiPeriod ");
-            foreach (var item in m.Reverse()) 
+            foreach (var item in m.Reverse())
             {
                 Console.WriteLine(item.Key + ": " + item.Value);
             }

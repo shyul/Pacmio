@@ -7,19 +7,13 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
-using System.Windows.Forms;
 
 namespace Pacmio
 {
@@ -147,7 +141,8 @@ namespace Pacmio
             };
 
             int i = 0, count = contracts.Count();
-            Parallel.ForEach(contracts, po, n => {
+            Parallel.ForEach(contracts, po, n =>
+            {
                 if (cts.Continue())
                 {
                     var (c, ias) = n;
@@ -167,7 +162,8 @@ namespace Pacmio
                 MaxDegreeOfParallelism = Root.DegreeOfParallelism
             };
             int i = 0, count = BarTables.Count();
-            Parallel.ForEach(BarTables, po, bt => {
+            Parallel.ForEach(BarTables, po, bt =>
+            {
                 if (cts.Continue())
                 {
                     bt.CalculateOnly(ias);
@@ -213,7 +209,8 @@ namespace Pacmio
                     };
 
                     int i = 0, count = tables.Count();
-                    Parallel.ForEach(tables, po, n => {
+                    Parallel.ForEach(tables, po, n =>
+                    {
                         if (cts.Continue())
                         {
                             n.Fetch(period, cts);

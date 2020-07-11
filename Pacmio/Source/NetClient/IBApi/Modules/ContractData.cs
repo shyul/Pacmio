@@ -144,9 +144,9 @@ namespace Pacmio.IB
                     c.MarketData.OrderTypes.FromString(fields[17], ',');
                     c.MarketData.ValidExchanges.FromString(fields[18], ',');
 
-                    if(c is IBusiness ib) 
+                    if (c is IBusiness ib)
                     {
-                        ib.Industry =  fields[24];
+                        ib.Industry = fields[24];
                         ib.Category = fields[25];
                         ib.Subcategory = fields[26];
                         /*
@@ -193,7 +193,7 @@ namespace Pacmio.IB
                     c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
 
                     //if (c.FullName.Length < 5)
-                        c.FullName = fields[21].Replace("\"", "");
+                    c.FullName = fields[21].Replace("\"", "");
 
                     c.UpdateTime = DateTime.Now;
 
@@ -207,7 +207,7 @@ namespace Pacmio.IB
             string[] pd_string_list = field.Split(';');
             foreach (string pd_string in pd_string_list)
             {
-                if (!pd_string.ToUpper().Contains("CLOSED")) 
+                if (!pd_string.ToUpper().Contains("CLOSED"))
                 {
                     string[] pd_string_pair = pd_string.Split('-');
                     Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));

@@ -11,7 +11,7 @@ namespace Pacmio // Can be derived from SMA
     {
         public WMA(int interval) : this(Bar.Column_Close, interval) { }
 
-        public WMA(NumericColumn column, int interval) : base(column, interval) 
+        public WMA(NumericColumn column, int interval) : base(column, interval)
         {
             Description = "Weighted Moving Average " + LineSeries.Label;
         }

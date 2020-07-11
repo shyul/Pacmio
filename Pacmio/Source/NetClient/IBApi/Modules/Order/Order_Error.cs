@@ -7,17 +7,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Globalization;
-using System.Text;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using Xu;
-using Pacmio;
 
 namespace Pacmio.IB
 {
@@ -29,7 +19,7 @@ namespace Pacmio.IB
             string code = fields[3];
             string message = fields[4];
 
-            if(code == "2102" || code == "2109") 
+            if (code == "2102" || code == "2109")
             {
                 Console.WriteLine(">>>>> PlaceOrder Warning: " + message);
             }

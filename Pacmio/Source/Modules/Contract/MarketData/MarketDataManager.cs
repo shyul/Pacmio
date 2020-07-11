@@ -4,24 +4,19 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
 using Xu;
-using Xu.GridView;
 
 namespace Pacmio
 {
     public static class MarketDataManager
     {
-        public static void Add(MarketDataGridView gv) 
+        public static void Add(MarketDataGridView gv)
         {
-            if (!List.Contains(gv)) 
+            if (!List.Contains(gv))
             {
                 List.Add(gv);
             }
@@ -46,19 +41,19 @@ namespace Pacmio
         /// <summary>
         /// 
         /// </summary>
-        public static void CleanUp() 
+        public static void CleanUp()
         {
-        
+
         }
 
         public static Contract SelectedContract
         {
             get
             {
-                if(DockCanvas.ActiveDockForm is MarketDataGridView gv) 
+                if (DockCanvas.ActiveDockForm is MarketDataGridView gv)
                 {
                     return gv.SelectedContract;
-                
+
                 }
 
                 return null;

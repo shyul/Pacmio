@@ -7,13 +7,7 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Xu;
 
 namespace Pacmio
 {
@@ -56,10 +50,10 @@ namespace Pacmio
             }
         }
 
-        public void Reset() 
+        public void Reset()
         {
-        
-        
+
+
         }
 
         private readonly SortedDictionary<DateTime, TradeInfo> TradeLog = new SortedDictionary<DateTime, TradeInfo>();

@@ -5,25 +5,23 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
 {
-    using FundamentalDatum = KeyValuePair<
-    (FundamentalDataType Type, DateTime Time, Frequency Freq),
-    (DataSource Source, string Param, double Value, double AdjValue)>;
-
     using FundamentalDataTable = Dictionary<
         (FundamentalDataType Type, DateTime Time, Frequency Freq),
         (DataSource Source, string Param, double Value, double AdjValue)>;
+    using FundamentalDatum = KeyValuePair<
+    (FundamentalDataType Type, DateTime Time, Frequency Freq),
+    (DataSource Source, string Param, double Value, double AdjValue)>;
 
     [Serializable, DataContract]
     public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>

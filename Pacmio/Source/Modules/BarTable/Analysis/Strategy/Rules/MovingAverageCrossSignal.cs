@@ -4,26 +4,23 @@
 /// 
 /// ***************************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
-    public class MovingAverageCrossSignal : BasicSignal
+    public class MovingAverageCrossSignal : Strategy
     {
-        public MovingAverageCrossSignal()
+        public MovingAverageCrossSignal(string name) : base(name)
         {
-            SignalColumn  = new SignalColumn(Name);
+            Name = name;
+            SignalColumn = new SignalColumn(Name);
 
         }
 
         public void Config(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
             m_barAnalysisSet.Clear();
-             
+
             switch (type_fast)
             {
                 case MovingAverageType.Simple:
@@ -67,14 +64,15 @@ namespace Pacmio
 
         public SMA MA_Slow { get; private set; }
 
-        public SignalColumn SignalColumn { get; } 
+        public SignalColumn SignalColumn { get; }
 
         public override BarAnalysisSet BarAnalysisSet(BarFreq _) => m_barAnalysisSet;
+
         private readonly BarAnalysisSet m_barAnalysisSet = new BarAnalysisSet();
 
         public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
         {
-        
+
         }
 
         public void Calculate(BarTable bt, int i)
@@ -83,9 +81,9 @@ namespace Pacmio
 
         }
 
-        public void Evaluate(BarTable bt) 
+        public void Evaluate(BarTable bt)
         {
-        
+
         }
     }
 }

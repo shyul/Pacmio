@@ -5,21 +5,12 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using Xu;
-using Xu.Chart;
-using System.Diagnostics;
 
 namespace Pacmio
 {
     public class SimulationSet : IEquatable<SimulationSet>
     {
-        public SimulationSet(Contract c, TradeRule tr)
+        public SimulationSet(Contract c, Strategy tr)
         {
             Contract = c;
             TradeRule = tr;
@@ -28,7 +19,7 @@ namespace Pacmio
 
         public readonly Contract Contract;
 
-        public readonly TradeRule TradeRule;
+        public readonly Strategy TradeRule;
 
         public readonly PositionStatus Status;
 

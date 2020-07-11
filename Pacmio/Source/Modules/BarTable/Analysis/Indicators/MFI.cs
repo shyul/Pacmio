@@ -13,7 +13,6 @@
 /// 
 /// ***************************************************************************
 
-using System;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
@@ -22,7 +21,7 @@ namespace Pacmio
 {
     public sealed class MFI : ATR, IOscillator
     {
-        public MFI(int interval) 
+        public MFI(int interval)
         {
             Interval = interval;
 

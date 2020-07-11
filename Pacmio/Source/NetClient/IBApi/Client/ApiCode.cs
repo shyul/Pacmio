@@ -7,9 +7,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms.VisualStyles;
 using Xu;
 
 namespace Pacmio.IB

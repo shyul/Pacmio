@@ -7,19 +7,14 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.IO;
 using Xu;
 
 namespace Pacmio
 {
-    public abstract class TradeRule : IAnalysisSetting, IEquatable<TradeRule>
+    public abstract class Strategy : IAnalysisSetting, IEquatable<Strategy>
     {
-        public TradeRule(string name)
+        public Strategy(string name)
         {
             Name = name;
         }
@@ -30,7 +25,7 @@ namespace Pacmio
 
         public Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
 
-        public BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
+        public virtual BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
         {
             if (Analyses.ContainsKey(barFreq))
                 return Analyses[barFreq];
@@ -56,7 +51,7 @@ namespace Pacmio
 
         #endregion Trading Timing
 
-        public bool Equals(TradeRule other) => other is TradeRule tr && Name == tr.Name;
+        public bool Equals(Strategy other) => other is Strategy tr && Name == tr.Name;
 
         public bool Equals(IAnalysisSetting other) => other is IAnalysisSetting ias && Name == ias.Name;
     }

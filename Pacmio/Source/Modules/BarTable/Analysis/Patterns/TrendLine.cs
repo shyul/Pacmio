@@ -6,9 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
@@ -120,7 +117,7 @@ namespace Pacmio
                 }
             }
 
-            
+
 
 
 

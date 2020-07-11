@@ -1,15 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Threading;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using Pacmio;
+using System;
 using System.Reflection;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
-using Xu;
 using Xu.WindowsNativeMethods;
-using Pacmio;
 
 namespace TestClient
 {
@@ -44,7 +39,7 @@ namespace TestClient
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-             
+
                     Root.Load();
 
                     Application.Run(new MainForm());

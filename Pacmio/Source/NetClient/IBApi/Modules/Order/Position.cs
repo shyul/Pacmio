@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Xu;
 
 namespace Pacmio.IB
@@ -36,10 +35,10 @@ namespace Pacmio.IB
         /// (10)"NASDAQ"-(11)"USD"-(12)"FB"-(13)"NMS"-(14)"162"-(15)"184.27472345"-
         /// </summary>
         /// <param name="fields"></param>
-        private static void ParsePoistion(string[] fields) 
+        private static void ParsePoistion(string[] fields)
         {
             int msgVersion = fields[1].ToInt32(-1);
-            if(msgVersion == 3) 
+            if (msgVersion == 3)
             {
                 (bool contractValid, Contract c) = Util.GetContractByIbCode(fields[4], fields[10], fields[5], fields[3]);
 
@@ -49,7 +48,7 @@ namespace Pacmio.IB
                     Account ac = AccountManager.GetOrAdd(accountCode);
                     c.Status = ContractStatus.Alive;
                     double totalQuantity = fields[14].ToDouble();
-                    if (totalQuantity != 0) 
+                    if (totalQuantity != 0)
                     {
                         double averagePrice = fields[15].ToDouble();
                         PositionStatus ps = ac.GetPosition(c);
@@ -69,14 +68,14 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void ParsePoistionEnd(string[] fields)
         {
-            if(fields[1] == "1") 
+            if (fields[1] == "1")
             {
                 foreach (Account ac in AccountManager.List)
                 {
-                    foreach(Contract c in ac.Positions.Keys) 
+                    foreach (Contract c in ac.Positions.Keys)
                     {
                         var item = (ac, c);
-                        if (!UpdatedPositions.Contains(item)) 
+                        if (!UpdatedPositions.Contains(item))
                         {
                             if (ac.Positions.ContainsKey(c))
                             {
@@ -84,7 +83,7 @@ namespace Pacmio.IB
                                 ac.Positions[c].AveragePrice = double.NaN;
                             }
                         }
-                    }                       
+                    }
                 }
                 UpdatedPositions.Clear();
             }

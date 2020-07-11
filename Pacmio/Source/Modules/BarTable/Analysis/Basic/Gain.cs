@@ -4,10 +4,7 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Linq;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
@@ -118,7 +115,7 @@ namespace Pacmio
 
                     if (test_high)
                     {
-                        if (data >= left_data && data >= right_data) 
+                        if (data >= left_data && data >= right_data)
                         {
                             peak_result = j;
                             if (data == left_data) bt[left_index][Column_Peak] = 0;

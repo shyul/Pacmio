@@ -4,10 +4,10 @@
 /// 
 /// ***************************************************************************
 
+using Pacmio.IB;
 using System;
 using System.Runtime.Serialization;
 using Xu;
-using Pacmio.IB;
 
 namespace Pacmio
 {

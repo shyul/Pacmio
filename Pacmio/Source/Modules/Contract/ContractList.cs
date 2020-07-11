@@ -5,15 +5,14 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
-using IbXmlAE;
 
 namespace Pacmio
 {
@@ -388,7 +387,8 @@ namespace Pacmio
             var list = Serialization.DeserializeJsonFile<Contract[]>(FileName);
             if (list is null) return;
 
-            Parallel.ForEach(list, c => {
+            Parallel.ForEach(list, c =>
+            {
                 //c.LoadMarketData();
 
                 //c.MarketData.Status = MarketTickStatus.Unknown;

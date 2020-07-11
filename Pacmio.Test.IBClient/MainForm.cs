@@ -1,20 +1,15 @@
-﻿using System;
+﻿using Pacmio;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
-using Xu.Chart;
-using Pacmio;
-using Pacmio.IB;
-using System.Net.Http.Headers;
-using System.IO;
-using System.Reflection;
 
 namespace TestClient
 {
@@ -33,7 +28,8 @@ namespace TestClient
             }
             set
             {
-                this.Invoke(() => {
+                this.Invoke(() =>
+                {
                     try
                     {
                         DateTimePickerHistoricalDataStart.Value = value.Start;
@@ -99,7 +95,8 @@ namespace TestClient
                 }
             });
 
-            Detailed_Progress = new Progress<float>(p => {
+            Detailed_Progress = new Progress<float>(p =>
+            {
                 int val = p.ToInt32();
                 if (val > 100) val = 100;
                 else if (val < 0) val = 0;
@@ -222,7 +219,7 @@ namespace TestClient
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
 
-                TradeRule tr = new TestTradeRule(freq);
+                Strategy tr = new TestTradeRule(freq);
 
                 Cts = new CancellationTokenSource();
 
@@ -325,7 +322,8 @@ namespace TestClient
         private void BtnSetupSimulation_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 var list = ContractList.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
                 StrategyManager.GetWatchList(list, Cts, Progress);
             }, Cts.Token);
@@ -684,7 +682,8 @@ namespace TestClient
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     string sourceFileName = Root.OpenFile.FileName;
                     using (var fs = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     using (StreamReader sr = new StreamReader(fs))
@@ -710,7 +709,8 @@ namespace TestClient
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     string sourceFileName = Root.OpenFile.FileName;
                     ContractList.ImportNasdaq(sourceFileName, Cts, Progress);
                 }, Cts.Token);
@@ -720,7 +720,8 @@ namespace TestClient
         private void BtnMatchSymbols_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && (DateTime.Now - n.UpdateTime).Days > 7, Cts, Progress);
             }, Cts.Token);
         }
@@ -728,7 +729,8 @@ namespace TestClient
         private void BtnUpdateContracts_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 //ContractList.UpdateContractData("US", n => (DateTime.Now - n.UpdateTime).Minutes > 180, Cts, Progress);
                 //ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && string.IsNullOrWhiteSpace(ib.Industry), Cts, Progress);
                 ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && ib.Industry is null, Cts, Progress);
@@ -742,7 +744,8 @@ namespace TestClient
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     ContractList.ImportCSV(Root.OpenFile.FileName, Cts, Progress);
                 }, Cts.Token);
             }
@@ -755,7 +758,8 @@ namespace TestClient
             if (Root.SaveFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     ContractList.ExportCSV(Root.SaveFile.FileName, Cts, Progress);
                 }, Cts.Token);
             }

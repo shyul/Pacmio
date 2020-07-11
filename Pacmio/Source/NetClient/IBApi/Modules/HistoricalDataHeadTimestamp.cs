@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Xu;
 
 namespace Pacmio.IB
@@ -96,7 +95,7 @@ namespace Pacmio.IB
             {
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
 
-                if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is HistoricalData sd) 
+                if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is HistoricalData sd)
                 {
                     sd.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
                 }

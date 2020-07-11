@@ -5,10 +5,9 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Text;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
@@ -18,7 +17,7 @@ namespace Pacmio
     [Serializable, DataContract]
     public sealed class Account : IEquatable<Account>, IEquatable<string>
     {
-        public Account(string accountCode) 
+        public Account(string accountCode)
         {
             AccountCode = accountCode;
             Setup();
@@ -121,7 +120,7 @@ namespace Pacmio
         public void Close(Contract c)
         {
             double qty = -Positions[c].Quantity;
-            if (qty != 0) 
+            if (qty != 0)
             {
                 OrderInfo od = new OrderInfo()
                 {

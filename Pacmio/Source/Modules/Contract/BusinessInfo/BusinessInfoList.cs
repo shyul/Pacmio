@@ -5,16 +5,11 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
@@ -44,7 +39,7 @@ namespace Pacmio
                 string fileName = BusinessInfoFile(isin);
                 BusinessInfo bi = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
 
-                if (!List.ContainsKey(isin)) 
+                if (!List.ContainsKey(isin))
                     List.Add(isin, bi);
 
                 //List[isin] = bi;

@@ -15,12 +15,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
@@ -29,12 +25,12 @@ namespace Pacmio
         /// <summary>
         /// List of all available trade rules
         /// </summary>
-        public static readonly List<TradeRule> List = new List<TradeRule>();
+        public static readonly List<Strategy> List = new List<Strategy>();
 
 
 
 
-        public static Dictionary<Contract, TradeRule> WatchList = new Dictionary<Contract, TradeRule>();
+        public static Dictionary<Contract, Strategy> WatchList = new Dictionary<Contract, Strategy>();
 
 
 

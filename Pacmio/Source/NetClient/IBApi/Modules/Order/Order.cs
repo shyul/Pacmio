@@ -8,8 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Xu;
 
 namespace Pacmio.IB
 {
@@ -196,7 +194,7 @@ namespace Pacmio.IB
                 SendRequest(paramsList);
             }
         }
-        
+
 
         public static void CancelOrder(int orderId)
         {

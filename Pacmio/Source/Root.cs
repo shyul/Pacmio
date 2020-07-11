@@ -7,13 +7,11 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Threading;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Reflection;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Xu;
 using Xu.WindowsNativeMethods;

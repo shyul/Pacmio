@@ -7,10 +7,6 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
 using Xu;
 
 namespace Pacmio.IB
@@ -81,8 +77,8 @@ namespace Pacmio.IB
             double quantity = fields[19].ToDouble();
             double totalQuantity = fields[24].ToDouble();
 
-            if (fields[18] == "SLD") 
-            { 
+            if (fields[18] == "SLD")
+            {
                 quantity = -quantity;
                 totalQuantity = -totalQuantity;
             }
@@ -114,7 +110,7 @@ namespace Pacmio.IB
 
                 // Add match contract info task.
             }
-            else 
+            else
             {
                 ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
                 PositionStatus ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);

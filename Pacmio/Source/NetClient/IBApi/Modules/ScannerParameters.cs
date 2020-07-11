@@ -6,12 +6,10 @@
 /// 
 /// ***************************************************************************
 
+using IbXmlScannerParameter;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using Xu;
-using IbXmlScannerParameter;
 
 namespace Pacmio.IB
 {
@@ -34,7 +32,7 @@ namespace Pacmio.IB
         {
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
             string msgVersion = fields[1];
-            if(msgVersion == "1")
+            if (msgVersion == "1")
             {
                 string xmlString = fields[2];
                 ScanParameters = Serialization.DeserializeXML<ScanParameterResponse>(xmlString);
@@ -45,7 +43,7 @@ namespace Pacmio.IB
 
                 List<string> allFilterList = new List<string>();
 
-                foreach(var ins in ScanParameters.InstrumentList[0].Instrument) 
+                foreach (var ins in ScanParameters.InstrumentList[0].Instrument)
                 {
                     Console.WriteLine(ins.Type + ": " + ins.Name);
 
@@ -57,7 +55,7 @@ namespace Pacmio.IB
 
                 Console.WriteLine("\n\n");
 
-                foreach(string code in allFilterList) 
+                foreach (string code in allFilterList)
                 {
                     Console.Write(code + ",");
                 }
@@ -66,9 +64,9 @@ namespace Pacmio.IB
 
                 List<string> codeList = new List<string>();
 
-                foreach (var flt in ScanParameters.FilterList[0].RangeFilter) 
+                foreach (var flt in ScanParameters.FilterList[0].RangeFilter)
                 {
-                    foreach(var abf in flt.AbstractField) 
+                    foreach (var abf in flt.AbstractField)
                     {
                         string code = abf.Code;
                         codeList.CheckAdd(code);

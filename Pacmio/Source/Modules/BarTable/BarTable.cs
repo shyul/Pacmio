@@ -7,15 +7,11 @@
 /// ***************************************************************************
 
 using System;
-using System.Threading;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
@@ -1309,7 +1305,8 @@ namespace Pacmio
             };
 
             int i = 0, count = contracts.Count() * settings_list.Count();
-            Parallel.ForEach(contracts, po, c => {
+            Parallel.ForEach(contracts, po, c =>
+            {
                 if (cts.Continue())
                 {
                     foreach (var (freq, type, period) in settings_list)

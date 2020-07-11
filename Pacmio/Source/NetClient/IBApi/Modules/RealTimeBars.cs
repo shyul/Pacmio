@@ -7,8 +7,8 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 using Xu;
 
@@ -106,7 +106,7 @@ namespace Pacmio.IB
                 */
                 DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.FromEpoch(epochTime), c.TimeZone);
                 //Period p = new Period(time, time.AddSeconds(5));
-                
+
                 // Emit BarTable update
 
                 Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | " + time + " : " + fields.ToStringWithIndex());
@@ -115,7 +115,7 @@ namespace Pacmio.IB
                 SendCancel_RealTimeBars(requestId);
 
 
-  
+
         }
     }
 }

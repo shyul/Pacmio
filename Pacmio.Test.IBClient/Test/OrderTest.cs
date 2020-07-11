@@ -1,14 +1,9 @@
-﻿using System;
+﻿using Pacmio;
+using System;
 using System.ComponentModel;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Xu;
-using Pacmio;
-using Pacmio.IB;
 
 namespace TestClient
 {
@@ -16,9 +11,9 @@ namespace TestClient
     {
         public static Account LiveAccount { get; set; }
 
-        private static readonly DataTable Table = new DataTable("Order List"); 
+        private static readonly DataTable Table = new DataTable("Order List");
 
-        public static DataTable InitializeTable(DataGridView gv) 
+        public static DataTable InitializeTable(DataGridView gv)
         {
             DataTable table = Table;
             gv.DataSource = table;
@@ -82,7 +77,7 @@ namespace TestClient
             return table;
         }
 
-        public static void UpdateTable(OrderInfo od) 
+        public static void UpdateTable(OrderInfo od)
         {
             //Console.WriteLine("\n\nUpdating ########## " + od.ContractInfo.name);
 
@@ -104,7 +99,7 @@ namespace TestClient
             var rows = Table.AsEnumerable()
                 .Where(r => r.Field<int>("PermId") == od.PermId);
 
-            if(rows.Count() > 0)
+            if (rows.Count() > 0)
             {
                 DataRow row = rows.First();
                 row.BeginEdit();

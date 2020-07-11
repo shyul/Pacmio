@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
+﻿using Pacmio;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
-using Pacmio;
 
 namespace TestClient
 {
@@ -62,7 +57,7 @@ namespace TestClient
         public void RefreshGrid()
         {
             GridView.Rows.Clear();
-            foreach(var item in d)
+            foreach (var item in d)
             {
                 string[] row = new string[] { item.Key.Start.ToString(), item.Key.Stop.ToString(), item.Value.ToString() };
                 GridView.Rows.Add(row);

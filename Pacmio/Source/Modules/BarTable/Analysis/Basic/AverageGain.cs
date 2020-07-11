@@ -4,9 +4,6 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {

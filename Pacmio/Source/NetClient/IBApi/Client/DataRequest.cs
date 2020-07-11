@@ -9,19 +9,9 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Globalization;
-using System.Text;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using Xu;
-using Pacmio;
-using System.Windows.Forms;
 using System.Linq;
+using System.Threading;
+using Xu;
 
 namespace Pacmio.IB
 {
@@ -201,7 +191,7 @@ namespace Pacmio.IB
                     if (cts.Cancelled() || IsCancelled)
                         return bt.EarliestTime;
 
-                StartDownload:
+                    StartDownload:
                     SendRequest_HistoricalDataHeadTimestamp(bt);
 
                     int time = 0;

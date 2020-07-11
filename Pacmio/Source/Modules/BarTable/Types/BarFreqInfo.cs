@@ -5,9 +5,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Runtime.Serialization;
 using Xu;
-using Pacmio.IB;
 
 namespace Pacmio
 {
@@ -44,7 +42,7 @@ namespace Pacmio
                 Duration = new Frequency(TimeUnit.Days, days);// new TimeSpan(days, 0, 0, 0);
                 DurationString = days + " D";
             }
-            else if (proposedDuration.TotalDays > 360) 
+            else if (proposedDuration.TotalDays > 360)
             {
                 int years = Math.Ceiling(proposedDuration.TotalDays / 360).ToInt32(1);
                 Duration = new Frequency(TimeUnit.Years, years);// new TimeSpan(days, 0, 0, 0);
