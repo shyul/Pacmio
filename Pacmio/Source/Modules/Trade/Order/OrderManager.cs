@@ -31,82 +31,13 @@ namespace Pacmio
         /// <summary>
         /// Perm Id to Order Information Lookup Table
         /// </summary>
-        private static readonly Dictionary<int, OrderInfo> List = new Dictionary<int, OrderInfo>();
+        //private static readonly Dictionary<int, OrderInfo> List = new Dictionary<int, OrderInfo>();
 
-        public static int Count => List.Count;
+        //public static int Count => List.Count;
 
-        public static OrderInfo GetOrAdd(int permId)
-        {
-            lock (List)
-            {
-                if (!List.ContainsKey(permId))
-                {
-                    List.Add(permId, new OrderInfo() { PermId = permId });
-                }
 
-                
 
-                return List[permId];
-            }
-        }
 
-        public static OrderInfo GetOrAdd(OrderInfo od)
-        {
-            if (od.PermId < 1) throw new Exception("Can not add OrderInfo without proper permId");
-
-            if (!List.ContainsKey(od.PermId))
-            {
-                List.Add(od.PermId, od);
-            }
-            /*
-            OrderInfo od2 = List[od.PermId];
-            if(od2.Contract is Contract c)
-            {
-                c.TradeData.Add(od2);
-            }*/
-
-            return List[od.PermId];
-        }
-
-        #region Active List
-
-        private static readonly ConcurrentDictionary<int, OrderInfo> ActiveList = new ConcurrentDictionary<int, OrderInfo>();
-
-        public static bool AddNew(OrderInfo od)
-        {
-            Account ac = od.Account;
-            Contract c = od.Contract;
-
-            c.TradeData.Add(od);
-
-            bool valid = ActiveList.TryAdd(od.OrderId, od);
-            ac.CurrentOrders[c] = od;
-
-            return valid;
-        }
-
-        public static OrderInfo GetOrAdd(int orderId, int permId)
-        {
-            lock (ActiveList)
-                if (ActiveList.ContainsKey(orderId))
-                {
-                    OrderInfo od = ActiveList[orderId];
-                    if (permId > 0)
-                    {
-                        od.PermId = permId;
-                        ActiveList.TryRemove(orderId, out _);
-                        return GetOrAdd(od);
-                    }
-                    else
-                        return od;
-                }
-                else
-                {
-                    return GetOrAdd(permId);
-                }
-        }
-
-        #endregion Active List
 
         #region Order Actions
 
@@ -167,38 +98,6 @@ namespace Pacmio
 
         #endregion Data Requests
 
-        #region File system
 
-        private static string FileName => Root.ResourcePath + "Orders.Json";
-
-        public static void Save()
-        {
-            lock (List)
-                List.Values.ToList().SerializeJsonFile(FileName);
-        }
-
-        /// <summary>
-        /// This function should be used only at the startup of this application.
-        /// </summary>
-        public static void Load()
-        {
-            if (File.Exists(FileName))
-            {
-                List<OrderInfo> data = Serialization.DeserializeJsonFile<List<OrderInfo>>(FileName);
-
-                data.AsParallel().ForAll(od => {
-                    lock (List) List[od.PermId] = od;
-                    if (od.IsEditable)
-                        od.Account.CurrentOrders[od.Contract] = od;
-                    /*
-                    if (od.Contract is Contract c)
-                    {
-                        c.TradeData.Add(od);
-                    }*/
-                });
-            }
-        }
-
-        #endregion File system
     }
 }

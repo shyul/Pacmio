@@ -24,13 +24,12 @@ namespace Pacmio.IB
         {
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[6].ToInt32();
-            OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
+            OrderInfo od = TradeData.GetOrAdd(orderId, permId);
 
             od.Status = ApiCode.GetEnum<OrderStatus>(fields[2]).Enum;
             od.FilledQuantity = fields[3].ToDouble();
             od.RemainingQuantity = fields[4].ToDouble();
             od.AveragePrice = fields[5].ToDouble();
-            od.PermId = permId;
             od.ParentOrderId = fields[7].ToInt32();
             od.LastFillPrice = fields[8].ToDouble();
             od.ClientId = fields[9].ToInt32();
@@ -41,10 +40,9 @@ namespace Pacmio.IB
 
             Console.WriteLine("\nParse Order Status: " + fields.ToStringWithIndex());
 
-            if (od.Status == OrderStatus.Filled || od.Status == OrderStatus.Cancelled)
+            if (od.Status == OrderStatus.Filled || od.Status == OrderStatus.Cancelled || od.Status == OrderStatus.ApiCancelled)
             {
                 RemoveRequest(orderId, false);
-   
             }
         }
     }

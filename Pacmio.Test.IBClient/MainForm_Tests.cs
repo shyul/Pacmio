@@ -104,30 +104,6 @@ namespace TestClient
         */
 
 
-
-
-
-
-
-        public void OrderTableHandler(int status, DateTime time, string msg)
-        {
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
-
-                    if(status == IncomingMessage.OpenOrder || status == IncomingMessage.CompletedOrder) 
-                    {
-                        int permId = msg.ToInt32(-1);
-                        OrderInfo od = OrderManager.GetOrAdd(permId);
-
-                        if (!(od is null))
-                            OrderTest.UpdateTable(od);
-                    }
-                });
-            });
-            UpdateUI.Start();
-        }
-
-
         public void TradeTableHandler(int status, DateTime time, string msg)
         {
             Task UpdateUI = new Task(() => {

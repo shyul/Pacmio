@@ -164,8 +164,8 @@ namespace Pacmio.IB
                     {
                         Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
 
-                        SendRequest_AccountSummary();
-                        SendRequest_Postion();
+                        //SendRequest_AccountSummary();
+                        //SendRequest_Postion();
                     }
                 }
 

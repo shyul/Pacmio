@@ -45,94 +45,96 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void Parse_CompletedOrder(string[] fields)
         {
-            //int orderId = fields[1].ToInt32(-1);
-            int permId = fields[23].ToInt32();
-            OrderInfo od = OrderManager.GetOrAdd(permId);
+            int conId = fields[1].ToInt32(-1);
 
-            od.ConId = fields[1].ToInt32(-1);
-
-            if (od.Contract is Contract c) c.TradeData.Add(od);
-
-            int totalQuantity = fields[13].ToInt32(0);
-            od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
-
-            od.Type = ApiCode.GetEnum<OrderType>(fields[14]).Enum;
-            od.LimitPrice = fields[15].ToDouble();
-            od.AuxPrice = fields[16].ToDouble();
-            od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[17]).Enum;
-
-            if(od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[27].Length > 5) 
+            if (ContractList.GetOrFetch(conId) is Contract c)
             {
-                od.EffectiveDateTime = DateTime.ParseExact(fields[27].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-            else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[33].Length > 5)
-            {
-                od.EffectiveDateTime = DateTime.ParseExact(fields[33].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-           
-            // fields[18]  // order.OcaGroup = eDecoder.ReadString();
-            od.AccountCode = fields[19];
-            // fields[20]  // order.OpenClose = eDecoder.ReadString();
-            // fields[21]  // order.Origin = eDecoder.ReadInt();
-            od.Description = fields[22];  // order.OrderRef = eDecoder.ReadString();
+                int permId = fields[23].ToInt32();
+                OrderInfo od = c.TradeData.GetOrAdd(permId);
 
-            od.OutsideRegularTradeHours = fields[24] == "1";
-            od.Hidden = fields[25] == "1";
-            od.ModeCode = fields[32];
-            od.AllOrNone = fields[47] == "1";
+                if (od.Contract is null) od.Contract = c;
+                //od.ConId = fields[1].ToInt32(-1);
 
-            int N = 57;
-            if (!string.IsNullOrWhiteSpace(fields[53]))
-            {
-                N += 4;
-            }
+                int totalQuantity = fields[13].ToInt32(0);
+                od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
 
-            od.TrailStopPrice = fields[N].ToDouble(); // 61
-            od.TrailingPercent = fields[N + 1].ToDouble(); // 62
-            int comboLegCount = fields[N + 3].ToInt32(); // 64
-            N += 4 + comboLegCount * 8;
-            int orderComboLegCount = fields[N].ToInt32(); // 65
-            N += 1 + orderComboLegCount;
-            // N = 66
-            int smartComboRoutingParamsCount = fields[N].ToInt32(); // 66
+                od.Type = ApiCode.GetEnum<OrderType>(fields[14]).Enum;
+                od.LimitPrice = fields[15].ToDouble();
+                od.AuxPrice = fields[16].ToDouble();
+                od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[17]).Enum;
 
-            N += 3 + smartComboRoutingParamsCount * 2;
-            // N = 69
-            N += (double.IsNaN(fields[N].ToDouble())) ? 1 : 8;
-            // N = 70 
-            N += (string.IsNullOrWhiteSpace(fields[N])) ? 1 : 2; // readHedgeParams() 
-            // N = 71
-            N += 2; // readClearingParams();
-            N += 1; // readNotHeld();
-            // N = 74
-            N += (fields[N] == "1") ? 4 : 1; // readDeltaNeutral(); // 74
-            // N = 75
-            if (!string.IsNullOrWhiteSpace(fields[N])) // readAlgoParams()
-            {
-                N += 1;
-                int algoParamsCount = fields[N].ToInt32();
-                N += 1 + algoParamsCount * 2;
+                if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[27].Length > 5)
+                {
+                    od.EffectiveDateTime = DateTime.ParseExact(fields[27].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+                else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[33].Length > 5)
+                {
+                    od.EffectiveDateTime = DateTime.ParseExact(fields[33].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+
+                // fields[18]  // order.OcaGroup = eDecoder.ReadString();
+                od.AccountCode = fields[19];
+                // fields[20]  // order.OpenClose = eDecoder.ReadString();
+                // fields[21]  // order.Origin = eDecoder.ReadInt();
+                od.Description = fields[22];  // order.OrderRef = eDecoder.ReadString();
+
+                od.OutsideRegularTradeHours = fields[24] == "1";
+                od.Hidden = fields[25] == "1";
+                od.ModeCode = fields[32];
+                od.AllOrNone = fields[47] == "1";
+
+                int N = 57;
+                if (!string.IsNullOrWhiteSpace(fields[53]))
+                {
+                    N += 4;
+                }
+
+                od.TrailStopPrice = fields[N].ToDouble(); // 61
+                od.TrailingPercent = fields[N + 1].ToDouble(); // 62
+                int comboLegCount = fields[N + 3].ToInt32(); // 64
+                N += 4 + comboLegCount * 8;
+                int orderComboLegCount = fields[N].ToInt32(); // 65
+                N += 1 + orderComboLegCount;
+                // N = 66
+                int smartComboRoutingParamsCount = fields[N].ToInt32(); // 66
+
+                N += 3 + smartComboRoutingParamsCount * 2;
+                // N = 69
+                N += (double.IsNaN(fields[N].ToDouble())) ? 1 : 8;
+                // N = 70 
+                N += (string.IsNullOrWhiteSpace(fields[N])) ? 1 : 2; // readHedgeParams() 
+                                                                     // N = 71
+                N += 2; // readClearingParams();
+                N += 1; // readNotHeld();
+                        // N = 74
+                N += (fields[N] == "1") ? 4 : 1; // readDeltaNeutral(); // 74
+                                                 // N = 75
+                if (!string.IsNullOrWhiteSpace(fields[N])) // readAlgoParams()
+                {
+                    N += 1;
+                    int algoParamsCount = fields[N].ToInt32();
+                    N += 1 + algoParamsCount * 2;
+                }
+                else
+                {
+                    N += 1;
+                }
+                // N = 76
+                N += 1; // readSolicited();
+                        // N = 77; //Console.WriteLine("4) N = " + N);
+                od.Status = ApiCode.GetEnum<OrderStatus>(fields[N]).Enum;
+
+
             }
-            else
-            {
-                N += 1;
-            }
-            // N = 76
-            N += 1; // readSolicited();
-            // N = 77; //Console.WriteLine("4) N = " + N);
-            od.Status = ApiCode.GetEnum<OrderStatus>(fields[N]).Enum;
 
             Console.WriteLine("\nCompleted Orders: " + fields.ToStringWithIndex());
-            Console.WriteLine(OrderManager.Count + " | " + od.Status + " | " + fields[90]);
-
-            OrderManager.Update(od);
         }
 
         private static void Parse_CompletedOrdersEnd(string[] fields)
         {
             IsReady_CompletedOrders = true;
             Console.WriteLine("\nCompleted Orders End: " + fields.ToStringWithIndex());
-            OrderManager.Update(); // TODO: Tranmit message
+            // TODO: Tranmit message
         }
 
         /// <summary>

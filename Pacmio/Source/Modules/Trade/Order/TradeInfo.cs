@@ -43,27 +43,27 @@ namespace Pacmio
         [DataMember, Browsable(true)]
         public string AccountCode { get; set; }
 
+        [IgnoreDataMember]
+        public Account Account => AccountManager.Get(AccountCode);
+
         [DataMember]
         public int ConId
         {
-            get 
+            get
             {
-                if (Contract is Contract c) 
+                if (Contract is Contract c)
                     return c.ConId;
-                else 
+                else
                     return m_ConId;
             }
-            
+
             set
             {
-                if(value > 0) 
+                if (value != m_ConId || Contract is null || Contract.ConId != value)
                 {
+                    Contract = ContractList.GetOrFetch(m_ConId);
+                    Console.WriteLine("Added Contract to TradeInfo: " + Contract);
                     m_ConId = value;
-                    if (Contract is null || Contract.ConId != m_ConId) 
-                    { 
-                        Contract = ContractList.GetOrFetch(m_ConId);
-                        //Console.WriteLine("Added Contract to TradeInfo: " + Contract);
-                    }
                 }
             }
         }

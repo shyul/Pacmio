@@ -78,10 +78,9 @@ namespace Pacmio.IB
         {
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[25].ToInt32();
-            OrderInfo od = OrderManager.GetOrAdd(orderId, permId);
+            int conId = fields[2].ToInt32(-1);
 
-            od.ConId = fields[2].ToInt32(-1);
-            if (od.Contract is Contract c) c.TradeData.Add(od);
+            OrderInfo od = TradeData.GetOrAdd(orderId, permId, conId);
 
             int totalQuantity = fields[14].ToInt32(0);
             od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;

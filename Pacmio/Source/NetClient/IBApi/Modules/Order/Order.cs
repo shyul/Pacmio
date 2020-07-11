@@ -28,13 +28,11 @@ namespace Pacmio.IB
         {
             Contract c = od.Contract;
 
-            
-
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
             var (valid_orderType, orderTypeCode) = ApiCode.GetIbCode(od.Type);
             var (valid_tif, TifCode) = ApiCode.GetIbCode(od.TimeInForce);
 
-            Console.WriteLine("PlaceOrder: " + c.ToString());
+            Console.WriteLine("\n##### Place Order: " + c.ToString() + " #####");
 
             if (Connected && valid_exchange && c is IBusiness it && valid_orderType && valid_tif && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
@@ -42,10 +40,9 @@ namespace Pacmio.IB
 
                 if ((!modify && !ActiveRequestContains(od.OrderId)) || od.OrderId == -1)
                 {
-                    (int requestId, _) = RegisterRequest(RequestType.PlaceOrder);
-                    od.OrderId = requestId;
-                    if (!OrderManager.AddNew(od)) 
-                        throw new Exception("Error adding new OrderInfo to OrderManager.ActiveList");
+                    var (orderId, _) = RegisterRequest(RequestType.PlaceOrder);
+                    od.OrderId = orderId;
+                    TradeData.AddActive(od);
                 }
 
                 string lastTradeDateOrContractMonth = "";

@@ -100,14 +100,11 @@ namespace Pacmio
 
             set
             {
-                if (value > 0)
+                if (value != m_ConId || Contract is null || Contract.ConId != value)
                 {
+                    Contract = ContractList.GetOrFetch(m_ConId);
+                    Console.WriteLine("Added Contract to OrderInfo: " + Contract);
                     m_ConId = value;
-                    if (Contract is null || Contract.ConId != m_ConId)
-                    {
-                        Contract = ContractList.GetOrFetch(m_ConId);
-                        //Console.WriteLine("Added Contract to OrderInfo: " + Contract);
-                    }
                 }
             }
         }
