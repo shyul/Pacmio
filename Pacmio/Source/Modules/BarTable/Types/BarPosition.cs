@@ -13,10 +13,10 @@ namespace Pacmio
 {
     public sealed class BarPosition
     {
-        public BarPosition(Bar b, IAnalysisSetting ias)
+        public BarPosition(Bar b, BarAnalysisSet bas)
         {
             Bar = b;
-            AnalysisSetting = ias;
+            BarAnalysisSet = bas;
             //Snapshot();
             Reset();
         }
@@ -31,7 +31,7 @@ namespace Pacmio
 
         public void Snapshot()
         {
-            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[AnalysisSetting] is BarPosition bp_1)
+            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[BarAnalysisSet] is BarPosition bp_1)
             {
                 Quantity = bp_1.Quantity;
                 AveragePrice = bp_1.AveragePrice;
@@ -69,7 +69,7 @@ namespace Pacmio
 
         public Bar Bar { get; }
 
-        public IAnalysisSetting AnalysisSetting { get; }
+        public BarAnalysisSet BarAnalysisSet { get; }
 
         public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
 

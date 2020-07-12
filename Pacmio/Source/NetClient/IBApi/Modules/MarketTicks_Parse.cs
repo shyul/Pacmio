@@ -326,6 +326,8 @@ namespace Pacmio.IB
 
                             //double totalVol = volFields[3].ToDouble() * 100;
                             hd.InboundLiveTick(time, last, vol);
+                             
+                            // if c.ActiveStrategy is Strategy s --> s.Evaluate(c);
 
                             /*
                             if (!TicksList.ContainsKey(c)) 

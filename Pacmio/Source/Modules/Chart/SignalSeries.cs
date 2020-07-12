@@ -26,7 +26,7 @@ namespace Pacmio
 
         public BarTable Table => BarChart.BarTable;
 
-        public IAnalysisSetting AnalysisSetting => BarChart.AnalysisSetting;
+        public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
 
         //public IEnumerable<SignalColumn> SignalColumns => AnalysisSetting.Analyses[BarChart.BarFreq].SignalColumns;
 
@@ -38,7 +38,7 @@ namespace Pacmio
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    var (bullish, bearish) = Table[i, AnalysisSetting];
+                    var (bullish, bearish) = Table[i, BarAnalysisSet];
 
 
 
@@ -85,7 +85,7 @@ namespace Pacmio
 
                         foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
                         {
-                            var (desc, score) = Table[i, AnalysisSetting, sc];
+                            var (desc, score) = Table[i, BarAnalysisSet, sc];
 
                             Rectangle rect;
                             int height;

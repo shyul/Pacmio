@@ -138,7 +138,7 @@ namespace Pacmio
         }
 
 
-        public (string description, double score) this[int i, IAnalysisSetting ias, SignalColumn column]
+        public (string description, double score) this[int i, BarAnalysisSet bas, SignalColumn column]
         {
             get
             {
@@ -150,7 +150,7 @@ namespace Pacmio
                     int k = i - j;
                     if (k >= 0 && k < Count)
                     {
-                        if (Rows[k][ias][column] is SignalDatum sd)
+                        if (Rows[k][bas][column] is SignalDatum sd)
                         {
                             if (string.IsNullOrEmpty(description)) description = sd.Description;
                             score += sd.Scores[j];
@@ -162,19 +162,17 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) this[int i, IAnalysisSetting ias]
+        public (double bullish, double bearish) this[int i, BarAnalysisSet bas]
         {
             get
             {
                 double bull = 0, bear = 0;
-
-                if (ias.BarAnalysisSet(BarFreq) is BarAnalysisSet bas)
-                    foreach (SignalColumn sc in bas.SignalColumns)
-                    {
-                        var (_, score) = this[i, ias, sc];
-                        if (score > 0) bull += score;
-                        else if (score < 0) bear += score;
-                    }
+                foreach (SignalColumn sc in bas.SignalColumns)
+                {
+                    var (_, score) = this[i, bas, sc];
+                    if (score > 0) bull += score;
+                    else if (score < 0) bear += score;
+                }
 
                 return (bull, bear);
             }
@@ -971,7 +969,7 @@ namespace Pacmio
 
         public void SimulateOnly(Strategy s)
         {
-            if (Enabled && s.BarAnalysisSet(BarFreq) is BarAnalysisSet bas)
+            if (Enabled && s[BarFreq] is BarAnalysisSet bas)
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
@@ -991,15 +989,9 @@ namespace Pacmio
                 }
         }
 
-        public void CalculateOnly(IAnalysisSetting ias)
-        {
-            if (Enabled && ias.BarAnalysisSet(BarFreq) is BarAnalysisSet bas)
-                CalculateOnly(bas);
-        }
-
         public void CalculateOnly(BarAnalysisSet bas)
         {
-            if (Enabled && bas is BarAnalysisSet)
+            if (Enabled && Count > 0 && bas is BarAnalysisSet)
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;

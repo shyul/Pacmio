@@ -49,7 +49,7 @@ namespace Pacmio
 
         public override void DrawCustomBackground(Graphics g)
         {
-            DrawPosition(g, this, BarTable, BarChart.AnalysisSetting);
+            DrawPosition(g, this, BarTable, BarChart.BarAnalysisSet);
         }
 
         public static Dictionary<TradeActionType, Brush> ColorPalette { get; } = new Dictionary<TradeActionType, Brush>()
@@ -62,9 +62,9 @@ namespace Pacmio
                 { TradeActionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
             };
 
-        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, IAnalysisSetting ias)
+        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, BarAnalysisSet ias)
         {
-            if (ias is IAnalysisSetting && bt.Count > 0)
+            if (ias is BarAnalysisSet && bt.Count > 0)
             {
                 List<(Brush br, Rectangle rect)> rectangles = new List<(Brush, Rectangle)>();
 

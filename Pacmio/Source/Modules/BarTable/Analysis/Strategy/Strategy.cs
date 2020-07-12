@@ -8,11 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Xu;
 
 namespace Pacmio
 {
-    public abstract class Strategy : IAnalysisSetting, IEquatable<Strategy>
+    public abstract class Strategy : IEquatable<Strategy>
     {
         public Strategy(string name)
         {
@@ -25,18 +26,37 @@ namespace Pacmio
 
         protected Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
 
+        public BarAnalysisSet this[BarFreq freq]
+        {
+            get
+            {
+                if (Analyses.ContainsKey(freq))
+                    return Analyses[freq];
+                else
+                    return null;
+            }
+            set
+            {
+                if (value is BarAnalysisSet bas)
+                    Analyses[freq] = bas;
+                else if (Analyses.ContainsKey(freq))
+                    Analyses.Remove(freq);
+            }
+        }
+
         public void Clear() => Analyses.Clear();
 
+        /*
         public virtual BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
         {
             if (Analyses.ContainsKey(barFreq))
                 return Analyses[barFreq];
             else
                 return null;
-        }
+        }*/
 
 
-        public void Calculate(BarTable bt, int i)
+        public virtual void Calculate(BarTable bt, int i)
         {
 
 
@@ -48,7 +68,7 @@ namespace Pacmio
         }
 
         // !!! The Function Actually Makes The Purchase
-        public void Evaluate(BarTable bt)
+        public void Evaluate(Contract c)
         {
 
         }
@@ -67,7 +87,5 @@ namespace Pacmio
         #endregion Trading Timing
 
         public bool Equals(Strategy other) => other is Strategy tr && Name == tr.Name;
-
-        public bool Equals(IAnalysisSetting other) => other is IAnalysisSetting ias && Name == ias.Name;
     }
 }

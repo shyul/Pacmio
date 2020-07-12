@@ -80,8 +80,6 @@ namespace Pacmio
             });
         }
 
-
-
         public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
     }
 }

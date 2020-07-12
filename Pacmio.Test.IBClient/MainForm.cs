@@ -219,13 +219,13 @@ namespace TestClient
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
 
-                Strategy tr = new TestStrategy(freq);
+                //Strategy tr = new TestStrategy(freq);
 
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
-                    BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, tr, freq, type, ref pd, Cts);
+                    BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
                     HistoricalPeriod = pd;
                 }, Cts.Token);
 
@@ -238,10 +238,10 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
             BarFreq freq = BarFreq;
             BarType type = BarType;
-            IAnalysisSetting tr = new TestStrategy(freq);
+            //IAnalysisSetting tr = new TestStrategy(freq);
 
             var symbols = ContractList.GetSymbolList(ref symbolText);
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, tr));
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 

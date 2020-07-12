@@ -91,50 +91,77 @@ namespace Pacmio
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 
-        public void ConfigChart(BarTable bt, IAnalysisSetting ias)
+        public void Config(BarTable bt)
         {
-            ReadyToShow = false;
             lock (GraphicsLockObject)
             {
-                RemoveAllChartSeries();
-
-                if (BarTable is BarTable)
-                {
-                    lock (BarTable.DataViews) BarTable.DataViews.CheckRemove(this);
-                }
+                ReadyToShow = false;
 
                 BarTable = bt;
 
-                if (BarTable is BarTable)
-                {
-                    lock (BarTable.DataViews) BarTable.DataViews.CheckAdd(this);
-
-                    StopPt = BarTable.LastIndex;
-                    TabName = Name = BarTable.Name;
-                }
-                else
-                {
-                    StopPt = 0;
-                    TabName = "No BarTable";
-                }
-
-                AnalysisSetting = ias;
-                if (AnalysisSetting.BarAnalysisSet(BarTable.BarFreq) is BarAnalysisSet bas)
-                {
-                    BarAnalysisSet = bas;
-                    foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
-                    {
-                        ic.ConfigChart(this);
-                    }
-                    bt.CalculateOnly(BarAnalysisSet);
-                }
-                else
-                {
-                    BarAnalysisSet = null;
-                }
+                ReadyToShow = BarTable is BarTable;
+                if (ReadyToShow) StopPt = BarTable.Count;
             }
-            StopPt = bt.Count;
-            ReadyToShow = (BarTable is BarTable);
+            SetAsyncUpdateUI();
+        }
+
+        public void Config(BarAnalysisSet bas)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+                RemoveAllChartSeries();
+
+                BarAnalysisSet = bas;
+
+                ReadyToShow = BarTable is BarTable;
+                if (ReadyToShow) StopPt = BarTable.Count;
+            }
+            SetAsyncUpdateUI();
+        }
+
+        public void Config(Strategy s)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+                RemoveAllChartSeries();
+
+                Strategy = s;
+
+                ReadyToShow = BarTable is BarTable;
+                if (ReadyToShow) StopPt = BarTable.Count;
+            }
+            SetAsyncUpdateUI();
+        }
+
+        public void Config(BarTable bt, BarAnalysisSet bas)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+
+                BarTable = bt;
+                BarAnalysisSet = bas;
+
+                ReadyToShow = BarTable is BarTable;
+                if (ReadyToShow) StopPt = BarTable.Count;
+            }
+            SetAsyncUpdateUI();
+        }
+
+        public void Config(BarTable bt, Strategy s)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+
+                BarTable = bt;
+                Strategy = s;
+
+                ReadyToShow = BarTable is BarTable;
+                if (ReadyToShow) StopPt = BarTable.Count;
+            }
             SetAsyncUpdateUI();
         }
 
@@ -145,15 +172,73 @@ namespace Pacmio
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
 
-        public IAnalysisSetting AnalysisSetting { get; private set; } = null;
+        public Strategy Strategy
+        {
+            get => m_Strategy;
 
-        public BarAnalysisSet BarAnalysisSet { get; private set; } = null;
+            private set
+            {
+                Strategy = value;
+                BarAnalysisSet = Strategy is Strategy ? Strategy[BarFreq] : null;
+            }
+        }
 
-        public BarTable BarTable { get; private set; } = null;
+        private Strategy m_Strategy = null;
 
-        public override ITable Table => BarTable;
+        public BarAnalysisSet BarAnalysisSet
+        {
+            get => m_BarAnalysisSet;
 
-        public override int DataCount => BarTable.Count;
+            private set
+            {
+                RemoveAllChartSeries();
+                m_BarAnalysisSet = value;
+                if (m_BarAnalysisSet is BarAnalysisSet bas)
+                {
+                    foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                    {
+                        ic.ConfigChart(this);
+                        if (BarTable is BarTable bt) bt.CalculateOnly(bas);
+                    }
+                }
+            }
+        }
+
+        private BarAnalysisSet m_BarAnalysisSet = null;
+
+        public BarTable BarTable
+        {
+            get => m_BarTable;
+
+            private set
+            {
+                if (m_BarTable is BarTable)
+                {
+                    lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckRemove(this);
+                }
+
+                m_BarTable = value;
+
+                if (m_BarTable is BarTable)
+                {
+                    lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckAdd(this);
+
+                    //StopPt = m_BarTable.LastIndex;
+                    TabName = Name = m_BarTable.Name;
+                }
+                else
+                {
+                    StopPt = 0;
+                    TabName = "No BarTable";
+                }
+            }
+        }
+
+        private BarTable m_BarTable = null;
+
+        public override ITable Table => m_BarTable;
+
+        public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
         public IEnumerable<IChartOverlay> ChartOverlays
             => BarAnalysisSet
@@ -165,11 +250,11 @@ namespace Pacmio
             get
             {
                 if (BarFreq < BarFreq.Minute)
-                    return BarTable.IndexToTime(i + StartPt).ToString("MMM-dd HH:mm:ss");
+                    return m_BarTable.IndexToTime(i + StartPt).ToString("MMM-dd HH:mm:ss");
                 else if (BarFreq < BarFreq.Daily)
-                    return BarTable.IndexToTime(i + StartPt).ToString("MMM-dd HH:mm");
+                    return m_BarTable.IndexToTime(i + StartPt).ToString("MMM-dd HH:mm");
                 else
-                    return BarTable.IndexToTime(i + StartPt).ToString("MMM-dd-yyyy");
+                    return m_BarTable.IndexToTime(i + StartPt).ToString("MMM-dd-yyyy");
             }
         }
 
@@ -188,7 +273,7 @@ namespace Pacmio
             }
         }
 
-        public Bar LastBar => BarTable[LastIndex];
+        public Bar LastBar => m_BarTable[LastIndex];
 
         public double LastClose => (LastBar is null) ? 0 : LastBar.Close;
 
@@ -198,11 +283,11 @@ namespace Pacmio
 
         public OhlcType OhlcType { get => MainArea.PriceSeries.Type; set => MainArea.PriceSeries.Type = value; }
 
-        public Period Period => new Period(BarTable.IndexToTime(StartPt), BarTable.IndexToTime(StopPt));
+        public Period Period => new Period(m_BarTable.IndexToTime(StartPt), m_BarTable.IndexToTime(StopPt));
 
-        public BarFreq BarFreq => BarTable.BarFreq;
+        public BarFreq BarFreq => m_BarTable.BarFreq;
 
-        public Frequency Frequency => BarTable.Frequency;
+        public Frequency Frequency => m_BarTable.Frequency;
 
         public TimeUnit TimeUnit => Frequency.Unit;
 
@@ -214,9 +299,11 @@ namespace Pacmio
 
         public double ChartRangePercent => (ChartRange.Minimum != 0) ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
 
-        public override bool ReadyToShow { get => IsActive && m_ReadyToShow && BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
+        public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
 
-        public bool HasSignalColumn => AnalysisSetting is IAnalysisSetting tr && tr.BarAnalysisSet(BarTable.BarFreq) is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
+        public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
+
+        public bool HasPositionColumn => Strategy is Strategy;
 
         public override void CoordinateOverlay() { }
 
@@ -232,12 +319,11 @@ namespace Pacmio
 
             if (ReadyToShow)
             {
-                lock (BarTable.DataLockObject)
+                lock (m_BarTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        //BarTable.CurrentIAnalysisSetting = IAnalysisSetting;
                         SignalArea.Visible = true;// HasSignalColumn;
-                        //PositionArea.Visible = false;
+                        //PositionArea.Visible = HasPositionColumn;
 
                         AxisX.TickList.Clear();
 
@@ -271,7 +357,7 @@ namespace Pacmio
                                 MajorTick = MinorTick * 5;
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
-                                    DateTime time = BarTable.IndexToTime(i);
+                                    DateTime time = m_BarTable.IndexToTime(i);
                                     if (time.Year % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.Year.ToString()));
                                     if (time.Year % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Year.ToString().GetLast(2)));
                                     px++;
@@ -283,7 +369,7 @@ namespace Pacmio
                                 MajorTick = MinorTick * 6;
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
-                                    DateTime time = BarTable.IndexToTime(i);
+                                    DateTime time = m_BarTable.IndexToTime(i);
                                     if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
                                     if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
                                     px++;
@@ -303,8 +389,8 @@ namespace Pacmio
                                     MajorTick = new Frequency(TimeUnit.Weeks, 1);
                                     for (int i = StartPt; i < StopPt; i++)
                                     {
-                                        DateTime time = BarTable.IndexToTime(i);
-                                        DateTime last_time = BarTable.IndexToTime(i - 1);
+                                        DateTime time = m_BarTable.IndexToTime(i);
+                                        DateTime last_time = m_BarTable.IndexToTime(i - 1);
                                         if (time.DayOfWeek < last_time.DayOfWeek) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd"))); ///.WeekOfYear().ToString())); ;
                                         if (time.Day % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Day.ToString()));
                                         px++;
@@ -316,8 +402,8 @@ namespace Pacmio
                                     MajorTick = new Frequency(TimeUnit.Months, 1);
                                     for (int i = StartPt; i < StopPt; i++)
                                     {
-                                        DateTime time = BarTable.IndexToTime(i);
-                                        DateTime last_time = BarTable.IndexToTime(i - 1);
+                                        DateTime time = m_BarTable.IndexToTime(i);
+                                        DateTime last_time = m_BarTable.IndexToTime(i - 1);
                                         if (time.Day < last_time.Day)
                                         {
                                             if (time.Month < last_time.Month)
@@ -337,8 +423,8 @@ namespace Pacmio
                                 MajorTick = new Frequency(TimeUnit.Hours, 1);
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
-                                    DateTime time = BarTable.IndexToTime(i);
-                                    DateTime last_time = BarTable.IndexToTime(i - 1);
+                                    DateTime time = m_BarTable.IndexToTime(i);
+                                    DateTime last_time = m_BarTable.IndexToTime(i - 1);
                                     if (time.Hour < last_time.Hour)
                                     {
                                         if (time.Day < last_time.Day)
@@ -357,8 +443,8 @@ namespace Pacmio
                                 MajorTick = new Frequency(TimeUnit.Minutes, 30);
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
-                                    DateTime time = BarTable.IndexToTime(i);
-                                    DateTime last_time = BarTable.IndexToTime(i - 1);
+                                    DateTime time = m_BarTable.IndexToTime(i);
+                                    DateTime last_time = m_BarTable.IndexToTime(i - 1);
 
                                     if (time.Hour > last_time.Hour)
                                         AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("HH:mm")));
@@ -375,8 +461,8 @@ namespace Pacmio
                                 MajorTick = new Frequency(TimeUnit.Minutes, 30);
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
-                                    DateTime time = BarTable.IndexToTime(i);
-                                    DateTime last_time = BarTable.IndexToTime(i - 1);
+                                    DateTime time = m_BarTable.IndexToTime(i);
+                                    DateTime last_time = m_BarTable.IndexToTime(i - 1);
 
                                     if (time.Day > last_time.Day)
                                         AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd")));
@@ -438,11 +524,11 @@ namespace Pacmio
                         }
                     }
 
-                Title = BarTable.Name + " | " + IndexCount + " Units | CTR: " + ChartRangePercent.ToString("0.##") + "% | " + LastTimeString;
+                Title = m_BarTable.Name + " | " + IndexCount + " Units | CTR: " + ChartRangePercent.ToString("0.##") + "% | " + LastTimeString;
             }
             else
             {
-                Title = BarTable.Name + " | " + IndexCount + " Units | " + LastTimeString;
+                Title = m_BarTable.Name + " | " + IndexCount + " Units | " + LastTimeString;
             }
 
             PerformLayout();
@@ -455,7 +541,7 @@ namespace Pacmio
 
             if (ChartBounds.Width > 0 && ChartBounds.Height > 0)
             {
-                if (BarTable is null)
+                if (m_BarTable is null)
                 {
                     g.DrawString("Not configured", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
                 }
@@ -463,19 +549,19 @@ namespace Pacmio
                 {
                     //BarTable.CurrentIAnalysisSetting = IAnalysisSetting;
 
-                    g.DrawString(BarTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
+                    g.DrawString(m_BarTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
                     if (DataCount < 1)
                     {
                         g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
                     }
-                    else if (!BarTable.ReadyToShow)
+                    else if (!m_BarTable.ReadyToShow)
                     {
                         g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
                     }
                     else if (ReadyToShow)
                     {
-                        lock (BarTable.DataLockObject)
+                        lock (m_BarTable.DataLockObject)
                             lock (GraphicsLockObject)
                             {
 
@@ -506,7 +592,7 @@ namespace Pacmio
 
                                 foreach (var ic in ChartOverlays)
                                 {
-                                    ic.Draw(g, this, BarTable);
+                                    ic.Draw(g, this, m_BarTable);
                                 }
                             }
                     }

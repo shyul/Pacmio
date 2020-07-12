@@ -81,7 +81,7 @@ namespace Pacmio
             }
         }
 
-        public void AddChart(Contract c, IAnalysisSetting ias, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
+        public void AddChart(Contract c, BarAnalysisSet ias, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
             BarTable bt = AddContract(c, barFreq, barType);
             AddChart(bt, ias);
@@ -129,7 +129,7 @@ namespace Pacmio
             return new List<BarTable>();
         }
 
-        public void AddChart(IEnumerable<(Contract, IAnalysisSetting)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
+        public void AddChart(IEnumerable<(Contract, BarAnalysisSet)> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             PeriodSettings[(barFreq, barType)] = period;
@@ -153,7 +153,7 @@ namespace Pacmio
             });
         }
 
-        public void Calculate(IAnalysisSetting ias, CancellationTokenSource cts, IProgress<float> progress)
+        public void Calculate(BarAnalysisSet ias, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             ParallelOptions po = new ParallelOptions()
@@ -173,12 +173,12 @@ namespace Pacmio
             });
         }
 
-        private void AddChart(BarTable bt, IAnalysisSetting ias)
+        private void AddChart(BarTable bt, BarAnalysisSet bas)
         {
             if (BarChart.List.Where(n => n.BarTable == bt).Count() == 0)
             {
                 BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-                bc.ConfigChart(bt, ias);
+                bc.Config(bt, bas);
                 if (Root.Form.InvokeRequired)
                 {
                     Root.Form.Invoke((MethodInvoker)delegate

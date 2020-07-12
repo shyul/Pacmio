@@ -45,7 +45,7 @@ namespace Pacmio
 
         public override void DrawCustomBackground(Graphics g)
         {
-            PositionArea.DrawPosition(g, this, BarTable, BarChart.AnalysisSetting);
+            PositionArea.DrawPosition(g, this, BarTable, BarChart.BarAnalysisSet);
         }
     }
 }
