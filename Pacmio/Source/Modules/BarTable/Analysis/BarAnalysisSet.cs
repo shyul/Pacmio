@@ -7,13 +7,14 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
 namespace Pacmio
 {
-    public class BarAnalysisSet
+    public class BarAnalysisSet : IEnumerable<BarAnalysis>
     {
         public IEnumerable<BarAnalysis> List
         {
@@ -25,24 +26,33 @@ namespace Pacmio
             {
                 lock (m_List)
                 {
-                    m_List.Clear();
-                    value.ToList().ForEach(n =>
-                    {
-                        SetBarAnalysisParents(n);
-                        m_List.CheckAdd(n);
-                        SetBarAnalysisChildren(n);
-                    });
+                    Clear();
+                    Add(value);
                 }
-
-                PrintList();
             }
         }
 
         private readonly List<BarAnalysis> m_List = new List<BarAnalysis>();
 
+        public IEnumerator<BarAnalysis> GetEnumerator() => m_List.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => m_List.GetEnumerator();
+
         public void Clear() => m_List.Clear();
 
         public void Add(BarAnalysis ba) => m_List.CheckAdd(ba);
+
+        public void Add(IEnumerable<BarAnalysis> list) 
+        {
+            list.ToList().ForEach(n =>
+            {
+                SetBarAnalysisParents(n);
+                m_List.CheckAdd(n);
+                SetBarAnalysisChildren(n);
+            });
+
+            PrintList();
+        }
 
         private void SetBarAnalysisParents(BarAnalysis ba)
         {
@@ -64,11 +74,13 @@ namespace Pacmio
 
         public void PrintList()
         {
-            List.ToList().ForEach(n =>
+            this.ToList().ForEach(n =>
             {
                 Console.WriteLine("BarAnalysisSet | Added BA: " + n.Name);
             });
         }
+
+
 
         public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
     }

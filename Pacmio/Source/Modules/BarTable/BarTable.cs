@@ -977,7 +977,7 @@ namespace Pacmio
                     Status = TableStatus.Calculating;
                     // Send Signal
 
-                    Calculate(bas.List);
+                    Calculate(bas);
 
                     // Calculate the signal and position and 
                     // Simulation the Strategy
@@ -1005,7 +1005,7 @@ namespace Pacmio
                     Status = TableStatus.Calculating;
                     // Send Signal
 
-                    Calculate(bas.List);
+                    Calculate(bas);
 
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;

@@ -122,7 +122,7 @@ namespace Pacmio
                 if (AnalysisSetting.BarAnalysisSet(BarTable.BarFreq) is BarAnalysisSet bas)
                 {
                     BarAnalysisSet = bas;
-                    foreach (var ic in bas.List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                    foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
                     {
                         ic.ConfigChart(this);
                     }
@@ -156,7 +156,7 @@ namespace Pacmio
         public override int DataCount => BarTable.Count;
 
         public IEnumerable<IChartOverlay> ChartOverlays
-            => BarAnalysisSet.List
+            => BarAnalysisSet
             .Where(n => n is IChartOverlay)
             .Select(n => (IChartOverlay)n);
 
