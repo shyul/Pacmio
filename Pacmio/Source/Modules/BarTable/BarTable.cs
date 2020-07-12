@@ -969,6 +969,28 @@ namespace Pacmio
                 }
         }
 
+        public void SimulateOnly(Strategy s)
+        {
+            if (Enabled && s.BarAnalysisSet(BarFreq) is BarAnalysisSet bas)
+                lock (DataLockObject)
+                {
+                    Status = TableStatus.Calculating;
+                    // Send Signal
+
+                    Calculate(bas.List);
+
+                    // Calculate the signal and position and 
+                    // Simulation the Strategy
+                    // With result...
+
+                    s.Simulate(this);
+
+                    Status = TableStatus.CalculateFinished;
+                    Status = TableStatus.Ready;
+                    // Send Signal
+                }
+        }
+
         public void CalculateOnly(IAnalysisSetting ias)
         {
             if (Enabled && ias.BarAnalysisSet(BarFreq) is BarAnalysisSet bas)
@@ -984,8 +1006,6 @@ namespace Pacmio
                     // Send Signal
 
                     Calculate(bas.List);
-
-                    // Calculate the signal and position and simulation result...
 
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
@@ -1006,6 +1026,9 @@ namespace Pacmio
                 {
                     SetCalculationPointer(LatestCalculatePointer - 2);
                     Calculate(BarAnalysisPointerList.Keys);
+
+                    // Evaluate the Strategy
+
                     Status = TableStatus.TickingFinished;
                     // lead it to calculation... here
                 }
@@ -1444,14 +1467,14 @@ namespace Pacmio
             btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
         }
 
-        private void SyncFile(Period pd)
+        public void SyncFile(Period pd)
         {
             using BarTableFileData btd = BarTableFileData;
             SaveFile(btd);
             LoadFile(btd, pd);
         }
 
-        private void ClearFile(Period pd)
+        public void ClearFile(Period pd)
         {
             using BarTableFileData btd = BarTableFileData;
             btd.DataSourceSegments.Remove(pd);
@@ -1462,7 +1485,7 @@ namespace Pacmio
 
         }
 
-        private void ClearFile()
+        public void ClearFile()
         {
             using BarTableFileData btd = BarTableFileData;
             btd.DataSourceSegments.Clear();

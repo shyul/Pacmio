@@ -23,7 +23,9 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        public Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
+        protected Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
+
+        public void Clear() => Analyses.Clear();
 
         public virtual BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
         {
@@ -33,7 +35,20 @@ namespace Pacmio
                 return null;
         }
 
-        public void EvaluatePosition()
+
+        public void Calculate(BarTable bt, int i)
+        {
+
+
+        }
+
+        public void Simulate(BarTable bt)
+        {
+
+        }
+
+        // !!! The Function Actually Makes The Purchase
+        public void Evaluate(BarTable bt)
         {
 
         }

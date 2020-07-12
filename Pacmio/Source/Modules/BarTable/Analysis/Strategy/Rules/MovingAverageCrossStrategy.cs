@@ -22,9 +22,9 @@ namespace Pacmio
 
         }
 
-        public void Config(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
+        public void Config(BarFreq freq, MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
-            m_barAnalysisSet.Clear();
+            BarAnalysisSet bas = new BarAnalysisSet();
 
             switch (type_fast)
             {
@@ -63,6 +63,10 @@ namespace Pacmio
                     MA_Slow = new HMA(interval_slow);
                     break;
             }
+
+            bas.List = new List<BarAnalysis>() { MA_Fast, MA_Slow};
+
+            Analyses[freq] = bas;
         }
 
         public SMA MA_Fast { get; private set; }
@@ -71,30 +75,14 @@ namespace Pacmio
 
         public SignalColumn SignalColumn { get; }
 
-        public override BarAnalysisSet BarAnalysisSet(BarFreq _) => m_barAnalysisSet;
-
-        private readonly BarAnalysisSet m_barAnalysisSet = new BarAnalysisSet();
-
-
         // Make this part to research manager...
         public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
         {
 
         }
 
-        public void Calculate(BarTable bt, int i)
-        {
 
-
-        }
-
-        /// <summary>
-        /// !!! The Function Actually Makes The Purchase
-        /// </summary>
-        /// <param name="bt"></param>
-        public void Evaluate(BarTable bt)
-        {
-
-        }
     }
+
+  
 }

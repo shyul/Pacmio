@@ -42,6 +42,8 @@ namespace Pacmio
 
         public void Clear() => m_List.Clear();
 
+        public void Add(BarAnalysis ba) => m_List.CheckAdd(ba);
+
         private void SetBarAnalysisParents(BarAnalysis ba)
         {
             ba.Parents.Where(n => n is BarAnalysis).Select(n => (BarAnalysis)n).ToList().ForEach(n =>
