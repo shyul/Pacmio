@@ -69,9 +69,9 @@ namespace Pacmio
             Console.WriteLine(TabName + ": The BarChart is closing");
 
             lock (List) List.CheckRemove(this);
-            if (BarTable is BarTable)
+            if (m_BarTable is BarTable)
             {
-                lock (BarTable.DataViews) BarTable.DataViews.CheckRemove(this);
+                lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckRemove(this);
             }
             AsyncUpdateUITask_Cts.Cancel();
             HostContainer?.Remove(this);
@@ -98,9 +98,10 @@ namespace Pacmio
                 ReadyToShow = false;
 
                 BarTable = bt;
+                if (m_BarTable is BarTable) m_BarTable.CalculateOnly(BarAnalysisSet);
 
-                ReadyToShow = BarTable is BarTable;
-                if (ReadyToShow) StopPt = BarTable.Count;
+                ReadyToShow = m_BarTable is BarTable;
+                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -114,8 +115,8 @@ namespace Pacmio
 
                 BarAnalysisSet = bas;
 
-                ReadyToShow = BarTable is BarTable;
-                if (ReadyToShow) StopPt = BarTable.Count;
+                ReadyToShow = m_BarTable is BarTable;
+                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -129,8 +130,8 @@ namespace Pacmio
 
                 Strategy = s;
 
-                ReadyToShow = BarTable is BarTable;
-                if (ReadyToShow) StopPt = BarTable.Count;
+                ReadyToShow = m_BarTable is BarTable;
+                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -144,8 +145,8 @@ namespace Pacmio
                 BarTable = bt;
                 BarAnalysisSet = bas;
 
-                ReadyToShow = BarTable is BarTable;
-                if (ReadyToShow) StopPt = BarTable.Count;
+                ReadyToShow = m_BarTable is BarTable;
+                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -159,8 +160,8 @@ namespace Pacmio
                 BarTable = bt;
                 Strategy = s;
 
-                ReadyToShow = BarTable is BarTable;
-                if (ReadyToShow) StopPt = BarTable.Count;
+                ReadyToShow = m_BarTable is BarTable;
+                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -178,7 +179,7 @@ namespace Pacmio
 
             private set
             {
-                Strategy = value;
+                m_Strategy = value;
                 BarAnalysisSet = Strategy is Strategy ? Strategy[BarFreq] : null;
             }
         }
@@ -198,7 +199,7 @@ namespace Pacmio
                     foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
                     {
                         ic.ConfigChart(this);
-                        if (BarTable is BarTable bt) bt.CalculateOnly(bas);
+                        if (m_BarTable is BarTable bt) bt.CalculateOnly(bas);
                     }
                 }
             }
@@ -222,8 +223,6 @@ namespace Pacmio
                 if (m_BarTable is BarTable)
                 {
                     lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckAdd(this);
-
-                    //StopPt = m_BarTable.LastIndex;
                     TabName = Name = m_BarTable.Name;
                 }
                 else
@@ -236,7 +235,18 @@ namespace Pacmio
 
         private BarTable m_BarTable = null;
 
-        public override ITable Table => m_BarTable;
+        public override ITable Table
+        {
+            get => m_BarTable;
+
+            set
+            {
+                if (value is BarTable bt)
+                    BarTable = bt;
+                else
+                    m_BarTable = null;
+            }
+        }
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
