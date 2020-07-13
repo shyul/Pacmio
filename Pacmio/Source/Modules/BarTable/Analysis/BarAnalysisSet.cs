@@ -16,6 +16,16 @@ namespace Pacmio
 {
     public class BarAnalysisSet : IEnumerable<BarAnalysis>
     {
+        public BarAnalysisSet()
+        {
+
+        }
+
+        public BarAnalysisSet(BarAnalysisSet bas)
+        {
+            List = bas.List;
+        }
+
         public IEnumerable<BarAnalysis> List
         {
             get
@@ -27,7 +37,7 @@ namespace Pacmio
                 lock (m_List)
                 {
                     Clear();
-                    Add(value);
+                    AddRange(value);
                 }
             }
         }
@@ -42,7 +52,7 @@ namespace Pacmio
 
         public void Add(BarAnalysis ba) => m_List.CheckAdd(ba);
 
-        public void Add(IEnumerable<BarAnalysis> list) 
+        public void AddRange(IEnumerable<BarAnalysis> list)
         {
             list.ToList().ForEach(n =>
             {
@@ -53,6 +63,15 @@ namespace Pacmio
 
             PrintList();
         }
+
+        public static BarAnalysisSet Merge(BarAnalysisSet s1, BarAnalysisSet s2) 
+        {
+            BarAnalysisSet bas = new BarAnalysisSet(s1);
+            bas.AddRange(s2);
+            return bas;
+        }
+
+        public static BarAnalysisSet operator +(BarAnalysisSet s1, BarAnalysisSet s2) => Merge(s1, s2);
 
         private void SetBarAnalysisParents(BarAnalysis ba)
         {

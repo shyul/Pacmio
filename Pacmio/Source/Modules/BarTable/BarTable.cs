@@ -967,29 +967,33 @@ namespace Pacmio
                 }
         }
 
-        public void SimulateOnly(Strategy s)
+        public void CalculateOnly(BarAnalysisSet bas)
         {
-            if (Enabled && s[BarFreq] is BarAnalysisSet bas)
+            if (Enabled && Count > 0 && bas is BarAnalysisSet)
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
-                    // Send Signal
-
                     Calculate(bas);
-
-                    // Calculate the signal and position and 
-                    // Simulation the Strategy
-                    // With result...
-
-                    s.Simulate(this);
-
-                    Status = TableStatus.CalculateFinished;
-                    Status = TableStatus.Ready;
-                    // Send Signal
                 }
         }
 
-        public void CalculateOnly(BarAnalysisSet bas)
+        public void CalculateFinish(BarAnalysisSet bas)
+        {
+            if (Enabled && Count > 0 && bas is BarAnalysisSet)
+                lock (DataLockObject)
+                {
+                    if (Status == TableStatus.Calculating)
+                    {
+                        lock (DataViews)
+                        {
+                            DataViews.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).ToList().ForEach(n => { n.PointerToEnd(); });
+                        }
+                        m_Status = TableStatus.Ready;
+                    }
+                }
+        }
+
+        public void CalculateRefresh(BarAnalysisSet bas)
         {
             if (Enabled && Count > 0 && bas is BarAnalysisSet)
                 lock (DataLockObject)
@@ -999,9 +1003,13 @@ namespace Pacmio
 
                     Calculate(bas);
 
-                    Status = TableStatus.CalculateFinished;
-                    Status = TableStatus.Ready;
-                    // Send Signal
+                    //Status = TableStatus.CalculateFinished;
+                    //Status = TableStatus.Ready;
+                    lock (DataViews)
+                    {
+                        DataViews.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).ToList().ForEach(n => { n.PointerToEnd(); });
+                    }
+                    m_Status = TableStatus.Ready;
                 }
         }
 

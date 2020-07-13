@@ -20,7 +20,7 @@ namespace Pacmio
 
         }
 
-        public override ITable Table => throw new NotImplementedException();
+        public override ITable Table { get; set; }
 
         public override IEnumerable<GridStripe> Stripes => StripesSet;
 

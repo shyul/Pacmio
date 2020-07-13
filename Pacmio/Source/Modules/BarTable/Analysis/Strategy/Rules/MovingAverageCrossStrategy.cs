@@ -75,6 +75,29 @@ namespace Pacmio
 
         public SignalColumn SignalColumn { get; }
 
+        protected Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
+
+        public override void ClearBarAnalysisSet() => Analyses.Clear();
+
+        public override BarAnalysisSet this[BarFreq freq]
+        {
+            get
+            {
+                if (Analyses.ContainsKey(freq))
+                    return Analyses[freq];
+                else
+                    return null;
+            }
+            set
+            {
+                if (value is BarAnalysisSet bas)
+                    Analyses[freq] = new BarAnalysisSet(bas);
+                else if (Analyses.ContainsKey(freq))
+                    Analyses.Remove(freq);
+            }
+        }
+
+
         // Make this part to research manager...
         public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
         {

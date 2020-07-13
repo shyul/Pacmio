@@ -98,7 +98,7 @@ namespace Pacmio
                 ReadyToShow = false;
 
                 BarTable = bt;
-                if (m_BarTable is BarTable) m_BarTable.CalculateOnly(BarAnalysisSet);
+                if (m_BarTable is BarTable) m_BarTable.CalculateRefresh(BarAnalysisSet);
 
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastIndex;
@@ -199,7 +199,7 @@ namespace Pacmio
                     foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
                     {
                         ic.ConfigChart(this);
-                        if (m_BarTable is BarTable bt) bt.CalculateOnly(bas);
+                        if (m_BarTable is BarTable bt) bt.CalculateRefresh(bas);
                     }
                 }
             }

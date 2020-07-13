@@ -24,37 +24,9 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        protected Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
+        public abstract BarAnalysisSet this[BarFreq freq] { get; set; }
 
-        public BarAnalysisSet this[BarFreq freq]
-        {
-            get
-            {
-                if (Analyses.ContainsKey(freq))
-                    return Analyses[freq];
-                else
-                    return null;
-            }
-            set
-            {
-                if (value is BarAnalysisSet bas)
-                    Analyses[freq] = bas;
-                else if (Analyses.ContainsKey(freq))
-                    Analyses.Remove(freq);
-            }
-        }
-
-        public void Clear() => Analyses.Clear();
-
-        /*
-        public virtual BarAnalysisSet BarAnalysisSet(BarFreq barFreq)
-        {
-            if (Analyses.ContainsKey(barFreq))
-                return Analyses[barFreq];
-            else
-                return null;
-        }*/
-
+        public abstract void ClearBarAnalysisSet();// => Analyses.Clear();
 
         public virtual void Calculate(BarTable bt, int i)
         {
@@ -62,8 +34,15 @@ namespace Pacmio
 
         }
 
-        public void Simulate(BarTable bt)
+        public virtual void Simulate(Contract c)
         {
+            // Find all BarTables here
+
+            // Sort the BarFreq and calculate higher time scale first
+
+            // Lower Time Frame BarTable get loaded...
+            
+            // Lowest Time Frame gets Position Information
 
         }
 

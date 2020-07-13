@@ -27,7 +27,7 @@ namespace Pacmio
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
 
-        public override ITable Table => MarketDataTable;
+        public override ITable Table { get => MarketDataTable; set { } }
 
         public override IEnumerable<GridStripe> Stripes => StripesSet;
 

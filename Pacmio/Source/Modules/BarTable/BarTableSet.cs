@@ -92,7 +92,7 @@ namespace Pacmio
                     bt.Fetch(period, cts);
                     period = bt.Period;
                 }
-                bt.CalculateOnly(ias);
+                bt.CalculateRefresh(ias);
             }
         }
 
@@ -166,7 +166,7 @@ namespace Pacmio
             {
                 if (cts.Continue())
                 {
-                    bt.CalculateOnly(ias);
+                    bt.CalculateRefresh(ias);
                     i++;
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }
