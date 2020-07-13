@@ -23,74 +23,30 @@ namespace Pacmio
     public static class StrategyManager
     {
         /// <summary>
-        /// List of all available trade rules
+        /// List of all available Strategies
         /// </summary>
-        public static readonly List<Strategy> List = new List<Strategy>();
+        public static List<Strategy> StrategyList { get; } = new List<Strategy>();
 
 
+        /// <summary>
+        /// List of all available Contracts
+        /// </summary>
+        public static List<Contract> ContractList { get; } = new List<Contract>();
 
+        public static BarTableSet BarTableSet { get; } = new BarTableSet();
 
-        public static Dictionary<Contract, Strategy> WatchList = new Dictionary<Contract, Strategy>();
+        public static int MaxDegreeOfParallelism => Root.DegreeOfParallelism;
 
-
-
-
-        public static void GetWatchList(IEnumerable<Stock> list, CancellationTokenSource cts, IProgress<float> progress) // Get it from the Market Scanner
+        public static void Simulate(Period pd, CancellationTokenSource cts)
         {
-            /*
-            int count = list.Count();
-            int i = 0;
-            foreach (Stock stk in list)
-            {
-                if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
-                BarTable bt = stk.GetTableOld(BarFreq.Daily, BarType.Trades);
-                bt.LoadOnly(new Period(new DateTime(1900, 1, 1), DateTime.Now));
-                i++;
-                progress?.Report(i * 100.0f / count);
-            }*/
-        }
-
-        public static void GetWatchList(List<Contract> list)
-        {
-
+            foreach (Contract c in ContractList)
+                foreach (Strategy s in StrategyList)
+                {
+                    s.Calculate(c, pd, cts);
+                }
         }
 
 
-        public static void GetWatchList(int daysSinceIPO, Range<double> priceRange, Range<double> volumeRange) // Types // Sinc 
-        {
-
-
-        }
-
-        public static void CleanUpWatchList()
-        {
-
-
-        }
-
-
-
-        public static void Optimize()
-        {
-            // We have to run one symbol of a time, or the RAM is going to explode.
-
-
-        }
-
-
-        public static void Simulate()
-        {
-
-
-
-        }
-
-
-        public static void LiveTrade()
-        {
-
-
-        }
 
 
         // New Types for Bar

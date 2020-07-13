@@ -81,7 +81,7 @@ namespace Pacmio
 
                     TradeActionType this_Type = TradeActionType.None;
 
-                    if (bt[i][ias] is BarPosition bp)
+                    if (bt[i][ias] is BarAnalysisSetData bp)
                     {
                         this_Type = bp.ActionType;
                         if (i >= 0)

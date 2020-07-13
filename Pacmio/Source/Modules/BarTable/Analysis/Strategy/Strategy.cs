@@ -8,11 +8,73 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio
 {
+    /// <summary>
+    /// Condition Filter: yield: push into lower time frame BarTable
+    /// what does it do? Calculate(BarAnalysisPointer bap)
+
+    /// </summary>
+    public abstract class Filter : Indicator
+    {
+        public Filter()
+        {
+            // Prepare the BarAnalysis needed in this filter
+        }
+
+        // also list the BarAnalysis needed here
+
+        public virtual (BarFreq Freq, BarType Type) LowerTimeFrame { get; }
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+            /// 1. Finish a group of BarAnalysis
+            /// 2. Yield signal score and storage them in the BarAnalysisSetData
+            /// 3. Yeild important levels and trend lines !! and storage them in the BarAnalysisSetData ->> accessible to lower time frame indicators
+            /// 4. IF Signal Score is met: Load the lower time frame BarTable from StrategyManager.BarTableSet with Period setttings
+            /// 5. Run Lower Time Frame Calculate
+            /// 
+
+            /// Filter does not yield trading result, only push into lower time frame analysis
+        }
+
+
+    }
+
+    /// <summary>
+    /// Indication: Move into Either Enter or Exit
+    /// Passive: Only yield signal score
+    /// </summary>
+    public abstract class Indicator : BarAnalysis
+    {
+        /// <summary>
+        /// The BarAnalysisSet this Indicator belongs to.
+        /// So you have find Signal Datum to put signal in
+        /// </summary>
+        public BarAnalysisSet BarAnalysisSet { get; }
+    }
+
+
+    /// <summary>
+    /// Confirmation and Validation: yield enter position
+    /// Settings: Sizing strategy, Account #, Time in effect, OrderType, Order Expiry, and so on...
+    /// Does not yield signal score
+    /// </summary>
+    public abstract class PositionAnalysis : Indicator
+    {
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+        }
+    }
+
+
+
+
     public abstract class Strategy : IEquatable<Strategy>
     {
         public Strategy(string name)
@@ -24,14 +86,63 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        public abstract BarAnalysisSet this[BarFreq freq] { get; set; }
+        protected Dictionary<(BarFreq BarFreq, BarType BarType), (BarAnalysisSet BarAnalysisSet, int Units)> Analyses { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), (BarAnalysisSet BarAnalysisSet, int Units)>();
 
-        public abstract void ClearBarAnalysisSet();// => Analyses.Clear();
+        public virtual void ClearBarAnalysisSet() => Analyses.Clear();
 
-        public virtual void Calculate(BarTable bt, int i)
+        //public BarFreq FilterBarFreq { get; set; }
+
+        /// <summary>
+        /// BarFreq for Trading || Evaluate Positions
+        /// All other BarFreq are filters and should be calculated from high to low
+        /// 
+        /// How Filter works
+        /// 1. Get the filter event
+        /// 2. Download 300 units before the event, and one unit worth of data after the event for calculation and evaluations
+        /// </summary>
+        public BarFreq PrimaryBarFreq { get; set; }
+
+        public virtual (BarAnalysisSet BarAnalysisSet, int Units) this[BarFreq BarFreq, BarType BarType = BarType.Trades]
         {
+            get
+            {
+                if (Analyses.ContainsKey((BarFreq, BarType)))
+                    return Analyses[(BarFreq, BarType)];
+                else
+                    return (null, 0);
+            }
+            set
+            {
+                if (value.BarAnalysisSet is BarAnalysisSet bas && value.Units > 0)
+                    Analyses[(BarFreq, BarType)] = (new BarAnalysisSet(bas), value.Units);
+                else if (Analyses.ContainsKey((BarFreq, BarType)))
+                    Analyses.Remove((BarFreq, BarType));
+            }
+        }
+
+        public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)
+        {
+            var list = Analyses.OrderByDescending(n => n.Key.BarFreq);
+
+            int i = 0;
+            foreach (var item in list)
+            {
+                BarTable bt = StrategyManager.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
 
 
+
+
+                BarAnalysisSet bas = item.Value.BarAnalysisSet;
+
+
+
+                bt.CalculateOnly(bas);
+
+                i++;
+            }
+
+            // Evaluate at the end
+            Evaluate(c);
         }
 
         public virtual void Simulate(Contract c)
@@ -41,7 +152,7 @@ namespace Pacmio
             // Sort the BarFreq and calculate higher time scale first
 
             // Lower Time Frame BarTable get loaded...
-            
+
             // Lowest Time Frame gets Position Information
 
         }
@@ -54,8 +165,14 @@ namespace Pacmio
 
         #region Trading Timing
 
+        /// <summary>
+        /// The number of days for getting the bench mark
+        /// </summary>
         public int TrainingDays { get; set; } = 2;
 
+        /// <summary>
+        /// The number of days enters the actual trade (Evaluate) or tradelog for simulation | final bench mark
+        /// </summary>
         public int TradingDays { get; set; } = 1;
 
         /// <summary>

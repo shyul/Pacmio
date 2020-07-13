@@ -11,9 +11,9 @@ using System.Collections.Generic;
 
 namespace Pacmio
 {
-    public sealed class BarPosition
+    public sealed class BarAnalysisSetData
     {
-        public BarPosition(Bar b, BarAnalysisSet bas)
+        public BarAnalysisSetData(Bar b, BarAnalysisSet bas)
         {
             Bar = b;
             BarAnalysisSet = bas;
@@ -31,7 +31,7 @@ namespace Pacmio
 
         public void Snapshot()
         {
-            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[BarAnalysisSet] is BarPosition bp_1)
+            if (Bar.Table.LastBar_1 is Bar b_1 && b_1[BarAnalysisSet] is BarAnalysisSetData bp_1)
             {
                 Quantity = bp_1.Quantity;
                 AveragePrice = bp_1.AveragePrice;
@@ -70,6 +70,12 @@ namespace Pacmio
         public Bar Bar { get; }
 
         public BarAnalysisSet BarAnalysisSet { get; }
+
+
+        /// <summary>
+        /// TODO: Fix this 
+        /// </summary>
+        public List<TrendLine> ImportantTrendLines = new List<TrendLine>();
 
         public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
 

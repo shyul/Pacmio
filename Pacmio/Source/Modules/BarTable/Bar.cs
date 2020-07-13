@@ -323,16 +323,16 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private readonly Dictionary<BarAnalysisSet, BarPosition> TradeDatums = new Dictionary<BarAnalysisSet, BarPosition>();
+        private readonly Dictionary<BarAnalysisSet, BarAnalysisSetData> TradeDatums = new Dictionary<BarAnalysisSet, BarAnalysisSetData>();
 
-        public BarPosition this[BarAnalysisSet bas]
+        public BarAnalysisSetData this[BarAnalysisSet bas]
         {
             get
             {
                 if (!TradeDatums.ContainsKey(bas))
                 {
                     // TODO: Can not create BP like this !!!
-                    TradeDatums.Add(bas, new BarPosition(this, bas));
+                    TradeDatums.Add(bas, new BarAnalysisSetData(this, bas));
                 }
 
                 return TradeDatums[bas];

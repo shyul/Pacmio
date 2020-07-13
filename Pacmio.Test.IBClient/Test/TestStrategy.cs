@@ -16,27 +16,5 @@ namespace TestClient
         {
             Analyses.Add(freq, BarTableTest.TestBarAnalysisSet);
         }
-
-        protected Dictionary<BarFreq, BarAnalysisSet> Analyses { get; } = new Dictionary<BarFreq, BarAnalysisSet>();
-
-        public override void ClearBarAnalysisSet() => Analyses.Clear();
-
-        public override BarAnalysisSet this[BarFreq freq]
-        {
-            get
-            {
-                if (Analyses.ContainsKey(freq))
-                    return Analyses[freq];
-                else
-                    return null;
-            }
-            set
-            {
-                if (value is BarAnalysisSet bas)
-                    Analyses[freq] = new BarAnalysisSet(bas);
-                else if (Analyses.ContainsKey(freq))
-                    Analyses.Remove(freq);
-            }
-        } 
     }
 }

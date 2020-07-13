@@ -1,8 +1,16 @@
+Task for Initial Strategy:
+1. ASK: How to get signal datum?
+2. Get a sample scalping Strategy complete
+3. Compare Training vs without training?
+
+
+a. Strategy as BAS group vs BarFreq
+b. Strategy Datum containing SignalDatum and Position Log
+c. Strategy Signal Calculation BarAnalysis -> Knows which BAS it belongs to..
+
+
 1. Order -> OrderInfo -> Trade Log -> Position
 2. Pattern:
-
-
-
 
 Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
 Parse Errors: (0)"4"-(1)"2"-(2)"202"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 202"

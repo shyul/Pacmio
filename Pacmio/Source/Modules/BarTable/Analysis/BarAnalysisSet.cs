@@ -99,6 +99,12 @@ namespace Pacmio
             });
         }
 
+        public BarFreq BarFreq { get; set; }
+
+        public BarType BarType { get; set; } = BarType.Trades;
+
+        public int TrainingUnit { get; set; } = 1000;
+
         public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
     }
 }
