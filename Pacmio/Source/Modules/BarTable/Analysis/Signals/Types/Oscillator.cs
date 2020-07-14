@@ -15,7 +15,13 @@ namespace Pacmio
 {
     public enum OscillatorType : int
     {
+        Positive,
 
+        Negative,
+
+        Oversold,
+
+        Overbought,
 
     }
 

@@ -74,6 +74,7 @@ namespace TestClient
                         //new ADX(14) { Order = 100, HasXAxisBar = true },
 
                         new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50),
+                        new ConstantIndicator(rsi),
                         //indicator_reference_cross,
                         //new CandleStick(),
                     }
