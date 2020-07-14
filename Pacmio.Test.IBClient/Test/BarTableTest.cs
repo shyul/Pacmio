@@ -27,6 +27,16 @@ namespace TestClient
 
                 //var boll = new Bollinger(20, 2.0);
 
+                SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
+                SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
+                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+
+                //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
+
+
+               // ma_cross.SignalColumn.BullishColor = fast_MA.Color;
+                //ma_cross.SignalColumn.BearishColor = slow_MA.Color;
+
                 BarAnalysisSet bas = new BarAnalysisSet()
                 {
                     List = new List<BarAnalysis>
@@ -48,8 +58,9 @@ namespace TestClient
                         //new SMA(20) { Color = Color.Green },
                         //new SMA(50) { Color = Color.Tomato },
                         new EMA(200) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
-                        new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 },
-                        new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 },
+                        //fast_MA,
+                        //slow_MA,
+                        ma_cross,
                         //new HMA(16) { Color = Color.LimeGreen },
                         //new WMA(16) { Color = Color.LimeGreen },
                         //new EMA(5) { Color = Color.SteelBlue },
@@ -72,10 +83,9 @@ namespace TestClient
                         new ADX(14) { AreaRatio = 10,HasXAxisBar = true },
                         //new CCI(20, 0.015),
                         //new ADX(14) { Order = 100, HasXAxisBar = true },
-
-                        new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50),
+                   
                         new ConstantIndicator(rsi),
-                        //indicator_reference_cross,
+                        
                         //new CandleStick(),
                     }
                 };

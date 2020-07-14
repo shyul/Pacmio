@@ -85,14 +85,14 @@ namespace Pacmio
 
         public readonly Dictionary<ConstantDataType, double[]> TypeToScore = new Dictionary<ConstantDataType, double[]>
         {
-            { ConstantDataType.Above, new double[] { 0.25 } },
-            { ConstantDataType.CrossDown, new double[] { -3.5, -3, -2 } },
+            { ConstantDataType.Above, new double[] { 2 } },
+            { ConstantDataType.CrossDown, new double[] { -4, -3.5, -3, -2 } },
             { ConstantDataType.EnterFromAbove, new double[] { -1 } },
-            { ConstantDataType.ExitAbove, new double[] { 3, 2 } },
-            { ConstantDataType.ExitBelow, new double[] { -3, -2 } },
+            { ConstantDataType.ExitAbove, new double[] { 3, 2, 1 } },
+            { ConstantDataType.ExitBelow, new double[] { -3, -2, -1 } },
             { ConstantDataType.Within, new double[] { 0 } },
-            { ConstantDataType.CrossUp, new double[] { 3.5, 3, 2 } },
-            { ConstantDataType.Below, new double[] { -0.25 } },
+            { ConstantDataType.CrossUp, new double[] { 4, 3.5, 3, 2 } },
+            { ConstantDataType.Below, new double[] { -2 } },
             { ConstantDataType.EnterFromBelow, new double[] { 1 } },
         };
 

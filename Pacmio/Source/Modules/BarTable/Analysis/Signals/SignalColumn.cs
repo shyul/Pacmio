@@ -31,8 +31,9 @@ namespace Pacmio
             }
             set
             {
-                BullishTheme.ForeColor = BullishTheme.FillColor = value;
-                BullishTheme.EdgeColor = value.Opaque(196);
+                BullishTheme.ForeColor = value;
+                BullishTheme.FillColor = value.Opaque(64);
+                BullishTheme.EdgeColor = value.Opaque(255);
             }
         } //= Color.Green;
 
@@ -44,8 +45,9 @@ namespace Pacmio
             }
             set
             {
-                BearishTheme.ForeColor = BearishTheme.FillColor = value;
-                BearishTheme.EdgeColor = value.Opaque(196);
+                BearishTheme.ForeColor = value;
+                BearishTheme.FillColor = value.Opaque(64);
+                BearishTheme.EdgeColor = value.Opaque(255);
             }
         } //= Color.Red;
 

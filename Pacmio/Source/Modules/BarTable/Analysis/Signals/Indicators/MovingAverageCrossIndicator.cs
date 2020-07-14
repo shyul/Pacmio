@@ -31,13 +31,19 @@ namespace Pacmio
             string label = "(" + Fast_MA.Name + "," + Slow_MA.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            SignalColumn = new SignalColumn(Name, label);// { BullishColor = Fast_MA.Color, BearishColor = Slow_MA.Color };
+            SignalColumn = new SignalColumn(Name, label) 
+            {
+                BullishColor = Fast_MA.Color, 
+                BearishColor = Slow_MA.Color 
+            };
+
             SignalColumns = new SignalColumn[] { SignalColumn };
         }
 
         public MovingAverageCrossIndicator(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
             (Fast_MA, Slow_MA) = Config(type_fast, interval_fast, type_slow, interval_slow);
+
             Fast_Column = Fast_MA.Result_Column;
             Slow_Column = Slow_MA.Result_Column;
 
@@ -47,7 +53,7 @@ namespace Pacmio
             string label = "(" + Fast_MA.Name + "," + Slow_MA.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            SignalColumn = new SignalColumn(Name, label);// { BullishColor = Fast_MA.Color, BearishColor = Slow_MA.Color };
+            SignalColumn = new SignalColumn(Name, label);
             SignalColumns = new SignalColumn[] { SignalColumn };
         }
 
