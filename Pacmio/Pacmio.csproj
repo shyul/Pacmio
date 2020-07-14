@@ -107,14 +107,13 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Filter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\DualDataIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\OscillatorType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalTool.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\ConstantDataType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DivergenceType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualDataType.cs" />

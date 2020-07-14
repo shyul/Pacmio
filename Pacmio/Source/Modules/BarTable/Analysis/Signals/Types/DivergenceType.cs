@@ -4,6 +4,11 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xu;
+
 namespace Pacmio
 {
     public enum DivergenceType : int
@@ -25,4 +30,23 @@ namespace Pacmio
 
         HiddenNegative
     }
+
+    public class DivergenceIndicator : Indicator
+    {
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
+
+        #region Divergence Tools
+
+        public static void Divergence(BarTable bt, int i, int minimumPeakMargin)
+        {
+
+        }
+
+        #endregion Divergence Tools
+    }
+
+
 }

@@ -41,5 +41,39 @@ namespace Pacmio
         public double[] Points { get; private set; }
 
         public double Score { get; private set; }
+
+        #region Point Tools
+
+        public static void MergePoints(List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] += points[i];
+                else
+                    list.Add(points[i]);
+            }
+        }
+
+        public static void MergePointsNegative(List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] -= points[i];
+                else
+                    list.Add(-points[i]);
+            }
+        }
+
+        public static void MergePoints(List<double> list, double point)
+        {
+            if (list.Count > 0)
+                list[0] += point;
+            else
+                list.Add(point);
+        }
+
+        #endregion Point Tools
     }
 }
