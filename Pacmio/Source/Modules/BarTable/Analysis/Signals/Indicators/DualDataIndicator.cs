@@ -48,16 +48,26 @@ namespace Pacmio
 
         public Dictionary<DualDataType, double[]> TypeToScore { get; } = new Dictionary<DualDataType, double[]>
         {
+            { DualDataType.Above, new double[] { 0.5 } },
+            { DualDataType.Below, new double[] { -0.5 } },
+            { DualDataType.Expansion, new double[] { 1 } },
+            { DualDataType.Contraction, new double[] { 1 } },
+            { DualDataType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
+            { DualDataType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
+            { DualDataType.TrendUp, new double[] { 0.5 } },
+            { DualDataType.TrendDown, new double[] { -0.5 } },
+        };
+        public Dictionary<DualDataType, double[]> TypeToScore2 { get; } = new Dictionary<DualDataType, double[]>
+        {
             { DualDataType.Above, new double[] { 0.25 } },
             { DualDataType.Below, new double[] { -0.25 } },
             { DualDataType.Expansion, new double[] { 1 } },
-            { DualDataType.Contraction, new double[] { -0.25 } },
+            { DualDataType.Contraction, new double[] { 0.25 } },
             { DualDataType.CrossUp, new double[] { 3, 2, 1 } },
             { DualDataType.CrossDown, new double[] { -3, -2, -1 } },
             { DualDataType.TrendUp, new double[] { 1 } },
             { DualDataType.TrendDown, new double[] { -1 } },
         };
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -80,6 +90,8 @@ namespace Pacmio
                 }
                 else
                     sd.Set(points, description);
+
+                Console.WriteLine("Score: " + sd.Score);
             }
 
         }

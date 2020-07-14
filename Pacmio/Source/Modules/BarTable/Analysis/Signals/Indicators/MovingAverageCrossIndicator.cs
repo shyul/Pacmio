@@ -23,10 +23,13 @@ namespace Pacmio
             Fast_Column = Fast_MA.Result_Column;
             Slow_Column = Slow_MA.Result_Column;
 
+            Fast_MA.AddChild(this);
+            Slow_MA.AddChild(this);
+
             string label = "(" + Fast_MA.Name + "," + Slow_MA.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            SignalColumn = new SignalColumn(Name, label);
+            SignalColumn = new SignalColumn(Name, label);// { BullishColor = Fast_MA.Color, BearishColor = Slow_MA.Color };
             SignalColumns = new SignalColumn[] { SignalColumn };
         }
 

@@ -240,7 +240,7 @@ namespace Pacmio
             return dualDataTypes;
         }
 
-        public static (double[] points ,string description) DualDataSignal(this BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column, Dictionary<DualDataType, double[]> typeToScore)
+        public static (double[] points, string description) DualDataSignal(this BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column, Dictionary<DualDataType, double[]> typeToScore)
         {
             List<DualDataType> dualDataTypes = new List<DualDataType>();
             List<double> point_list = new List<double>();

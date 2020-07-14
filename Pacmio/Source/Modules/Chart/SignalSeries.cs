@@ -38,12 +38,14 @@ namespace Pacmio
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    var (bullish, bearish) = Table[i].SignalScore(BarAnalysisSet);
-
-
-
-                    axisY.Range.Insert(bullish);
-                    axisY.Range.Insert(bearish);
+                    if (i >= table.Count)
+                        break;
+                    else if (i > 0) 
+                    {
+                        var (bullish, bearish) = Table[i].SignalScore(BarAnalysisSet);
+                        axisY.Range.Insert(bullish);
+                        axisY.Range.Insert(bearish);
+                    }
                 }
             }
             else
@@ -103,7 +105,7 @@ namespace Pacmio
                             }
                             else if (score < 0)
                             {
-                                height = axisY.ValueToPixel(-score) - ref_pix;
+                                height = axisY.ValueToPixel(score) - ref_pix;
                                 rect = new Rectangle(x, neg_base_pix, tickWidth, height);
                                 neg_base_pix += height;
                                 g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
