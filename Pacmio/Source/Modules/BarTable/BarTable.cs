@@ -137,47 +137,6 @@ namespace Pacmio
             }
         }
 
-
-        public (string description, double score) this[int i, BarAnalysisSet bas, SignalColumn column]
-        {
-            get
-            {
-                string description = string.Empty;
-                double score = 0;
-
-                for (int j = 0; j < column.MaxEffectLength; j++)
-                {
-                    int k = i - j;
-                    if (k >= 0 && k < Count)
-                    {
-                        if (Rows[k][bas][column] is SignalDatum sd)
-                        {
-                            if (string.IsNullOrEmpty(description)) description = sd.Description;
-                            score += sd.Scores[j];
-                        }
-                    }
-                }
-
-                return (description, score);
-            }
-        }
-
-        public (double bullish, double bearish) this[int i, BarAnalysisSet bas]
-        {
-            get
-            {
-                double bull = 0, bear = 0;
-                foreach (SignalColumn sc in bas.SignalColumns)
-                {
-                    var (_, score) = this[i, bas, sc];
-                    if (score > 0) bull += score;
-                    else if (score < 0) bear += score;
-                }
-
-                return (bull, bear);
-            }
-        }
-
         private void Clear()
         {
             lock (DataLockObject)

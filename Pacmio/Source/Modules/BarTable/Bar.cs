@@ -203,7 +203,7 @@ namespace Pacmio
         /// BarAnalysis Data Line
         /// </summary>
         // set is not allowed// One column only has one data
-        private readonly Dictionary<NumericColumn, double> NumericDatums = new Dictionary<NumericColumn, double>();
+        private Dictionary<NumericColumn, double> NumericDatums { get; } = new Dictionary<NumericColumn, double>();
 
         public double this[NumericColumn column]
         {
@@ -283,7 +283,7 @@ namespace Pacmio
 
         #region Tag Column
 
-        private readonly Dictionary<TagColumn, TagInfo> TagDatums = new Dictionary<TagColumn, TagInfo>();
+        private Dictionary<TagColumn, TagInfo> TagDatums { get; } = new Dictionary<TagColumn, TagInfo>();
 
         public TagInfo this[TagColumn column]
         {
@@ -318,22 +318,63 @@ namespace Pacmio
 
         #endregion Tag Column
 
+        #region Signal Information
+
+        public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
+
+        public SignalDatum this[SignalColumn column]
+        {
+            get
+            {
+                if (!SignalDatums.ContainsKey(column))
+                    SignalDatums.Add(column, new SignalDatum());
+
+                return SignalDatums[column];
+            }
+            set
+            {
+                if (!SignalDatums.ContainsKey(column))
+                    SignalDatums.Add(column, value);
+                else
+                {
+                    if (value is null)
+                        SignalDatums.Remove(column);
+                    else
+                        SignalDatums[column] = value;
+                }
+            }
+        }
+
+        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas)
+        {
+            double bull = 0, bear = 0;
+            foreach (SignalColumn sc in bas.SignalColumns)
+            {
+                if (this[sc] is SignalDatum sd)
+                {
+                    double score = sd.Score;
+                    if (score > 0) bull += score;
+                    else if (score < 0) bear += score;
+                }
+            }
+            return (bull, bear);
+        }
+
+        #endregion Signal Information
+
         #region Position / Simulation Information
 
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private readonly Dictionary<BarAnalysisSet, BarAnalysisSetData> TradeDatums = new Dictionary<BarAnalysisSet, BarAnalysisSetData>();
+        private Dictionary<BarAnalysisSet, BarAnalysisSetData> TradeDatums { get; } = new Dictionary<BarAnalysisSet, BarAnalysisSetData>();
 
         public BarAnalysisSetData this[BarAnalysisSet bas]
         {
             get
             {
                 if (!TradeDatums.ContainsKey(bas))
-                {
-                    // TODO: Can not create BP like this !!!
                     TradeDatums.Add(bas, new BarAnalysisSetData(this, bas));
-                }
 
                 return TradeDatums[bas];
             }
@@ -354,6 +395,7 @@ namespace Pacmio
             NumericDatums.Clear();
             TagDatums.Clear();
             TradeDatums.Clear();
+            SignalDatums.Clear();
         }
     }
 }

@@ -73,7 +73,7 @@ namespace TestClient
                         //new CCI(20, 0.015),
                         //new ADX(14) { Order = 100, HasXAxisBar = true },
 
-
+                        new MovingAverageCrossIndicator(MovingAverageType.Exponential, 9, MovingAverageType.Exponential, 13),
                         //indicator_reference_cross,
                         //new CandleStick(),
                     }

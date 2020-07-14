@@ -325,7 +325,7 @@ namespace TestClient
             Task.Run(() =>
             {
                 var list = ContractList.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
-                StrategyManager.GetWatchList(list, Cts, Progress);
+                //StrategyManager.GetWatchList(list, Cts, Progress);
             }, Cts.Token);
         }
 

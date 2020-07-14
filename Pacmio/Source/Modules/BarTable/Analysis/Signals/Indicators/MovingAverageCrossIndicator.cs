@@ -2,29 +2,43 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// The trade rule applies to each contract
+/// 
 /// ***************************************************************************
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
-    public class MovingAverageCrossStrategy : Strategy
+    public class MovingAverageCrossIndicator : DualDataIndicator
     {
-        public MovingAverageCrossStrategy(string name) : base(name)
+        public MovingAverageCrossIndicator(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
-            Name = name;
-            SignalColumn = new SignalColumn(Name);
+            (Fast_MA, Slow_MA) = Config(type_fast, interval_fast, type_slow, interval_slow);
+            Fast_Column = Fast_MA.Result_Column;
+            Slow_Column = Slow_MA.Result_Column;
 
+            string label = "(" + Fast_MA.Name + "," + Slow_MA.Name + ")";
+            GroupName = Name = GetType().Name + label;
+
+            SignalColumn = new SignalColumn(Name, label);
+            SignalColumns = new SignalColumn[] { SignalColumn };
         }
 
-        public void Config(BarFreq freq, MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
+        public override int GetHashCode() => GetType().GetHashCode() ^ Fast_MA.GetHashCode() ^ Slow_MA.GetHashCode();
+
+        public SMA Fast_MA { get; }
+
+        public SMA Slow_MA { get; }
+
+        public static (SMA Fast, SMA Slow) Config(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
-            BarAnalysisSet bas = new BarAnalysisSet();
+            SMA MA_Fast = null, MA_Slow = null;
 
             switch (type_fast)
             {
@@ -64,28 +78,7 @@ namespace Pacmio
                     break;
             }
 
-            bas.List = new List<BarAnalysis>() { MA_Fast, MA_Slow};
-
-
+            return (MA_Fast, MA_Slow);
         }
-
-        public SMA MA_Fast { get; private set; }
-
-        public SMA MA_Slow { get; private set; }
-
-        public SignalColumn SignalColumn { get; }
-
-
-
-
-        // Make this part to research manager...
-        public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
-        {
-
-        }
-
-
     }
-
-  
 }

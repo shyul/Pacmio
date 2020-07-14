@@ -15,66 +15,6 @@ using Xu;
 
 namespace Pacmio
 {
-    /// <summary>
-    /// Condition Filter: yield: push into lower time frame BarTable
-    /// what does it do? Calculate(BarAnalysisPointer bap)
-
-    /// </summary>
-    public abstract class Filter : Indicator
-    {
-        public Filter()
-        {
-            // Prepare the BarAnalysis needed in this filter
-        }
-
-        // also list the BarAnalysis needed here
-
-        public virtual (BarFreq Freq, BarType Type) LowerTimeFrame { get; }
-
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-            /// 1. Finish a group of BarAnalysis
-            /// 2. Yield signal score and storage them in the BarAnalysisSetData
-            /// 3. Yeild important levels and trend lines !! and storage them in the BarAnalysisSetData ->> accessible to lower time frame indicators
-            /// 4. IF Signal Score is met: Load the lower time frame BarTable from StrategyManager.BarTableSet with Period setttings
-            /// 5. Run Lower Time Frame Calculate
-            /// 
-
-            /// Filter does not yield trading result, only push into lower time frame analysis
-        }
-
-
-    }
-
-    /// <summary>
-    /// Indication: Move into Either Enter or Exit
-    /// Passive: Only yield signal score
-    /// </summary>
-    public abstract class Indicator : BarAnalysis
-    {
-        /// <summary>
-        /// The BarAnalysisSet this Indicator belongs to.
-        /// So you have find Signal Datum to put signal in
-        /// </summary>
-        public BarAnalysisSet BarAnalysisSet { get; }
-    }
-
-
-    /// <summary>
-    /// Confirmation and Validation: yield enter position
-    /// Settings: Sizing strategy, Account #, Time in effect, OrderType, Order Expiry, and so on...
-    /// Does not yield signal score
-    /// </summary>
-    public abstract class PositionAnalysis : Indicator
-    {
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-        }
-    }
-
-
-
-
     public abstract class Strategy : IEquatable<Strategy>
     {
         public Strategy(string name)
@@ -86,7 +26,7 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        protected Dictionary<(BarFreq BarFreq, BarType BarType), (BarAnalysisSet BarAnalysisSet, int Units)> Analyses { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), (BarAnalysisSet BarAnalysisSet, int Units)>();
+        protected Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> Analyses { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
 
         public virtual void ClearBarAnalysisSet() => Analyses.Clear();
 
@@ -102,19 +42,19 @@ namespace Pacmio
         /// </summary>
         public BarFreq PrimaryBarFreq { get; set; }
 
-        public virtual (BarAnalysisSet BarAnalysisSet, int Units) this[BarFreq BarFreq, BarType BarType = BarType.Trades]
+        public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
         {
             get
             {
                 if (Analyses.ContainsKey((BarFreq, BarType)))
                     return Analyses[(BarFreq, BarType)];
                 else
-                    return (null, 0);
+                    return null;
             }
             set
             {
-                if (value.BarAnalysisSet is BarAnalysisSet bas && value.Units > 0)
-                    Analyses[(BarFreq, BarType)] = (new BarAnalysisSet(bas), value.Units);
+                if (value is BarAnalysisSet bas)
+                    Analyses[(BarFreq, BarType)] = new BarAnalysisSet(bas);
                 else if (Analyses.ContainsKey((BarFreq, BarType)))
                     Analyses.Remove((BarFreq, BarType));
             }
@@ -132,7 +72,7 @@ namespace Pacmio
 
 
 
-                BarAnalysisSet bas = item.Value.BarAnalysisSet;
+                BarAnalysisSet bas = item.Value;
 
 
 

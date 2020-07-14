@@ -38,7 +38,7 @@ namespace Pacmio
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    var (bullish, bearish) = Table[i, BarAnalysisSet];
+                    var (bullish, bearish) = Table[i].SignalScore(BarAnalysisSet);
 
 
 
@@ -85,7 +85,10 @@ namespace Pacmio
 
                         foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
                         {
-                            var (desc, score) = Table[i, BarAnalysisSet, sc];
+                            SignalDatum sd = Table[i][sc];
+
+                            string desc = sd.Description;
+                            double score = sd.Score;
 
                             Rectangle rect;
                             int height;

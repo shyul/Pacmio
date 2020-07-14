@@ -14,7 +14,7 @@ namespace TestClient
     {
         public TestStrategy(BarFreq freq) : base("TestTradeRule")
         {
-            Analyses.Add(freq, BarTableTest.TestBarAnalysisSet);
+            this[freq] = BarTableTest.TestBarAnalysisSet;
         }
     }
 }

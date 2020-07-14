@@ -26,7 +26,7 @@ namespace Pacmio
             ActionType = TradeActionType.None;
             Quantity = 0;
             AveragePrice = double.NaN;
-            SignalDatums.Clear();
+
         }
 
         public void Snapshot()
@@ -73,34 +73,11 @@ namespace Pacmio
 
 
         /// <summary>
-        /// TODO: Fix this 
+        /// TODO: Fix this
         /// </summary>
         public List<TrendLine> ImportantTrendLines = new List<TrendLine>();
 
-        public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
 
-        public SignalDatum this[SignalColumn column]
-        {
-            get
-            {
-                if (SignalDatums.ContainsKey(column))
-                    return SignalDatums[column];
-                else
-                    return null;
-            }
-            set
-            {
-                if (!SignalDatums.ContainsKey(column))
-                    SignalDatums.Add(column, value);
-                else
-                {
-                    if (value is null)
-                        SignalDatums.Remove(column);
-                    else
-                        SignalDatums[column] = value;
-                }
-            }
-        }
 
         public TradeActionType ActionType { get; private set; } = TradeActionType.None;
 

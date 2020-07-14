@@ -105,6 +105,11 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Filter.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\DualDataIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStickType.cs" />
@@ -124,7 +129,7 @@
     <Compile Include="Source\Modules\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarPosition.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetData.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
@@ -306,6 +311,9 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Modules\BarTable\Analysis\Signals\Filters\" />
+    <Folder Include="Source\Modules\BarTable\Analysis\Strategy\PositionAnalysis\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

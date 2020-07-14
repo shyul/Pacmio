@@ -7,12 +7,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
 {
     public static class SignalTool
     {
+        public static void MergePoints(this List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] += points[i];
+                else
+                    list.Add(points[i]);
+            }
+        }
+
+        public static void MergePointsNegative(this List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] -= points[i];
+                else
+                    list.Add(-points[i]);
+            }
+        }
+
+        public static void MergePoints(this List<double> list, double point)
+        {
+            if (list.Count > 0)
+                list[0] += point;
+            else
+                list.Add(point);
+        }
+
         #region Constant Data
 
         public static ConstantDataType ConstantDataSignal(this BarTable bt, int i, ISingleData analysis, double constant)
@@ -205,6 +238,83 @@ namespace Pacmio
             }
 
             return dualDataTypes;
+        }
+
+        public static (double[] points ,string description) DualDataSignal(this BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column, Dictionary<DualDataType, double[]> typeToScore)
+        {
+            List<DualDataType> dualDataTypes = new List<DualDataType>();
+            List<double> point_list = new List<double>();
+
+            double value_fast = bt[i, fast_Column];
+            double value_slow = bt[i, slow_Column];
+
+            if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
+            {
+                double delta = value_fast - value_slow;
+                double delta_abs = Math.Abs(delta);
+
+                if (delta > 0)
+                {
+                    dualDataTypes.Add(DualDataType.Above);
+                    point_list.MergePoints(typeToScore[DualDataType.Above]);
+                }
+                else if (delta < 0)
+                {
+                    dualDataTypes.Add(DualDataType.Below);
+                    point_list.MergePoints(typeToScore[DualDataType.Below]);
+                }
+
+                double last_value_fast = bt[i - 1, fast_Column];
+                double last_value_slow = bt[i - 1, slow_Column];
+
+                if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
+                {
+                    double last_delta = last_value_fast - last_value_slow;
+
+                    if (value_fast > last_value_fast && value_slow > last_value_slow)
+                    {
+                        dualDataTypes.Add(DualDataType.TrendUp);
+                        point_list.MergePoints(typeToScore[DualDataType.TrendUp]);
+                    }
+                    else if (value_fast < last_value_fast && value_slow < last_value_slow)
+                    {
+                        dualDataTypes.Add(DualDataType.TrendDown);
+                        point_list.MergePoints(typeToScore[DualDataType.TrendDown]);
+                    }
+
+                    if (delta >= 0 && last_delta < 0)
+                    {
+                        dualDataTypes.Add(DualDataType.CrossUp);
+                        point_list.MergePoints(typeToScore[DualDataType.CrossUp]);
+                    }
+                    else if (delta <= 0 && last_delta > 0)
+                    {
+                        dualDataTypes.Add(DualDataType.CrossDown);
+                        point_list.MergePoints(typeToScore[DualDataType.CrossDown]);
+                    }
+
+                    double last_delta_abs = Math.Abs(last_delta);
+
+                    if (delta_abs > last_delta_abs)
+                    {
+                        dualDataTypes.Add(DualDataType.Expansion);
+                        if (delta > 0)
+                            point_list.MergePoints(typeToScore[DualDataType.Expansion]);
+                        else if (delta < 0)
+                            point_list.MergePointsNegative(typeToScore[DualDataType.Expansion]);
+                    }
+                    else
+                    {
+                        dualDataTypes.Add(DualDataType.Contraction);
+                        if (delta > 0)
+                            point_list.MergePoints(typeToScore[DualDataType.Contraction]);
+                        else if (delta < 0)
+                            point_list.MergePointsNegative(typeToScore[DualDataType.Contraction]);
+                    }
+                }
+            }
+
+            return (point_list.ToArray(), dualDataTypes.ToString(","));
         }
 
         #endregion Dual Data

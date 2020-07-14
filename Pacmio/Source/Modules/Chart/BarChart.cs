@@ -180,7 +180,7 @@ namespace Pacmio
             private set
             {
                 m_Strategy = value;
-                BarAnalysisSet = Strategy is Strategy ? Strategy[BarFreq] : null;
+                BarAnalysisSet = m_Strategy is Strategy s && m_BarTable is BarTable bt ? s[bt.BarFreq, bt.Type] : null;
             }
         }
 
@@ -220,16 +220,22 @@ namespace Pacmio
 
                 m_BarTable = value;
 
-                if (m_BarTable is BarTable)
+                if (m_BarTable is BarTable bt)
                 {
                     lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckAdd(this);
+
+                    if (m_Strategy is Strategy s)
+                    {
+                        BarAnalysisSet = s[bt.BarFreq, bt.Type];
+                    }
+
                     TabName = Name = m_BarTable.Name;
                 }
                 else
                 {
                     StopPt = 0;
                     TabName = "No BarTable";
-                }
+                }  
             }
         }
 

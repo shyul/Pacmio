@@ -99,12 +99,9 @@ namespace Pacmio
             });
         }
 
-        public BarFreq BarFreq { get; set; }
+        // List all indicator types, and aggreagte all signal columns here...
+        public IEnumerable<SignalColumn> SignalColumns => m_List.Where(n => n is Indicator id && id.SignalColumns is SignalColumn[]).SelectMany(n => ((Indicator)n).SignalColumns);
 
-        public BarType BarType { get; set; } = BarType.Trades;
-
-        public int TrainingUnit { get; set; } = 1000;
-
-        public List<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
+        public IEnumerable<PositionAnalysis> PositionAnalyses => m_List.Where(n => n is PositionAnalysis).Select(n => (PositionAnalysis)n);
     }
 }

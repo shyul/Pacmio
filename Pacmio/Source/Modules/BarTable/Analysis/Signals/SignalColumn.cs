@@ -19,7 +19,7 @@ namespace Pacmio
             Label = label;
         }
 
-        public int MaxEffectLength { get; set; } = 1;
+        //public int MaxEffectLength { get; set; } = 1;
 
         #region Graphics Properties
 
