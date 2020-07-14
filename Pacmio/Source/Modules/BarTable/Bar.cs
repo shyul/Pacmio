@@ -345,10 +345,10 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas)
+        public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {
             double bull = 0, bear = 0;
-            foreach (SignalColumn sc in bas.SignalColumns)
+            foreach (SignalColumn sc in scs)
             {
                 if (this[sc] is SignalDatum sd)
                 {
@@ -360,6 +360,22 @@ namespace Pacmio
             return (bull, bear);
         }
 
+        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
+        /*
+    {
+        double bull = 0, bear = 0;
+        foreach (SignalColumn sc in bas.SignalColumns)
+        {
+            if (this[sc] is SignalDatum sd)
+            {
+                double score = sd.Score;
+                if (score > 0) bull += score;
+                else if (score < 0) bear += score;
+            }
+        }
+        return (bull, bear);
+    }**/
+
         #endregion Signal Information
 
         #region Position / Simulation Information
@@ -367,24 +383,24 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private Dictionary<BarAnalysisSet, BarAnalysisSetData> TradeDatums { get; } = new Dictionary<BarAnalysisSet, BarAnalysisSetData>();
+        private Dictionary<PositionAnalysis, PositionData> PositionDatums { get; } = new Dictionary<PositionAnalysis, PositionData>();
 
-        public BarAnalysisSetData this[BarAnalysisSet bas]
+        public PositionData this[PositionAnalysis pas]
         {
             get
             {
-                if (!TradeDatums.ContainsKey(bas))
-                    TradeDatums.Add(bas, new BarAnalysisSetData(this, bas));
+                if (!PositionDatums.ContainsKey(pas))
+                    PositionDatums.Add(pas, new PositionData(this, pas));
 
-                return TradeDatums[bas];
+                return PositionDatums[pas];
             }
         }
 
-        public void RemoveTradeDatum(BarAnalysisSet bas)
+        public void RemoveTradeDatum(PositionAnalysis pas)
         {
-            if (TradeDatums.ContainsKey(bas))
+            if (PositionDatums.ContainsKey(pas))
             {
-                TradeDatums.Remove(bas);
+                PositionDatums.Remove(pas);
             }
         }
 
@@ -394,7 +410,7 @@ namespace Pacmio
         {
             NumericDatums.Clear();
             TagDatums.Clear();
-            TradeDatums.Clear();
+            PositionDatums.Clear();
             SignalDatums.Clear();
         }
     }

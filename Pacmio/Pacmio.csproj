@@ -109,7 +109,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Oscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\PositionAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStick.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Source\Modules\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetData.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionData.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Source\Modules\Contract\Types\TradeData.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\PositionSimTools.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionSimTools.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Order\TradeInfoManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionStatus.cs" />

@@ -54,7 +54,7 @@ namespace Pacmio
 
         public void AddRange(IEnumerable<BarAnalysis> list)
         {
-            list.ToList().ForEach(n =>
+            list.OrderBy(n => n.Order).ToList().ForEach(n =>
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);
@@ -101,7 +101,5 @@ namespace Pacmio
 
         // List all indicator types, and aggreagte all signal columns here...
         public IEnumerable<SignalColumn> SignalColumns => m_List.Where(n => n is Indicator id && id.SignalColumns is SignalColumn[]).SelectMany(n => ((Indicator)n).SignalColumns);
-
-        public IEnumerable<PositionAnalysis> PositionAnalyses => m_List.Where(n => n is PositionAnalysis).Select(n => (PositionAnalysis)n);
     }
 }

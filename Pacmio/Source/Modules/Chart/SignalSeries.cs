@@ -18,6 +18,10 @@ namespace Pacmio
         public SignalSeries(BarChart chart)
         {
             BarChart = chart;
+
+            if (BarChart.Strategy is Strategy s && s.PositionAnalysis is PositionAnalysis pas) 
+                PositionAnalysis = pas;
+
             LegendName = "Signal";
             Width = 40;
         }
@@ -28,12 +32,15 @@ namespace Pacmio
 
         public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
 
+        public PositionAnalysis PositionAnalysis { get; }
+
         //public IEnumerable<SignalColumn> SignalColumns => AnalysisSetting.Analyses[BarChart.BarFreq].SignalColumns;
 
         public override void RefreshAxis(IArea area, ITable table)
         {
             ContinuousAxis axisY = area.AxisY(Side);
 
+            // TODO: If PositionAnalysis is available, please use PositionAnalysis SignalColumn CASH -> LONG -> SHORT
             if (BarChart.HasSignalColumn)
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)

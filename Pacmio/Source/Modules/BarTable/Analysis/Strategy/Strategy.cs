@@ -32,16 +32,6 @@ namespace Pacmio
 
         //public BarFreq FilterBarFreq { get; set; }
 
-        /// <summary>
-        /// BarFreq for Trading || Evaluate Positions
-        /// All other BarFreq are filters and should be calculated from high to low
-        /// 
-        /// How Filter works
-        /// 1. Get the filter event
-        /// 2. Download 300 units before the event, and one unit worth of data after the event for calculation and evaluations
-        /// </summary>
-        public BarFreq PrimaryBarFreq { get; set; }
-
         public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
         {
             get
@@ -59,6 +49,11 @@ namespace Pacmio
                     Analyses.Remove((BarFreq, BarType));
             }
         }
+
+
+
+
+        public PositionAnalysis PositionAnalysis { get; set; }
 
         public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)
         {

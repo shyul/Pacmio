@@ -20,8 +20,16 @@ namespace Pacmio
     /// Settings: Sizing strategy, Account #, Time in effect, OrderType, Order Expiry, and so on...
     /// Does not yield signal score
     /// </summary>
-    public abstract class PositionAnalysis : Indicator
+    public abstract class PositionAnalysis
     {
-
+        /// <summary>
+        /// BarFreq for Trading || Evaluate Positions
+        /// All other BarFreq are filters and should be calculated from high to low
+        /// 
+        /// How Filter works
+        /// 1. Get the filter event
+        /// 2. Download 300 units before the event, and one unit worth of data after the event for calculation and evaluations
+        /// </summary>
+        public BarFreq BarFreq { get; }
     }
 }

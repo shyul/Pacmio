@@ -29,7 +29,7 @@ namespace TestClient
 
                 SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
                 SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
 
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
 
@@ -60,7 +60,7 @@ namespace TestClient
                         new EMA(200) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
                         //fast_MA,
                         //slow_MA,
-                        ma_cross,
+
                         //new HMA(16) { Color = Color.LimeGreen },
                         //new WMA(16) { Color = Color.LimeGreen },
                         //new EMA(5) { Color = Color.SteelBlue },
@@ -79,13 +79,13 @@ namespace TestClient
                         //ema5_smma5_cross,
                         //divergence
 
-                        new WaveTrend(10, 21, 4, 0.015){ AreaRatio = 15},
-                        new ADX(14) { AreaRatio = 10,HasXAxisBar = true },
+                        new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, Order = int.MaxValue },
+                        new ADX(14) { AreaRatio = 10, HasXAxisBar = true, Order = int.MaxValue - 10 },
                         //new CCI(20, 0.015),
                         //new ADX(14) { Order = 100, HasXAxisBar = true },
                    
                         new ConstantIndicator(rsi),
-                        
+                        ma_cross,
                         //new CandleStick(),
                     }
                 };
