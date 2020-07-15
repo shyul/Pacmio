@@ -563,24 +563,23 @@ namespace Pacmio
                 }
                 else
                 {
-                    //BarTable.CurrentIAnalysisSetting = IAnalysisSetting;
-
-                    g.DrawString(m_BarTable.Contract.FullName, Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
-
-                    if (DataCount < 1)
+                    if (!m_BarTable.ReadyToShow)
                     {
-                        g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
-                    }
-                    else if (!m_BarTable.ReadyToShow)
-                    {
-                        g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
+                        g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName,
+                            Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
+
+                        if (DataCount < 1)
+                            g.DrawString("No Data", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
+                        else
+                            g.DrawString("Preparing Data... Stand By.", Main.Theme.FontBold, Main.Theme.GrayTextBrush, new Point(Bounds.Width / 2, Bounds.Height / 2), AppTheme.TextAlignCenter);
                     }
                     else if (ReadyToShow)
                     {
                         lock (m_BarTable.DataLockObject)
                             lock (GraphicsLockObject)
                             {
-
+                                g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
+                                    Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
                                 for (int i = 0; i < Areas.Count; i++)
                                 {
@@ -613,12 +612,7 @@ namespace Pacmio
                             }
                     }
                 }
-
-
-
             }
-
-
         }
     }
 }
