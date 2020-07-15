@@ -27,14 +27,7 @@ namespace Pacmio
             Reference = 0;
             FixedTickStep_Right = 2;
 
-            AddSeries(SignalSeries = new SignalSeries(chart)
-            {
-                Order = int.MinValue + 1,
-                Side = AlignType.Right,
-                Name = "Signal",
-                LegendName = "SIGNAL",
-                LegendLabelFormat = "0.##"
-            });
+            AddSeries(SignalSeries = new SignalSeries(chart));
         }
 
         public BarChart BarChart { get; }

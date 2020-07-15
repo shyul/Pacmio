@@ -19,10 +19,16 @@ namespace Pacmio
         {
             BarChart = chart;
 
-            if (BarChart.Strategy is Strategy s && s.PositionAnalysis is PositionAnalysis pas) 
+            if (BarChart.Strategy is Strategy s && s.PositionAnalysis is PositionAnalysis pas)
                 PositionAnalysis = pas;
 
-            LegendName = "Signal";
+            Name = "Signal";
+            LegendName = "SIGNAL: ";
+            LegendLabelFormat = "0.##";
+            Importance = Importance.Major;
+            Order = int.MinValue + 1;
+            Side = AlignType.Right;
+
             Width = 40;
         }
 
@@ -47,7 +53,7 @@ namespace Pacmio
                 {
                     if (i >= table.Count)
                         break;
-                    else if (i > 0) 
+                    else if (i > 0)
                     {
                         var (bullish, bearish) = Table[i].SignalScore(BarAnalysisSet);
                         axisY.Range.Insert(bullish);
@@ -68,7 +74,31 @@ namespace Pacmio
         {
             List<(string text, Font font, Brush brush)> labels = new List<(string text, Font font, Brush brush)>();
 
+            var (bullish, bearish) = Table[pt].SignalScore(BarAnalysisSet);
+            double score = bullish + bearish;
 
+            if (score > 0)
+            {
+                labels.Add((score.ToString(), Main.Theme.FontBold, BarTable.Upper_TextTheme.ForeBrush));
+            }
+            else if (score < 0)
+            {
+                labels.Add((score.ToString(), Main.Theme.FontBold, BarTable.Lower_TextTheme.ForeBrush));
+            }
+            else
+            {
+                labels.Add((score.ToString(), Main.Theme.FontBold, BarChart.Theme.ForeBrush));
+            }
+
+            foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
+            {
+                SignalDatum sd = Table[pt][sc];
+
+                if (sd.Score > 0)
+                    labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
+                else if (sd.Score < 0)
+                    labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+            }
 
             return labels;
         }
