@@ -31,5 +31,15 @@ namespace Pacmio
         /// 2. Download 300 units before the event, and one unit worth of data after the event for calculation and evaluations
         /// </summary>
         public BarFreq BarFreq { get; }
+
+        public IEnumerable<SignalColumn> EntrySignals { get; }
+
+        public IEnumerable<SignalColumn> LongExitSignals { get; }
+
+        public IEnumerable<SignalColumn> ShortExitSignals { get; }
+
+        public MultiTimePeriod EntryPeriods { get; }
+
+
     }
 }

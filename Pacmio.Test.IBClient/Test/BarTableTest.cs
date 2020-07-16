@@ -27,8 +27,10 @@ namespace TestClient
 
                 //var boll = new Bollinger(20, 2.0);
 
-                SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
-                SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
+                //SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
+                //SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
+                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
 
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
@@ -43,7 +45,7 @@ namespace TestClient
                     //ema5_smma5_cross,
                
                     //new BoxRange(14),
-                    //new Bollinger(100, 2.0),
+                    new SMA(20) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
                     new Bollinger(20, 2.0),
                     //new Chanderlier(22, 3) { Color = Color.Blue, Low_Color = Color.Plum },
                     //rsi,
@@ -51,7 +53,7 @@ namespace TestClient
                     //new SMA(5) { Color = Color.Blue },
                     //new SMA(20) { Color = Color.Green },
                     //new SMA(50) { Color = Color.Tomato },
-                    new EMA(200) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
+              
                     //fast_MA,
                     //slow_MA,
 
