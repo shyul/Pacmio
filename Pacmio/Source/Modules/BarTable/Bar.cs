@@ -361,20 +361,6 @@ namespace Pacmio
         }
 
         public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
-        /*
-    {
-        double bull = 0, bear = 0;
-        foreach (SignalColumn sc in bas.SignalColumns)
-        {
-            if (this[sc] is SignalDatum sd)
-            {
-                double score = sd.Score;
-                if (score > 0) bull += score;
-                else if (score < 0) bear += score;
-            }
-        }
-        return (bull, bear);
-    }**/
 
         #endregion Signal Information
 

@@ -44,7 +44,11 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => m_List.GetEnumerator();
 
+        public int Count => m_List.Count;
+
         public void Clear() => m_List.Clear();
+
+        public bool Contains(BarAnalysis ba) => m_List.Contains(ba);
 
         public void Add(BarAnalysis ba) => m_List.CheckAdd(ba);
 
@@ -60,7 +64,7 @@ namespace Pacmio
             PrintList();
         }
 
-        public static BarAnalysisSet Merge(BarAnalysisSet s1, BarAnalysisSet s2) 
+        public static BarAnalysisSet Merge(BarAnalysisSet s1, BarAnalysisSet s2)
         {
             BarAnalysisSet bas = new BarAnalysisSet(s1);
             bas.AddRange(s2);
@@ -95,7 +99,14 @@ namespace Pacmio
             });
         }
 
-        // List all indicator types, and aggreagte all signal columns here...
+        /// <summary>
+        /// List all BarAnalysis which also present as ChartSeries
+        /// </summary>
+        public IEnumerable<IChartSeries> ChartSeries => m_List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder);
+
+        /// <summary>
+        /// List all indicator types, and aggreagte all signal columns here...
+        /// </summary>
         public IEnumerable<SignalColumn> SignalColumns => m_List.Where(n => n is Indicator id && id.SignalColumns is SignalColumn[]).SelectMany(n => ((Indicator)n).SignalColumns);
     }
 }

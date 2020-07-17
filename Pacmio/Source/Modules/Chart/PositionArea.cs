@@ -50,7 +50,7 @@ namespace Pacmio
         public override void DrawCustomBackground(Graphics g)
         {
             if (BarChart.Strategy is Strategy s)
-                PositionArea.DrawPosition(g, this, BarTable, s.PositionAnalysis);
+                DrawPosition(g, this, BarTable, s.PositionAnalysis);
         }
 
         public static Dictionary<TradeActionType, Brush> ColorPalette { get; } = new Dictionary<TradeActionType, Brush>()

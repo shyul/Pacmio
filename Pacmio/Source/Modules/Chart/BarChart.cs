@@ -33,6 +33,7 @@ namespace Pacmio
 
         public BarChart(string name, OhlcType type) : base(name)
         {
+            Icon = Pacmio.Properties.Resources.Icon_Chart;
             Margin = new Padding(5, 15, 5, 5);
             Theme.FillColor = BackColor = Color.FromArgb(255, 255, 253, 245);
             Theme.EdgeColor = Theme.ForeColor = Color.FromArgb(192, 192, 192);
@@ -51,6 +52,8 @@ namespace Pacmio
             //AddArea(PositionArea = new PositionArea(this));
             AddArea(SignalArea = new SignalArea(this));
             AddArea(MainArea = new MainArea(this, MainArea.DefaultName, 50, 0.3f) { HasXAxisBar = true, });
+
+
 
             OhlcType = type;
             lock (List) List.CheckAdd(this);
@@ -196,7 +199,7 @@ namespace Pacmio
                 m_BarAnalysisSet = value;
                 if (m_BarAnalysisSet is BarAnalysisSet bas)
                 {
-                    foreach (var ic in bas.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder))
+                    foreach (var ic in bas.ChartSeries)
                     {
                         ic.ConfigChart(this);
                         if (m_BarTable is BarTable bt) bt.CalculateRefresh(bas);
