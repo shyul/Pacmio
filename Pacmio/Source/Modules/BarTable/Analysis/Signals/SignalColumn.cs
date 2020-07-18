@@ -9,17 +9,28 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SignalColumn : Column
+    public class SignalColumn : Column, IOrdered
     {
-        public SignalColumn(string name) => Name = name;
+        public SignalColumn(string name, SignalColumnType type = SignalColumnType.Filter)
+        {
+            Label = Name = name;
+            Type = type;
+        }
 
-        public SignalColumn(string name, string label)
+        public SignalColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter)
         {
             Name = name;
             Label = label;
+            Type = type;
         }
 
-        //public int MaxEffectLength { get; set; } = 1;
+        public SignalColumnType Type { get; }
+
+        public bool Enabled { get; set; } = true;
+
+        public int Order { get; set; } = 0;
+
+        public Importance Importance { get; set; } = Importance.None;
 
         #region Graphics Properties
 
@@ -55,6 +66,19 @@ namespace Pacmio
 
         public ColorTheme BearishTheme { get; } = new ColorTheme();
 
+
+
         #endregion Graphics Properties
+    }
+
+    public enum SignalColumnType : int
+    {
+        Filter = 0,
+
+        Entry = 10,
+
+        ExitLong = 11,
+
+        ExitShort = 12
     }
 }

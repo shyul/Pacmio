@@ -19,8 +19,8 @@ namespace Pacmio
         {
             BarChart = chart;
 
-            if (BarChart.Strategy is Strategy s && s.PositionAnalysis is PositionAnalysis pas)
-                PositionAnalysis = pas;
+            if (BarChart.Strategy is Strategy s)
+                Strategy = s;
 
             Name = "Signal";
             LegendName = "SIGNAL: ";
@@ -38,9 +38,7 @@ namespace Pacmio
 
         public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
 
-        public PositionAnalysis PositionAnalysis { get; }
-
-        //public IEnumerable<SignalColumn> SignalColumns => AnalysisSetting.Analyses[BarChart.BarFreq].SignalColumns;
+        public Strategy Strategy { get; }
 
         public override void RefreshAxis(IArea area, ITable table)
         {

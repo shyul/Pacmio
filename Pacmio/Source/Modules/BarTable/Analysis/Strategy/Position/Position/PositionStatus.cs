@@ -52,11 +52,15 @@ namespace Pacmio
 
         #region Risk Management
 
-        //public double RiskDelta { get; set; } = double.NaN;
-
         public double Stop { get; set; } = double.NaN;
 
         public double Limit { get; set; } = double.NaN;
+
+
+        // Scale Setting
+
+
+        // All trend line and level (support-resistance) lines from higher time frames are buffered here.
 
         #endregion Risk Management
 

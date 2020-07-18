@@ -75,23 +75,6 @@ namespace Pacmio
             }
         }
 
-        /*
-        public void Update(BarTable bt) // Cancellation Token should be used
-        {
-            BarAnalysisPointer bap = bt.GetBarAnalysisPointer(this);
-
-            if (!bap.IsUpToDate && bap.Count > 0)
-            {
-                bap.StopPt = bap.Count;
-
-                if (bap.StartPt < 0)
-                    bap.StartPt = 0;
-
-                Calculate(bap);
-                bap.StartPt = bap.StopPt;
-            }
-        }*/
-
         protected abstract void Calculate(BarAnalysisPointer bap);
 
         #endregion Methods

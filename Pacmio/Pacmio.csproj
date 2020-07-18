@@ -104,17 +104,15 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendLineSet.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrendLineDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Filter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Oscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\CandleStick.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CandleStick.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\ConstantData.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartOverlay.cs" />
@@ -128,7 +126,7 @@
     <Compile Include="Source\Modules\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionData.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Position\BarPositionData.cs" />
     <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
     <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
@@ -156,17 +154,16 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\SimulationResult.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ResearchManager.cs" />
-    <Compile Include="Source\Modules\Trade\Account\Account.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\IBroker.cs" />
+    <Compile Include="Source\Modules\Account\Account.cs" />
     <Compile Include="Source\Modules\Contract\Types\TradeData.cs" />
-    <Compile Include="Source\Modules\Trade\Position\PositionDataTable.cs" />
-    <Compile Include="Source\Modules\Trade\Position\PositionGridView.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionSimTools.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Position\Position\PositionDataTable.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Position\Position\PositionGridView.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Position\Position\PositionSimTools.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Strategy.cs" />
-    <Compile Include="Source\Modules\Trade\Order\TradeInfoManager.cs" />
-    <Compile Include="Source\Modules\Trade\Position\PositionStatus.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\LiquidityType.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\TradeActionType.cs" />
+    <Compile Include="Source\Modules\Contract\Order\TradeInfoManager.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Position\Position\PositionStatus.cs" />
+    <Compile Include="Source\Modules\Contract\Order\Types\LiquidityType.cs" />
+    <Compile Include="Source\Modules\Contract\Order\Types\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ADX.cs" />
@@ -197,11 +194,10 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IDeltaNeutral.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IOption.cs" />
     <Compile Include="Source\Modules\Contract\BusinessInfo\BusinessInfo.cs" />
-    <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
-    <Compile Include="Source\Modules\Trade\Order\OrderInfo.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\OrderStatus.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\OrderTimeInForce.cs" />
-    <Compile Include="Source\Modules\Trade\Order\TradeInfo.cs" />
+    <Compile Include="Source\Modules\Contract\Order\OrderInfo.cs" />
+    <Compile Include="Source\Modules\Contract\Order\Types\OrderStatus.cs" />
+    <Compile Include="Source\Modules\Contract\Order\Types\OrderTimeInForce.cs" />
+    <Compile Include="Source\Modules\Contract\Order\TradeInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\DataRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Completed.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\DeltaNeutralValidation.cs" />
@@ -213,9 +209,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
-    <Compile Include="Source\Modules\Trade\Account\AccountManager.cs" />
+    <Compile Include="Source\Modules\Account\AccountManager.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerManager.cs" />
-    <Compile Include="Source\Modules\Trade\Order\Types\OrderType.cs" />
+    <Compile Include="Source\Modules\Contract\Order\Types\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\ExecutionData.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\FundamentalData.cs" />
@@ -312,7 +308,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Modules\BarTable\Analysis\Signals\Filters\" />
-    <Folder Include="Source\Modules\BarTable\Analysis\Strategy\PositionAnalysis\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

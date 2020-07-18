@@ -134,7 +134,7 @@ namespace Pacmio
                     OutsideRegularTradeHours = true,
                 };
 
-                OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                //OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
             }
         }
 

@@ -16,11 +16,18 @@ namespace Pacmio
     /// </summary>
     public class TrendLineDatum
     {
+        // public identify the source of this TrendLine... 
+
         public bool IsLogarithmic { get; }
 
-        public (DateTime time, double value) Point1 { get; }
+        public (DateTime time, double value) Start { get; }
 
-        public (DateTime time, double value) Point2 { get; }
+        /// <summary>
+        /// Increase or decresse per each Bar.... at BarFreq...
+        /// </summary>
+        public double Rate { get; }
+
+        //public (DateTime time, double value) Point2 { get; }
 
         public double Weight { get; }
 

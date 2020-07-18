@@ -130,6 +130,51 @@ namespace Pacmio
             }
         }
 
+        #region Order Actions
+
+        public const string EntryOrderDescription = "Entry Order";
+        public const string StopLossOrderDescription = "Stop Loss Order";
+        public const string ProfitTakerOrderDescription = "Profit Taker Order";
+        public const string ExitOrderDescription = "Exit Order";
+
+        public static void PlaceOrder(OrderInfo od)
+        {
+            if (od.Account.CurrentOrders.ContainsKey(od.Contract) && od.Account.CurrentOrders[od.Contract] is OrderInfo odi && odi.IsEditable)
+            {
+                throw new Exception("There is an on-going order for this contract at the same account!");
+            }
+
+            IB.Client.PlaceOrder(od);
+        }
+
+        public static void ModifyOrder(OrderInfo od)
+        {
+
+        }
+
+        public static void CancelOrder(OrderInfo od)
+        {
+
+        }
+
+        public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
+
+        public static void CloseAllPositions()
+        {
+            CancelAllOrders();
+            foreach (Account ac in AccountManager.List)
+                ac.CloseAllPositions();
+        }
+
+        #endregion Order Actions
+
+        public static void Request_OpenOrders() => IB.Client.SendRequest_OpenOrders();
+
+        public static void Request_AllOpenOrders() => IB.Client.SendRequest_AllOpenOrders();
+
+        public static void Request_CompleteOrders(bool apiOnly = false) => IB.Client.SendRequest_CompletedOrders(apiOnly);
+
+
         #endregion Order / Active List
 
 

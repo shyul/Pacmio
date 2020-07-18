@@ -34,7 +34,7 @@ namespace Pacmio.IB
             od.HeldNotice = fields[10];
             od.MarketCapPrice = fields[11].ToDouble();
 
-            OrderManager.Update(od);
+            //OrderManager.Update(od);
 
             Console.WriteLine("\nParse Order Status: " + fields.ToStringWithIndex());
 

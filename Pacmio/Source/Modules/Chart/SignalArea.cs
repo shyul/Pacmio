@@ -39,7 +39,7 @@ namespace Pacmio
         public override void DrawCustomBackground(Graphics g)
         {
             if (BarChart.Strategy is Strategy s)
-                PositionArea.DrawPosition(g, this, BarTable, s.PositionAnalysis);
+                PositionArea.DrawPosition(g, this, BarTable, s);
         }
     }
 }

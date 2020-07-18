@@ -59,5 +59,11 @@ namespace Pacmio
         public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
 
         #endregion Quote
+
+        #region Trade
+
+
+
+        #endregion Trade
     }
 }

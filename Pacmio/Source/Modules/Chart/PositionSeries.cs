@@ -80,7 +80,7 @@ namespace Pacmio
                     break;
                 else if (i >= 0)
                 {
-                    double data = Table[i][BarChart.Strategy.PositionAnalysis].PnL;
+                    double data = Table[i][BarChart.Strategy].PnL;
                     if (!double.IsNaN(data))
                     {
                         int x = area.IndexToPixel(pt);

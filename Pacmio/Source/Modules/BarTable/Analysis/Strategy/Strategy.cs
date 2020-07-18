@@ -50,11 +50,6 @@ namespace Pacmio
             }
         }
 
-
-
-
-        public PositionAnalysis PositionAnalysis { get; set; }
-
         public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)
         {
             var list = Analyses.OrderByDescending(n => n.Key.BarFreq);

@@ -281,6 +281,18 @@ namespace Pacmio
 
         #endregion Numeric Column
 
+        #region Patterns
+
+
+
+        #endregion Patterns
+
+        #region Trend Lines
+
+        public TrendLineSet TrendLineSet { get; } = new TrendLineSet();
+
+        #endregion Trend Lines
+
         #region Tag Column
 
         private Dictionary<TagColumn, TagInfo> TagDatums { get; } = new Dictionary<TagColumn, TagInfo>();
@@ -369,24 +381,24 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        private Dictionary<PositionAnalysis, PositionData> PositionDatums { get; } = new Dictionary<PositionAnalysis, PositionData>();
+        private Dictionary<Strategy, BarPositionData> PositionDatums { get; } = new Dictionary<Strategy, BarPositionData>();
 
-        public PositionData this[PositionAnalysis pas]
+        public BarPositionData this[Strategy s]
         {
             get
             {
-                if (!PositionDatums.ContainsKey(pas))
-                    PositionDatums.Add(pas, new PositionData(this, pas));
+                if (!PositionDatums.ContainsKey(s))
+                    PositionDatums.Add(s, new BarPositionData(this, s));
 
-                return PositionDatums[pas];
+                return PositionDatums[s];
             }
         }
 
-        public void RemoveTradeDatum(PositionAnalysis pas)
+        public void RemoveTradeDatum(Strategy s)
         {
-            if (PositionDatums.ContainsKey(pas))
+            if (PositionDatums.ContainsKey(s))
             {
-                PositionDatums.Remove(pas);
+                PositionDatums.Remove(s);
             }
         }
 
