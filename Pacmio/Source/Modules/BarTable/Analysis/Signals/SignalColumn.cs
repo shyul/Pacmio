@@ -46,7 +46,7 @@ namespace Pacmio
                 BullishTheme.FillColor = value.Opaque(64);
                 BullishTheme.EdgeColor = value.Opaque(255);
             }
-        } //= Color.Green;
+        }
 
         public Color BearishColor
         {
@@ -60,7 +60,7 @@ namespace Pacmio
                 BearishTheme.FillColor = value.Opaque(64);
                 BearishTheme.EdgeColor = value.Opaque(255);
             }
-        } //= Color.Red;
+        }
 
         public ColorTheme BullishTheme { get; } = new ColorTheme();
 
