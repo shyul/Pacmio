@@ -270,15 +270,15 @@ namespace Pacmio.IB
 
         public static bool IsWorkHours => WorkHours.IsWorkTime();
 
-        public static readonly WorkHours WorkHours = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHours = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(23, 30)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(23, 30)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(23, 30)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(23, 30)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(22, 30)) } },
-            { DayOfWeek.Saturday,   new List<(Time Start, Time Stop)>() { (Start: new Time(3, 30), Stop: new Time(23, 30)) } },
-            { DayOfWeek.Sunday,     new List<(Time Start, Time Stop)>() { (Start: new Time(1), Stop: new Time(23, 30)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(22, 30)) } },
+            { DayOfWeek.Saturday,   new MultiTimePeriod() { new TimePeriod(new Time(3, 30), new Time(23, 30)) } },
+            { DayOfWeek.Sunday,     new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } }
         });
     }
 }

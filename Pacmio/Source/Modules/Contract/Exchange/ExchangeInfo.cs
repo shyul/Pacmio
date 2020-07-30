@@ -55,230 +55,230 @@ namespace Pacmio
         {
             return workHours switch
             {
-                (ExchangeWorkHours.Full) => WorkHoursAll,
-                (ExchangeWorkHours.NorthAmerica) => WorkHoursNorthAmerica,
-                (ExchangeWorkHours.NorthAmericaExtended) => WorkHoursNorthAmericaExtended,
-                (ExchangeWorkHours.NorthAmericaExtended2) => WorkHoursNorthAmericaExtended2,
-                (ExchangeWorkHours.Amex) => WorkHoursAmex,
-                (ExchangeWorkHours.ArcaEdge) => WorkHoursArcaEdge,
-                (ExchangeWorkHours.Cboe) => WorkHoursCboe,
-                (ExchangeWorkHours.CanadianVenture) => WorkHoursCanadianVenture,
-                (ExchangeWorkHours.LSE) => WorkHoursLSE,
-                (ExchangeWorkHours.FWB) => WorkHoursFWB,
-                (ExchangeWorkHours.SWB) => WorkHoursSWB,
-                (ExchangeWorkHours.CentralEurope) => WorkHoursCentralEurope,
-                (ExchangeWorkHours.EBS) => WorkHoursEBS,
-                (ExchangeWorkHours.SFB) => WorkHoursSFB,
-                (ExchangeWorkHours.BM) => WorkHoursBM,
-                (ExchangeWorkHours.China) => WorkHoursChina,
-                (ExchangeWorkHours.HongKong) => WorkHoursHongKong,
-                (ExchangeWorkHours.Singapore) => WorkHoursSingapore,
-                (ExchangeWorkHours.India) => WorkHoursIndia,
-                (ExchangeWorkHours.ASX) => WorkHoursASX,
+                ExchangeWorkHours.Full => WorkHoursAll,
+                ExchangeWorkHours.NorthAmerica => WorkHoursNorthAmerica,
+                ExchangeWorkHours.NorthAmericaExtended => WorkHoursNorthAmericaExtended,
+                ExchangeWorkHours.NorthAmericaExtended2 => WorkHoursNorthAmericaExtended2,
+                ExchangeWorkHours.Amex => WorkHoursAmex,
+                ExchangeWorkHours.ArcaEdge => WorkHoursArcaEdge,
+                ExchangeWorkHours.Cboe => WorkHoursCboe,
+                ExchangeWorkHours.CanadianVenture => WorkHoursCanadianVenture,
+                ExchangeWorkHours.LSE => WorkHoursLSE,
+                ExchangeWorkHours.FWB => WorkHoursFWB,
+                ExchangeWorkHours.SWB => WorkHoursSWB,
+                ExchangeWorkHours.CentralEurope => WorkHoursCentralEurope,
+                ExchangeWorkHours.EBS => WorkHoursEBS,
+                ExchangeWorkHours.SFB => WorkHoursSFB,
+                ExchangeWorkHours.BM => WorkHoursBM,
+                ExchangeWorkHours.China => WorkHoursChina,
+                ExchangeWorkHours.HongKong => WorkHoursHongKong,
+                ExchangeWorkHours.Singapore => WorkHoursSingapore,
+                ExchangeWorkHours.India => WorkHoursIndia,
+                ExchangeWorkHours.ASX => WorkHoursASX,
                 _ => WorkHoursAll,
             };
         }
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursAll = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursAll = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Sunday,     new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Saturday,   new List<(Time Start, Time Stop)>() { (Start: new Time(0), Stop: new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Sunday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Saturday,   new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmerica = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursNorthAmerica = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmericaExtended = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursNorthAmericaExtended = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(4), Stop: new Time(20)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(4), Stop: new Time(20)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(4), Stop: new Time(20)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(4), Stop: new Time(20)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(4), Stop: new Time(20)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmericaExtended2 = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursNorthAmericaExtended2 = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(17)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(17)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(17)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(17)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(17)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursAmex = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursAmex = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(7), Stop: new Time(20)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(7), Stop: new Time(20)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(7), Stop: new Time(20)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(7), Stop: new Time(20)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(7), Stop: new Time(20)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursArcaEdge = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursArcaEdge = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(7, 30), Stop: new Time(16, 1)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(7, 30), Stop: new Time(16, 1)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(7, 30), Stop: new Time(16, 1)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(7, 30), Stop: new Time(16, 1)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(7, 30), Stop: new Time(16, 1)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCboe = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursCboe = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16, 15)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16, 15)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16, 15)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16, 15)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16, 15)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCanadianVenture = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursCanadianVenture = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)), (Start: new Time(16, 15), Stop: new Time(17)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)), (Start: new Time(16, 15), Stop: new Time(17)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)), (Start: new Time(16, 15), Stop: new Time(17)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)), (Start: new Time(16, 15), Stop: new Time(17)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(16)), (Start: new Time(16, 15), Stop: new Time(17)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursLSE = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursLSE = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(16, 50)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(16, 50)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(16, 50)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(16, 50)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(16, 50)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCentralEurope = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursCentralEurope = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 40)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 40)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 40)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 40)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 40)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
          });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursFWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursFWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(20)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(20)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(20)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(20)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(20)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursSWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(22)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(22)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(22)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(22)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(8), Stop: new Time(22)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSFB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursSFB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 30)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 30)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 30)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 30)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 30)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursEBS = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursEBS = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 32)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 32)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 32)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 32)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 32)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursBM = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursBM = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 35)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 35)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 35)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 35)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(17, 35)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursChina = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursChina = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(11, 30)), (Start: new Time(13), Stop: new Time(15)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(11, 30)), (Start: new Time(13), Stop: new Time(15)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(11, 30)), (Start: new Time(13), Stop: new Time(15)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(11, 30)), (Start: new Time(13), Stop: new Time(15)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(11, 30)), (Start: new Time(13), Stop: new Time(15)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursHongKong = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursHongKong = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(16)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(16)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(16)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(16)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 30), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(16)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSingapore = new WorkHours("Singapore Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursSingapore = new WorkHours("Singapore Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(17)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(17)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(17)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(17)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9), Stop: new Time(12)), (Start: new Time(13), Stop: new Time(17)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } }
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursIndia = new WorkHours("India Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursIndia = new WorkHours("India Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 15), Stop: new Time(15, 30)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(9, 15), Stop: new Time(15, 30)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(9, 15), Stop: new Time(15, 30)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(9, 15), Stop: new Time(15, 30)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(9, 15), Stop: new Time(15, 30)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursASX = new WorkHours("E. Australia Standard Time", new Dictionary<DayOfWeek, List<(Time Start, Time Stop)>>()
+        public static readonly WorkHours WorkHoursASX = new WorkHours("E. Australia Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new List<(Time Start, Time Stop)>() { (Start: new Time(10), Stop: new Time(16)) } },
-            { DayOfWeek.Tuesday,    new List<(Time Start, Time Stop)>() { (Start: new Time(10), Stop: new Time(16)) } },
-            { DayOfWeek.Wednesday,  new List<(Time Start, Time Stop)>() { (Start: new Time(10), Stop: new Time(16)) } },
-            { DayOfWeek.Thursday,   new List<(Time Start, Time Stop)>() { (Start: new Time(10), Stop: new Time(16)) } },
-            { DayOfWeek.Friday,     new List<(Time Start, Time Stop)>() { (Start: new Time(10), Stop: new Time(16)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
+            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
+            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
         });
 
         #endregion
