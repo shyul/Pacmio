@@ -82,43 +82,43 @@ namespace Pacmio
         [NonSerialized, IgnoreDataMember, XmlIgnore]
         public static readonly WorkHours WorkHoursAll = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Sunday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
-            { DayOfWeek.Saturday,   new MultiTimePeriod() { new TimePeriod(new Time(0), new Time(23, 59, 59, 999)) } },
+            { DayOfWeek.Sunday,     new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Monday,     new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Thursday,   new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Friday,     new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
+            { DayOfWeek.Saturday,   new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
         public static readonly WorkHours WorkHoursNorthAmerica = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
-            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
-            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
-            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } },
-            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod(new Time(9, 30), new Time(16)) },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(9, 30), new Time(16)) },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod(new Time(9, 30), new Time(16)) },
+            { DayOfWeek.Thursday,   new MultiTimePeriod(new Time(9, 30), new Time(16)) },
+            { DayOfWeek.Friday,     new MultiTimePeriod(new Time(9, 30), new Time(16)) },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
         public static readonly WorkHours WorkHoursNorthAmericaExtended = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
-            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
-            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
-            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } },
-            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(4), new Time(20)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod(new Time(4), new Time(20)) },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(4), new Time(20)) },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod(new Time(4), new Time(20)) },
+            { DayOfWeek.Thursday,   new MultiTimePeriod(new Time(4), new Time(20)) },
+            { DayOfWeek.Friday,     new MultiTimePeriod(new Time(4), new Time(20)) },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
         public static readonly WorkHours WorkHoursNorthAmericaExtended2 = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
-            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
-            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
-            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } },
-            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(17)) } }
+            { DayOfWeek.Monday,     new MultiTimePeriod(new Time(8), new Time(17)) },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(8), new Time(17)) },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod(new Time(8), new Time(17)) },
+            { DayOfWeek.Thursday,   new MultiTimePeriod(new Time(8), new Time(17)) },
+            { DayOfWeek.Friday,     new MultiTimePeriod(new Time(8), new Time(17)) },
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
@@ -274,11 +274,11 @@ namespace Pacmio
         [NonSerialized, IgnoreDataMember, XmlIgnore]
         public static readonly WorkHours WorkHoursASX = new WorkHours("E. Australia Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
-            { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
-            { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
-            { DayOfWeek.Wednesday,  new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
-            { DayOfWeek.Thursday,   new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
-            { DayOfWeek.Friday,     new MultiTimePeriod() { new TimePeriod(new Time(10), new Time(16)) } },
+            { DayOfWeek.Monday,     new MultiTimePeriod(new Time(10), new Time(16)) },
+            { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(10), new Time(16)) },
+            { DayOfWeek.Wednesday,  new MultiTimePeriod(new Time(10), new Time(16)) },
+            { DayOfWeek.Thursday,   new MultiTimePeriod(new Time(10), new Time(16)) },
+            { DayOfWeek.Friday,     new MultiTimePeriod(new Time(10), new Time(16)) },
         });
 
         #endregion

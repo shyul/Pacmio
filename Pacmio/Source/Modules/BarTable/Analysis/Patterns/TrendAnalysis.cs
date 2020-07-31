@@ -9,9 +9,9 @@ using System.Collections.Generic;
 
 namespace Pacmio
 {
-    public class TrendLine : BarAnalysis, IPattern
+    public class TrendAnalysis : BarAnalysis, IPattern
     {
-        public TrendLine(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
         {
             IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;
@@ -36,7 +36,7 @@ namespace Pacmio
                 ChartSeries = null;
         }
 
-        public TrendLine(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
         {
             IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;

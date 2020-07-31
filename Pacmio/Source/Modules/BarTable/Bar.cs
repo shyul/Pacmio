@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xu;
 
 namespace Pacmio
@@ -281,18 +282,6 @@ namespace Pacmio
 
         #endregion Numeric Column
 
-        #region Patterns
-
-
-
-        #endregion Patterns
-
-        #region Trend Lines
-
-        public TrendLineSet TrendLineSet { get; } = new TrendLineSet();
-
-        #endregion Trend Lines
-
         #region Tag Column
 
         private Dictionary<TagColumn, TagInfo> TagDatums { get; } = new Dictionary<TagColumn, TagInfo>();
@@ -303,8 +292,8 @@ namespace Pacmio
             {
                 return column switch
                 {
-                    TagColumn oc when oc == Column_PeakTags => PeakTag,
-                    TagColumn oc when TagDatums.ContainsKey(oc) => TagDatums[column],
+                    TagColumn tagc when tagc == Column_PeakTags => PeakTag,
+                    TagColumn tagc when TagDatums.ContainsKey(tagc) => TagDatums[tagc],
                     _ => null,
                 };
             }
@@ -329,6 +318,46 @@ namespace Pacmio
         public static readonly TagColumn Column_PeakTags = new TagColumn("PEAKTAG", "PEAK");
 
         #endregion Tag Column
+
+        #region Patterns
+
+        private Dictionary<PatternColumn, Pattern> Patterns { get; } = new Dictionary<PatternColumn, Pattern>();
+
+        public Pattern this[PatternColumn column]
+        {
+            get
+            {
+                return column switch
+                {
+                    PatternColumn pc when Patterns.ContainsKey(pc) => Patterns[pc],
+                    _ => null,
+                };
+            }
+            set
+            {
+                if (value is Pattern pattern)
+                    switch (column)
+                    {
+                        //case PatternColumn oc when oc == Column_PeakTags: PeakTag = tag; break;
+                        default:
+                            if (!Patterns.ContainsKey(column))
+                                Patterns.Add(column, pattern);
+                            else
+                                Patterns[column] = pattern;
+                            break;
+                    }
+                else if (value is null && Patterns.ContainsKey(column))
+                    Patterns.Remove(column);
+            }
+        }
+
+        /// <summary>
+        /// helps BarTable to extract all trendlines for trend levels at the last Bar!!
+        /// helps BarChart to draw every thing...
+        /// </summary>
+        public IEnumerable<TrendLine> TrendLines => Patterns.Values.SelectMany(n => n.TrendLines);
+
+        #endregion Patterns
 
         #region Signal Information
 
