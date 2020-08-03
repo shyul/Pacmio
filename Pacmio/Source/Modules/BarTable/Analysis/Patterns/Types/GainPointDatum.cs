@@ -10,17 +10,6 @@ using Xu;
 
 namespace Pacmio
 {
-    public class GainPointColumn : Column
-    {
-        public GainPointColumn(string name) => Name = Label = name;
-
-        public GainPointColumn(string name, string label)
-        {
-            Name = name;
-            Label = label;
-        }
-    }
-
     public class GainPointDatum
     {
         public Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)> PositiveList { get; } = new Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)>();

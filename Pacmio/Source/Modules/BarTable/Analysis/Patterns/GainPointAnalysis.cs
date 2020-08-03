@@ -9,11 +9,10 @@ using System.Collections.Generic;
 
 namespace Pacmio
 {
-    public class GainPointAnalysis : BarAnalysis, IPattern
+    public class GainPointAnalysis : BarAnalysis
     {
-        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01)
         {
-            IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
@@ -36,9 +35,8 @@ namespace Pacmio
                 ChartSeries = null;
         }
 
-        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01)
         {
-            IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
@@ -54,8 +52,6 @@ namespace Pacmio
         }
 
         #region Parameters
-
-        public bool IsLogarithmic { get; }
 
         public virtual int Interval { get; }
 

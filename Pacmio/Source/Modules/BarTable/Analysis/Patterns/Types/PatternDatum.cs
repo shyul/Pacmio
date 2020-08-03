@@ -14,7 +14,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class Pattern
+    public class PatternDatum
     {
         public string AreaName { get; }
 

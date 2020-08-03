@@ -342,31 +342,18 @@ namespace Pacmio
 
         #region Patterns
 
-        private Dictionary<PatternColumn, Pattern> Patterns { get; } = new Dictionary<PatternColumn, Pattern>();
+        private Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
 
-        public Pattern this[PatternColumn column]
+        public PatternDatum this[PatternColumn column]
         {
-            get
-            {
-                return column switch
-                {
-                    PatternColumn pc when Patterns.ContainsKey(pc) => Patterns[pc],
-                    _ => null,
-                };
-            }
+            get => Patterns.ContainsKey(column) ? Patterns[column] : null;
             set
             {
-                if (value is Pattern pattern)
-                    switch (column)
-                    {
-                        //case PatternColumn oc when oc == Column_PeakTags: PeakTag = tag; break;
-                        default:
-                            if (!Patterns.ContainsKey(column))
-                                Patterns.Add(column, pattern);
-                            else
-                                Patterns[column] = pattern;
-                            break;
-                    }
+                if (value is PatternDatum pattern)
+                    if (!Patterns.ContainsKey(column))
+                        Patterns.Add(column, pattern);
+                    else
+                        Patterns[column] = pattern;
                 else if (value is null && Patterns.ContainsKey(column))
                     Patterns.Remove(column);
             }
