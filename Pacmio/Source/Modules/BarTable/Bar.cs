@@ -319,6 +319,27 @@ namespace Pacmio
 
         #endregion Tag Column
 
+        #region Gain Point Analysis
+
+        private Dictionary<GainPointColumn, GainPointDatum> GainPoints { get; } = new Dictionary<GainPointColumn, GainPointDatum>();
+
+        public GainPointDatum this[GainPointColumn column]
+        {
+            get => GainPoints.ContainsKey(column) ? GainPoints[column] : null;
+            set
+            {
+                if (value is GainPointDatum gpd)
+                    if (!GainPoints.ContainsKey(column))
+                        GainPoints.Add(column, gpd);
+                    else
+                        GainPoints[column] = gpd;
+                else if (value is null && GainPoints.ContainsKey(column))
+                    GainPoints.Remove(column);
+            }
+        }
+
+        #endregion Gain Point Analysis
+
         #region Patterns
 
         private Dictionary<PatternColumn, Pattern> Patterns { get; } = new Dictionary<PatternColumn, Pattern>();

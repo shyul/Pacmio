@@ -9,9 +9,9 @@ using System.Collections.Generic;
 
 namespace Pacmio
 {
-    public class TrendAnalysis : BarAnalysis, IPattern
+    public class GainPointAnalysis : BarAnalysis, IPattern
     {
-        public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
         {
             IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;
@@ -36,7 +36,7 @@ namespace Pacmio
                 ChartSeries = null;
         }
 
-        public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
+        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01, bool isLogarithmic = false)
         {
             IsLogarithmic = isLogarithmic;
             Tolerance = tolerance;
@@ -77,6 +77,8 @@ namespace Pacmio
 
         public Gain GainAnalysis { get; }
 
+        public GainPointColumn Result_Column { get; private set; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -84,49 +86,36 @@ namespace Pacmio
             if (bap.StartPt > min_start) bap.StartPt = min_start;
             if (bap.StartPt < 0) bap.StartPt = 0;
 
-            Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)> positive_list = new Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)>();
-            Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)> negative_list = new Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)>();
-
-            if (SourceData is null)
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                for (int i = bap.StartPt; i < bap.StopPt; i++)
+                Bar b = bt[i];
+                GainPointDatum gpd = new GainPointDatum();
+                b[Result_Column] = gpd;
+
+                if (SourceData is null)
                 {
-                    Bar b = bt[i];
                     double prominence = b[Bar.Column_Peak];
                     double trendStrength = b[Bar.Column_TrendStrength];
 
                     if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
-                        positive_list[i] = (b.Time, b[Bar.Column_High], prominence, trendStrength);
+                        gpd.PositiveList[i] = (b.Time, b[Bar.Column_High], prominence, trendStrength);
                     else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
-                        negative_list[i] = (b.Time, b[Bar.Column_Low], prominence, trendStrength);
+                        gpd.NegativeList[i] = (b.Time, b[Bar.Column_Low], prominence, trendStrength);
                 }
-            }
-            else
-            {
-                for (int i = bap.StartPt; i < bap.StopPt; i++)
+                else
                 {
-                    Bar b = bt[i];
                     double value = b[SourceData.Result_Column];
                     double prominence = b[GainAnalysis.Column_Peak];
                     double trendStrength = b[GainAnalysis.Column_TrendStrength];
 
                     if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
-                        positive_list[i] = (b.Time, value, prominence, trendStrength);
+                        gpd.PositiveList[i] = (b.Time, value, prominence, trendStrength);
                     else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
-                        negative_list[i] = (b.Time, value, prominence, trendStrength);
+                        gpd.NegativeList[i] = (b.Time, value, prominence, trendStrength);
                 }
             }
 
-
-
-
-
-
-
+            #endregion Calculation
         }
-
-        #endregion Calculation
     }
-
-
 }

@@ -26,7 +26,6 @@ namespace Pacmio
             Tolerance = tolerance;
         }
 
-
         public DateTime StartTime { get; }
 
         public double StartLevel { get; }
