@@ -35,6 +35,8 @@ namespace Pacmio
         /// </summary>
         public double TrendRate { get; }
 
+        public BarFreq BarFreq { get; }
+
         public double Tolerance { get; }
 
         public double Weight { get; }

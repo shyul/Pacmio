@@ -51,7 +51,7 @@ namespace Pacmio
 
             //AddArea(PositionArea = new PositionArea(this));
             AddArea(SignalArea = new SignalArea(this));
-            AddArea(MainArea = new MainArea(this, MainArea.DefaultName, 50, 0.3f) { HasXAxisBar = true, });
+            AddArea(MainArea = new MainArea(this, 50, 0.3f) { HasXAxisBar = true, });
 
 
 

@@ -16,7 +16,7 @@ namespace Pacmio
     {
         public const string DefaultName = "Main";
 
-        public MainArea(BarChart chart, string name, int height, float leftAxisRatio = 0.3f) : base(chart, name, height)
+        public MainArea(BarChart chart, int height, float leftAxisRatio = 0.3f) : base(chart, DefaultName, height)
         {
             AxisLeft.HeightRatio = leftAxisRatio;
             BarChart = chart;

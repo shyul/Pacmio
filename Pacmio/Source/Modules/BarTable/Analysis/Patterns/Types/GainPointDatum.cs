@@ -12,7 +12,7 @@ namespace Pacmio
 {
     public class GainPointDatum
     {
-        public Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)> PositiveList { get; } = new Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)>();
-        public Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)> NegativeList { get; } = new Dictionary<int, (DateTime time, double value, double prominence, double trendStrength)>();
+        public Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)> PositiveList { get; } = new Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)>();
+        public Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)> NegativeList { get; } = new Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)>();
     }
 }

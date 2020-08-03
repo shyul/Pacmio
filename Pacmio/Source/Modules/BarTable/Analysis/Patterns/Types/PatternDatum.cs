@@ -16,11 +16,21 @@ namespace Pacmio
 {
     public class PatternDatum
     {
+        public PatternDatum(BarFreq barFreq, string areaName) 
+        {
+            BarFreq = barFreq;
+            AreaName = areaName;
+        }
+
+        public BarFreq BarFreq { get; }
+        // Vectors of the pattern
+
         public string AreaName { get; }
+
+
 
         public List<TrendLine> TrendLines { get; } = new List<TrendLine>();
 
 
-        // Vectors of the pattern
     }
 }

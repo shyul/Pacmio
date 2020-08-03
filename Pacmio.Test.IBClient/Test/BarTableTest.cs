@@ -66,9 +66,7 @@ namespace TestClient
                     //new MACD(12, 26, 9),
                     //new STO(14, 3, 3),
                     //new TSI(25,13,7),
-                    
-                
-                       
+
                     new PSAR(0.02, 0.2),
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
                     //new Pivot(BarFreq.Daily),
@@ -84,7 +82,8 @@ namespace TestClient
                     ma_cross,
                     //new CandleStick(),
 
-                    new GainPointAnalysis(200, 3, 1),
+                    //new GainPointAnalysis(200, 3, 1),
+                    new TrendAnalysis(200, 3, 1, 0.03),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
