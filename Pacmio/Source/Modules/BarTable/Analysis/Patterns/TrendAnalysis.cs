@@ -6,14 +6,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrendAnalysis : BarAnalysis, IPattern
+    public class TrendAnalysis : BarAnalysis, IPattern, IChartOverlay
     {
         public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 1, double tolerance = 0.03, bool isLogarithmic = false)
         {
@@ -48,7 +50,7 @@ namespace Pacmio
 
         public virtual int Interval => GainPointAnalysis.Interval;
 
-        public virtual int MinimumRank { get; }
+        public virtual int MaximumResultCount { get; }
 
         public double Tolerance { get; }
 
@@ -58,7 +60,7 @@ namespace Pacmio
 
         public string AreaName { get; }
 
-       
+        public Color Color { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -72,24 +74,6 @@ namespace Pacmio
 
                 PatternDatum pd = new PatternDatum(bt.BarFreq, AreaName);
                 b[Result_Column] = pd;
-
-                /*
-                var pos_points = gpd.PositiveList.Select(n => (n.Key, n.Value.value));
-                var neg_points = gpd.NegativeList.Select(n => (n.Key, n.Value.value));
-
-                var all_points = pos_points.Concat(neg_points);
-
-                List<(int x1, double y1, int x2, double y2, double rate)> lines = new List<(int x1, double y1, int x2, double y2, double rate)>();
-                for (int j = 0; j < all_points.Count(); j++)
-                {
-                    var (x1, y1) = all_points.ElementAt(j);
-                    for (int k = j + 1; k < all_points.Count(); k++)
-                    {
-                        var (x2, y2) = all_points.ElementAt(k);
-                        double rate = (y2 - y1) / (x2 - x1);
-                        lines.Add((x1, y1, x2, y2, rate));
-                    }
-                }*/
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList);
                 for (int j = 0; j < all_points.Count(); j++)
@@ -108,8 +92,7 @@ namespace Pacmio
                         int distance = x2 - x1;
                         double rate = (y2 - y1) / distance;
 
-
-                        TrendLine tl = new TrendLine(pt1.Value.time, pt1.Value.level, rate, Tolerance, distance, IsLogarithmic);
+                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, distance, IsLogarithmic);
                         pd.TrendLines.Add(tl);
                     }
                 }
@@ -118,6 +101,33 @@ namespace Pacmio
                 {
                     Console.WriteLine(rate);
                 }*/
+            }
+        }
+
+        public void Draw(Graphics g, BarChart bc, BarTable bt)
+        {
+            if (AreaName is string areaName && bc[areaName] is Area a)
+            {
+                Bar b = bc.LastBar;
+
+                PatternDatum pd = b[Result_Column];
+
+                foreach (TrendLine tl in pd.TrendLines)
+                {
+                    int x1 = tl.StartIndex;
+                    int x2 = x1 + tl.Distance;
+
+                    double y1 = tl.StartLevel;
+                    double y2 = y1 + (tl.TrendRate * tl.Distance);
+
+                    Point pt1 = new Point(a.IndexToPixel(x1 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y1));
+                    Point pt2 = new Point(a.IndexToPixel(x2 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y2));
+                    g.DrawLine(new Pen(Color.Black), pt1, pt2);
+                }
+
+                //g.DrawLine(new Pen(Color.Black), new Point(a.Left, a.Top), new Point(a.Right, a.Bottom));
+                //Console.WriteLine(b.Index);
+
             }
         }
     }

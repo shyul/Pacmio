@@ -11,7 +11,7 @@ namespace Pacmio
     {
         int Interval { get; }
 
-        int MinimumRank { get; }
+        int MaximumResultCount { get; }
 
         double Tolerance { get; }
     }

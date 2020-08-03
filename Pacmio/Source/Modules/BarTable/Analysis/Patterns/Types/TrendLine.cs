@@ -16,19 +16,22 @@ namespace Pacmio
     /// </summary>
     public class TrendLine
     {
-        public TrendLine(DateTime startTime, double startLevel, double trendRate, double tolerance, double weight, bool isLogarithmic)
+        public TrendLine(int startIndex, double startLevel, int distance,double trendRate, double tolerance, double weight, bool isLogarithmic)
         {
-            StartTime = startTime;
+            StartIndex = startIndex;
             StartLevel = startLevel;
+            Distance = distance;
             TrendRate = trendRate;
             IsLogarithmic = isLogarithmic;
             Weight = weight;
             Tolerance = tolerance;
         }
 
-        public DateTime StartTime { get; }
+        public int StartIndex { get; }
 
         public double StartLevel { get; }
+
+        public int Distance { get; }
 
         /// <summary>
         /// Increase or decresse per each Bar.... at BarFreq...
