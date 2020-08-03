@@ -104,7 +104,6 @@ namespace Pacmio
                         if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
                             gpd.PositiveList[i_test] = (b_test.Time, value, prominence, trendStrength);
                         else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
-
                             gpd.NegativeList[i_test] = (b_test.Time, value, prominence, trendStrength);
                     }
                 }
