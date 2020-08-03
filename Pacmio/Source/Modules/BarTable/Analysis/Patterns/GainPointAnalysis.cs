@@ -2,62 +2,56 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// The intermediate calculation for most pattern analysis
+/// 
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
+using Xu;
 
 namespace Pacmio
 {
     public class GainPointAnalysis : BarAnalysis
     {
-        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01)
+        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 1)
         {
-            Tolerance = tolerance;
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
 
-            //string label = ;
-            //Name = ;
+            string label = "(" + ba.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
+            Name = GetType().Name + label;
 
             if (ba is ISingleData isd)
             {
-                SourceData = isd;
-                GainAnalysis = new Gain(SourceData.Result_Column, interval);
+                GainAnalysis = new Gain(isd.Result_Column, interval);
+                GainAnalysis.AddChild(this);
             }
             else
                 throw new ArgumentException("BarAnalysis has to be ISingleData");
 
-            if (ba is IChartSeries ics)
-                ChartSeries = ics;
-            else
-                ChartSeries = null;
+            Result_Column = new GainPointColumn(Name) { Label = label };
         }
 
-        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 5, double tolerance = 0.01)
+        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 1)
         {
-            Tolerance = tolerance;
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
 
-            //string label = ;
-            //Name = ;
+            string label = "(" + Bar.Column_Close.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
+            Name = GetType().Name + label;
 
-            SourceData = null;
-            ChartSeries = null;
             GainAnalysis = null;
 
+            Result_Column = new GainPointColumn(Name) { Label = label };
         }
 
         #region Parameters
 
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
+
         public virtual int Interval { get; }
-
-        public virtual int RankLimit { get; }
-
-        public double Tolerance { get; }
 
         public virtual int MinimumPeakProminence { get; }
 
@@ -67,19 +61,15 @@ namespace Pacmio
 
         #region Calculation
 
-        public ISingleData SourceData { get; }
-
-        public IChartSeries ChartSeries { get; }
-
         public Gain GainAnalysis { get; }
 
-        public GainPointColumn Result_Column { get; private set; }
+        public GainPointColumn Result_Column { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            int min_start = bap.StopPt - Interval - 1;
-            if (bap.StartPt > min_start) bap.StartPt = min_start;
+            //int min_start = bap.StopPt - Interval - 1;
+            //if (bap.StartPt > min_start) bap.StartPt = min_start;
             if (bap.StartPt < 0) bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
@@ -88,28 +78,55 @@ namespace Pacmio
                 GainPointDatum gpd = new GainPointDatum();
                 b[Result_Column] = gpd;
 
-                if (SourceData is null)
+                for (int j = 0; j < Interval; j++)
                 {
-                    double prominence = b[Bar.Column_Peak];
-                    double trendStrength = b[Bar.Column_TrendStrength];
+                    int i_test = i - j;
+                    if (i_test < 0) break;
 
-                    if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
-                        gpd.PositiveList[i] = (b.Time, b[Bar.Column_High], prominence, trendStrength);
-                    else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
-                        gpd.NegativeList[i] = (b.Time, b[Bar.Column_Low], prominence, trendStrength);
-                }
-                else
-                {
-                    double value = b[SourceData.Result_Column];
-                    double prominence = b[GainAnalysis.Column_Peak];
-                    double trendStrength = b[GainAnalysis.Column_TrendStrength];
+                    Bar b_test = bt[i_test];
 
-                    if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
-                        gpd.PositiveList[i] = (b.Time, value, prominence, trendStrength);
-                    else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
-                        gpd.NegativeList[i] = (b.Time, value, prominence, trendStrength);
+                    if (GainAnalysis is null)
+                    {
+                        double prominence = b_test[Bar.Column_Peak];
+                        double trendStrength = b_test[Bar.Column_TrendStrength];
+
+                        if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
+                            gpd.PositiveList[i_test] = (b_test.Time, b_test[Bar.Column_High], prominence, trendStrength);
+                        else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
+                            gpd.NegativeList[i_test] = (b_test.Time, b_test[Bar.Column_Low], prominence, trendStrength);
+                    }
+                    else
+                    {
+                        double value = b_test[GainAnalysis.Column];
+                        double prominence = b_test[GainAnalysis.Column_Peak];
+                        double trendStrength = b_test[GainAnalysis.Column_TrendStrength];
+
+                        if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
+                            gpd.PositiveList[i_test] = (b_test.Time, value, prominence, trendStrength);
+                        else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
+
+                            gpd.NegativeList[i_test] = (b_test.Time, value, prominence, trendStrength);
+                    }
                 }
             }
+            /*
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                GainPointDatum gpd = b[Result_Column];
+
+                Console.WriteLine("\n\n" + b.Time + "\n");
+
+                foreach (var val in gpd.PositiveList)
+                {
+                    Console.WriteLine("Positive: " + val.Key + ", " + val.Value.time + ", " + val.Value.value + ", " + val.Value.prominence + ", " + val.Value.trendStrength);
+                }
+
+                foreach (var val in gpd.NegativeList)
+                {
+                    Console.WriteLine("Negative: " + val.Key + ", " + val.Value.time + ", " + val.Value.value + ", " + val.Value.prominence + ", " + val.Value.trendStrength);
+                }
+            }*/
 
             #endregion Calculation
         }

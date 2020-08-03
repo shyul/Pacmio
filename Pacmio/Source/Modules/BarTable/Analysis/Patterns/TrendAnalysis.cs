@@ -20,6 +20,8 @@ namespace Pacmio
 
         public double Tolerance { get; }
 
+        public GainPointAnalysis GainPointAnalysis { get; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
 

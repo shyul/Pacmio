@@ -83,6 +83,8 @@ namespace TestClient
                     new SingleDataIndicator(rsi),
                     ma_cross,
                     //new CandleStick(),
+
+                    new GainPointAnalysis(200, 3, 1),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
