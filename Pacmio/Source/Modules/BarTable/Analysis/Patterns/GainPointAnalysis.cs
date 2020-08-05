@@ -18,7 +18,7 @@ namespace Pacmio
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
-            SkipLastCount = 3;
+            SkipLastCount = 10;
 
             string label = "(" + ba.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
@@ -39,7 +39,7 @@ namespace Pacmio
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
-            SkipLastCount = 3;
+            SkipLastCount = 10;
 
             string label = "(" + Bar.Column_Close.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;

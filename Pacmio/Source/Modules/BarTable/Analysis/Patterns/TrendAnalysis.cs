@@ -117,6 +117,8 @@ namespace Pacmio
                 }*/
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
+                Range<double> weight_range = new Range<double>(0);
+
                 for (int j = 0; j < all_points.Length; j++)
                 {
                     var pt1 = all_points[j];
@@ -134,19 +136,27 @@ namespace Pacmio
 
                         int distance = x2 - x1;
                         double rate = (y2 - y1) / distance;
+                        double weight = Math.Abs(distance * prominence);
 
-                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, Math.Abs(distance * prominence), IsLogarithmic);
+                        weight_range.Insert(weight);
+
+                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, weight, IsLogarithmic);
                         pd.TrendLines.Add(tl);
+
+                        int x3 = i;
+                        double y3 = y1 + (rate * Math.Abs(x3 - x1));
+                        pd.Levels.Add((weight, y3));
                     }
                 }
 
-                Range<double> range = new Range<double>(0);
+                /*
                 foreach (TrendLine tl in pd.TrendLines)
                 {
-                    range.Insert(tl.Weight);
+                    weight_range.Insert(tl.Weight);
                 }
+                */
 
-                pd.MaxTrendLineWeight = range.Max;
+                pd.MaxTrendLineWeight = weight_range.Max;
 
                 /*
                 foreach(var (x1, y1, x2, y2, rate) in lines) 
@@ -162,29 +172,35 @@ namespace Pacmio
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-
+                
                 Bar b = bc.LastBar;
 
                 if (b[Result_Column] is PatternDatum pd && pd.TrendLines is List<TrendLine> lines)
                     foreach (TrendLine tl in lines)
                     {
                         int x1 = tl.StartIndex;
-                        //int x1 = tl.StartIndex + tl.Distance;
-                        int x2 = bc.StopPt - 1;
 
-                        double y1 = tl.StartLevel;
-                        //double y1 = tl.StartLevel + (tl.TrendRate * tl.Distance);
-                        double y2 = y1 + (tl.TrendRate * Math.Abs(x2 - x1));
+                        int x1_idx = x1 - bc.StartPt;
 
-                        Point pt1 = new Point(a.IndexToPixel(x1 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y1));
-                        Point pt2 = new Point(a.IndexToPixel(x2 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y2));
+                        if(x1_idx >= 0)
+                        {                        
+                            //int x1 = tl.StartIndex + tl.Distance;
+                            int x2 = bc.StopPt - 1;
 
-                        int intensity = (255 * tl.Weight / pd.MaxTrendLineWeight).ToInt32();
+                            double y1 = tl.StartLevel;
+                            //double y1 = tl.StartLevel + (tl.TrendRate * tl.Distance);
+                            double y2 = y1 + (tl.TrendRate * Math.Abs(x2 - x1));
 
-                        if (intensity > 255) intensity = 255;
-                        else if (intensity < 0) intensity = 0;
+                            Point pt1 = new Point(a.IndexToPixel(x1_idx), a.AxisY(AlignType.Right).ValueToPixel(y1));
+                            Point pt2 = new Point(a.IndexToPixel(x2 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y2));
 
-                        g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
+                            int intensity = (255 * tl.Weight / pd.MaxTrendLineWeight).ToInt32();
+
+                            if (intensity > 255) intensity = 255;
+                            else if (intensity < 0) intensity = 0;
+
+                            g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
+                        }
                     }
 
                 //g.DrawLine(new Pen(Color.Black), new Point(a.Left, a.Top), new Point(a.Right, a.Bottom));
@@ -201,8 +217,24 @@ namespace Pacmio
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
+                Bar b = bc.LastBar;
 
+                if (b[Result_Column] is PatternDatum pd)
+                    foreach (var (weight, level) in pd.Levels)
+                    {
+                        int intensity = (255 * weight / pd.MaxTrendLineWeight).ToInt32();
 
+                        if (intensity > 255) intensity = 255;
+                        else if (intensity < 0) intensity = 0;
+
+                        //int x1 = bc.StopPt - bc.StartPt - 10;
+                        int x2 = bc.StopPt - bc.StartPt - 1;
+
+                        Point pt1 = new Point(a.IndexToPixel(x2), a.AxisY(AlignType.Right).ValueToPixel(level));
+                        Point pt2 = new Point(a.Right, a.AxisY(AlignType.Right).ValueToPixel(level));
+
+                        g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
+                    }
             }
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();
