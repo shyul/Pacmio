@@ -10,6 +10,10 @@ namespace Pacmio
 {
     public interface IChartOverlay
     {
+        
+
         void Draw(Graphics g, BarChart bc, BarTable bt);
     }
+
+
 }

@@ -693,14 +693,13 @@ namespace Pacmio
                     if ((!test_high) && (!test_low)) break;
 
                     int right_index = i + j;
-                    if (right_index >= BasicData_StopPt) break; // right_index = Gain_StopPt - 1;
+                    if (right_index >= BasicData_StopPt) break;
 
                     int left_index = i - j;
-                    if (left_index < 0) break; // left_index = 0;
+                    if (left_index < 0) break;
 
                     if (test_high)
                     {
-                        //double high_data = bt[i][High_Column];
                         double left_high = this[left_index].High;
                         double right_high = this[right_index].High;
 
@@ -715,7 +714,6 @@ namespace Pacmio
 
                     if (test_low)
                     {
-                        //double low_data = bt[i][Low_Column];
                         double left_low = this[left_index].Low;
                         double right_low = this[right_index].Low;
 

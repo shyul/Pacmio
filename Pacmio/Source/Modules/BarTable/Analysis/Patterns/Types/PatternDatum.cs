@@ -31,6 +31,6 @@ namespace Pacmio
 
         public List<TrendLine> TrendLines { get; } = new List<TrendLine>();
 
-
+        public double MaxTrendLineWeight { get; set; }
     }
 }

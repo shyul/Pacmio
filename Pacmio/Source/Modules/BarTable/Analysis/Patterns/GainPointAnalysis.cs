@@ -78,7 +78,7 @@ namespace Pacmio
                 GainPointDatum gpd = new GainPointDatum();
                 b[Result_Column] = gpd;
 
-                for (int j = 0; j < Interval; j++)
+                for (int j = 5; j < Interval; j++)
                 {
                     int i_test = i - j;
                     if (i_test < 0) break;
