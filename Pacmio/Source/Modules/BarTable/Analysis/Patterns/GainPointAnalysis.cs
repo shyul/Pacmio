@@ -93,9 +93,9 @@ namespace Pacmio
                         double prominence = b_test[Bar.Column_Peak];
                         double trendStrength = b_test[Bar.Column_TrendStrength];
 
-                        if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
+                        if (prominence > MinimumPeakProminence)// && trendStrength > MinimumTrendStrength)
                             gpd.PositiveList[i_test] = (b_test.Time, b_test[Bar.Column_High], prominence, trendStrength);
-                        else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
+                        else if (prominence < -MinimumPeakProminence)// && trendStrength < -MinimumTrendStrength)
                             gpd.NegativeList[i_test] = (b_test.Time, b_test[Bar.Column_Low], prominence, trendStrength);
                     }
                     else
@@ -104,9 +104,9 @@ namespace Pacmio
                         double prominence = b_test[GainAnalysis.Column_Peak];
                         double trendStrength = b_test[GainAnalysis.Column_TrendStrength];
 
-                        if (prominence > MinimumPeakProminence && trendStrength > MinimumTrendStrength)
+                        if (prominence > MinimumPeakProminence)// && trendStrength > MinimumTrendStrength)
                             gpd.PositiveList[i_test] = (b_test.Time, value, prominence, trendStrength);
-                        else if (prominence < -MinimumPeakProminence && trendStrength < -MinimumTrendStrength)
+                        else if (prominence < -MinimumPeakProminence)// && trendStrength < -MinimumTrendStrength)
                             gpd.NegativeList[i_test] = (b_test.Time, value, prominence, trendStrength);
                     }
                 }

@@ -4,18 +4,20 @@
 /// 
 /// ***************************************************************************
 
+using System.Drawing;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class Gain : BarAnalysis
+    public sealed class Gain : BarAnalysis, IChartSeries
     {
         public Gain(NumericColumn column, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
 
             string label = Column is null ? "(error)" : (Column == Bar.Column_Close ? "(" + MaximumPeakProminence.ToString() + ")" : "(" + Column.Name + "," + MaximumPeakProminence.ToString() + ")");
-            Name = GetType().Name + label;
+            Name = AreaName = GroupName = GetType().Name + label;
 
             Column = column;
             Column_Gain = new NumericColumn(Name + "_Gain");
@@ -26,6 +28,24 @@ namespace Pacmio
             Column_TrendStrength = new NumericColumn(Name + "_TrendStrength");
 
             Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+
+            ColumnSeries_Gain = new ColumnSeries(Column_Gain, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            {
+                Name = Name + "_GAIN",
+                LegendName = GroupName + "_GAIN",
+                Label = "GAIN",
+                Importance = Importance.Minor,
+                Order = 200
+            };
+
+            ColumnSeries_Trend = new ColumnSeries(Column_TrendStrength, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            {
+                Name = Name + "_Trend",
+                LegendName = GroupName + "_Trend",
+                Label = "TREND",
+                Importance = Importance.Minor,
+                Order = 200
+            };
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MaximumPeakProminence;
@@ -144,5 +164,43 @@ namespace Pacmio
         }
 
         #endregion Calculation
+
+        #region Series
+
+        public Color Color { get => ColumnSeries_Gain.Color; set => ColumnSeries_Gain.Color = ColumnSeries_Gain.ShadeColor = value; }
+
+        public ColumnSeries ColumnSeries_Gain { get; }
+
+        public ColumnSeries ColumnSeries_Trend { get; }
+
+        public bool ChartEnabled { get => Enabled && ColumnSeries_Gain.Enabled; set => ColumnSeries_Gain.Enabled = ColumnSeries_Trend.Enabled = value; }
+
+        public int SeriesOrder { get => ColumnSeries_Gain.Order; set => ColumnSeries_Gain.Order = ColumnSeries_Trend.Order = value; }
+
+        public bool HasXAxisBar { get; set; } = false;
+
+        public string AreaName { get; }
+
+        public float AreaRatio { get; set; } = 12;
+
+        public void ConfigChart(BarChart bc)
+        {
+            if (ChartEnabled)
+            {
+                Area a_gain = bc.AddArea(new Area(bc, AreaName + "_gain", AreaRatio)
+                {
+                    HasXAxisBar = HasXAxisBar,
+                });
+                a_gain.AddSeries(ColumnSeries_Gain);
+
+                Area a_trend = bc.AddArea(new Area(bc, AreaName + "_trend", AreaRatio)
+                {
+                    HasXAxisBar = HasXAxisBar,
+                });
+                a_trend.AddSeries(ColumnSeries_Trend);
+            }
+        }
+
+        #endregion Series
     }
 }

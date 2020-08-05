@@ -46,7 +46,6 @@ namespace Pacmio
 
         public SingleDataIndicator(IOscillator iosc, double range_percent = 0.05)
         {
-            Order = iosc.Order + 1;
             Column = iosc.Result_Column;
             double range = iosc.Reference * range_percent;
             Range = new Range<double>(iosc.Reference - range, iosc.Reference + range);
@@ -56,6 +55,9 @@ namespace Pacmio
 
             SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
             SignalColumns = new SignalColumn[] { SignalColumn };
+
+            //Order = iosc.Order + 1;
+            iosc.AddChild(this);
         }
 
         public SingleDataIndicator(NumericColumn column, Range<double> range)

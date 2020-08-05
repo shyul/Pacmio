@@ -170,7 +170,7 @@ namespace Pacmio
                     {
                         int x1 = tl.StartIndex;
                         //int x1 = tl.StartIndex + tl.Distance;
-                        int x2 = bc.StopPt;
+                        int x2 = bc.StopPt - 1;
 
                         double y1 = tl.StartLevel;
                         //double y1 = tl.StartLevel + (tl.TrendRate * tl.Distance);

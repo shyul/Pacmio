@@ -84,7 +84,7 @@ namespace TestClient
                     //new CandleStick(),
 
                     //new GainPointAnalysis(200, 3, 1),
-                    new TrendAnalysis(200, 2, 0, 0.03),
+                    new TrendAnalysis(260, 2, 0, 0.03),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
