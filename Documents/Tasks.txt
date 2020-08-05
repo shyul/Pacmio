@@ -1,3 +1,6 @@
+1. New Peak detect algorithm
+
+
 Task for Initial Strategy:
 1. ASK: How to get signal datum?
 2. Get a sample scalping Strategy complete

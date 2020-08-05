@@ -21,7 +21,7 @@ namespace TestClient
 
                 //var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });
                 //var mfi = new MFI(14) { Order = 99 };
-                var rsi = new RSI(14) { AreaRatio = 8 };
+                var rsi = new RSI(14) { AreaRatio = 8, HasXAxisBar = true, Order = int.MaxValue - 1, AreaOrder = int.MaxValue - 10 };
                 //var divergence = new Divergence(rsi);
                 //var indicator_reference_cross = new ConstantData(rsi, new Range<double>(49, 51));
 
@@ -38,15 +38,15 @@ namespace TestClient
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {                        
                     //mfi,
-                    rsi,
+                    
                     volumeEma,
                     //ema5,
                     //smma5,
                     //ema5_smma5_cross,
                
                     //new BoxRange(14),
-                    new SMA(20) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
-                    new Bollinger(20, 2.0),
+                    ///new SMA(20) { Color = Color.Teal.Opaque(50), LineWidth = 10 },
+                    ///new Bollinger(20, 2.0),
                     //new Chanderlier(22, 3) { Color = Color.Blue, Low_Color = Color.Plum },
                     //rsi,
    
@@ -67,23 +67,24 @@ namespace TestClient
                     //new STO(14, 3, 3),
                     //new TSI(25,13,7),
 
-                    new PSAR(0.02, 0.2),
+                    ///new PSAR(0.02, 0.2),
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
                     //new Pivot(BarFreq.Daily),
                     //ema5_smma5_cross,
                     //divergence
 
-                    new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15,HasXAxisBar = true, Order = int.MaxValue },
-                    new ADX(14) { AreaRatio = 10,  Order = int.MaxValue - 10 },
+                    ///new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    ///new ADX(14) { AreaRatio = 10,  Order = int.MaxValue - 10 },
                     //new CCI(20, 0.015),
                     //new ADX(14) { Order = 100, HasXAxisBar = true },
-                   
+                 
                     new SingleDataIndicator(rsi),
+                    rsi,
                     ma_cross,
                     //new CandleStick(),
 
                     //new GainPointAnalysis(200, 3, 1),
-                    new TrendAnalysis(200, 3, 0, 0.03),
+                    new TrendAnalysis(200, 2, 0, 0.03),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

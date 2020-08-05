@@ -8,11 +8,13 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public interface IChartOverlay
+    public interface IChartCustomGraphics
     {
         
 
-        void Draw(Graphics g, BarChart bc, BarTable bt);
+        void DrawOverlay(Graphics g, BarChart bc, BarTable bt);
+
+        void DrawBackground(Graphics g, BarChart bc, BarTable bt);
     }
 
 

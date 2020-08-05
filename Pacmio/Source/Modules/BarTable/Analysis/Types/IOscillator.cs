@@ -11,6 +11,8 @@ namespace Pacmio
 {
     public interface IOscillator : ISingleData
     {
+        int Order { get; }
+
         double Reference { get; }
 
         double LowerLimit { get; }

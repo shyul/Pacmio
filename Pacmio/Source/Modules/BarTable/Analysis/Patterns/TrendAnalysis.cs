@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrendAnalysis : BarAnalysis, IPattern, IChartOverlay
+    public class TrendAnalysis : BarAnalysis, IPattern, IChartCustomGraphics
     {
-        public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 1, double tolerance = 0.03, bool isLogarithmic = false)
+        public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
         {
             Tolerance = tolerance;
             IsLogarithmic = isLogarithmic;
@@ -31,7 +31,7 @@ namespace Pacmio
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
         }
 
-        public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 1, double tolerance = 0.03, bool isLogarithmic = false)
+        public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
         {
             Tolerance = tolerance;
             IsLogarithmic = isLogarithmic;
@@ -156,7 +156,7 @@ namespace Pacmio
             }
         }
 
-        public void Draw(Graphics g, BarChart bc, BarTable bt)
+        public void DrawBackground(Graphics g, BarChart bc, BarTable bt)
         {
             if (AreaName is string areaName && bc[areaName] is Area a)
             {
@@ -189,6 +189,19 @@ namespace Pacmio
 
                 //g.DrawLine(new Pen(Color.Black), new Point(a.Left, a.Top), new Point(a.Right, a.Bottom));
                 //Console.WriteLine(b.Index);
+
+            }
+            g.SmoothingMode = SmoothingMode.Default;
+            g.ResetClip();
+        }
+
+        public void DrawOverlay(Graphics g, BarChart bc, BarTable bt)
+        {
+            if (AreaName is string areaName && bc[areaName] is Area a)
+            {
+                g.SetClip(a.Bounds);
+                g.SmoothingMode = SmoothingMode.HighQuality;
+
 
             }
             g.SmoothingMode = SmoothingMode.Default;

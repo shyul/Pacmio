@@ -46,6 +46,7 @@ namespace Pacmio
 
         public SingleDataIndicator(IOscillator iosc, double range_percent = 0.05)
         {
+            Order = iosc.Order + 1;
             Column = iosc.Result_Column;
             double range = iosc.Reference * range_percent;
             Range = new Range<double>(iosc.Reference - range, iosc.Reference + range);

@@ -238,7 +238,7 @@ namespace Pacmio
                 {
                     StopPt = 0;
                     TabName = "No BarTable";
-                }  
+                }
             }
         }
 
@@ -259,10 +259,10 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-        public IEnumerable<IChartOverlay> ChartOverlays
+        public IEnumerable<IChartCustomGraphics> ChartOverlays
             => BarAnalysisSet
-            .Where(n => n is IChartOverlay)
-            .Select(n => (IChartOverlay)n);
+            .Where(n => n is IChartCustomGraphics)
+            .Select(n => (IChartCustomGraphics)n);
 
         public override string this[int i]
         {
@@ -584,6 +584,11 @@ namespace Pacmio
                                 g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
                                     Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
+                                foreach (var ic in ChartOverlays)
+                                {
+                                    ic.DrawBackground(g, this, m_BarTable);
+                                }
+
                                 for (int i = 0; i < Areas.Count; i++)
                                 {
                                     Area ca = Areas[i];
@@ -610,7 +615,7 @@ namespace Pacmio
 
                                 foreach (var ic in ChartOverlays)
                                 {
-                                    ic.Draw(g, this, m_BarTable);
+                                    ic.DrawOverlay(g, this, m_BarTable);
                                 }
                             }
                     }

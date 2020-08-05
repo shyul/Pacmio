@@ -13,11 +13,12 @@ namespace Pacmio
 {
     public class GainPointAnalysis : BarAnalysis
     {
-        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 1)
+        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
         {
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
+            SkipLastCount = 3;
 
             string label = "(" + ba.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
@@ -33,11 +34,12 @@ namespace Pacmio
             Result_Column = new GainPointColumn(Name) { Label = label };
         }
 
-        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 1)
+        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
         {
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
+            SkipLastCount = 3;
 
             string label = "(" + Bar.Column_Close.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
@@ -52,6 +54,8 @@ namespace Pacmio
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
 
         public virtual int Interval { get; }
+
+        public virtual int SkipLastCount { get; }
 
         public virtual int MinimumPeakProminence { get; }
 
@@ -68,8 +72,7 @@ namespace Pacmio
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            //int min_start = bap.StopPt - Interval - 1;
-            //if (bap.StartPt > min_start) bap.StartPt = min_start;
+
             if (bap.StartPt < 0) bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
@@ -78,7 +81,7 @@ namespace Pacmio
                 GainPointDatum gpd = new GainPointDatum();
                 b[Result_Column] = gpd;
 
-                for (int j = 5; j < Interval; j++)
+                for (int j = SkipLastCount; j < Interval; j++)
                 {
                     int i_test = i - j;
                     if (i_test < 0) break;
