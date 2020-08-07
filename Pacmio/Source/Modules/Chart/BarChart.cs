@@ -288,10 +288,10 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-        public IEnumerable<IChartCustomGraphics> ChartOverlays
+        public IEnumerable<IChartGraphics> ChartOverlays
             => BarAnalysisSet
-            .Where(n => n is IChartCustomGraphics)
-            .Select(n => (IChartCustomGraphics)n);
+            .Where(n => n is IChartGraphics)
+            .Select(n => (IChartGraphics)n);
 
         public override string this[int i]
         {
@@ -615,7 +615,7 @@ namespace Pacmio
 
                                 foreach (var ic in ChartOverlays)
                                 {
-                                    ic.DrawBackground(g, this, m_BarTable);
+                                    ic.DrawBackground(g, this);
                                 }
 
                                 for (int i = 0; i < Areas.Count; i++)
@@ -644,7 +644,7 @@ namespace Pacmio
 
                                 foreach (var ic in ChartOverlays)
                                 {
-                                    ic.DrawOverlay(g, this, m_BarTable);
+                                    ic.DrawOverlay(g, this);
                                 }
                             }
                     }

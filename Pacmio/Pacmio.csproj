@@ -101,7 +101,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartCustomGraphics.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartGraphics.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />

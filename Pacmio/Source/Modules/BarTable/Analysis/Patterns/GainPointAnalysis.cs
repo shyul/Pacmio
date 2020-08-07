@@ -18,7 +18,7 @@ namespace Pacmio
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
-            SkipLastCount = 10;
+            SkipLastCount = 5;
 
             string label = "(" + ba.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
@@ -39,7 +39,7 @@ namespace Pacmio
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
             MinimumTrendStrength = minimumTrendStrength;
-            SkipLastCount = 10;
+            SkipLastCount = 5;
 
             string label = "(" + Bar.Column_Close.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
@@ -93,6 +93,9 @@ namespace Pacmio
                         double prominence = b_test[Bar.Column_Peak];
                         double trendStrength = b_test[Bar.Column_TrendStrength];
 
+                        // For simulation accuracy, the prominence can't be greater than the back testing offset.
+                        if (prominence > j) prominence = j;
+
                         if (prominence > MinimumPeakProminence)// && trendStrength > MinimumTrendStrength)
                             gpd.PositiveList[i_test] = (b_test.Time, b_test[Bar.Column_High], prominence, trendStrength);
                         else if (prominence < -MinimumPeakProminence)// && trendStrength < -MinimumTrendStrength)
@@ -102,6 +105,10 @@ namespace Pacmio
                     {
                         double value = b_test[GainAnalysis.Column];
                         double prominence = b_test[GainAnalysis.Column_Peak];
+
+                        // For simulation accuracy, the prominence can't be greater than the back testing offset.
+                        if (prominence > j) prominence = j;
+
                         double trendStrength = b_test[GainAnalysis.Column_TrendStrength];
 
                         if (prominence > MinimumPeakProminence)// && trendStrength > MinimumTrendStrength)

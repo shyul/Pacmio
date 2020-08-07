@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrendAnalysis : BarAnalysis, IPattern, IChartCustomGraphics
+    public class TrendAnalysis : BarAnalysis, IPattern, IChartGraphics
     {
         public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
         {
@@ -58,8 +58,6 @@ namespace Pacmio
         public PatternColumn Result_Column { get; }
 
         public string AreaName { get; }
-
-        public Color Color { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -122,17 +120,25 @@ namespace Pacmio
                 for (int j = 0; j < all_points.Length; j++)
                 {
                     var pt1 = all_points[j];
+                    int x1 = pt1.Key;
+                    double y1 = pt1.Value.level;
+                    double p1 = Math.Abs(pt1.Value.prominence);
+
+                    if (p1 > 8) 
+                    {
+                        //Console.WriteLine("Adding level line: " + p1);
+                        TrendLine tl = new TrendLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100, IsLogarithmic);
+                        pd.TrendLines.Add(tl);
+                        pd.Levels.Add((p1 * p1 * 100, y1));
+                    }
+
                     for (int k = j + 1; k < all_points.Length; k++)
                     {
                         var pt2 = all_points[k];
-
-                        int x1 = pt1.Key;
                         int x2 = pt2.Key;
-
-                        double y1 = pt1.Value.level;
                         double y2 = pt2.Value.level;
 
-                        double prominence = pt1.Value.prominence + pt2.Value.prominence;
+                        double prominence = Math.Abs(pt1.Value.prominence) + Math.Abs(pt2.Value.prominence);
 
                         int distance = x2 - x1;
                         double rate = (y2 - y1) / distance;
@@ -166,24 +172,23 @@ namespace Pacmio
             }
         }
 
-        public void DrawBackground(Graphics g, BarChart bc, BarTable bt)
+        public void DrawBackground(Graphics g, BarChart bc)
         {
             if (AreaName is string areaName && bc[areaName] is Area a)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                
+
                 Bar b = bc.LastBar;
 
                 if (b[Result_Column] is PatternDatum pd && pd.TrendLines is List<TrendLine> lines)
                     foreach (TrendLine tl in lines)
                     {
                         int x1 = tl.StartIndex;
-
                         int x1_idx = x1 - bc.StartPt;
 
-                        if(x1_idx >= 0)
-                        {                        
+                        if (x1_idx >= 0)
+                        {
                             //int x1 = tl.StartIndex + tl.Distance;
                             int x2 = bc.StopPt - 1;
 
@@ -199,7 +204,12 @@ namespace Pacmio
                             if (intensity > 255) intensity = 255;
                             else if (intensity < 0) intensity = 0;
 
-                            g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
+                            if (y2 > y1)
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt2);
+                            else if (y2 < y1)
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt2);
+                            else
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
                         }
                     }
 
@@ -211,7 +221,7 @@ namespace Pacmio
             g.ResetClip();
         }
 
-        public void DrawOverlay(Graphics g, BarChart bc, BarTable bt)
+        public void DrawOverlay(Graphics g, BarChart bc)
         {
             if (AreaName is string areaName && bc[areaName] is Area a)
             {
