@@ -28,7 +28,7 @@ namespace Pacmio
 
             Result_Column = new PatternColumn(Name) { Label = label };
 
-            AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
+            GraphicsAreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
         }
 
         public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
@@ -42,7 +42,7 @@ namespace Pacmio
             GainPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(Name) { Label = label };
-            AreaName = MainArea.DefaultName;
+            GraphicsAreaName = MainArea.DefaultName;
         }
 
         public bool IsLogarithmic { get; }
@@ -53,11 +53,11 @@ namespace Pacmio
 
         public double Tolerance { get; }
 
+        #region Calculation
+
         public GainPointAnalysis GainPointAnalysis { get; }
 
         public PatternColumn Result_Column { get; }
-
-        public string AreaName { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -69,7 +69,7 @@ namespace Pacmio
                 Bar b = bt[i];
                 GainPointDatum gpd = b[GainPointAnalysis.Result_Column];
 
-                PatternDatum pd = b[Result_Column] = new PatternDatum(bt.BarFreq, AreaName);
+                PatternDatum pd = b[Result_Column] = new PatternDatum(bt.BarFreq, GraphicsAreaName);
 
                 /*
                 for (int j = 0; j < gpd.PositiveList.Count(); j++)
@@ -124,7 +124,7 @@ namespace Pacmio
                     double y1 = pt1.Value.level;
                     double p1 = Math.Abs(pt1.Value.prominence);
 
-                    if (p1 > 8) 
+                    if (p1 > 8)
                     {
                         //Console.WriteLine("Adding level line: " + p1);
                         TrendLine tl = new TrendLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100, IsLogarithmic);
@@ -172,9 +172,17 @@ namespace Pacmio
             }
         }
 
+        #endregion Calculation
+
+        #region Chart Graphics
+
+        public bool ChartEnabled { get; set; } = true;
+
+        public string GraphicsAreaName { get; }
+
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (AreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && GraphicsAreaName is string areaName && bc[areaName] is Area a)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
@@ -223,7 +231,7 @@ namespace Pacmio
 
         public void DrawOverlay(Graphics g, BarChart bc)
         {
-            if (AreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && GraphicsAreaName is string areaName && bc[areaName] is Area a)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
@@ -249,5 +257,7 @@ namespace Pacmio
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();
         }
+
+        #endregion Chart Graphics
     }
 }

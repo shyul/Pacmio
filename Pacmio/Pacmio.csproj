@@ -84,6 +84,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\Peak.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULT.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\GainPointColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\GainPointDatum.cs" />

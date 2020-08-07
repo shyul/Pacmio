@@ -15,11 +15,11 @@ namespace Pacmio
         public Gain(NumericColumn column, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            Column_High = Column_Low = column;
 
-            string label = Column is null ? "(error)" : (Column == Bar.Column_Close ? "(" + MaximumPeakProminence.ToString() + ")" : "(" + Column.Name + "," + MaximumPeakProminence.ToString() + ")");
+            string label = Column_High is null ? "(error)" : (Column_High == Bar.Column_Close ? "(" + MaximumPeakProminence.ToString() + ")" : "(" + Column_High.Name + "," + MaximumPeakProminence.ToString() + ")");
             Name = AreaName = GroupName = GetType().Name + label;
 
-            Column = column;
             Column_Gain = new NumericColumn(Name + "_Gain");
             Column_Percent = new NumericColumn(Name + "_Percent");
             Column_TrueRange = new NumericColumn(Name + "_TrueRange");
@@ -27,7 +27,7 @@ namespace Pacmio
             Column_Peak = new NumericColumn(Name + "_Peak");
             Column_TrendStrength = new NumericColumn(Name + "_TrendStrength");
 
-            Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
+            Description = (Column_High == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column_High.Name + ")";
 
             ColumnSeries_Gain = new ColumnSeries(Column_Gain, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
@@ -48,13 +48,15 @@ namespace Pacmio
             };
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MaximumPeakProminence;
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence;
 
         #region Parameters
 
         public int MaximumPeakProminence { get; }
 
-        public NumericColumn Column { get; } // The source Column
+        public NumericColumn Column_High { get; }
+
+        public NumericColumn Column_Low { get; }
 
         #endregion Parameters
 
@@ -85,12 +87,12 @@ namespace Pacmio
             if (bap.StartPt < 1)
             {
                 if (bap.StartPt < 0) bap.StartPt = 0;
-                data_1 = bt[0][Column];
+                data_1 = bt[0][Column_High];
                 trend_1 = 0;
             }
             else
             {
-                data_1 = bt[bap.StartPt - 1][Column];
+                data_1 = bt[bap.StartPt - 1][Column_High];
                 trend_1 = bt[bap.StartPt - 1][Column_TrendStrength];
             }
 
@@ -99,7 +101,7 @@ namespace Pacmio
                 Bar b = bt[i];
 
                 // Get Gain
-                double data = b[Column];
+                double data = b[Column_High];
                 double gain = b[Column_Gain] = data - data_1;
 
                 b[Column_Percent] = (data_1 == 0) ? 0 : (100 * gain / data_1);
@@ -130,8 +132,8 @@ namespace Pacmio
                     int left_index = i - j;
                     if (left_index < 0) left_index = 0;
 
-                    double left_data = bt[left_index][Column];
-                    double right_data = bt[right_index][Column];
+                    double left_data = bt[left_index][Column_High];
+                    double right_data = bt[right_index][Column_High];
 
                     if (test_high)
                     {

@@ -11,9 +11,9 @@ namespace Pacmio
     public interface IChartGraphics
     {
 
+        bool ChartEnabled { get; set; }
 
-
-        string AreaName { get; }
+        string GraphicsAreaName { get; }
 
         void DrawOverlay(Graphics g, BarChart bc);
 

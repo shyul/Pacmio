@@ -103,7 +103,7 @@ namespace Pacmio
                     }
                     else
                     {
-                        double value = b_test[GainAnalysis.Column];
+                        double value = b_test[GainAnalysis.Column_High];
                         double prominence = b_test[GainAnalysis.Column_Peak];
 
                         // For simulation accuracy, the prominence can't be greater than the back testing offset.
