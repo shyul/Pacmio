@@ -26,8 +26,9 @@ namespace Pacmio
             AreaName = label;
 
             Column_TrendStrength = new NumericColumn(Name) { Label = label };
+            Column_GapPercent = new NumericColumn("GapPercent" + label) { Label = label };
 
-            ColumnSeries_TrendStrength = new ColumnSeries(Column_TrendStrength, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            ColumnSeries_TrendStrength = new AdColumnSeries(Column_TrendStrength, Column_TrendStrength, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = GroupName + ": ",
@@ -37,6 +38,9 @@ namespace Pacmio
                 IsAntialiasing = false,
                 Order = 200
             };
+
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ Column_Close.GetHashCode();
@@ -50,6 +54,8 @@ namespace Pacmio
         public NumericColumn Column_Close { get; }
 
         public NumericColumn Column_TrendStrength { get; }
+
+        public NumericColumn Column_GapPercent { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -69,7 +75,7 @@ namespace Pacmio
             else
             {
                 Bar b_1 = bt[bap.StartPt - 1];
-                high_1 = b_1.High;
+                high_1 = b_1[Column_High];
                 low_1 = b_1[Column_Low];
                 close_1 = b_1[Column_Close];
                 trend_1 = b_1.TrendStrength;
@@ -81,6 +87,22 @@ namespace Pacmio
                 double high = b[Column_High];
                 double low = b[Column_Low];
                 double close = b[Column_Close];
+
+                if (i > 0)
+                {
+                    if (low > high_1)
+                    {
+                        b[Column_GapPercent] = 100 * (low - high_1) / high_1;
+                    }
+                    else if (high < low_1)
+                    {
+                        b[Column_GapPercent] = 100 * (high - low_1) / low_1;
+                    }
+                    else
+                        b[Column_GapPercent] = 0;
+                }
+                else
+                    b[Column_GapPercent] = 0;
 
                 double trend = 0;
                 if (close > close_1 || (high > high_1 && low > low_1))
@@ -103,17 +125,41 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color
+        public Color Color { get => UpperColor; set => UpperColor = value; }
+
+        public Color UpperColor
         {
-            get => ColumnSeries_TrendStrength.Color;
+            get
+            {
+                return ColumnSeries_TrendStrength.Theme.ForeColor;
+            }
             set
             {
-                ColumnSeries_TrendStrength.Color = value;
-                ColumnSeries_TrendStrength.ShadeColor = value;
+                ColumnSeries_TrendStrength.Theme.ForeColor = value;
+
+                ColumnSeries_TrendStrength.TextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_TrendStrength.TextTheme.FillColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_TrendStrength.TextTheme.ForeColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor;
             }
         }
 
-        public ColumnSeries ColumnSeries_TrendStrength { get; }
+        public Color LowerColor
+        {
+            get
+            {
+                return ColumnSeries_TrendStrength.DownTheme.ForeColor;
+            }
+            set
+            {
+                ColumnSeries_TrendStrength.DownTheme.ForeColor = value;
+
+                ColumnSeries_TrendStrength.DownTextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_TrendStrength.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_TrendStrength.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor;
+            }
+        }
+
+        public AdColumnSeries ColumnSeries_TrendStrength { get; }
 
         public bool ChartEnabled { get => Enabled && ColumnSeries_TrendStrength.Enabled; set => ColumnSeries_TrendStrength.Enabled = value; }
 

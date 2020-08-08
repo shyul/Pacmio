@@ -270,8 +270,11 @@ namespace Pacmio
         public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE", "CLOSE");
         public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME", string.Empty);
 
-        public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
-        public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
+        //public static readonly NumericColumn Column_Gain = new NumericColumn("GAIN");
+        //public static readonly NumericColumn Column_Percent = new NumericColumn("PERCENT");
+        public static NumericColumn Column_Gain => BarTable.GainAnalysis.Column_Gain;
+        public static NumericColumn Column_Percent => BarTable.GainAnalysis.Column_Percent;
+
         public static readonly NumericColumn Column_Gap = new NumericColumn("GAP");
         public static readonly NumericColumn Column_GapPercent = new NumericColumn("GAPPERCENT");
         public static readonly NumericColumn Column_TrueRange = new NumericColumn("TRUERANGE");

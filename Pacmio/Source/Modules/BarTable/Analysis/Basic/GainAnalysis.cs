@@ -10,9 +10,11 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class GainAnalysis : BarAnalysis, IChartSeries
+    public sealed class GainAnalysis : BarAnalysis, ISingleData, IChartSeries
     {
-        public GainAnalysis(NumericColumn column, int maximumPeakProminence)
+        public GainAnalysis() : this(Bar.Column_Close) { }
+
+        public GainAnalysis(NumericColumn column)
         {
             Column = column;
 
@@ -24,7 +26,7 @@ namespace Pacmio
 
             Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
-            ColumnSeries_Percent = new ColumnSeries(Column_Percent, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            ColumnSeries_Percent = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = GroupName + ": ",
@@ -34,6 +36,9 @@ namespace Pacmio
                 IsAntialiasing = false,
                 Order = 200
             };
+
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode();
@@ -45,6 +50,8 @@ namespace Pacmio
         public NumericColumn Column_Gain { get; }
 
         public NumericColumn Column_Percent { get; }
+
+        public NumericColumn Column_Result => Column_Percent;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -81,10 +88,41 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color { get => ColumnSeries_Percent.Color; set => ColumnSeries_Percent.Color = ColumnSeries_Percent.ShadeColor = value; }
+        public Color Color { get => UpperColor; set => UpperColor = value; }
 
-        public ColumnSeries ColumnSeries_Percent { get; }
+        public Color UpperColor
+        {
+            get
+            {
+                return ColumnSeries_Percent.Theme.ForeColor;
+            }
+            set
+            {
+                ColumnSeries_Percent.Theme.ForeColor = value;
 
+                ColumnSeries_Percent.TextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_Percent.TextTheme.FillColor = ColumnSeries_Percent.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.TextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_Percent.TextTheme.ForeColor = ColumnSeries_Percent.TextTheme.EdgeColor;
+            }
+        }
+
+        public Color LowerColor
+        {
+            get
+            {
+                return ColumnSeries_Percent.DownTheme.ForeColor;
+            }
+            set
+            {
+                ColumnSeries_Percent.DownTheme.ForeColor = value;
+
+                ColumnSeries_Percent.DownTextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_Percent.DownTextTheme.FillColor = ColumnSeries_Percent.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.DownTextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_Percent.DownTextTheme.ForeColor = ColumnSeries_Percent.DownTextTheme.EdgeColor;
+            }
+        }
+
+        public AdColumnSeries ColumnSeries_Percent { get; }
 
         public bool ChartEnabled { get => Enabled && ColumnSeries_Percent.Enabled; set => ColumnSeries_Percent.Enabled = value; }
 
@@ -100,11 +138,14 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area a_gain = bc.AddArea(new Area(bc, AreaName + "_gain", AreaRatio)
-                {
-                    HasXAxisBar = HasXAxisBar,
-                });
-                a_gain.AddSeries(ColumnSeries_Percent);
+                OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
+                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
+                    {
+                        Reference = 0,
+                        HasXAxisBar = HasXAxisBar,
+                        FixedTickStep_Right = 0.02,
+                    });
+                a.AddSeries(ColumnSeries_Percent);
             }
         }
 

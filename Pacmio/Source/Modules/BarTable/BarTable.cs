@@ -767,6 +767,8 @@ namespace Pacmio
 
         public int MinimumTagPeakProminence { get; set; } = 5;
 
+        public static GainAnalysis GainAnalysis { get; } = new GainAnalysis();
+
         #endregion Basic Data
 
         #region Data/Bar Analysis (TA) Calculation
@@ -806,6 +808,13 @@ namespace Pacmio
 
         public int LatestCalculatePointer { get; private set; } = 0;
 
+        private BarAnalysisPointer Calculate(BarAnalysis ba)
+        {
+            BarAnalysisPointer bap = GetBarAnalysisPointer(ba);
+            ba.Update(bap);
+            return bap;
+        }
+
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
@@ -821,6 +830,9 @@ namespace Pacmio
                 if (BasicData_StartPt < 0) BasicData_StartPt = 0;
                 BasicData_Calculate();
                 BasicData_StartPt = BasicData_StopPt;
+
+                startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
+                
 
                 foreach (BarAnalysis ba in analyses) //BarAnalysisPointerList.Keys)
                 {

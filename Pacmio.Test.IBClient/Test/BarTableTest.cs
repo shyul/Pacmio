@@ -37,6 +37,7 @@ namespace TestClient
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {                        
+                    new GainAnalysis(),
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
                 };
