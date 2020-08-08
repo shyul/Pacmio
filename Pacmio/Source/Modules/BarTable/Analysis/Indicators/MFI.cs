@@ -36,8 +36,8 @@ namespace Pacmio
             PMF_Column = new NumericColumn(Name + "_PMF") { Label = "PMF" };
             NMF_Column = new NumericColumn(Name + "_NMF") { Label = "NMF" };
 
-            Result_Column = new NumericColumn(Name) { Label = label };
-            LineSeries = new LineSeries(Result_Column)
+            Column_Result = new NumericColumn(Name) { Label = label };
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 Label = label,
@@ -98,7 +98,7 @@ namespace Pacmio
                     sum_n += bt[k][NMF_Column];
                 }
 
-                b[Result_Column] = (sum_n != 0) ? 100 - (100 / (1 + (sum_p / sum_n))) : 100;
+                b[Column_Result] = (sum_n != 0) ? 100 - (100 / (1 + (sum_p / sum_n))) : 100;
             }
         }
 

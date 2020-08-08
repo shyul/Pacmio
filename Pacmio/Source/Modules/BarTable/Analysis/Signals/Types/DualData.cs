@@ -107,10 +107,10 @@ namespace Pacmio
         #region Dual Data Tools
 
         public static List<DualDataType> DualDataSignal(BarTable bt, int i, ISingleData fast_analysis, ISingleData slow_analysis)
-            => DualDataSignal(bt, i, fast_analysis.Result_Column, slow_analysis.Result_Column);
+            => DualDataSignal(bt, i, fast_analysis.Column_Result, slow_analysis.Column_Result);
 
         public static List<DualDataType> DualDataSignal(BarTable bt, int i, IDualData analysis)
-            => DualDataSignal(bt, i, analysis.High_Column, analysis.Low_Column);
+            => DualDataSignal(bt, i, analysis.Column_High, analysis.Column_Low);
 
         public static List<DualDataType> DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column)
         {

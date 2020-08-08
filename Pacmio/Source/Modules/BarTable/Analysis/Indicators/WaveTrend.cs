@@ -44,12 +44,12 @@ namespace Pacmio // Can be derived from SMA
             EMA_TCI.LineSeries.DrawLimitShade = true;
             EMA_TCI.Color = Color.DarkSlateGray;
 
-            SMA_WT2 = new SMA(EMA_TCI.Result_Column, Interval_Slow);
+            SMA_WT2 = new SMA(EMA_TCI.Column_Result, Interval_Slow);
 
-            Result_Column.Name = Name;
-            Result_Column.Label = string.Empty;
+            Column_Result.Name = Name;
+            Column_Result.Label = string.Empty;
 
-            DotSeries = new DotSeries(SMA_WT2.Result_Column, Color.DarkOrange, 1)
+            DotSeries = new DotSeries(SMA_WT2.Column_Result, Color.DarkOrange, 1)
             {
                 Importance = Importance.Major,
                 Name = Name + "_SIGNAL",
@@ -104,7 +104,7 @@ namespace Pacmio // Can be derived from SMA
 
         public SMA SMA_WT2 { get; }
 
-        public NumericColumn Result_Column => SMA_WT2.Result_Column;
+        public NumericColumn Column_Result => SMA_WT2.Column_Result;
 
         public NumericColumn HIST_Column { get; }
 
@@ -138,7 +138,7 @@ namespace Pacmio // Can be derived from SMA
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double de = b[EMA_DE.Result_Column];
+                double de = b[EMA_DE.Column_Result];
                 if (de == 0) de = 0.001;
                 //Console.WriteLine("de = " + de);
 
@@ -155,7 +155,7 @@ namespace Pacmio // Can be derived from SMA
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[HIST_Column] = b[EMA_TCI.Result_Column] - b[SMA_WT2.Result_Column];
+                b[HIST_Column] = b[EMA_TCI.Column_Result] - b[SMA_WT2.Column_Result];
             }
         }
 

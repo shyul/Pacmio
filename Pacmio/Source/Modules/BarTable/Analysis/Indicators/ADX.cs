@@ -90,11 +90,11 @@ namespace Pacmio
 
         public NumericColumn DX_MA { get; }
 
-        public override NumericColumn Result_Column => DX_MA;
+        public override NumericColumn Column_Result => DX_MA;
 
-        public NumericColumn High_Column => PDI;
+        public NumericColumn Column_High => PDI;
 
-        public NumericColumn Low_Column => MDI;
+        public NumericColumn Column_Low => MDI;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -198,7 +198,7 @@ namespace Pacmio
                 double sum_i = pdi + mdi;
                 if (sum_i != 0) dx = Math.Abs((pdi - mdi) * 100 / sum_i);
 
-                b[Result_Column] = dx;
+                b[Column_Result] = dx;
 
                 if (i <= 2 * Interval)
                 {
@@ -207,7 +207,7 @@ namespace Pacmio
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        sum_i += bt[k][Result_Column];
+                        sum_i += bt[k][Column_Result];
                     }
                     b[DX_MA] = sum_i / Interval;
                 }

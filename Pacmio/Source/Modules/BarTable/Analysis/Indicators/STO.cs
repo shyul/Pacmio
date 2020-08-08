@@ -42,7 +42,7 @@ namespace Pacmio
             SL.Color = Color.FromArgb(255, 96, 96, 96);
             this.AddChild(SL);
 
-            SL_FULL = new SMA(Result_Column, D2);
+            SL_FULL = new SMA(Column_Result, D2);
             SL_FULL.LineSeries.LegendName = GroupName;
             SL_FULL.LineSeries.Name = Name + "_SL";
             SL_FULL.LineSeries.Label = "SL";
@@ -76,7 +76,7 @@ namespace Pacmio
 
         public NumericColumn OSC_Column { get; }
 
-        public NumericColumn Result_Column => SL.Result_Column;
+        public NumericColumn Column_Result => SL.Column_Result;
 
         public SMA SL { get; }
 
@@ -88,8 +88,8 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double high = b[BoxRange.High_Column];
-                double low = b[BoxRange.Low_Column];
+                double high = b[BoxRange.Column_High];
+                double low = b[BoxRange.Column_Low];
                 b[OSC_Column] = (high == low) ? 100.0 : 100.0 * (b.Close - low) / (high - low);
             }
         }

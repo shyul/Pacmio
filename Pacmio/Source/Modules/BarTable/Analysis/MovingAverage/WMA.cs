@@ -45,7 +45,7 @@ namespace Pacmio // Can be derived from SMA
                     val += bt[ik][Column] * (Interval - pt) / sum;
                 }
 
-                bt[i][Result_Column] = val;
+                bt[i][Column_Result] = val;
             }
         }
 

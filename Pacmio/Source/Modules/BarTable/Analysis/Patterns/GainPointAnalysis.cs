@@ -25,8 +25,13 @@ namespace Pacmio
 
             if (ba is ISingleData isd)
             {
-                GainAnalysis = new Gain(isd.Result_Column, interval);
-                GainAnalysis.AddChild(this);
+                PeakAnalysis = new PeakAnalysis(isd, interval);
+                PeakAnalysis.AddChild(this);
+            }
+            else if (ba is IDualData idd)
+            {
+                PeakAnalysis = new PeakAnalysis(idd, interval);
+                PeakAnalysis.AddChild(this);
             }
             else
                 throw new ArgumentException("BarAnalysis has to be ISingleData");
@@ -44,7 +49,7 @@ namespace Pacmio
             string label = "(" + Bar.Column_Close.Name + "," + Interval + "," + MinimumPeakProminence + "," + MinimumTrendStrength + ")";
             Name = GetType().Name + label;
 
-            GainAnalysis = null;
+            PeakAnalysis = null;
 
             Result_Column = new GainPointColumn(Name) { Label = label };
         }
@@ -65,7 +70,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public Gain GainAnalysis { get; }
+        public PeakAnalysis PeakAnalysis { get; }
 
         public GainPointColumn Result_Column { get; }
 
@@ -88,7 +93,7 @@ namespace Pacmio
 
                     Bar b_test = bt[i_test];
 
-                    if (GainAnalysis is null)
+                    if (PeakAnalysis is null)
                     {
                         double prominence = b_test[Bar.Column_Peak];
                         double trendStrength = b_test[Bar.Column_TrendStrength];
@@ -103,13 +108,14 @@ namespace Pacmio
                     }
                     else
                     {
-                        double value = b_test[GainAnalysis.Column_High];
-                        double prominence = b_test[GainAnalysis.Column_Peak];
+
+                        double prominence = b_test[PeakAnalysis.Column_Result];
+                        double value = prominence > 0 ? b_test[PeakAnalysis.Column_High] : b_test[PeakAnalysis.Column_Low];
 
                         // For simulation accuracy, the prominence can't be greater than the back testing offset.
                         if (prominence > j) prominence = j;
 
-                        double trendStrength = b_test[GainAnalysis.Column_TrendStrength];
+                        double trendStrength = 0;// b_test[GainAnalysis.Column_TrendStrength];
 
                         if (prominence > MinimumPeakProminence)// && trendStrength > MinimumTrendStrength)
                             gpd.PositiveList[i_test] = (b_test.Time, value, prominence, trendStrength);

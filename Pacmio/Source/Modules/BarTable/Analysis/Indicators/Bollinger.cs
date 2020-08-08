@@ -51,10 +51,10 @@ namespace Pacmio
             STDEV.ChartEnabled = false;
             STDEV.AddChild(this);
 
-            High_Column = new NumericColumn(Name + "_BBH") { Label = "H" };
-            Low_Column = new NumericColumn(Name + "_BBL") { Label = "L" };
+            Column_High = new NumericColumn(Name + "_BBH") { Label = "H" };
+            Column_Low = new NumericColumn(Name + "_BBL") { Label = "L" };
 
-            BandSeries = new BandSeries(High_Column, Low_Column, SMA.LineSeries.Color)
+            BandSeries = new BandSeries(Column_High, Column_Low, SMA.LineSeries.Color)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -81,19 +81,19 @@ namespace Pacmio
 
         public STDEV STDEV { get; }
 
-        public NumericColumn High_Column { get; }
+        public NumericColumn Column_High { get; }
 
-        public NumericColumn Low_Column { get; }
+        public NumericColumn Column_Low { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                double ma = bt[i][SMA.Result_Column];
-                double stdev = bt[i][STDEV.Result_Column] * Spread;
-                bt[i][High_Column] = ma + stdev;
-                bt[i][Low_Column] = ma - stdev;
+                double ma = bt[i][SMA.Column_Result];
+                double stdev = bt[i][STDEV.Column_Result] * Spread;
+                bt[i][Column_High] = ma + stdev;
+                bt[i][Column_Low] = ma - stdev;
             }
         }
 

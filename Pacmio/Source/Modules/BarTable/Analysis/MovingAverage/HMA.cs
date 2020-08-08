@@ -46,7 +46,7 @@ namespace Pacmio
 
             //Result_Column.Name = Name;
             //Result_Column.Label = label;
-            LineSeries = new LineSeries(Result_Column)
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -66,7 +66,7 @@ namespace Pacmio
 
         public WMA HMA_Result { get; }
 
-        public override NumericColumn Result_Column => HMA_Result.Result_Column;
+        public override NumericColumn Column_Result => HMA_Result.Column_Result;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -76,7 +76,7 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                bt[i][IM_Column] = (2 * bt[i][WMA_Fast.Result_Column]) - bt[i][WMA_Slow.Result_Column];
+                bt[i][IM_Column] = (2 * bt[i][WMA_Fast.Column_Result]) - bt[i][WMA_Slow.Column_Result];
             }
 
             //HMA_Result.Update(bap);

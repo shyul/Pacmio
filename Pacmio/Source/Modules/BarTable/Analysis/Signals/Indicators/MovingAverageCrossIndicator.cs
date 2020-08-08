@@ -22,8 +22,8 @@ namespace Pacmio
             Fast_MA = fast_MA;
             Slow_MA = slow_MA;
 
-            Fast_Column = Fast_MA.Result_Column;
-            Slow_Column = Slow_MA.Result_Column;
+            Fast_Column = Fast_MA.Column_Result;
+            Slow_Column = Slow_MA.Column_Result;
 
             Fast_MA.AddChild(this);
             Slow_MA.AddChild(this);
@@ -44,8 +44,8 @@ namespace Pacmio
         {
             (Fast_MA, Slow_MA) = Config(type_fast, interval_fast, type_slow, interval_slow);
 
-            Fast_Column = Fast_MA.Result_Column;
-            Slow_Column = Slow_MA.Result_Column;
+            Fast_Column = Fast_MA.Column_Result;
+            Slow_Column = Slow_MA.Column_Result;
 
             Fast_MA.AddChild(this);
             Slow_MA.AddChild(this);

@@ -41,7 +41,7 @@ namespace Pacmio
             AreaName = GroupName = Name = GetType().Name + label;
             Description = "Moving Average Convergence Divergence " + label;
 
-            Result_Column = new NumericColumn(Name);
+            Column_Result = new NumericColumn(Name);
             HIST_Column = new NumericColumn(Name + "_HIST");
 
             switch (AverageType)
@@ -50,38 +50,38 @@ namespace Pacmio
                     Fast_MA = new SMA(Column, Interval) { Order = Order - 1 };
                     Slow_MA = new SMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new SMA(Result_Column, Interval_Signal);
+                    MACD_SL = new SMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Smoothed:
                     Fast_MA = new SMMA(Column, Interval) { Order = Order - 1 };
                     Slow_MA = new SMMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new SMMA(Result_Column, Interval_Signal);
+                    MACD_SL = new SMMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Exponential:
                     Fast_MA = new EMA(Column, Interval) { Order = Order - 1 };
                     Slow_MA = new EMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new EMA(Result_Column, Interval_Signal);
+                    MACD_SL = new EMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Weighted:
                     Fast_MA = new WMA(Column, Interval) { Order = Order - 1 };
                     Slow_MA = new WMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new WMA(Result_Column, Interval_Signal);
+                    MACD_SL = new WMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Hull:
                     Fast_MA = new HMA(Column, Interval) { Order = Order - 1 };
                     Slow_MA = new HMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new HMA(Result_Column, Interval_Signal);
+                    MACD_SL = new HMA(Column_Result, Interval_Signal);
                     break;
             }
 
             Fast_MA.AddChild(this);
             Slow_MA.AddChild(this);
 
-            LineSeries = new LineSeries(Result_Column, Color.FromArgb(255, 96, 96, 96), LineType.Default, 2)
+            LineSeries = new LineSeries(Column_Result, Color.FromArgb(255, 96, 96, 96), LineType.Default, 2)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -145,7 +145,7 @@ namespace Pacmio
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[Result_Column] = b[Fast_MA.Result_Column] - b[Slow_MA.Result_Column];
+                b[Column_Result] = b[Fast_MA.Column_Result] - b[Slow_MA.Column_Result];
             }
 
             bap.StartPt = startPt;
@@ -154,7 +154,7 @@ namespace Pacmio
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[HIST_Column] = b[Result_Column] - b[MACD_SL.Result_Column];
+                b[HIST_Column] = b[Column_Result] - b[MACD_SL.Column_Result];
             }
         }
 

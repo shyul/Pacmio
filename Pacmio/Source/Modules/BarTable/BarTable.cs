@@ -613,11 +613,7 @@ namespace Pacmio
 
         #region Basic Data
 
-        private BarAnalysisPointer BarAnalysisPointer_Gain { get; } // = new BarAnalysisPointer();
 
-        private BarAnalysisPointer BarAnalysisPointer_TrueRange { get; }
-
-        private BarAnalysisPointer BarAnalysisPointer_Peak { get; }
 
         /// <summary>
         /// Valid data start pointer

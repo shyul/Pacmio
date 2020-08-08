@@ -70,9 +70,9 @@ namespace Pacmio
             EP_Column = new NumericColumn(Name + "_EP");
             AFS_Column = new NumericColumn(Name + "_AFS");
             Rising_Column = new NumericColumn(Name + "_Rising");
-            Result_Column = new NumericColumn(Name);
+            Column_Result = new NumericColumn(Name);
 
-            DotSeries = new DotSeries(Result_Column, Color.Brown, 1.5f)
+            DotSeries = new DotSeries(Column_Result, Color.Brown, 1.5f)
             {
                 Name = Name,
                 Label = label,
@@ -99,7 +99,7 @@ namespace Pacmio
 
         public NumericColumn Rising_Column { get; }
 
-        public NumericColumn Result_Column { get; }
+        public NumericColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -112,7 +112,7 @@ namespace Pacmio
 
                 if (i > 0)
                 {
-                    double prior_sar = bt[i - 1][Result_Column];
+                    double prior_sar = bt[i - 1][Column_Result];
                     double prior_ep = bt[i - 1][EP_Column];
                     double prior_af = bt[i - 1][AFS_Column];
                     double current_sar;
@@ -212,14 +212,14 @@ namespace Pacmio
 
                     bt[i][EP_Column] = prior_ep;
                     bt[i][AFS_Column] = prior_af;
-                    bt[i][Result_Column] = current_sar;
+                    bt[i][Column_Result] = current_sar;
                     bt[i][Rising_Column] = isRising ? 1 : -1;
                 }
                 else
                 {
                     bt[0][EP_Column] = current_high;
                     bt[0][AFS_Column] = AF;
-                    bt[0][Result_Column] = current_low;
+                    bt[0][Column_Result] = current_low;
                     bt[0][Rising_Column] = 1;
                 }
             }

@@ -26,12 +26,12 @@ namespace Pacmio
             Name = GetType().Name + label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
-            Result_Column = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name) { Label = label };
 
             SMA = sma;
             SMA.AddChild(this);
 
-            LineSeries = new LineSeries(Result_Column) { DrawLimitShade = false };
+            LineSeries = new LineSeries(Column_Result) { DrawLimitShade = false };
 
             Description = "Standard Deviation " + (column is null ? "(error)" : label);
         }
@@ -53,9 +53,9 @@ namespace Pacmio
                 {
                     int head = i - j;
                     if (i < Interval) head = 0;
-                    sum += Math.Pow(bt[head][Column] - bt[i][SMA.Result_Column], 2);
+                    sum += Math.Pow(bt[head][Column] - bt[i][SMA.Column_Result], 2);
                 }
-                bt[i][Result_Column] = Math.Sqrt(sum / Interval);
+                bt[i][Column_Result] = Math.Sqrt(sum / Interval);
             }
         }
 

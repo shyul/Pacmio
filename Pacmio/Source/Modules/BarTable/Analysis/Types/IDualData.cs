@@ -10,8 +10,8 @@ namespace Pacmio
 {
     public interface IDualData : IDependable
     {
-        NumericColumn High_Column { get; }
+        NumericColumn Column_High { get; }
 
-        NumericColumn Low_Column { get; }
+        NumericColumn Column_Low { get; }
     }
 }

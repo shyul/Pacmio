@@ -42,8 +42,8 @@ namespace Pacmio
             AverageLoss = new AverageLoss(Interval) { ChartEnabled = false };
             AverageLoss.AddChild(this);
 
-            Result_Column = new NumericColumn(Name);
-            LineSeries = new LineSeries(Result_Column)
+            Column_Result = new NumericColumn(Name);
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 Label = label,
@@ -74,8 +74,8 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double avgLoss = b[AverageLoss.Result_Column];
-                b[Result_Column] = (avgLoss != 0) ? 100 - 100 / (1 + b[AverageGain.Result_Column] / avgLoss) : 100;
+                double avgLoss = b[AverageLoss.Column_Result];
+                b[Column_Result] = (avgLoss != 0) ? 100 - 100 / (1 + b[AverageGain.Column_Result] / avgLoss) : 100;
             }
         }
 

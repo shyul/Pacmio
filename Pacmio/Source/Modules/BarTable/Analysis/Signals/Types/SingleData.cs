@@ -46,7 +46,7 @@ namespace Pacmio
 
         public SingleDataIndicator(IOscillator iosc, double range_percent = 0.05)
         {
-            Column = iosc.Result_Column;
+            Column = iosc.Column_Result;
             double range = iosc.Reference * range_percent;
             Range = new Range<double>(iosc.Reference - range, iosc.Reference + range);
 
@@ -186,7 +186,7 @@ namespace Pacmio
         }
 
         public static SingleDataType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, double constant)
-            => ConstantDataSignal(bt, i, analysis.Result_Column, constant);
+            => ConstantDataSignal(bt, i, analysis.Column_Result, constant);
 
         public static SingleDataType ConstantDataSignal(BarTable bt, int i, NumericColumn column, double constant)
         {
@@ -246,7 +246,7 @@ namespace Pacmio
         }
 
         public static SingleDataType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, Range<double> range)
-            => ConstantDataSignal(bt, i, analysis.Result_Column, range);
+            => ConstantDataSignal(bt, i, analysis.Column_Result, range);
 
         public static SingleDataType ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range)
         {

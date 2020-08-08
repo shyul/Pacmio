@@ -30,14 +30,14 @@ namespace Pacmio
         {
             BarTable bt = bap.Table;
 
-            double sum = (bap.StartPt == 0) ? bt[0][Column] * Interval : bt[bap.StartPt - 1][Result_Column] * Interval;
+            double sum = (bap.StartPt == 0) ? bt[0][Column] * Interval : bt[bap.StartPt - 1][Column_Result] * Interval;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 if (i != 0)
-                    sum = sum - bt[i - 1][Result_Column] + bt[i][Column];
+                    sum = sum - bt[i - 1][Column_Result] + bt[i][Column];
 
-                bt[i][Result_Column] = sum / Interval;
+                bt[i][Column_Result] = sum / Interval;
             }
         }
 

@@ -33,45 +33,45 @@ namespace Pacmio
             Description = "True Strength Index " + label;
 
             APC_Column = new NumericColumn(Name + "_APC");
-            Result_Column = new NumericColumn(Name);
+            Column_Result = new NumericColumn(Name);
             HIST_Column = new NumericColumn(Name + "_HIST");
 
             switch (AverageType)
             {
                 case MovingAverageType.Simple:
                     MA_1_PC = new SMA(Bar.Column_Gain, Interval);
-                    MA_2_PC = new SMA(MA_1_PC.Result_Column, Interval_2nd);
+                    MA_2_PC = new SMA(MA_1_PC.Column_Result, Interval_2nd);
                     MA_1_APC = new SMA(APC_Column, Interval);
-                    MA_2_APC = new SMA(MA_1_APC.Result_Column, Interval_2nd);
-                    MA_SL = new SMA(Result_Column, Interval_Signal);
+                    MA_2_APC = new SMA(MA_1_APC.Column_Result, Interval_2nd);
+                    MA_SL = new SMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Smoothed:
                     MA_1_PC = new SMMA(Bar.Column_Gain, Interval);
-                    MA_2_PC = new SMMA(MA_1_PC.Result_Column, Interval_2nd);
+                    MA_2_PC = new SMMA(MA_1_PC.Column_Result, Interval_2nd);
                     MA_1_APC = new SMMA(APC_Column, Interval);
-                    MA_2_APC = new SMMA(MA_1_APC.Result_Column, Interval_2nd);
-                    MA_SL = new SMMA(Result_Column, Interval_Signal);
+                    MA_2_APC = new SMMA(MA_1_APC.Column_Result, Interval_2nd);
+                    MA_SL = new SMMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Exponential:
                     MA_1_PC = new EMA(Bar.Column_Gain, Interval);
-                    MA_2_PC = new EMA(MA_1_PC.Result_Column, Interval_2nd);
+                    MA_2_PC = new EMA(MA_1_PC.Column_Result, Interval_2nd);
                     MA_1_APC = new EMA(APC_Column, Interval);
-                    MA_2_APC = new EMA(MA_1_APC.Result_Column, Interval_2nd);
-                    MA_SL = new EMA(Result_Column, Interval_Signal);
+                    MA_2_APC = new EMA(MA_1_APC.Column_Result, Interval_2nd);
+                    MA_SL = new EMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Weighted:
                     MA_1_PC = new WMA(Bar.Column_Gain, Interval);
-                    MA_2_PC = new WMA(MA_1_PC.Result_Column, Interval_2nd);
+                    MA_2_PC = new WMA(MA_1_PC.Column_Result, Interval_2nd);
                     MA_1_APC = new WMA(APC_Column, Interval);
-                    MA_2_APC = new WMA(MA_1_APC.Result_Column, Interval_2nd);
-                    MA_SL = new WMA(Result_Column, Interval_Signal);
+                    MA_2_APC = new WMA(MA_1_APC.Column_Result, Interval_2nd);
+                    MA_SL = new WMA(Column_Result, Interval_Signal);
                     break;
                 case MovingAverageType.Hull:
                     MA_1_PC = new HMA(Bar.Column_Gain, Interval);
-                    MA_2_PC = new HMA(MA_1_PC.Result_Column, Interval_2nd);
+                    MA_2_PC = new HMA(MA_1_PC.Column_Result, Interval_2nd);
                     MA_1_APC = new HMA(APC_Column, Interval);
-                    MA_2_APC = new HMA(MA_1_APC.Result_Column, Interval_2nd);
-                    MA_SL = new HMA(Result_Column, Interval_Signal);
+                    MA_2_APC = new HMA(MA_1_APC.Column_Result, Interval_2nd);
+                    MA_SL = new HMA(Column_Result, Interval_Signal);
                     break;
             }
 
@@ -80,7 +80,7 @@ namespace Pacmio
             MA_1_PC.AddChild(this);
             MA_2_PC.AddChild(this);
 
-            LineSeries = new LineSeries(Result_Column, Color.FromArgb(255, 96, 96, 96), LineType.Default, 2)
+            LineSeries = new LineSeries(Column_Result, Color.FromArgb(255, 96, 96, 96), LineType.Default, 2)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -140,7 +140,7 @@ namespace Pacmio
 
         public SMA MA_2_APC { get; }
 
-        public NumericColumn Result_Column { get; }
+        public NumericColumn Column_Result { get; }
 
         public SMA MA_SL { get; }
 
@@ -173,8 +173,8 @@ namespace Pacmio
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double ma_2_apc = b[MA_2_APC.Result_Column];
-                b[Result_Column] = ma_2_apc == 0 ? 100 : 100 * b[MA_2_PC.Result_Column] / ma_2_apc;
+                double ma_2_apc = b[MA_2_APC.Column_Result];
+                b[Column_Result] = ma_2_apc == 0 ? 100 : 100 * b[MA_2_PC.Column_Result] / ma_2_apc;
             }
 
             bap.StartPt = startPt;
@@ -183,7 +183,7 @@ namespace Pacmio
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[HIST_Column] = b[Result_Column] - b[MA_SL.Result_Column];
+                b[HIST_Column] = b[Column_Result] - b[MA_SL.Column_Result];
             }
         }
 

@@ -21,8 +21,8 @@ namespace Pacmio
             AreaName = GroupName = GetType().Name;
             Description = "Average True Range " + label;
 
-            Result_Column = new NumericColumn(Name);
-            LineSeries = new LineSeries(Result_Column, Color.DarkSlateGray, LineType.Default, 1.5f)
+            Column_Result = new NumericColumn(Name);
+            LineSeries = new LineSeries(Column_Result, Color.DarkSlateGray, LineType.Default, 1.5f)
             {
                 Name = Name,
                 Label = label,
@@ -45,7 +45,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public virtual NumericColumn Result_Column { get; protected set; }
+        public virtual NumericColumn Column_Result { get; protected set; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -64,12 +64,12 @@ namespace Pacmio
                         if (k < 0) k = 0;
                         tr_ma += bt[k].TrueRange;
                     }
-                    bt[i][Result_Column] = tr_ma / Interval;
+                    bt[i][Column_Result] = tr_ma / Interval;
                 }
                 else
                 {
-                    double prior_tr_ma = bt[i - 1][Result_Column];
-                    bt[i][Result_Column] = (tr + (prior_tr_ma * (Interval - 1))) / Interval; //  tr + prior_tr_ma - (prior_tr_ma / Interval);
+                    double prior_tr_ma = bt[i - 1][Column_Result];
+                    bt[i][Column_Result] = (tr + (prior_tr_ma * (Interval - 1))) / Interval; //  tr + prior_tr_ma - (prior_tr_ma / Interval);
                 }
             }
         }

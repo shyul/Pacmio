@@ -35,8 +35,8 @@ namespace Pacmio
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
             Description = "Simple Moving Average " + label;
 
-            Result_Column = new NumericColumn(Name) { Label = label };
-            LineSeries = new LineSeries(Result_Column)
+            Column_Result = new NumericColumn(Name) { Label = label };
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -60,7 +60,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public virtual NumericColumn Result_Column { get; protected set; }
+        public virtual NumericColumn Column_Result { get; protected set; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -75,14 +75,14 @@ namespace Pacmio
                 last_sum += bt[j][Column];
             }
 
-            bt[bap.StartPt][Result_Column] = last_sum / Interval;
+            bt[bap.StartPt][Column_Result] = last_sum / Interval;
 
             for (int i = bap.StartPt + 1; i < bap.StopPt; i++)
             {
                 int head = i - Interval;
                 if (head < 0) head = 0;
                 last_sum = last_sum - bt[head][Column] + bt[i][Column];
-                bt[i][Result_Column] = last_sum / Interval;
+                bt[i][Column_Result] = last_sum / Interval;
             }
         }
 

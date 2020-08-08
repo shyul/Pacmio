@@ -28,8 +28,8 @@ namespace Pacmio
 
             Volume_Column = new NumericColumn(Name + "_CUMUL_V");
             Volume_Price_Column = new NumericColumn(Name + "_CUMUL_VP");
-            Result_Column = new NumericColumn(Name) { Label = label };
-            LineSeries = new LineSeries(Result_Column)
+            Column_Result = new NumericColumn(Name) { Label = label };
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -56,7 +56,7 @@ namespace Pacmio
 
         public NumericColumn Volume_Price_Column { get; }
 
-        public NumericColumn Result_Column { get; }
+        public NumericColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -94,7 +94,7 @@ namespace Pacmio
                     double volumn = b.Volume;
                     b[Volume_Column] = cumulative_vol += volumn;
                     b[Volume_Price_Column] = cumulative_price_vol += volumn * b.Typical;
-                    b[Result_Column] = cumulative_price_vol / cumulative_vol;
+                    b[Column_Result] = cumulative_price_vol / cumulative_vol;
                     base_time = time;
                 }
             }

@@ -35,11 +35,11 @@ namespace Pacmio
             {
                 if (i > 0)
                 {
-                    double y0 = bt[i - 1][Result_Column];
-                    bt[i][Result_Column] = (bt[i][Column] - y0) * Multiplier + y0;
+                    double y0 = bt[i - 1][Column_Result];
+                    bt[i][Column_Result] = (bt[i][Column] - y0) * Multiplier + y0;
                 }
                 else
-                    bt[i][Result_Column] = bt[i][Column];
+                    bt[i][Column_Result] = bt[i][Column];
             }
         }
 

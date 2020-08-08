@@ -10,6 +10,6 @@ namespace Pacmio
 {
     public interface ISingleData : IDependable
     {
-        NumericColumn Result_Column { get; }
+        NumericColumn Column_Result { get; }
     }
 }

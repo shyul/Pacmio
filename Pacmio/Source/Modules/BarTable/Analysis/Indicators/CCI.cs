@@ -33,8 +33,8 @@ namespace Pacmio
             SMA_TP.AddChild(MDEV_TP);
             MDEV_TP.AddChild(this);
 
-            Result_Column = new NumericColumn(Name) { Label = label };
-            LineSeries = new LineSeries(Result_Column)
+            Column_Result = new NumericColumn(Name) { Label = label };
+            LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
                 Label = label,
@@ -68,7 +68,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[Result_Column] = (b.Typical - b[SMA_TP.Result_Column]) / (Constant * b[MDEV_TP.Result_Column]);
+                b[Column_Result] = (b.Typical - b[SMA_TP.Column_Result]) / (Constant * b[MDEV_TP.Column_Result]);
             }
         }
 

@@ -32,10 +32,10 @@ namespace Pacmio
             Channel = new PriceChannel(interval) { ChartEnabled = false };
             Channel.AddChild(this);
 
-            High_Column = new NumericColumn(Name + "_Long") { Label = "Long" };
-            Low_Column = new NumericColumn(Name + "_Short") { Label = "Short" };
+            Column_High = new NumericColumn(Name + "_Long") { Label = "Long" };
+            Column_Low = new NumericColumn(Name + "_Short") { Label = "Short" };
 
-            LineSeries_H = new LineSeries(High_Column)
+            LineSeries_H = new LineSeries(Column_High)
             {
                 Name = Name + "_Long",
                 LegendName = GroupName,
@@ -45,7 +45,7 @@ namespace Pacmio
                 LineType = LineType.Step
             };
 
-            LineSeries_L = new LineSeries(Low_Column)
+            LineSeries_L = new LineSeries(Column_Low)
             {
                 Name = Name + "_Short",
                 LegendName = GroupName,
@@ -72,9 +72,9 @@ namespace Pacmio
 
         public PriceChannel Channel { get; }
 
-        public NumericColumn High_Column { get; }
+        public NumericColumn Column_High { get; }
 
-        public NumericColumn Low_Column { get; }
+        public NumericColumn Column_Low { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -82,12 +82,12 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double atr = Spread * b[ATR.Result_Column];// b.TrueRange; // 
+                double atr = Spread * b[ATR.Column_Result];// b.TrueRange; // 
 
                 //Console.WriteLine("atr = " + atr);
 
-                b[High_Column] = b[Channel.High_Column] - atr;
-                b[Low_Column] = b[Channel.Low_Column] + atr;
+                b[Column_High] = b[Channel.Column_High] - atr;
+                b[Column_Low] = b[Channel.Column_Low] + atr;
             }
         }
 

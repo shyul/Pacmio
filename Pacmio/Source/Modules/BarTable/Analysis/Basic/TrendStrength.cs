@@ -12,9 +12,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrueRange : BarAnalysis, IChartSeries
+    public class TrendStrength : BarAnalysis, IChartSeries
     {
-        public TrueRange()
+        public TrendStrength()
         {
             Column_High = Bar.Column_High;
             Column_Low = Bar.Column_Low;
@@ -25,24 +25,13 @@ namespace Pacmio
             Description = Name + " " + label;
             AreaName = label;
 
-            Column_TrueRange = new NumericColumn(Name) { Label = label };
-            Column_Typical = new NumericColumn("Typical" + label) { Label = label };
+            Column_TrendStrength = new NumericColumn(Name) { Label = label };
 
-
-            ColumnSeries_TrueRange = new ColumnSeries(Column_TrueRange, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            ColumnSeries_TrendStrength = new ColumnSeries(Column_TrendStrength, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
                 Name = Name,
                 LegendName = GroupName + "_" + GetType().Name,
                 Label = GetType().Name,
-                Importance = Importance.Minor,
-                Order = 200
-            };
-
-            ColumnSeries_Typical = new ColumnSeries(Column_Typical, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
-            {
-                Name = Name,
-                LegendName = GroupName + "_Typical",
-                Label = "Typical",
                 Importance = Importance.Minor,
                 Order = 200
             };
@@ -58,25 +47,30 @@ namespace Pacmio
 
         public NumericColumn Column_Close { get; }
 
-        public NumericColumn Column_TrueRange { get; }
-
-        public NumericColumn Column_Typical { get; }
+        public NumericColumn Column_TrendStrength { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            double close_1;
+
+            double high_1, low_1, close_1, trend_1;
 
             if (bap.StartPt < 1)
             {
                 Bar b = bt[0];
                 if (bap.StartPt < 0) bap.StartPt = 0;
+                high_1 = b[Column_High];
+                low_1 = b[Column_Low];
                 close_1 = b[Column_Close];
+                trend_1 = b[Column_TrendStrength] = 0;
             }
             else
             {
                 Bar b_1 = bt[bap.StartPt - 1];
+                high_1 = b_1.High;
+                low_1 = b_1[Column_Low];
                 close_1 = b_1[Column_Close];
+                trend_1 = b_1.TrendStrength;
             }
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
@@ -86,11 +80,19 @@ namespace Pacmio
                 double low = b[Column_Low];
                 double close = b[Column_Close];
 
-                double[] list = new double[] { (high - low), Math.Abs(high - close_1), Math.Abs(low - close_1) };
+                double trend = 0;
+                if (close > close_1 || (high > high_1 && low > low_1))
+                {
+                    trend = (trend_1 > 0) ? trend_1 + 1 : 1;
+                }
+                else if (close < close_1 || (high < high_1 && low < low_1))
+                {
+                    trend = (trend_1 < 0) ? trend_1 - 1 : -1;
+                }
 
-                b[Column_TrueRange] = list.Max();
-                b[Column_Typical] = (high + low + close) / 3.0;
-
+                b[Column_TrendStrength] = trend_1 = trend;
+                high_1 = high;
+                low_1 = low;
                 close_1 = close;
             }
         }
@@ -101,28 +103,23 @@ namespace Pacmio
 
         public Color Color
         {
-            get => ColumnSeries_TrueRange.Color;
+            get => ColumnSeries_TrendStrength.Color;
             set
             {
-                ColumnSeries_TrueRange.Color = value;
-                ColumnSeries_TrueRange.ShadeColor = value;
-                ColumnSeries_Typical.Color = value;
-                ColumnSeries_Typical.ShadeColor = value;
+                ColumnSeries_TrendStrength.Color = value;
+                ColumnSeries_TrendStrength.ShadeColor = value;
             }
         }
 
-        public ColumnSeries ColumnSeries_TrueRange { get; }
+        public ColumnSeries ColumnSeries_TrendStrength { get; }
 
-        public ColumnSeries ColumnSeries_Typical { get; }
-
-        public bool ChartEnabled { get => Enabled && ColumnSeries_TrueRange.Enabled; set => ColumnSeries_TrueRange.Enabled = ColumnSeries_Typical.Enabled = value; }
+        public bool ChartEnabled { get => Enabled && ColumnSeries_TrendStrength.Enabled; set => ColumnSeries_TrendStrength.Enabled = value; }
 
         public int SeriesOrder
         {
-            get => ColumnSeries_TrueRange.Order; set
+            get => ColumnSeries_TrendStrength.Order; set
             {
-                ColumnSeries_TrueRange.Order = value;
-                ColumnSeries_Typical.Order = value + 1;
+                ColumnSeries_TrendStrength.Order = value;
             }
         }
 
@@ -136,17 +133,11 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area truerange_area = bc.AddArea(new Area(bc, "TrueRange" + AreaName, AreaRatio)
+                Area truerange_area = bc.AddArea(new Area(bc, "TrendStrength" + AreaName, AreaRatio)
                 {
                     HasXAxisBar = false,
                 });
-                truerange_area.AddSeries(ColumnSeries_TrueRange);
-
-                Area typical_area = bc.AddArea(new Area(bc, "Typical" + AreaName, AreaRatio)
-                {
-                    HasXAxisBar = HasXAxisBar,
-                });
-                typical_area.AddSeries(ColumnSeries_Typical);
+                truerange_area.AddSeries(ColumnSeries_TrendStrength);
             }
         }
 

@@ -24,10 +24,10 @@ namespace Pacmio
             Description = "Box Range " + label;
             GroupName = Name = GetType().Name + label;
 
-            High_Column = new NumericColumn(Name + "_HHI") { Label = "H" };
-            Low_Column = new NumericColumn(Name + "_LLO") { Label = "L" };
+            Column_High = new NumericColumn(Name + "_HHI") { Label = "H" };
+            Column_Low = new NumericColumn(Name + "_LLO") { Label = "L" };
 
-            BandSeries = new BandSeries(High_Column, Low_Column, Color.LimeGreen)
+            BandSeries = new BandSeries(Column_High, Column_Low, Color.LimeGreen)
             {
                 Name = Name,
                 LegendName = GroupName,
@@ -48,9 +48,9 @@ namespace Pacmio
 
         #region Calculation
 
-        public NumericColumn High_Column { get; }
+        public NumericColumn Column_High { get; }
 
-        public NumericColumn Low_Column { get; }
+        public NumericColumn Column_Low { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -72,8 +72,8 @@ namespace Pacmio
                     if (low > compare_low) low = compare_low;
                 }
 
-                b[High_Column] = high;
-                b[Low_Column] = low;
+                b[Column_High] = high;
+                b[Column_Low] = low;
             }
         }
 
