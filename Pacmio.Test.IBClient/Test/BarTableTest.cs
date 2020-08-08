@@ -37,6 +37,43 @@ namespace TestClient
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {                        
+                    volumeEma,
+                    new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
+                };
+
+                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+
+                return bas;
+            }
+        }
+        public static BarAnalysisSet TestBarAnalysisSet2
+        {
+            get
+            {
+                var volumeEma = new EMA(Bar.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };
+                volumeEma.LineSeries.Side = AlignType.Left;
+                volumeEma.LineSeries.Label = volumeEma.GetType().Name + "(" + volumeEma.Interval.ToString() + ")";
+                volumeEma.LineSeries.LegendName = "VOLUME";
+                volumeEma.LineSeries.LegendLabelFormat = "0.##";
+
+                //var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });
+                //var mfi = new MFI(14) { Order = 99 };
+                var rsi = new RSI(14) { AreaRatio = 8, HasXAxisBar = true, Order = int.MaxValue - 1, AreaOrder = int.MaxValue - 10 };
+                //var divergence = new Divergence(rsi);
+                //var indicator_reference_cross = new ConstantData(rsi, new Range<double>(49, 51));
+
+                //var boll = new Bollinger(20, 2.0);
+
+                //SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
+                //SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
+                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
+
+                //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
+
+                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                {                        
                     //mfi,
                     
                     volumeEma,
@@ -92,7 +129,6 @@ namespace TestClient
                 return bas;
             }
         }
-
 
         public static BarAnalysisSet EmptyBarAnalysisSet
         {
