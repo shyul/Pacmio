@@ -26,10 +26,12 @@ namespace Pacmio
 
             ColumnSeries_Percent = new ColumnSeries(Column_Percent, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
-                Name = Name + "_GAIN",
-                LegendName = GroupName + "_GAIN",
+                Name = Name,
+                LegendName = GroupName + ": ",
                 Label = "GAIN",
-                Importance = Importance.Minor,
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
                 Order = 200
             };
         }

@@ -26,7 +26,16 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-
+            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = GroupName + ": ",
+                Label = "Peak",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
+                Order = 200
+            };
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -44,11 +53,17 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
+            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = GroupName,
+                Label = label,
+                IsAntialiasing = false
+            };
 
-
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
-
-
 
         public PeakAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, string graphicsAreaName = null)
         {
@@ -63,8 +78,16 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
+            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = GroupName,
+                Label = label,
+                IsAntialiasing = false
+            };
 
-
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
 
         public PeakAnalysis(IDualData idd, int maximumPeakProminence)
@@ -80,8 +103,16 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
+            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = GroupName,
+                Label = label,
+                IsAntialiasing = false
+            };
 
-
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
 
         public PeakAnalysis(int maximumPeakProminence = 100)
@@ -96,6 +127,17 @@ namespace Pacmio
 
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+
+            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = GroupName,
+                Label = label,
+                IsAntialiasing = false
+            };
+
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence;
@@ -233,7 +275,7 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area a_gain = bc.AddArea(new Area(bc, AreaName + "_Peak", AreaRatio)
+                Area a_gain = bc.AddArea(new Area(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });

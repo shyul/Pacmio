@@ -30,9 +30,11 @@ namespace Pacmio
             ColumnSeries_TrendStrength = new ColumnSeries(Column_TrendStrength, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
                 Name = Name,
-                LegendName = GroupName + "_" + GetType().Name,
+                LegendName = GroupName + ": ",
                 Label = GetType().Name,
-                Importance = Importance.Minor,
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
                 Order = 200
             };
         }

@@ -28,22 +28,25 @@ namespace Pacmio
             Column_TrueRange = new NumericColumn(Name) { Label = label };
             Column_Typical = new NumericColumn("Typical" + label) { Label = label };
 
-
             ColumnSeries_TrueRange = new ColumnSeries(Column_TrueRange, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
                 Name = Name,
-                LegendName = GroupName + "_" + GetType().Name,
+                LegendName = GroupName + ": ",
                 Label = GetType().Name,
-                Importance = Importance.Minor,
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
                 Order = 200
             };
 
             ColumnSeries_Typical = new ColumnSeries(Column_Typical, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
-                Name = Name,
-                LegendName = GroupName + "_Typical",
+                Name = "Typical " + label,
+                LegendName = "Typical " + label,
                 Label = "Typical",
-                Importance = Importance.Minor,
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
                 Order = 200
             };
         }
