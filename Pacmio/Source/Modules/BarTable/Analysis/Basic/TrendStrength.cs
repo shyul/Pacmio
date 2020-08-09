@@ -152,15 +152,15 @@ namespace Pacmio
 
         public Color LowerColor
         {
-            get => ColumnSeries_TrendStrength.DownTheme.ForeColor;
+            get => ColumnSeries_TrendStrength.LowerTheme.ForeColor;
 
             set
             {
-                ColumnSeries_GapPercent.DownTheme.ForeColor = ColumnSeries_TrendStrength.DownTheme.ForeColor = value;
+                ColumnSeries_GapPercent.LowerTheme.ForeColor = ColumnSeries_TrendStrength.LowerTheme.ForeColor = value;
 
-                ColumnSeries_GapPercent.DownTextTheme.EdgeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_GapPercent.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_GapPercent.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor;
+                ColumnSeries_GapPercent.LowerTextTheme.EdgeColor = ColumnSeries_TrendStrength.LowerTextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_GapPercent.LowerTextTheme.FillColor = ColumnSeries_TrendStrength.LowerTextTheme.FillColor = ColumnSeries_TrendStrength.LowerTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.LowerTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.LowerTextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_GapPercent.LowerTextTheme.ForeColor = ColumnSeries_TrendStrength.LowerTextTheme.ForeColor = ColumnSeries_TrendStrength.LowerTextTheme.EdgeColor;
             }
         }
 

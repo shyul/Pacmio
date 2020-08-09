@@ -110,11 +110,11 @@ namespace Pacmio
             set
             {
                 BandSeries.Color =
-                BandSeries.ShadeColor =
+                BandSeries.EdgeColor =
                 BandSeries.LowColor =
                 BandSeries.LowShadeColor =
                 SMA.LineSeries.Color =
-                SMA.LineSeries.ShadeColor = value;
+                SMA.LineSeries.EdgeColor = value;
                 BandSeries.FillColor = value.Opaque(64);
             }
         }

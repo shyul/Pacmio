@@ -104,7 +104,7 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color { get => LineSeries.Color; set => LineSeries.Color = LineSeries.ShadeColor = value; }
+        public Color Color { get => LineSeries.Color; set => LineSeries.Color = LineSeries.EdgeColor = value; }
 
         public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
 

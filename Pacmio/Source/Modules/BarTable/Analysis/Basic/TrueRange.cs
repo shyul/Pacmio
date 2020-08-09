@@ -110,9 +110,9 @@ namespace Pacmio
             set
             {
                 ColumnSeries_TrueRange.Color = value;
-                ColumnSeries_TrueRange.ShadeColor = value;
+                ColumnSeries_TrueRange.EdgeColor = value;
                 LineSeries_Typical.Color = value;
-                LineSeries_Typical.ShadeColor = value;
+                LineSeries_Typical.EdgeColor = value;
             }
         }
 

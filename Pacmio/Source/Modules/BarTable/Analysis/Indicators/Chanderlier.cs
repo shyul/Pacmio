@@ -95,9 +95,9 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color { get => LineSeries_H.Color; set => LineSeries_H.Color = LineSeries_H.ShadeColor = value; }
+        public Color Color { get => LineSeries_H.Color; set => LineSeries_H.Color = LineSeries_H.EdgeColor = value; }
 
-        public Color Low_Color { get => LineSeries_L.Color; set => LineSeries_L.Color = LineSeries_L.ShadeColor = value; }
+        public Color Low_Color { get => LineSeries_L.Color; set => LineSeries_L.Color = LineSeries_L.EdgeColor = value; }
 
         public float LineWidth { get => LineSeries_H.Width; set => LineSeries_H.Width = LineSeries_L.Width = value; }
 

@@ -242,7 +242,7 @@ namespace Pacmio
                 }
                 else if (peak_result < -MinimumPeakProminenceForTagDisplay)
                 {
-                    b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries_Peak.DownTextTheme);
+                    b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries_Peak.LowerTextTheme);
                 }
             }
         }
@@ -251,33 +251,46 @@ namespace Pacmio
 
         public Color UpperColor
         {
-            get
-            {
-                return ColumnSeries_Peak.Theme.ForeColor;
-            }
+            get => ColumnSeries_Peak.Color; // ColumnSeries_Peak.Theme.ForeColor;
+        
             set
             {
+                Color c = value;
+                ColumnSeries_Peak.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries_Peak.EdgeColor = ColumnSeries_Peak.TextTheme.ForeColor = c;
+                
+                /*
+                ColumnSeries_Peak.Color = value;
+                ColumnSeries_Peak.EdgeColor = ColumnSeries_Peak.Color.GetBrightness() < 0.6 ? ColumnSeries_Peak.Color.Brightness(0.85f) : ColumnSeries_Peak.Color.Brightness(-0.85f);
+                
                 ColumnSeries_Peak.Theme.ForeColor = value;
 
                 ColumnSeries_Peak.TextTheme.EdgeColor = value.Opaque(255);
                 ColumnSeries_Peak.TextTheme.FillColor = ColumnSeries_Peak.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Peak.TextTheme.EdgeColor.Brightness(-0.85f);
                 ColumnSeries_Peak.TextTheme.ForeColor = ColumnSeries_Peak.TextTheme.EdgeColor;
+                */
             }
         }
 
         public Color LowerColor
         {
-            get
-            {
-                return ColumnSeries_Peak.DownTheme.ForeColor;
-            }
+            get => ColumnSeries_Peak.LowerColor; // ColumnSeries_Peak.DownTheme.ForeColor;
+
             set
             {
+                Color c = value;
+                ColumnSeries_Peak.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries_Peak.LowerEdgeColor = ColumnSeries_Peak.LowerTextTheme.ForeColor = c;
+                /*
+                ColumnSeries_Peak.DownColor = value;
+                ColumnSeries_Peak.DownEdgeColor = ColumnSeries_Peak.DownColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.DownColor.Brightness(0.85f) : ColumnSeries_Peak.DownColor.Brightness(-0.85f);
+                
                 ColumnSeries_Peak.DownTheme.ForeColor = value;
 
                 ColumnSeries_Peak.DownTextTheme.EdgeColor = value.Opaque(255);
                 ColumnSeries_Peak.DownTextTheme.FillColor = ColumnSeries_Peak.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Peak.DownTextTheme.EdgeColor.Brightness(-0.85f);
                 ColumnSeries_Peak.DownTextTheme.ForeColor = ColumnSeries_Peak.DownTextTheme.EdgeColor;
+                */
             }
         }
 

@@ -90,12 +90,12 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color { get => LineSeries.Color; set => LineSeries.Color = LineSeries.ShadeColor = value; }
+        public Color Color { get => LineSeries.Color; set => LineSeries.Color = LineSeries.EdgeColor = value; }
 
         public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
 
         public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
-        
+
         public Series MainSeries => LineSeries;
 
         public LineSeries LineSeries { get; protected set; }

@@ -228,7 +228,7 @@ namespace Pacmio
             get => CloudSeries.Color;
             set
             {
-                CloudSeries.Color = CloudSeries.ShadeColor = value;
+                CloudSeries.Color = CloudSeries.EdgeColor = value;
                 CloudSeries.FillColor = value.Opaque(64);
             }
         }

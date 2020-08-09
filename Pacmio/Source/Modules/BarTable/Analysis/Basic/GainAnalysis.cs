@@ -111,15 +111,15 @@ namespace Pacmio
         {
             get
             {
-                return ColumnSeries_Percent.DownTheme.ForeColor;
+                return ColumnSeries_Percent.LowerTheme.ForeColor;
             }
             set
             {
-                ColumnSeries_Percent.DownTheme.ForeColor = value;
+                ColumnSeries_Percent.LowerTheme.ForeColor = value;
 
-                ColumnSeries_Percent.DownTextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_Percent.DownTextTheme.FillColor = ColumnSeries_Percent.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.DownTextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_Percent.DownTextTheme.ForeColor = ColumnSeries_Percent.DownTextTheme.EdgeColor;
+                ColumnSeries_Percent.LowerTextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_Percent.LowerTextTheme.FillColor = ColumnSeries_Percent.LowerTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.LowerTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.LowerTextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_Percent.LowerTextTheme.ForeColor = ColumnSeries_Percent.LowerTextTheme.EdgeColor;
             }
         }
 

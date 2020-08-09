@@ -90,7 +90,7 @@ namespace Pacmio
             set
             {
                 BandSeries.Color =
-                BandSeries.ShadeColor =
+                BandSeries.EdgeColor =
                 BandSeries.LowColor =
                 BandSeries.LowShadeColor =
                 BandSeries.FillColor = value.Opaque(64);
