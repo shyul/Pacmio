@@ -19,12 +19,12 @@ namespace Pacmio
 
             if (ba is ISingleData isd)
             {
-                PivotPointAnalysis = new PivotPoint(isd, maximumPeakProminence, minimumPeakProminence);
+                PivotPointAnalysis = new PivotPointAnalysis(isd, maximumPeakProminence, minimumPeakProminence);
                 PivotPointAnalysis.AddChild(this);
             }
             else if (ba is IDualData idd)
             {
-                PivotPointAnalysis = new PivotPoint(idd, maximumPeakProminence, minimumPeakProminence);
+                PivotPointAnalysis = new PivotPointAnalysis(idd, maximumPeakProminence, minimumPeakProminence);
                 PivotPointAnalysis.AddChild(this);
             }
             else
@@ -60,7 +60,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public PivotPoint PivotPointAnalysis { get; }
+        public PivotPointAnalysis PivotPointAnalysis { get; }
 
         public TrendStrength TrendStrengthAnalysis { get; }
 
@@ -97,13 +97,13 @@ namespace Pacmio
                     if (prominence > MinimumPeakProminence)// || trendStrength > MinimumTrendStrength)
                     {
                         double high = b[PivotPointAnalysis.Column_High];
-                        gpd.PositiveList[i_test] = (b.Time, high, prominence, trendStrength);
+                        gpd.PositiveList[i_test] = new Pivot(i_test, b.Time, high, prominence, trendStrength);
                         gpd.LevelRange.Insert(high);
                     }
                     else if (prominence < -MinimumPeakProminence)// || trendStrength < -MinimumTrendStrength)
                     {
                         double low = b[PivotPointAnalysis.Column_Low];
-                        gpd.NegativeList[i_test] = (b.Time, low, prominence, trendStrength);
+                        gpd.NegativeList[i_test] = new Pivot(i_test, b.Time, low, prominence, trendStrength);
                         gpd.LevelRange.Insert(low);
                     }
                 }

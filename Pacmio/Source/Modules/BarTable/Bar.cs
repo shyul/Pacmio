@@ -316,7 +316,7 @@ namespace Pacmio
         /// helps BarTable to extract all trendlines for trend levels at the last Bar!!
         /// helps BarChart to draw every thing...
         /// </summary>
-        public IEnumerable<TrendLine> TrendLines => Patterns.Values.SelectMany(n => n.TrendLines);
+        public IEnumerable<PivotLine> TrendLines => Patterns.Values.SelectMany(n => n.PivotLines);
 
         #endregion Patterns
 

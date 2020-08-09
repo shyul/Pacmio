@@ -121,8 +121,8 @@ namespace Pacmio
                     if (p1 > 8)
                     {
                         //Console.WriteLine("Adding level line: " + p1);
-                        TrendLine tl = new TrendLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100);
-                        pd.TrendLines.Add(tl);
+                        PivotLine tl = new PivotLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100);
+                        pd.PivotLines.Add(tl);
                         pd.Levels.Add((p1 * p1 * 100, y1));
                     }
 
@@ -140,8 +140,8 @@ namespace Pacmio
 
                         weight_range.Insert(weight);
 
-                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, weight);
-                        pd.TrendLines.Add(tl);
+                        PivotLine tl = new PivotLine(x1, y1, distance, rate, Tolerance, weight);
+                        pd.PivotLines.Add(tl);
 
                         int x3 = i;
                         double y3 = y1 + (rate * Math.Abs(x3 - x1));
@@ -185,8 +185,8 @@ namespace Pacmio
 
                 Bar b = bc.LastBar;
 
-                if (b[Result_Column] is PatternDatum pd && pd.TrendLines is List<TrendLine> lines)
-                    foreach (TrendLine tl in lines)
+                if (b[Result_Column] is PatternDatum pd && pd.PivotLines is List<PivotLine> lines)
+                    foreach (PivotLine tl in lines)
                     {
                         int x1 = tl.StartIndex;
                         int x1_idx = x1 - bc.StartPt;

@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class PivotLevel : BarAnalysis
+    public class PivotLevelAnalysis : BarAnalysis
     {
         protected override void Calculate(BarAnalysisPointer bap)
         {

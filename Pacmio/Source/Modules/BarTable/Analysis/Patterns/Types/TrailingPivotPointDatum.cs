@@ -14,8 +14,8 @@ namespace Pacmio
     {
         public Range<double> LevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)> PositiveList { get; } = new Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)>();
-        
-        public Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)> NegativeList { get; } = new Dictionary<int, (DateTime time, double level, double prominence, double trendStrength)>();
+        public Dictionary<int, Pivot> PositiveList { get; } = new Dictionary<int, Pivot>();
+
+        public Dictionary<int, Pivot> NegativeList { get; } = new Dictionary<int, Pivot>();
     }
 }

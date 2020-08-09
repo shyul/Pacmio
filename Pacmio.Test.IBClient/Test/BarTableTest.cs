@@ -34,14 +34,14 @@ namespace TestClient
                     new GainAnalysis(),
                     new TrueRange(),
                     new TrendStrength(),
-                    new PivotPoint(),
+                    new PivotPointAnalysis(),
 
                     //new ADX(14),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     rsi,
-                    new PivotPoint(rsi, 100),
+                    new PivotPointAnalysis(rsi, 100),
 
                     //new TSI(25,13,7),
 

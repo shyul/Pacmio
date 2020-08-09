@@ -619,7 +619,7 @@ namespace Pacmio
 
         public static TrendStrength TrendStrengthAnalysis { get; } = new TrendStrength() { ChartEnabled = false };
 
-        public static PivotPoint PivotPointAnalysis { get; } = new PivotPoint() { ChartEnabled = false };
+        public static PivotPointAnalysis PivotPointAnalysis { get; } = new PivotPointAnalysis() { ChartEnabled = false };
 
         #endregion Basic Data
 

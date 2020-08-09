@@ -29,7 +29,7 @@ namespace Pacmio
 
 
 
-        public List<TrendLine> TrendLines { get; } = new List<TrendLine>();
+        public List<PivotLine> PivotLines { get; } = new List<PivotLine>();
 
         public List<(double Weight, double Level)> Levels { get; } = new List<(double Weight, double Level)>();
 

@@ -11,9 +11,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class PivotPoint : BarAnalysis, ISingleData, IChartSeries
+    public sealed class PivotPointAnalysis : BarAnalysis, ISingleData, IChartSeries
     {
-        public PivotPoint(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public PivotPointAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
@@ -41,7 +41,7 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PivotPoint(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public PivotPointAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
@@ -78,7 +78,7 @@ namespace Pacmio
             }
         }
 
-        public PivotPoint(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public PivotPointAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
@@ -106,7 +106,7 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PivotPoint(IDualData idd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public PivotPointAnalysis(IDualData idd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
@@ -141,7 +141,7 @@ namespace Pacmio
             LowerColor = idd.LowerColor;
         }
 
-        public PivotPoint(int maximumPeakProminence = 100, int minimumPeakProminenceForAnalysis = 5)
+        public PivotPointAnalysis(int maximumPeakProminence = 100, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
