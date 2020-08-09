@@ -16,7 +16,7 @@ namespace Pacmio
     /// </summary>
     public class TrendLine
     {
-        public TrendLine(int startIndex, double startLevel, int distance, double trendRate, double tolerance, double weight, bool isLogarithmic)
+        public TrendLine(int startIndex, double startLevel, int distance, double trendRate, double tolerance, double weight)
         {
             StartIndex = startIndex;
             StartLevel = startLevel;

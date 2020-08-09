@@ -270,27 +270,27 @@ namespace Pacmio
 
         #endregion Tag Column
 
-        #region Gain Point Analysis
+        #region Trailing Pivot Points
 
-        private Dictionary<GainPointColumn, GainPointDatum> GainPoints { get; } = new Dictionary<GainPointColumn, GainPointDatum>();
+        private Dictionary<TrailingPivotPointColumn, TrailingPivotPointDatum> TrailingPivotPoints { get; } = new Dictionary<TrailingPivotPointColumn, TrailingPivotPointDatum>();
 
-        public GainPointDatum this[GainPointColumn column]
+        public TrailingPivotPointDatum this[TrailingPivotPointColumn column]
         {
-            get => GainPoints.ContainsKey(column) ? GainPoints[column] : null;
+            get => TrailingPivotPoints.ContainsKey(column) ? TrailingPivotPoints[column] : null;
 
             set
             {
-                if (value is GainPointDatum gpd)
-                    if (!GainPoints.ContainsKey(column))
-                        GainPoints.Add(column, gpd);
+                if (value is TrailingPivotPointDatum gpd)
+                    if (!TrailingPivotPoints.ContainsKey(column))
+                        TrailingPivotPoints.Add(column, gpd);
                     else
-                        GainPoints[column] = gpd;
-                else if (value is null && GainPoints.ContainsKey(column))
-                    GainPoints.Remove(column);
+                        TrailingPivotPoints[column] = gpd;
+                else if (value is null && TrailingPivotPoints.ContainsKey(column))
+                    TrailingPivotPoints.Remove(column);
             }
         }
 
-        #endregion Gain Point Analysis
+        #endregion Trailing Pivot Points
 
         #region Patterns
 

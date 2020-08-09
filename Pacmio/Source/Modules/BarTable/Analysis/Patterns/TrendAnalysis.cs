@@ -16,46 +16,40 @@ namespace Pacmio
 {
     public class TrendAnalysis : BarAnalysis, IPattern, IChartGraphics
     {
-        public TrendAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
+        public TrendAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
-            Tolerance = tolerance;
-            IsLogarithmic = isLogarithmic;
-            string label = "(" + ba.Name + "," + interval + "," + minimumPeakProminence + "," + minimumTrendStrength + ")";
+            string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            GainPointAnalysis = new PivotTrendLine(ba, interval, minimumPeakProminence, minimumTrendStrength);
-            GainPointAnalysis.AddChild(this);
+            TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
+            TrailingPivotPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(Name) { Label = label };
-
             GraphicsAreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
         }
 
-        public TrendAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 0, double tolerance = 0.03, bool isLogarithmic = false)
+        public TrendAnalysis(int test_interval)
         {
-            Tolerance = tolerance;
-            IsLogarithmic = isLogarithmic;
-            string label = "(" + Bar.Column_Close.Name + "," + interval + "," + minimumPeakProminence + "," + minimumTrendStrength + ")";
+
+            string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
 
-            GainPointAnalysis = new PivotTrendLine(interval, minimumPeakProminence, minimumTrendStrength);
-            GainPointAnalysis.AddChild(this);
+            TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
+            TrailingPivotPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(Name) { Label = label };
             GraphicsAreaName = MainArea.DefaultName;
         }
 
-        public bool IsLogarithmic { get; }
-
-        public virtual int Interval => GainPointAnalysis.Interval;
+        public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
 
         public virtual int MaximumResultCount { get; }
 
-        public double Tolerance { get; }
+        public double Tolerance => 0.01;
 
         #region Calculation
 
-        public PivotTrendLine GainPointAnalysis { get; }
+        public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Result_Column { get; }
 
@@ -67,7 +61,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                GainPointDatum gpd = b[GainPointAnalysis.Result_Column];
+                TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum(bt.BarFreq, GraphicsAreaName);
 
@@ -127,7 +121,7 @@ namespace Pacmio
                     if (p1 > 8)
                     {
                         //Console.WriteLine("Adding level line: " + p1);
-                        TrendLine tl = new TrendLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100, IsLogarithmic);
+                        TrendLine tl = new TrendLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100);
                         pd.TrendLines.Add(tl);
                         pd.Levels.Add((p1 * p1 * 100, y1));
                     }
@@ -146,7 +140,7 @@ namespace Pacmio
 
                         weight_range.Insert(weight);
 
-                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, weight, IsLogarithmic);
+                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, weight);
                         pd.TrendLines.Add(tl);
 
                         int x3 = i;
@@ -179,6 +173,8 @@ namespace Pacmio
         public bool ChartEnabled { get; set; } = true;
 
         public string GraphicsAreaName { get; }
+
+
 
         public void DrawBackground(Graphics g, BarChart bc)
         {

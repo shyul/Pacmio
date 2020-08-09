@@ -13,12 +13,13 @@ namespace Pacmio
 {
     public sealed class PivotPoint : BarAnalysis, ISingleData, IChartSeries
     {
-        public PivotPoint(NumericColumn column, int maximumPeakProminence)
+        public PivotPoint(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
             Column_High = Column_Low = column;
 
-            string label = "(" + Column_High.Name + "," + maximumPeakProminence + ")";
+            string label = "(" + Column_High.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -40,12 +41,13 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PivotPoint(ISingleData isd, int maximumPeakProminence)
+        public PivotPoint(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
             Column_High = Column_Low = isd.Column_Result;
 
-            string label = "(" + Column_High.Name + "," + maximumPeakProminence + ")";
+            string label = "(" + Column_High.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -76,13 +78,14 @@ namespace Pacmio
             }
         }
 
-        public PivotPoint(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence)
+        public PivotPoint(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
             Column_High = column_high;
             Column_Low = column_low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -103,13 +106,14 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PivotPoint(IDualData idd, int maximumPeakProminence)
+        public PivotPoint(IDualData idd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
             Column_High = idd.Column_High;
             Column_Low = idd.Column_Low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -137,13 +141,14 @@ namespace Pacmio
             LowerColor = idd.LowerColor;
         }
 
-        public PivotPoint(int maximumPeakProminence = 100)
+        public PivotPoint(int maximumPeakProminence = 100, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
             Column_High = Bar.Column_High;
             Column_Low = Bar.Column_Low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -164,11 +169,11 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence;
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminenceForAnalysis;
 
         public int MaximumPeakProminence { get; }
 
-        public int MinimumPeakProminenceForTagDisplay { get; set; } = 5;
+        public int MinimumPeakProminenceForAnalysis { get; } = 5;
 
         public NumericColumn Column_High { get; }
 
@@ -183,7 +188,10 @@ namespace Pacmio
             BarTable bt = bap.Table;
 
             int min_peak_start = bap.StopPt - MaximumPeakProminence * 2 - 1;
-            if (bap.StartPt > min_peak_start) bap.StartPt = min_peak_start;
+            if (bap.StartPt > min_peak_start) 
+                bap.StartPt = min_peak_start;
+            else if (bap.StartPt < 0) 
+                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
@@ -246,11 +254,11 @@ namespace Pacmio
                 double low = b[Column_Low];
                 double peak_result = b[Column_Result];
 
-                if (peak_result > MinimumPeakProminenceForTagDisplay)
+                if (peak_result > MinimumPeakProminenceForAnalysis)
                 {
                     b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
                 }
-                else if (peak_result < -MinimumPeakProminenceForTagDisplay)
+                else if (peak_result < -MinimumPeakProminenceForAnalysis)
                 {
                     b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
                 }

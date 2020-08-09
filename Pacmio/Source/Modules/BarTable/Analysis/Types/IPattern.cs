@@ -9,7 +9,7 @@ namespace Pacmio
 {
     public interface IPattern
     {
-        int Interval { get; }
+        int TestInterval { get; }
 
         int MaximumResultCount { get; }
 

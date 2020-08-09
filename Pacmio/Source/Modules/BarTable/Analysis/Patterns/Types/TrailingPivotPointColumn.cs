@@ -10,11 +10,11 @@ using Xu;
 
 namespace Pacmio
 {
-    public class GainPointColumn : Column
+    public class TrailingPivotPointColumn : Column
     {
-        public GainPointColumn(string name) => Name = Label = name;
+        public TrailingPivotPointColumn(string name) => Name = Label = name;
 
-        public GainPointColumn(string name, string label)
+        public TrailingPivotPointColumn(string name, string label)
         {
             Name = name;
             Label = label;
