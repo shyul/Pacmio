@@ -116,6 +116,8 @@ namespace Pacmio
             }
         }
 
+        public Series MainSeries => ColumnSeries_TrueRange;
+
         public ColumnSeries ColumnSeries_TrueRange { get; }
 
         public LineSeries LineSeries_Typical { get; }

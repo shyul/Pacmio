@@ -667,10 +667,14 @@ namespace Pacmio
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
-        private void Calculate(IEnumerable<BarAnalysis> analyses)
+        private void Calculate(IEnumerable<BarAnalysis> analyses, bool debugInfo = false)
         {
-            //Console.WriteLine("\n==================");
-            //Console.WriteLine("Table: " + Name + " | Count: " + Count);
+            if (debugInfo)
+            {
+                Console.WriteLine("\n==================");
+                Console.WriteLine("Table: " + Name + " | Count: " + Count);
+            }
+
             DateTime total_time = DateTime.Now;
 
             int startPt = Count;
@@ -682,7 +686,7 @@ namespace Pacmio
                 startPt = Math.Min(startPt, Calculate(TrendStrengthAnalysis).StartPt);
                 startPt = Math.Min(startPt, Calculate(PeakAnalysis).StartPt);
 
-                foreach (BarAnalysis ba in analyses) //BarAnalysisPointerList.Keys)
+                foreach (BarAnalysis ba in analyses)
                 {
                     DateTime single_time = DateTime.Now;
 
@@ -692,14 +696,20 @@ namespace Pacmio
                     ba.Update(bap);
                     startPt = Math.Min(startPt, bap.StartPt);
 
-                    //Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                    if (debugInfo)
+                    {
+                        Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                    }
                 }
             }
             LatestCalculatePointer = startPt;
 
-            //Console.WriteLine("------------------");
-            Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
-            //Console.WriteLine("==================\n");
+            if (debugInfo)
+            {
+                Console.WriteLine("------------------");
+                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
+                Console.WriteLine("==================\n");
+            }
         }
 
         #endregion Data/Bar Analysis (TA) Calculation

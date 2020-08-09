@@ -38,6 +38,16 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnHistoricalDataContractSet8 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet7 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet6 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet5 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet4 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet3 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet2 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet1 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataConfigMinuteLastWeek = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataConfigDailyFull = new System.Windows.Forms.Button();
             this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
@@ -77,6 +87,7 @@ namespace TestClient
             this.button4 = new System.Windows.Forms.Button();
             this.BtnMarketDataAddContract = new System.Windows.Forms.Button();
             this.tabOrder = new System.Windows.Forms.TabPage();
+            this.BtnTestMassiveOrder = new System.Windows.Forms.Button();
             this.GroupBoxOrderSetting = new System.Windows.Forms.GroupBox();
             this.BtnOrderSettingApplyCurrentPrice = new System.Windows.Forms.Button();
             this.TextBoxOrderSettingQuantity = new System.Windows.Forms.TextBox();
@@ -178,7 +189,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnTestMassiveOrder = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -239,6 +249,16 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet8);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet7);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet6);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet5);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet4);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet3);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet2);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet1);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataConfigMinuteLastWeek);
+            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataConfigDailyFull);
             this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
@@ -257,9 +277,109 @@ namespace TestClient
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
             // 
+            // BtnHistoricalDataContractSet8
+            // 
+            this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(364, 35);
+            this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
+            this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet8.TabIndex = 56;
+            this.BtnHistoricalDataContractSet8.Text = "FB";
+            this.BtnHistoricalDataContractSet8.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet8.Click += new System.EventHandler(this.BtnHistoricalDataContractSet8_Click);
+            // 
+            // BtnHistoricalDataContractSet7
+            // 
+            this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(313, 35);
+            this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
+            this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet7.TabIndex = 55;
+            this.BtnHistoricalDataContractSet7.Text = "AAPL";
+            this.BtnHistoricalDataContractSet7.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet7.Click += new System.EventHandler(this.BtnHistoricalDataContractSet7_Click);
+            // 
+            // BtnHistoricalDataContractSet6
+            // 
+            this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(262, 35);
+            this.BtnHistoricalDataContractSet6.Name = "BtnHistoricalDataContractSet6";
+            this.BtnHistoricalDataContractSet6.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet6.TabIndex = 54;
+            this.BtnHistoricalDataContractSet6.Text = "TSLA";
+            this.BtnHistoricalDataContractSet6.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet6.Click += new System.EventHandler(this.BtnHistoricalDataContractSet6_Click);
+            // 
+            // BtnHistoricalDataContractSet5
+            // 
+            this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(211, 35);
+            this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
+            this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet5.TabIndex = 53;
+            this.BtnHistoricalDataContractSet5.Text = "GLD";
+            this.BtnHistoricalDataContractSet5.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet5.Click += new System.EventHandler(this.BtnHistoricalDataContractSet5_Click);
+            // 
+            // BtnHistoricalDataContractSet4
+            // 
+            this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(160, 35);
+            this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
+            this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet4.TabIndex = 51;
+            this.BtnHistoricalDataContractSet4.Text = "IWM";
+            this.BtnHistoricalDataContractSet4.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet4.Click += new System.EventHandler(this.BtnHistoricalDataContractSet4_Click);
+            // 
+            // BtnHistoricalDataContractSet3
+            // 
+            this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(109, 35);
+            this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
+            this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet3.TabIndex = 50;
+            this.BtnHistoricalDataContractSet3.Text = "VXX";
+            this.BtnHistoricalDataContractSet3.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet3.Click += new System.EventHandler(this.BtnHistoricalDataContractSet3_Click);
+            // 
+            // BtnHistoricalDataContractSet2
+            // 
+            this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(58, 35);
+            this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
+            this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet2.TabIndex = 49;
+            this.BtnHistoricalDataContractSet2.Text = "SPY";
+            this.BtnHistoricalDataContractSet2.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet2.Click += new System.EventHandler(this.BtnHistoricalDataContractSet2_Click);
+            // 
+            // BtnHistoricalDataContractSet1
+            // 
+            this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(7, 35);
+            this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
+            this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet1.TabIndex = 48;
+            this.BtnHistoricalDataContractSet1.Text = "QQQ";
+            this.BtnHistoricalDataContractSet1.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet1.Click += new System.EventHandler(this.BtnHistoricalDataContractSet1_Click);
+            // 
+            // BtnHistoricalDataConfigMinuteLastWeek
+            // 
+            this.BtnHistoricalDataConfigMinuteLastWeek.Location = new System.Drawing.Point(211, 6);
+            this.BtnHistoricalDataConfigMinuteLastWeek.Name = "BtnHistoricalDataConfigMinuteLastWeek";
+            this.BtnHistoricalDataConfigMinuteLastWeek.Size = new System.Drawing.Size(198, 23);
+            this.BtnHistoricalDataConfigMinuteLastWeek.TabIndex = 47;
+            this.BtnHistoricalDataConfigMinuteLastWeek.Text = "1 Minute / Last Week";
+            this.BtnHistoricalDataConfigMinuteLastWeek.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataConfigMinuteLastWeek.Click += new System.EventHandler(this.BtnHistoricalDataConfigMinuteLastWeek_Click);
+            // 
+            // BtnHistoricalDataConfigDailyFull
+            // 
+            this.BtnHistoricalDataConfigDailyFull.Location = new System.Drawing.Point(7, 6);
+            this.BtnHistoricalDataConfigDailyFull.Name = "BtnHistoricalDataConfigDailyFull";
+            this.BtnHistoricalDataConfigDailyFull.Size = new System.Drawing.Size(198, 23);
+            this.BtnHistoricalDataConfigDailyFull.TabIndex = 46;
+            this.BtnHistoricalDataConfigDailyFull.Text = "Daily / Full";
+            this.BtnHistoricalDataConfigDailyFull.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataConfigDailyFull.Click += new System.EventHandler(this.BtnHistoricalDataConfigDailyFull_Click);
+            // 
             // BtnLoadMultiHistoricalChart
             // 
-            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(14, 47);
+            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 108);
             this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
             this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadMultiHistoricalChart.TabIndex = 45;
@@ -288,7 +408,7 @@ namespace TestClient
             // 
             // BtnCloseChart
             // 
-            this.BtnCloseChart.Location = new System.Drawing.Point(14, 105);
+            this.BtnCloseChart.Location = new System.Drawing.Point(7, 166);
             this.BtnCloseChart.Name = "BtnCloseChart";
             this.BtnCloseChart.Size = new System.Drawing.Size(230, 23);
             this.BtnCloseChart.TabIndex = 37;
@@ -306,7 +426,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(14, 189);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 250);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -336,7 +456,7 @@ namespace TestClient
             // 
             // BtnChartsUpdateAll
             // 
-            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(14, 160);
+            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 221);
             this.BtnChartsUpdateAll.Name = "BtnChartsUpdateAll";
             this.BtnChartsUpdateAll.Size = new System.Drawing.Size(230, 23);
             this.BtnChartsUpdateAll.TabIndex = 2;
@@ -346,12 +466,13 @@ namespace TestClient
             // 
             // BtnLoadHistoricalChart
             // 
-            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(14, 18);
+            this.BtnLoadHistoricalChart.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 79);
             this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
             this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadHistoricalChart.TabIndex = 0;
             this.BtnLoadHistoricalChart.Text = "Show Historical Chart";
-            this.BtnLoadHistoricalChart.UseVisualStyleBackColor = true;
+            this.BtnLoadHistoricalChart.UseVisualStyleBackColor = false;
             this.BtnLoadHistoricalChart.Click += new System.EventHandler(this.BtnLoadHistoricalChart_Click);
             // 
             // tabContract
@@ -677,6 +798,19 @@ namespace TestClient
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
+            // 
+            // BtnTestMassiveOrder
+            // 
+            this.BtnTestMassiveOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnTestMassiveOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnTestMassiveOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnTestMassiveOrder.Location = new System.Drawing.Point(253, 33);
+            this.BtnTestMassiveOrder.Name = "BtnTestMassiveOrder";
+            this.BtnTestMassiveOrder.Size = new System.Drawing.Size(183, 29);
+            this.BtnTestMassiveOrder.TabIndex = 83;
+            this.BtnTestMassiveOrder.Text = "Test Massive Order";
+            this.BtnTestMassiveOrder.UseVisualStyleBackColor = false;
+            this.BtnTestMassiveOrder.Click += new System.EventHandler(this.BtnTestMassiveOrder_Click);
             // 
             // GroupBoxOrderSetting
             // 
@@ -1549,7 +1683,7 @@ namespace TestClient
             this.TextBoxSingleContractName.Name = "TextBoxSingleContractName";
             this.TextBoxSingleContractName.Size = new System.Drawing.Size(132, 22);
             this.TextBoxSingleContractName.TabIndex = 18;
-            this.TextBoxSingleContractName.Text = "SPY";
+            this.TextBoxSingleContractName.Text = "QQQ";
             this.TextBoxSingleContractName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
             // 
             // MainProgBar
@@ -1737,19 +1871,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnTestMassiveOrder
-            // 
-            this.BtnTestMassiveOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.BtnTestMassiveOrder.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnTestMassiveOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.BtnTestMassiveOrder.Location = new System.Drawing.Point(253, 33);
-            this.BtnTestMassiveOrder.Name = "BtnTestMassiveOrder";
-            this.BtnTestMassiveOrder.Size = new System.Drawing.Size(183, 29);
-            this.BtnTestMassiveOrder.TabIndex = 83;
-            this.BtnTestMassiveOrder.Text = "Test Massive Order";
-            this.BtnTestMassiveOrder.UseVisualStyleBackColor = false;
-            this.BtnTestMassiveOrder.Click += new System.EventHandler(this.BtnTestMassiveOrder_Click);
             // 
             // MainForm
             // 
@@ -1954,5 +2075,15 @@ namespace TestClient
         private System.Windows.Forms.Button BtnMarketDataSyncTicks;
         private System.Windows.Forms.Button BtnApplyDefaultDownloadPeriod;
         private System.Windows.Forms.Button BtnTestMassiveOrder;
+        private System.Windows.Forms.Button BtnHistoricalDataConfigMinuteLastWeek;
+        private System.Windows.Forms.Button BtnHistoricalDataConfigDailyFull;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet8;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet7;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet6;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet5;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet4;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet3;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet2;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet1;
     }
 }

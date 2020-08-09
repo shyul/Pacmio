@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System.Drawing;
+using Xu.Chart;
 
 namespace Pacmio
 {
@@ -21,6 +22,8 @@ namespace Pacmio
         string AreaName { get; }
 
         float AreaRatio { get; set; }
+
+        Series MainSeries { get; }
 
         void ConfigChart(BarChart bc);
     }

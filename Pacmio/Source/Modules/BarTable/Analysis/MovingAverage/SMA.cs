@@ -95,6 +95,8 @@ namespace Pacmio
         public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
 
         public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
+        
+        public Series MainSeries => LineSeries;
 
         public LineSeries LineSeries { get; protected set; }
 

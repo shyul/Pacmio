@@ -151,13 +151,6 @@ namespace Pacmio
             BarTable bt = bap.Table;
             int startPt = bap.StartPt;
 
-            /*
-            MA_1_PC.Update(bap);
-
-            bap.StartPt = startPt;
-            MA_2_PC.Update(bap);
-            */
-
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
@@ -191,7 +184,7 @@ namespace Pacmio
 
         #region Series
 
-        public Color Color => throw new NotImplementedException();
+        public Color Color { get => UpperColor; set => UpperColor = value; }
 
         public Color UpperColor { get; set; } = Color.Green;
 
@@ -200,6 +193,8 @@ namespace Pacmio
         public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
 
         public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
+
+        public Series MainSeries => LineSeries;
 
         public LineSeries LineSeries { get; }
 

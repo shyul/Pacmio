@@ -84,6 +84,8 @@ namespace Pacmio
 
         public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
 
+        public Series MainSeries => LineSeries;
+
         public LineSeries LineSeries { get; protected set; }
 
         public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }

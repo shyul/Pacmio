@@ -163,6 +163,8 @@ namespace Pacmio // Can be derived from SMA
 
         #region Series
 
+        public Series MainSeries => EMA_TCI.LineSeries;
+
         public ColumnSeries ColumnSeries { get; }
 
         public DotSeries DotSeries { get; }

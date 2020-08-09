@@ -120,7 +120,7 @@ namespace TestClient
                 DateTimePickerHistoricalDataStop.Enabled = true;
 
             DateTimePickerHistoricalDataStop.Value = DateTime.Now.AddHours(3);
-            DateTimePickerHistoricalDataStart.Value = DateTimePickerHistoricalDataStop.Value.Date;//   .AddDays(-);
+            DateTimePickerHistoricalDataStart.Value = DateTime.Now.Date;
 
             TestFreqAlign tfa = new TestFreqAlign();
             TestMultiPeriodDataSource tmpds = new TestMultiPeriodDataSource();
@@ -129,6 +129,70 @@ namespace TestClient
 
             //if (DateTime.Now.Hour > 17)
             //LoadValidSymbolHistoricalDataChart();
+        }
+
+        private void BtnHistoricalDataConfigDailyFull_Click(object sender, EventArgs e)
+        {
+            SelectHistoricalDataBarFreq.Text = "Daily";
+            DateTimePickerHistoricalDataStart.Value = new DateTime(1900, 1, 1);
+        }
+
+        private void BtnHistoricalDataConfigMinuteLastWeek_Click(object sender, EventArgs e)
+        {
+            SelectHistoricalDataBarFreq.Text = "Minute";
+            DateTime time = DateTime.Now.AddDays(-7);
+            while (time.DayOfWeek != DayOfWeek.Sunday) time.AddDays(-1);
+            time = time.Date;
+            DateTimePickerHistoricalDataStart.Value = time;
+            CheckBoxChartToCurrent.Checked = true;
+        }
+
+        private void BtnHistoricalDataContractSet1_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet1.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet2_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet2.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet3_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet3.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet4_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet4.Text; 
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet5_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet5.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet6_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet6.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet7_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet7.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet8_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet8.Text;
+            ValidateSymbol();
         }
 
         private void BtnMasterCancel_Click(object sender, EventArgs e)

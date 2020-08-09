@@ -19,17 +19,23 @@ namespace TestClient
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
+                var rsi = new RSI(14) { AreaRatio = 8, HasXAxisBar = true, Order = int.MaxValue - 1, AreaOrder = int.MaxValue - 10 };
+
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
-                    new GainAnalysis(),
-                    new TrueRange(),
-                    new TrendStrength(),
-                    new PeakAnalysis(),
+                    //new GainAnalysis(),
+                    //new TrueRange(),
+                    //new TrendStrength(),
+                    //new PeakAnalysis(),
 
                     //new ADX(14),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
+                    rsi,
+                    //new PeakAnalysis(rsi),
+
+                    //new TSI(25,13,7),
 
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },

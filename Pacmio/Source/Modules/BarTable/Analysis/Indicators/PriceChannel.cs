@@ -101,6 +101,8 @@ namespace Pacmio
 
         public LineType LineType { get => BandSeries.LineType; set => BandSeries.LineType = value; }
 
+        public Series MainSeries => BandSeries;
+
         public BandSeries BandSeries { get; }
 
         public bool ChartEnabled { get => Enabled && BandSeries.Enabled; set => BandSeries.Enabled = value; }

@@ -116,6 +116,8 @@ namespace Pacmio
 
         public int AreaOrder { get; set; } = 0;
 
+        public Series MainSeries => SL.LineSeries;
+
         public void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)

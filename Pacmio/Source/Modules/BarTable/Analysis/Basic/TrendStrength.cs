@@ -31,7 +31,7 @@ namespace Pacmio
             ColumnSeries_TrendStrength = new AdColumnSeries(Column_TrendStrength, Column_TrendStrength, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName,
+                LegendName = "Trend",
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
@@ -163,6 +163,8 @@ namespace Pacmio
                 ColumnSeries_GapPercent.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor;
             }
         }
+
+        public Series MainSeries => ColumnSeries_TrendStrength;
 
         public AdColumnSeries ColumnSeries_TrendStrength { get; }
 

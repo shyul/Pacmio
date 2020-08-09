@@ -61,6 +61,11 @@ namespace Pacmio
                 IsAntialiasing = false
             };
 
+            if (isd is IChartSeries ics && ics.MainSeries is ITagSeries ts)
+            {
+                ts.TagColumns.Add(Column_PeakTags);
+            }
+
             UpperColor = Color.Green;
             LowerColor = Color.Red;
         }
@@ -110,6 +115,11 @@ namespace Pacmio
                 Label = label,
                 IsAntialiasing = false
             };
+
+            if (idd is IChartSeries ics && ics.MainSeries is ITagSeries ts)
+            {
+                ts.TagColumns.Add(Column_PeakTags);
+            }
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -260,6 +270,8 @@ namespace Pacmio
                 ColumnSeries_Peak.DownTextTheme.ForeColor = ColumnSeries_Peak.DownTextTheme.EdgeColor;
             }
         }
+
+        public Series MainSeries => ColumnSeries_Peak;
 
         public AdColumnSeries ColumnSeries_Peak { get; }
 

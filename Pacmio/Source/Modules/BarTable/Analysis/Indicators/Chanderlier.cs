@@ -103,6 +103,8 @@ namespace Pacmio
 
         public LineType LineType { get => LineSeries_H.LineType; set => LineSeries_H.LineType = LineSeries_L.LineType = value; }
 
+        public Series MainSeries => LineSeries_H;
+
         public LineSeries LineSeries_H { get; }
 
         public LineSeries LineSeries_L { get; }

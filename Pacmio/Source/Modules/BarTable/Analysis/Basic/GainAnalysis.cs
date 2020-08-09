@@ -123,6 +123,8 @@ namespace Pacmio
             }
         }
 
+        public Series MainSeries => ColumnSeries_Percent;
+
         public AdColumnSeries ColumnSeries_Percent { get; }
 
         public bool ChartEnabled { get => Enabled && ColumnSeries_Percent.Enabled; set => ColumnSeries_Percent.Enabled = value; }

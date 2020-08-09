@@ -233,6 +233,8 @@ namespace Pacmio
 
         public float DotWidth { get => DotSeries.Width; set => DotSeries.Width = value; }
 
+        public Series MainSeries => DotSeries;
+
         public DotSeries DotSeries { get; }
 
         public bool ChartEnabled { get => Enabled && DotSeries.Enabled; set => DotSeries.Enabled = value; }

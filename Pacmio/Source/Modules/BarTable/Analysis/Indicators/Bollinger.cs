@@ -123,6 +123,8 @@ namespace Pacmio
 
         public LineType LineType { get => SMA.LineSeries.LineType; set => BandSeries.LineType = SMA.LineSeries.LineType = value; }
 
+        public Series MainSeries => BandSeries;
+
         public BandSeries BandSeries { get; }
 
         public bool ChartEnabled { get => Enabled && SMA.ChartEnabled && BandSeries.Enabled; set => SMA.ChartEnabled = BandSeries.Enabled = value; }

@@ -277,6 +277,7 @@ namespace Pacmio
         public GainPointDatum this[GainPointColumn column]
         {
             get => GainPoints.ContainsKey(column) ? GainPoints[column] : null;
+
             set
             {
                 if (value is GainPointDatum gpd)
@@ -298,6 +299,7 @@ namespace Pacmio
         public PatternDatum this[PatternColumn column]
         {
             get => Patterns.ContainsKey(column) ? Patterns[column] : null;
+
             set
             {
                 if (value is PatternDatum pattern)

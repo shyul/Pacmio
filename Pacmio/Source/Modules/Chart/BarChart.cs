@@ -53,32 +53,6 @@ namespace Pacmio
             AddArea(SignalArea = new SignalArea(this));
             AddArea(MainArea = new MainArea(this, 50, 0.3f) { HasXAxisBar = true, });
 
-            /*
-            AddArea(Test_Gain_Area = new Area(this, "Test_Gain_Area", 8));
-            AddArea(Test_Trend_Area = new Area(this, "Test_Trend_Area", 8));
-
-            Test_Gain_ColumnSeries = new ColumnSeries(Bar.Column_Peak, Color.Teal, Color.DarkBlue, 50)
-            {
-                Name = "Test_Gain_ColumnSeries",
-                LegendName = "Test_Gain_ColumnSeries",
-                Label = "GAIN",
-                Importance = Importance.Minor,
-                Order = 200
-            };
-
-            Test_Trend_ColumnSeries = new ColumnSeries(Bar.Column_TrendStrength, Color.Pink, Color.Red, 50)
-            {
-                Name = "Test_Trend_ColumnSeries",
-                LegendName = "Test_Trend_ColumnSeries",
-                Label = "TREND",
-                Importance = Importance.Minor,
-                Order = 200
-            };
-
-            Test_Gain_Area.AddSeries(Test_Gain_ColumnSeries);
-            Test_Trend_Area.AddSeries(Test_Trend_ColumnSeries);
-            */
-
             OhlcType = type;
             lock (List) List.CheckAdd(this);
             ResumeLayout(false);
@@ -108,13 +82,6 @@ namespace Pacmio
             while (Disposing) ;*/
         }
 
-        /*
-        public Area Test_Gain_Area { get; }
-        public Area Test_Trend_Area { get; }
-
-        public ColumnSeries Test_Gain_ColumnSeries { get; }
-        public ColumnSeries Test_Trend_ColumnSeries { get; }
-        */
         public string Title { get => MainArea.PriceSeries.Legend.Label; set => MainArea.PriceSeries.Legend.Label = value; }
 
         public override string Label { get => MainArea.PriceSeries.Label; set => MainArea.PriceSeries.Label = value; }
