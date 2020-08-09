@@ -119,8 +119,16 @@ namespace TestClient
             else
                 DateTimePickerHistoricalDataStop.Enabled = true;
 
-            DateTimePickerHistoricalDataStop.Value = DateTime.Now.AddHours(3);
-            DateTimePickerHistoricalDataStart.Value = DateTime.Now.Date;
+            DateTime time = DateTime.Now;
+
+            DateTimePickerHistoricalDataStop.Value = time.AddHours(3);
+
+            while (time.DayOfWeek == DayOfWeek.Saturday || time.DayOfWeek == DayOfWeek.Sunday)
+            {
+                time = time.AddDays(-1);
+            }
+
+            DateTimePickerHistoricalDataStart.Value = time.Date;
 
             TestFreqAlign tfa = new TestFreqAlign();
             TestMultiPeriodDataSource tmpds = new TestMultiPeriodDataSource();
@@ -167,7 +175,7 @@ namespace TestClient
 
         private void BtnHistoricalDataContractSet4_Click(object sender, EventArgs e)
         {
-            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet4.Text; 
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet4.Text;
             ValidateSymbol();
         }
 

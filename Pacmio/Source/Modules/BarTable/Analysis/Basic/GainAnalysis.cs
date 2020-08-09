@@ -26,7 +26,7 @@ namespace Pacmio
 
             Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
-            ColumnSeries_Percent = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Gain" + label + " %",
@@ -93,43 +93,35 @@ namespace Pacmio
 
         public Color UpperColor
         {
-            get
-            {
-                return ColumnSeries_Percent.Theme.ForeColor;
-            }
+            get => ColumnSeries.Color;
+
             set
             {
-                ColumnSeries_Percent.Theme.ForeColor = value;
-
-                ColumnSeries_Percent.TextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_Percent.TextTheme.FillColor = ColumnSeries_Percent.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.TextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_Percent.TextTheme.ForeColor = ColumnSeries_Percent.TextTheme.EdgeColor;
+                Color c = value;
+                ColumnSeries.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.EdgeColor = ColumnSeries.TextTheme.ForeColor = c;
             }
         }
 
         public Color LowerColor
         {
-            get
-            {
-                return ColumnSeries_Percent.LowerTheme.ForeColor;
-            }
+            get => ColumnSeries.LowerColor;
+
             set
             {
-                ColumnSeries_Percent.LowerTheme.ForeColor = value;
-
-                ColumnSeries_Percent.LowerTextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_Percent.LowerTextTheme.FillColor = ColumnSeries_Percent.LowerTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Percent.LowerTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Percent.LowerTextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_Percent.LowerTextTheme.ForeColor = ColumnSeries_Percent.LowerTextTheme.EdgeColor;
+                Color c = value;
+                ColumnSeries.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.LowerEdgeColor = ColumnSeries.LowerTextTheme.ForeColor = c;
             }
         }
 
-        public Series MainSeries => ColumnSeries_Percent;
+        public Series MainSeries => ColumnSeries;
 
-        public AdColumnSeries ColumnSeries_Percent { get; }
+        public AdColumnSeries ColumnSeries { get; }
 
-        public bool ChartEnabled { get => Enabled && ColumnSeries_Percent.Enabled; set => ColumnSeries_Percent.Enabled = value; }
+        public bool ChartEnabled { get => Enabled && ColumnSeries.Enabled; set => ColumnSeries.Enabled = value; }
 
-        public int SeriesOrder { get => ColumnSeries_Percent.Order; set => ColumnSeries_Percent.Order = value; }
+        public int SeriesOrder { get => ColumnSeries.Order; set => ColumnSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 
@@ -148,7 +140,7 @@ namespace Pacmio
                         HasXAxisBar = HasXAxisBar,
                         //FixedTickStep_Right = 0.02,
                     });
-                a.AddSeries(ColumnSeries_Percent);
+                a.AddSeries(ColumnSeries);
             }
         }
 

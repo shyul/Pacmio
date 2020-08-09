@@ -5,7 +5,6 @@
 /// ***************************************************************************
 
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
@@ -26,7 +25,7 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = GroupName + ": ",
@@ -53,7 +52,7 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Peak" + label,
@@ -87,7 +86,7 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Peak" + label,
@@ -114,7 +113,7 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Peak" + label,
@@ -148,7 +147,7 @@ namespace Pacmio
             Column_Result = new NumericColumn(Name) { Label = label };
             Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
 
-            ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Peak" + label,
@@ -235,14 +234,22 @@ namespace Pacmio
                 }
 
                 b[Column_Result] = peak_result;
+            }
+
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                double high = b[Column_High];
+                double low = b[Column_Low];
+                double peak_result = b[Column_Result];
 
                 if (peak_result > MinimumPeakProminenceForTagDisplay)
                 {
-                    b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries_Peak.TextTheme);
+                    b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
                 }
                 else if (peak_result < -MinimumPeakProminenceForTagDisplay)
                 {
-                    b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries_Peak.LowerTextTheme);
+                    b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
                 }
             }
         }
@@ -251,56 +258,35 @@ namespace Pacmio
 
         public Color UpperColor
         {
-            get => ColumnSeries_Peak.Color; // ColumnSeries_Peak.Theme.ForeColor;
-        
+            get => ColumnSeries.Color;
+
             set
             {
                 Color c = value;
-                ColumnSeries_Peak.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries_Peak.EdgeColor = ColumnSeries_Peak.TextTheme.ForeColor = c;
-                
-                /*
-                ColumnSeries_Peak.Color = value;
-                ColumnSeries_Peak.EdgeColor = ColumnSeries_Peak.Color.GetBrightness() < 0.6 ? ColumnSeries_Peak.Color.Brightness(0.85f) : ColumnSeries_Peak.Color.Brightness(-0.85f);
-                
-                ColumnSeries_Peak.Theme.ForeColor = value;
-
-                ColumnSeries_Peak.TextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_Peak.TextTheme.FillColor = ColumnSeries_Peak.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Peak.TextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_Peak.TextTheme.ForeColor = ColumnSeries_Peak.TextTheme.EdgeColor;
-                */
+                ColumnSeries.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.EdgeColor = ColumnSeries.TextTheme.ForeColor = c;
             }
         }
 
         public Color LowerColor
         {
-            get => ColumnSeries_Peak.LowerColor; // ColumnSeries_Peak.DownTheme.ForeColor;
+            get => ColumnSeries.LowerColor;
 
             set
             {
                 Color c = value;
-                ColumnSeries_Peak.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries_Peak.LowerEdgeColor = ColumnSeries_Peak.LowerTextTheme.ForeColor = c;
-                /*
-                ColumnSeries_Peak.DownColor = value;
-                ColumnSeries_Peak.DownEdgeColor = ColumnSeries_Peak.DownColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.DownColor.Brightness(0.85f) : ColumnSeries_Peak.DownColor.Brightness(-0.85f);
-                
-                ColumnSeries_Peak.DownTheme.ForeColor = value;
-
-                ColumnSeries_Peak.DownTextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_Peak.DownTextTheme.FillColor = ColumnSeries_Peak.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_Peak.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_Peak.DownTextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_Peak.DownTextTheme.ForeColor = ColumnSeries_Peak.DownTextTheme.EdgeColor;
-                */
+                ColumnSeries.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.LowerEdgeColor = ColumnSeries.LowerTextTheme.ForeColor = c;
             }
         }
 
-        public Series MainSeries => ColumnSeries_Peak;
+        public Series MainSeries => ColumnSeries;
 
-        public AdColumnSeries ColumnSeries_Peak { get; }
+        public AdColumnSeries ColumnSeries { get; }
 
-        public bool ChartEnabled { get => Enabled && ColumnSeries_Peak.Enabled; set => ColumnSeries_Peak.Enabled = value; }
+        public bool ChartEnabled { get => Enabled && ColumnSeries.Enabled; set => ColumnSeries.Enabled = value; }
 
-        public int SeriesOrder { get => ColumnSeries_Peak.Order; set => ColumnSeries_Peak.Order = value; }
+        public int SeriesOrder { get => ColumnSeries.Order; set => ColumnSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 
@@ -316,7 +302,7 @@ namespace Pacmio
                 {
                     HasXAxisBar = HasXAxisBar,
                 });
-                a_gain.AddSeries(ColumnSeries_Peak);
+                a_gain.AddSeries(ColumnSeries);
             }
         }
     }

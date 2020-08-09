@@ -23,10 +23,10 @@ namespace TestClient
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
-                    //new GainAnalysis(),
+                    new GainAnalysis(),
                     //new TrueRange(),
                     //new TrendStrength(),
-                    //new PeakAnalysis(),
+                    new PeakAnalysis(),
 
                     //new ADX(14),
                     //new RSI(14),
