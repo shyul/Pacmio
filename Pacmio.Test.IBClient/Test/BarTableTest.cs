@@ -19,29 +19,22 @@ namespace TestClient
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                //var ema5_smma5_cross = new DualData(new EMA(5) { Color = Color.Teal }, new EMA(13) { Color = Color.Peru });
-                //var mfi = new MFI(14) { Order = 99 };
-                var rsi = new RSI(14) { AreaRatio = 8, HasXAxisBar = true, Order = int.MaxValue - 1, AreaOrder = int.MaxValue - 10 };
-                //var divergence = new Divergence(rsi);
-                //var indicator_reference_cross = new ConstantData(rsi, new Range<double>(49, 51));
-
-                //var boll = new Bollinger(20, 2.0);
-
-                //SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
-                //SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
-                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
-
-                //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
-
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     new GainAnalysis(),
-                    new PeakAnalysis(100),
                     new TrueRange(),
+                    new TrendStrength(),
+                    new PeakAnalysis(),
+
+                    //new ADX(14),
+                    //new RSI(14),
+                    //new CCI(20, 0.015),
+                    //new MFI(14),
+
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
+
+                    new TrendAnalysis(260, 5, 0, 0.03),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

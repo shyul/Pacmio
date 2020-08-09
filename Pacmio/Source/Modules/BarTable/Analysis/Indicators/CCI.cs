@@ -17,7 +17,7 @@ namespace Pacmio
 {
     public sealed class CCI : ATR, IOscillator
     {
-        public CCI(int interval, double constant)
+        public CCI(int interval, double constant = 0.015)
         {
             Interval = interval;
             Constant = constant;
@@ -27,8 +27,8 @@ namespace Pacmio
             AreaName = GroupName = GetType().Name;
             Description = "Commodity Channel Index " + label;
 
-            SMA_TP = new SMA(Bar.Column_Typical, interval);
-            MDEV_TP = new MDEV(Bar.Column_Typical, SMA_TP);
+            SMA_TP = new SMA(BarTable.TrueRangeAnalysis.Column_Typical, interval);
+            MDEV_TP = new MDEV(BarTable.TrueRangeAnalysis.Column_Typical, SMA_TP);
 
             SMA_TP.AddChild(MDEV_TP);
             MDEV_TP.AddChild(this);

@@ -14,7 +14,7 @@ namespace Pacmio
 {
     public sealed class PeakAnalysis : BarAnalysis, ISingleData, IChartSeries
     {
-        public PeakAnalysis(NumericColumn column, int maximumPeakProminence, string graphicsAreaName = null)
+        public PeakAnalysis(NumericColumn column, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = Column_Low = column;
@@ -65,7 +65,7 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PeakAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, string graphicsAreaName = null)
+        public PeakAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = column_high;
@@ -131,8 +131,10 @@ namespace Pacmio
             ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName,
+                LegendName = "Peak" + label,
                 Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
                 IsAntialiasing = false
             };
 

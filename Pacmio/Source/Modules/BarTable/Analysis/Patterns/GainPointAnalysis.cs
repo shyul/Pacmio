@@ -95,8 +95,8 @@ namespace Pacmio
 
                     if (PeakAnalysis is null)
                     {
-                        double prominence = b_test[Bar.Column_Peak];
-                        double trendStrength = b_test[Bar.Column_TrendStrength];
+                        double prominence = b_test[BarTable.PeakAnalysis.Column_Result];
+                        double trendStrength = b_test[BarTable.TrendStrengthAnalysis.Column_TrendStrength];
 
                         // For simulation accuracy, the prominence can't be greater than the back testing offset.
                         if (prominence > j) prominence = j;

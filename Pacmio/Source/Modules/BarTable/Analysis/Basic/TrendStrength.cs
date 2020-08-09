@@ -31,12 +31,21 @@ namespace Pacmio
             ColumnSeries_TrendStrength = new AdColumnSeries(Column_TrendStrength, Column_TrendStrength, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName + ": ",
-                Label = GetType().Name,
+                LegendName = GroupName,
+                Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
-                IsAntialiasing = false,
-                Order = 200
+                IsAntialiasing = false
+            };
+
+            ColumnSeries_GapPercent = new AdColumnSeries(Column_GapPercent, Column_GapPercent, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = "Gap" + label + " %",
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false
             };
 
             UpperColor = Color.Green;
@@ -129,45 +138,50 @@ namespace Pacmio
 
         public Color UpperColor
         {
-            get
-            {
-                return ColumnSeries_TrendStrength.Theme.ForeColor;
-            }
+            get => ColumnSeries_TrendStrength.Theme.ForeColor;
+
             set
             {
-                ColumnSeries_TrendStrength.Theme.ForeColor = value;
+                ColumnSeries_GapPercent.Theme.ForeColor = ColumnSeries_TrendStrength.Theme.ForeColor = value;
 
-                ColumnSeries_TrendStrength.TextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_TrendStrength.TextTheme.FillColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_TrendStrength.TextTheme.ForeColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor;
+                ColumnSeries_GapPercent.TextTheme.EdgeColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_GapPercent.TextTheme.FillColor = ColumnSeries_TrendStrength.TextTheme.FillColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.TextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_GapPercent.TextTheme.ForeColor = ColumnSeries_TrendStrength.TextTheme.ForeColor = ColumnSeries_TrendStrength.TextTheme.EdgeColor;
             }
         }
 
         public Color LowerColor
         {
-            get
-            {
-                return ColumnSeries_TrendStrength.DownTheme.ForeColor;
-            }
+            get => ColumnSeries_TrendStrength.DownTheme.ForeColor;
+
             set
             {
-                ColumnSeries_TrendStrength.DownTheme.ForeColor = value;
+                ColumnSeries_GapPercent.DownTheme.ForeColor = ColumnSeries_TrendStrength.DownTheme.ForeColor = value;
 
-                ColumnSeries_TrendStrength.DownTextTheme.EdgeColor = value.Opaque(255);
-                ColumnSeries_TrendStrength.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(-0.85f);
-                ColumnSeries_TrendStrength.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor;
+                ColumnSeries_GapPercent.DownTextTheme.EdgeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor = value.Opaque(255);
+                ColumnSeries_GapPercent.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.FillColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.GetBrightness() < 0.6 ? ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(0.85f) : ColumnSeries_TrendStrength.DownTextTheme.EdgeColor.Brightness(-0.85f);
+                ColumnSeries_GapPercent.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.ForeColor = ColumnSeries_TrendStrength.DownTextTheme.EdgeColor;
             }
         }
 
         public AdColumnSeries ColumnSeries_TrendStrength { get; }
 
-        public bool ChartEnabled { get => Enabled && ColumnSeries_TrendStrength.Enabled; set => ColumnSeries_TrendStrength.Enabled = value; }
+        public AdColumnSeries ColumnSeries_GapPercent { get; }
+
+        public bool ChartEnabled
+        {
+            get => Enabled && ColumnSeries_TrendStrength.Enabled;
+            set => ColumnSeries_TrendStrength.Enabled = ColumnSeries_GapPercent.Enabled = value;
+        }
 
         public int SeriesOrder
         {
-            get => ColumnSeries_TrendStrength.Order; set
+            get => ColumnSeries_TrendStrength.Order;
+
+            set
             {
                 ColumnSeries_TrendStrength.Order = value;
+                ColumnSeries_GapPercent.Order = value + 20;
             }
         }
 
@@ -181,11 +195,23 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area truerange_area = bc.AddArea(new Area(bc, "TrendStrength" + AreaName, AreaRatio)
-                {
-                    HasXAxisBar = false,
-                });
-                truerange_area.AddSeries(ColumnSeries_TrendStrength);
+                OscillatorArea area_trend = bc["TrendStrength_" + AreaName] is OscillatorArea oa ? oa :
+                    bc.AddArea(new OscillatorArea(bc, "TrendStrength_" + AreaName, AreaRatio)
+                    {
+                        Reference = 0,
+                        HasXAxisBar = false,
+                    });
+
+                area_trend.AddSeries(ColumnSeries_TrendStrength);
+
+                OscillatorArea area_gap = bc["GapPercent_" + AreaName] is OscillatorArea oa_gap ? oa_gap :
+                    bc.AddArea(new OscillatorArea(bc, "GapPercent_" + AreaName, AreaRatio)
+                    {
+                        Reference = 0,
+                        HasXAxisBar = HasXAxisBar,
+                    });
+
+                area_gap.AddSeries(ColumnSeries_GapPercent);
             }
         }
 

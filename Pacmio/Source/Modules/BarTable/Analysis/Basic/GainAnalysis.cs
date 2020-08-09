@@ -29,7 +29,7 @@ namespace Pacmio
             ColumnSeries_Percent = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Gain %",
+                LegendName = "Gain" + label + " %",
                 Label = "",
                 LegendLabelFormat = "G5",
                 Importance = Importance.Major,
@@ -133,7 +133,7 @@ namespace Pacmio
 
         public string AreaName { get; }
 
-        public float AreaRatio { get; set; } = 12;
+        public float AreaRatio { get; set; } = 10;
 
         public void ConfigChart(BarChart bc)
         {
@@ -144,7 +144,7 @@ namespace Pacmio
                     {
                         Reference = 0,
                         HasXAxisBar = HasXAxisBar,
-                        FixedTickStep_Right = 0.02,
+                        //FixedTickStep_Right = 0.02,
                     });
                 a.AddSeries(ColumnSeries_Percent);
             }

@@ -613,161 +613,13 @@ namespace Pacmio
 
         #region Basic Data
 
-
-
-        /// <summary>
-        /// Valid data start pointer
-        /// </summary>
-        private int BasicData_StartPt { get; set; } = 0;
-
-        /// <summary>
-        /// Pointer for calculated data end
-        /// </summary>
-        private int BasicData_StopPt { get; set; } = 0;
-
-        private void BasicData_Calculate()
-        {
-            double high_1, low_1, close_1, trend_1;
-
-            int min_peak_start = BasicData_StopPt - MaximumPeakProminence * 2 - 1;
-            if (BasicData_StartPt > min_peak_start) BasicData_StartPt = min_peak_start;
-
-            //if (Gain_StartPt < 0) return;
-
-            // Define the bondary condition
-            if (BasicData_StartPt < 1)
-            {
-                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
-                //open_1 = this[0].Open;
-                high_1 = this[0].High;
-                low_1 = this[0].Low;
-                close_1 = this[0].Close;
-                trend_1 = this[0].TrendStrength = 0;
-            }
-            else
-            {
-                Bar b_1 = this[BasicData_StartPt - 1];
-                //open_1 = b_1.Open;
-                high_1 = b_1.High;
-                low_1 = b_1.Low;
-                close_1 = b_1.Close;
-                trend_1 = b_1.TrendStrength;
-            }
-
-            for (int i = BasicData_StartPt; i < BasicData_StopPt; i++)
-            {
-                Bar b = this[i];
-
-                double open = b.Open;
-                double high = b.High;
-                double low = b.Low;
-                double close = b.Close;
-
-                // Get Gain
-                double gain = b.Gain = close - close_1;
-                b.Percent = (close_1 == 0) ? 0 : (100 * gain / close_1);
-
-                double gap = b.Gap = open - close_1;
-                b.GapPercent = (close_1 == 0) ? 0 : (100 * gap / close_1);
-
-                // Get Trend
-                double[] list = new double[] { (high - low), Math.Abs(high - close_1), Math.Abs(low - close_1) };
-                b.TrueRange = list.Max();
-                b.Typical = (high + low + close) / 3.0;
-
-                double trend = 0;
-                if (gain > 0 || (high > high_1 && low > low_1))
-                {
-                    trend = (trend_1 > 0) ? trend_1 + 1 : 1;
-                }
-                else if (gain < 0 || (high < high_1 && low < low_1))
-                {
-                    trend = (trend_1 < 0) ? trend_1 - 1 : -1;
-                }
-
-                // Get Peak and Troughs
-                int peak_result = 0;
-                int j = 1;
-                bool test_high = true, test_low = true;
-
-                while (j < MaximumPeakProminence)
-                {
-                    if ((!test_high) && (!test_low)) break;
-
-                    int right_index = i + j;
-                    if (right_index >= BasicData_StopPt) break;
-
-                    int left_index = i - j;
-                    if (left_index < 0) break;
-
-                    if (test_high)
-                    {
-                        double left_high = this[left_index].High;
-                        double right_high = this[right_index].High;
-
-                        if (high >= left_high && high >= right_high)
-                        {
-                            peak_result = j;
-                            if (high == left_high) this[left_index].Peak = 0;
-                        }
-                        else
-                            test_high = false;
-                    }
-
-                    if (test_low)
-                    {
-                        double left_low = this[left_index].Low;
-                        double right_low = this[right_index].Low;
-
-                        if (low <= left_low && low <= right_low)
-                        {
-                            peak_result = -j;
-                            if (low == left_low) this[left_index].Peak = 0;
-                        }
-                        else
-                            test_low = false;
-                    }
-                    j++;
-                }
-
-                b.Peak = peak_result;
-
-                if (peak_result > MinimumTagPeakProminence)
-                {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Top, Upper_TextTheme);
-                }
-                else if (peak_result < -MinimumTagPeakProminence)
-                {
-                    b.PeakTag = new TagInfo(i, close.ToString("G5"), DockStyle.Bottom, Lower_TextTheme);
-                }
-
-                b.TrendStrength = trend_1 = trend;
-                high_1 = high;
-                low_1 = low;
-                close_1 = close;
-            }
-        }
-
-        public int MaximumPeakProminence
-        {
-            get
-            {
-                return m_MaximumPeakProminence;
-            }
-            set
-            {
-                if (m_MaximumPeakProminence != value)
-                {
-                    ResetCalculationPointer();
-                    m_MaximumPeakProminence = value;
-                }
-            }
-        }
-        private int m_MaximumPeakProminence = 100;
-
-        public int MinimumTagPeakProminence { get; set; } = 5;
-
         public static GainAnalysis GainAnalysis { get; } = new GainAnalysis();
+
+        public static TrueRange TrueRangeAnalysis { get; } = new TrueRange();
+
+        public static TrendStrength TrendStrengthAnalysis { get; } = new TrendStrength();
+
+        public static PeakAnalysis PeakAnalysis { get; } = new PeakAnalysis();
 
         #endregion Basic Data
 
@@ -789,9 +641,6 @@ namespace Pacmio
         {
             if (pt < 0)
                 pt = 0;
-
-            if (BasicData_StartPt > pt)
-                BasicData_StartPt = pt;
 
             foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
                 if (bap.StartPt > pt)
@@ -824,15 +673,14 @@ namespace Pacmio
             //Console.WriteLine("Table: " + Name + " | Count: " + Count);
             DateTime total_time = DateTime.Now;
 
-            int startPt = BasicData_StopPt = Count;
+            int startPt = Count;
+
             if (Count > 0)
             {
-                if (BasicData_StartPt < 0) BasicData_StartPt = 0;
-                BasicData_Calculate();
-                BasicData_StartPt = BasicData_StopPt;
-
                 startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
-                
+                startPt = Math.Min(startPt, Calculate(TrueRangeAnalysis).StartPt);
+                startPt = Math.Min(startPt, Calculate(TrendStrengthAnalysis).StartPt);
+                startPt = Math.Min(startPt, Calculate(PeakAnalysis).StartPt);
 
                 foreach (BarAnalysis ba in analyses) //BarAnalysisPointerList.Keys)
                 {

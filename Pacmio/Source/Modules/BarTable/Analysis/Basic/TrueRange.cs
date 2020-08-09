@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrueRange : BarAnalysis, IChartSeries
+    public class TrueRange : BarAnalysis, ISingleData, IChartSeries
     {
         public TrueRange()
         {
@@ -23,7 +23,7 @@ namespace Pacmio
             string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + Column_Close.Name + ")";
             GroupName = Name = GetType().Name + label;
             Description = Name + " " + label;
-            AreaName = label;
+            AreaName = MainArea.DefaultName;
 
             Column_TrueRange = new NumericColumn(Name) { Label = label };
             Column_Typical = new NumericColumn("Typical" + label) { Label = label };
@@ -31,22 +31,22 @@ namespace Pacmio
             ColumnSeries_TrueRange = new ColumnSeries(Column_TrueRange, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
                 Name = Name,
-                LegendName = GroupName + ": ",
-                Label = GetType().Name,
+                LegendName = GroupName,
+                Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
                 IsAntialiasing = false,
                 Order = 200
             };
 
-            ColumnSeries_Typical = new ColumnSeries(Column_Typical, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            LineSeries_Typical = new LineSeries(Column_Typical)
             {
                 Name = "Typical " + label,
                 LegendName = "Typical " + label,
-                Label = "Typical",
-                Importance = Importance.Major,
+                Label = "",
                 Side = AlignType.Right,
-                IsAntialiasing = false,
+                IsAntialiasing = true,
+                DrawLimitShade = false,
                 Order = 200
             };
         }
@@ -64,6 +64,8 @@ namespace Pacmio
         public NumericColumn Column_TrueRange { get; }
 
         public NumericColumn Column_Typical { get; }
+
+        public NumericColumn Column_Result => Column_TrueRange;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -109,23 +111,23 @@ namespace Pacmio
             {
                 ColumnSeries_TrueRange.Color = value;
                 ColumnSeries_TrueRange.ShadeColor = value;
-                ColumnSeries_Typical.Color = value;
-                ColumnSeries_Typical.ShadeColor = value;
+                LineSeries_Typical.Color = value;
+                LineSeries_Typical.ShadeColor = value;
             }
         }
 
         public ColumnSeries ColumnSeries_TrueRange { get; }
 
-        public ColumnSeries ColumnSeries_Typical { get; }
+        public LineSeries LineSeries_Typical { get; }
 
-        public bool ChartEnabled { get => Enabled && ColumnSeries_TrueRange.Enabled; set => ColumnSeries_TrueRange.Enabled = ColumnSeries_Typical.Enabled = value; }
+        public bool ChartEnabled { get => Enabled && ColumnSeries_TrueRange.Enabled; set => ColumnSeries_TrueRange.Enabled = LineSeries_Typical.Enabled = value; }
 
         public int SeriesOrder
         {
             get => ColumnSeries_TrueRange.Order; set
             {
                 ColumnSeries_TrueRange.Order = value;
-                ColumnSeries_Typical.Order = value + 1;
+                LineSeries_Typical.Order = value + 1;
             }
         }
 
@@ -139,17 +141,17 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area truerange_area = bc.AddArea(new Area(bc, "TrueRange" + AreaName, AreaRatio)
+                Area truerange_area = bc.AddArea(new Area(bc, "TrueRange_" + AreaName, AreaRatio)
                 {
                     HasXAxisBar = false,
                 });
                 truerange_area.AddSeries(ColumnSeries_TrueRange);
 
-                Area typical_area = bc.AddArea(new Area(bc, "Typical" + AreaName, AreaRatio)
+                Area typical_area = bc.AddArea(new Area(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });
-                typical_area.AddSeries(ColumnSeries_Typical);
+                typical_area.AddSeries(LineSeries_Typical);
             }
         }
 
