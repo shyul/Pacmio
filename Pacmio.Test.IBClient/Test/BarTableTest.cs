@@ -36,8 +36,10 @@ namespace TestClient
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
-                {                        
+                {
                     new GainAnalysis(),
+                    new PeakAnalysis(100),
+                    new TrueRange(),
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
                 };

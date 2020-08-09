@@ -22,15 +22,16 @@ namespace Pacmio
             Name = AreaName = GroupName = GetType().Name + label;
 
             Column_Gain = new NumericColumn(Name + "_Gain");
-            Column_Percent = new NumericColumn(Name + "_Percent");
+            Column_Percent = new NumericColumn(Name + "_Percent") { Label = "" };
 
             Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
             ColumnSeries_Percent = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName + ": ",
-                Label = "GAIN",
+                LegendName = "Gain %",
+                Label = "",
+                LegendLabelFormat = "G5",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
                 IsAntialiasing = false,

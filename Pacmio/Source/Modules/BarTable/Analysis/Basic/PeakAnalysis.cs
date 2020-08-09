@@ -132,7 +132,7 @@ namespace Pacmio
             {
                 Name = Name,
                 LegendName = GroupName,
-                Label = label,
+                Label = "",
                 IsAntialiasing = false
             };
 
