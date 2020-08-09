@@ -49,6 +49,8 @@ namespace Pacmio
                 DrawLimitShade = false,
                 Order = 200
             };
+
+            Color = Color.FromArgb(88, 168, 208);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ Column_Close.GetHashCode();
@@ -109,10 +111,9 @@ namespace Pacmio
             get => ColumnSeries_TrueRange.Color;
             set
             {
-                ColumnSeries_TrueRange.Color = value;
-                ColumnSeries_TrueRange.EdgeColor = value;
-                LineSeries_Typical.Color = value;
-                LineSeries_Typical.EdgeColor = value;
+                Color c = value;
+                ColumnSeries_TrueRange.Color = c;
+                LineSeries_Typical.Color = LineSeries_Typical.EdgeColor = ColumnSeries_TrueRange.EdgeColor = c.GetBrightness() < 0.3 ? c.Brightness(0.35f) : c.Brightness(-0.35f);
             }
         }
 

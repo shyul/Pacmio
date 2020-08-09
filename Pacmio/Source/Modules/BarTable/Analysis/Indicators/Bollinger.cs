@@ -111,13 +111,17 @@ namespace Pacmio
             {
                 BandSeries.Color =
                 BandSeries.EdgeColor =
-                BandSeries.LowColor =
-                BandSeries.LowShadeColor =
+                BandSeries.LowerColor =
+                BandSeries.LowerEdgeColor =
                 SMA.LineSeries.Color =
                 SMA.LineSeries.EdgeColor = value;
                 BandSeries.FillColor = value.Opaque(64);
             }
         }
+
+        public Color UpperColor { get => BandSeries.Color; set => BandSeries.Color = BandSeries.EdgeColor = value; }
+
+        public Color LowerColor { get => BandSeries.LowerColor; set => BandSeries.LowerColor = BandSeries.LowerEdgeColor = value; }
 
         public float LineWidth { get => SMA.LineSeries.Width; set => SMA.LineSeries.Width = value; }
 

@@ -15,13 +15,13 @@ namespace Pacmio
 
         double Reference { get; }
 
-        double LowerLimit { get; }
-
         double UpperLimit { get; }
 
-        Color LowerColor { get; }
+        double LowerLimit { get; }
 
         Color UpperColor { get; }
+
+        Color LowerColor { get; }
 
         string AreaName { get; }
 

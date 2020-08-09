@@ -235,10 +235,10 @@ namespace Pacmio
 
         public Color LowerColor  // Color.OrangeRed;
         {
-            get => CloudSeries.LowColor;
+            get => CloudSeries.LowerColor;
             set
             {
-                CloudSeries.LowColor = CloudSeries.LowShadeColor = value;
+                CloudSeries.LowerColor = CloudSeries.LowerEdgeColor = value;
                 CloudSeries.LowFillColor = value.Opaque(64);
             }
         }

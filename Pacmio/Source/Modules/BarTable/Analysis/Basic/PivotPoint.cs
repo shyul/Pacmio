@@ -11,9 +11,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class PeakAnalysis : BarAnalysis, ISingleData, IChartSeries
+    public sealed class PivotPoint : BarAnalysis, ISingleData, IChartSeries
     {
-        public PeakAnalysis(NumericColumn column, int maximumPeakProminence)
+        public PivotPoint(NumericColumn column, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = Column_Low = column;
@@ -23,13 +23,13 @@ namespace Pacmio
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = GroupName + ": ",
-                Label = "Peak",
+                Label = "Pivot Point ",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
                 IsAntialiasing = false,
@@ -40,7 +40,7 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PeakAnalysis(ISingleData isd, int maximumPeakProminence)
+        public PivotPoint(ISingleData isd, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = Column_Low = isd.Column_Result;
@@ -50,12 +50,12 @@ namespace Pacmio
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Peak" + label,
+                LegendName = "Pivot Point " + label,
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
@@ -69,11 +69,14 @@ namespace Pacmio
 
             isd.AddChild(this);
 
-            UpperColor = Color.Green;
-            LowerColor = Color.Red;
+            if (isd is IOscillator iosc)
+            {
+                UpperColor = iosc.UpperColor;
+                LowerColor = iosc.LowerColor;
+            }
         }
 
-        public PeakAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence)
+        public PivotPoint(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = column_high;
@@ -84,12 +87,12 @@ namespace Pacmio
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Peak" + label,
+                LegendName = "Pivot Point " + label,
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
@@ -100,7 +103,7 @@ namespace Pacmio
             LowerColor = Color.Red;
         }
 
-        public PeakAnalysis(IDualData idd, int maximumPeakProminence)
+        public PivotPoint(IDualData idd, int maximumPeakProminence)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = idd.Column_High;
@@ -111,12 +114,12 @@ namespace Pacmio
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Peak" + label,
+                LegendName = "Pivot Point " + label,
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
@@ -130,11 +133,11 @@ namespace Pacmio
 
             idd.AddChild(this);
 
-            UpperColor = Color.Green;
-            LowerColor = Color.Red;
+            UpperColor = idd.UpperColor;
+            LowerColor = idd.LowerColor;
         }
 
-        public PeakAnalysis(int maximumPeakProminence = 100)
+        public PivotPoint(int maximumPeakProminence = 100)
         {
             MaximumPeakProminence = maximumPeakProminence;
             Column_High = Bar.Column_High;
@@ -145,12 +148,12 @@ namespace Pacmio
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PEAKTAG", "PEAK");
+            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Peak" + label,
+                LegendName = "Pivot Point " + label,
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,

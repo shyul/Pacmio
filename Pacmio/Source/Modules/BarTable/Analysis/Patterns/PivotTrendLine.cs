@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class GainPointAnalysis : BarAnalysis
+    public class PivotTrendLine : BarAnalysis
     {
-        public GainPointAnalysis(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
+        public PivotTrendLine(BarAnalysis ba, int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
         {
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
@@ -25,12 +25,12 @@ namespace Pacmio
 
             if (ba is ISingleData isd)
             {
-                PeakAnalysis = new PeakAnalysis(isd, interval);
+                PeakAnalysis = new PivotPoint(isd, interval);
                 PeakAnalysis.AddChild(this);
             }
             else if (ba is IDualData idd)
             {
-                PeakAnalysis = new PeakAnalysis(idd, interval);
+                PeakAnalysis = new PivotPoint(idd, interval);
                 PeakAnalysis.AddChild(this);
             }
             else
@@ -39,7 +39,7 @@ namespace Pacmio
             Result_Column = new GainPointColumn(Name) { Label = label };
         }
 
-        public GainPointAnalysis(int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
+        public PivotTrendLine(int interval, int minimumPeakProminence, int minimumTrendStrength = 0)
         {
             Interval = interval;
             MinimumPeakProminence = minimumPeakProminence;
@@ -70,7 +70,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public PeakAnalysis PeakAnalysis { get; }
+        public PivotPoint PeakAnalysis { get; }
 
         public GainPointColumn Result_Column { get; }
 
@@ -95,7 +95,7 @@ namespace Pacmio
 
                     if (PeakAnalysis is null)
                     {
-                        double prominence = b_test[BarTable.PeakAnalysis.Column_Result];
+                        double prominence = b_test[BarTable.PivotPointAnalysis.Column_Result];
                         double trendStrength = b_test[BarTable.TrendStrengthAnalysis.Column_TrendStrength];
 
                         // For simulation accuracy, the prominence can't be greater than the back testing offset.

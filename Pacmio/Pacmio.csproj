@@ -84,13 +84,14 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PivotPoint.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULT.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\GainPointColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\GainPointDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\GainPointAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotTrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrendAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternDatum.cs" />

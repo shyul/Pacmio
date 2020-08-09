@@ -3,7 +3,8 @@
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
-
+/// 
+using System.Drawing;
 using Xu;
 
 namespace Pacmio
@@ -13,5 +14,9 @@ namespace Pacmio
         NumericColumn Column_High { get; }
 
         NumericColumn Column_Low { get; }
+
+        Color UpperColor { get; }
+
+        Color LowerColor { get; }
     }
 }

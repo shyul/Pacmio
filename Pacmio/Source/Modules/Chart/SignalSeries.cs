@@ -77,11 +77,11 @@ namespace Pacmio
 
             if (score > 0)
             {
-                labels.Add((score.ToString(), Main.Theme.FontBold, BarTable.Upper_TextTheme.ForeBrush));
+                labels.Add((score.ToString(), Main.Theme.FontBold, Root.Upper_TextTheme.ForeBrush));
             }
             else if (score < 0)
             {
-                labels.Add((score.ToString(), Main.Theme.FontBold, BarTable.Lower_TextTheme.ForeBrush));
+                labels.Add((score.ToString(), Main.Theme.FontBold, Root.Lower_TextTheme.ForeBrush));
             }
             else
             {

@@ -19,21 +19,29 @@ namespace TestClient
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                var rsi = new RSI(14) { AreaRatio = 8, HasXAxisBar = true, Order = int.MaxValue - 1, AreaOrder = int.MaxValue - 10 };
+                var rsi = new RSI(14) 
+                {
+                    UpperColor = Color.Blue,
+                    LowerColor = Color.DarkOrange,
+                    AreaRatio = 8,
+                    HasXAxisBar = true,
+                    Order = int.MaxValue - 1,
+                    AreaOrder = int.MaxValue - 10
+                };
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     new GainAnalysis(),
-                    //new TrueRange(),
-                    //new TrendStrength(),
-                    new PeakAnalysis(),
+                    new TrueRange(),
+                    new TrendStrength(),
+                    new PivotPoint(),
 
                     //new ADX(14),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     rsi,
-                    new PeakAnalysis(rsi, 100),
+                    new PivotPoint(rsi, 100),
 
                     //new TSI(25,13,7),
 

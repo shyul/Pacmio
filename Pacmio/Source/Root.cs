@@ -118,8 +118,8 @@ namespace Pacmio
                 Settings = new PacSettings();
 
             // TODO: Set these from the Setting File
-            BarTable.UpperColor = Color.Green;
-            BarTable.LowerColor = Color.Red;
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
 
             // Build essential directories
             if (!Directory.Exists(ResourcePath)) Directory.CreateDirectory(ResourcePath);
@@ -154,6 +154,46 @@ namespace Pacmio
         }
 
         #endregion File Storage Utilities
+
+        public static readonly ColorTheme Upper_Theme = new ColorTheme();
+
+        public static readonly ColorTheme Upper_TextTheme = new ColorTheme();
+
+        public static readonly ColorTheme Lower_Theme = new ColorTheme();
+
+        public static readonly ColorTheme Lower_TextTheme = new ColorTheme();
+
+        public static Color UpperColor
+        {
+            get
+            {
+                return Upper_Theme.ForeColor;
+            }
+            set
+            {
+                Upper_Theme.ForeColor = value;
+
+                Upper_TextTheme.EdgeColor = value.Opaque(255);
+                Upper_TextTheme.FillColor = Upper_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Upper_TextTheme.EdgeColor.Brightness(0.85f) : Upper_TextTheme.EdgeColor.Brightness(-0.85f);
+                Upper_TextTheme.ForeColor = Upper_TextTheme.EdgeColor;
+            }
+        }
+
+        public static Color LowerColor
+        {
+            get
+            {
+                return Lower_Theme.ForeColor;
+            }
+            set
+            {
+                Lower_Theme.ForeColor = value;
+
+                Lower_TextTheme.EdgeColor = value.Opaque(255);
+                Lower_TextTheme.FillColor = Lower_TextTheme.EdgeColor.GetBrightness() < 0.6 ? Lower_TextTheme.EdgeColor.Brightness(0.85f) : Lower_TextTheme.EdgeColor.Brightness(-0.85f);
+                Lower_TextTheme.ForeColor = Lower_TextTheme.EdgeColor;
+            }
+        }
 
         public static readonly string GUID = ((Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true))[0] as GuidAttribute).Value;
         public static readonly Mutex InstanceMutex = new Mutex(true, GUID);

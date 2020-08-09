@@ -29,7 +29,7 @@ namespace Pacmio
             ColumnSeries = new AdColumnSeries(Column_Percent, Column_Percent, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Gain" + label + " %",
+                LegendName = "Gain " + label + " %",
                 Label = "",
                 LegendLabelFormat = "G5",
                 Importance = Importance.Major,

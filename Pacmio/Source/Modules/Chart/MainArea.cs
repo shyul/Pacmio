@@ -33,7 +33,7 @@ namespace Pacmio
             });
 
             //PriceSeries.TagColumns.Add(Bar.Column_PeakTags);
-            PriceSeries.TagColumns.Add(BarTable.PeakAnalysis.Column_PeakTags);
+            PriceSeries.TagColumns.Add(BarTable.PivotPointAnalysis.Column_PeakTags);
 
             // Configure volume series
             // ===================================================

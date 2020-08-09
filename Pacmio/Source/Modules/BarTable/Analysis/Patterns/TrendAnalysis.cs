@@ -23,7 +23,7 @@ namespace Pacmio
             string label = "(" + ba.Name + "," + interval + "," + minimumPeakProminence + "," + minimumTrendStrength + ")";
             Name = GetType().Name + label;
 
-            GainPointAnalysis = new GainPointAnalysis(ba, interval, minimumPeakProminence, minimumTrendStrength);
+            GainPointAnalysis = new PivotTrendLine(ba, interval, minimumPeakProminence, minimumTrendStrength);
             GainPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(Name) { Label = label };
@@ -38,7 +38,7 @@ namespace Pacmio
             string label = "(" + Bar.Column_Close.Name + "," + interval + "," + minimumPeakProminence + "," + minimumTrendStrength + ")";
             Name = GetType().Name + label;
 
-            GainPointAnalysis = new GainPointAnalysis(interval, minimumPeakProminence, minimumTrendStrength);
+            GainPointAnalysis = new PivotTrendLine(interval, minimumPeakProminence, minimumTrendStrength);
             GainPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(Name) { Label = label };
@@ -55,7 +55,7 @@ namespace Pacmio
 
         #region Calculation
 
-        public GainPointAnalysis GainPointAnalysis { get; }
+        public PivotTrendLine GainPointAnalysis { get; }
 
         public PatternColumn Result_Column { get; }
 
