@@ -4,15 +4,12 @@
 /// 
 /// ***************************************************************************
 
+using System;
 
 namespace Pacmio
 {
-    public interface IPattern
+    public interface IPivot
     {
-        int TestInterval { get; }
 
-        int MaximumResultCount { get; }
-
-        double Tolerance { get; }
     }
 }

@@ -5,7 +5,6 @@
 /// ***************************************************************************
 
 using System;
-using System.Security.Permissions;
 
 namespace Pacmio
 {
@@ -17,7 +16,7 @@ namespace Pacmio
     /// </summary>
     public class PivotLine : PivotLevel
     {
-        public PivotLine(IPattern source, Pivot startPoint, Pivot stopPoint) : base(source, startPoint)
+        public PivotLine(Pivot startPoint, Pivot stopPoint) : base(startPoint)
         {
             P2 = stopPoint;
             Distance = Math.Abs(X2 - X1);

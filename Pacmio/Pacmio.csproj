@@ -89,6 +89,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULT.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevelAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\Pivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotPointColumn.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IOscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Types\IPattern.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\Chart\PositionArea.cs" />

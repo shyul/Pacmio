@@ -24,7 +24,7 @@ namespace Pacmio
             TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Result_Column = new PatternColumn(Name) { Label = label };
+            Result_Column = new PatternColumn(this);
             GraphicsAreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
         }
 
@@ -37,7 +37,7 @@ namespace Pacmio
             TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Result_Column = new PatternColumn(Name) { Label = label };
+            Result_Column = new PatternColumn(this);
             GraphicsAreaName = MainArea.DefaultName;
         }
 
@@ -63,50 +63,7 @@ namespace Pacmio
                 Bar b = bt[i];
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
-                PatternDatum pd = b[Result_Column] = new PatternDatum(bt.BarFreq, GraphicsAreaName);
-
-                /*
-                for (int j = 0; j < gpd.PositiveList.Count(); j++)
-                {
-                    var pt1 = gpd.PositiveList.ElementAt(j);
-                    for (int k = j + 1; k < gpd.PositiveList.Count(); k++)
-                    {
-                        var pt2 = gpd.PositiveList.ElementAt(k);
-
-                        int x1 = pt1.Key;
-                        int x2 = pt2.Key;
-
-                        double y1 = pt1.Value.level;
-                        double y2 = pt2.Value.level;
-
-                        int distance = x2 - x1;
-                        double rate = (y2 - y1) / distance;
-
-                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, distance, IsLogarithmic);
-                        pd.TrendLines.Add(tl);
-                    }
-                }
-
-                for (int j = 0; j < gpd.NegativeList.Count(); j++)
-                {
-                    var pt1 = gpd.NegativeList.ElementAt(j);
-                    for (int k = j + 1; k < gpd.NegativeList.Count(); k++)
-                    {
-                        var pt2 = gpd.NegativeList.ElementAt(k);
-
-                        int x1 = pt1.Key;
-                        int x2 = pt2.Key;
-
-                        double y1 = pt1.Value.level;
-                        double y2 = pt2.Value.level;
-
-                        int distance = x2 - x1;
-                        double rate = (y2 - y1) / distance;
-
-                        TrendLine tl = new TrendLine(x1, y1, distance, rate, Tolerance, distance, IsLogarithmic);
-                        pd.TrendLines.Add(tl);
-                    }
-                }*/
+                PatternDatum pd = b[Result_Column] = new PatternDatum();
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
                 Range<double> weight_range = new Range<double>(0);
@@ -114,56 +71,40 @@ namespace Pacmio
                 for (int j = 0; j < all_points.Length; j++)
                 {
                     var pt1 = all_points[j];
-                    int x1 = pt1.Key;
-                    double y1 = pt1.Value.level;
-                    double p1 = Math.Abs(pt1.Value.prominence);
 
-                    if (p1 > 8)
+                    if (pt1.Value.Prominece > 8)
                     {
-                        //Console.WriteLine("Adding level line: " + p1);
-                        PivotLine tl = new PivotLine(x1, y1, j - x1, 0d, Tolerance, p1 * p1 * 100);
-                        pd.PivotLines.Add(tl);
-                        pd.Levels.Add((p1 * p1 * 100, y1));
+                        pd.Pivots.Add(new PivotLevel(pt1.Value));
                     }
 
                     for (int k = j + 1; k < all_points.Length; k++)
                     {
                         var pt2 = all_points[k];
-                        int x2 = pt2.Key;
-                        double y2 = pt2.Value.level;
-
-                        double prominence = Math.Abs(pt1.Value.prominence) + Math.Abs(pt2.Value.prominence);
-
-                        int distance = x2 - x1;
-                        double rate = (y2 - y1) / distance;
-                        double weight = Math.Abs(distance * prominence);
-
-                        weight_range.Insert(weight);
-
-                        PivotLine tl = new PivotLine(x1, y1, distance, rate, Tolerance, weight);
-                        pd.PivotLines.Add(tl);
-
-                        int x3 = i;
-                        double y3 = y1 + (rate * Math.Abs(x3 - x1));
-                        pd.Levels.Add((weight, y3));
+                        pd.Pivots.Add(new PivotLine(pt1.Value, pt2.Value));
+                        //Console.WriteLine("Add PivotLine: " + pt1.Value.Level + " | " + pt2.Value.Level);
                     }
                 }
-
-                /*
-                foreach (TrendLine tl in pd.TrendLines)
-                {
-                    weight_range.Insert(tl.Weight);
-                }
-                */
-
-                pd.MaxTrendLineWeight = weight_range.Max;
-
-                /*
-                foreach(var (x1, y1, x2, y2, rate) in lines) 
-                {
-                    Console.WriteLine(rate);
-                }*/
             }
+        }
+
+        public double GetWeight(IPivot pvt)
+        {
+            if (pvt is PivotLine line)
+            {
+                double p1 = Math.Abs(line.P1.Prominece);
+                //if (p1 > 30) p1 = 30;
+
+                double p2 = Math.Abs(line.P2.Prominece);
+                //if (p2 > 30) p2 = 30;
+
+                return 1 * (line.Distance > 100 ? 100 : line.Distance) * (p1 + p2 + Math.Abs(line.P1.TrendStrength) + Math.Abs(line.P2.TrendStrength));
+            }
+            else if (pvt is PivotLevel level)
+            {
+                return 2 * Math.Abs(level.P1.Prominece) * (Math.Abs(level.P1.Prominece) + 0.1 * Math.Abs(level.P1.TrendStrength));
+            }
+            else
+                return 0;
         }
 
         #endregion Calculation
@@ -171,6 +112,11 @@ namespace Pacmio
         #region Chart Graphics
 
         public bool ChartEnabled { get; set; } = true;
+
+
+
+
+
 
         public string GraphicsAreaName { get; }
 
@@ -182,7 +128,7 @@ namespace Pacmio
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-
+                /*
                 Bar b = bc.LastBar;
 
                 if (b[Result_Column] is PatternDatum pd && pd.PivotLines is List<PivotLine> lines)
@@ -216,9 +162,7 @@ namespace Pacmio
                                 g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
                         }
                     }
-
-                //g.DrawLine(new Pen(Color.Black), new Point(a.Left, a.Top), new Point(a.Right, a.Bottom));
-                //Console.WriteLine(b.Index);
+                */
 
             }
             g.SmoothingMode = SmoothingMode.Default;
@@ -231,6 +175,7 @@ namespace Pacmio
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
+                /*
                 Bar b = bc.LastBar;
 
                 if (b[Result_Column] is PatternDatum pd)
@@ -248,7 +193,7 @@ namespace Pacmio
                         Point pt2 = new Point(a.Right, a.AxisY(AlignType.Right).ValueToPixel(level));
 
                         g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
-                    }
+                    }*/
             }
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();

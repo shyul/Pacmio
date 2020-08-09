@@ -294,7 +294,7 @@ namespace Pacmio
 
         #region Patterns
 
-        private Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
+        public Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
 
         public PatternDatum this[PatternColumn column]
         {
@@ -312,11 +312,12 @@ namespace Pacmio
             }
         }
 
-        /// <summary>
-        /// helps BarTable to extract all trendlines for trend levels at the last Bar!!
-        /// helps BarChart to draw every thing...
-        /// </summary>
-        public IEnumerable<PivotLine> TrendLines => Patterns.Values.SelectMany(n => n.PivotLines);
+        public void CalculatePivots() 
+        {
+        
+        
+        
+        }
 
         #endregion Patterns
 

@@ -6,7 +6,11 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Xu;
 using Xu.Chart;
 
@@ -96,11 +100,86 @@ namespace Pacmio
                 // * 3. Draw pivot level
                 // ******************************
 
-                //double last_close = Table[stopPt].Close;
 
 
-                // Draw Polygons and trendline
 
+                if (BarChart.LastBar is Bar b)
+                {
+                    double last_close = b.Close;
+                    var patterns = b.Patterns.Where(n => n.Key.Source.ChartEnabled && n.Key.Source is IChartGraphics ig && ig.GraphicsAreaName == DefaultName);
+                    //var all_pivots = patterns.SelectMany(n => n.Value.Pivots);
+
+                    Dictionary<IPivot, double> weights = new Dictionary<IPivot, double>();
+
+                    foreach (var p0 in patterns)
+                    {
+                        PatternColumn pc = p0.Key;
+                        PatternDatum pd = p0.Value;
+
+                        foreach (IPivot ip in pd.Pivots)
+                        {
+                            double weight = pc.Source.GetWeight(ip);
+                            weights[ip] = weight;
+                        }
+                    }
+
+                    double maxWeight = weights.Values.Max();
+
+                    foreach (var p0 in patterns)
+                    {
+                        PatternColumn pc = p0.Key;
+                        PatternDatum pd = p0.Value;
+
+                        foreach (IPivot ip in pd.Pivots)
+                        {
+                            if (ip is PivotLine line)
+                            {
+                                int x1 = line.X1 - StartPt;
+                                if (x1 >= 0)
+                                {
+                                    int x3 = StopPt - StartPt - 1;
+                                    double y1 = line.Y1;
+                                    double y3 = y1 + (line.TrendRate * (x3 - x1));
+
+                                    Point pt1 = new Point(IndexToPixel(x1), AxisY(AlignType.Right).ValueToPixel(y1));
+                                    Point pt3 = new Point(IndexToPixel(x3), AxisY(AlignType.Right).ValueToPixel(y3));
+
+                                    int intensity = (255 * weights[ip] / maxWeight).ToInt32();
+
+                                    if (intensity > 255) intensity = 255;
+                                    else if (intensity < 1) intensity = 1;
+
+                                    if (y3 > y1)
+                                        g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt3);
+                                    else if (y3 < y1)
+                                        g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt3);
+                                    else
+                                        g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt3);
+                                }
+                            }
+                            else if (ip is PivotLevel level)
+                            {
+                                int x1 = level.X1 - StartPt;
+                                if (x1 >= 0)
+                                {
+                                    int x3 = StopPt - StartPt - 1;
+                                    double y1 = level.Y1;
+                                    int py1 = AxisY(AlignType.Right).ValueToPixel(y1);
+
+                                    Point pt1 = new Point(IndexToPixel(x1), py1);
+                                    Point pt3 = new Point(IndexToPixel(x3), py1);
+
+                                    int intensity = (255 * weights[ip] / maxWeight).ToInt32();
+
+                                    if (intensity > 255) intensity = 255;
+                                    else if (intensity < 1) intensity = 1;
+
+                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 80, 80, 32)), pt1, pt3);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 g.ResetClip();
             }

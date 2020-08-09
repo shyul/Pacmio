@@ -9,15 +9,12 @@ using System.Security.Permissions;
 
 namespace Pacmio
 {
-    public class PivotLevel
+    public class PivotLevel : IPivot
     {
-        public PivotLevel(IPattern source, Pivot point)
+        public PivotLevel(Pivot point)
         {
-            Source = source;
             P1 = point;
         }
-
-        public IPattern Source { get; protected set; }
 
         public Pivot P1 { get; protected set; }
 
