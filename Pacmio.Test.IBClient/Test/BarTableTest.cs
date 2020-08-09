@@ -33,7 +33,7 @@ namespace TestClient
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     rsi,
-                    //new PeakAnalysis(rsi),
+                    new PeakAnalysis(rsi, 100),
 
                     //new TSI(25,13,7),
 

@@ -56,8 +56,10 @@ namespace Pacmio
             ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName,
-                Label = label,
+                LegendName = "Peak" + label,
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
                 IsAntialiasing = false
             };
 
@@ -65,6 +67,8 @@ namespace Pacmio
             {
                 ts.TagColumns.Add(Column_PeakTags);
             }
+
+            isd.AddChild(this);
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -86,8 +90,10 @@ namespace Pacmio
             ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName,
-                Label = label,
+                LegendName = "Peak" + label,
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
                 IsAntialiasing = false
             };
 
@@ -111,8 +117,10 @@ namespace Pacmio
             ColumnSeries_Peak = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = GroupName,
-                Label = label,
+                LegendName = "Peak" + label,
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
                 IsAntialiasing = false
             };
 
@@ -120,6 +128,8 @@ namespace Pacmio
             {
                 ts.TagColumns.Add(Column_PeakTags);
             }
+
+            idd.AddChild(this);
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -156,7 +166,7 @@ namespace Pacmio
 
         public int MaximumPeakProminence { get; }
 
-        public int MinimumPeakProminenceForAnalysis { get; set; } = 5;
+        public int MinimumPeakProminenceForTagDisplay { get; set; } = 5;
 
         public NumericColumn Column_High { get; }
 
@@ -226,11 +236,11 @@ namespace Pacmio
 
                 b[Column_Result] = peak_result;
 
-                if (peak_result > MinimumPeakProminenceForAnalysis)
+                if (peak_result > MinimumPeakProminenceForTagDisplay)
                 {
                     b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries_Peak.TextTheme);
                 }
-                else if (peak_result < -MinimumPeakProminenceForAnalysis)
+                else if (peak_result < -MinimumPeakProminenceForTagDisplay)
                 {
                     b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries_Peak.DownTextTheme);
                 }
