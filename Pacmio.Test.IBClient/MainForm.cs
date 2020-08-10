@@ -149,7 +149,7 @@ namespace TestClient
         {
             SelectHistoricalDataBarFreq.Text = "Minute";
             DateTime time = DateTime.Now.AddDays(-7);
-            while (time.DayOfWeek != DayOfWeek.Sunday) time.AddDays(-1);
+            while (time.DayOfWeek != DayOfWeek.Sunday) time = time.AddDays(-1);
             time = time.Date;
             DateTimePickerHistoricalDataStart.Value = time;
             CheckBoxChartToCurrent.Checked = true;
