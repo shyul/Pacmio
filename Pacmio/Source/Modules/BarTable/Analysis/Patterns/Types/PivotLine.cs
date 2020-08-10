@@ -16,7 +16,7 @@ namespace Pacmio
     /// </summary>
     public class PivotLine : PivotLevel
     {
-        public PivotLine(Pivot startPoint, Pivot stopPoint) : base(startPoint)
+        public PivotLine(IPattern source, Pivot startPoint, Pivot stopPoint, double weight) : base(source, startPoint, weight)
         {
             P2 = stopPoint;
             Distance = Math.Abs(X2 - X1);

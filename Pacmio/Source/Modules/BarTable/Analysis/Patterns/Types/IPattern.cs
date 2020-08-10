@@ -17,8 +17,6 @@ namespace Pacmio
 
         double Tolerance { get; }
 
-        double GetWeight(IPivot pvt);
-
         bool ChartEnabled { get; }
     }
 }

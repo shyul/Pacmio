@@ -71,40 +71,27 @@ namespace Pacmio
                 for (int j = 0; j < all_points.Length; j++)
                 {
                     var pt1 = all_points[j];
+                    double p1 = Math.Abs(pt1.Value.Prominece);
+                    double t1 = Math.Abs(pt1.Value.TrendStrength);
 
                     if (pt1.Value.Prominece > 8)
                     {
-                        pd.Pivots.Add(new PivotLevel(pt1.Value));
+                        double w = 2 * ((p1 * p1) + t1);
+                        pd.Pivots.Add(new PivotLevel(this, pt1.Value, w));
                     }
 
                     for (int k = j + 1; k < all_points.Length; k++)
                     {
                         var pt2 = all_points[k];
-                        pd.Pivots.Add(new PivotLine(pt1.Value, pt2.Value));
-                        //Console.WriteLine("Add PivotLine: " + pt1.Value.Level + " | " + pt2.Value.Level);
+                        double p2 = Math.Abs(pt2.Value.Prominece);
+                        double t2 = Math.Abs(pt2.Value.TrendStrength);
+                        int distance = Math.Abs(pt2.Key - pt1.Key);
+                        //double w = 1 * (distance > 100 ? 100 : distance) * (p1 + p2 + t1 + t2);
+                        double w = 1 * distance * (p1 + p2 + t1 + t2);
+                        pd.Pivots.Add(new PivotLine(this, pt1.Value, pt2.Value, w));
                     }
                 }
             }
-        }
-
-        public double GetWeight(IPivot pvt)
-        {
-            if (pvt is PivotLine line)
-            {
-                double p1 = Math.Abs(line.P1.Prominece);
-                //if (p1 > 30) p1 = 30;
-
-                double p2 = Math.Abs(line.P2.Prominece);
-                //if (p2 > 30) p2 = 30;
-
-                return 1 * (line.Distance > 100 ? 100 : line.Distance) * (p1 + p2 + Math.Abs(line.P1.TrendStrength) + Math.Abs(line.P2.TrendStrength));
-            }
-            else if (pvt is PivotLevel level)
-            {
-                return 2 * Math.Abs(level.P1.Prominece) * (Math.Abs(level.P1.Prominece) + 0.1 * Math.Abs(level.P1.TrendStrength));
-            }
-            else
-                return 0;
         }
 
         #endregion Calculation

@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Xu;
 using Xu.Chart;
 
@@ -109,7 +108,7 @@ namespace Pacmio
                     var patterns = b.Patterns.Where(n => n.Key.Source.ChartEnabled && n.Key.Source is IChartGraphics ig && ig.GraphicsAreaName == DefaultName);
                     //var all_pivots = patterns.SelectMany(n => n.Value.Pivots);
 
-                    Dictionary<IPivot, double> weights = new Dictionary<IPivot, double>();
+                    Range<double> weights = new Range<double>(double.MaxValue, double.MinValue);
 
                     foreach (var p0 in patterns)
                     {
@@ -118,12 +117,11 @@ namespace Pacmio
 
                         foreach (IPivot ip in pd.Pivots)
                         {
-                            double weight = pc.Source.GetWeight(ip);
-                            weights[ip] = weight;
+                            weights.Insert(ip.Weight);
                         }
                     }
 
-                    double maxWeight = weights.Values.Max();
+                    double maxWeight = weights.Max;
 
                     foreach (var p0 in patterns)
                     {
@@ -144,7 +142,7 @@ namespace Pacmio
                                     Point pt1 = new Point(IndexToPixel(x1), AxisY(AlignType.Right).ValueToPixel(y1));
                                     Point pt3 = new Point(IndexToPixel(x3), AxisY(AlignType.Right).ValueToPixel(y3));
 
-                                    int intensity = (255 * weights[ip] / maxWeight).ToInt32();
+                                    int intensity = (255 * ip.Weight / maxWeight).ToInt32();
 
                                     if (intensity > 255) intensity = 255;
                                     else if (intensity < 1) intensity = 1;
@@ -169,7 +167,7 @@ namespace Pacmio
                                     Point pt1 = new Point(IndexToPixel(x1), py1);
                                     Point pt3 = new Point(IndexToPixel(x3), py1);
 
-                                    int intensity = (255 * weights[ip] / maxWeight).ToInt32();
+                                    int intensity = (255 * ip.Weight / maxWeight).ToInt32();
 
                                     if (intensity > 255) intensity = 255;
                                     else if (intensity < 1) intensity = 1;
