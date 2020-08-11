@@ -665,7 +665,7 @@ namespace Pacmio
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
-        private void Calculate(IEnumerable<BarAnalysis> analyses, bool debugInfo = false)
+        private void Calculate(IEnumerable<BarAnalysis> analyses, bool debugInfo = true)
         {
             if (debugInfo)
             {

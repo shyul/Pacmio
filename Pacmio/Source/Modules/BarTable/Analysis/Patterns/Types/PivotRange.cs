@@ -12,7 +12,7 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio 
+namespace Pacmio
 {
     public class PivotRange
     {
@@ -39,6 +39,15 @@ namespace Pacmio
                 return offset;
             else
                 return 0;
+        }
+
+        public double Weight
+        {
+            get
+            {
+                if (WeightList.Count > 0) { return WeightList.Values.Sum(); }
+                else return 0;
+            }
         }
 
         public Dictionary<IChartPattern, double> WeightList { get; } = new Dictionary<IChartPattern, double>();

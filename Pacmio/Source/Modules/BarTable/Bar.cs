@@ -312,6 +312,10 @@ namespace Pacmio
             }
         }
 
+        #endregion Patterns
+
+        #region PivotRangeSet
+
         public HashSet<PivotRangeSet> PivotRangeSet { get; } = new HashSet<PivotRangeSet>();
 
         public PivotRangeSet this[IChartPattern pattern]
@@ -330,7 +334,7 @@ namespace Pacmio
             }
         }
 
-        #endregion Patterns
+        #endregion PivotRangeSet
 
         #region Signal Information
 

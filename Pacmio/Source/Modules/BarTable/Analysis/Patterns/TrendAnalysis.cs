@@ -70,10 +70,11 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double maxRange = b[ATR.Column_Result];
+                double tolerance = b[ATR.Column_Result];
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum();
+                PivotRangeSet prs = b[this];
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
 
@@ -92,9 +93,7 @@ namespace Pacmio
                             Weight = w
                         };
                         pd.Pivots.Add(level);
-
-
-
+                        prs.Insert(level, tolerance);
                     }
 
                     for (int k = j + 1; k < all_points.Length; k++)
@@ -106,10 +105,7 @@ namespace Pacmio
                         // consider the distant to date as a factor for fading
                         line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
                         pd.Pivots.Add(line);
-
-
-
-
+                        prs.Insert(line, tolerance);
                     }
                 }
 
