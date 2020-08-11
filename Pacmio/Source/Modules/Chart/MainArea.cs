@@ -105,7 +105,7 @@ namespace Pacmio
                 if (BarChart.LastBar is Bar b)
                 {
                     double last_close = b.Close;
-                    var patterns = b.Patterns.Where(n => n.Key.Source.ChartEnabled && n.Key.Source is IChartGraphics ig && ig.GraphicsAreaName == DefaultName).ToArray();
+                    var patterns = b.Patterns.Where(n => n.Key.Source.ChartEnabled && n.Key.Source is IChartPattern ig && ig.AreaName == DefaultName).ToArray();
                     //var all_pivots = patterns.SelectMany(n => n.Value.Pivots);
 
                     Range<double> weights = new Range<double>(double.MaxValue, double.MinValue);

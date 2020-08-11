@@ -69,7 +69,7 @@ namespace Pacmio
                 else
                 {
                     double prior_tr_ma = bt[i - 1][Column_Result];
-                    bt[i][Column_Result] = (tr + (prior_tr_ma * (Interval - 1))) / Interval; //  tr + prior_tr_ma - (prior_tr_ma / Interval);
+                    bt[i][Column_Result] = (tr + (prior_tr_ma * (Interval - 1))) / Interval;
                 }
             }
         }

@@ -14,12 +14,12 @@ namespace Pacmio
 {
     public class PatternColumn : Column
     {
-        public PatternColumn(IPattern source) 
+        public PatternColumn(IChartPattern source) 
         {
             Source = source;
             Name = Label = Source.Name;
         }
 
-        public IPattern Source { get; }
+        public IChartPattern Source { get; }
     }
 }

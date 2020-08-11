@@ -312,8 +312,24 @@ namespace Pacmio
             }
         }
 
-        public Dictionary<string, PivotWeightList> PivotLevel { get; } = new Dictionary<string, PivotWeightList>();
-        public HashSet<PivotWeightList> PivotLevel2 { get; } = new HashSet<PivotWeightList>();
+        public HashSet<PivotRangeSet> PivotRangeSet { get; } = new HashSet<PivotRangeSet>();
+
+        public PivotRangeSet this[IChartPattern pattern]
+        {
+            get
+            {
+                var result = PivotRangeSet.Where(n => n.Equals(pattern));
+                if (result.Count() > 0)
+                    return result.First();
+                else
+                {
+                    PivotRangeSet prs = new PivotRangeSet(pattern);
+                    PivotRangeSet.Add(prs);
+                    return prs;
+                }
+            }
+        }
+
         #endregion Patterns
 
         #region Signal Information

@@ -35,6 +35,7 @@ namespace TestClient
                     new TrueRange(),
                     new TrendStrength(),
                     new PivotPointAnalysis(),
+                    new ATR(14),
 
                     //new ADX(14),
                     //new RSI(14),

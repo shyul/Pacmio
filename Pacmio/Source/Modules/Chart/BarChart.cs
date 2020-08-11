@@ -258,10 +258,10 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-        public IEnumerable<IChartGraphics> ChartOverlays
+        public IEnumerable<IChartPattern> ChartOverlays
             => BarAnalysisSet
-            .Where(n => n is IChartGraphics)
-            .Select(n => (IChartGraphics)n);
+            .Where(n => n is IChartPattern)
+            .Select(n => (IChartPattern)n);
 
         public override string this[int i]
         {

@@ -10,7 +10,7 @@ namespace Pacmio
 {
     public interface IPivot
     {
-        IPattern Source { get; }
+        IChartPattern Source { get; }
 
         double Weight { get; }
 

@@ -14,20 +14,20 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class TrendAnalysis : BarAnalysis, IPattern, IChartGraphics
+    public class TrendAnalysis : BarAnalysis, IChartPattern
     {
         public TrendAnalysis(BarAnalysis ba, NumericColumn column_MaximumRange, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            Column_MaximumRange = column_MaximumRange;
+            //Column_MaximumRange = column_MaximumRange;
 
             TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(this);
-            GraphicsAreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
+            AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
         }
 
         public TrendAnalysis(int test_interval)
@@ -35,13 +35,15 @@ namespace Pacmio
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
 
-            Column_MaximumRange = BarTable.TrueRangeAnalysis.Column_TrueRange;
+            //Column_MaximumRange = BarTable.TrueRangeAnalysis.Column_TrueRange;
+            ATR = new ATR(14);
+            ATR.AddChild(this);
 
             TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(this);
-            GraphicsAreaName = MainArea.DefaultName;
+            AreaName = MainArea.DefaultName;
         }
 
         public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
@@ -52,11 +54,13 @@ namespace Pacmio
 
         #region Calculation
 
-        public NumericColumn Column_MaximumRange { get; }
+        public ATR ATR { get; }
 
         public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Result_Column { get; }
+
+        public PivotRangeSet PivotRangeSet { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -66,7 +70,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double maxRange = b[Column_MaximumRange];
+                double maxRange = b[ATR.Column_Result];
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum();
@@ -126,13 +130,13 @@ namespace Pacmio
 
 
 
-        public string GraphicsAreaName { get; }
+        public string AreaName { get; }
 
 
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && GraphicsAreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
@@ -179,7 +183,7 @@ namespace Pacmio
 
         public void DrawOverlay(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && GraphicsAreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
