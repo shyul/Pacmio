@@ -137,7 +137,7 @@ namespace Pacmio
                                 {
                                     int x3 = StopPt - StartPt - 1;
                                     double y1 = line.Y1;
-                                    double y3 = y1 + (line.TrendRate * (x3 - x1));
+                                    double y3 = y1 + (line.TrendRate * (x3 - x1)); //line.Level;// 
 
                                     Point pt1 = new Point(IndexToPixel(x1), AxisY(AlignType.Right).ValueToPixel(y1));
                                     Point pt3 = new Point(IndexToPixel(x3), AxisY(AlignType.Right).ValueToPixel(y3));

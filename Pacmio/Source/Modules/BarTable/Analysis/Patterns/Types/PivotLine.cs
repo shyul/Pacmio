@@ -16,11 +16,12 @@ namespace Pacmio
     /// </summary>
     public class PivotLine : PivotLevel
     {
-        public PivotLine(IPattern source, Pivot startPoint, Pivot stopPoint, double weight) : base(source, startPoint, weight)
+        public PivotLine(IPattern source, Pivot pt1, Pivot pt2, int x3) : base(source, pt1)
         {
-            P2 = stopPoint;
-            Distance = Math.Abs(X2 - X1);
+            P2 = pt2;
+            DeltaX = Math.Abs(X2 - X1);
             TrendRate = (Y2 - Y1) / (X2 - X1);
+            Level = Y1 + (TrendRate * (x3 - X1));
         }
 
         public Pivot P2 { get; }
@@ -29,12 +30,8 @@ namespace Pacmio
 
         public double Y2 => P2.Level;
 
-        public int Distance { get; }
+        public int DeltaX { get; }
 
-        /// <summary>
-        /// Increase or decresse per each Bar.... at BarFreq...
-        /// </summary>
         public double TrendRate { get; }
-
     }
 }

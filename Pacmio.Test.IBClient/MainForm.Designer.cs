@@ -1683,7 +1683,7 @@ namespace TestClient
             this.TextBoxSingleContractName.Name = "TextBoxSingleContractName";
             this.TextBoxSingleContractName.Size = new System.Drawing.Size(132, 22);
             this.TextBoxSingleContractName.TabIndex = 18;
-            this.TextBoxSingleContractName.Text = "QQQ";
+            this.TextBoxSingleContractName.Text = "TQQQ";
             this.TextBoxSingleContractName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
             // 
             // MainProgBar

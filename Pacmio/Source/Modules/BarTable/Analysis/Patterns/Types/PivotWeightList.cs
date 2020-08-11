@@ -32,4 +32,19 @@ namespace Pacmio
 
         public Dictionary<Range<double>, double> Weight { get; } = new Dictionary<Range<double>, double>();
     }
+
+    public class PivotRange
+    {
+        private Range<double> Range { get; } = new Range<double>(double.MaxValue, double.MinValue);
+
+
+        public bool Insert(double value) => Range.Insert(value);
+
+        public double Min => Range.Min;
+
+        public double Max => Range.Max;
+
+
+        public List<(IPattern, double)> Weight { get; } = new List<(IPattern, double)>();
+    }
 }

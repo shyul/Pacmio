@@ -10,11 +10,11 @@ namespace Pacmio
 {
     public class PivotLevel : IPivot
     {
-        public PivotLevel(IPattern source, Pivot point, double weight)
+        public PivotLevel(IPattern source, Pivot pt1)
         {
             Source = source;
-            P1 = point;
-            Weight = weight;
+            P1 = pt1;
+            Level = P1.Level;
         }
 
         public Pivot P1 { get; }
@@ -25,6 +25,8 @@ namespace Pacmio
 
         public IPattern Source { get; }
 
-        public double Weight { get; }
+        public double Weight { get; set; }
+
+        public double Level { get; protected set; }
     }
 }

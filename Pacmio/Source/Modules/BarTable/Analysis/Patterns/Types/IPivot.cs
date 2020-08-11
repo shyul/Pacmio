@@ -13,5 +13,7 @@ namespace Pacmio
         IPattern Source { get; }
 
         double Weight { get; }
+
+        double Level { get; }
     }
 }

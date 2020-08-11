@@ -16,10 +16,12 @@ namespace Pacmio
 {
     public class TrendAnalysis : BarAnalysis, IPattern, IChartGraphics
     {
-        public TrendAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public TrendAnalysis(BarAnalysis ba, NumericColumn column_MaximumRange, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
+
+            Column_MaximumRange = column_MaximumRange;
 
             TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
@@ -30,9 +32,10 @@ namespace Pacmio
 
         public TrendAnalysis(int test_interval)
         {
-
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
+
+            Column_MaximumRange = BarTable.TrueRangeAnalysis.Column_TrueRange;
 
             TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
@@ -49,6 +52,8 @@ namespace Pacmio
 
         #region Calculation
 
+        public NumericColumn Column_MaximumRange { get; }
+
         public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Result_Column { get; }
@@ -61,12 +66,12 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
+                double maxRange = b[Column_MaximumRange];
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum();
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
-                Range<double> weight_range = new Range<double>(0);
 
                 for (int j = 0; j < all_points.Length; j++)
                 {
@@ -76,11 +81,16 @@ namespace Pacmio
 
                     if (pt1.Value.Prominece > 8)
                     {
-                        double w = 2 * ((p1 * p1) + t1);
-
                         // consider the distant to date as a factor for fading
+                        double w = 2 * ((p1 * p1) + t1);
+                        PivotLevel level = new PivotLevel(this, pt1.Value)
+                        {
+                            Weight = w
+                        };
+                        pd.Pivots.Add(level);
 
-                        pd.Pivots.Add(new PivotLevel(this, pt1.Value, w));
+
+
                     }
 
                     for (int k = j + 1; k < all_points.Length; k++)
@@ -88,15 +98,14 @@ namespace Pacmio
                         var pt2 = all_points[k];
                         double p2 = Math.Abs(pt2.Value.Prominece);
                         double t2 = Math.Abs(pt2.Value.TrendStrength);
-
-
-                        // Also get pt3 here...
+                        PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i);
                         // consider the distant to date as a factor for fading
+                        line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
+                        pd.Pivots.Add(line);
 
-                        int distance = Math.Abs(pt2.Key - pt1.Key);
-                        //double w = 1 * (distance > 100 ? 100 : distance) * (p1 + p2 + t1 + t2);
-                        double w = 1 * distance * (p1 + p2 + t1 + t2);
-                        pd.Pivots.Add(new PivotLine(this, pt1.Value, pt2.Value, w));
+
+
+
                     }
                 }
 
