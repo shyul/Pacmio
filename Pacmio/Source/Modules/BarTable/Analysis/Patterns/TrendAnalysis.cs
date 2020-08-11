@@ -77,6 +77,9 @@ namespace Pacmio
                     if (pt1.Value.Prominece > 8)
                     {
                         double w = 2 * ((p1 * p1) + t1);
+
+                        // consider the distant to date as a factor for fading
+
                         pd.Pivots.Add(new PivotLevel(this, pt1.Value, w));
                     }
 
@@ -85,12 +88,21 @@ namespace Pacmio
                         var pt2 = all_points[k];
                         double p2 = Math.Abs(pt2.Value.Prominece);
                         double t2 = Math.Abs(pt2.Value.TrendStrength);
+
+
+                        // Also get pt3 here...
+                        // consider the distant to date as a factor for fading
+
                         int distance = Math.Abs(pt2.Key - pt1.Key);
                         //double w = 1 * (distance > 100 ? 100 : distance) * (p1 + p2 + t1 + t2);
                         double w = 1 * distance * (p1 + p2 + t1 + t2);
                         pd.Pivots.Add(new PivotLine(this, pt1.Value, pt2.Value, w));
                     }
                 }
+
+
+                // Merge to the Area's PivotWeightList
+
             }
         }
 

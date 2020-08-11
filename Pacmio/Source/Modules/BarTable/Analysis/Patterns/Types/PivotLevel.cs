@@ -5,7 +5,6 @@
 /// ***************************************************************************
 
 using System;
-using System.Security.Permissions;
 
 namespace Pacmio
 {

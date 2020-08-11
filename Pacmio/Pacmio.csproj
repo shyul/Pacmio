@@ -92,6 +92,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\Pivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLevel.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotWeightList.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotPointColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotPointDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrailingPivotPoint.cs" />

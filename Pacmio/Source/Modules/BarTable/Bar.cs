@@ -56,7 +56,7 @@ namespace Pacmio
         /// <summary>
         /// BarTable this Bar belongs to. And unable to change through the entire life cycle of the Bar.
         /// </summary>
-        public readonly BarTable Table; // { get; set; }
+        public BarTable Table { get; }
 
         public override int GetHashCode() => Time.GetHashCode();
 
@@ -240,11 +240,11 @@ namespace Pacmio
             }
         }
 
-        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN", "O");
-        public static readonly NumericColumn Column_High = new NumericColumn("HIGH", "H");
-        public static readonly NumericColumn Column_Low = new NumericColumn("LOW", "L");
-        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE", "CLOSE");
-        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME", string.Empty);
+        public static NumericColumn Column_Open { get; } = new NumericColumn("OPEN", "O");
+        public static NumericColumn Column_High { get; } = new NumericColumn("HIGH", "H");
+        public static NumericColumn Column_Low { get; } = new NumericColumn("LOW", "L");
+        public static NumericColumn Column_Close { get; } = new NumericColumn("CLOSE", "CLOSE");
+        public static NumericColumn Column_Volume { get; } = new NumericColumn("VOLUME", string.Empty);
 
         #endregion Numeric Column
 
@@ -312,13 +312,8 @@ namespace Pacmio
             }
         }
 
-        public void CalculatePivots() 
-        {
-        
-        
-        
-        }
-
+        public Dictionary<string, PivotWeightList> PivotLevel { get; } = new Dictionary<string, PivotWeightList>();
+        public HashSet<PivotWeightList> PivotLevel2 { get; } = new HashSet<PivotWeightList>();
         #endregion Patterns
 
         #region Signal Information

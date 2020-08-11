@@ -8,12 +8,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
@@ -80,7 +78,7 @@ namespace Pacmio
         /// The Rows Data Storage
         /// The Storage is not directly accessible outside of the class.
         /// </summary>
-        private readonly List<Bar> Rows = new List<Bar>();
+        private List<Bar> Rows { get; } = new List<Bar>();
 
         /// <summary>
         /// Lookup Bar by Index. Mostly used in the Chart.
@@ -360,7 +358,7 @@ namespace Pacmio
 
         #region Time
 
-        private readonly Dictionary<DateTime, int> TimeToRows = new Dictionary<DateTime, int>();
+        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
 
         public IEnumerable<Bar> this[Period pd] => Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time);
 
@@ -625,7 +623,7 @@ namespace Pacmio
 
         #region Data/Bar Analysis (TA) Calculation
 
-        private readonly Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList = new Dictionary<BarAnalysis, BarAnalysisPointer>();
+        private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new Dictionary<BarAnalysis, BarAnalysisPointer>();
 
         private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
@@ -716,7 +714,7 @@ namespace Pacmio
 
         #region BarChart / DataView
 
-        public readonly List<IDataView> DataViews = new List<IDataView>();
+        public List<IDataView> DataViews { get; } = new List<IDataView>();
 
         #endregion BarChart / DataView
 
@@ -1152,7 +1150,6 @@ namespace Pacmio
 
             ParallelOptions po = new ParallelOptions()
             {
-                //CancellationToken = cts.Token,
                 MaxDegreeOfParallelism = Math.Ceiling(Root.DegreeOfParallelism / 3D).ToInt32(1)
             };
 
