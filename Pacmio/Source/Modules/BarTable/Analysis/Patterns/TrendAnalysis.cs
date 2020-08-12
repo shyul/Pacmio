@@ -140,66 +140,60 @@ namespace Pacmio
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b)// && b[Result_Column] is PatternDatum pd)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Result_Column] is PatternDatum pd)
             {
-                var patterns = b.Patterns.Where(n => n.Key.Name == Result_Column.Name).Select(n => n.Value);
+                int StartPt = a.StartPt;
+                int StopPt = a.StopPt;
 
-                if(patterns.Count() > 0) 
+                g.SetClip(a.Bounds);
+                g.SmoothingMode = SmoothingMode.HighQuality;
+
+                double maxWeight = pd.WeightRange.Max;
+                foreach (IPivot ip in pd.Pivots)
                 {
-                    PatternDatum pd = patterns.First();
-                    int StartPt = a.StartPt;
-                    int StopPt = a.StopPt;
-
-                    g.SetClip(a.Bounds);
-                    g.SmoothingMode = SmoothingMode.HighQuality;
-
-                    double maxWeight = pd.WeightRange.Max;
-                    foreach (IPivot ip in pd.Pivots)
+                    if (ip is PivotLine line)
                     {
-                        if (ip is PivotLine line)
+                        int x1 = line.X1 - StartPt;
+                        if (x1 >= 0)
                         {
-                            int x1 = line.X1 - StartPt;
-                            if (x1 >= 0)
-                            {
-                                int x3 = StopPt - StartPt - 1;
-                                double y1 = line.Y1;
-                                double y3 = y1 + (line.TrendRate * (x3 - x1)); //line.Level;// 
+                            int x3 = StopPt - StartPt - 1;
+                            double y1 = line.Y1;
+                            double y3 = y1 + (line.TrendRate * (x3 - x1)); //line.Level;// 
 
-                                Point pt1 = new Point(a.IndexToPixel(x1), a.AxisY(AlignType.Right).ValueToPixel(y1));
-                                Point pt3 = new Point(a.IndexToPixel(x3), a.AxisY(AlignType.Right).ValueToPixel(y3));
+                            Point pt1 = new Point(a.IndexToPixel(x1), a.AxisY(AlignType.Right).ValueToPixel(y1));
+                            Point pt3 = new Point(a.IndexToPixel(x3), a.AxisY(AlignType.Right).ValueToPixel(y3));
 
-                                int intensity = (255 * ip.Weight / maxWeight).ToInt32();
+                            int intensity = (255 * ip.Weight / maxWeight).ToInt32();
 
-                                if (intensity > 255) intensity = 255;
-                                else if (intensity < 1) intensity = 1;
+                            if (intensity > 255) intensity = 255;
+                            else if (intensity < 1) intensity = 1;
 
-                                if (y3 > y1)
-                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt3);
-                                else if (y3 < y1)
-                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt3);
-                                else
-                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt3);
-                            }
+                            if (y3 > y1)
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt3);
+                            else if (y3 < y1)
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt3);
+                            else
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt3);
                         }
-                        else if (ip is PivotLevel level)
+                    }
+                    else if (ip is PivotLevel level)
+                    {
+                        int x1 = level.X1 - StartPt;
+                        if (x1 >= 0)
                         {
-                            int x1 = level.X1 - StartPt;
-                            if (x1 >= 0)
-                            {
-                                int x3 = StopPt - StartPt - 1;
-                                double y1 = level.Y1;
-                                int py1 = a.AxisY(AlignType.Right).ValueToPixel(y1);
+                            int x3 = StopPt - StartPt - 1;
+                            double y1 = level.Y1;
+                            int py1 = a.AxisY(AlignType.Right).ValueToPixel(y1);
 
-                                Point pt1 = new Point(a.IndexToPixel(x1), py1);
-                                Point pt3 = new Point(a.IndexToPixel(x3), py1);
+                            Point pt1 = new Point(a.IndexToPixel(x1), py1);
+                            Point pt3 = new Point(a.IndexToPixel(x3), py1);
 
-                                int intensity = (255 * ip.Weight / maxWeight).ToInt32();
+                            int intensity = (255 * ip.Weight / maxWeight).ToInt32();
 
-                                if (intensity > 255) intensity = 255;
-                                else if (intensity < 1) intensity = 1;
+                            if (intensity > 255) intensity = 255;
+                            else if (intensity < 1) intensity = 1;
 
-                                g.DrawLine(new Pen(Color.FromArgb(intensity, 80, 80, 32)), pt1, pt3);
-                            }
+                            g.DrawLine(new Pen(Color.FromArgb(intensity, 80, 80, 32)), pt1, pt3);
                         }
                     }
                 }

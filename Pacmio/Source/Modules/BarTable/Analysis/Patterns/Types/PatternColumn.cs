@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PatternColumn : Column, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
+    public class PatternColumn : Column//, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
         public PatternColumn(IChartPattern source)
         {
@@ -25,6 +25,7 @@ namespace Pacmio
 
         public string AreaName => Source.AreaName;
 
+        /*
         #region Equality
 
         public override int GetHashCode() => Name.GetHashCode();
@@ -57,6 +58,6 @@ namespace Pacmio
         public static bool operator !=(PatternColumn s1, object s2) => !s1.Equals(s2);
         public static bool operator ==(PatternColumn s1, object s2) => s1.Equals(s2);
 
-        #endregion Equality
+        #endregion Equality*/
     }
 }
