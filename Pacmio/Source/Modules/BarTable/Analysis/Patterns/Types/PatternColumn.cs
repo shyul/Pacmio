@@ -25,6 +25,8 @@ namespace Pacmio
 
         public string AreaName => Source.AreaName;
 
+        //public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
+
         #region Equality
 
         public override int GetHashCode() => Name.GetHashCode();

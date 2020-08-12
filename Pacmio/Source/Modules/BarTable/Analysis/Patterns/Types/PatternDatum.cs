@@ -16,6 +16,28 @@ namespace Pacmio
 {
     public class PatternDatum
     {
+        public PatternDatum(double min, double max)
+        {
+            LevelRange = new Range<double>(double.MaxValue, double.MinValue);
+            LevelRange.Insert(min);
+            LevelRange.Insert(max);
+        }
+        /*
+        public PatternDatum() 
+        {
+            LevelRange = new Range<double>(double.MaxValue, double.MinValue);
+        }
+        */
+        public void Add(IPivot p) 
+        {
+            Pivots.Add(p);
+            WeightRange.Insert(p.Weight);
+        }
+        
         public List<IPivot> Pivots { get; } = new List<IPivot>();
+
+        public Range<double> LevelRange { get; }
+
+        public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
     }
 }

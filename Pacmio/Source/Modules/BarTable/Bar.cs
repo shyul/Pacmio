@@ -362,7 +362,7 @@ namespace Pacmio
 
 
 
-
+        /*
         public Dictionary<PivotRangeColumn, PivotRangeDatum> PivotRangeDatums33 { get; } = new Dictionary<PivotRangeColumn, PivotRangeDatum>();
 
         public PivotRangeDatum this[PivotRangeColumn column]
@@ -375,7 +375,7 @@ namespace Pacmio
                 return PivotRangeDatums33[column];
             }
         }
-
+        */
 
 
         #endregion PivotRangeSet

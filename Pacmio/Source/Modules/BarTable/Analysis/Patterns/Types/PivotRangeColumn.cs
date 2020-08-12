@@ -14,6 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
+    /*
     public class PivotRangeColumn : Column, IEquatable<PivotRangeColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
         public PivotRangeColumn(string name) => Name = Label = name;
@@ -52,5 +53,5 @@ namespace Pacmio
         public static bool operator ==(PivotRangeColumn s1, object s2) => s1.Equals(s2);
 
         #endregion Equality
-    }
+    }*/
 }
