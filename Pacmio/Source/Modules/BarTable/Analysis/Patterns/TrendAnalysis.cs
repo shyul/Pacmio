@@ -74,8 +74,14 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double tolerance = b[ATR.Column_Result];
+                double tolerance = b[ATR.Column_Result] / 4;
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
+
+                double center = b.Close;
+                double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
+                Range<double> level_range = new Range<double>(center - range_delta, center + range_delta);
+
+                //Range<double> level_range = new Range<double>(double.MaxValue, double.MinValue);
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum();
                 PivotRangeDatum prs = b[PivotRange_Column];
@@ -88,16 +94,20 @@ namespace Pacmio
                     double p1 = Math.Abs(pt1.Value.Prominece);
                     double t1 = Math.Abs(pt1.Value.TrendStrength);
 
-                    if (pt1.Value.Prominece > 8)
+
+
+                    if (pt1.Value.Prominece > 8 && level_range.Contains(pt1.Value.Level))
                     {
                         // consider the distant to date as a factor for fading
                         double w = 2 * ((p1 * p1) + t1);
-                        PivotLevel level = new PivotLevel(this, pt1.Value)
+                        PivotLevel level = new PivotLevel(this, pt1.Value, tolerance)
                         {
                             Weight = w
                         };
                         pd.Pivots.Add(level);
-                        prs.Insert(level, tolerance);
+
+
+                        //prs.Insert(level);
                     }
 
                     for (int k = j + 1; k < all_points.Length; k++)
@@ -105,15 +115,22 @@ namespace Pacmio
                         var pt2 = all_points[k];
                         double p2 = Math.Abs(pt2.Value.Prominece);
                         double t2 = Math.Abs(pt2.Value.TrendStrength);
-                        PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i);
-                        // consider the distant to date as a factor for fading
-                        line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
-                        pd.Pivots.Add(line);
-                        prs.Insert(line, tolerance);
+
+                        PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i, tolerance);
+
+                        if (level_range.Contains(line.Level))
+                        {
+                            // consider the distant to date as a factor for fading
+                            line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
+                            pd.Pivots.Add(line);
+                        }
                     }
                 }
 
-
+                foreach (var p in pd.Pivots) //.Where(n => level_range.Contains(n.Level)))
+                {
+                    prs.Insert(p);
+                }
                 // Merge to the Area's PivotWeightList
 
             }

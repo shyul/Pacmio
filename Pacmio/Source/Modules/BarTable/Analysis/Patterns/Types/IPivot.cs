@@ -15,5 +15,7 @@ namespace Pacmio
         double Weight { get; }
 
         double Level { get; }
+
+        double Tolerance { get; }
     }
 }

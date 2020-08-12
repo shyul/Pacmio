@@ -16,7 +16,7 @@ namespace Pacmio
     /// </summary>
     public class PivotLine : PivotLevel
     {
-        public PivotLine(IChartPattern source, Pivot pt1, Pivot pt2, int x3) : base(source, pt1)
+        public PivotLine(IChartPattern source, Pivot pt1, Pivot pt2, int x3, double tolerance) : base(source, pt1, tolerance)
         {
             P2 = pt2;
             DeltaX = Math.Abs(X2 - X1);

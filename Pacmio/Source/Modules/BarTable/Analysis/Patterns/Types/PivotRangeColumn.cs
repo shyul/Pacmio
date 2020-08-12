@@ -14,19 +14,14 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PivotRangeColumn : Column//, IEquatable<PivotRangeColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
+    public class PivotRangeColumn : Column, IEquatable<PivotRangeColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
         public PivotRangeColumn(string name) => Name = Label = name;
 
-        public PivotRangeColumn(string name, string label)
-        {
-            Name = name;
-            Label = label;
-        }
-        /*
         public string AreaName => Name;
-        
+
         #region Equality
+        public override int GetHashCode() => AreaName.GetHashCode();
 
         public bool Equals(PivotRangeColumn other) => AreaName == other.AreaName;
         public static bool operator !=(PivotRangeColumn s1, PivotRangeColumn s2) => !s1.Equals(s2);
@@ -56,6 +51,6 @@ namespace Pacmio
         public static bool operator !=(PivotRangeColumn s1, object s2) => !s1.Equals(s2);
         public static bool operator ==(PivotRangeColumn s1, object s2) => s1.Equals(s2);
 
-        #endregion Equality*/
+        #endregion Equality
     }
 }

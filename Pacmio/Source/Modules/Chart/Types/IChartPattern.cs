@@ -12,6 +12,8 @@ namespace Pacmio
     {
         string Name { get; }
 
+        string AreaName { get; }
+
         int TestInterval { get; }
 
         int MaximumResultCount { get; }
@@ -19,8 +21,6 @@ namespace Pacmio
         double Tolerance { get; }
 
         bool ChartEnabled { get; set; }
-
-        string AreaName { get; }
 
         void DrawOverlay(Graphics g, BarChart bc);
 

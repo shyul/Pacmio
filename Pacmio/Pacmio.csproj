@@ -279,6 +279,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="App.config" />
     <None Include="Resources\StockChart.ico" />
     <None Include="Resources\Icon_Chart.png" />

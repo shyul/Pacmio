@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
@@ -312,22 +313,70 @@ namespace Pacmio
             }
         }
 
+
+
         #endregion Patterns
 
         #region PivotRangeSet
 
-        public Dictionary<PivotRangeColumn, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<PivotRangeColumn, PivotRangeDatum>();
+        private Dictionary<string, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<string, PivotRangeDatum>();
+
+        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n.Pivots);
+
+        public void CalculatePivotRange()
+        {
+            PivotRangeDatums.Clear();
+            foreach (var p in Pivots)
+            {
+                string areaName = p.Source.AreaName;
+
+                if (!PivotRangeDatums.ContainsKey(areaName))
+                    PivotRangeDatums[p.Source.AreaName] = new PivotRangeDatum();
+
+                PivotRangeDatum prd = PivotRangeDatums[p.Source.AreaName];
+                prd.Insert(p);
+            }
+        }
+
+        public PivotRangeDatum this[IArea column]
+        {
+            get
+            {
+                if (PivotRangeDatums.ContainsKey(column.Name))
+                    return PivotRangeDatums[column.Name];
+                else
+                    return null;
+            }
+        }
+
+        public PivotRangeDatum this[IChartPattern column]
+        {
+            get
+            {
+                if (PivotRangeDatums.ContainsKey(column.AreaName))
+                    return PivotRangeDatums[column.AreaName];
+                else
+                    return null;
+            }
+        }
+
+
+
+
+        public Dictionary<PivotRangeColumn, PivotRangeDatum> PivotRangeDatums33 { get; } = new Dictionary<PivotRangeColumn, PivotRangeDatum>();
 
         public PivotRangeDatum this[PivotRangeColumn column]
         {
             get
             {
-                if (!PivotRangeDatums.ContainsKey(column))
-                    PivotRangeDatums.Add(column, new PivotRangeDatum());
+                if (!PivotRangeDatums33.ContainsKey(column))
+                    PivotRangeDatums33.Add(column, new PivotRangeDatum());
 
-                return PivotRangeDatums[column];
+                return PivotRangeDatums33[column];
             }
         }
+
+
 
         #endregion PivotRangeSet
 

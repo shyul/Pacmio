@@ -20,10 +20,10 @@ namespace Pacmio
 
         public void Reset() => RangeList.Clear();
 
-        public void Insert(IPivot p, double tolerance)
+        public void Insert(IPivot p)
         {
             double level = p.Level;
-            var list = RangeList.Where(n => n.Offset(level) <= tolerance).ToArray();
+            var list = RangeList.Where(n => n.Offset(level) <= p.Tolerance).ToArray();
             if (list.Count() > 0)
             {
                 list.OrderBy(n => n.Offset(level)).First().Insert(p);
