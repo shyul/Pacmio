@@ -258,7 +258,7 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-        public IEnumerable<IChartPattern> ChartOverlays
+        public IEnumerable<IChartPattern> ChartPatterns
             => BarAnalysisSet
             .Where(n => n is IChartPattern)
             .Select(n => (IChartPattern)n);
@@ -293,7 +293,7 @@ namespace Pacmio
 
         public Bar LastBar => m_BarTable[LastIndex];
 
-        public double LastClose => (LastBar is null) ? 0 : LastBar.Close;
+        public double LastClose => (LastBar is null) ? double.NaN : LastBar.Close;
 
         public DateTime LastTime => (LastBar is null) ? DateTime.Now : LastBar.Time;
 
@@ -583,7 +583,7 @@ namespace Pacmio
                                 g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
                                     Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
-                                foreach (var ic in ChartOverlays)
+                                foreach (var ic in ChartPatterns)
                                 {
                                     ic.DrawBackground(g, this);
                                 }
@@ -612,7 +612,7 @@ namespace Pacmio
                                     }
                                 }
 
-                                foreach (var ic in ChartOverlays)
+                                foreach (var ic in ChartPatterns)
                                 {
                                     ic.DrawOverlay(g, this);
                                 }

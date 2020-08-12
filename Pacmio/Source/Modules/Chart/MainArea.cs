@@ -100,14 +100,15 @@ namespace Pacmio
                 // ******************************
 
 
-
+                /*
 
                 if (BarChart.LastBar is Bar b)
                 {
                     double last_close = b.Close;
                     var patterns = b.Patterns.Where(n => n.Key.Source.ChartEnabled && n.Key.Source is IChartPattern ig && ig.AreaName == DefaultName).ToArray();
                     //var all_pivots = patterns.SelectMany(n => n.Value.Pivots);
-                    /*
+                    
+
                     Range<double> weights = new Range<double>(double.MaxValue, double.MinValue);
 
                     foreach (var p0 in patterns)
@@ -122,12 +123,12 @@ namespace Pacmio
                     }
 
                     double maxWeight = weights.Max;
-                    */
+                    
+                    
                     foreach (var p0 in patterns)
                     {
-                        //PatternColumn pc = p0.Key;
                         PatternDatum pd = p0.Value;
-                        double maxWeight = pd.WeightRange.Max;
+                        //double maxWeight = pd.WeightRange.Max;
                         foreach (IPivot ip in pd.Pivots)
                         {
                             if (ip is PivotLine line)
@@ -177,7 +178,7 @@ namespace Pacmio
                             }
                         }
                     }
-                }
+                }*/
 
                 g.ResetClip();
             }

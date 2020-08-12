@@ -303,17 +303,12 @@ namespace Pacmio
 
             set
             {
-                if (value is PatternDatum pattern)
-                    if (!Patterns.ContainsKey(column))
-                        Patterns.Add(column, pattern);
-                    else
-                        Patterns[column] = pattern;
+                if (value is PatternDatum pd)
+                    Patterns[column] = pd;
                 else if (value is null && Patterns.ContainsKey(column))
                     Patterns.Remove(column);
             }
         }
-
-
 
         #endregion Patterns
 
@@ -329,11 +324,10 @@ namespace Pacmio
             foreach (var p in Pivots)
             {
                 string areaName = p.Source.AreaName;
-
                 if (!PivotRangeDatums.ContainsKey(areaName))
-                    PivotRangeDatums[p.Source.AreaName] = new PivotRangeDatum();
+                    PivotRangeDatums[areaName] = new PivotRangeDatum();
 
-                PivotRangeDatum prd = PivotRangeDatums[p.Source.AreaName];
+                PivotRangeDatum prd = PivotRangeDatums[areaName];// = new PivotRangeDatum();
                 prd.Insert(p);
             }
         }

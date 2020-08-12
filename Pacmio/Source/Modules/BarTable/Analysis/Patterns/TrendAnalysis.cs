@@ -67,52 +67,65 @@ namespace Pacmio
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            if (bap.StartPt < 0) bap.StartPt = 0;
+            /*
+            int min_peak_start = bap.StopPt - TrailingPivotPointAnalysis.PivotPointAnalysis.MaximumPeakProminence * 2 - 1;
+            if (bap.StartPt > min_peak_start)
+                bap.StartPt = min_peak_start;
+            else 
+            */
+            if (bap.StartPt < 0)
+                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double tolerance = b[ATR.Column_Result] / 4;
-                TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
-
-                double center = b.Close;
-                double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
-                PatternDatum pd = b[Result_Column] = new PatternDatum(center - range_delta, center + range_delta);
-
-                var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
-
-                for (int j = 0; j < all_points.Length; j++)
+                if (b[Result_Column] is null)
                 {
-                    var pt1 = all_points[j];
-                    double p1 = Math.Abs(pt1.Value.Prominece);
-                    double t1 = Math.Abs(pt1.Value.TrendStrength);
+                    double tolerance = b[ATR.Column_Result] / 4;
+                    TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
-                    if (pt1.Value.Prominece > 8 && pd.LevelRange.Contains(pt1.Value.Level))
+                    double center = b.Close;
+                    double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
+
+                    PatternDatum pd = new PatternDatum(center - range_delta, center + range_delta);
+
+                    var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
+
+                    for (int j = 0; j < all_points.Length; j++)
                     {
-                        // consider the distant to date as a factor for fading
-                        double w = 2 * ((p1 * p1) + t1);
-                        PivotLevel level = new PivotLevel(this, pt1.Value, tolerance)
-                        {
-                            Weight = w
-                        };
-                        pd.Add(level);
-                    }
+                        var pt1 = all_points[j];
+                        double p1 = Math.Abs(pt1.Value.Prominece);
+                        double t1 = Math.Abs(pt1.Value.TrendStrength);
 
-                    for (int k = j + 1; k < all_points.Length; k++)
-                    {
-                        var pt2 = all_points[k];
-                        double p2 = Math.Abs(pt2.Value.Prominece);
-                        double t2 = Math.Abs(pt2.Value.TrendStrength);
-
-                        PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i, tolerance);
-
-                        if (pd.LevelRange.Contains(line.Level))
+                        if (pt1.Value.Prominece > 8 && pd.LevelRange.Contains(pt1.Value.Level))
                         {
                             // consider the distant to date as a factor for fading
-                            line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
-                            pd.Add(line);
+                            double w = 2 * ((p1 * p1) + t1);
+                            PivotLevel level = new PivotLevel(this, pt1.Value, tolerance)
+                            {
+                                Weight = w
+                            };
+                            pd.Add(level);
+                        }
+
+                        for (int k = j + 1; k < all_points.Length; k++)
+                        {
+                            var pt2 = all_points[k];
+                            double p2 = Math.Abs(pt2.Value.Prominece);
+                            double t2 = Math.Abs(pt2.Value.TrendStrength);
+
+                            PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i, tolerance);
+
+                            if (pd.LevelRange.Contains(line.Level))
+                            {
+                                // consider the distant to date as a factor for fading
+                                line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
+                                pd.Add(line);
+                            }
                         }
                     }
+
+                    b[Result_Column] = pd;
                 }
             }
         }
@@ -123,57 +136,73 @@ namespace Pacmio
 
         public bool ChartEnabled { get; set; } = true;
 
-
-
-
-
-
         public string AreaName { get; }
-
-
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b)// && b[Result_Column] is PatternDatum pd)
             {
-                g.SetClip(a.Bounds);
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                /*
-                Bar b = bc.LastBar;
+                var patterns = b.Patterns.Where(n => n.Key.Name == Result_Column.Name).Select(n => n.Value);
 
-                if (b[Result_Column] is PatternDatum pd && pd.PivotLines is List<PivotLine> lines)
-                    foreach (PivotLine tl in lines)
+                if(patterns.Count() > 0) 
+                {
+                    PatternDatum pd = patterns.First();
+                    int StartPt = a.StartPt;
+                    int StopPt = a.StopPt;
+
+                    g.SetClip(a.Bounds);
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+
+                    double maxWeight = pd.WeightRange.Max;
+                    foreach (IPivot ip in pd.Pivots)
                     {
-                        int x1 = tl.StartIndex;
-                        int x1_idx = x1 - bc.StartPt;
-
-                        if (x1_idx >= 0)
+                        if (ip is PivotLine line)
                         {
-                            //int x1 = tl.StartIndex + tl.Distance;
-                            int x2 = bc.StopPt - 1;
+                            int x1 = line.X1 - StartPt;
+                            if (x1 >= 0)
+                            {
+                                int x3 = StopPt - StartPt - 1;
+                                double y1 = line.Y1;
+                                double y3 = y1 + (line.TrendRate * (x3 - x1)); //line.Level;// 
 
-                            double y1 = tl.StartLevel;
-                            //double y1 = tl.StartLevel + (tl.TrendRate * tl.Distance);
-                            double y2 = y1 + (tl.TrendRate * Math.Abs(x2 - x1));
+                                Point pt1 = new Point(a.IndexToPixel(x1), a.AxisY(AlignType.Right).ValueToPixel(y1));
+                                Point pt3 = new Point(a.IndexToPixel(x3), a.AxisY(AlignType.Right).ValueToPixel(y3));
 
-                            Point pt1 = new Point(a.IndexToPixel(x1_idx), a.AxisY(AlignType.Right).ValueToPixel(y1));
-                            Point pt2 = new Point(a.IndexToPixel(x2 - bc.StartPt), a.AxisY(AlignType.Right).ValueToPixel(y2));
+                                int intensity = (255 * ip.Weight / maxWeight).ToInt32();
 
-                            int intensity = (255 * tl.Weight / pd.MaxTrendLineWeight).ToInt32();
+                                if (intensity > 255) intensity = 255;
+                                else if (intensity < 1) intensity = 1;
 
-                            if (intensity > 255) intensity = 255;
-                            else if (intensity < 0) intensity = 0;
+                                if (y3 > y1)
+                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt3);
+                                else if (y3 < y1)
+                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt3);
+                                else
+                                    g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt3);
+                            }
+                        }
+                        else if (ip is PivotLevel level)
+                        {
+                            int x1 = level.X1 - StartPt;
+                            if (x1 >= 0)
+                            {
+                                int x3 = StopPt - StartPt - 1;
+                                double y1 = level.Y1;
+                                int py1 = a.AxisY(AlignType.Right).ValueToPixel(y1);
 
-                            if (y2 > y1)
-                                g.DrawLine(new Pen(Color.FromArgb(intensity, 26, 120, 32)), pt1, pt2);
-                            else if (y2 < y1)
-                                g.DrawLine(new Pen(Color.FromArgb(intensity, 120, 26, 32)), pt1, pt2);
-                            else
-                                g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
+                                Point pt1 = new Point(a.IndexToPixel(x1), py1);
+                                Point pt3 = new Point(a.IndexToPixel(x3), py1);
+
+                                int intensity = (255 * ip.Weight / maxWeight).ToInt32();
+
+                                if (intensity > 255) intensity = 255;
+                                else if (intensity < 1) intensity = 1;
+
+                                g.DrawLine(new Pen(Color.FromArgb(intensity, 80, 80, 32)), pt1, pt3);
+                            }
                         }
                     }
-                */
-
+                }
             }
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();

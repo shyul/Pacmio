@@ -79,8 +79,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 TrailingPivotPointDatum gpd = new TrailingPivotPointDatum();
-                bt[i][Result_Column] = gpd;
-
+       
                 for (int j = MinimumPeakProminence; j < TestInterval; j++)
                 {
                     int i_test = i - j;
@@ -107,6 +106,8 @@ namespace Pacmio
                         gpd.LevelRange.Insert(low);
                     }
                 }
+
+                bt[i][Result_Column] = gpd;
             }
             /*
             for (int i = bap.StartPt; i < bap.StopPt; i++)

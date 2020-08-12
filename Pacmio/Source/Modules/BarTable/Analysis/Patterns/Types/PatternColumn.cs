@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PatternColumn : Column, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
+    public class PatternColumn : Column, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
         public PatternColumn(IChartPattern source)
         {
@@ -25,11 +25,13 @@ namespace Pacmio
 
         public string AreaName => Source.AreaName;
 
-        //public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
-
         #region Equality
 
         public override int GetHashCode() => Name.GetHashCode();
+
+        public bool Equals(PatternColumn other) => AreaName == other.Name;
+        public static bool operator !=(PatternColumn s1, PatternColumn s2) => !s1.Equals(s2);
+        public static bool operator ==(PatternColumn s1, PatternColumn s2) => s1.Equals(s2);
 
         public bool Equals(IChartPattern other) => AreaName == other.AreaName;
         public static bool operator !=(PatternColumn s1, IChartPattern s2) => !s1.Equals(s2);
@@ -45,6 +47,7 @@ namespace Pacmio
 
         public override bool Equals(object other)
         {
+            if (other is PatternColumn pc) return Equals(pc);
             if (other is IChartPattern icp) return Equals(icp);
             else if (other is IArea a) return Equals(a);
             else if (other is string s) return Equals(s);
