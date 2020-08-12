@@ -204,7 +204,7 @@ namespace Pacmio
 
         public void DrawOverlay(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Result_Column] is PatternDatum pd)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
