@@ -104,7 +104,7 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area a = bc.AddArea(new Area(bc, AreaName, AreaRatio)
+                BarChartArea a = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
                 {
                     Order = AreaOrder,
                     HasXAxisBar = HasXAxisBar,

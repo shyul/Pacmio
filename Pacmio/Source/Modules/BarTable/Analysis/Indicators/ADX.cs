@@ -251,15 +251,16 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
-                {
-                    Order = AreaOrder,
-                    Reference = Reference,
-                    HasXAxisBar = HasXAxisBar,
-                    //UpperColor = Color.YellowGreen,
-                    //LowerColor = Color.PaleVioletRed,
-                    //FixedTickStep_Right = 20,
-                });
+                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
+                    {
+                        Order = AreaOrder,
+                        Reference = Reference,
+                        HasXAxisBar = HasXAxisBar,
+                        //UpperColor = Color.YellowGreen,
+                        //LowerColor = Color.PaleVioletRed,
+                        //FixedTickStep_Right = 20,
+                    });
 
                 a.AddSeries(CloudSeries);
                 a.AddSeries(LineSeries);

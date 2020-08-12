@@ -51,7 +51,7 @@ namespace Pacmio
 
             //AddArea(PositionArea = new PositionArea(this));
             AddArea(SignalArea = new SignalArea(this));
-            AddArea(MainArea = new MainArea(this, 50, 0.3f) { HasXAxisBar = true, });
+            AddArea(MainArea = new MainBarChartArea(this, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
             lock (List) List.CheckAdd(this);
@@ -88,7 +88,7 @@ namespace Pacmio
 
         public override string Description { get => MainArea.PriceSeries.Description; set => MainArea.PriceSeries.Description = value; }
 
-        public readonly MainArea MainArea;
+        public readonly MainBarChartArea MainArea;
         public readonly SignalArea SignalArea;
         public readonly PositionArea PositionArea;
 

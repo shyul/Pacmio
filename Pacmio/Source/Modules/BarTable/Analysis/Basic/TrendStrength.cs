@@ -195,8 +195,8 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea area_trend = bc["TrendStrength_" + AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, "TrendStrength_" + AreaName, AreaRatio)
+                BarChartOscillatorArea area_trend = bc["TrendStrength_" + AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, "TrendStrength_" + AreaName, AreaRatio)
                     {
                         Reference = 0,
                         HasXAxisBar = false,
@@ -204,8 +204,8 @@ namespace Pacmio
 
                 area_trend.AddSeries(ColumnSeries_TrendStrength);
 
-                OscillatorArea area_gap = bc["GapPercent_" + AreaName] is OscillatorArea oa_gap ? oa_gap :
-                    bc.AddArea(new OscillatorArea(bc, "GapPercent_" + AreaName, AreaRatio)
+                BarChartOscillatorArea area_gap = bc["GapPercent_" + AreaName] is BarChartOscillatorArea oa_gap ? oa_gap :
+                    bc.AddArea(new BarChartOscillatorArea(bc, "GapPercent_" + AreaName, AreaRatio)
                     {
                         Reference = 0,
                         HasXAxisBar = HasXAxisBar,

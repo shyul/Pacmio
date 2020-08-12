@@ -11,6 +11,7 @@
 /// Ref 2: https://school.stockcharts.com/doku.php?id=trading_strategies:rsi2
 /// Ref 2: https://school.stockcharts.com/doku.php?id=technical_indicators:introduction_to_technical_indicators_and_oscillators
 /// Ref 3: https://www.udemy.com/course/advance-trading-strategies/learn/lecture/9783962#overview
+/// Ref 4: https://youtu.be/fJ1_un39T1o  
 /// 
 /// ***************************************************************************
 
@@ -91,8 +92,8 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
+                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Reference = Reference,
                         UpperLimit = UpperLimit,

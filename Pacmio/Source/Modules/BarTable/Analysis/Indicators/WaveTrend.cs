@@ -191,17 +191,18 @@ namespace Pacmio // Can be derived from SMA
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
-                {
-                    Order = AreaOrder,
-                    HasXAxisBar = HasXAxisBar,
-                    Reference = Reference,
-                    UpperLimit = UpperLimit,
-                    LowerLimit = LowerLimit,
-                    UpperColor = UpperColor,
-                    LowerColor = LowerColor,
-                    FixedTickStep_Right = 20,
-                });
+                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
+                    {
+                        Order = AreaOrder,
+                        HasXAxisBar = HasXAxisBar,
+                        Reference = Reference,
+                        UpperLimit = UpperLimit,
+                        LowerLimit = LowerLimit,
+                        UpperColor = UpperColor,
+                        LowerColor = LowerColor,
+                        FixedTickStep_Right = 20,
+                    });
 
                 a.AddSeries(ColumnSeries);
                 a.AddSeries(EMA_TCI.LineSeries);

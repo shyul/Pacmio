@@ -84,8 +84,8 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                OscillatorArea a = bc[AreaName] is OscillatorArea oa ? oa :
-                    bc.AddArea(new OscillatorArea(bc, AreaName, AreaRatio)
+                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
                     {
                         Reference = Reference,
                         UpperLimit = UpperLimit,

@@ -45,7 +45,7 @@ namespace Pacmio
             TrailingPivotPointAnalysis.AddChild(this);
 
             Result_Column = new PatternColumn(this);
-            AreaName = MainArea.DefaultName;
+            AreaName = MainBarChartArea.DefaultName;
 
             //PivotRange_Column = new PivotRangeColumn(AreaName);
         }
@@ -81,11 +81,15 @@ namespace Pacmio
                 Bar b = bt[i];
                 if (b[Result_Column] is null)
                 {
-                    double tolerance = b[ATR.Column_Result] / 4;
                     TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
+                    double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
+                    //double tolerance = range_delta / 25;
+
+                    double tolerance = b[ATR.Column_Result] / 4;
+           
 
                     double center = b.Close;
-                    double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
+             
 
                     PatternDatum pd = new PatternDatum(center - range_delta, center + range_delta);
 

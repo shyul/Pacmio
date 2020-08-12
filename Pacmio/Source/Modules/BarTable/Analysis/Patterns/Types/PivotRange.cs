@@ -51,6 +51,7 @@ namespace Pacmio
         }
 
         public Dictionary<IChartPattern, double> WeightList { get; } = new Dictionary<IChartPattern, double>();
+
         public Range<double> Range { get; } = new Range<double>(double.MaxValue, double.MinValue);
     }
 }

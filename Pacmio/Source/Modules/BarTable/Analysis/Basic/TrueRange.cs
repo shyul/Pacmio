@@ -23,7 +23,7 @@ namespace Pacmio
             string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + Column_Close.Name + ")";
             GroupName = Name = GetType().Name + label;
             Description = Name + " " + label;
-            AreaName = MainArea.DefaultName;
+            AreaName = MainBarChartArea.DefaultName;
 
             Column_TrueRange = new NumericColumn(Name) { Label = label };
             Column_Typical = new NumericColumn("Typical" + label) { Label = label };
@@ -144,13 +144,13 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area truerange_area = bc.AddArea(new Area(bc, "TrueRange_" + AreaName, AreaRatio)
+                BarChartArea truerange_area = bc.AddArea(new BarChartArea(bc, "TrueRange_" + AreaName, AreaRatio)
                 {
                     HasXAxisBar = false,
                 });
                 truerange_area.AddSeries(ColumnSeries_TrueRange);
 
-                Area typical_area = bc.AddArea(new Area(bc, AreaName, AreaRatio)
+                BarChartArea typical_area = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });

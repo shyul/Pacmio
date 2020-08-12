@@ -332,7 +332,7 @@ namespace Pacmio
             }
         }
 
-        public PivotRangeDatum this[IArea column]
+        public PivotRangeDatum this[IBarChartArea column]
         {
             get
             {
@@ -353,24 +353,6 @@ namespace Pacmio
                     return null;
             }
         }
-
-
-
-        /*
-        public Dictionary<PivotRangeColumn, PivotRangeDatum> PivotRangeDatums33 { get; } = new Dictionary<PivotRangeColumn, PivotRangeDatum>();
-
-        public PivotRangeDatum this[PivotRangeColumn column]
-        {
-            get
-            {
-                if (!PivotRangeDatums33.ContainsKey(column))
-                    PivotRangeDatums33.Add(column, new PivotRangeDatum());
-
-                return PivotRangeDatums33[column];
-            }
-        }
-        */
-
 
         #endregion PivotRangeSet
 

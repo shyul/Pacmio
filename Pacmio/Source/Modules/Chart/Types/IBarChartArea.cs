@@ -2,26 +2,23 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// Ref 1: https://www.tradingview.com/scripts/choppinessindex/?solution=43000501980
+/// Technical Analysis Chart UI
 /// 
 /// ***************************************************************************
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
+using System.Linq;
 using Xu;
 using Xu.Chart;
 
 namespace Pacmio
 {
-    public class CHOP : BarAnalysis
+    public interface IBarChartArea : IArea
     {
+        BarChart BarChart { get; }
 
-
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-
-        }
+        BarTable BarTable { get; }
     }
 }

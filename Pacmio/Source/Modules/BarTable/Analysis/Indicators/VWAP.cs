@@ -120,7 +120,7 @@ namespace Pacmio
 
         public bool HasXAxisBar { get; set; } = false;
 
-        public string AreaName { get; } = MainArea.DefaultName;
+        public string AreaName { get; } = MainBarChartArea.DefaultName;
 
         public float AreaRatio { get; set; } = 12;
 
@@ -128,7 +128,7 @@ namespace Pacmio
         {
             if (ChartEnabled)
             {
-                Area a = bc.AddArea(new Area(bc, AreaName, AreaRatio)
+                BarChartArea a = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });

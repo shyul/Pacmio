@@ -88,13 +88,13 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULT.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VOLOSC.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CalculatePivotRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\Pivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotRange.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotRangeColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotRangeDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotPointColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotPointDatum.cs" />
@@ -112,6 +112,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
+    <Compile Include="Source\Modules\Chart\BarChartArea.cs" />
+    <Compile Include="Source\Modules\Chart\BarChartOscillatorArea.cs" />
+    <Compile Include="Source\Modules\Chart\Types\IBarChartArea.cs" />
     <Compile Include="Source\Modules\Chart\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />
@@ -177,7 +180,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\ATR.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\TSI.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\WMA.cs" />
-    <Compile Include="Source\Modules\Chart\MainArea.cs" />
+    <Compile Include="Source\Modules\Chart\MainBarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Bar.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\WaveTrend.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\ExchangeInfo.cs" />

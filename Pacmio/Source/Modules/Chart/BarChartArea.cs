@@ -15,48 +15,17 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class MainArea : Area
+    public class BarChartArea : Area, IBarChartArea
     {
-        public const string DefaultName = "Main";
-
-        public MainArea(BarChart chart, int height, float leftAxisRatio = 0.3f) : base(chart, DefaultName, height)
+        public BarChartArea(BarChart chart, string name, float height, float leftAxisRatio = 1) : base(chart, name, height)
         {
             AxisLeft.HeightRatio = leftAxisRatio;
             BarChart = chart;
-            Importance = Importance.Huge;
-
-            // Configure Price series by assigning the chart type
-            // ===================================================
-            AddSeries(PriceSeries = new OhlcSeries(Bar.Column_Open, Bar.Column_High, Bar.Column_Low, Bar.Column_Close,
-                BarTable.GainAnalysis.Column_Percent)
-            {
-                Order = int.MaxValue,
-                Importance = Importance.Huge,
-                LegendName = "PriceSeries"
-            });
-
-            //PriceSeries.TagColumns.Add(Bar.Column_PeakTags);
-            PriceSeries.TagColumns.Add(BarTable.PivotPointAnalysis.Column_PeakTags);
-
-            // Configure volume series
-            // ===================================================
-            AddSeries(VolumeSeries = new AdColumnSeries(Bar.Column_Volume, BarTable.GainAnalysis.Column_Percent, 50)
-            {
-                Order = int.MinValue,
-                Side = AlignType.Left,
-                Name = Bar.Column_Volume.Name,
-                LegendName = "VOLUME",
-                LegendLabelFormat = "0.##"
-            });
         }
 
         public BarChart BarChart { get; private set; }
 
         public BarTable BarTable => BarChart.BarTable;
-
-        public readonly OhlcSeries PriceSeries;
-
-        public readonly AdColumnSeries VolumeSeries;
 
         public override void Coordinate()
         {
@@ -80,9 +49,11 @@ namespace Pacmio
         /// 
         /// </summary>
         /// <param name="g"></param>
-        public override void DrawCustomBackground(Graphics g)
+        public override void DrawCustomBackground(Graphics g) => DrawCustomBackground(g, this);
+
+        public static void DrawCustomBackground(Graphics g, IBarChartArea a)
         {
-            if (Table.Count > 0)
+            if (a.BarTable.Count > 0)
             {
                 /*
                 int stopPt = StopPt - 1;
@@ -93,38 +64,41 @@ namespace Pacmio
                 // * 2. Draw Patterns in the chart *
                 // *********************************
 
-                g.SetClip(Bounds);
+                g.SetClip(a.Bounds);
 
                 // ******************************
                 // * 3. Draw pivot level
                 // ******************************
 
-                int x1 = (Right - Width * 0.3).ToInt32();
-                int x2 = Right;
+                int x1 = (a.Bounds.Right - a.Bounds.Width * 0.1).ToInt32();
+                int x2 = a.Bounds.Right;
 
                 int full_width = x2 - x1;
 
                 // Console.WriteLine("full_width = " + full_width);
-
-                if (BarChart.LastBar is Bar b)
+                //Console.WriteLine("IBarChartArea a = " + a.Name);
+                if (a.BarChart.LastBar is Bar b && b[a] is PivotRangeDatum prd)
                 {
-                    var rangeList = b[this].RangeList.OrderByDescending(n => n.Weight);
+                    var rangeList = prd.RangeList.OrderByDescending(n => n.Weight);
 
                     if (rangeList.Count() > 0)
                     {
                         double max_weight = rangeList.Select(n => n.Weight).Max();// .Last().Weight;
 
-                        foreach (var pr in rangeList) 
+                        foreach (var pr in rangeList)
                         {
-                            int y1 = AxisY(AlignType.Right).ValueToPixel(pr.Range.Max);
-                            int y2 = AxisY(AlignType.Right).ValueToPixel(pr.Range.Min);
+                            int y1 = a.AxisY(AlignType.Right).ValueToPixel(pr.Range.Max);
+                            int y2 = a.AxisY(AlignType.Right).ValueToPixel(pr.Range.Min);
                             int height = y2 - y1;
 
                             double weight = pr.Weight;
 
                             int width = (weight * full_width / max_weight).ToInt32();
 
-                            g.DrawRectangle(new Pen(Color.Magenta), x2 - width, y1, width, height);
+                            Rectangle rect = new Rectangle(x2 - width, y1, width, height);
+
+                            g.FillRectangle(a.BarChart.Theme.FillBrush, rect);
+                            g.DrawRectangle(new Pen(Color.Magenta), rect);
 
                         }
                     }
@@ -134,11 +108,13 @@ namespace Pacmio
             }
         }
 
-        public override void DrawCustomOverlay(Graphics g)
+        public override void DrawCustomOverlay(Graphics g) => DrawCustomOverlay(g, this);
+
+        public static void DrawCustomOverlay(Graphics g, IBarChartArea a)
         {
-            if (Table.Count > 0)
+            if (a.BarTable.Count > 0)
             {
-                g.SetClip(Bounds);
+                g.SetClip(a.Bounds);
                 /*
                 int pt = 0;
                 for (int i = StartPt; i < StopPt; i++)
