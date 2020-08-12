@@ -31,10 +31,10 @@ namespace Pacmio
             string label = "(" + Fast_MA.Name + "," + Slow_MA.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            SignalColumn = new SignalColumn(Name, label) 
+            SignalColumn = new SignalColumn(Name, label)
             {
-                BullishColor = Fast_MA.Color, 
-                BearishColor = Slow_MA.Color 
+                BullishColor = Fast_MA.Color,
+                BearishColor = Slow_MA.Color
             };
 
             SignalColumns = new SignalColumn[] { SignalColumn };

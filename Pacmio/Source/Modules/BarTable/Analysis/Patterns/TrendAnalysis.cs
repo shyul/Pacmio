@@ -28,6 +28,8 @@ namespace Pacmio
 
             Result_Column = new PatternColumn(this);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
+
+            PivotRange_Column = new PivotRangeColumn(AreaName);
         }
 
         public TrendAnalysis(int test_interval)
@@ -44,6 +46,8 @@ namespace Pacmio
 
             Result_Column = new PatternColumn(this);
             AreaName = MainArea.DefaultName;
+
+            PivotRange_Column = new PivotRangeColumn(AreaName);
         }
 
         public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
@@ -60,7 +64,7 @@ namespace Pacmio
 
         public PatternColumn Result_Column { get; }
 
-        public PivotRangeSet PivotRangeSet { get; }
+        public PivotRangeColumn PivotRange_Column { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -74,7 +78,7 @@ namespace Pacmio
                 TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
 
                 PatternDatum pd = b[Result_Column] = new PatternDatum();
-                PivotRangeSet prs = b[this];
+                PivotRangeDatum prs = b[PivotRange_Column];
 
                 var all_points = gpd.PositiveList.Concat(gpd.NegativeList).OrderBy(n => n.Key).ToArray();
 

@@ -19,7 +19,7 @@ namespace TestClient
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                var rsi = new RSI(14) 
+                var rsi = new RSI(14)
                 {
                     UpperColor = Color.Blue,
                     LowerColor = Color.DarkOrange,

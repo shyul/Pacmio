@@ -316,21 +316,16 @@ namespace Pacmio
 
         #region PivotRangeSet
 
-        public HashSet<PivotRangeSet> PivotRangeSet { get; } = new HashSet<PivotRangeSet>();
+        public Dictionary<PivotRangeColumn, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<PivotRangeColumn, PivotRangeDatum>();
 
-        public PivotRangeSet this[IChartPattern pattern]
+        public PivotRangeDatum this[PivotRangeColumn column]
         {
             get
             {
-                var result = PivotRangeSet.Where(n => n.Equals(pattern));
-                if (result.Count() > 0)
-                    return result.First();
-                else
-                {
-                    PivotRangeSet prs = new PivotRangeSet(pattern);
-                    PivotRangeSet.Add(prs);
-                    return prs;
-                }
+                if (!PivotRangeDatums.ContainsKey(column))
+                    PivotRangeDatums.Add(column, new PivotRangeDatum());
+
+                return PivotRangeDatums[column];
             }
         }
 

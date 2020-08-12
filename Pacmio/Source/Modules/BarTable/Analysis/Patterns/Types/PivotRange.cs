@@ -38,7 +38,7 @@ namespace Pacmio
             if (offset >= 0)
                 return offset;
             else
-                return 0;
+                return double.MaxValue;
         }
 
         public double Weight
