@@ -51,5 +51,15 @@ namespace Pacmio
         public readonly OhlcSeries PriceSeries;
 
         public readonly AdColumnSeries VolumeSeries;
+
+        public override void DrawCursor(Graphics g, ITable table)
+        {
+            if (Chart.SelectedDataPointUnregulated >= 0)
+            {
+                //int pt = SelectedDataPoint;
+
+            }
+            //base.DrawCursor(g);
+        }
     }
 }

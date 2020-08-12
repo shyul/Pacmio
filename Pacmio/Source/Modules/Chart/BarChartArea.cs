@@ -27,6 +27,7 @@ namespace Pacmio
 
         public BarTable BarTable => BarChart.BarTable;
 
+        /*
         public override void Coordinate()
         {
             base.Coordinate();
@@ -44,12 +45,11 @@ namespace Pacmio
                 pt++;
             }
         }
+        */
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="g"></param>
         public override void DrawCustomBackground(Graphics g) => DrawCustomBackground(g, this);
+
+        public override void DrawCustomOverlay(Graphics g) => DrawCustomOverlay(g, this);
 
         public static void DrawCustomBackground(Graphics g, IBarChartArea a)
         {
@@ -108,8 +108,6 @@ namespace Pacmio
             }
         }
 
-        public override void DrawCustomOverlay(Graphics g) => DrawCustomOverlay(g, this);
-
         public static void DrawCustomOverlay(Graphics g, IBarChartArea a)
         {
             if (a.BarTable.Count > 0)
@@ -136,14 +134,6 @@ namespace Pacmio
             }
         }
 
-        public override void DrawCursor(Graphics g, ITable table)
-        {
-            if (Chart.SelectedDataPointUnregulated >= 0)
-            {
-                //int pt = SelectedDataPoint;
 
-            }
-            //base.DrawCursor(g);
-        }
     }
 }

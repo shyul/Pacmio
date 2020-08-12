@@ -16,10 +16,6 @@ namespace Pacmio
 
         int TestInterval { get; }
 
-        int MaximumResultCount { get; }
-
-        double Tolerance { get; }
-
         bool ChartEnabled { get; set; }
 
         void DrawOverlay(Graphics g, BarChart bc);

@@ -91,6 +91,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VOLOSC.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CalculatePivotRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevelAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\ReversalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\Pivot.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLevel.cs" />

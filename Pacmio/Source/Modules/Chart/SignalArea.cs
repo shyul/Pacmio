@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class SignalArea : OscillatorArea
+    public sealed class SignalArea : OscillatorArea, IBarChartArea
     {
         public SignalArea(BarChart chart) : base(chart, "Signal", 10)
         {

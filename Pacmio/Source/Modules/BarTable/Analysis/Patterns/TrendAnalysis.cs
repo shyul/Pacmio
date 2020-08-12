@@ -26,7 +26,7 @@ namespace Pacmio
             TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Result_Column = new PatternColumn(this);
+            Column_Result = new PatternColumn(this);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
             //PivotRange_Column = new PivotRangeColumn(AreaName);
@@ -44,7 +44,7 @@ namespace Pacmio
             TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Result_Column = new PatternColumn(this);
+            Column_Result = new PatternColumn(this);
             AreaName = MainBarChartArea.DefaultName;
 
             //PivotRange_Column = new PivotRangeColumn(AreaName);
@@ -52,9 +52,8 @@ namespace Pacmio
 
         public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
 
-        public virtual int MaximumResultCount { get; }
 
-        public double Tolerance => 0.01;
+
 
         #region Calculation
 
@@ -62,7 +61,7 @@ namespace Pacmio
 
         public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
 
-        public PatternColumn Result_Column { get; }
+        public PatternColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -79,7 +78,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                if (b[Result_Column] is null)
+                if (b[Column_Result] is null)
                 {
                     TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
                     double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
@@ -129,7 +128,7 @@ namespace Pacmio
                         }
                     }
 
-                    b[Result_Column] = pd;
+                    b[Column_Result] = pd;
                 }
             }
         }
@@ -144,7 +143,7 @@ namespace Pacmio
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Result_Column] is PatternDatum pd)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Column_Result] is PatternDatum pd)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
@@ -208,7 +207,7 @@ namespace Pacmio
 
         public void DrawOverlay(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Result_Column] is PatternDatum pd)
+            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Column_Result] is PatternDatum pd)
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
