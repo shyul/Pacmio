@@ -849,27 +849,33 @@ namespace Pacmio
 
         public void AddPriceTick(DateTime time, double price, double size)
         {
+            //Console.WriteLine("Inbound Tick = " + price + " | " + size);
+
             if (Enabled && IsLive)
-            //lock (DataLockObject)
-            {
-                TableStatus last_status = Status;
-                Status = TableStatus.Ticking;
-                Add(time, price, size);
-
-                if (last_status == TableStatus.Ready)
+                lock (DataLockObject)
                 {
-                    SetCalculationPointer(LatestCalculatePointer - 2);
-                    Calculate(BarAnalysisPointerList.Keys);
+                    TableStatus last_status = Status;
+                    Status = TableStatus.Ticking;
+                    Add(time, price, size);
 
-                    // Evaluate the Strategy
+                    if (last_status == TableStatus.Ready)
+                    {
+                        SetCalculationPointer(LatestCalculatePointer - 2);
 
-                    Status = TableStatus.TickingFinished;
-                    // lead it to calculation... here
+
+                        Calculate(BarAnalysisPointerList.Keys);
+
+                        // Evaluate the Strategy
+
+                        Status = TableStatus.TickingFinished;
+                        // lead it to calculation... here
+                    }
+
+                    Status = last_status;
                 }
-
-                Status = last_status;
-            }
         }
+
+
 
         public void ResetCalculateData()
         {

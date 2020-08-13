@@ -313,6 +313,7 @@ namespace Pacmio.IB
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
                         case TickType.RTTradeVolume when c.MarketData is HistoricalData hd:
+                            //Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
                             string[] volFields = fields[4].Split(';');
 
                             double last = volFields[0].ToDouble();

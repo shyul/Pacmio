@@ -195,56 +195,58 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                Bar b = bt[i];
-                double high = b[Column_High];
-                double low = b[Column_Low];
-
-                // Get Peak and Troughs
-                int peak_result = 0;
-                int j = 1;
-                bool test_high = true, test_low = true;
-
-                while (j < MaximumPeakProminence)
+                if(bt[i] is Bar b) 
                 {
-                    if ((!test_high) && (!test_low)) break;
+                    double high = b[Column_High];
+                    double low = b[Column_Low];
 
-                    int right_index = i + j;
-                    if (right_index >= bap.StopPt) break;
+                    // Get Peak and Troughs
+                    int peak_result = 0;
+                    int j = 1;
+                    bool test_high = true, test_low = true;
 
-                    int left_index = i - j;
-                    if (left_index < 0) break;
-
-                    if (test_high)
+                    while (j < MaximumPeakProminence)
                     {
-                        double left_high = bt[left_index][Column_High];
-                        double right_high = bt[right_index][Column_High];
+                        if ((!test_high) && (!test_low)) break;
 
-                        if (high >= left_high && high >= right_high)
+                        int right_index = i + j;
+                        if (right_index >= bap.StopPt) break;
+
+                        int left_index = i - j;
+                        if (left_index < 0) break;
+
+                        if (test_high)
                         {
-                            peak_result = j;
-                            if (high == left_high) bt[left_index][Column_Result] = 0;
+                            double left_high = bt[left_index][Column_High];
+                            double right_high = bt[right_index][Column_High];
+
+                            if (high >= left_high && high >= right_high)
+                            {
+                                peak_result = j;
+                                if (high == left_high) bt[left_index][Column_Result] = 0;
+                            }
+                            else
+                                test_high = false;
                         }
-                        else
-                            test_high = false;
+
+                        if (test_low)
+                        {
+                            double left_low = bt[left_index][Column_Low];
+                            double right_low = bt[right_index][Column_Low];
+
+                            if (low <= left_low && low <= right_low)
+                            {
+                                peak_result = -j;
+                                if (low == left_low) bt[left_index][Column_Result] = 0;
+                            }
+                            else
+                                test_low = false;
+                        }
+                        j++;
                     }
 
-                    if (test_low)
-                    {
-                        double left_low = bt[left_index][Column_Low];
-                        double right_low = bt[right_index][Column_Low];
-
-                        if (low <= left_low && low <= right_low)
-                        {
-                            peak_result = -j;
-                            if (low == left_low) bt[left_index][Column_Result] = 0;
-                        }
-                        else
-                            test_low = false;
-                    }
-                    j++;
+                    b[Column_Result] = peak_result;
                 }
-
-                b[Column_Result] = peak_result;
             }
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
