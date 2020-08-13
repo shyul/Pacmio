@@ -16,10 +16,7 @@ namespace Pacmio
 {
     public class CalculatePivotRange : BarAnalysis
     {
-        public CalculatePivotRange() 
-        {
-            Name = GetType().Name;
-        }
+        public CalculatePivotRange() => Name = GetType().Name;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

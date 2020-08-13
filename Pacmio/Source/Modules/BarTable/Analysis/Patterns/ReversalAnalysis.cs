@@ -38,8 +38,37 @@ namespace Pacmio
             {
                 if (bt[i] is Bar b && b[this] is PivotRangeDatum prd)// && b[Column] is double d)
                 {
+                    Bar b_1 = bt[i - 1];
+
+                    double close_1 = b_1.Close;
+
+                    double open = b.Open;
+                    double close = b.Close;
+                    double high = b.High;
+                    double low = b.Low;
 
 
+
+                    Range<double> c_1_o = new Range<double>(close_1, open);
+
+                    var list1 = prd.RangeList.Where(n => n.Range.Intersects(c_1_o)).Select(n => n.Weight).Sum();
+
+                    Range<double> oc = new Range<double>(open, close);
+
+                    Range<double> hl = new Range<double>(low, high);
+
+
+
+
+                    // Range intersection
+
+                    // Cross up is plus, cross down is negative
+
+                    // Abs the cross up and cross down is get its total travelling length
+
+                    // Less to zero sum but large distance means reversal
+
+                    // Large sum and large abs sums means penitration
 
                 }
             }
@@ -55,15 +84,7 @@ namespace Pacmio
         {
             if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[this] is PivotRangeDatum prd)
             {
-                // Range intersection
 
-                // Cross up is plus, cross down is negative
-
-                // Abs the cross up and cross down is get its total travelling length
-
-                // Less to zero sum but large distance means reversal
-
-                // Large sum and large abs sums means penitration
 
             }
         }

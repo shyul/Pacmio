@@ -622,7 +622,7 @@ namespace Pacmio
         
         
         
-        public static CalculatePivotRange CalculatePivotRange { get; } = new CalculatePivotRange();
+
 
         
 
@@ -706,8 +706,6 @@ namespace Pacmio
                         Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
                     }
                 }
-
-                startPt = Math.Min(startPt, Calculate(CalculatePivotRange).StartPt);
             }
             LatestCalculatePointer = startPt;
 

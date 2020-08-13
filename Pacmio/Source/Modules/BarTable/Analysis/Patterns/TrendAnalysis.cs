@@ -29,7 +29,7 @@ namespace Pacmio
             Column_Result = new PatternColumn(this);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
-            //PivotRange_Column = new PivotRangeColumn(AreaName);
+            this.AddChild(CalculatePivotRange);
         }
 
         public TrendAnalysis(int test_interval)
@@ -47,7 +47,7 @@ namespace Pacmio
             Column_Result = new PatternColumn(this);
             AreaName = MainBarChartArea.DefaultName;
 
-            //PivotRange_Column = new PivotRangeColumn(AreaName);
+            this.AddChild(CalculatePivotRange);
         }
 
         public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
@@ -58,6 +58,8 @@ namespace Pacmio
         #region Calculation
 
         public ATR ATR { get; }
+
+        public CalculatePivotRange CalculatePivotRange { get; } = new CalculatePivotRange();
 
         public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
 

@@ -12,6 +12,8 @@ namespace Pacmio
     {
         string Name { get; }
 
+        //CalculatePivotRange CalculatePivotRange { get; }
+
         string AreaName { get; }
 
         int TestInterval { get; }

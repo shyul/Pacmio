@@ -35,5 +35,17 @@ namespace Pacmio
                 pr.Insert(p);
             }
         }
+
+        public double Weight(double min, double max)
+        {
+            Range<double> r = new Range<double>(min);
+            r.Insert(max);
+
+            double w = RangeList.Where(n => n.Range.Intersects(r)).Select(n => n.Weight).Sum();
+
+            if (min < max) return w;
+            else if (min > max) return -w;
+            else return 0;
+        }
     }
 }
