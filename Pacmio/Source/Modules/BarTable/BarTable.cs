@@ -831,12 +831,7 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     Status = TableStatus.Calculating;
-                    // Send Signal
-
                     Calculate(bas);
-
-                    //Status = TableStatus.CalculateFinished;
-                    //Status = TableStatus.Ready;
                     lock (DataViews)
                     {
                         DataViews.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).ToList().ForEach(n => { n.PointerToEnd(); });
@@ -844,8 +839,6 @@ namespace Pacmio
                     m_Status = TableStatus.Ready;
                 }
         }
-
-        //private TableStatus LastTableStatusBeforeCalculateTickRequested { get; set; } = TableStatus.Default;
 
         private bool CalculateTickRequested { get; set; } = false;
 
@@ -866,21 +859,20 @@ namespace Pacmio
             }
         }
 
-        private Task CalculateTickTask { get; } //= new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
+        private Task CalculateTickTask { get; }
 
-        private CancellationTokenSource CalculateTickCancelTs { get; } //= new CancellationTokenSource();
+        private CancellationTokenSource CalculateTickCancelTs { get; }
 
         private void CalculateTickWorker()
         {
             while (CalculateTickCancelTs is CancellationTokenSource cts && !cts.IsCancellationRequested)
             {
-                if (CalculateTickRequested) // && !cts.IsCancellationRequested) 
+                if (CalculateTickRequested)
                 {
                     CalculateTickRequested = false;
 
                     lock (DataLockObject)
                     {
-                        //SetCalculationPointer(LatestCalculatePointer - 1);
                         Calculate(BarAnalysisPointerList.Keys);
                         Status = TableStatus.TickingFinished;
                     }

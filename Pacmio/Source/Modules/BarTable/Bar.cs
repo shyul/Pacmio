@@ -165,15 +165,11 @@ namespace Pacmio
 
         public double Gain => this[BarTable.GainAnalysis.Column_Gain];
 
-        public double Percent => this[BarTable.GainAnalysis.Column_Percent];
-
         public double TrueRange => this[BarTable.TrueRangeAnalysis.Column_TrueRange];
 
         public double Typical => this[BarTable.TrueRangeAnalysis.Column_Typical];
 
         public double TrendStrength => this[BarTable.TrendStrengthAnalysis.Column_TrendStrength];
-
-        public double GapPercent => this[BarTable.TrendStrengthAnalysis.Column_GapPercent];
 
         public List<CandleStickType> CandleStickTypes { get; } = new List<CandleStickType>();
 
@@ -185,6 +181,8 @@ namespace Pacmio
                 {
                     NumericColumn nc => this[nc],
                     TagColumn tc => this[tc],
+                    TrailingPivotPointColumn tpc => this[tpc],
+                    PatternColumn pc => this[pc],
                     SignalColumn sc => this[sc],
                     _ => null,
                 };
