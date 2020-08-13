@@ -200,7 +200,7 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     PeriodSettings[(barFreq, barType)] = period;
-                    var tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType);//.OrderByDescending(n => n.Key.BarFreq);
+                    var tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType);
 
                     ParallelOptions po = new ParallelOptions()
                     {

@@ -16,8 +16,6 @@ namespace Pacmio
 
         string AreaName { get; }
 
-        int TestInterval { get; }
-
         bool ChartEnabled { get; set; }
 
         void DrawOverlay(Graphics g, BarChart bc);

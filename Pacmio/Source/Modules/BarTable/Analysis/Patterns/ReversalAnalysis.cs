@@ -20,8 +20,10 @@ namespace Pacmio
         {
 
 
-
+            CalculatePivotRange.AddChild(this);
         }
+
+        public CalculatePivotRange CalculatePivotRange { get; } = new CalculatePivotRange();
 
         public NumericColumn Column { get; protected set; }
 
@@ -47,15 +49,9 @@ namespace Pacmio
                     double high = b.High;
                     double low = b.Low;
 
-
-
-                    Range<double> c_1_o = new Range<double>(close_1, open);
-
-                    var list1 = prd.RangeList.Where(n => n.Range.Intersects(c_1_o)).Select(n => n.Weight).Sum();
-
-                    Range<double> oc = new Range<double>(open, close);
-
-                    Range<double> hl = new Range<double>(low, high);
+                    double w1 = prd.Weight(close_1, open); // gap
+                    double w2 = prd.Weight(open, close); // movement
+                    //double w3 = prd.Weight(low, high);
 
 
 
@@ -73,8 +69,6 @@ namespace Pacmio
                 }
             }
         }
-
-        public int TestInterval => throw new NotImplementedException();
 
         public bool ChartEnabled { get; set; } = true;
 

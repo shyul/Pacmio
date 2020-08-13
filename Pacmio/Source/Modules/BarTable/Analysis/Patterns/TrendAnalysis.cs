@@ -50,10 +50,6 @@ namespace Pacmio
             this.AddChild(CalculatePivotRange);
         }
 
-        public virtual int TestInterval => TrailingPivotPointAnalysis.TestInterval;
-
-
-
 
         #region Calculation
 

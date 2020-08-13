@@ -335,6 +335,8 @@ namespace TestClient
             Task.Run(() =>
             {
                 BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
+                BarTableTest.BarTableSet.Calculate(BarTableTest.TestBarAnalysisSet, Cts, Progress);
+                BarChart.PointerToEndAll();
             }, Cts.Token);
         }
 
