@@ -78,36 +78,40 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                TrailingPivotPointDatum gpd = new TrailingPivotPointDatum();
-       
-                for (int j = MinimumPeakProminence; j < TestInterval; j++)
+                if (bt[i] is Bar b0)
                 {
-                    int i_test = i - j;
-                    if (i_test < 0) break;
+                    TrailingPivotPointDatum gpd = new TrailingPivotPointDatum();
 
-                    Bar b = bt[i_test];
-
-                    double prominence = b[PivotPointAnalysis.Column_Result];
-                    double trendStrength = b[TrendStrengthAnalysis.Column_TrendStrength];
-
-                    // For simulation accuracy, the prominence can't be greater than the back testing offset.
-                    if (prominence > j) prominence = j;
-
-                    if (prominence > MinimumPeakProminence)// || trendStrength > MinimumTrendStrength)
+                    for (int j = MinimumPeakProminence; j < TestInterval; j++)
                     {
-                        double high = b[PivotPointAnalysis.Column_High];
-                        gpd.PositiveList[i_test] = new Pivot(i_test, b.Time, high, prominence, trendStrength);
-                        gpd.LevelRange.Insert(high);
+                        int i_test = i - j;
+                        if (i_test < 0) break;
+
+                        if (bt[i_test] is Bar b)
+                        {
+                            double prominence = b[PivotPointAnalysis.Column_Result];
+                            double trendStrength = b[TrendStrengthAnalysis.Column_TrendStrength];
+
+                            // For simulation accuracy, the prominence can't be greater than the back testing offset.
+                            if (prominence > j) prominence = j;
+
+                            if (prominence > MinimumPeakProminence)// || trendStrength > MinimumTrendStrength)
+                            {
+                                double high = b[PivotPointAnalysis.Column_High];
+                                gpd.PositiveList[i_test] = new Pivot(i_test, b.Time, high, prominence, trendStrength);
+                                gpd.LevelRange.Insert(high);
+                            }
+                            else if (prominence < -MinimumPeakProminence)// || trendStrength < -MinimumTrendStrength)
+                            {
+                                double low = b[PivotPointAnalysis.Column_Low];
+                                gpd.NegativeList[i_test] = new Pivot(i_test, b.Time, low, prominence, trendStrength);
+                                gpd.LevelRange.Insert(low);
+                            }
+                        }
                     }
-                    else if (prominence < -MinimumPeakProminence)// || trendStrength < -MinimumTrendStrength)
-                    {
-                        double low = b[PivotPointAnalysis.Column_Low];
-                        gpd.NegativeList[i_test] = new Pivot(i_test, b.Time, low, prominence, trendStrength);
-                        gpd.LevelRange.Insert(low);
-                    }
+
+                    b0[Result_Column] = gpd;
                 }
-
-                bt[i][Result_Column] = gpd;
             }
             /*
             for (int i = bap.StartPt; i < bap.StopPt; i++)

@@ -89,8 +89,6 @@ namespace Pacmio
         {
             lock (LiveBarTables)
                 Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(time, price, size));
-
-
         }
 
         [IgnoreDataMember]

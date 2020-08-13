@@ -434,6 +434,9 @@ namespace Pacmio
         {
             NumericDatums.Clear();
             TagDatums.Clear();
+            TrailingPivotPoints.Clear();
+            PivotRangeDatums.Clear();
+            Patterns.Clear();
             PositionDatums.Clear();
             SignalDatums.Clear();
         }

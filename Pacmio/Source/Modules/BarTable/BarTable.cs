@@ -24,17 +24,22 @@ namespace Pacmio
     {
         #region Ctor
 
-        public BarTable(Contract c, BarFreq barFreq, BarType type) // = TickerType.Trades
+        public BarTable(Contract c, BarFreq barFreq, BarType type)
         {
             Contract = c;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
             Type = type;
+
+            CalculateTickCancelTs = new CancellationTokenSource();
+            CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
+            CalculateTickTask.Start();
         }
 
         public void Dispose()
         {
             IsLive = false;
+            CalculateTickCancelTs.Cancel();
 
             lock (DataViews)
             {
@@ -847,35 +852,51 @@ namespace Pacmio
                 }
         }
 
+        //private TableStatus LastTableStatusBeforeCalculateTickRequested { get; set; } = TableStatus.Default;
+
+        private bool CalculateTickRequested { get; set; } = false;
+
         public void AddPriceTick(DateTime time, double price, double size)
         {
-            //Console.WriteLine("Inbound Tick = " + price + " | " + size);
-
             if (Enabled && IsLive)
-                lock (DataLockObject)
+            {
+                //Console.WriteLine("Inbound Tick = " + price + " | " + size);
+                //lock (DataLockObject) 
+                Add(time, price, size);
+
+                if (Status == TableStatus.Ready)
                 {
-                    TableStatus last_status = Status;
                     Status = TableStatus.Ticking;
-                    Add(time, price, size);
-
-                    if (last_status == TableStatus.Ready)
-                    {
-                        SetCalculationPointer(LatestCalculatePointer - 2);
-
-
-                        Calculate(BarAnalysisPointerList.Keys);
-
-                        // Evaluate the Strategy
-
-                        Status = TableStatus.TickingFinished;
-                        // lead it to calculation... here
-                    }
-
-                    Status = last_status;
+                    SetCalculationPointer(LatestCalculatePointer - 1);
+                    CalculateTickRequested = true;
                 }
+            }
         }
 
+        private Task CalculateTickTask { get; } //= new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
 
+        private CancellationTokenSource CalculateTickCancelTs { get; } //= new CancellationTokenSource();
+
+        private void CalculateTickWorker()
+        {
+            while (CalculateTickCancelTs is CancellationTokenSource cts && !cts.IsCancellationRequested)
+            {
+                if (CalculateTickRequested) // && !cts.IsCancellationRequested) 
+                {
+                    CalculateTickRequested = false;
+
+                    lock (DataLockObject)
+                    {
+                        //SetCalculationPointer(LatestCalculatePointer - 1);
+                        Calculate(BarAnalysisPointerList.Keys);
+                        Status = TableStatus.TickingFinished;
+                    }
+
+                    Status = TableStatus.Ready;
+                }
+                Thread.Sleep(1);
+            }
+        }
 
         public void ResetCalculateData()
         {

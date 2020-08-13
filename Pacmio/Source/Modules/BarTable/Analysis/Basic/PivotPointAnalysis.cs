@@ -251,18 +251,20 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                Bar b = bt[i];
-                double high = b[Column_High];
-                double low = b[Column_Low];
-                double peak_result = b[Column_Result];
+                if (bt[i] is Bar b)
+                {
+                    double high = b[Column_High];
+                    double low = b[Column_Low];
+                    double peak_result = b[Column_Result];
 
-                if (peak_result > MinimumPeakProminenceForAnalysis)
-                {
-                    b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
-                }
-                else if (peak_result < -MinimumPeakProminenceForAnalysis)
-                {
-                    b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
+                    if (peak_result > MinimumPeakProminenceForAnalysis)
+                    {
+                        b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
+                    }
+                    else if (peak_result < -MinimumPeakProminenceForAnalysis)
+                    {
+                        b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
+                    }
                 }
             }
         }
