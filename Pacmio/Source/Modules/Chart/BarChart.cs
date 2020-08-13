@@ -102,7 +102,7 @@ namespace Pacmio
                 if (m_BarTable is BarTable) m_BarTable.CalculateRefresh(BarAnalysisSet);
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -117,7 +117,7 @@ namespace Pacmio
                 BarAnalysisSet = bas;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -132,7 +132,7 @@ namespace Pacmio
                 Strategy = s;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -147,7 +147,7 @@ namespace Pacmio
                 BarAnalysisSet = bas;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             SetAsyncUpdateUI();
         }
@@ -162,7 +162,7 @@ namespace Pacmio
                 Strategy = s;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             SetAsyncUpdateUI();
         }

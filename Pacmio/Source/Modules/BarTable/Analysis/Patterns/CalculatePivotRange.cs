@@ -30,7 +30,7 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                bt[i].CalculatePivotRange();
+                if (bt[i] is Bar b) b.CalculatePivotRange();
             }
         }
     }

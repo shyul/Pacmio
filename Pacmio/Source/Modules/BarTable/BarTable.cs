@@ -164,37 +164,7 @@ namespace Pacmio
         /// <summary>
         /// Returns Last Row's Index
         /// </summary>
-        public int LastIndex => Count - 1;
-
-        /// <summary>
-        /// Returns the Last Bar in the Table. Null is the BarTable is empty.
-        /// </summary>
-        public Bar LastBar
-        {
-            get
-            {
-                if (IsEmpty)
-                    return null;
-                else
-                    return this[LastIndex];
-            }
-        }
-
-        public Bar LastBar_1
-        {
-            get
-            {
-                if (LastIndex < 1)
-                    return null;
-                else
-                    return this[LastIndex - 1];
-            }
-        }
-
-        /// <summary>
-        /// Last most Close
-        /// </summary>
-        public double LastClose => (LastBar is null) ? -1 : LastBar.Close;
+        private int LastIndex => Count - 1;
 
         /// <summary>
         /// Add single Bar into the BarTable. Will disregard if the Bar with exactly the same time already in the Table. 
@@ -255,8 +225,8 @@ namespace Pacmio
 
             if (!Contains(time))
             {
-                if (Count > 0 && LastBar.Source >= DataSource.IB)
-                    LastBar.Source = DataSource.Realtime;
+                if (Count > 0 && this[LastIndex].Source >= DataSource.IB)
+                    this[LastIndex].Source = DataSource.Realtime;
 
                 Bar nb = new Bar(this, time, DataSource.Tick,
                             last, last, last, last, volume, // - 1, -1, -1, -1, -1, // Ticks are actual trade values
@@ -624,13 +594,6 @@ namespace Pacmio
 
         public static PivotPointAnalysis PivotPointAnalysis { get; } = new PivotPointAnalysis(); // { ChartEnabled = false };
 
-        
-        
-        
-
-
-        
-
         #endregion Basic Data
 
         #region Data/Bar Analysis (TA) Calculation
@@ -665,7 +628,37 @@ namespace Pacmio
             SetCalculationPointer(pt);
         }*/
 
-        public int LatestCalculatePointer { get; private set; } = 0;
+        public int LastCalculateIndex { get; private set; } = -1;
+
+        /// <summary>
+        /// Last most Close
+        /// </summary>
+        public double LastClose => (LastBar is null) ? -1 : LastBar.Close;
+
+        /// <summary>
+        /// Returns the Last Bar in the Table. Null is the BarTable is empty.
+        /// </summary>
+        public Bar LastBar
+        {
+            get
+            {
+                if (LastCalculateIndex < 0)
+                    return null;
+                else
+                    return this[LastCalculateIndex];
+            }
+        }
+
+        public Bar LastBar_1
+        {
+            get
+            {
+                if (LastCalculateIndex < 1)
+                    return null;
+                else
+                    return this[LastCalculateIndex - 1];
+            }
+        }
 
         private BarAnalysisPointer Calculate(BarAnalysis ba)
         {
@@ -712,12 +705,12 @@ namespace Pacmio
                     }
                 }
             }
-            LatestCalculatePointer = startPt;
+            LastCalculateIndex = startPt;
 
             if (debugInfo)
             {
                 Console.WriteLine("------------------");
-                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LatestCalculatePointer);
+                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
                 Console.WriteLine("==================\n");
             }
         }
@@ -867,7 +860,7 @@ namespace Pacmio
                 if (Status == TableStatus.Ready)
                 {
                     Status = TableStatus.Ticking;
-                    SetCalculationPointer(LatestCalculatePointer - 1);
+                    SetCalculationPointer(LastCalculateIndex - 1);
                     CalculateTickRequested = true;
                 }
             }
