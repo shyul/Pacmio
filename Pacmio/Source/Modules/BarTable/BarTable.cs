@@ -879,7 +879,8 @@ namespace Pacmio
 
                     Status = TableStatus.Ready;
                 }
-                Thread.Sleep(1);
+                else
+                    Thread.Sleep(1);
             }
         }
 
