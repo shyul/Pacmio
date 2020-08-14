@@ -142,7 +142,7 @@ namespace Pacmio
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && bc.BarTable is BarTable bt && bt[bt.Count - 2] is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is PatternDatum pd)
+            if (ChartEnabled && bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is PatternDatum pd)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;

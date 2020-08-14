@@ -185,11 +185,11 @@ namespace Pacmio
 
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
-            if (!bap.IsUpToDate && bap.Count > 0)
+            int count = bap.Count;
+            if (!bap.IsUpToDate && count > 0)
             {
-                bap.StopPt = bap.Count - MinimumPeakProminenceForAnalysis + 1;
-
-                int min_peak_start = bap.StopPt - MaximumPeakProminence * 2 - 1;
+                bap.StopPt = count - 1;  // bap.StopPt = count - MinimumPeakProminenceForAnalysis + 1;
+                int min_peak_start = count - MaximumPeakProminence * 2 - 1;
 
                 if (bap.StartPt > min_peak_start)
                     bap.StartPt = min_peak_start;
@@ -198,8 +198,8 @@ namespace Pacmio
                     bap.StartPt = 0;
 
                 Calculate(bap);
-                bap.StartPt = bap.StopPt;
-                bap.StopPt += MinimumPeakProminenceForAnalysis - 1;
+                bap.StartPt = bap.StopPt; //bap.StartPt = bap.StopPt = count;
+                bap.StopPt++;
             }
         }
 
