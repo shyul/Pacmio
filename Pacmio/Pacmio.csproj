@@ -108,11 +108,13 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CandleStick.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\CandleStickIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
+    <Compile Include="Source\Modules\BarTable\Types\CandleStickType.cs" />
+    <Compile Include="Source\Modules\BarTable\Types\ICandleStick.cs" />
     <Compile Include="Source\Modules\Chart\BarChartArea.cs" />
     <Compile Include="Source\Modules\Chart\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Modules\Chart\Types\IBarChartArea.cs" />

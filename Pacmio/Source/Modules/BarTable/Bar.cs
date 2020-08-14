@@ -17,7 +17,7 @@ namespace Pacmio
     /// <summary>
     /// One Single Bar is not as simple as it sounds.
     /// </summary>
-    public class Bar : IRow
+    public class Bar : IRow, ICandleStick
     {
         #region Ctor
 
