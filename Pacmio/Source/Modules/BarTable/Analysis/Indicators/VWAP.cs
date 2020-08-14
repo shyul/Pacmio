@@ -20,14 +20,15 @@ namespace Pacmio
         public VWAP(Frequency frequency)
         {
             Frequency = frequency;
+            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Frequency.ToString() + ")";
             Name = GetType().Name + label;
             GroupName = GetType().Name;
             Description = "Volume Weighted Average Price " + label;
 
-            Volume_Column = new NumericColumn(Name + "_CUMUL_V");
-            Volume_Price_Column = new NumericColumn(Name + "_CUMUL_VP");
+            Column_Volume = new NumericColumn(Name + "_CUMUL_V");
+            Column_Volume_Price = new NumericColumn(Name + "_CUMUL_VP");
             Column_Result = new NumericColumn(Name) { Label = label };
             LineSeries = new LineSeries(Column_Result)
             {
@@ -52,9 +53,11 @@ namespace Pacmio
 
         #region Calculation
 
-        public NumericColumn Volume_Column { get; }
+        public NumericColumn Column_Typical { get; }
 
-        public NumericColumn Volume_Price_Column { get; }
+        public NumericColumn Column_Volume { get; }
+
+        public NumericColumn Column_Volume_Price { get; }
 
         public NumericColumn Column_Result { get; }
 
@@ -71,20 +74,16 @@ namespace Pacmio
                 if (bap.StartPt > 0)
                 {
                     Bar b_1 = bt[bap.StartPt - 1];
-                    cumulative_vol = b_1[Volume_Column];
-                    cumulative_price_vol = b_1[Volume_Price_Column];
-                    //base_time = b_1.Time;
+                    cumulative_vol = b_1[Column_Volume];
+                    cumulative_price_vol = b_1[Column_Volume_Price];
                     base_time = Frequency.Align(b_1.Time);
                 }
-
 
                 for (int i = bap.StartPt; i < bap.StopPt; i++)
                 {
                     Bar b = bt[i];
-                    //DateTime time = b.Time;
                     DateTime time = Frequency.Align(b.Time);
 
-                    //if (time.Day != base_time.Day)
                     if (time != base_time)
                     {
                         cumulative_vol = 0;
@@ -92,8 +91,8 @@ namespace Pacmio
                     }
 
                     double volumn = b.Volume;
-                    b[Volume_Column] = cumulative_vol += volumn;
-                    b[Volume_Price_Column] = cumulative_price_vol += volumn * b.Typical;
+                    b[Column_Volume] = cumulative_vol += volumn;
+                    b[Column_Volume_Price] = cumulative_price_vol += volumn * b[Column_Typical];
                     b[Column_Result] = cumulative_price_vol / cumulative_vol;
                     base_time = time;
                 }

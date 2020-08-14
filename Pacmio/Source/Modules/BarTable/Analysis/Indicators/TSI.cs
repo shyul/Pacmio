@@ -130,6 +130,8 @@ namespace Pacmio
 
         public double LowerLimit { get; set; } = double.NaN;
 
+        public NumericColumn Column_Gain { get; } = BarTable.GainAnalysis.Column_Gain;
+
         public SMA MA_1_PC { get; }
 
         public SMA MA_2_PC { get; }
@@ -154,7 +156,7 @@ namespace Pacmio
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[APC_Column] = Math.Abs(b.Gain);
+                b[APC_Column] = Math.Abs(b[Column_Gain]);
             }
 
             bap.StartPt = startPt;

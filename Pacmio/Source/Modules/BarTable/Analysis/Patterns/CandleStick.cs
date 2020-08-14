@@ -236,6 +236,8 @@ namespace Pacmio
             double low = b.Low;
             double hl_Length = Math.Abs(high - low);
 
+            NumericColumn column_trend = BarTable.TrueRangeAnalysis.Column_Typical;
+
             if (hl_Length > 0)
             {
                 double open = b.Open;
@@ -246,7 +248,7 @@ namespace Pacmio
 
                 if (body_shadow_ratio < 0.33)
                 {
-                    double trend_1 = (i > 0) ? bt[i - 1].TrendStrength : 0;
+                    double trend_1 = (i > 0) ? bt[i - 1][column_trend] : 0;
 
                     double top_shadow = Math.Abs(high - Math.Max(open, close));
                     double buttom_shadow = Math.Abs(Math.Min(open, close) - low);

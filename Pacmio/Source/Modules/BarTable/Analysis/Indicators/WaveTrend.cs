@@ -24,6 +24,7 @@ namespace Pacmio // Can be derived from SMA
             Interval_Slow = interval_sl;
             Weight = weight;
             Interval_Channel_Multiplier = 2D / (Interval_Channel + 1D);
+            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Interval_Channel.ToString() + "," + Interval_Average.ToString() + "," + Interval_Slow.ToString() + "," + Weight.ToString() + ")";
             Description = "Wave Trend Oscillator " + label;
@@ -92,6 +93,8 @@ namespace Pacmio // Can be derived from SMA
 
         public double LowerLimit { get; set; } = -53;
 
+        public NumericColumn Column_Typical { get; }
+
         public NumericColumn ESA_Column { get; }
 
         public NumericColumn D_Column { get; }
@@ -116,7 +119,7 @@ namespace Pacmio // Can be derived from SMA
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double typical = b.Typical;
+                double typical = b[Column_Typical];
                 double typical_esa;
 
                 if (i > 0)
@@ -142,7 +145,7 @@ namespace Pacmio // Can be derived from SMA
                 if (de == 0) de = 0.001;
                 //Console.WriteLine("de = " + de);
 
-                b[DE_Column] = (b.Typical - b[ESA_Column]) / (Weight * de);
+                b[DE_Column] = (b[Column_Typical] - b[ESA_Column]) / (Weight * de);
                 //Console.WriteLine("b[DE_Column] = " + b[DE_Column]);
             }
 

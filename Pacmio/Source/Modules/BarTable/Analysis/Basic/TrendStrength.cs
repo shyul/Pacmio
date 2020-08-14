@@ -87,7 +87,7 @@ namespace Pacmio
                 high_1 = b_1[Column_High];
                 low_1 = b_1[Column_Low];
                 close_1 = b_1[Column_Close];
-                trend_1 = b_1.TrendStrength;
+                trend_1 = b_1[Column_TrendStrength];
             }
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)

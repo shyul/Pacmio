@@ -31,20 +31,22 @@ namespace TestClient
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
-                    new GainAnalysis(),
-                    new TrueRange(),
-                    new TrendStrength(),
-                    new PivotPointAnalysis(),
-                    new ATR(14),
+                    //new GainAnalysis(),
+                    //new TrueRange(),
+                    //new TrendStrength(),
+                    //new PivotPointAnalysis(),
+                    //new ATR(14),
 
                     //new ADX(14),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
-                    rsi,
-                    new PivotPointAnalysis(rsi, 100),
+                    new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    //rsi,
+                    //new PivotPointAnalysis(rsi, 100),
 
                     //new TSI(25,13,7),
+                    //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },
 
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },

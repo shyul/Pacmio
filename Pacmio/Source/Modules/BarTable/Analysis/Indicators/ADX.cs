@@ -20,12 +20,13 @@ namespace Pacmio
         public ADX(int interval = 14)
         {
             Interval = interval;
+            TR = BarTable.TrueRangeAnalysis.Column_TrueRange;
 
             string label = "(" + Interval.ToString() + ")";
             AreaName = GroupName = Name = GetType().Name + label;
             Description = "Average Directional Index " + label;
 
-            TR = new NumericColumn(Name + "_TR");
+            TR_MA = new NumericColumn(Name + "_TR");
             PDM = new NumericColumn(Name + "_PDM");
             MDM = new NumericColumn(Name + "_MDM");
             PDM_MA = new NumericColumn(Name + "_PDM_MA");
@@ -76,6 +77,8 @@ namespace Pacmio
 
         public NumericColumn TR { get; }
 
+        public NumericColumn TR_MA { get; }
+
         public NumericColumn PDM { get; }
 
         public NumericColumn MDM { get; }
@@ -105,7 +108,7 @@ namespace Pacmio
                 Bar b = bt[i];
                 Bar b_1 = bt[i - 1];
 
-                double tr = b.TrueRange;
+                double tr = b[TR];
                 double tr_ma;
 
                 if (i < Interval)
@@ -115,14 +118,14 @@ namespace Pacmio
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        tr_ma_sum += bt[k].TrueRange;
+                        tr_ma_sum += bt[k][TR];
                     }
-                    tr_ma = b[TR] = tr_ma_sum;
+                    tr_ma = b[TR_MA] = tr_ma_sum;
                 }
                 else
                 {
-                    double prior_tr_ma = b_1[TR];
-                    tr_ma = b[TR] = tr + prior_tr_ma - (prior_tr_ma / Interval);
+                    double prior_tr_ma = b_1[TR_MA];
+                    tr_ma = b[TR_MA] = tr + prior_tr_ma - (prior_tr_ma / Interval);
                 }
 
                 double current_high = b.High; // C4

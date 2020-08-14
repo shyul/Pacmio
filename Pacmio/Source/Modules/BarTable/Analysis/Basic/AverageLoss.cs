@@ -4,6 +4,7 @@
 /// 
 /// ***************************************************************************
 
+using Xu;
 
 namespace Pacmio
 {
@@ -14,9 +15,11 @@ namespace Pacmio
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
+            NumericColumn column = GainAnalysis.Column_Gain;
+
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                double g = bt[i].Gain;
+                double g = bt[i][column];
                 g = (g < 0) ? -g : 0;
 
                 if (i > 0)

@@ -21,6 +21,7 @@ namespace Pacmio
         {
             Interval = interval;
             Constant = constant;
+            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
@@ -57,6 +58,8 @@ namespace Pacmio
 
         public double LowerLimit { get; set; } = -100;
 
+        public NumericColumn Column_Typical { get; }
+
         public SMA SMA_TP { get; }
 
         public MDEV MDEV_TP { get; }
@@ -68,7 +71,7 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[Column_Result] = (b.Typical - b[SMA_TP.Column_Result]) / (Constant * b[MDEV_TP.Column_Result]);
+                b[Column_Result] = (b[Column_Typical] - b[SMA_TP.Column_Result]) / (Constant * b[MDEV_TP.Column_Result]);
             }
         }
 

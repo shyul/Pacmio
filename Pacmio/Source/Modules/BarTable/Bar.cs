@@ -163,14 +163,6 @@ namespace Pacmio
 
         #region Intrinsic Indicators
 
-        public double Gain => this[BarTable.GainAnalysis.Column_Gain];
-
-        public double TrueRange => this[BarTable.TrueRangeAnalysis.Column_TrueRange];
-
-        public double Typical => this[BarTable.TrueRangeAnalysis.Column_Typical];
-
-        public double TrendStrength => this[BarTable.TrendStrengthAnalysis.Column_TrendStrength];
-
         public List<CandleStickType> CandleStickTypes { get; } = new List<CandleStickType>();
 
         public object this[Column column]

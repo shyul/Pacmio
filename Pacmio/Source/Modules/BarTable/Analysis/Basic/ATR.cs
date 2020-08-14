@@ -15,6 +15,7 @@ namespace Pacmio
         public ATR(int interval = 14)
         {
             Interval = interval;
+            TrueRangeAnalysis = BarTable.TrueRangeAnalysis;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
@@ -37,9 +38,11 @@ namespace Pacmio
 
         #region Parameters
 
+        public override int GetHashCode() => GetType().GetHashCode() ^ Interval;
+
         public virtual int Interval { get; protected set; }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Interval;
+        public TrueRange TrueRangeAnalysis { get; }
 
         #endregion Parameters
 
@@ -50,10 +53,11 @@ namespace Pacmio
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
+            NumericColumn tr_column = TrueRangeAnalysis.Column_TrueRange;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                double tr = bt[i].TrueRange;
+                double tr = bt[i][tr_column];
 
                 if (i < Interval)
                 {
@@ -62,7 +66,7 @@ namespace Pacmio
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        tr_ma += bt[k].TrueRange;
+                        tr_ma += bt[k][tr_column];
                     }
                     bt[i][Column_Result] = tr_ma / Interval;
                 }
