@@ -276,22 +276,27 @@ namespace Pacmio
             }
         }
 
+        public int LastIndexMax => m_BarTable.Count - 1;
+
         public int LastIndex // Of the bar
         {
             get
             {
                 int stopPt = StopPt - 1;
+                int maxIndex = LastIndexMax;
 
                 if (stopPt < 0)
                     stopPt = 0;
-                else if (stopPt >= Table.Count)
-                    stopPt = Table.Count - 1;
+                else if (stopPt > maxIndex)
+                    stopPt = maxIndex;
 
                 return stopPt;
             }
         }
 
-        public Bar LastBar => m_BarTable[LastIndex];
+        public Bar LastBar => (LastIndex < 0) ? null : m_BarTable[LastIndex];
+
+        public Bar LastBar_1 => (LastIndex < 1) ? null : m_BarTable[LastIndex - 1];
 
         public double LastClose => (LastBar is null) ? double.NaN : LastBar.Close;
 

@@ -15,7 +15,7 @@ namespace Pacmio
     {
         public TrailingPivotPoint(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
-            TestInterval = test_interval;
+            TestLength = test_interval;
 
             if (ba is ISingleData isd)
             {
@@ -30,7 +30,7 @@ namespace Pacmio
             else
                 throw new ArgumentException("BarAnalysis has to be ISingleData or IDualData");
 
-            string label = "(" + ba.Name + "," + TestInterval + "," + MinimumPeakProminence + ")";
+            string label = "(" + ba.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
             Result_Column = new TrailingPivotPointColumn(Name) { Label = label };
@@ -39,10 +39,10 @@ namespace Pacmio
         public TrailingPivotPoint(int test_interval = 250)
         {
             PivotPointAnalysis = BarTable.PivotPointAnalysis;
-            TestInterval = test_interval;
+            TestLength = test_interval;
             TrendStrengthAnalysis = new TrendStrength();
 
-            string label = "(" + Bar.Column_Close.Name + "," + TestInterval + "," + MinimumPeakProminence + ")";
+            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
             Result_Column = new TrailingPivotPointColumn(Name) { Label = label };
@@ -52,9 +52,9 @@ namespace Pacmio
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
 
-        public virtual int TestInterval { get; }
+        public virtual int TestLength { get; }
 
-        public virtual int MinimumPeakProminence => 5;// PivotPointAnalysis.MinimumPeakProminenceForAnalysis;
+        public virtual int MinimumPeakProminenceForAnalysis => 5;
 
         #endregion Parameters
 
@@ -66,15 +66,24 @@ namespace Pacmio
 
         public TrailingPivotPointColumn Result_Column { get; }
 
+        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        {
+            if (!bap.IsUpToDate && bap.Count > 0)
+            {
+                bap.StopPt = bap.Count - 1;
+
+                if (bap.StartPt < 0)
+                    bap.StartPt = 0;
+
+                Calculate(bap);
+                bap.StartPt = bap.StopPt;
+                bap.StopPt++;
+            }
+        }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-
-            int min_peak_start = bap.StopPt - PivotPointAnalysis.MaximumPeakProminence * 2 - 1;
-            if (bap.StartPt > min_peak_start)
-                bap.StartPt = min_peak_start;
-            else if (bap.StartPt < 0)
-                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
@@ -82,7 +91,7 @@ namespace Pacmio
                 {
                     TrailingPivotPointDatum gpd = new TrailingPivotPointDatum();
 
-                    for (int j = MinimumPeakProminence; j < TestInterval; j++)
+                    for (int j = MinimumPeakProminenceForAnalysis; j < TestLength; j++)
                     {
                         int i_test = i - j;
                         if (i_test < 0) break;
@@ -95,13 +104,13 @@ namespace Pacmio
                             // For simulation accuracy, the prominence can't be greater than the back testing offset.
                             if (prominence > j) prominence = j;
 
-                            if (prominence > MinimumPeakProminence)// || trendStrength > MinimumTrendStrength)
+                            if (prominence > MinimumPeakProminenceForAnalysis)// || trendStrength > MinimumTrendStrength)
                             {
                                 double high = b[PivotPointAnalysis.Column_High];
                                 gpd.PositiveList[i_test] = new Pivot(i_test, b.Time, high, prominence, trendStrength);
                                 gpd.LevelRange.Insert(high);
                             }
-                            else if (prominence < -MinimumPeakProminence)// || trendStrength < -MinimumTrendStrength)
+                            else if (prominence < -MinimumPeakProminenceForAnalysis)// || trendStrength < -MinimumTrendStrength)
                             {
                                 double low = b[PivotPointAnalysis.Column_Low];
                                 gpd.NegativeList[i_test] = new Pivot(i_test, b.Time, low, prominence, trendStrength);

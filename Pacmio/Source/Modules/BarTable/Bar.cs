@@ -287,6 +287,8 @@ namespace Pacmio
 
         public Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
 
+        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n.Pivots);
+
         public PatternDatum this[PatternColumn column]
         {
             get => Patterns.ContainsKey(column) ? Patterns[column] : null;
@@ -305,8 +307,6 @@ namespace Pacmio
         #region PivotRangeSet
 
         private Dictionary<string, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<string, PivotRangeDatum>();
-
-        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n.Pivots);
 
         public void CalculatePivotRange()
         {

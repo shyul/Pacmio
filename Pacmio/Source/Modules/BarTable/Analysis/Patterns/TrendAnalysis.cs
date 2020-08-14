@@ -37,8 +37,7 @@ namespace Pacmio
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
 
-            //Column_MaximumRange = BarTable.TrueRangeAnalysis.Column_TrueRange;
-            ATR = new ATR(14);
+            ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
             TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
@@ -61,32 +60,34 @@ namespace Pacmio
 
         public PatternColumn Column_Result { get; }
 
+        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        {
+            if (!bap.IsUpToDate && bap.Count > 0)
+            {
+                bap.StopPt = bap.Count - 1;
+
+                if (bap.StartPt < 0)
+                    bap.StartPt = 0;
+
+                Calculate(bap);
+                bap.StartPt = bap.StopPt;
+                bap.StopPt++;
+            }
+        }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            /*
-            int min_peak_start = bap.StopPt - TrailingPivotPointAnalysis.PivotPointAnalysis.MaximumPeakProminence * 2 - 1;
-            if (bap.StartPt > min_peak_start)
-                bap.StartPt = min_peak_start;
-            else 
-            */
-            if (bap.StartPt < 0)
-                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                Bar b = bt[i];
-                if (b[Column_Result] is null)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointDatum gpd)
                 {
-                    TrailingPivotPointDatum gpd = b[TrailingPivotPointAnalysis.Result_Column];
                     double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
                     //double tolerance = range_delta / 25;
 
                     double tolerance = b[ATR.Column_Result] / 4;
-           
-
                     double center = b.Close;
-             
 
                     PatternDatum pd = new PatternDatum(center - range_delta, center + range_delta);
 
@@ -115,7 +116,7 @@ namespace Pacmio
                             double p2 = Math.Abs(pt2.Value.Prominece);
                             double t2 = Math.Abs(pt2.Value.TrendStrength);
 
-                            PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i, tolerance);
+                            PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i + 1, tolerance);
 
                             if (pd.LevelRange.Contains(line.Level))
                             {
@@ -141,7 +142,7 @@ namespace Pacmio
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Column_Result] is PatternDatum pd)
+            if (ChartEnabled && bc.BarTable is BarTable bt && bt[bt.Count - 2] is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is PatternDatum pd)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
@@ -209,25 +210,10 @@ namespace Pacmio
             {
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                /*
-                Bar b = bc.LastBar;
 
-                if (b[Result_Column] is PatternDatum pd)
-                    foreach (var (weight, level) in pd.Levels)
-                    {
-                        int intensity = (255 * weight / pd.MaxTrendLineWeight).ToInt32();
 
-                        if (intensity > 255) intensity = 255;
-                        else if (intensity < 0) intensity = 0;
 
-                        //int x1 = bc.StopPt - bc.StartPt - 10;
-                        int x2 = bc.StopPt - bc.StartPt - 1;
 
-                        Point pt1 = new Point(a.IndexToPixel(x2), a.AxisY(AlignType.Right).ValueToPixel(level));
-                        Point pt2 = new Point(a.Right, a.AxisY(AlignType.Right).ValueToPixel(level));
-
-                        g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt2);
-                    }*/
             }
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();

@@ -61,7 +61,7 @@ namespace Pacmio
             }
         }
 
-        public void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        public virtual void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
             if (!bap.IsUpToDate && bap.Count > 0)
             {

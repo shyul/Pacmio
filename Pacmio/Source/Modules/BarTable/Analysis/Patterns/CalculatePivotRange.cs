@@ -17,16 +17,25 @@ namespace Pacmio
     public class CalculatePivotRange : BarAnalysis
     {
         public CalculatePivotRange() => Name = GetType().Name;
+        
+        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        {
+            if (!bap.IsUpToDate && bap.Count > 0)
+            {
+                bap.StopPt = bap.Count - 1;
+
+                if (bap.StartPt < 0)
+                    bap.StartPt = 0;
+
+                Calculate(bap);
+                bap.StartPt = bap.StopPt;
+                bap.StopPt++;
+            }
+        }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-
-            int min_peak_start = bap.StopPt - BarTable.PivotPointAnalysis.MaximumPeakProminence * 2 - 1;
-            if (bap.StartPt > min_peak_start)
-                bap.StartPt = min_peak_start;
-            else if (bap.StartPt < 0)
-                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {

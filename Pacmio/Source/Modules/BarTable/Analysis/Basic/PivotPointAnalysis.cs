@@ -183,15 +183,29 @@ namespace Pacmio
 
         public TagColumn Column_PeakTags { get; }
 
+        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        {
+            if (!bap.IsUpToDate && bap.Count > 0)
+            {
+                bap.StopPt = bap.Count - MinimumPeakProminenceForAnalysis + 1;
+
+                int min_peak_start = bap.StopPt - MaximumPeakProminence * 2 - 1;
+
+                if (bap.StartPt > min_peak_start)
+                    bap.StartPt = min_peak_start;
+
+                if (bap.StartPt < 0)
+                    bap.StartPt = 0;
+
+                Calculate(bap);
+                bap.StartPt = bap.StopPt;
+                bap.StopPt += MinimumPeakProminenceForAnalysis - 1;
+            }
+        }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-
-            int min_peak_start = bap.StopPt - MaximumPeakProminence * 2 - 1;
-            if (bap.StartPt > min_peak_start) 
-                bap.StartPt = min_peak_start;
-            else if (bap.StartPt < 0) 
-                bap.StartPt = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {

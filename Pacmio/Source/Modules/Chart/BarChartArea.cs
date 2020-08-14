@@ -27,26 +27,6 @@ namespace Pacmio
 
         public BarTable BarTable => BarChart.BarTable;
 
-        /*
-        public override void Coordinate()
-        {
-            base.Coordinate();
-
-            int pt = 0;
-            for (int i = StartPt; i < StopPt; i++)
-            {
-                if (i >= Table.Count) break;
-                if (i >= 0)
-                {
-                    //int this_color = (int)BarTable[i].ActionType;
-
-
-                }
-                pt++;
-            }
-        }
-        */
-
         public override void DrawCustomBackground(Graphics g) => DrawCustomBackground(g, this);
 
         public override void DrawCustomOverlay(Graphics g) => DrawCustomOverlay(g, this);
@@ -77,7 +57,7 @@ namespace Pacmio
 
                 // Console.WriteLine("full_width = " + full_width);
                 //Console.WriteLine("IBarChartArea a = " + a.Name);
-                if (a.BarChart.LastBar is Bar b && b[a] is PivotRangeDatum prd)
+                if (a.BarChart.LastBar_1 is Bar b && b[a] is PivotRangeDatum prd)
                 {
                     var rangeList = prd.RangeList.OrderByDescending(n => n.Weight);
 
