@@ -135,7 +135,7 @@ namespace Pacmio
 
             StartTask();
 
-            Form = new PacmioForm() { IsRibbonShrink = true, Text = TitleText, Width = 1500, Height = 1200 };
+            Form = new PacmioForm() { Text = TitleText, };
         }
 
         public static void Save()

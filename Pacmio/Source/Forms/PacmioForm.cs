@@ -26,30 +26,12 @@ namespace Pacmio
             rbtIBClient.Add(rbtpane_IBClient, 0);
             Ribbon.AddRibbonTab(rbtIBClient);
             */
-
-
-
+            IsRibbonShrink = true;
+            Width = 1500;
+            Height = 1200;
 
             ResumeLayout(false); // false
             PerformLayout();
-
-
-
         }
-
-        private readonly Command c_IBHistorial = new Command()
-        {
-            //Enabled = false,
-            Label = "Historical Data Request Awseome with more Awesome!!",
-
-            IconList = new Dictionary<IconType, Dictionary<Size, Bitmap>>() { { IconType.Normal, new Dictionary<Size, Bitmap>() {
-                    { new Size(16, 16), Xu.Properties.Resources.Database_16 },
-                    { new Size(24, 24), Xu.Properties.Resources.Database_24 },
-                    { new Size(32, 32), Xu.Properties.Resources.Database_32 }
-                } } },
-            //Action = () => { TestPublicHistoricalData(); },
-        };
-
-
     }
 }

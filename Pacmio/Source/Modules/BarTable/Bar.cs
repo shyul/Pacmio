@@ -322,6 +322,16 @@ namespace Pacmio
             }
         }
 
+        public PivotRangeDatum GetPivotRangeDatum() => GetPivotRangeDatum(MainBarChartArea.DefaultName);
+
+        public PivotRangeDatum GetPivotRangeDatum(string areaName)
+        {
+            if (PivotRangeDatums.ContainsKey(areaName))
+                return PivotRangeDatums[areaName];
+            else
+                return null;
+        }
+
         public PivotRangeDatum this[IBarChartArea column]
         {
             get
