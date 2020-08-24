@@ -87,8 +87,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PivotPointAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULT.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VOLOSC.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\UO.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CalculatePivotRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\ReversalAnalysis.cs" />

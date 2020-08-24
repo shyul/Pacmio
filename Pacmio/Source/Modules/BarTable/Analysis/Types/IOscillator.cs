@@ -9,7 +9,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface IOscillator : ISingleData, IDependable
+    public interface IOscillator : ISingleData, IChartSeries, IDependable
     {
         int Order { get; }
 

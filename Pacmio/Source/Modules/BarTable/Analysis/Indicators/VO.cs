@@ -2,7 +2,10 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// Ref 1: https://www.tradingview.com/scripts/choppinessindex/?solution=43000501980
+/// Volume Oscillator
+/// 
+/// Ref 1: https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/volume-oscillator
+/// Ref 2: 
 /// 
 /// ***************************************************************************
 
@@ -15,16 +18,20 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class CHOP : BarAnalysis, IOscillator
+    public class VO : BarAnalysis, IOscillator
     {
-        public CHOP(int interval = 14)
+        public VO(int interval_fast = 14, int interval_slow = 28) 
         {
-            Interval = interval;
+            Fast_MA = new SMA(Bar.Column_Volume, interval_fast);
+            Slow_MA = new SMA(Bar.Column_Volume, interval_slow);
 
-            string label = "(" + Interval.ToString()  + ")";
+            Fast_MA.AddChild(this);
+            Slow_MA.AddChild(this);
+
+            string label = "(" + Interval_Fast.ToString() + "," + Interval_Slow.ToString() + ")";
             Name = GetType().Name + label;
             AreaName = GroupName = Name;
-            Description = "Choppiness Index " + label;
+            Description = "Volume Oscillator " + label;
 
             Column_Result = new NumericColumn(Name);
             LineSeries = new LineSeries(Column_Result)
@@ -42,21 +49,23 @@ namespace Pacmio
 
         #region Parameters
 
-        public double Reference { get; set; } = 50;
+        public double Reference { get; set; } = 0;
 
-        public double UpperLimit { get; set; } = 60;
+        public double UpperLimit { get; set; } = 15;
 
-        public double LowerLimit { get; set; } = 40;
+        public double LowerLimit { get; set; } = -15;
 
-        public int Interval { get; }
+        public int Interval_Fast => Fast_MA.Interval;
 
-
+        public int Interval_Slow => Slow_MA.Interval;
 
         #endregion Parameters
 
         #region Calculation
 
-        public PriceChannel PriceChannel { get; }
+        public SMA Fast_MA { get; }
+
+        public SMA Slow_MA { get; }
 
         public NumericColumn Column_Result { get; }
 
@@ -66,11 +75,11 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b)
+                if(bt[i] is Bar b) 
                 {
-
-
-
+                    double fast_ma = b[Fast_MA.Column_Result];
+                    double slow_ma = b[Slow_MA.Column_Result];
+                    b[Column_Result] = 100 * (fast_ma - slow_ma) / slow_ma;
                 }
 
 

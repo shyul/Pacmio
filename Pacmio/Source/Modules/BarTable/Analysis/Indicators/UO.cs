@@ -2,16 +2,9 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// RSI
-/// 1. Over bought and over sold levels
-/// 2. Trend Condition
-/// 3. Showing Divergence
+/// Ultimate Oscillator
 /// 
-/// Ref 1:
-/// Ref 2: https://school.stockcharts.com/doku.php?id=trading_strategies:rsi2
-/// Ref 2: https://school.stockcharts.com/doku.php?id=technical_indicators:introduction_to_technical_indicators_and_oscillators
-/// Ref 3: https://www.udemy.com/course/advance-trading-strategies/learn/lecture/9783962#overview
-/// Ref 4: https://youtu.be/fJ1_un39T1o  
+/// Ref 1: https://school.stockcharts.com/doku.php?id=technical_indicators:ultimate_oscillator
 /// 
 /// ***************************************************************************
 
@@ -24,24 +17,16 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public sealed class RSI : ATR, IOscillator
+    public class UO : BarAnalysis, IOscillator
     {
-        public RSI(int interval, double lowerLimit = 30, double upperLimit = 70)
+        public UO(int interval = 14)
         {
             Interval = interval;
-            LowerLimit = lowerLimit;
-            UpperLimit = upperLimit;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
-            AreaName = GroupName = GetType().Name;
-            Description = "Relative Strength Index " + label;
-
-            AverageGain = new AverageGain(Interval) { ChartEnabled = false };
-            AverageGain.AddChild(this);
-
-            AverageLoss = new AverageLoss(Interval) { ChartEnabled = false };
-            AverageLoss.AddChild(this);
+            AreaName = GroupName = Name;
+            Description = "Choppiness Index " + label;
 
             Column_Result = new NumericColumn(Name);
             LineSeries = new LineSeries(Column_Result)
@@ -61,26 +46,36 @@ namespace Pacmio
 
         public double Reference { get; set; } = 50;
 
-        public double UpperLimit { get; set; } = 70;
+        public double UpperLimit { get; set; } = 60;
 
-        public double LowerLimit { get; set; } = 30;
+        public double LowerLimit { get; set; } = 40;
+
+        public int Interval { get; }
+
+
 
         #endregion Parameters
 
         #region Calculation
 
-        public AverageGain AverageGain { get; }
+        public PriceChannel PriceChannel { get; }
 
-        public AverageLoss AverageLoss { get; }
+        public NumericColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
+
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                Bar b = bt[i];
-                double avgLoss = b[AverageLoss.Column_Result];
-                b[Column_Result] = (avgLoss != 0) ? 100 - 100 / (1 + b[AverageGain.Column_Result] / avgLoss) : 100;
+                if (bt[i] is Bar b)
+                {
+
+
+
+                }
+
+
             }
         }
 
@@ -88,11 +83,33 @@ namespace Pacmio
 
         #region Series
 
+        public Color Color { get => LineSeries.Color; set => LineSeries.Color = value; }
+
+        public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
+
+        public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
+
+        public Series MainSeries => LineSeries;
+
+        public LineSeries LineSeries { get; protected set; }
+
         public Color UpperColor { get; set; } = Color.ForestGreen;
 
         public Color LowerColor { get; set; } = Color.Crimson;
 
-        public override void ConfigChart(BarChart bc)
+        public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
+
+        public int SeriesOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
+
+        public virtual bool HasXAxisBar { get; set; } = false;
+
+        public string AreaName { get; protected set; }
+
+        public float AreaRatio { get; set; } = 8;
+
+        public int AreaOrder { get; set; } = 0;
+
+        public void ConfigChart(BarChart bc)
         {
             if (ChartEnabled)
             {
