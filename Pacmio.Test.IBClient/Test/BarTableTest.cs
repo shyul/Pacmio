@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Xu;
+using Pacmio.Analysis;
 
 namespace TestClient
 {
@@ -51,8 +52,8 @@ namespace TestClient
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
-                    new TrendAnalysis(260),
-                    new ReversalAnalysis(),
+                    new Trend(260),
+                    new Reversal(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
@@ -135,7 +136,7 @@ namespace TestClient
                     //new CandleStick(),
 
                     //new GainPointAnalysis(200, 3, 1),
-                    new TrendAnalysis(260),
+                    new Trend(260),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

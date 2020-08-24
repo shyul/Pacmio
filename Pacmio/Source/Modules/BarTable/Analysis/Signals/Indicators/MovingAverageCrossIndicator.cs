@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class MovingAverageCrossIndicator : DualDataIndicator
     {

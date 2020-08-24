@@ -23,10 +23,6 @@ namespace Pacmio
 
         Color LowerColor { get; }
 
-        string AreaName { get; }
-
-        float AreaRatio { get; set; }
-
         int AreaOrder { get; set; }
     }
 }

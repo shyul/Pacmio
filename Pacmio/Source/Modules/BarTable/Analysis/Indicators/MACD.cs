@@ -11,7 +11,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public sealed class MACD : SMA, IOscillator
     {

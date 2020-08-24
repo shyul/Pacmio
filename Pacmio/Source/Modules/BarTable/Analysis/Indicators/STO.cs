@@ -14,7 +14,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public sealed class STO : BarAnalysis, IOscillator, IChartSeries
     {

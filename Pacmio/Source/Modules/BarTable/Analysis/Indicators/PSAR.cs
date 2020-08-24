@@ -53,7 +53,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public sealed class PSAR : BarAnalysis, ISingleData, IChartSeries
     {

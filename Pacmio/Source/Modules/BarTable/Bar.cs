@@ -173,7 +173,7 @@ namespace Pacmio
                 {
                     NumericColumn nc => this[nc],
                     TagColumn tc => this[tc],
-                    TrailingPivotPointColumn tpc => this[tpc],
+                    TrailingPivotsColumn tpc => this[tpc],
                     PatternColumn pc => this[pc],
                     SignalColumn sc => this[sc],
                     _ => null,
@@ -263,15 +263,15 @@ namespace Pacmio
 
         #region Trailing Pivot Points
 
-        private Dictionary<TrailingPivotPointColumn, TrailingPivotPointDatum> TrailingPivotPoints { get; } = new Dictionary<TrailingPivotPointColumn, TrailingPivotPointDatum>();
+        private Dictionary<TrailingPivotsColumn, TrailingPivotsDatum> TrailingPivotPoints { get; } = new Dictionary<TrailingPivotsColumn, TrailingPivotsDatum>();
 
-        public TrailingPivotPointDatum this[TrailingPivotPointColumn column]
+        public TrailingPivotsDatum this[TrailingPivotsColumn column]
         {
             get => TrailingPivotPoints.ContainsKey(column) ? TrailingPivotPoints[column] : null;
 
             set
             {
-                if (value is TrailingPivotPointDatum gpd)
+                if (value is TrailingPivotsDatum gpd)
                     if (!TrailingPivotPoints.ContainsKey(column))
                         TrailingPivotPoints.Add(column, gpd);
                     else

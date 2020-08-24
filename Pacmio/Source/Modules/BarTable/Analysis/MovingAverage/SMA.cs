@@ -19,7 +19,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class SMA : BarAnalysis, ISingleData, IChartSeries
     {

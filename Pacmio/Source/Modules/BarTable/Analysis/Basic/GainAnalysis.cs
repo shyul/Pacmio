@@ -8,7 +8,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public sealed class GainAnalysis : BarAnalysis, ISingleData, IChartSeries
     {

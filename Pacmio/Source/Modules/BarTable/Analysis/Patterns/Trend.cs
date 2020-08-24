@@ -12,18 +12,18 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class TrendAnalysis : BarAnalysis, IChartPattern
+    public class Trend : BarAnalysis, IChartPattern
     {
-        public TrendAnalysis(BarAnalysis ba, NumericColumn column_MaximumRange, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public Trend(BarAnalysis ba, NumericColumn column_MaximumRange, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
             //Column_MaximumRange = column_MaximumRange;
 
-            TrailingPivotPointAnalysis = new TrailingPivotPoint(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
+            TrailingPivotPointAnalysis = new TrailingPivots(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this);
@@ -32,7 +32,7 @@ namespace Pacmio
             this.AddChild(CalculatePivotRange);
         }
 
-        public TrendAnalysis(int test_interval)
+        public Trend(int test_interval)
         {
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
@@ -40,7 +40,7 @@ namespace Pacmio
             ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
-            TrailingPivotPointAnalysis = new TrailingPivotPoint(test_interval);
+            TrailingPivotPointAnalysis = new TrailingPivots(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this);
@@ -56,7 +56,7 @@ namespace Pacmio
 
         public CalculatePivotRange CalculatePivotRange { get; } = new CalculatePivotRange();
 
-        public TrailingPivotPoint TrailingPivotPointAnalysis { get; }
+        public TrailingPivots TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Column_Result { get; }
 
@@ -81,7 +81,7 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointDatum gpd)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotsDatum gpd)
                 {
                     double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
                     //double tolerance = range_delta / 25;

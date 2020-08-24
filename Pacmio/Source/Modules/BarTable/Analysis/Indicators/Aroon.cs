@@ -15,7 +15,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class Aroon : BarAnalysis, IDualData, IOscillator
     {

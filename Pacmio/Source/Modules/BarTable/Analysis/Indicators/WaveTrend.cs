@@ -13,7 +13,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio // Can be derived from SMA
+namespace Pacmio.Analysis
 {
     public sealed class WaveTrend : BarAnalysis, ISingleData, IOscillator, IChartSeries
     {

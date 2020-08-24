@@ -13,7 +13,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public sealed class TSI : BarAnalysis, ISingleData, IOscillator, IChartSeries
     {

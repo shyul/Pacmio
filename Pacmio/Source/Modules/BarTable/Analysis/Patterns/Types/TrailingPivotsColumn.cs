@@ -10,12 +10,14 @@ using Xu;
 
 namespace Pacmio
 {
-    public class TrailingPivotPointDatum
+    public class TrailingPivotsColumn : Column
     {
-        public Range<double> LevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
+        public TrailingPivotsColumn(string name) => Name = Label = name;
 
-        public Dictionary<int, Pivot> PositiveList { get; } = new Dictionary<int, Pivot>();
-
-        public Dictionary<int, Pivot> NegativeList { get; } = new Dictionary<int, Pivot>();
+        public TrailingPivotsColumn(string name, string label)
+        {
+            Name = name;
+            Label = label;
+        }
     }
 }

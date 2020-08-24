@@ -12,11 +12,11 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class ReversalAnalysis : BarAnalysis, IChartSeries
+    public class Reversal : BarAnalysis, IChartSeries
     {
-        public ReversalAnalysis()
+        public Reversal()
         {
             GroupName = Name = GetType().Name;
             Description = Name;

@@ -9,11 +9,11 @@
 using System;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class TrailingPivotPoint : BarAnalysis
+    public class TrailingPivots : BarAnalysis
     {
-        public TrailingPivotPoint(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public TrailingPivots(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             TestLength = test_interval;
 
@@ -33,10 +33,10 @@ namespace Pacmio
             string label = "(" + ba.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new TrailingPivotPointColumn(Name) { Label = label };
+            Result_Column = new TrailingPivotsColumn(Name) { Label = label };
         }
 
-        public TrailingPivotPoint(int test_interval = 250)
+        public TrailingPivots(int test_interval = 250)
         {
             PivotPointAnalysis = BarTable.PivotPointAnalysis;
             TestLength = test_interval;
@@ -45,7 +45,7 @@ namespace Pacmio
             string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new TrailingPivotPointColumn(Name) { Label = label };
+            Result_Column = new TrailingPivotsColumn(Name) { Label = label };
         }
 
         #region Parameters
@@ -64,7 +64,7 @@ namespace Pacmio
 
         public TrendStrength TrendStrengthAnalysis { get; }
 
-        public TrailingPivotPointColumn Result_Column { get; }
+        public TrailingPivotsColumn Result_Column { get; }
 
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
@@ -89,7 +89,7 @@ namespace Pacmio
             {
                 if (bt[i] is Bar b0)
                 {
-                    TrailingPivotPointDatum gpd = new TrailingPivotPointDatum();
+                    TrailingPivotsDatum gpd = new TrailingPivotsDatum();
 
                     for (int j = MinimumPeakProminenceForAnalysis; j < TestLength; j++)
                     {

@@ -6,7 +6,7 @@
 
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class AverageGain : ATR
     {

@@ -9,9 +9,9 @@
 using System;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class PivotLevelAnalysis : BarAnalysis
+    public class PivotLevels : BarAnalysis
     {
         protected override void Calculate(BarAnalysisPointer bap)
         {

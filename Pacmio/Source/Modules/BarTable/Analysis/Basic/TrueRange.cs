@@ -10,7 +10,7 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class TrueRange : BarAnalysis, ISingleData, IChartSeries
     {
