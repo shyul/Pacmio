@@ -88,7 +88,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\UO.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CalculatePivotRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevels.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Source\Modules\Chart\Types\IBarChartArea.cs" />
     <Compile Include="Source\Modules\Chart\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PriceChannel.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IOscillator.cs" />
     <Compile Include="Source\Modules\Chart\Types\IChartPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />

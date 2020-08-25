@@ -126,7 +126,7 @@ namespace TestClient
                     //divergence
 
                     ///new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
-                    ///new ADX(14) { AreaRatio = 10,  Order = int.MaxValue - 10 },
+                    new ADX(14) { AreaRatio = 10,  Order = int.MaxValue - 10 },
                     //new CCI(20, 0.015),
                     //new ADX(14) { Order = 100, HasXAxisBar = true },
                  

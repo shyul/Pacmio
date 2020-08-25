@@ -14,21 +14,27 @@ using System.Linq;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
+using System.Windows.Forms;
 
 namespace Pacmio.Analysis
 {
-    public class UO : BarAnalysis, IOscillator
+    public class ULTO : BarAnalysis, IOscillator
     {
-        public UO(int interval = 14)
+        public ULTO(int interval_fast = 7, int interval_middle = 14, int interval_slow = 28)
         {
-            Interval = interval;
+            Interval_Fast = interval_fast;
+            Interval_Middle = interval_middle;
+            Interval_Slow = interval_slow;
 
-            string label = "(" + Interval.ToString() + ")";
+            string label = "(" + Interval_Fast.ToString() + "," + Interval_Middle.ToString() + "," + Interval_Slow.ToString() + ")";
             Name = GetType().Name + label;
             AreaName = GroupName = Name;
-            Description = "Choppiness Index " + label;
+            Description = "Ultimate Oscillator " + label;
 
+            Column_BP = new NumericColumn(Name + "_BP");
+            Column_TR = new NumericColumn(Name + "_TR");
             Column_Result = new NumericColumn(Name);
+
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
@@ -50,15 +56,19 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = 40;
 
-        public int Interval { get; }
+        public int Interval_Fast { get; }
 
+        public int Interval_Middle { get; }
 
+        public int Interval_Slow { get; }
 
         #endregion Parameters
 
         #region Calculation
 
-        public PriceChannel PriceChannel { get; }
+        public NumericColumn Column_BP { get; }
+
+        public NumericColumn Column_TR { get; }
 
         public NumericColumn Column_Result { get; }
 
@@ -70,12 +80,50 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
-
-
-
+                    (double high, double low) = bt[i - 1] is Bar b_1 ? (Math.Max(b_1.Close, b.High), Math.Min(b_1.Close, b.Low)) : (b.High, b.Low);
+                    b[Column_BP] = b.Close - low;
+                    b[Column_TR] = high - low;
                 }
+            }
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                if (bt[i] is Bar b)
+                {
+                    double bp_sum_fast = 0, bp_sum_middle = 0, bp_sum_slow = 0;
+                    double tr_sum_fast = 0, tr_sum_middle = 0, tr_sum_slow = 0;
 
+                    for (int j = 0; j < Interval_Slow; j++)
+                    {
+                        int k = i - j;
+                        if (k < 0) k = 0;
+                        if (bt[k] is Bar b_sum)
+                        {
+                            double bp = b_sum[Column_BP];
+                            double tr = b_sum[Column_TR];
+                            bp_sum_slow += bp;
+                            tr_sum_slow += tr;
+
+                            if (j < Interval_Middle)
+                            {
+                                bp_sum_middle += bp;
+                                tr_sum_middle += tr;
+                            }
+
+                            if (j < Interval_Fast)
+                            {
+                                bp_sum_fast += bp;
+                                tr_sum_fast += tr;
+                            }
+                        }
+                    }
+
+                    double avg_fast = bp_sum_fast / tr_sum_fast;
+                    double avg_middle = bp_sum_middle / tr_sum_middle;
+                    double avg_slow = bp_sum_slow / tr_sum_slow;
+
+                    b[Column_Result] = 100 * ((4 * avg_fast) + (2 * avg_middle) + avg_slow) / (4 + 2 + 1);
+                }
             }
         }
 

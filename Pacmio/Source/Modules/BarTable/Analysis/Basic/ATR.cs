@@ -44,6 +44,8 @@ namespace Pacmio.Analysis
 
         public TrueRange TrueRangeAnalysis { get; }
 
+        public NumericColumn TR => TrueRangeAnalysis.Column_TrueRange;
+
         #endregion Parameters
 
         #region Calculation
@@ -53,11 +55,10 @@ namespace Pacmio.Analysis
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            NumericColumn tr_column = TrueRangeAnalysis.Column_TrueRange;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                double tr = bt[i][tr_column];
+                double tr = bt[i][TR];
 
                 if (i < Interval)
                 {
@@ -66,7 +67,7 @@ namespace Pacmio.Analysis
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        tr_ma += bt[k][tr_column];
+                        tr_ma += bt[k][TR];
                     }
                     bt[i][Column_Result] = tr_ma / Interval;
                 }

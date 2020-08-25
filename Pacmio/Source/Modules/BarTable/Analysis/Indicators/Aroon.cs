@@ -28,7 +28,15 @@ namespace Pacmio.Analysis
             AreaName = GroupName = Name;
             Description = "Aroon " + label;
 
-
+            LineSeries = new LineSeries(Column_Result, Color.DarkSlateGray, LineType.Default, 1.5f)
+            {
+                Name = Name,
+                Label = string.Empty,
+                LegendName = GroupName,
+                Importance = Importance.Major,
+                IsAntialiasing = true,
+                DrawLimitShade = false
+            };
 
             CloudSeries = new CloudSeries(Column_High, Column_Low)
             {
@@ -80,9 +88,32 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
+                    Dictionary<double, int> high_index = new Dictionary<double, int>();
+                    Dictionary<double, int> low_index = new Dictionary<double, int>();
 
+                    for (int j = 0; j < Interval; j++)
+                    {
+                        int k = i - j;
+                        if (k < 0) k = 0;
+                        if (bt[k] is Bar b_peak)
+                        {
+                            double high = b_peak.High, low = b_peak.Low;
 
+                            if (!high_index.ContainsKey(high))
+                                high_index[high] = j;
 
+                            if (!low_index.ContainsKey(low))
+                                low_index[low] = j;
+                        }
+                    }
+
+                    int days_high = high_index.OrderByDescending(n => n.Key).First().Value;
+                    int days_low = low_index.OrderBy(n => n.Key).First().Value;
+
+                    double aroon_up = b[Column_High] = 100 * (Interval - days_high) / Interval;
+                    double aroon_down = b[Column_Low] = 100 * (Interval - days_low) / Interval;
+
+                    b[Column_Result] = aroon_up - aroon_down;
                 }
             }
         }
@@ -91,11 +122,11 @@ namespace Pacmio.Analysis
 
         #region Series
 
-        public Color Color { get => CloudSeries.Color; set => CloudSeries.Color = value; }
+        public Color Color { get => LineSeries.Color; set => LineSeries.Color = value; }
 
-        public float LineWidth { get => CloudSeries.Width; set => CloudSeries.Width = value; }
+        public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = CloudSeries.Width = value; }
 
-        public LineType LineType { get => CloudSeries.LineType; set => CloudSeries.LineType = value; }
+        public LineType LineType { get => CloudSeries.LineType; set => LineSeries.LineType = CloudSeries.LineType = value; }
 
         public Series MainSeries => CloudSeries;
 
@@ -119,6 +150,8 @@ namespace Pacmio.Analysis
             }
         }
 
+        public LineSeries LineSeries { get; }
+
         public CloudSeries CloudSeries { get; }
 
         public virtual bool ChartEnabled { get => Enabled && CloudSeries.Enabled; set => CloudSeries.Enabled = value; }
@@ -132,8 +165,6 @@ namespace Pacmio.Analysis
         public float AreaRatio { get; set; } = 8;
 
         public int AreaOrder { get; set; } = 0;
-
-
 
         public void ConfigChart(BarChart bc)
         {
@@ -151,6 +182,7 @@ namespace Pacmio.Analysis
                     });
 
                 a.AddSeries(CloudSeries);
+                a.AddSeries(LineSeries);
             }
         }
 

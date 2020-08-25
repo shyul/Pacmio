@@ -107,15 +107,17 @@ namespace Pacmio
         /// TODO: Fixed sequence
         /// </summary>
         /// <param name="i"></param>
-        /// <param name="length"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public IEnumerable<Bar> this[int i, int length]
+        public IEnumerable<Bar> this[int i, int count]
         {
             get
             {
-                int len = length - 1;
-                if (i < len) len = i;
-                return Rows.Skip(i - len).Take(len + 1).Reverse();
+                //int skip = i - count + 1;
+                //if (skip < 0) skip = 0;
+                int cnt = count - 1;
+                if (i < cnt) cnt = i;
+                return Rows.Skip(i - cnt).Take(cnt + 1); //.Reverse();
             }
         }
 

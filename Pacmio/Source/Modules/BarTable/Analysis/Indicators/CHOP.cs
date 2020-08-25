@@ -3,6 +3,7 @@
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
 /// Ref 1: https://www.tradingview.com/scripts/choppinessindex/?solution=43000501980
+/// Ref 2: https://www.incrediblecharts.com/indicators/choppiness-index.php
 /// 
 /// ***************************************************************************
 
@@ -19,7 +20,10 @@ namespace Pacmio.Analysis
     {
         public CHOP(int interval = 14)
         {
-            Interval = interval;
+            PriceChannel = new PriceChannel(interval);
+            PriceChannel.AddChild(this);
+
+            Multiplier = 100 / Math.Log10(interval);
 
             string label = "(" + Interval.ToString()  + ")";
             Name = GetType().Name + label;
@@ -48,15 +52,21 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = 40;
 
-        public int Interval { get; }
+        public int Interval => PriceChannel.Interval;
 
-
+        public double Multiplier { get; }
 
         #endregion Parameters
 
         #region Calculation
 
+        public NumericColumn TR => BarTable.TrueRangeAnalysis.Column_TrueRange;
+
         public PriceChannel PriceChannel { get; }
+
+        public NumericColumn Column_MaxHigh => PriceChannel.Column_High;
+
+        public NumericColumn Column_MinLow => PriceChannel.Column_Low;
 
         public NumericColumn Column_Result { get; }
 
@@ -66,14 +76,20 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b)
+                double tr_sum = 0;
+                for (int j = 0; j < Interval; j++)
                 {
-
-
-
+                    int k = i - j;
+                    if (k < 0) k = 0;
+                    if (bt[k] is Bar b_tr)
+                        tr_sum += b_tr[TR];
                 }
 
-
+                if (bt[i] is Bar b)
+                {
+                    double diff = b[Column_MaxHigh] - b[Column_MinLow];
+                    b[Column_Result] = (diff > 0) ? Multiplier * Math.Log10(tr_sum / diff) : 0;
+                }
             }
         }
 
