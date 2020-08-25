@@ -66,7 +66,7 @@ namespace Pacmio
 
         private void SetBarAnalysisParents(BarAnalysis ba)
         {
-            ba.Parents.Where(n => n is BarAnalysis).Select(n => (BarAnalysis)n).ToList().ForEach(n =>
+            ba.Parents.Where(n => n is BarAnalysis).Select(n => n as BarAnalysis).ToList().ForEach(n =>
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);
@@ -75,7 +75,7 @@ namespace Pacmio
 
         private void SetBarAnalysisChildren(BarAnalysis ba)
         {
-            ba.Children.Where(n => n is BarAnalysis).Select(n => (BarAnalysis)n).ToList().ForEach(n =>
+            ba.Children.Where(n => n is BarAnalysis).Select(n => n as BarAnalysis).ToList().ForEach(n =>
             {
                 m_List.CheckAdd(n);
                 SetBarAnalysisChildren(n);

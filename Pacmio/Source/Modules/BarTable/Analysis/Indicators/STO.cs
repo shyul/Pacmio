@@ -33,23 +33,33 @@ namespace Pacmio.Analysis
 
             OSC_Column = new NumericColumn(Name + "_OSC");
 
-            SL = new SMA(OSC_Column, D); // { ChartEnabled = false };
-            SL.LineSeries.LegendName = GroupName;
-            SL.LineSeries.Name = Name + "_STO";
-            SL.LineSeries.Label = string.Empty;
-            SL.LineSeries.Importance = Importance.Major;
-            SL.LineSeries.DrawLimitShade = true;
-            SL.Color = Color.FromArgb(255, 96, 96, 96);
+            SL = new SMA(OSC_Column, D) { ChartEnabled = false };
             this.AddChild(SL);
 
-            SL_FULL = new SMA(Column_Result, D2); // { ChartEnabled = false };
-            SL_FULL.LineSeries.LegendName = GroupName;
-            SL_FULL.LineSeries.Name = Name + "_SL";
-            SL_FULL.LineSeries.Label = "SL";
-            SL_FULL.LineSeries.Importance = Importance.Minor;
-            SL_FULL.LineSeries.DrawLimitShade = false;
-            SL_FULL.Color = Color.DodgerBlue;
+            LineSeries_SL = new LineSeries(SL.Column_Result)
+            {
+                Name = Name + "_STO",
+                Label = string.Empty,
+                LegendName = GroupName,
+                Importance = Importance.Major,
+                DrawLimitShade = true,
+                IsAntialiasing = true,
+                Color = Color.FromArgb(255, 96, 96, 96)
+            };
+
+            SL_FULL = new SMA(Column_Result, D2) { ChartEnabled = false };
             SL.AddChild(SL_FULL);
+
+            LineSeries_FULL = new LineSeries(SL_FULL.Column_Result)
+            {
+                Name = Name + "_SL",
+                Label = "SL",
+                LegendName = GroupName,
+                Importance = Importance.Minor,
+                DrawLimitShade = false,
+                IsAntialiasing = true,
+                Color = Color.DodgerBlue
+            };
         }
 
         #region Parameters
@@ -98,15 +108,15 @@ namespace Pacmio.Analysis
 
         #region Series
 
-        public Color Color { get => SL.Color; set => SL.Color = value; }
+        public Color Color { get => LineSeries_SL.Color; set => LineSeries_SL.Color = value; }
 
         public Color UpperColor { get; set; } = Color.CornflowerBlue;
 
         public Color LowerColor { get; set; } = Color.Tomato;
 
-        public bool ChartEnabled { get => Enabled && SL.ChartEnabled; set => SL.ChartEnabled = SL_FULL.ChartEnabled = value; }
+        public bool ChartEnabled { get => Enabled && LineSeries_SL.Enabled; set => LineSeries_SL.Enabled = LineSeries_FULL.Enabled = value; }
 
-        public int SeriesOrder { get => SL.LineSeries.Order; set => SL.LineSeries.Order = value; }
+        public int SeriesOrder { get => LineSeries_SL.Order; set => LineSeries_SL.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 
@@ -116,7 +126,11 @@ namespace Pacmio.Analysis
 
         public int AreaOrder { get; set; } = 0;
 
-        public Series MainSeries => SL.LineSeries;
+        public Series MainSeries => LineSeries_SL;
+
+        public LineSeries LineSeries_SL { get; }
+
+        public LineSeries LineSeries_FULL { get; }
 
         public void ConfigChart(BarChart bc)
         {
@@ -135,8 +149,8 @@ namespace Pacmio.Analysis
                         FixedTickStep_Right = 15,
                     });
 
-                a.AddSeries(SL.LineSeries);
-                a.AddSeries(SL_FULL.LineSeries);
+                a.AddSeries(LineSeries_SL);
+                a.AddSeries(LineSeries_FULL);
             }
         }
 

@@ -106,7 +106,7 @@ namespace Pacmio.Analysis
 
         public virtual bool HasXAxisBar { get; set; } = false;
 
-        public string AreaName { get; protected set; } = MainBarChartArea.DefaultName;
+        public string AreaName { get; set; } = MainBarChartArea.DefaultName;
 
         public float AreaRatio { get; set; } = 12;
 

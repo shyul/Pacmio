@@ -47,34 +47,34 @@ namespace Pacmio.Analysis
             switch (AverageType)
             {
                 case MovingAverageType.Simple:
-                    Fast_MA = new SMA(Column, Interval) { Order = Order - 1 };
-                    Slow_MA = new SMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
+                    Fast_MA = new SMA(Column, Interval) { ChartEnabled = false, Order = Order - 1 };
+                    Slow_MA = new SMA(Column, Interval_Slow) { ChartEnabled = false, Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new SMA(Column_Result, Interval_Signal);
+                    MACD_SL = new SMA(Column_Result, Interval_Signal) { ChartEnabled = false };
                     break;
                 case MovingAverageType.Smoothed:
-                    Fast_MA = new SMMA(Column, Interval) { Order = Order - 1 };
-                    Slow_MA = new SMMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
+                    Fast_MA = new SMMA(Column, Interval) { ChartEnabled = false, Order = Order - 1 };
+                    Slow_MA = new SMMA(Column, Interval_Slow) { ChartEnabled = false, Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new SMMA(Column_Result, Interval_Signal);
+                    MACD_SL = new SMMA(Column_Result, Interval_Signal) { ChartEnabled = false };
                     break;
                 case MovingAverageType.Exponential:
-                    Fast_MA = new EMA(Column, Interval) { Order = Order - 1 };
-                    Slow_MA = new EMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
+                    Fast_MA = new EMA(Column, Interval) { ChartEnabled = false, Order = Order - 1 };
+                    Slow_MA = new EMA(Column, Interval_Slow) { ChartEnabled = false, Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new EMA(Column_Result, Interval_Signal);
+                    MACD_SL = new EMA(Column_Result, Interval_Signal) { ChartEnabled = false };
                     break;
                 case MovingAverageType.Weighted:
-                    Fast_MA = new WMA(Column, Interval) { Order = Order - 1 };
-                    Slow_MA = new WMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
+                    Fast_MA = new WMA(Column, Interval) { ChartEnabled = false, Order = Order - 1 };
+                    Slow_MA = new WMA(Column, Interval_Slow) { ChartEnabled = false, Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new WMA(Column_Result, Interval_Signal);
+                    MACD_SL = new WMA(Column_Result, Interval_Signal) { ChartEnabled = false };
                     break;
                 case MovingAverageType.Hull:
-                    Fast_MA = new HMA(Column, Interval) { Order = Order - 1 };
-                    Slow_MA = new HMA(Column, Interval_Slow) { Order = Fast_MA.Order + 1 };
+                    Fast_MA = new HMA(Column, Interval) { ChartEnabled = false, Order = Order - 1 };
+                    Slow_MA = new HMA(Column, Interval_Slow) { ChartEnabled = false, Order = Fast_MA.Order + 1 };
                     Order = Slow_MA.Order + 1;
-                    MACD_SL = new HMA(Column_Result, Interval_Signal);
+                    MACD_SL = new HMA(Column_Result, Interval_Signal) { ChartEnabled = false };
                     break;
             }
 
@@ -91,13 +91,16 @@ namespace Pacmio.Analysis
                 Label = " "
             };
 
-            MACD_SL.Color = Color.Red;
-            MACD_SL.LineSeries.Importance = Importance.Minor;
-            MACD_SL.LineSeries.Name = Name + "_SL";
-            MACD_SL.LineSeries.Label = "SL";
-            MACD_SL.LineSeries.LegendName = GroupName;
-            MACD_SL.LineSeries.IsAntialiasing = true;
-            MACD_SL.LineSeries.Order = 100;
+            LineSeries_SL = new LineSeries(MACD_SL.Column_Result)
+            {
+                Name = Name + "_SL",
+                Label = "SL",
+                LegendName = GroupName,
+                Importance = Importance.Minor,
+                DrawLimitShade = false,
+                IsAntialiasing = true,
+                Color = Color.Red
+            };
 
             ColumnSeries = new ColumnSeries(HIST_Column, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
             {
@@ -168,6 +171,8 @@ namespace Pacmio.Analysis
 
         public ColumnSeries ColumnSeries { get; }
 
+        public LineSeries LineSeries_SL { get; }
+
         public override bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => ColumnSeries.Enabled = LineSeries.Enabled = value; }
 
         public int AreaOrder { get; set; } = 0;
@@ -189,7 +194,7 @@ namespace Pacmio.Analysis
                     });
                 a.AddSeries(ColumnSeries);
                 a.AddSeries(LineSeries);
-                a.AddSeries(MACD_SL.LineSeries);
+                a.AddSeries(LineSeries_SL);
             }
         }
 
