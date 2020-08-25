@@ -54,7 +54,7 @@ namespace Pacmio.Analysis
 
         public ATR ATR { get; }
 
-        public PivotRanges CalculatePivotRange { get; } = new PivotRanges();
+        public PivotRanges CalculatePivotRange { get; } = new PivotRanges(); // => BarTable.CalculatePivotRange;
 
         public TrailingPivots TrailingPivotPointAnalysis { get; }
 

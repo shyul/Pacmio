@@ -203,11 +203,11 @@ namespace Pacmio
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
-        /// string genericTickList = "236,375";  // 292 is news
+        /// string genericTickList = "236,375";  // 292 is news and 233 is RTVolume
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual bool Request_MarketTicks(string param = "236,233,375") => IB.Client.SendRequest_MarketTicks(this, param);
+        public virtual bool Request_MarketTicks(string param = "233,236,375") => IB.Client.SendRequest_MarketTicks(this, param);
 
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 

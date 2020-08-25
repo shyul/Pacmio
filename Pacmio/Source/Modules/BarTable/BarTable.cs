@@ -597,6 +597,8 @@ namespace Pacmio
 
         public static PivotPointAnalysis PivotPointAnalysis { get; } = new PivotPointAnalysis(); // { ChartEnabled = false };
 
+        //public static PivotRanges CalculatePivotRange { get; } = new PivotRanges();
+
         #endregion Basic Data
 
         #region Data/Bar Analysis (TA) Calculation

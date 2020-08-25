@@ -50,7 +50,7 @@ namespace TestClient
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
-                    new MACD(12, 26, 9),
+                    //new MACD(12, 26, 9),
                     new STO(8, 3, 3) { Order = int.MaxValue - 1 },
                     new VO() { HasXAxisBar = true, Order = int.MaxValue },
                     //rsi,
@@ -62,8 +62,8 @@ namespace TestClient
                     volumeEma,
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
-                    //new Trend(260),
-                    //new Reversal(),
+                    new Trend(260),
+                    new Reversal(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

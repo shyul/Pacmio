@@ -12,6 +12,12 @@ namespace Pacmio
     [Serializable, DataContract]
     public class BidAskData : MarketData
     {
+        /*
+        public BidAskData(Contract c) : base(c)
+        {
+            // Contract = c;
+        }*/
+
         [DataMember]
         public double Ask { get; set; } = double.NaN;
 

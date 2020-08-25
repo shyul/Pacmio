@@ -57,7 +57,8 @@ namespace Pacmio
             // The purpose of ordering by the children and parents first is
             // We want to add the ones with less dependancy first so its setting
             // can be applied to the Set, instead of been ignored.
-            list.OrderBy(n => n.Children.Count).ThenBy(n => n.Parents.Count).ThenBy(n => n.Order).ToList().ForEach(n =>
+            //list.OrderBy(n => n.Children.Count).ThenBy(n => n.Parents.Count).ThenBy(n => n.Order).ToList().ForEach(n =>
+            list.OrderBy(n => n.Order).ToList().ForEach(n =>
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);

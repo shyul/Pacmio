@@ -51,7 +51,7 @@ namespace Pacmio.Analysis
             CalculatePivotRange.AddChild(this);
         }
 
-        public PivotRanges CalculatePivotRange { get; } = new PivotRanges();
+        public PivotRanges CalculatePivotRange { get; } = new PivotRanges(); // => BarTable.CalculatePivotRange;
 
         public ISingleData SourceAnalysis { get; protected set; }
 

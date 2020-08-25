@@ -16,6 +16,12 @@ namespace Pacmio
     [Serializable, DataContract]
     public class HistoricalData : BidAskData
     {
+        /*
+        public HistoricalData(Contract c) : base(c)
+        {
+            // Contract = c;
+        }*/
+
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
 
@@ -85,10 +91,29 @@ namespace Pacmio
             return list;
         }
 
+        public DateTime RTLastTime { get; private set; } = DateTime.MinValue;
+
+        public double RTLastPrice { get; private set; } = -1;
+
         public void InboundLiveTick(DateTime time, double price, double size)
         {
-            lock (LiveBarTables)
-                Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(time, price, size));
+            if (time > RTLastTime)
+            {
+                RTLastTime = time;
+
+                if (double.IsNaN(price))
+                {
+                    price = RTLastPrice;
+                }
+                else
+                {
+                    RTLastPrice = price;
+                }
+
+                if (price > 0)
+                    lock (LiveBarTables)
+                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(time, price, size));
+            }
         }
 
         [IgnoreDataMember]

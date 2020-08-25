@@ -304,8 +304,9 @@ namespace Pacmio.IB
 
                             https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                         */
-                        case TickType.RTVolumeTimeSales when c.MarketData is HistoricalData hd:
+                        case TickType.RTVolumeTimeSales:
                             Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
+                            RTVolume(fields[4], c);
                             break;
 
                         /*
@@ -314,6 +315,9 @@ namespace Pacmio.IB
                         */
                         case TickType.RTTradeVolume when c.MarketData is HistoricalData hd:
                             Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
+                            RTVolume(fields[4], c);
+
+                            /*
                             string[] volFields = fields[4].Split(';');
 
                             double last = volFields[0].ToDouble();
@@ -326,7 +330,7 @@ namespace Pacmio.IB
                             DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
 
                             //double totalVol = volFields[3].ToDouble() * 100;
-                            hd.InboundLiveTick(time, last, vol);
+                            hd.InboundLiveTick(time, last, vol);*/
 
                             // if c.ActiveStrategy is Strategy s --> s.Evaluate(c);
 
@@ -351,6 +355,41 @@ namespace Pacmio.IB
 
                     MarketDataManager.UpdateUI(c);
                 }
+        }
+
+        //  contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
+        private static void RTVolume(string field4, Contract c) 
+        {
+            string[] fields = field4.Split(';');
+
+            //if (c.MarketData is HistoricalData hd && fields.Length == 6 && fields[5] == "true" && fields[0].Length > 0 && fields[0].ToDouble() is double last && !double.IsNaN(last))
+            if (c.MarketData is HistoricalData hd)// && !double.IsNaN(last))
+            {
+                double last = fields[0].ToDouble();
+                double vol = fields[1].ToDouble() * 100;
+                if (vol == 0) vol = 33;
+
+                long epochMs = fields[2].ToInt64();
+                DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
+
+                //double totalVol = volFields[3].ToDouble() * 100;
+                hd.InboundLiveTick(time, last, vol);
+
+                /*
+                double last = fields[0].ToDouble();
+                if (double.IsNaN(last)) last = hd.LastPrice;
+
+                double vol = fields[1].ToDouble() * 100;
+                if (vol == 0) vol = 38;
+
+                long epochMs = fields[2].ToInt64();
+                DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
+
+                //double totalVol = volFields[3].ToDouble() * 100;
+                hd.InboundLiveTick(time, last, vol);*/
+            }
+
+
         }
 
 

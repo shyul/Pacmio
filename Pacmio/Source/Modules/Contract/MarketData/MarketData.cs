@@ -16,6 +16,14 @@ namespace Pacmio
     [KnownType(typeof(HistoricalData))]
     public class MarketData
     {
+        /*
+        public MarketData(Contract c) 
+        {
+            Contract = c;
+        }*/
+
+        //public Contract Contract { get; }
+
         #region Basic Info  
 
         [DataMember]
