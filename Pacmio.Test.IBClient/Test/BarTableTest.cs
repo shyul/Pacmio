@@ -30,7 +30,7 @@ namespace TestClient
                     AreaOrder = int.MaxValue - 10
                 };
 
-                var aroon = new Aroon();
+                var aroon = new Aroon() { HasXAxisBar = true, Order = int.MaxValue };
                 //aroon.LineSeries.Enabled = false;
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
@@ -43,14 +43,14 @@ namespace TestClient
 
                     //new ADX(14),
                     //new ULTO(),
-                    //aroon,
+                    aroon,
                     //new CHOP(),
                     
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
-                    new VO(5, 10) { HasXAxisBar = true, Order = int.MaxValue },
+                    //new VO(5, 10) { HasXAxisBar = true, Order = int.MaxValue },
                     //rsi,
                     //new PivotPointAnalysis(rsi, 100),
 

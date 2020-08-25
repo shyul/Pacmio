@@ -25,11 +25,11 @@ namespace Pacmio.Analysis
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
-            AreaName = GroupName = GetType().Name;
+            AreaName = GroupName = Name;
             Description = "Aroon " + label;
 
-            Column_High = new NumericColumn(Name + "_H");
-            Column_Low = new NumericColumn(Name + "_L");
+            Column_High = new NumericColumn(Name + "_H") { Label = " H" };
+            Column_Low = new NumericColumn(Name + "_L") { Label = "L" };
             Column_Result = new NumericColumn(Name + "_OSC");
 
             LineSeries = new LineSeries(Column_Result, Color.DarkSlateGray, LineType.Default, 1.5f)
@@ -114,8 +114,8 @@ namespace Pacmio.Analysis
                     int days_high = high_index.OrderByDescending(n => n.Key).First().Value;
                     int days_low = low_index.OrderBy(n => n.Key).First().Value;
 
-                    double aroon_up = b[Column_High] = 100 * (Interval - days_high) / Interval;
-                    double aroon_down = b[Column_Low] = 100 * (Interval - days_low) / Interval;
+                    double aroon_up = b[Column_High] = 100.0D * (Interval - days_high) / Interval;
+                    double aroon_down = b[Column_Low] = 100.0D * (Interval - days_low) / Interval;
 
                     b[Column_Result] = aroon_up - aroon_down;
                 }
