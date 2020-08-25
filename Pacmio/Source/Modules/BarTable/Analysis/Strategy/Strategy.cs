@@ -15,6 +15,20 @@ using Xu;
 
 namespace Pacmio
 {
+
+    public class BarTableSetting : IEquatable<BarTableSetting>
+    {
+        public BarFreq BarFreq { get; set; }
+
+        public BarType BarType { get; set; }
+
+        public bool Equals(BarTableSetting other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
     public abstract class Strategy : IEquatable<Strategy>
     {
         public Strategy(string name)

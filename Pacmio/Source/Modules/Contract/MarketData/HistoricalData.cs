@@ -16,12 +16,6 @@ namespace Pacmio
     [Serializable, DataContract]
     public class HistoricalData : BidAskData
     {
-        /*
-        public HistoricalData(Contract c) : base(c)
-        {
-            // Contract = c;
-        }*/
-
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
 

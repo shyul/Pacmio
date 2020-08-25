@@ -32,39 +32,38 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public HistoricalData StockData
+        public HistoricalData HistoricalData
         {
             get
             {
-                if (m_StockData is null) LoadMarketData();
-                return m_StockData;
+                if (m_HistoricalData is null) LoadMarketData();
+                return m_HistoricalData;
             }
         }
 
         [IgnoreDataMember]
-        private HistoricalData m_StockData = null;
+        private HistoricalData m_HistoricalData = null;
 
         public override void LoadMarketData()
         {
-            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
-            m_StockData.Status = MarketTickStatus.Unknown;
-            if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new List<BarTable>();
+            m_HistoricalData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
+            m_HistoricalData.Status = MarketTickStatus.Unknown;
+            if (m_HistoricalData.LiveBarTables is null) m_HistoricalData.LiveBarTables = new List<BarTable>();
         }
 
         public override void SaveMarketData()
         {
-            if (m_StockData is HistoricalData sd)
+            if (m_HistoricalData is HistoricalData sd)
             {
-                if (!Directory.Exists(MarketDataFilePath)) Directory.CreateDirectory(MarketDataFilePath);
+                if (!Directory.Exists(MarketDataFilePath)) 
+                    Directory.CreateDirectory(MarketDataFilePath);
+
                 sd.SerializeJsonFile(MarketDataFileName);
-                /*
-                if (m_StockData.BarTables is ConcurrentDictionary<(BarFreq barFreq, BarType type), BarTable> list)
-                    Parallel.ForEach(list.Values, bt => bt.Save());*/
             }
         }
 
         [IgnoreDataMember]
-        public override MarketData MarketData => StockData;
+        public override MarketData MarketData => HistoricalData;
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";
