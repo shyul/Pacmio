@@ -28,6 +28,10 @@ namespace Pacmio.Analysis
             AreaName = GroupName = Name;
             Description = "Aroon " + label;
 
+            Column_High = new NumericColumn(Name + "_H");
+            Column_Low = new NumericColumn(Name + "_L");
+            Column_Result = new NumericColumn(Name + "_OSC");
+
             LineSeries = new LineSeries(Column_Result, Color.DarkSlateGray, LineType.Default, 1.5f)
             {
                 Name = Name,
@@ -54,6 +58,8 @@ namespace Pacmio.Analysis
                 IsAntialiasing = true
             };
 
+      
+
             UpperColor = Color.OliveDrab;
             LowerColor = Color.OrangeRed;
         }
@@ -67,8 +73,6 @@ namespace Pacmio.Analysis
         public double LowerLimit { get; set; } = 30;
 
         public int Interval { get; }
-
-
 
         #endregion Parameters
 
@@ -182,7 +186,7 @@ namespace Pacmio.Analysis
                     });
 
                 a.AddSeries(CloudSeries);
-                a.AddSeries(LineSeries);
+                //a.AddSeries(LineSeries);
             }
         }
 

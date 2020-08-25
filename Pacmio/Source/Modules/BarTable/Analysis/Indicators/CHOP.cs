@@ -20,15 +20,15 @@ namespace Pacmio.Analysis
     {
         public CHOP(int interval = 14)
         {
-            PriceChannel = new PriceChannel(interval);
-            PriceChannel.AddChild(this);
-
+            PriceChannel = new PriceChannel(interval) { ChartEnabled = false };
             Multiplier = 100 / Math.Log10(interval);
 
             string label = "(" + Interval.ToString()  + ")";
             Name = GetType().Name + label;
             AreaName = GroupName = Name;
             Description = "Choppiness Index " + label;
+
+            PriceChannel.AddChild(this);
 
             Column_Result = new NumericColumn(Name);
             LineSeries = new LineSeries(Column_Result)

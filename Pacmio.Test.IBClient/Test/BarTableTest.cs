@@ -30,6 +30,9 @@ namespace TestClient
                     AreaOrder = int.MaxValue - 10
                 };
 
+                var aroon = new Aroon();
+                //aroon.LineSeries.Enabled = false;
+
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     //new GainAnalysis(),
@@ -38,7 +41,11 @@ namespace TestClient
                     //new PivotPointAnalysis(),
                     //new ATR(14),
 
-                    new ADX(14),
+                    //new ADX(14),
+                    //new ULTO(),
+                    //aroon,
+                    new CHOP(),
+                    new VO(5, 10),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),

@@ -22,16 +22,16 @@ namespace Pacmio.Analysis
     {
         public VO(int interval_fast = 14, int interval_slow = 28) 
         {
-            Fast_MA = new SMA(Bar.Column_Volume, interval_fast);
-            Slow_MA = new SMA(Bar.Column_Volume, interval_slow);
-
-            Fast_MA.AddChild(this);
-            Slow_MA.AddChild(this);
+            Fast_MA = new SMA(Bar.Column_Volume, interval_fast) { ChartEnabled = false };
+            Slow_MA = new SMA(Bar.Column_Volume, interval_slow) { ChartEnabled = false };
 
             string label = "(" + Interval_Fast.ToString() + "," + Interval_Slow.ToString() + ")";
             Name = GetType().Name + label;
             AreaName = GroupName = Name;
             Description = "Volume Oscillator " + label;
+
+            Fast_MA.AddChild(this);
+            Slow_MA.AddChild(this);
 
             Column_Result = new NumericColumn(Name);
             LineSeries = new LineSeries(Column_Result)

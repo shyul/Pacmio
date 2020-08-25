@@ -52,9 +52,9 @@ namespace Pacmio.Analysis
 
         public double Reference { get; set; } = 50;
 
-        public double UpperLimit { get; set; } = 60;
+        public double UpperLimit { get; set; } = 70;
 
-        public double LowerLimit { get; set; } = 40;
+        public double LowerLimit { get; set; } = 30;
 
         public int Interval_Fast { get; }
 
