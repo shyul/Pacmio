@@ -207,7 +207,7 @@ namespace Pacmio
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual bool Request_MarketTicks(string param = "236,375") => IB.Client.SendRequest_MarketTicks(this, param);
+        public virtual bool Request_MarketTicks(string param = "236,233,375") => IB.Client.SendRequest_MarketTicks(this, param);
 
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
