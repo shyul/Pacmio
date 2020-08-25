@@ -15,7 +15,7 @@ namespace Pacmio.Analysis
         public ATR(int interval = 14)
         {
             Interval = interval;
-            TrueRangeAnalysis = BarTable.TrueRangeAnalysis;
+            //TrueRangeAnalysis = BarTable.TrueRangeAnalysis;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
@@ -42,7 +42,7 @@ namespace Pacmio.Analysis
 
         public virtual int Interval { get; protected set; }
 
-        public TrueRange TrueRangeAnalysis { get; }
+        public TrueRange TrueRangeAnalysis => BarTable.TrueRangeAnalysis;
 
         public NumericColumn TR => TrueRangeAnalysis.Column_TrueRange;
 

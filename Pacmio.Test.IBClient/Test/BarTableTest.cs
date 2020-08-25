@@ -38,7 +38,7 @@ namespace TestClient
                     //new PivotPointAnalysis(),
                     //new ATR(14),
 
-                    //new ADX(14),
+                    new ADX(14),
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
@@ -52,8 +52,8 @@ namespace TestClient
                     volumeEma,
                     new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
-                    new Trend(260),
-                    new Reversal(),
+                    //new Trend(260),
+                    //new Reversal(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

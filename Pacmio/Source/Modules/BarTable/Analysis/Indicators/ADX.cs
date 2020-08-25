@@ -20,7 +20,7 @@ namespace Pacmio.Analysis
         public ADX(int interval = 14)
         {
             Interval = interval;
-            TR = BarTable.TrueRangeAnalysis.Column_TrueRange;
+            //TR = BarTable.TrueRangeAnalysis.Column_TrueRange;
 
             string label = "(" + Interval.ToString() + ")";
             AreaName = GroupName = Name = GetType().Name + label;
@@ -75,7 +75,7 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = double.NaN;
 
-        public NumericColumn TR { get; }
+        //public NumericColumn TR { get; }
 
         public NumericColumn TR_MA { get; }
 
