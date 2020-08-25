@@ -25,7 +25,7 @@ namespace Pacmio.Analysis
 
             string label = "(" + Interval.ToString()  + ")";
             Name = GetType().Name + label;
-            AreaName = GroupName = Name;
+            AreaName = GroupName = GetType().Name;
             Description = "Choppiness Index " + label;
 
             PriceChannel.AddChild(this);

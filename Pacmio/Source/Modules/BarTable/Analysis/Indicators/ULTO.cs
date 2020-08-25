@@ -28,7 +28,7 @@ namespace Pacmio.Analysis
 
             string label = "(" + Interval_Fast.ToString() + "," + Interval_Middle.ToString() + "," + Interval_Slow.ToString() + ")";
             Name = GetType().Name + label;
-            AreaName = GroupName = Name;
+            AreaName = GroupName = GetType().Name;
             Description = "Ultimate Oscillator " + label;
 
             Column_BP = new NumericColumn(Name + "_BP");

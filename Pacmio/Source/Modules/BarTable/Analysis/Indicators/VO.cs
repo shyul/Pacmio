@@ -22,12 +22,12 @@ namespace Pacmio.Analysis
     {
         public VO(int interval_fast = 14, int interval_slow = 28) 
         {
-            Fast_MA = new SMA(Bar.Column_Volume, interval_fast) { ChartEnabled = false };
-            Slow_MA = new SMA(Bar.Column_Volume, interval_slow) { ChartEnabled = false };
+            Fast_MA = new EMA(Bar.Column_Volume, interval_fast) { ChartEnabled = false };
+            Slow_MA = new EMA(Bar.Column_Volume, interval_slow) { ChartEnabled = false };
 
             string label = "(" + Interval_Fast.ToString() + "," + Interval_Slow.ToString() + ")";
             Name = GetType().Name + label;
-            AreaName = GroupName = Name;
+            AreaName = GroupName = GetType().Name;
             Description = "Volume Oscillator " + label;
 
             Fast_MA.AddChild(this);
@@ -36,7 +36,7 @@ namespace Pacmio.Analysis
             Column_Result = new NumericColumn(Name);
             LineSeries = new LineSeries(Column_Result)
             {
-                Name = Name,
+                Name = this.Name,
                 Label = label,
                 LegendName = GroupName,
                 Importance = Importance.Major,
@@ -75,14 +75,12 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if(bt[i] is Bar b) 
+                if (bt[i] is Bar b)
                 {
                     double fast_ma = b[Fast_MA.Column_Result];
                     double slow_ma = b[Slow_MA.Column_Result];
                     b[Column_Result] = 100 * (fast_ma - slow_ma) / slow_ma;
                 }
-
-
             }
         }
 

@@ -44,12 +44,13 @@ namespace TestClient
                     //new ADX(14),
                     //new ULTO(),
                     //aroon,
-                    new CHOP(),
-                    new VO(5, 10),
+                    //new CHOP(),
+                    
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
-                    new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    new VO(5, 10) { HasXAxisBar = true, Order = int.MaxValue },
                     //rsi,
                     //new PivotPointAnalysis(rsi, 100),
 
@@ -57,7 +58,7 @@ namespace TestClient
                     //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },
 
                     volumeEma,
-                    new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
+                    //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
                     //new Trend(260),
                     //new Reversal(),
