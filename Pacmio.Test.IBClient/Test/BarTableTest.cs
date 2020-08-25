@@ -43,13 +43,14 @@ namespace TestClient
 
                     //new ADX(14),
                     //new ULTO(),
-                    aroon,
+                    //aroon,
                     //new CHOP(),
                     
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),
                     //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    new STO(8, 3, 3) { Order = int.MaxValue - 1 },
                     new VO() { HasXAxisBar = true, Order = int.MaxValue },
                     //rsi,
                     //new PivotPointAnalysis(rsi, 100),

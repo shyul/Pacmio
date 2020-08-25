@@ -28,12 +28,12 @@ namespace Pacmio.Analysis
             Description = "Stochastic Oscillator " + label;
             AreaName = GroupName = Name = GetType().Name + label;
 
-            BoxRange = new PriceChannel(K);
+            BoxRange = new PriceChannel(K) { ChartEnabled = false };
             BoxRange.AddChild(this);
 
             OSC_Column = new NumericColumn(Name + "_OSC");
 
-            SL = new SMA(OSC_Column, D);
+            SL = new SMA(OSC_Column, D); // { ChartEnabled = false };
             SL.LineSeries.LegendName = GroupName;
             SL.LineSeries.Name = Name + "_STO";
             SL.LineSeries.Label = string.Empty;
@@ -42,7 +42,7 @@ namespace Pacmio.Analysis
             SL.Color = Color.FromArgb(255, 96, 96, 96);
             this.AddChild(SL);
 
-            SL_FULL = new SMA(Column_Result, D2);
+            SL_FULL = new SMA(Column_Result, D2); // { ChartEnabled = false };
             SL_FULL.LineSeries.LegendName = GroupName;
             SL_FULL.LineSeries.Name = Name + "_SL";
             SL_FULL.LineSeries.Label = "SL";
@@ -137,10 +137,6 @@ namespace Pacmio.Analysis
 
                 a.AddSeries(SL.LineSeries);
                 a.AddSeries(SL_FULL.LineSeries);
-                /*
-                Area a2 = bc.AddArea(new Area(bc, MainArea.DefaultName, 10));
-                a2.AddSeries(LineSeries_H);
-                a2.AddSeries(LineSeries_L);*/
             }
         }
 
