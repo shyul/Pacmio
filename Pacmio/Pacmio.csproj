@@ -90,7 +90,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\CalculatePivotRange.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotRanges.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\PivotLevels.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Reversal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\IPivot.cs" />

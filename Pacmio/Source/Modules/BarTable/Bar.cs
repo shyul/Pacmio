@@ -308,7 +308,7 @@ namespace Pacmio
 
         private Dictionary<string, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<string, PivotRangeDatum>();
 
-        public void CalculatePivotRange()
+        public void CalculatePivotRangeDatums()
         {
             PivotRangeDatums.Clear();
             foreach (var p in Pivots)
