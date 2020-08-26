@@ -6,6 +6,8 @@
 /// 
 /// ***************************************************************************
 
+using IbXmlScannerParameter;
+using Pacmio.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,7 @@ namespace Pacmio
         }
     }
 
-
+    // 60% is HFT trading!
     public abstract class Strategy : IEquatable<Strategy>
     {
         public Strategy(string name)
@@ -62,6 +64,14 @@ namespace Pacmio
                 else if (Analyses.ContainsKey((BarFreq, BarType)))
                     Analyses.Remove((BarFreq, BarType));
             }
+        }
+
+        public SMA DailySMA5 { get; }
+
+        public Indicator DailyFilter { get; }
+
+        public Indicator TradeIndicator { get;
+        
         }
 
         public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)

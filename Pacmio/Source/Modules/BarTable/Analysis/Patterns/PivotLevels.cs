@@ -38,6 +38,8 @@ namespace Pacmio.Analysis
 
             BarTable higer_time_frame_table = BarTableSet.Get(c, BarFreq, bt.Type);
 
+
+
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 if (bt[i] is Bar b)
