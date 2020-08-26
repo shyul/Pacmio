@@ -78,7 +78,12 @@ namespace Pacmio
 
                 BarAnalysisSet bas = item.Value;
 
+                // Find all BarTables here
+                // Sort the BarFreq and calculate higher time scale first
 
+                // Lower Time Frame BarTable get loaded...
+
+                // Lowest Time Frame gets Position Information
 
                 bt.CalculateOnly(bas);
 
@@ -89,16 +94,26 @@ namespace Pacmio
             Evaluate(c);
         }
 
-        public virtual void Simulate(Contract c)
+        public virtual void Simulate(Contract c, Period pd, CancellationTokenSource cts)
         {
-            // Find all BarTables here
+            var list = Analyses.OrderByDescending(n => n.Key.BarFreq);
 
-            // Sort the BarFreq and calculate higher time scale first
 
-            // Lower Time Frame BarTable get loaded...
+            int i = 0;
+            foreach (var item in list)
+            {
+                BarTable bt = StrategyManager.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
+                BarAnalysisSet bas = item.Value;
 
-            // Lowest Time Frame gets Position Information
+                // Apply intermediate result and level
+                bt.CalculateOnly(bas);
 
+                // Get intermediate result and level
+
+                // Get decision wether to pursue the lower time frames....
+
+                i++;
+            }
         }
 
         // !!! The Function Actually Makes The Purchase
