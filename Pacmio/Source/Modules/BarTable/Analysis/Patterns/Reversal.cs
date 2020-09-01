@@ -5,10 +5,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using Xu;
 using Xu.Chart;
 
@@ -178,23 +175,23 @@ namespace Pacmio.Analysis
         {
             if (ChartEnabled)
             {
-                BarChartOscillatorArea area_trend = bc["Weight_" + AreaName] is BarChartOscillatorArea oa ? oa :
-                    bc.AddArea(new BarChartOscillatorArea(bc, "TotalWeight_" + AreaName, AreaRatio)
+                BarChartOscillatorArea area_weight = bc["Weight_" + AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, "Weight_" + AreaName, AreaRatio)
                     {
                         Reference = 0,
                         HasXAxisBar = false,
                     });
 
-                area_trend.AddSeries(ColumnSeries_Weight);
+                area_weight.AddSeries(ColumnSeries_Weight);
 
-                BarChartOscillatorArea area_gap = bc["GapPercent_" + AreaName] is BarChartOscillatorArea oa_gap ? oa_gap :
-                    bc.AddArea(new BarChartOscillatorArea(bc, "GapPercent_" + AreaName, AreaRatio)
+                BarChartArea area_total = bc["TotalWeight_" + AreaName] is BarChartArea oa_gap ? oa_gap :
+                    bc.AddArea(new BarChartArea(bc, "TotalWeight_" + AreaName, AreaRatio)
                     {
-                        Reference = 0,
+                        // Reference = 0,
                         HasXAxisBar = HasXAxisBar,
                     });
 
-                area_gap.AddSeries(ColumnSeries_TotalWeight);
+                area_total.AddSeries(ColumnSeries_TotalWeight);
             }
         }
 
