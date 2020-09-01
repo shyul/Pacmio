@@ -61,25 +61,25 @@
             this.label6 = new System.Windows.Forms.Label();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tcpIpRadioButton = new System.Windows.Forms.RadioButton();
             this.httpRadioButton = new System.Windows.Forms.RadioButton();
+            this.tcpIpRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.usernameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.usernameTextBox.Location = new System.Drawing.Point(71, 12);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(172, 20);
             this.usernameTextBox.TabIndex = 1;
-            this.usernameTextBox.Text = "philip";
+            this.usernameTextBox.Text = "me@xuli.us";
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.passwordTextBox.Location = new System.Drawing.Point(71, 38);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '~';
@@ -106,8 +106,8 @@
             // 
             // loginButton
             // 
-            this.loginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.loginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.loginButton.Location = new System.Drawing.Point(12, 195);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(227, 23);
@@ -137,8 +137,8 @@
             // 
             // hostTextBox
             // 
-            this.hostTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.hostTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.hostTextBox.Location = new System.Drawing.Point(71, 64);
             this.hostTextBox.Name = "hostTextBox";
             this.hostTextBox.Size = new System.Drawing.Size(172, 20);
@@ -147,8 +147,8 @@
             // 
             // portTextBox
             // 
-            this.portTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.portTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.portTextBox.Location = new System.Drawing.Point(71, 90);
             this.portTextBox.Name = "portTextBox";
             this.portTextBox.Size = new System.Drawing.Size(172, 20);
@@ -287,9 +287,9 @@
             // 
             // previewTextBox
             // 
-            this.previewTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.previewTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.previewTextBox.Location = new System.Drawing.Point(9, 469);
             this.previewTextBox.Multiline = true;
             this.previewTextBox.Name = "previewTextBox";
@@ -342,6 +342,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection Type";
             // 
+            // httpRadioButton
+            // 
+            this.httpRadioButton.AutoSize = true;
+            this.httpRadioButton.Location = new System.Drawing.Point(73, 19);
+            this.httpRadioButton.Name = "httpRadioButton";
+            this.httpRadioButton.Size = new System.Drawing.Size(54, 17);
+            this.httpRadioButton.TabIndex = 1;
+            this.httpRadioButton.Text = "HTTP";
+            this.httpRadioButton.UseVisualStyleBackColor = true;
+            // 
             // tcpIpRadioButton
             // 
             this.tcpIpRadioButton.AutoSize = true;
@@ -353,16 +363,6 @@
             this.tcpIpRadioButton.TabStop = true;
             this.tcpIpRadioButton.Text = "TCP/IP";
             this.tcpIpRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // httpRadioButton
-            // 
-            this.httpRadioButton.AutoSize = true;
-            this.httpRadioButton.Location = new System.Drawing.Point(73, 19);
-            this.httpRadioButton.Name = "httpRadioButton";
-            this.httpRadioButton.Size = new System.Drawing.Size(54, 17);
-            this.httpRadioButton.TabIndex = 1;
-            this.httpRadioButton.Text = "HTTP";
-            this.httpRadioButton.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
