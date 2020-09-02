@@ -68,6 +68,9 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ServerConnection">
+      <HintPath>.\ServerConnection.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -79,6 +82,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TIProData">
+      <HintPath>.\TIProData.dll</HintPath>
+    </Reference>
+    <Reference Include="zlib.net">
+      <HintPath>.\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
@@ -107,6 +116,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Rules\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\CandleStickIndicator.cs" />
@@ -207,6 +217,7 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
+    <Compile Include="Source\NetClient\TIProData\Client.cs" />
     <Compile Include="Source\UnknownItemList.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
@@ -252,7 +263,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerInfo.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerConfig.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />

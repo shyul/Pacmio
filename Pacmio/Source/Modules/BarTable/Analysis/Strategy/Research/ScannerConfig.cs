@@ -14,7 +14,9 @@
 
 using Pacmio.IB;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Pacmio
@@ -36,10 +38,14 @@ namespace Pacmio
                                                          // "TOP_OPEN_PERC_GAIN"
                                                          // "HALTED"
 
-        public string FilterOptions { get; set; } = string.Empty; // (23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+        //public string FilterOptions { get; set; } = string.Empty; // (23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
                                                                   // (23)"priceAbove=5;avgVolumeAbove=500000;marketCapAbove1e6=1000;"
                                                                   // stkTypes: All, inc:CORP, inc:ADR, inc:ETF, inc:ETN, inc:REIT, inc:CEF, inc:ETMF (Exchange Traded Managed Fund)
                                                                   // exc:CORP, exc:ADR, exc:ETF, exc:ETN, exc:REIT, exc:CEF
+
+        public Dictionary<string, string> Options { get; } = new Dictionary<string, string>();
+
+        public string FilterOptions => string.Join(";", Options.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
 
         public bool Equals(ScannerConfig other) => other is ScannerConfig sc &&
             (Type, Location, StockTypeFilter, Code, FilterOptions) == (sc.Type, sc.Location, sc.StockTypeFilter, sc.Code, sc.FilterOptions);
@@ -56,5 +62,11 @@ namespace Pacmio
                             StockTypeFilter.GetHashCode() ^
                             Code.GetHashCode() ^
                             FilterOptions.GetHashCode();
+
+        public static ScannerConfig GapUp => new ScannerConfig() 
+        {
+        
+        
+        };
     }
 }
