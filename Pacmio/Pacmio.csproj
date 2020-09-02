@@ -218,6 +218,7 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
+    <Compile Include="Source\NetClient\TIProData\TopList.cs" />
     <Compile Include="Source\UnknownItemList.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />

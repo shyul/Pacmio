@@ -55,7 +55,8 @@ namespace Pacmio.TIProData
             NextPayment = args.nextPayment;
             OddsmakerAvailable = args.oddsmakerAvailable;
 
-            Console.WriteLine("Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now") + " | OddsMaker Remaining: " + OddsmakerAvailable.ToString());
+            Console.WriteLine("Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now") 
+                + " | OddsMaker Remaining: " + OddsmakerAvailable.ToString());
         }
 
         private static void ConnectionBasePreview(ConnectionBase source, PreviewArgs args)
@@ -90,6 +91,6 @@ namespace Pacmio.TIProData
             Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate;
         }
 
-        private static ConnectionMaster Connection { get; } = new ConnectionMaster();
+        public static ConnectionMaster Connection { get; } = new ConnectionMaster();
     }
 }

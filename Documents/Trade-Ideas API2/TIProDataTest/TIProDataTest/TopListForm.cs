@@ -225,7 +225,7 @@ namespace WindowsFormsApplication1
         }
         public override object Clone()
         {
-            DataCell result = (DataCell)base.Clone();
+            DataCell result = base.Clone() as DataCell;
             result._mode = _mode;
             result._format = _format;
             result._internalCode = _internalCode;
