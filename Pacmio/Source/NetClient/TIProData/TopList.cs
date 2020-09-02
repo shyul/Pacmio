@@ -81,6 +81,8 @@ namespace Pacmio.TIProData
 
         HashSet<string> UnknownSymbols { get; } = new HashSet<string>();
 
+        HashSet<Stock> UnknownStock { get; } = new HashSet<Stock>();
+
         void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
             LastUpdateTime = DateTime.Now;
@@ -89,47 +91,56 @@ namespace Pacmio.TIProData
             {
                 foreach (RowData row in rows)
                 {
-                    string symbol = row.GetAsString("symbol");
-
-                    if (Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
+                    if (row.GetAsString("symbol") is string symbol && symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
                     {
                         var list = ContractList.GetList(symbol, US_Exchanges);
 
-                        if (list.Count() > 0)
+                        if (list.Where(n => n is Stock).Count() > 0)
                         {
-                            string rowString = list.First().ToString() + " >> ";
+                            Stock stk = list.First() as Stock;
+
+                            if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
+                                stk.FullName = fullname;
+
+                            if(stk.ISIN.Length < 8 && !UnknownStock.Contains(stk)) 
+                            {
+                                UnknownStock.Add(stk);
+                                ContractList.Fetch(stk);
+                            }
+
+                            string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
                             foreach (string key in Columns.Keys)
                             {
-                                ColumnInfo c = Columns[key];
+                                ColumnInfo ci = Columns[key];
 
                                 string dataString = row.GetAsString(key);
-                                string format = c.Format.Trim();
+                                string format = ci.Format.Trim();
 
                                 if (format == string.Empty)
                                 {
-                                    rowString += c.Description + "=" + dataString + "; ";
+                                    rowString += ci.Description + "=" + dataString + "; ";
                                 }
                                 else if (format == "p")
                                 {
                                     if (row.GetAsString("four_digits") == "1")
                                     {
-                                        rowString += c.Description + "=" + dataString.ToDouble().ToString("N4") + "; ";
+                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N4") + "; ";
                                     }
                                     else
                                     {
-                                        rowString += c.Description + "=" + dataString.ToDouble().ToString("N2") + "; ";
+                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N2") + "; ";
                                     }
                                 }
                                 else
                                 {
-                                    int digits = c.Format.ToInt32();
+                                    int digits = ci.Format.ToInt32();
 
                                     if (digits > 7)
                                         digits = 7;
                                     else if (digits < 0)
                                         digits = 0;
 
-                                    rowString += c.Description + "=" + dataString.ToDouble().ToString("N" + digits) + "; ";
+                                    rowString += ci.Description + "=" + dataString.ToDouble().ToString("N" + digits) + "; ";
                                 }
                             }
                             Console.WriteLine(rowString);

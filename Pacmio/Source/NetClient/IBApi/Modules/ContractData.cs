@@ -192,8 +192,10 @@ namespace Pacmio.IB
 
                     c.MarketData.MarketRules.FromString(fields[pt + 3], ','); // 38
 
-                    //if (c.FullName.Length < 5)
-                    c.FullName = fields[21].Replace("\"", "");
+                    string fullname = fields[21].Replace("\"", "");
+
+                    if (c.FullName.Length < 5 && fullname.Length > 5)
+                        c.FullName = fullname;
 
                     c.UpdateTime = DateTime.Now;
 
