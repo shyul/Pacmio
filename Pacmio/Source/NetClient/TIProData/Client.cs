@@ -42,38 +42,40 @@ namespace Pacmio.TIProData
             Connection.ConnectionBase.ConnectionFactory = new TcpIpConnectionFactory(Root.Settings.TIServerAddress, Root.Settings.TIServerPort);
         }
 
-        private static void PingUpdate(TimeSpan ping)
+        public static ConnectionMaster Connection { get; } = new ConnectionMaster();
+
+        public static void Initialize()
+        {
+            Connected = false;
+            Connection.PingManager.PingUpdate += PingUpdate_Handler;
+            Connection.LoginManager.AccountStatusUpdate += AccountStatusUpdate_Handler;
+            Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate_Handler;
+            Connection.ConnectionBase.Preview += ConnectionBasePreview_Handler;
+        }
+
+        private static void PingUpdate_Handler(TimeSpan ping)
         {
             Ping = ping;
 
             Console.WriteLine("Ping: " + Ping.TotalMilliseconds.ToString() + "ms");
         }
 
-        private static void AccountStatusUpdate(LoginManager source, AccountStatusArgs args)
+        private static void AccountStatusUpdate_Handler(LoginManager source, AccountStatusArgs args)
         {
             AccountStatus = args.accountStatus;
             NextPayment = args.nextPayment;
             OddsmakerAvailable = args.oddsmakerAvailable;
 
-            Console.WriteLine("Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now") 
+            Console.WriteLine("Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now")
                 + " | OddsMaker Remaining: " + OddsmakerAvailable.ToString());
         }
 
-        private static void ConnectionBasePreview(ConnectionBase source, PreviewArgs args)
-        {
-            Console.WriteLine("GoodMessage: " + args.goodMessage.ToString());
-            if (args.goodMessage)
-            {
-                Console.WriteLine(Encoding.ASCII.GetString(args.messageBody));
-            }
-        }
-
-        private static void ConnectionBaseConnectionStatusUpdate(ConnectionBase source, ConnectionStatusCallbackArgs args)
+        private static void ConnectionBaseConnectionStatusUpdate_Handler(ConnectionBase source, ConnectionStatusCallbackArgs args)
         {
             Connected = !args.isServerDisconnect;
             string message = args.message;
 
-            if(message.Contains("Working:  ")) 
+            if (message.Contains("Working:  "))
             {
                 message = message.Replace("Working:  ", "");
                 LastStatusCheckTime = DateTime.Parse(message);
@@ -82,15 +84,14 @@ namespace Pacmio.TIProData
             Console.WriteLine("Status: " + Connected + " | LastStatusCheck: " + LastStatusCheck.TotalSeconds.ToString() + " secs ago | Message: " + args.message);
         }
 
-        public static void Initialize()
+        private static void ConnectionBasePreview_Handler(ConnectionBase source, PreviewArgs args)
         {
-            Connected = false;
-            Connection.PingManager.PingUpdate += PingUpdate;
-            Connection.LoginManager.AccountStatusUpdate += AccountStatusUpdate;
-            Connection.ConnectionBase.Preview += ConnectionBasePreview;
-            Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate;
+            //Console.WriteLine("GoodMessage: " + args.goodMessage.ToString());
+            /*
+            if (args.goodMessage)
+            {
+                Console.WriteLine(Encoding.ASCII.GetString(args.messageBody));
+            }*/
         }
-
-        public static ConnectionMaster Connection { get; } = new ConnectionMaster();
     }
 }

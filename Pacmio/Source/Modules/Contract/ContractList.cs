@@ -54,7 +54,7 @@ namespace Pacmio
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols)
             => Values.Where(val => symbols.Contains(val.Name));
 
-        private static IEnumerable<Contract> GetList(string symbol, IEnumerable<Exchange> exchanges)
+        public static IEnumerable<Contract> GetList(string symbol, IEnumerable<Exchange> exchanges)
             => Values.Where(val => val.Name == symbol.ToUpper() && exchanges.Contains(val.Exchange));
 
         private static IEnumerable<Contract> GetList(IEnumerable<string> symbols, IEnumerable<Exchange> exchanges)
