@@ -42,5 +42,21 @@ namespace Pacmio
         public int IBTimeout { get; set; } = 1000;
 
         #endregion IBClient
+
+        #region Trade-Ideas
+
+        [DataMember, Browsable(true), Category("3: Trade-Ideas Client")]
+        public string TIServerAddress { get; set; } = "server.trade-ideas.com";
+
+        [DataMember, Browsable(true), Category("3: Trade-Ideas Client")]
+        public int TIServerPort { get; set; } = 443;
+
+        [DataMember, Browsable(true), Category("3: Trade-Ideas Client")]
+        public string TIUsername { get; set; } = "phil";
+
+        [DataMember, Browsable(true), Category("3: Trade-Ideas Client")]
+        public string TIPassword { get; set; } = "password";
+
+        #endregion Trade-Ideas
     }
 }
