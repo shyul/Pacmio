@@ -13,10 +13,10 @@ namespace Pacmio
 {
     public static class ScannerManager
     {
-        public static readonly ConcurrentDictionary<ScannerConfig, Dictionary<int, (int ConId, string Name, DateTime time)>> List
-            = new ConcurrentDictionary<ScannerConfig, Dictionary<int, (int ConId, string Name, DateTime time)>>();
+        public static readonly ConcurrentDictionary<ScannerConfigOld, Dictionary<int, (int ConId, string Name, DateTime time)>> List
+            = new ConcurrentDictionary<ScannerConfigOld, Dictionary<int, (int ConId, string Name, DateTime time)>>();
 
-        public static ScannerConfig GetOrAdd(ScannerConfig info)
+        public static ScannerConfigOld GetOrAdd(ScannerConfigOld info)
         {
             if (!List.ContainsKey(info))
             {
@@ -36,7 +36,7 @@ namespace Pacmio
             }
         }
 
-        public static void Remove(ScannerConfig info)
+        public static void Remove(ScannerConfigOld info)
         {
             if (List.ContainsKey(info))
             {
@@ -47,7 +47,7 @@ namespace Pacmio
 
         public static void CancelAll()
         {
-            foreach (ScannerConfig info in List.Keys)
+            foreach (ScannerConfigOld info in List.Keys)
             {
                 IB.Client.SendCancel_ScannerSubscription(info.RequestId);
             }
@@ -65,7 +65,7 @@ namespace Pacmio
         /// Do not call any IB function in this method... or it is going to lock up.
         /// </summary>
         /// <param name="info"></param>
-        public static void Updated(ScannerConfig info)
+        public static void Updated(ScannerConfigOld info)
         {
             if (List.ContainsKey(info))
             {

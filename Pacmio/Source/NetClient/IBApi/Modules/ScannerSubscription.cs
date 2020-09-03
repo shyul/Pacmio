@@ -15,13 +15,13 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly ConcurrentDictionary<int, ScannerConfig> ScanRequestList = new ConcurrentDictionary<int, ScannerConfig>();
+        private static readonly ConcurrentDictionary<int, ScannerConfigOld> ScanRequestList = new ConcurrentDictionary<int, ScannerConfigOld>();
 
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"TOP_PERC_GAIN"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=1000000;"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
         // Received Error: (0)"4"-(1)"2"-(2)"-1"-(3)"2106"-(4)"HMDS data farm connection is OK:ushmds"
-        internal static void SendRequest_ScannerSubscription(ScannerConfig info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
+        internal static void SendRequest_ScannerSubscription(ScannerConfigOld info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
             double abovePrice = double.NaN, double belowPrice = double.NaN, double aboveVolume = double.NaN, double marketCapAbove = double.NaN, double marketCapBelow = double.NaN,
             bool excludeConvertible = false, string scannerSettingPairs = "",
             string moodyRatingAbove = "", string moodyRatingBelow = "", string spRatingAbove = "", string spRatingBelow = "",
@@ -91,7 +91,7 @@ namespace Pacmio.IB
                 RemoveRequest(requestId);
                 if (ScanRequestList.ContainsKey(requestId))
                 {
-                    ScanRequestList.TryRemove(requestId, out ScannerConfig info);
+                    ScanRequestList.TryRemove(requestId, out ScannerConfigOld info);
                     ScannerManager.List.TryRemove(info, out _);
                 }
             }
@@ -116,7 +116,7 @@ namespace Pacmio.IB
             if (msgVersion == "3" && ScanRequestList.ContainsKey(requestId))
             {
                 //int numberOfElements = fields[3].ToInt32(-1);
-                ScannerConfig info = ScanRequestList[requestId];
+                ScannerConfigOld info = ScanRequestList[requestId];
 
                 for (int i = 4; i < fields.Length; i += 16)
                 {

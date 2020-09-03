@@ -449,7 +449,7 @@ namespace TestClient
         private void BtnRequestScanner_Click(object sender, EventArgs e)
         {
             if (!Root.IBConnected) return;
-            ScannerConfig info_MOST_ACTIVE = new ScannerConfig()
+            ScannerConfigOld info_MOST_ACTIVE = new ScannerConfigOld()
             {
                 //Code = "MOST_ACTIVE",
                 Code = "MOST_ACTIVE",

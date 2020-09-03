@@ -264,7 +264,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerConfig.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\Scanner.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Xml\IbXmlAE.cs" />
