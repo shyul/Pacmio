@@ -17,7 +17,7 @@ namespace Pacmio
     public class HistoricalData : BidAskData
     {
         [DataMember]
-        public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
+        public DateTime BarTableEarliestTime { get; set; } = DateTime.MaxValue;
 
         [DataMember]
         public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }

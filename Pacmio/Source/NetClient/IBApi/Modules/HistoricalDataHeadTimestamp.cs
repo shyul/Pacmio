@@ -81,6 +81,7 @@ namespace Pacmio.IB
             {
                 RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
                 DataRequestID = -1; // Emit update cancelled.
+                
             }
         }
 

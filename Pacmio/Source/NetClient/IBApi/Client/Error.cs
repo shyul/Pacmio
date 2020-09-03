@@ -41,15 +41,38 @@ namespace Pacmio.IB
                         break;
 
                     case RequestType.RequestHeadTimestamp:
-                        RemoveRequest(requestId);
-                        DataRequestID = -1;
-                        break;
+                        {
+                            RemoveRequest(requestId);
+                            Contract c = activeBarTable_HistoricalDataHeadTimestamp.Contract;
 
+                            if (fields[3] == "200")
+                                c.Status = ContractStatus.Error;
+
+                            if (c.MarketData is HistoricalData sd)
+                            {
+                                sd.BarTableEarliestTime = DateTime.MaxValue;
+                            }
+
+                            DataRequestID = -1;
+                            Console.WriteLine("Requesting HeadTimestamp errors:" + activeBarTable_HistoricalDataHeadTimestamp.ToString() + fields.ToStringWithIndex());
+                            break;
+                        }
                     case RequestType.RequestHistoricalTicks:
                         RemoveRequest(requestId);
                         requestId_HistoricalTick = -1;
                         break;
 
+                    case RequestType.RequestMarketData:
+                        {
+                            RemoveRequest(requestId, false);
+                            ActiveMarketTicks.TryRemove(requestId, out Contract c);
+
+                            if (fields[3] == "200")
+                                c.Status = ContractStatus.Error;
+
+                            Console.WriteLine("RequestMarketData errors: " + fields.ToStringWithIndex() + fields.ToStringWithIndex());
+                            break;
+                        }
                     case RequestType.RequestFundamentalData:
                     default:
                         Console.WriteLine(type + " returned with errors: " + fields.ToStringWithIndex());
@@ -102,7 +125,7 @@ namespace Pacmio.IB
                 // Received Error: (0)"4" - (1)"2" - (2)"20000001" - (3)"2152" - (4)"Exchanges - Depth: BATS; ARCA; ISLAND; BEX; IEX; Top: BYX; AMEX; CHX; NYSENAT; PSX; EDGEA; ISE; DRCTEDGE; Need additional market data permissions - Depth: NYSE; "
                 // Received Error: (0)"4" - (1)"2" - (2)"10000001" - (3)"10197" - (4)"No market data during competing live session"
 
-                Console.WriteLine("Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.");
+                Console.WriteLine("Unable to locate this request Id: " + requestId + " in the table, maybe this message just tells your something has been properly removed.");
                 Console.WriteLine("Parse Errors: " + fields.ToStringWithIndex());
                 RemoveRequest(requestId);
             }

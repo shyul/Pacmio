@@ -65,8 +65,6 @@ namespace Pacmio.IB
                 {
                     type = ActiveRequestIds[requestId];
 
-                    Log.Print(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + "Request >> " + requestId);
-
                     (bool hasCancellationCode, RequestCancellationCode Result) = type.GetAttribute<RequestCancellationCode>();
                     if (hasCancellationCode && cancel)
                     {
@@ -76,7 +74,14 @@ namespace Pacmio.IB
                             Result.Version.ToString(),
                             requestId.ToString(),
                         });
+
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + " and Cancel: " + requestId + " | " + cancelRequest);
                     }
+                    else
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + " Id Only: " + requestId);
+                    }
+
                     ActiveRequestIds.TryRemove(requestId, out _);
                     return (true, type);
                 }

@@ -16,6 +16,9 @@ namespace Pacmio
     [Serializable, DataContract]
     public enum ContractStatus : int
     {
+        [EnumMember, Description("Error")]
+        Error = -2000,
+
         [EnumMember, Description("Test")]
         Test = -1000,
 
