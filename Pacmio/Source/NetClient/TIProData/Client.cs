@@ -34,19 +34,38 @@ namespace Pacmio.TIProData
 
         public static bool Connected { get; private set; }
 
+        public static TcpIpConnectionFactory TcpIpConnectionFactory { get; private set; }
+
+        //public static IConnection TcpIpConnection { get; private set; }
+
         public static void Connect()
         {
-            Connected = false;
+            Initialize();
             Connection.LoginManager.Username = Root.Settings.TIUsername;
             Connection.LoginManager.Password = Root.Settings.TIPassword;
-            Connection.ConnectionBase.ConnectionFactory = new TcpIpConnectionFactory(Root.Settings.TIServerAddress, Root.Settings.TIServerPort);
+            Connection.ConnectionBase.ConnectionFactory = TcpIpConnectionFactory = new TcpIpConnectionFactory(Root.Settings.TIServerAddress, Root.Settings.TIServerPort);
+            /*
+            TcpIpConnectionFactory.Address = Root.Settings.TIServerAddress;
+            TcpIpConnectionFactory.Port = Root.Settings.TIServerPort;
+            TcpIpConnection = TcpIpConnectionFactory.CreateConnection();*/
         }
 
-        public static ConnectionMaster Connection { get; } = new ConnectionMaster();
+        public static void Disconnect()
+        {
+            if (TcpIpConnectionFactory is TcpIpConnectionFactory icf)
+            {
+                Connected = false;
+                Connection.Dispose();
+                //icf.CreateConnection(null).Disconnect();
+            }
+        }
+
+        public static ConnectionMaster Connection { get; private set; } 
 
         public static void Initialize()
         {
             Connected = false;
+            Connection = new ConnectionMaster();
             Connection.PingManager.PingUpdate += PingUpdate_Handler;
             Connection.LoginManager.AccountStatusUpdate += AccountStatusUpdate_Handler;
             Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate_Handler;

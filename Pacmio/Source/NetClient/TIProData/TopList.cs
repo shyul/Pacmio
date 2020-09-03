@@ -36,12 +36,10 @@ namespace Pacmio.TIProData
 
             tls = new TopListScanner("Low Price Gappers")
             {
-                PriceMin = 1.5,
-                PriceMax = 25,
-                GapPercentMin = 5,
-                GapPercentMax = -5,
-                VolumeMin = 50e3,
-                AverageTrueRangeMin = 0.25,
+                Price = (1.5, 25),
+                Volume = (50e3, double.NaN),
+                GapPercent = (5, -5),
+                AverageTrueRange = (0.25, double.NaN),
                 ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
             };
 
@@ -72,6 +70,7 @@ namespace Pacmio.TIProData
 
         public override void Start()
         {
+            IsActive = true;
             string configStr = ConfigString;
             Console.WriteLine(Name + " | " + configStr);
 
@@ -82,9 +81,10 @@ namespace Pacmio.TIProData
             TopList.Start();
         }
 
-        public override void Stop() 
-        { 
+        public override void Stop()
+        {
             TopList.Stop();
+            IsActive = false;
         }
 
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
@@ -116,25 +116,71 @@ namespace Pacmio.TIProData
 
         private DateTime m_HistoricalTime;
 
-        public override double PriceMin { get => GetConfigDouble("MinPrice"); set => SetConfig("MinPrice", value); }
+        public override (double Min, double Max) Price
+        {
+            get => (GetConfigDouble("MinPrice"), GetConfigDouble("MaxPrice"));
 
-        public override double PriceMax { get => GetConfigDouble("MaxPrice"); set => SetConfig("MaxPrice", value); }
+            set
+            {
+                SetConfig("MinPrice", value.Min);
+                SetConfig("MaxPrice", value.Max);
+            }
+        }
 
-        public override double VolumeMin { get => GetConfigDouble("MinTV"); set => SetConfig("MinTV", value); }
+        public override (double Min, double Max) Volume
+        {
+            get => (GetConfigDouble("MinTV"), GetConfigDouble("MaxTV"));
 
-        public override double VolumeMax { get => GetConfigDouble("MaxTV"); set => SetConfig("MaxTV", value); }
+            set
+            {
+                SetConfig("MinTV", value.Min);
+                SetConfig("MaxTV", value.Max);
+            }
+        }
 
-        public override double MarketCapMin { get => GetConfigDouble("MinMCap"); set => SetConfig("MinMCap", value); }
+        public override (double Min, double Max) MarketCap
+        {
+            get => (GetConfigDouble("MinMCap"), GetConfigDouble("MaxMCap"));
 
-        public override double MarketCapMax { get => GetConfigDouble("MaxMCap"); set => SetConfig("MaxMCap", value); }
+            set
+            {
+                SetConfig("MinMCap", value.Min);
+                SetConfig("MaxMCap", value.Max);
+            }
+        }
 
-        public override double GapPercentMin { get => GetConfigDouble("MinGUP"); set => SetConfig("MinGUP", value); }
+        public override (double Min, double Max) GainPercent
+        {
+            get => (GetConfigDouble("MinFCP"), GetConfigDouble("MaxFCP"));
 
-        public override double GapPercentMax { get => GetConfigDouble("MaxGUP"); set => SetConfig("MaxGUP", value); }
+            set
+            {
+                SetConfig("MinFCP", value.Min);
+                SetConfig("MaxFCP", value.Max);
+            }
+        }
 
-        public double AverageTrueRangeMin { get => GetConfigDouble("MinATR"); set => SetConfig("MinATR", value); }
+        public override (double Min, double Max) GapPercent
+        {
+            get => (GetConfigDouble("MinGUP"), GetConfigDouble("MaxGUP"));
 
-        public double AverageTrueRangeMax { get => GetConfigDouble("MaxATR"); set => SetConfig("MaxATR", value); }
+            set
+            {
+                SetConfig("MinGUP", value.Min);
+                SetConfig("MaxGUP", value.Max);
+            }
+        }
+
+        public (double Min, double Max) AverageTrueRange
+        {
+            get => (GetConfigDouble("MinATR"), GetConfigDouble("MaxATR"));
+
+            set
+            {
+                SetConfig("MinATR", value.Min);
+                SetConfig("MaxATR", value.Max);
+            }
+        }
 
         public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
 

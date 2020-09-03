@@ -31,27 +31,25 @@ namespace Pacmio
 
         public abstract void Stop();
 
+        public virtual bool IsActive { get; set; } = false;
+
         public virtual bool IsSnapshot { get; set; } = false;
 
         public virtual string Name { get; set; }
 
         public virtual int NumberOfRows { get; set; } = 100;
 
-        public virtual double PriceMin { get; set; }
+        public virtual (double Min, double Max) Price { get; set; }
 
-        public virtual double PriceMax { get; set; }
+        public virtual (double Min, double Max) Volume { get; set; }
 
-        public virtual double VolumeMin { get; set; }
+        public virtual (double Min, double Max) MarketCap { get; set; }
 
-        public virtual double VolumeMax { get; set; }
+        public virtual (double Min, double Max) GainPercent { get; set; }
 
-        public virtual double MarketCapMin { get; set; }
+        public virtual (double Min, double Max) GapPercent { get; set; }
 
-        public virtual double MarketCapMax { get; set; }
 
-        public virtual double GapPercentMin { get; set; }
-
-        public virtual double GapPercentMax { get; set; }
 
         public bool GetConfigBool(string key, string expectedValue) => ConfigList.ContainsKey(key) && ConfigList[key] == expectedValue;
 

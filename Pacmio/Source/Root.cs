@@ -135,9 +135,9 @@ namespace Pacmio
 
             StartTask();
 
-            TIProData.Client.Initialize();
-            //TIProData.Client.Connect();
-            //TIProData.Client.TestTopList();
+            //TIProData.Client.Initialize();
+            TIProData.Client.Connect();
+            TIProData.Client.TestTopList();
 
             Form = new PacmioForm() { Text = TitleText, };
         }
