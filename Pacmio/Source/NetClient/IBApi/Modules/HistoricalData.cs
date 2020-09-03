@@ -211,7 +211,11 @@ namespace Pacmio.IB
                 }
 
                 //ActiveBarTable_HistoricalData = null;
-                if (fields[3] == "366")
+                if (fields[3] == "200") 
+                {
+                    active_HistoricalDataBarTable.Contract.Status = ContractStatus.Error;
+                }
+                else if (fields[3] == "366")
                 {
                     // Unable to find the table for the contract
                 }

@@ -81,8 +81,25 @@ namespace Pacmio.IB
             {
                 RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
                 DataRequestID = -1; // Emit update cancelled.
-                
             }
+        }
+
+        private static void ParseError_HistoricalHeadDataTimestamp(string[] fields)
+        {
+            int requestId = fields[2].ToInt32(-1);
+            RemoveRequest(requestId, false);
+            Contract c = activeBarTable_HistoricalDataHeadTimestamp.Contract;
+
+            if (fields[3] == "200")
+                c.Status = ContractStatus.Error;
+            /*
+            if (c.MarketData is HistoricalData sd)
+            {
+                sd.BarTableEarliestTime = DateTime.MaxValue;
+            }*/
+
+            Console.WriteLine("Requesting HeadTimestamp errors: " + activeBarTable_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
+            DataRequestID = -1;
         }
 
         /// <summary>

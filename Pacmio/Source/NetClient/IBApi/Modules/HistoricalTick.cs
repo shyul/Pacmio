@@ -156,5 +156,17 @@ namespace Pacmio.IB
         public static void InboundTick(Contract c, DateTime time, double price, double size) => TickList[c].Add((time, price, size));
 
         private static readonly ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>> TickList = new ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>>();
+
+        private static void ParseError_HistoricalTick(string[] fields)
+        {
+            int requestId = fields[2].ToInt32(-1);
+            RemoveRequest(requestId, false);
+            ActiveMarketTicks.TryRemove(requestId, out Contract c);
+
+            if (fields[3] == "200")
+                c.Status = ContractStatus.Error;
+
+            Console.WriteLine("RequestMarketData errors: " + fields.ToStringWithIndex());
+        }
     }
 }

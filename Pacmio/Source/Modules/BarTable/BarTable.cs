@@ -1122,7 +1122,7 @@ namespace Pacmio
                     // https://interactivebrokers.github.io/tws-api/historical_limitations.html
                     DateTime earliestTime = (bt.BarFreq < BarFreq.Minute) ? DateTime.Now.AddMonths(-6) : bt.EarliestTime;
 
-                    if (earliestTime < DateTime.Now)
+                    if (bt.Contract.Status != ContractStatus.Error && earliestTime < DateTime.Now)
                     {
                         List<Period> api_request_pd_list = new List<Period>();
 

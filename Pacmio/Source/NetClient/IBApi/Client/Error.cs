@@ -41,38 +41,19 @@ namespace Pacmio.IB
                         break;
 
                     case RequestType.RequestHeadTimestamp:
-                        {
-                            RemoveRequest(requestId);
-                            Contract c = activeBarTable_HistoricalDataHeadTimestamp.Contract;
+                        ParseError_HistoricalHeadDataTimestamp(fields);
+             
+                        break;
 
-                            if (fields[3] == "200")
-                                c.Status = ContractStatus.Error;
-
-                            if (c.MarketData is HistoricalData sd)
-                            {
-                                sd.BarTableEarliestTime = DateTime.MaxValue;
-                            }
-
-                            DataRequestID = -1;
-                            Console.WriteLine("Requesting HeadTimestamp errors:" + activeBarTable_HistoricalDataHeadTimestamp.ToString() + fields.ToStringWithIndex());
-                            break;
-                        }
                     case RequestType.RequestHistoricalTicks:
                         RemoveRequest(requestId);
                         requestId_HistoricalTick = -1;
                         break;
 
                     case RequestType.RequestMarketData:
-                        {
-                            RemoveRequest(requestId, false);
-                            ActiveMarketTicks.TryRemove(requestId, out Contract c);
+                        ParseError_HistoricalTick(fields);
+                        break;
 
-                            if (fields[3] == "200")
-                                c.Status = ContractStatus.Error;
-
-                            Console.WriteLine("RequestMarketData errors: " + fields.ToStringWithIndex() + fields.ToStringWithIndex());
-                            break;
-                        }
                     case RequestType.RequestFundamentalData:
                     default:
                         Console.WriteLine(type + " returned with errors: " + fields.ToStringWithIndex());
