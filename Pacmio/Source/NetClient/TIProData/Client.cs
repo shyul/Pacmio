@@ -40,7 +40,12 @@ namespace Pacmio.TIProData
 
         public static void Connect()
         {
-            Initialize();
+            Connected = false;
+            Connection = new ConnectionMaster();
+            Connection.PingManager.PingUpdate += PingUpdate_Handler;
+            Connection.LoginManager.AccountStatusUpdate += AccountStatusUpdate_Handler;
+            Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate_Handler;
+            Connection.ConnectionBase.Preview += ConnectionBasePreview_Handler;
             Connection.LoginManager.Username = Root.Settings.TIUsername;
             Connection.LoginManager.Password = Root.Settings.TIPassword;
             Connection.ConnectionBase.ConnectionFactory = TcpIpConnectionFactory = new TcpIpConnectionFactory(Root.Settings.TIServerAddress, Root.Settings.TIServerPort);
@@ -55,22 +60,12 @@ namespace Pacmio.TIProData
             if (TcpIpConnectionFactory is TcpIpConnectionFactory icf)
             {
                 Connected = false;
-                Connection.Dispose();
+                Connection?.Dispose();
                 //icf.CreateConnection(null).Disconnect();
             }
         }
 
         public static ConnectionMaster Connection { get; private set; } 
-
-        public static void Initialize()
-        {
-            Connected = false;
-            Connection = new ConnectionMaster();
-            Connection.PingManager.PingUpdate += PingUpdate_Handler;
-            Connection.LoginManager.AccountStatusUpdate += AccountStatusUpdate_Handler;
-            Connection.ConnectionBase.ConnectionStatusUpdate += ConnectionBaseConnectionStatusUpdate_Handler;
-            Connection.ConnectionBase.Preview += ConnectionBasePreview_Handler;
-        }
 
         private static void PingUpdate_Handler(TimeSpan ping)
         {

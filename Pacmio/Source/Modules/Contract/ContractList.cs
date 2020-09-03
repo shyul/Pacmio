@@ -85,7 +85,7 @@ namespace Pacmio
 
                 if (list.Count() == 1 && !forceUpdate)
                     return list.First();
-                else if (Root.IBConnected)
+                else if (IB.Client.Connected)
                 {
                     if (list.Count() > 1)
                     {
@@ -105,7 +105,7 @@ namespace Pacmio
         {
             var list = GetList(symbol, countryCode).Where(n => n.ConId > 0);
 
-            if ((list.Count() == 0 || forceUpdate) && Root.IBConnected)
+            if ((list.Count() == 0 || forceUpdate) && IB.Client.Connected)
             {
                 var dataDownload = Fetch(symbol, cts).Where(n => n.Name == symbol);
                 if (dataDownload.Count() > 0)
@@ -128,7 +128,7 @@ namespace Pacmio
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
 
-            if (count > 0 && Root.IBConnected)
+            if (count > 0 && IB.Client.Connected)
             {
                 int i = 0;
                 foreach (string symbol in non_existing_symbols)
@@ -167,7 +167,7 @@ namespace Pacmio
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
             int count = non_existing_symbols.Count();
             Console.WriteLine("non_existing_symbols.Count() = " + count);
-            if (count > 0 && Root.IBConnected)
+            if (count > 0 && IB.Client.Connected)
             {
                 int i = 0;
                 foreach (string symbol in non_existing_symbols)

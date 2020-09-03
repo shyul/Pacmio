@@ -36,16 +36,16 @@ namespace Pacmio
 
         #region IB Client
 
-        public static void IBConnectUpdate(ConnectionStatus status, DateTime time, string message = "")
+        public static void NetConnectUpdate(ConnectionStatus status, DateTime time, string message = "")
         {
-            OnIBConnectedHandler?.Invoke(status, time, message);
+            OnNetConnectedHandler?.Invoke(status, time, message);
         }
 
-        public static event ConnectionStatusEventHandler OnIBConnectedHandler;
+        public static event ConnectionStatusEventHandler OnNetConnectedHandler;
 
-        public static bool IBConnected => IB.Client.Connected;
+        public static bool NetConnected => IB.Client.Connected;// && TIProData.Client.Connected;
 
-        public static void IBClientStart()
+        public static void NetClientStart()
         {
             if (Settings is null) return;
 
@@ -54,7 +54,7 @@ namespace Pacmio
                 int timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
-                OnIBConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
+                OnNetConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
                 IB.Client.Connect(Settings.IBClientId, Settings.IBServerPort, Settings.IBServerAddress, Settings.IBTimeout);
 
                 while (!IB.Client.Connected)
@@ -64,23 +64,33 @@ namespace Pacmio
                     if (j > timeout) break;
                 }
             }
+
+            if (!TIProData.Client.Connected) 
+            {
+                TIProData.Client.Connect();
+            }
         }
 
-        public static void IBClientStop()
+        public static void NetClientStop()
         {
-            if (IBConnected)
+            if (IB.Client.Connected)
             {
                 int timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
                 IB.Client.Disconnect.Start();
 
-                while (IBConnected)
+                while (IB.Client.Connected)
                 {
                     Thread.Sleep(1);
                     j++;
                     if (j > timeout) break;
                 }
+            }
+
+            if (TIProData.Client.Connected)
+            {
+                TIProData.Client.Disconnect();
             }
         }
 
@@ -135,9 +145,8 @@ namespace Pacmio
 
             StartTask();
 
-            //TIProData.Client.Initialize();
-            TIProData.Client.Connect();
-            TIProData.Client.TestTopList();
+            //TIProData.Client.Connect();
+            //TIProData.Client.TestTopList();
 
             Form = new PacmioForm() { Text = TitleText, };
         }

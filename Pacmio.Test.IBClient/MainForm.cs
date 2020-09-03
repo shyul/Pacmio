@@ -80,7 +80,7 @@ namespace TestClient
             UpdateAccountList();
             ToggleConnect();
 
-            Root.OnIBConnectedHandler += IBClientOnConnectedHandler;
+            Root.OnNetConnectedHandler += NetClientOnConnectedHandler;
 
             TradeInfoManager.UpdatedHandler += TradeTableHandler;
 
@@ -218,13 +218,13 @@ namespace TestClient
             Root.Settings.IBServerAddress = TextBoxIPAddress.Text;
 
             btnConnect.Enabled = false;
-            if (Root.IBConnected)
+            if (Root.NetConnected)
             {
-                Root.IBClientStop();
+                Root.NetClientStop();
             }
             else
             {
-                Root.IBClientStart();
+                Root.NetClientStart();
 
             }
             Thread.Sleep(100);
@@ -412,7 +412,7 @@ namespace TestClient
 
         private void BtnRequestHistoricalTicks_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected || !ValidateSymbol()) return;
+            if (!Root.NetConnected || !ValidateSymbol()) return;
 
 
 
@@ -448,7 +448,7 @@ namespace TestClient
 
         private void BtnRequestScanner_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
+            if (!Root.NetConnected) return;
             ScannerConfigOld info_MOST_ACTIVE = new ScannerConfigOld()
             {
                 //Code = "MOST_ACTIVE",
@@ -485,7 +485,7 @@ namespace TestClient
 
         private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
+            if (!Root.NetConnected) return;
             ScannerManager.Request_ScannerParameters();
         }
 
@@ -527,7 +527,7 @@ namespace TestClient
 
         private void TestMassOrder_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
+            if (!Root.NetConnected) return;
             AccountManager.Request_AccountSummary();
 
             string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
@@ -547,13 +547,13 @@ namespace TestClient
 
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
+            if (!Root.NetConnected) return;
             TradeInfoManager.Request_Log();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected) return;
+            if (!Root.NetConnected) return;
             TradeData.CloseAllPositions();
         }
 
@@ -903,7 +903,7 @@ namespace TestClient
 
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected || !ValidateSymbol()) return;
+            if (!Root.NetConnected || !ValidateSymbol()) return;
             ContractTest.ActiveContract.Request_MarketTicks(TextBoxGenericTickList.Text);
             MarketDataGridView.MarketDataTable.Add(ContractTest.ActiveContract);
         }
@@ -933,7 +933,7 @@ namespace TestClient
 
         private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
         {
-            if (!Root.IBConnected || !ValidateSymbol()) return;
+            if (!Root.NetConnected || !ValidateSymbol()) return;
 
             if (ContractTest.ActiveContract is Stock imd)
             {
@@ -949,7 +949,7 @@ namespace TestClient
         private void BtnOrder_Click(object sender, EventArgs e)
         {
 
-            if (Root.IBConnected && ValidateSymbol())
+            if (Root.NetConnected && ValidateSymbol())
             {
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
                 OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
@@ -1015,7 +1015,7 @@ namespace TestClient
 
         private void BtnOrderBraket_Click(object sender, EventArgs e)
         {
-            if (Root.IBConnected && ValidateSymbol())
+            if (Root.NetConnected && ValidateSymbol())
             {
                 Account iba = OrderTest.LiveAccount;
 

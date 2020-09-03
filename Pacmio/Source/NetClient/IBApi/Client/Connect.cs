@@ -90,15 +90,15 @@ namespace Pacmio.IB
             }
             else
             {
-                Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Connect already established!");
+                Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Connect already established!");
             }
         }
 
         private static void ConnectWorker()
         {
-            Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Reset and prepare connectivity resource."); // If it is connected
+            Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Reset and prepare connectivity resource."); // If it is connected
             ResetAll();
-            Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Start connect: " + Hostname + ":" + Port); // If it is connected
+            Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "Start connect: " + Hostname + ":" + Port); // If it is connected
 
             TcpClient = new TcpClient()
             {
@@ -111,7 +111,7 @@ namespace Pacmio.IB
             try
             {
                 TcpClient.Connect(Hostname, Port);
-                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "TCP Client is connected: " + Hostname + ":" + Port); // If it is connected
+                Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "TCP Client is connected: " + Hostname + ":" + Port); // If it is connected
 
                 int j = 0;
                 while (!IsSocketConnected() && j < Timeout)
@@ -145,7 +145,7 @@ namespace Pacmio.IB
                     }
                     catch (Exception e) when (e is IOException || e is InvalidOperationException)
                     {
-                        Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
+                        Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
                         Disconnect.Start();
                     }
 
@@ -159,7 +159,7 @@ namespace Pacmio.IB
 
                     if (j < Timeout)
                     {
-                        Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
+                        Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Connected, DateTime.Now, "Connect Success: " + ConnectTime); // If it is connected
 
                         //SendRequest_AccountSummary();
                         //SendRequest_Postion();
@@ -168,14 +168,14 @@ namespace Pacmio.IB
 
                 if (j > Timeout - 2)
                 {
-                    Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Timeout. Failed to connect.");
+                    Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Timeout. Failed to connect.");
                     ResetAll();
                 }
             }
             catch (SocketException e)
             {
                 ResetAll();
-                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Socket Error: " + e.Message);
+                Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now, "Socket Error: " + e.Message);
                 return;
             }
         }
@@ -185,9 +185,9 @@ namespace Pacmio.IB
             ScannerManager.CancelAll();
             if (ApiStatus == ConnectionStatus.Connected || ApiStatus == ConnectionStatus.Connecting)
             {
-                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now);
+                Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now);
                 ResetAll();
-                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now);
+                Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnected, DateTime.Now);
                 /*
                 foreach(var item in TicksList) 
                 {

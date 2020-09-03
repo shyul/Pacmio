@@ -57,11 +57,11 @@ namespace Pacmio.IB
                             // The time would be the local time, example PST for the west coast.
                             ConnectTime = DateTime.ParseExact(raw[1].Substring(0, raw[1].Length - 4), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                             ServerVersion = raw[0].ToInt32(-1);
-                            Root.IBConnectUpdate(ApiStatus, DateTime.Now, "API Server Ver: " + ServerVersion.ToString());
+                            Root.NetConnectUpdate(ApiStatus, DateTime.Now, "API Server Ver: " + ServerVersion.ToString());
 
                             if (ServerVersion < MIN_VERSION)
                             {
-                                Root.IBConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now, "IB Gateway version: " + ServerVersion.ToString() + " is too old, requiring minimum version: " + MIN_VERSION.ToString());
+                                Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now, "IB Gateway version: " + ServerVersion.ToString() + " is too old, requiring minimum version: " + MIN_VERSION.ToString());
                                 Disconnect.Start();
                                 break;
                             }
@@ -76,7 +76,7 @@ namespace Pacmio.IB
                 }
                 else if (!IsSocketConnected())
                 {
-                    Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
+                    Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();
                 }
                 else

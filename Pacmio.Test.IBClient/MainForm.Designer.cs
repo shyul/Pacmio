@@ -19,7 +19,7 @@ namespace TestClient
         {
             if (disposing && (components != null))
             {
-                Root.IBClientStop();
+                Root.NetClientStop();
                 components.Dispose();
             }
             base.Dispose(disposing);

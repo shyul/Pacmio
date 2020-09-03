@@ -43,7 +43,7 @@ namespace TestClient
             }
         }
 
-        public void IBClientOnConnectedHandler(ConnectionStatus status, DateTime time, string msg)
+        public void NetClientOnConnectedHandler(ConnectionStatus status, DateTime time, string msg)
         {
             Task UpdateUI = new Task(() =>
             {
@@ -177,9 +177,7 @@ namespace TestClient
 
         public void ToggleConnect()
         {
-
-
-            if (!Root.IBConnected)
+            if (!Root.NetConnected)
             {
                 btnConnect.Text = "Connect";
                 LbStatus.Text = "Not Connected";

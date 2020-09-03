@@ -1063,7 +1063,7 @@ namespace Pacmio
                 bt.Adjust(); // With all the quandl bars loaded (or not... we still have bars loaded from the file system), we can do Sort and Forward Adjust now.
 
                 // Load IB Daily if Quandle fails
-                if (!quandl_is_available && Root.IBConnected)
+                if (!quandl_is_available && IB.Client.Connected)
                 {
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl is not available, try getting the Daily Bars from IB!");
                     Fetch_IB(bt, period, cts);
@@ -1095,7 +1095,7 @@ namespace Pacmio
             {
                 var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
 
-                if (bfi_valid && Root.IBConnected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
+                if (bfi_valid && IB.Client.Connected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
                 {
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request: " + period);
 

@@ -190,14 +190,14 @@ namespace Pacmio.IB
                     }
                     catch (Exception e) when (e is IOException || e is InvalidOperationException)
                     {
-                        Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
+                        Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Send Data Error, disconnecting.");
                         Disconnect.Start();
                         break;
                     }
                 }
                 else if (!IsSocketConnected())
                 {
-                    Root.IBConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
+                    Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();
                     break;
                 }
