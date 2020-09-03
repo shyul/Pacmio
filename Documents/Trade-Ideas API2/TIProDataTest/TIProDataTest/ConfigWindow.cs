@@ -412,6 +412,12 @@ namespace WindowsFormsApplication1
             _topListStrategy.Time = _topListStrategy.Time.AddMilliseconds(-_topListStrategy.Time.Millisecond);
             _topListStrategy.Time = _topListStrategy.Time.AddSeconds(-_topListStrategy.Time.Second);
             _topListStrategy.OutsideMarketHours = outsideMarketHoursCheckBox.Checked;
+
+            //StringBuilder sb = new StringBuilder();
+
+            Console.WriteLine(_topListStrategy.MakeConfigString());
+
+
         }
 
     }

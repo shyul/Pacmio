@@ -25,7 +25,13 @@ namespace Pacmio.TIProData
 
         public static void TestTopList()
         {
-            tlg = new TopListGroup("form=1&sort=MaxGUP&count=100&MinGUP=5&MinPrice=1.5&MinTV=50000&MaxGUP=-5&MaxPrice=25&X_NYSE=on&XN=on&WN=Small+Gappers&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=&col_ver=1&omh=1");
+            DateTime time = new DateTime(2020, 06, 10, 06, 30, 00);
+            long epoch = time.ToEpoch().ToInt64();
+
+            Console.WriteLine("Epoch = " + epoch);
+
+
+            tlg = new TopListGroup("form=1&sort=MaxGUP&count=100&MinGUP=5&MinPrice=1.5&MinTV=50000&MaxGUP=-5&MaxPrice=25&X_NYSE=on&XN=on&WN=Small+Gappers&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=&col_ver=1&omh=1&hist=1&exact_time=" + epoch);
 
 
             if (Connected)
@@ -42,15 +48,26 @@ namespace Pacmio.TIProData
         public TopListGroup(string config)
         {
             Configuration = config;
-            TopList = Client.Connection.TopListManager.GetTopList(Configuration);
+
+            var toplist = Client.Connection.TopListManager.GetTopList(Configuration);
+
+            TopList = toplist is TopList tl ? tl : null;
+
+
             TopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
             TopList.TopListData += new TopListData(TopListData_Handler);
             TopList.Start();
+
+            //Console.WriteLine("########################################"  + TopList.GetType().FullName);
         }
 
-
+        
 
         public string Configuration { get; private set; }
+
+        public void Start() => TopList.Start();
+
+        public void Stop() => TopList.Stop();
 
         private TopList TopList { get; set; }
 
