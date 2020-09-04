@@ -18,6 +18,7 @@ using TradeIdeas.TIProData.Configuration;
 using TradeIdeas.ServerConnection;
 using System.Windows.Forms;
 
+
 namespace Pacmio.TIProData
 {
     public static partial class Client
@@ -49,16 +50,18 @@ namespace Pacmio.TIProData
 
             tls.Start();
 
-            if (Connected)
-            {
 
 
-            }
+
+            
         }
     }
 
 
-    public class TopListScanner : Scanner
+
+
+
+    public class TopListScanner : Scanner, IWatchList
     {
         public TopListScanner(string name, int numberOfRows = 100)
         {
@@ -70,22 +73,32 @@ namespace Pacmio.TIProData
 
         public override void Start()
         {
-            IsActive = true;
-            string configStr = ConfigString;
-            Console.WriteLine(Name + " | " + configStr);
+            if (!IsActive && Client.Connected)
+            {
+                IsActive = true;
+                string configStr = ConfigString;
+                Console.WriteLine(Name + " | " + configStr);
 
-            var toplist = Client.Connection.TopListManager.GetTopList(configStr);
-            TopList = toplist is TopList tl ? tl : null;
-            TopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
-            TopList.TopListData += new TopListData(TopListData_Handler);
-            TopList.Start();
+                var toplist = Client.Connection.TopListManager.GetTopList(configStr);
+                TopList = toplist is TopList tl ? tl : null;
+                TopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
+                TopList.TopListData += new TopListData(TopListData_Handler);
+                TopList.Start();
+            }
         }
 
         public override void Stop()
         {
-            TopList.Stop();
-            IsActive = false;
+            if (m_IsActive)
+            {
+                TopList.Stop();
+                IsActive = false;
+            }
         }
+
+        public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
+
+        private bool m_IsActive = false;
 
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
 
@@ -234,6 +247,8 @@ namespace Pacmio.TIProData
                 //Console.WriteLine(sender.TopListInfo.ToString());
             }
         }
+
+        public ICollection<Contract> List { get; } = new List<Contract>();
 
         void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {

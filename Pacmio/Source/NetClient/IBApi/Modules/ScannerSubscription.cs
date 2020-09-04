@@ -92,7 +92,7 @@ namespace Pacmio.IB
                 if (ScanRequestList.ContainsKey(requestId))
                 {
                     ScanRequestList.TryRemove(requestId, out ScannerConfigOld info);
-                    ScannerManager.List.TryRemove(info, out _);
+                    ScannerManager.Old_List.TryRemove(info, out _);
                 }
             }
         }
@@ -124,9 +124,9 @@ namespace Pacmio.IB
                     int conId = fields[i + 1].ToInt32(-1);
                     string symbolName = fields[i + 2];
 
-                    if (ScannerManager.List.ContainsKey(info))
+                    if (ScannerManager.Old_List.ContainsKey(info))
                     {
-                        ScannerManager.List[info][rank] = (conId, symbolName, DateTime.Now);
+                        ScannerManager.Old_List[info][rank] = (conId, symbolName, DateTime.Now);
                     }
 
                     /*

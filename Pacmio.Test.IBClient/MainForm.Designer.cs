@@ -189,6 +189,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnRequestTIProScanner = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -651,6 +652,7 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnRequestTIProScanner);
             this.tabMarketData.Controls.Add(this.BtnMarketDataSyncTicks);
             this.tabMarketData.Controls.Add(this.BtnCancelAllScanner);
             this.tabMarketData.Controls.Add(this.BtnRequestMarketDepth);
@@ -1872,6 +1874,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnRequestTIProScanner
+            // 
+            this.BtnRequestTIProScanner.Location = new System.Drawing.Point(506, 346);
+            this.BtnRequestTIProScanner.Name = "BtnRequestTIProScanner";
+            this.BtnRequestTIProScanner.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestTIProScanner.TabIndex = 51;
+            this.BtnRequestTIProScanner.Text = "Request TI Pro Scanner";
+            this.BtnRequestTIProScanner.UseVisualStyleBackColor = true;
+            this.BtnRequestTIProScanner.Click += new System.EventHandler(this.BtnRequestTIProScanner_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2085,5 +2097,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnHistoricalDataContractSet3;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet2;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet1;
+        private System.Windows.Forms.Button BtnRequestTIProScanner;
     }
 }

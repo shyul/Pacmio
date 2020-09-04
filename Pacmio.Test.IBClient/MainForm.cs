@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
 
+
 namespace TestClient
 {
     public partial class MainForm : Form
@@ -644,16 +645,6 @@ namespace TestClient
 
         }
 
-
-
-
-
-
-
-
-
-
-
         public static Progress<float> Detailed_Progress;
 
         private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
@@ -1094,6 +1085,30 @@ namespace TestClient
         }
 
 
+
+        //public static Pacmio.TIProData.TopListScanner tls { get; private set; }
+
+        private void BtnRequestTIProScanner_Click(object sender, EventArgs e)
+        {
+            /*
+            tls = new Pacmio.TIProData.TopListScanner("Low Price Gappers")
+            {
+                Price = (1.5, 25),
+                Volume = (50e3, double.NaN),
+                GapPercent = (5, -5),
+                AverageTrueRange = (0.25, double.NaN),
+                ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
+            };*/
+
+            Pacmio.TIProData.TopListScanner tls = ScannerManager.AddTradeIdeasTopList();
+
+            //tls.IsHistory = true;
+            //tls.IsSnapshot = true;
+            tls.IsHistory = true;
+            tls.HistoricalTime = new DateTime(2020, 09, 02, 06, 30, 00);
+
+            tls.Start();
+        }
     }
     public static class DataGridHelper
     {

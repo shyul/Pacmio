@@ -43,15 +43,33 @@ namespace Pacmio
 
         public static event ConnectionStatusEventHandler OnNetConnectedHandler;
 
-        public static bool NetConnected => IB.Client.Connected;// && TIProData.Client.Connected;
+        public static bool NetConnected => IB.Client.Connected && TIProData.Client.Connected;
 
         public static void NetClientStart()
         {
             if (Settings is null) return;
 
+            int timeout = 100;
+
+            if (!TIProData.Client.Connected)
+            {
+                TIProData.Client.Connect();
+
+                while (!TIProData.Client.Connected)
+                {
+                    Thread.Sleep(10);
+                    timeout--;
+
+                    if (timeout < 0)
+                    {
+                        TIProData.Client.Disconnect(); break;
+                    }
+                }
+            }
+
             if (!IB.Client.Connected)
             {
-                int timeout = IB.Client.Timeout + 2000;
+                timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
                 OnNetConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
@@ -63,11 +81,6 @@ namespace Pacmio
                     j++;
                     if (j > timeout) break;
                 }
-            }
-
-            if (!TIProData.Client.Connected) 
-            {
-                TIProData.Client.Connect();
             }
         }
 

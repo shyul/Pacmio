@@ -71,7 +71,7 @@ namespace Pacmio.TIProData
         {
             Ping = ping;
 
-            Console.WriteLine("Ping: " + Ping.TotalMilliseconds.ToString() + "ms");
+            Console.WriteLine("[TIProData] Ping: " + Ping.TotalMilliseconds.ToString() + "ms");
         }
 
         private static void AccountStatusUpdate_Handler(LoginManager source, AccountStatusArgs args)
@@ -80,7 +80,7 @@ namespace Pacmio.TIProData
             NextPayment = args.nextPayment;
             OddsmakerAvailable = args.oddsmakerAvailable;
 
-            Console.WriteLine("Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now")
+            Console.WriteLine("[TIProData] Account Status:  " + AccountStatus.ToString() + " | Next Payment: " + ((NextPayment is DateTime pt) ? pt.ToString() : "Pay Now")
                 + " | OddsMaker Remaining: " + OddsmakerAvailable.ToString());
         }
 
@@ -95,7 +95,7 @@ namespace Pacmio.TIProData
                 LastStatusCheckTime = DateTime.Parse(message);
             }
 
-            Console.WriteLine("Status: " + Connected + " | LastStatusCheck: " + LastStatusCheck.TotalSeconds.ToString() + " secs ago | Message: " + args.message);
+            Console.WriteLine("[TIProData] Status: " + Connected + " | LastStatusCheck: " + LastStatusCheck.TotalSeconds.ToString() + " secs ago | Message: " + args.message);
         }
 
         private static void ConnectionBasePreview_Handler(ConnectionBase source, PreviewArgs args)

@@ -15,7 +15,7 @@
 using Pacmio.IB;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.UI.WebControls;
@@ -23,10 +23,18 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class Scanner : IEquatable<Scanner>
+    public interface IWatchList
     {
+        ICollection<Contract> List { get; }
+    }
 
+    public interface ISignalQueue
+    {
+        ConcurrentQueue<Contract> Queue { get; }
+    }
 
+    public abstract class Scanner : IEquatable<Scanner>, IDisposable
+    {
         public abstract void Start();
 
         public abstract void Stop();
@@ -49,11 +57,9 @@ namespace Pacmio
 
         public virtual (double Min, double Max) GapPercent { get; set; }
 
+        protected bool GetConfigBool(string key, string expectedValue) => ConfigList.ContainsKey(key) && ConfigList[key] == expectedValue;
 
-
-        public bool GetConfigBool(string key, string expectedValue) => ConfigList.ContainsKey(key) && ConfigList[key] == expectedValue;
-
-        public void SetConfig(string key, bool isSet, string value)
+        protected void SetConfig(string key, bool isSet, string value)
         {
             if (isSet)
                 ConfigList[key] = value;
@@ -61,9 +67,9 @@ namespace Pacmio
                 ConfigList.Remove(key);
         }
 
-        public double GetConfigDouble(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToDouble() : double.NaN;
+        protected double GetConfigDouble(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToDouble() : double.NaN;
 
-        public void SetConfig(string key, double value) 
+        protected void SetConfig(string key, double value) 
         {
             if (double.IsNaN(value) && ConfigList.ContainsKey(key))
                 ConfigList.Remove(key);
@@ -71,13 +77,13 @@ namespace Pacmio
                 ConfigList[key] = value.ToString("0.#######");
         }
 
-        public int GetConfigInt(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToInt32() : 0;
+        protected int GetConfigInt(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToInt32() : 0;
 
-        public void SetConfig(string key, int value) => ConfigList[key] = value.ToString();
+        protected void SetConfig(string key, int value) => ConfigList[key] = value.ToString();
 
-        public string GetConfigString(string key) => ConfigList.ContainsKey(key) ? ConfigList[key] : string.Empty;
+        protected string GetConfigString(string key) => ConfigList.ContainsKey(key) ? ConfigList[key] : string.Empty;
 
-        public void SetConfig(string key, string value)
+        protected void SetConfig(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(value) && ConfigList.ContainsKey(key))
                 ConfigList.Remove(key);
@@ -85,7 +91,7 @@ namespace Pacmio
                 ConfigList[key] = value;
         }
 
-        public Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
+        protected Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
 
         public virtual string ConfigString => string.Join(";", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
 
@@ -94,7 +100,7 @@ namespace Pacmio
 
         protected HashSet<string> UnknownSymbols { get; } = new HashSet<string>();
 
-        public virtual List<Contract> List { get; } = new List<Contract>();
+
 
         #endregion Output
 
@@ -113,6 +119,8 @@ namespace Pacmio
         public override string ToString() => Name + ": " + ConfigString;
 
         #endregion Equality
+
+        public void Dispose() => Stop();
     }
 
 
