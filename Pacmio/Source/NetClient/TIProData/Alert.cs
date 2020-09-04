@@ -2,22 +2,23 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// Trade-Ideas API
+/// 
 /// ***************************************************************************
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
+using System.Text;
+using System.Text.RegularExpressions;
 using Xu;
-using Xu.Chart;
+using TradeIdeas.TIProData;
+using TradeIdeas.TIProData.Configuration;
 
-namespace Pacmio.Analysis
+namespace Pacmio.TIProData
 {
-    public class Ichimoku : BarAnalysis
+    public abstract class Alert : Filter
     {
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
 
-        }
     }
 }

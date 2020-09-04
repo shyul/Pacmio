@@ -2,6 +2,8 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
+/// https://school.stockcharts.com/doku.php?id=technical_indicators:volume_by_price
+/// 
 /// ***************************************************************************
 
 using System;
@@ -13,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class Ichimoku : BarAnalysis
+    public sealed class VolumeByPrice : BarAnalysis
     {
         protected override void Calculate(BarAnalysisPointer bap)
         {

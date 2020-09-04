@@ -16,12 +16,13 @@ using Xu;
 
 namespace Pacmio
 {
-    using FundamentalDataTable = Dictionary<
-        (FundamentalDataType Type, DateTime Time, Frequency Freq),
+    using FundamentalDataTable =
+        Dictionary<(FundamentalDataType Type, DateTime Time, Frequency Freq),
         (DataSource Source, string Param, double Value, double AdjValue)>;
-    using FundamentalDatum = KeyValuePair<
-    (FundamentalDataType Type, DateTime Time, Frequency Freq),
-    (DataSource Source, string Param, double Value, double AdjValue)>;
+
+    using FundamentalDatum =
+        KeyValuePair<(FundamentalDataType Type, DateTime Time, Frequency Freq),
+        (DataSource Source, string Param, double Value, double AdjValue)>;
 
     [Serializable, DataContract]
     public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>

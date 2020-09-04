@@ -30,6 +30,9 @@ namespace Pacmio
         public double ShortableShares { get; set; } = double.NaN;
 
         [DataMember]
+        public double FloatShares { get; set; } = double.NaN;
+
+        [DataMember]
         public Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)> DividendTable { get; private set; }
             = new Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)>();
 

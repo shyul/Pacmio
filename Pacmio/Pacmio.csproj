@@ -93,7 +93,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PivotPointAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeRatio.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\VolumeByPrice.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerType.cs" />
@@ -220,7 +223,9 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\ScannerList.cs" />
+    <Compile Include="Source\NetClient\TIProData\Alert.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
+    <Compile Include="Source\NetClient\TIProData\Filter.cs" />
     <Compile Include="Source\NetClient\TIProData\TopWatchList.cs" />
     <Compile Include="Source\UnknownItemList.cs" />
     <Compile Include="Source\Common.cs" />
