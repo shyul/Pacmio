@@ -74,6 +74,7 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnRequestTIProScanner = new System.Windows.Forms.Button();
             this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
             this.BtnCancelAllScanner = new System.Windows.Forms.Button();
             this.BtnRequestMarketDepth = new System.Windows.Forms.Button();
@@ -189,7 +190,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnRequestTIProScanner = new System.Windows.Forms.Button();
+            this.BtnRequestTIProAlert = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -652,6 +653,7 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnRequestTIProAlert);
             this.tabMarketData.Controls.Add(this.BtnRequestTIProScanner);
             this.tabMarketData.Controls.Add(this.BtnMarketDataSyncTicks);
             this.tabMarketData.Controls.Add(this.BtnCancelAllScanner);
@@ -671,6 +673,16 @@ namespace TestClient
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
+            // 
+            // BtnRequestTIProScanner
+            // 
+            this.BtnRequestTIProScanner.Location = new System.Drawing.Point(506, 346);
+            this.BtnRequestTIProScanner.Name = "BtnRequestTIProScanner";
+            this.BtnRequestTIProScanner.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestTIProScanner.TabIndex = 51;
+            this.BtnRequestTIProScanner.Text = "Request TI Pro Scanner";
+            this.BtnRequestTIProScanner.UseVisualStyleBackColor = true;
+            this.BtnRequestTIProScanner.Click += new System.EventHandler(this.BtnRequestTIProScanner_Click);
             // 
             // BtnMarketDataSyncTicks
             // 
@@ -1874,15 +1886,15 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnRequestTIProScanner
+            // BtnRequestTIProAlert
             // 
-            this.BtnRequestTIProScanner.Location = new System.Drawing.Point(506, 346);
-            this.BtnRequestTIProScanner.Name = "BtnRequestTIProScanner";
-            this.BtnRequestTIProScanner.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestTIProScanner.TabIndex = 51;
-            this.BtnRequestTIProScanner.Text = "Request TI Pro Scanner";
-            this.BtnRequestTIProScanner.UseVisualStyleBackColor = true;
-            this.BtnRequestTIProScanner.Click += new System.EventHandler(this.BtnRequestTIProScanner_Click);
+            this.BtnRequestTIProAlert.Location = new System.Drawing.Point(506, 375);
+            this.BtnRequestTIProAlert.Name = "BtnRequestTIProAlert";
+            this.BtnRequestTIProAlert.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestTIProAlert.TabIndex = 52;
+            this.BtnRequestTIProAlert.Text = "Request TI Pro Alert";
+            this.BtnRequestTIProAlert.UseVisualStyleBackColor = true;
+            this.BtnRequestTIProAlert.Click += new System.EventHandler(this.BtnRequestTIProAlert_Click);
             // 
             // MainForm
             // 
@@ -2098,5 +2110,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnHistoricalDataContractSet2;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet1;
         private System.Windows.Forms.Button BtnRequestTIProScanner;
+        private System.Windows.Forms.Button BtnRequestTIProAlert;
     }
 }

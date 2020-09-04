@@ -1107,6 +1107,12 @@ namespace TestClient
 
             tls.Start();
         }
+
+        private void BtnRequestTIProAlert_Click(object sender, EventArgs e)
+        {
+            Pacmio.TIProData.AlertList tls = ScannerManager.AddTradeIdeasAlert();
+            tls.Start();
+        }
     }
     public static class DataGridHelper
     {

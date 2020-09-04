@@ -24,10 +24,10 @@ namespace Pacmio
 
         public static int Count => List.Count;
 
-        public static Scanner Add(Scanner sc) 
+        public static T Add<T>(T sc) where T : Scanner
         {
             if (List.Contains(sc))
-                return List.Where(n => n == sc).First(); // as TIProData.TopListScanner;
+                return List.Where(n => n == sc).First() as T;
             else
             {
                 List.CheckAdd(sc);
@@ -48,9 +48,21 @@ namespace Pacmio
                 ExtraConfig = "form=1&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
             }; // &sort=MaxGUP
 
-            return Add(tls) as TIProData.TopWatchList;
+            return Add(tls);
         }
 
+        public static TIProData.AlertList AddTradeIdeasAlert() 
+        {
+            TIProData.AlertList tal = new TIProData.AlertList()
+            {
+                Name = "NHP",
+                Price = (1, double.NaN),
+                NewHigh = 0,
+                ExtraConfig = "form=1",
+            };
+
+            return Add(tal);
+        }
 
         public static void Request_ScannerParameters() => IB.Client.SendRequest_ScannerParameters();
 

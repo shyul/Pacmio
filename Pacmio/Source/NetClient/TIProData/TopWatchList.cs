@@ -31,6 +31,8 @@ namespace Pacmio.TIProData
         {
             if (!IsActive && Client.Connected)
             {
+                Stop();
+
                 IsActive = true;
                 string configStr = ConfigString;
                 Console.WriteLine(Name + " | " + configStr);
@@ -47,7 +49,8 @@ namespace Pacmio.TIProData
         {
             if (m_IsActive)
             {
-                TopList.Stop();
+                if (TopList is TopList)
+                    TopList.Stop();
                 IsActive = false;
             }
         }
