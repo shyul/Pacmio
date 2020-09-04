@@ -35,7 +35,19 @@ namespace Pacmio
             }
         }
 
-        public static TIProData.TopWatchList AddTradeIdeasTopList(string name = "Gappers List", double minPrice = 1.5, double maxPrice = 25, double minVolume = 50e3, double minPercent = 5, double minATR = 0.25) 
+        public static T Remove<T>(T sc) where T : Scanner
+        {
+            if (List.Contains(sc))
+            {
+                sc = List.Where(n => n == sc).First() as T;
+                List.Remove(sc);
+            }
+
+            sc.Stop();
+            return sc;
+        }
+
+        public static TIProData.TopWatchList AddTradeIdeasTopList(string name = "Gappers List", double minPrice = 1.5, double maxPrice = 25, double minVolume = 50e3, double minPercent = 5, double minATR = 0.25)
         {
             double percent = Math.Abs(minPercent);
 
@@ -51,14 +63,14 @@ namespace Pacmio
             return Add(tls);
         }
 
-        public static TIProData.AlertList AddTradeIdeasAlert() 
+        public static TIProData.AlertList AddTradeIdeasAlert()
         {
             TIProData.AlertList tal = new TIProData.AlertList()
             {
                 Name = "NHP",
                 Price = (1, double.NaN),
                 NewHigh = 0,
-                ExtraConfig = "form=1",
+                ExtraConfig = "form=1&omh=1&col_ver=1&show0=D_Symbol&show1=D_Type&show2=D_Time&show3=D_Desc&show4=Price&show5=RV&show6=TV&show7=FCP&show8=Vol1&show9=Vol5&show10=PV&show11=Count&show12=Float&show13=SFloat&show14=D_Name",
             };
 
             return Add(tal);

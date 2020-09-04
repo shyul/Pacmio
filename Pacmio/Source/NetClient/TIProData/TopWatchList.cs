@@ -57,15 +57,17 @@ namespace Pacmio.TIProData
 
         public string SortColumn { get => GetConfigString("sort"); set => SetConfig("sort", value); }
 
-        public Dictionary<string, ColumnInfo> Columns { get; } = new Dictionary<string, ColumnInfo>();
 
-        public HashSet<Stock> UnknownStock { get; } = new HashSet<Stock>();
+
+
 
         void TopListStatus_Handler(TopList sender)
         {
             if (sender == TopList)
             {
                 Console.WriteLine("WindowName: " + sender.TopListInfo.WindowName);
+                ConfigColumns(sender.TopListInfo.Columns);
+                /*
                 lock (Columns)
                 {
                     Columns.Clear();
@@ -74,96 +76,20 @@ namespace Pacmio.TIProData
                         Columns[c.WireName] = c;
                         Console.WriteLine(c.WireName + " | " + c.Description + " | " + c.Format + " | " + c.Units + " | " + c.InternalCode + " | " + c.Graphics + " | " + c.TextHeader + " | " + c.PreferredWidth);
                     }
-                }
+                }*/
                 //Console.WriteLine(sender.TopListInfo.ToString());
             }
         }
 
-        public ICollection<Contract> List { get; } = new List<Contract>();
+        public ICollection<Contract> List { get; private set; } = new List<Contract>();
 
         private void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
             LastRefreshTime = DateTime.Now;
             if (IsSnapshot) Stop();
-
-            lock (Columns)
+            lock (List)
             {
-                lock (List)
-                {
-                    List.Clear();
-
-                    foreach (RowData row in rows)
-                    {
-                        if (row.GetAsString("symbol") is string symbol && symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
-                        {
-                            var list = ContractList.GetList(symbol, Exchanges);
-
-                            if (list.Where(n => n is Stock).Count() > 0)
-                            {
-                                Stock stk = list.First() as Stock;
-
-                                List.Add(stk);
-
-                                if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
-                                    stk.FullName = fullname;
-
-                                if (stk.ISIN.Length < 8 && !UnknownStock.Contains(stk))
-                                {
-                                    UnknownStock.Add(stk);
-                                    ContractList.Fetch(stk);
-                                }
-
-                                string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
-                                foreach (string key in Columns.Keys)
-                                {
-                                    ColumnInfo ci = Columns[key];
-
-                                    string dataString = row.GetAsString(key);
-                                    string format = ci.Format.Trim();
-
-                                    if (format == string.Empty)
-                                    {
-                                        rowString += ci.Description + "=" + dataString + "; ";
-                                    }
-                                    else if (format == "p")
-                                    {
-                                        if (row.GetAsString("four_digits") == "1")
-                                        {
-                                            rowString += ci.Description + "=" + dataString.ToDouble().ToString("N4") + "; ";
-                                        }
-                                        else
-                                        {
-                                            rowString += ci.Description + "=" + dataString.ToDouble().ToString("N2") + "; ";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        int digits = ci.Format.ToInt32();
-
-                                        if (digits > 7)
-                                            digits = 7;
-                                        else if (digits < 0)
-                                            digits = 0;
-
-                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N" + digits) + "; ";
-                                    }
-                                }
-                                Console.WriteLine(rowString);
-
-                                // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
-
-                                //Console.WriteLine(row.ToString());
-                            }
-                            else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
-                            {
-                                UnknownSymbols.Add(symbol);
-                                ContractList.Fetch(symbol);
-                            }
-                        }
-                    }
-                }
-
-                // Trigger the list is updated event!!
+                List = PrintAllRows(rows);
             }
         }
     }

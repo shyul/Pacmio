@@ -203,5 +203,118 @@ namespace Pacmio.TIProData
                 return extraConfig + string.Join("&", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
             }
         }
+
+        public Dictionary<string, ColumnInfo> Columns { get; } = new Dictionary<string, ColumnInfo>();
+
+        public void ConfigColumns(IList<ColumnInfo> list)
+        {
+            lock (Columns)
+            {
+                Columns.Clear();
+                foreach (ColumnInfo c in list)
+                {
+                    Columns[c.WireName] = c;
+                    Console.WriteLine(c.WireName + " | " + c.Description + " | " + c.Format + " | " + c.Units + " | " + c.InternalCode + " | " + c.Graphics + " | " + c.TextHeader + " | " + c.PreferredWidth);
+                }
+            }
+        }
+
+        public HashSet<Stock> UnknownStock { get; } = new HashSet<Stock>();
+
+        public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol") 
+        {
+            List<Contract> List = new List<Contract>();
+            lock (Columns)
+            {
+                foreach (RowData row in rows)
+                {
+                    if (row.GetAsString(symbolColumnName) is string symbol && symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
+                    {
+                        var list = ContractList.GetList(symbol, Exchanges);
+
+                        if (list.Where(n => n is Stock).Count() > 0)
+                        {
+                            Stock stk = list.First() as Stock;
+
+                            List.Add(stk);
+
+                            if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
+                                stk.FullName = fullname;
+
+                            if (stk.ISIN.Length < 8 && !UnknownStock.Contains(stk))
+                            {
+                                UnknownStock.Add(stk);
+                                ContractList.Fetch(stk);
+                            }
+
+                            string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
+                            foreach (string key in Columns.Keys)
+                            {
+                                ColumnInfo ci = Columns[key];
+
+                                string dataString = row.GetAsString(key);
+                                string format = ci.Format.Trim();
+
+                                if (format == string.Empty)
+                                {
+                                    rowString += ci.Description + "=" + dataString + "; ";
+                                }
+                                else if (format == "p")
+                                {
+                                    if (row.GetAsString("four_digits") == "1")
+                                    {
+                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N4") + "; ";
+                                    }
+                                    else
+                                    {
+                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N2") + "; ";
+                                    }
+                                }
+                                else
+                                {
+                                    int digits = ci.Format.ToInt32();
+
+                                    if (digits > 7)
+                                        digits = 7;
+                                    else if (digits < 0)
+                                        digits = 0;
+
+                                    rowString += ci.Description + "=" + dataString.ToDouble().ToString("N" + digits) + "; ";
+                                }
+                            }
+                            
+                            if (row.GetAsString("DESCRIPTION") is string desc && desc.Length > 0)
+                            {
+                                rowString += " | desc = " + desc;
+                            }
+
+                            if (row.GetAsString("ALT_DESCRIPTION") is string adesc && adesc.Length > 0)
+                            {
+                                rowString += " | adesc = " + adesc;
+                            }
+
+                            Console.WriteLine(rowString);
+
+                            // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
+
+                            //Console.WriteLine(row.ToString());
+                        }
+                        else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
+                        {
+                            UnknownSymbols.Add(symbol);
+                            ContractList.Fetch(symbol);
+                        }
+                    }
+
+
+
+                }
+
+
+                // Trigger the list is updated event!!
+            }
+
+            return List;
+        }
     }
 }

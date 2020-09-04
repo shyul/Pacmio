@@ -52,13 +52,20 @@ namespace Pacmio.TIProData
         private int alertCount;
         private int messageCount;
 
-        void _streamingAlerts_StreamingAlertsConfig(StreamingAlerts source)
+        void _streamingAlerts_StreamingAlertsConfig(StreamingAlerts sender)
         {
+            if (sender == StreamingAlerts)
+            {
+                Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");
+                ConfigColumns(sender.Columns);
 
-            if (source != StreamingAlerts)
+            }
+
+            /*
+            if (sender != StreamingAlerts)
                 Console.WriteLine("Ignoring StreamingAlertsConfig.\r\n");
             else
-                Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");
+                Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");*/
 
         }
 
@@ -75,10 +82,12 @@ namespace Pacmio.TIProData
                 Console.WriteLine("Message Count:  " + messageCount);
                 Console.WriteLine("Received " + data.Count + " alerts.\r\n");
 
+                PrintAllRows(data, "SYMBOL");
+                /*
                 foreach (RowData alert in data)
                 {
                     Console.WriteLine(alert.ToString());
-                }
+                }*/
             }
 
         }
