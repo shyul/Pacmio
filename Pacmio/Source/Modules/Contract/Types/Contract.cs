@@ -212,6 +212,9 @@ namespace Pacmio
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
         [IgnoreDataMember]
+        public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketTicks.Values.Contains(this);
+
+        [IgnoreDataMember] 
         public virtual MarketData MarketData { get; }
 
         public abstract void LoadMarketData();

@@ -221,6 +221,32 @@ namespace Pacmio.TIProData
 
         public HashSet<Stock> UnknownStock { get; } = new HashSet<Stock>();
 
+        
+        public void InitColumns() 
+        {
+            ConfigList["form"] = "1";
+            ConfigList["omh"] = "1";
+            ConfigList["col_ver"] = "1";
+            ConfigList["show0"] = "D_Symbol"; // Important
+            ConfigList["show1"] = "Price";
+            ConfigList["show2"] = "TV";
+            ConfigList["show3"] = "Float"; // Important
+            ConfigList["show4"] = "SFloat"; // Important
+            ConfigList["show5"] = "STP"; // Important
+            ConfigList["show6"] = "RV";
+            ConfigList["show7"] = "EarningD";
+            
+        }
+
+
+
+        public static void MergeSettings(Scanner s) 
+        {
+        
+        
+        }
+
+
         public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol") 
         {
             List<Contract> List = new List<Contract>();
@@ -235,6 +261,25 @@ namespace Pacmio.TIProData
                         if (list.Where(n => n is Stock).Count() > 0)
                         {
                             Stock stk = list.First() as Stock;
+
+                            if((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.HistoricalData is HistoricalData hd)
+                            {
+                                hd.Status = MarketTickStatus.Delayed;
+
+                                hd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
+                                hd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;
+                                // Price
+
+                                // Volume
+
+                                // 
+
+                                // Social
+
+                                // Float Short
+
+                                // Float
+                            }
 
                             List.Add(stk);
 
@@ -251,6 +296,16 @@ namespace Pacmio.TIProData
                             foreach (string key in Columns.Keys)
                             {
                                 ColumnInfo ci = Columns[key];
+
+                                switch (key) 
+                                {
+                                    case ("c_D_Name") when row.GetAsString("c_D_Name") is string fn && fn.Length > 0: stk.FullName = fn; break;
+                                    case ("DESCRIPTION"): break;
+                                }
+
+
+
+
 
                                 string dataString = row.GetAsString(key);
                                 string format = ci.Format.Trim();

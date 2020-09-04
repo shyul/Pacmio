@@ -33,6 +33,32 @@ namespace Pacmio
     // 60% is HFT trading!
     public abstract class Strategy : IEquatable<Strategy>
     {
+        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
+
+        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
+
+        // Step 2: Define Signal Group
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public Strategy(string name)
         {
             Name = name;

@@ -64,7 +64,7 @@ namespace Pacmio.IB
                     Contract c = ActiveMarketTicks[requestId];
                     if (c is Stock stk) stk.Status = ContractStatus.Alive;
 
-                    c.MarketData.Status = (MarketTickStatus)fields[3].ToInt32(0);
+                    c.MarketData.Status = fields[3].ToInt32(0) as MarketTickStatus;
                     MarketDataManager.UpdateUI(c);
                 }
         }

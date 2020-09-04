@@ -91,6 +91,14 @@ namespace Pacmio
 
         protected Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
 
+        public void ImportConfig(Scanner s)
+        {
+            foreach (var item in s.ConfigList)
+            {
+                ConfigList[item.Key] = item.Value;
+            }
+        }
+
         public string ExtraConfig { get; set; } = string.Empty;
 
         public virtual string ConfigString
