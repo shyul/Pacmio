@@ -14,12 +14,21 @@ using System.Text.RegularExpressions;
 using Xu;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
+using System.Collections.Concurrent;
 
 namespace Pacmio.TIProData
 {
-    public class AlertList : Filter
+    public class Signal : SignalFilter, ISignalSource
     {
+        public Signal(string name, int numberOfRows = 100)
+        {
+            Name = name;
+            NumberOfRows = numberOfRows;
+        }
+
         private StreamingAlerts StreamingAlerts { get; set; }
+
+
 
         public override void Start()
         {
@@ -32,8 +41,8 @@ namespace Pacmio.TIProData
                 Console.WriteLine(Name + " | " + configStr);
 
                 StreamingAlerts = Client.Connection.StreamingAlertsManager.GetAlerts(configStr);
-                StreamingAlerts.StreamingAlertsData += new StreamingAlertsData(_streamingAlerts_StreamingAlertsData);
-                StreamingAlerts.StreamingAlertsConfig += new StreamingAlertsConfig(_streamingAlerts_StreamingAlertsConfig);
+                StreamingAlerts.StreamingAlertsData += new StreamingAlertsData(AlertsData_Handler);
+                StreamingAlerts.StreamingAlertsConfig += new StreamingAlertsConfig(AlertsConfig_Handler);
                 StreamingAlerts.Start();
             }
         }
@@ -52,7 +61,7 @@ namespace Pacmio.TIProData
         private int alertCount;
         private int messageCount;
 
-        void _streamingAlerts_StreamingAlertsConfig(StreamingAlerts sender)
+        void AlertsConfig_Handler(StreamingAlerts sender)
         {
             if (sender == StreamingAlerts)
             {
@@ -69,7 +78,9 @@ namespace Pacmio.TIProData
 
         }
 
-        void _streamingAlerts_StreamingAlertsData(List<RowData> data, StreamingAlerts source)
+        ConcurrentQueue<Contract> ISignalSource.Queue { get; } = new ConcurrentQueue<Contract>();
+
+        void AlertsData_Handler(List<RowData> data, StreamingAlerts source)
         {
 
             if (source != StreamingAlerts)
@@ -93,50 +104,6 @@ namespace Pacmio.TIProData
         }
 
 
-        public bool Halt { get => GetConfigBool("Sh_HALT", "on"); set { SetConfig("Sh_HALT", value, "on"); } }
 
-        public int NewHigh 
-        {
-            get => GetConfigQ("NHP");
-            set => SetConfigQ("NHP", value);
-        }
-
-        public int NewLow
-        {
-            get => GetConfigQ("NLP");
-            set => SetConfigQ("NLP", value);
-        }
-
-        protected int GetConfigQ(string key)
-        {
-            string keyOn = "Sh_" + key;
-            string keyQ = "Q" + key;
-
-            if (ConfigList.ContainsKey(keyOn))
-            {
-                return (ConfigList.ContainsKey(keyQ)) ? GetConfigInt(keyQ) : 0;
-            }
-
-            return -1;
-        }
-
-        protected void SetConfigQ(string key, int value)
-        {
-            string keyOn = "Sh_" + key;
-            string keyQ = "Q" + key;
-
-            if (value < 0) // Remove  
-            {
-                if (ConfigList.ContainsKey(keyOn))
-                    ConfigList.Remove(keyOn);
-                if (ConfigList.ContainsKey(keyQ))
-                    ConfigList.Remove(keyQ);
-            }
-            else
-            {
-                ConfigList[keyOn] = "on";
-                if (value > 0) ConfigList[keyQ] = value.ToString();
-            }
-        }
     }
 }

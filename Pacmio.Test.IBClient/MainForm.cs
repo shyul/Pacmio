@@ -1110,7 +1110,7 @@ namespace TestClient
 
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)
         {
-            Pacmio.TIProData.AlertList tls = ScannerManager.AddTradeIdeasAlert();
+            Pacmio.TIProData.Signal tls = ScannerManager.AddTradeIdeasAlert();
             tls.Start();
         }
     }
