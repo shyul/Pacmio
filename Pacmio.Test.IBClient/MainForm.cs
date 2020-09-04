@@ -453,7 +453,7 @@ namespace TestClient
 
             Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 100)
             {
-                Code = "MOST_ACTIVE",
+                SortType = "MOST_ACTIVE",
                 Price = (10, 100),
                 VolumeMinimum = 1e7,
                 MarketCap = (1e8, double.NaN),
@@ -1099,7 +1099,8 @@ namespace TestClient
 
             Pacmio.TIProData.TopWatchList tls = ScannerManager.AddTradeIdeasTopList();
 
-            //tls.IsHistory = true;
+            tls.SortColumn = "MaxGUP";
+
             //tls.IsSnapshot = true;
             tls.IsHistory = true;
             tls.HistoricalTime = new DateTime(2020, 09, 02, 06, 30, 00);

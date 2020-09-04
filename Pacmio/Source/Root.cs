@@ -65,6 +65,7 @@ namespace Pacmio
                         TIProData.Client.Disconnect(); break;
                     }
                 }
+                Thread.Sleep(500);
             }
 
             if (!IB.Client.Connected)

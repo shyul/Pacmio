@@ -45,8 +45,8 @@ namespace Pacmio
                 Volume = (minVolume, double.NaN),
                 GapPercent = (percent, -percent),
                 AverageTrueRange = (minATR, double.NaN),
-                ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
-            };
+                ExtraConfig = "form=1&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
+            }; // &sort=MaxGUP
 
             return Add(tls) as TIProData.TopWatchList;
         }

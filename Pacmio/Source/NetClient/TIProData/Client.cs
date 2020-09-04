@@ -86,7 +86,6 @@ namespace Pacmio.TIProData
 
         private static void ConnectionBaseConnectionStatusUpdate_Handler(ConnectionBase source, ConnectionStatusCallbackArgs args)
         {
-            Connected = !args.isServerDisconnect;
             string message = args.message;
 
             if (message.Contains("Working:  "))
@@ -95,6 +94,7 @@ namespace Pacmio.TIProData
                 LastStatusCheckTime = DateTime.Parse(message);
             }
 
+            Connected = !args.isServerDisconnect;
             Console.WriteLine("[TIProData] Status: " + Connected + " | LastStatusCheck: " + LastStatusCheck.TotalSeconds.ToString() + " secs ago | Message: " + args.message);
         }
 

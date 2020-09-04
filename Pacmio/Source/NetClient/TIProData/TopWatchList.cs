@@ -151,7 +151,7 @@ namespace Pacmio.TIProData
 
         public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
 
-
+        public string SortColumn { get => GetConfigString("sort"); set => SetConfig("sort", value); }
 
         public override string ConfigString
         {

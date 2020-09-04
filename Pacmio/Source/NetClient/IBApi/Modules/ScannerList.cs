@@ -50,13 +50,13 @@ namespace Pacmio.IB
 
         public int RequestId { get; set; } = 0;
 
-        public string Type { get; set; } = "STK";
+        public string ContractType { get; set; } = "STK";
 
-        public string Location { get; set; } = "STK.US";
+        public string ContractLocation { get; set; } = "STK.US";
 
-        public string StockTypeFilter { get; set; } = "ALL";
+        public string ContractTypeFilter { get; set; } = "ALL";
 
-        public string Code { get; set; } = string.Empty; // "TOP_PERC_GAIN";
+        public string SortType { get; set; } = string.Empty; // "TOP_PERC_GAIN";
                                                          // "MOST_ACTIVE"
                                                          // "TOP_OPEN_PERC_GAIN"
                                                          // "HALTED"

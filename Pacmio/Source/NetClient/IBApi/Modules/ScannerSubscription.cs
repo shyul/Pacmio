@@ -43,9 +43,9 @@ namespace Pacmio.IB
                     requestId.ParamPos(),
 
                     info.NumberOfRows.ParamPos(),
-                    info.Type, // STK
-                    info.Location, // "STK.US"
-                    info.Code, // "TOP_PERC_GAIN"
+                    info.ContractType, // STK
+                    info.ContractLocation, // "STK.US"
+                    info.SortType, // "TOP_PERC_GAIN"
 
                     abovePrice.Param(),
                     belowPrice.Param(),
@@ -66,7 +66,7 @@ namespace Pacmio.IB
                     excludeConvertible.Param(), // "0"
                     averageOptionVolumeAbove.Param(),
                     scannerSettingPairs,
-                    info.StockTypeFilter, // "ALL", "ETF", "STK"??
+                    info.ContractTypeFilter, // "ALL", "ETF", "STK"??
                     info.ConfigString, // filterOptions, //scannerSubscriptionFilterOptions.Param(), // ""
                     scannerSubscriptionOptions.Param() // ""
                 });
