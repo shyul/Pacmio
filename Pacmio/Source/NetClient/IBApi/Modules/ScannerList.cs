@@ -77,16 +77,7 @@ namespace Pacmio.IB
             }
         }
 
-        public override (double Min, double Max) Volume
-        {
-            get => (GetConfigDouble("usdVolumeAbove"), GetConfigDouble("usdVolumeBelow"));
-
-            set
-            {
-                SetConfig("usdVolumeAbove", value.Min);
-                SetConfig("usdVolumeBelow", value.Max);
-            }
-        }
+        public double VolumeMinimum { get => GetConfigDouble("volumeAbove"); set => SetConfig("volumeAbove", value); }
 
         public override (double Min, double Max) MarketCap
         {

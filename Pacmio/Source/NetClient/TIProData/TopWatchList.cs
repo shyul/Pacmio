@@ -94,7 +94,7 @@ namespace Pacmio.TIProData
             }
         }
 
-        public override (double Min, double Max) Volume
+        public (double Min, double Max) Volume
         {
             get => (GetConfigDouble("MinTV"), GetConfigDouble("MaxTV"));
 

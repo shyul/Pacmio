@@ -451,11 +451,11 @@ namespace TestClient
         {
             if (!Root.NetConnected) return;
 
-            Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 20)
+            Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 100)
             {
                 Code = "MOST_ACTIVE",
                 Price = (10, 100),
-                Volume = (10e6, double.NaN),
+                VolumeMinimum = 1e7,
                 MarketCap = (1e8, double.NaN),
                 ExtraConfig = "stkTypes=inc:CORP",
             };

@@ -41,7 +41,7 @@ namespace Pacmio
 
         public virtual (double Min, double Max) Price { get; set; }
 
-        public virtual (double Min, double Max) Volume { get; set; }
+        //public virtual (double Min, double Max) Volume { get; set; }
 
         public virtual (double Min, double Max) MarketCap { get; set; }
 
