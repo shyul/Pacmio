@@ -11,59 +11,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Xu;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
-using TradeIdeas.ServerConnection;
-using System.Windows.Forms;
-
 
 namespace Pacmio.TIProData
 {
-    public static partial class Client
+    public class TopWatchList : Scanner, IWatchList
     {
-        public static TopListScanner tls { get; private set; }
-
-        public static void TestTopList()
-        {
-            DateTime time = new DateTime(2020, 09, 03, 06, 30, 00);
-
-            Console.WriteLine("TotalDays = " + (DateTime.Now - time).TotalDays);
-
-            long epoch = time.ToEpoch().ToInt64();
-
-            Console.WriteLine("Epoch = " + epoch);
-
-            tls = new TopListScanner("Low Price Gappers")
-            {
-                Price = (1.5, 25),
-                Volume = (50e3, double.NaN),
-                GapPercent = (5, -5),
-                AverageTrueRange = (0.25, double.NaN),
-                ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
-            };
-
-            tls.IsSnapshot = true;
-            //tls.IsHistory = true;
-            //tls.HistoricalTime = new DateTime(2020, 06, 10, 06, 30, 00);
-
-            tls.Start();
-
-
-
-
-            
-        }
-    }
-
-
-
-
-
-    public class TopListScanner : Scanner, IWatchList
-    {
-        public TopListScanner(string name, int numberOfRows = 100)
+        public TopWatchList(string name, int numberOfRows = 100)
         {
             Name = name;
             NumberOfRows = numberOfRows;
@@ -99,8 +55,6 @@ namespace Pacmio.TIProData
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
 
         private bool m_IsActive = false;
-
-        public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
 
         public override string Name { get => GetConfigString("WN"); set => SetConfig("WN", value); }
 
@@ -197,7 +151,7 @@ namespace Pacmio.TIProData
 
         public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
 
-        public string ExtraConfig { get; set; } = string.Empty;
+
 
         public override string ConfigString
         {
@@ -220,9 +174,9 @@ namespace Pacmio.TIProData
                 else if (ConfigList.ContainsKey("exact_time"))
                     ConfigList.Remove("exact_time");
 
-                if (ExtraConfig.EndsWith("&")) ExtraConfig += "&";
-
-                return ExtraConfig + string.Join("&", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
+                string extraConfig = ExtraConfig;
+                if (!extraConfig.EndsWith("&")) extraConfig += "&";
+                return extraConfig + string.Join("&", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
             }
         }
 
@@ -250,9 +204,9 @@ namespace Pacmio.TIProData
 
         public ICollection<Contract> List { get; } = new List<Contract>();
 
-        void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
+        private void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
-            LastUpdateTime = DateTime.Now;
+            LastRefreshTime = DateTime.Now;
             if (IsSnapshot) Stop();
 
             lock (Columns)
@@ -318,6 +272,9 @@ namespace Pacmio.TIProData
                                     }
                                 }
                                 Console.WriteLine(rowString);
+
+                                // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
+
                                 //Console.WriteLine(row.ToString());
                             }
                             else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
@@ -333,4 +290,42 @@ namespace Pacmio.TIProData
             }
         }
     }
+
+    /*
+    public static partial class Client
+    {
+        public static WatchList tls { get; private set; }
+
+        public static void TestTopList()
+        {
+            DateTime time = new DateTime(2020, 09, 03, 06, 30, 00);
+
+            Console.WriteLine("TotalDays = " + (DateTime.Now - time).TotalDays);
+
+            long epoch = time.ToEpoch().ToInt64();
+
+            Console.WriteLine("Epoch = " + epoch);
+
+            tls = new WatchList("Low Price Gappers")
+            {
+                Price = (1.5, 25),
+                Volume = (50e3, double.NaN),
+                GapPercent = (5, -5),
+                AverageTrueRange = (0.25, double.NaN),
+                ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
+            };
+
+            tls.IsSnapshot = true;
+            //tls.IsHistory = true;
+            //tls.HistoricalTime = new DateTime(2020, 06, 10, 06, 30, 00);
+
+            tls.Start();
+
+
+
+
+
+        }
+    }
+    */
 }

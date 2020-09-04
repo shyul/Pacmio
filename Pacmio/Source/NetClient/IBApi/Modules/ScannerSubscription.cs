@@ -15,13 +15,14 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly ConcurrentDictionary<int, ScannerConfigOld> ScanRequestList = new ConcurrentDictionary<int, ScannerConfigOld>();
+        private static readonly ConcurrentDictionary<int, WatchList> ScanRequestList = new ConcurrentDictionary<int, WatchList>();
 
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"TOP_PERC_GAIN"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=1000000;"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
         // Received Error: (0)"4"-(1)"2"-(2)"-1"-(3)"2106"-(4)"HMDS data farm connection is OK:ushmds"
-        internal static void SendRequest_ScannerSubscription(ScannerConfigOld info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
+        //Send RequestScannerSubscription: (0)"22"-(1)"3"-(2)"100"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"stkTypes=inc:CORP;marketCapAbove1e6=1000;priceAbove=10;priceBelow=100;usdVolumeAbove=10000000"-(24)""
+        internal static void SendRequest_ScannerSubscription(WatchList info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
             double abovePrice = double.NaN, double belowPrice = double.NaN, double aboveVolume = double.NaN, double marketCapAbove = double.NaN, double marketCapBelow = double.NaN,
             bool excludeConvertible = false, string scannerSettingPairs = "",
             string moodyRatingAbove = "", string moodyRatingBelow = "", string spRatingAbove = "", string spRatingBelow = "",
@@ -35,7 +36,7 @@ namespace Pacmio.IB
                 info.RequestId = requestId;
                 ScanRequestList[requestId] = info;
 
-                ScannerManager.GetOrAdd(info);
+                //ScannerManager.GetOrAdd(info);
 
                 SendRequest(new string[] {
                     typeStr,
@@ -66,7 +67,7 @@ namespace Pacmio.IB
                     averageOptionVolumeAbove.Param(),
                     scannerSettingPairs,
                     info.StockTypeFilter, // "ALL", "ETF", "STK"??
-                    info.FilterOptions, // filterOptions, //scannerSubscriptionFilterOptions.Param(), // ""
+                    info.ConfigString, // filterOptions, //scannerSubscriptionFilterOptions.Param(), // ""
                     scannerSubscriptionOptions.Param() // ""
                 });
             }
@@ -79,20 +80,37 @@ namespace Pacmio.IB
             // Emit update cancelled.
         }
 
+        /*
+            Scanner Subscription Error !!!!!!!!!!!!! 3: Historical Market Data Service query message:no items retrieved
+            21:06:08 Removing RequestScannerSubscription and Cancel: 3 | CancelScannerSubscription
+            Scanner Result End.
+            Unable to locate this request Id: 3 in the table, maybe this message just tells your something has been properly removed.
+            Parse Errors: (0)"4"-(1)"2"-(2)"3"-(3)"162"-(4)"Historical Market Data Service error message:API scanner subscription cancelled: 3"
+         */
+
         private static void ParseError_ScannerSubscription(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
-            string message = fields[4];
+            //string message = fields[4];
 
-            Console.WriteLine("Scanner Subscription Error !!!!!!!!!!!!! " + fields[2] + ": " + message);
+            // fields[2] + ": " + message);
+            // Scanner Subscription Error !!!!!!!!!!!!! (0)"4"-(1)"2"-(2)"2"-(3)"165"-(4)"Historical Market Data Service query message:no items retrieved"
 
             if (requestId > -1)
             {
-                RemoveRequest(requestId);
-                if (ScanRequestList.ContainsKey(requestId))
+                if (fields[3] != "165")
                 {
-                    ScanRequestList.TryRemove(requestId, out ScannerConfigOld info);
-                    ScannerManager.Old_List.TryRemove(info, out _);
+                    Console.WriteLine("Scanner Subscription Error: " + fields.ToStringWithIndex());
+                    RemoveRequest(requestId);
+                    if (ScanRequestList.ContainsKey(requestId))
+                    {
+                        ScanRequestList.TryRemove(requestId, out WatchList info);
+                        ScannerManager.List.Remove(info);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Scanner no items retrieved: " + fields.ToStringWithIndex());
                 }
             }
         }
@@ -116,37 +134,8 @@ namespace Pacmio.IB
             if (msgVersion == "3" && ScanRequestList.ContainsKey(requestId))
             {
                 //int numberOfElements = fields[3].ToInt32(-1);
-                ScannerConfigOld info = ScanRequestList[requestId];
-
-                for (int i = 4; i < fields.Length; i += 16)
-                {
-                    int rank = fields[i].ToInt32(-1);
-                    int conId = fields[i + 1].ToInt32(-1);
-                    string symbolName = fields[i + 2];
-
-                    if (ScannerManager.Old_List.ContainsKey(info))
-                    {
-                        ScannerManager.Old_List[info][rank] = (conId, symbolName, DateTime.Now);
-                    }
-
-                    /*
-                    string typeName = fields[i + 3];
-                    string lastTradeDateOrContractMonth = fields[i + 4];
-                    double strike = fields[i + 5].ToDouble();
-                    string right = fields[i + 6];
-                    string exchange = fields[i + 7]; // SMART, which is useless
-                    string currency = fields[i + 8];
-                    string localSymbol = fields[i + 9];
-                    string MarketName = fields[i + 10];
-                    string tradingClass = fields[i + 11]; // "SCM"
-                    string distance = fields[i + 12];
-                    string benchmark = fields[i + 13];
-                    string projection = fields[i + 14];
-                    string legsStr = fields[i + 15];
-                    */
-                }
-
-                ScannerManager.Updated(info);
+                WatchList info = ScanRequestList[requestId];
+                info.ScannerData_Handler(fields);
             }
         }
 

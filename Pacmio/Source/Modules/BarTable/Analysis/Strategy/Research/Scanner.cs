@@ -23,16 +23,6 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface IWatchList
-    {
-        ICollection<Contract> List { get; }
-    }
-
-    public interface ISignalQueue
-    {
-        ConcurrentQueue<Contract> Queue { get; }
-    }
-
     public abstract class Scanner : IEquatable<Scanner>, IDisposable
     {
         public abstract void Start();
@@ -42,6 +32,8 @@ namespace Pacmio
         public virtual bool IsActive { get; set; } = false;
 
         public virtual bool IsSnapshot { get; set; } = false;
+
+        public virtual DateTime LastRefreshTime { get; protected set; } = DateTime.MinValue;
 
         public virtual string Name { get; set; }
 
@@ -69,10 +61,13 @@ namespace Pacmio
 
         protected double GetConfigDouble(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToDouble() : double.NaN;
 
-        protected void SetConfig(string key, double value) 
+        protected void SetConfig(string key, double value)
         {
-            if (double.IsNaN(value) && ConfigList.ContainsKey(key))
-                ConfigList.Remove(key);
+            if (double.IsNaN(value))
+            { 
+                if (ConfigList.ContainsKey(key)) 
+                    ConfigList.Remove(key); 
+            }
             else
                 ConfigList[key] = value.ToString("0.#######");
         }
@@ -85,16 +80,28 @@ namespace Pacmio
 
         protected void SetConfig(string key, string value)
         {
-            if (string.IsNullOrWhiteSpace(value) && ConfigList.ContainsKey(key))
-                ConfigList.Remove(key);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                if (ConfigList.ContainsKey(key))
+                    ConfigList.Remove(key);
+            }
             else
                 ConfigList[key] = value;
         }
 
         protected Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
 
-        public virtual string ConfigString => string.Join(";", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
+        public string ExtraConfig { get; set; } = string.Empty;
 
+        public virtual string ConfigString
+        {
+            get
+            {
+                string extraConfig = ExtraConfig;
+                if (!extraConfig.EndsWith(";")) extraConfig += ";";
+                return extraConfig + string.Join(";", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
+            }
+        }
 
         #region Output
 
@@ -105,7 +112,7 @@ namespace Pacmio
         #endregion Output
 
 
-        #region Equality
+        #region Equality // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
 
         public bool Equals(Scanner other) => other is Scanner sc && GetType() == other.GetType() && ConfigString == sc.ConfigString;
 
@@ -124,52 +131,5 @@ namespace Pacmio
     }
 
 
-    public class ScannerConfigOld : IEquatable<ScannerConfigOld>
-    {
-        public int RequestId { get; set; } = 0;
 
-        public int NumberOfRows { get; set; } = 100;
-
-        public string Type { get; set; } = "STK";
-
-        public string Location { get; set; } = "STK.US";
-
-        public string StockTypeFilter { get; set; } = "ALL";
-
-        public string Code { get; set; } = string.Empty; // "TOP_PERC_GAIN";
-                                                         // "MOST_ACTIVE"
-                                                         // "TOP_OPEN_PERC_GAIN"
-                                                         // "HALTED"
-
-        //public string FilterOptions { get; set; } = string.Empty; // (23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-                                                                  // (23)"priceAbove=5;avgVolumeAbove=500000;marketCapAbove1e6=1000;"
-                                                                  // stkTypes: All, inc:CORP, inc:ADR, inc:ETF, inc:ETN, inc:REIT, inc:CEF, inc:ETMF (Exchange Traded Managed Fund)
-                                                                  // exc:CORP, exc:ADR, exc:ETF, exc:ETN, exc:REIT, exc:CEF
-
-        public Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
-
-        public string FilterOptions => string.Join(";", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
-
-        public bool Equals(ScannerConfigOld other) => other is ScannerConfigOld sc &&
-            (Type, Location, StockTypeFilter, Code, FilterOptions) == (sc.Type, sc.Location, sc.StockTypeFilter, sc.Code, sc.FilterOptions);
-
-        // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-        public override bool Equals(object other) => other is ScannerConfigOld sc && Equals(sc);
-
-        public static bool operator ==(ScannerConfigOld s1, ScannerConfigOld s2) => s1.Equals(s2);
-        public static bool operator !=(ScannerConfigOld s1, ScannerConfigOld s2) => !s1.Equals(s2);
-
-        public override int GetHashCode() =>
-                            Type.GetHashCode() ^
-                            Location.GetHashCode() ^
-                            StockTypeFilter.GetHashCode() ^
-                            Code.GetHashCode() ^
-                            FilterOptions.GetHashCode();
-
-        public static ScannerConfigOld GapUp => new ScannerConfigOld() 
-        {
-        
-        
-        };
-    }
 }

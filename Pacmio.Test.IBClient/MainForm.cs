@@ -450,38 +450,35 @@ namespace TestClient
         private void BtnRequestScanner_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            ScannerConfigOld info_MOST_ACTIVE = new ScannerConfigOld()
+
+            Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 20)
             {
-                //Code = "MOST_ACTIVE",
                 Code = "MOST_ACTIVE",
-                //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-                //FilterOptions = "priceAbove=5;priceBelow=300;avgVolumeAbove=10000000;marketCapAbove1e6=10000;stkTypes=inc:CORP;"
-
-
-                //FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
+                Price = (10, 100),
+                Volume = (10e6, double.NaN),
+                MarketCap = (1e8, double.NaN),
+                ExtraConfig = "stkTypes=inc:CORP",
             };
-            /*
-            ScannerInfo info_TOP_OPEN_PERC_GAIN = new ScannerInfo()
-            {
-                //Code = "MOST_ACTIVE",
-                Code = "TOP_OPEN_PERC_GAIN",
-                FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-            };
-            ScannerInfo info_TOP_OPEN_PERC_LOSE = new ScannerInfo()
-            {
-                //Code = "MOST_ACTIVE",
-                Code = "TOP_OPEN_PERC_LOSE",
-                FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-            };*/
 
-            ScannerManager.GetOrAdd(info_MOST_ACTIVE);
+            //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+            //FilterOptions = "priceAbove=5;priceBelow=300;avgVolumeAbove=10000000;marketCapAbove1e6=10000;stkTypes=inc:CORP;"
+            //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+            //FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
+            //FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
+
+            wcl = ScannerManager.Add(wcl) as Pacmio.IB.WatchList;
+
+            wcl.Start();
+
+
+            //ScannerManager.GetOrAdd(info_MOST_ACTIVE);
             //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_GAIN);
             //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_LOSE);
         }
 
         private void BtnCancelAllScanner_Click(object sender, EventArgs e)
         {
-            ScannerManager.CancelAll();
+            ScannerManager.Stop();
         }
 
         private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
@@ -1100,7 +1097,7 @@ namespace TestClient
                 ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
             };*/
 
-            Pacmio.TIProData.TopListScanner tls = ScannerManager.AddTradeIdeasTopList();
+            Pacmio.TIProData.TopWatchList tls = ScannerManager.AddTradeIdeasTopList();
 
             //tls.IsHistory = true;
             //tls.IsSnapshot = true;

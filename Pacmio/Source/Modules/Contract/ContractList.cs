@@ -60,7 +60,7 @@ namespace Pacmio
         private static IEnumerable<Contract> GetList(IEnumerable<string> symbols, IEnumerable<Exchange> exchanges)
             => Values.Where(val => symbols.Contains(val.Name) && exchanges.Contains(val.Exchange));
 
-        private static IEnumerable<Contract> GetList(string symbol, string countryCode)
+        public static IEnumerable<Contract> GetList(string symbol, string countryCode)
             => GetList(symbol, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
 
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols, string countryCode)

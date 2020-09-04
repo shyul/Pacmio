@@ -124,6 +124,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Types\ISignalSource.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Types\IWatchList.cs" />
     <Compile Include="Source\Modules\BarTable\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\ICandleStick.cs" />
     <Compile Include="Source\Modules\Chart\BarChartArea.cs" />
@@ -217,8 +219,9 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
+    <Compile Include="Source\NetClient\IBApi\Modules\ScannerList.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
-    <Compile Include="Source\NetClient\TIProData\TopList.cs" />
+    <Compile Include="Source\NetClient\TIProData\TopWatchList.cs" />
     <Compile Include="Source\UnknownItemList.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />

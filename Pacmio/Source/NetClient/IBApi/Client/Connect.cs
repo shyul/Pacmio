@@ -10,6 +10,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -182,7 +183,8 @@ namespace Pacmio.IB
 
         public static Task Disconnect => new Task(() =>
         {
-            ScannerManager.CancelAll();
+            ScannerManager.List.Where(n => n is WatchList).ToList().ForEach(n => n.Stop());
+
             if (ApiStatus == ConnectionStatus.Connected || ApiStatus == ConnectionStatus.Connecting)
             {
                 Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Disconnecting, DateTime.Now);
