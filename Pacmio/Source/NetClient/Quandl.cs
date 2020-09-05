@@ -201,7 +201,7 @@ namespace Pacmio
                                 {
                                     if (!UnknownItemList.Contains(currentSymbolName))
                                     {
-                                        UnknownItemList.Add(DateTime.Now, currentSymbolName, "STK");
+                                        UnknownItemList.CheckIn(DateTime.Now, currentSymbolName, "STK");
                                     }
                                     btdIsValid = false;
                                 }

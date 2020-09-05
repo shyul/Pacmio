@@ -10,16 +10,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
 using TradeIdeas.ServerConnection;
+using Xu;
 
 namespace Pacmio.TIProData
 {
     public static partial class Client
     {
-
         public static TimeSpan Ping { get; private set; }
 
         public static DateTime LastStatusCheckTime { get; private set; } = DateTime.MinValue;
@@ -65,7 +66,7 @@ namespace Pacmio.TIProData
             }
         }
 
-        public static ConnectionMaster Connection { get; private set; } 
+        public static ConnectionMaster Connection { get; private set; }
 
         private static void PingUpdate_Handler(TimeSpan ping)
         {
@@ -106,6 +107,102 @@ namespace Pacmio.TIProData
             {
                 Console.WriteLine(Encoding.ASCII.GetString(args.messageBody));
             }*/
+        }
+
+        public static string GetValue(this RowData row, ColumnInfo ci)
+        {
+            if (row.GetAsString(ci.WireName) is string dataString && dataString.Length > 0)
+            {
+                string format = ci.Format.Trim();
+
+                switch (format)
+                {
+                    case (""): return dataString;
+
+                    case ("p"):
+                        {
+                            double d = dataString.ToDouble();
+                            if (!double.IsNaN(d))
+                            {
+                                return (row.GetAsString("four_digits") == "1") ? d.ToString("N4") : d.ToString("N2");
+                            }
+                            else
+                                return null;
+                        }
+                    default:
+                        {
+                            double d = dataString.ToDouble();
+                            if (!double.IsNaN(d))
+                            {
+                                int digits = format.ToInt32();
+
+                                if (digits > 7)
+                                    digits = 7;
+                                else if (digits < 0)
+                                    digits = 0;
+
+                                return d.ToString("N" + digits);
+                            }
+                            else
+                                return null;
+                        }
+                }
+            }
+            else
+                return null;
+        }
+
+        public static string GetString(this RowData row, string key) => (row.GetAsString(key) is string value) ? value : null;
+
+        public static int GetInt(this RowData row, string key)
+        {
+            string s = row.GetString(key);
+
+            if (string.IsNullOrWhiteSpace(s))
+                return 0;
+            else
+                return s.ToInt32();
+        }
+
+        public static double GetDouble(this RowData row, string key)
+        {
+            string s = row.GetString(key);
+
+            if (string.IsNullOrWhiteSpace(s))
+                return double.NaN;
+            else
+                return s.ToDouble();
+        }
+
+        public static string GetSymbol(this RowData row, string key = "symbol")
+        {
+            string symbol = GetString(row, key);
+
+            if (symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
+                return symbol;
+            else
+                return null;
+        }
+
+        public static (Exchange Exchange, string Code) GetExchange(this RowData row)
+        {
+            if (GetString(row, "EXCHANGE") is string exCode)
+            {
+                switch (exCode)
+                {
+                    case ("NYSE"): return (Exchange.NYSE, exCode);
+                    case ("NASD"): return (Exchange.NASDAQ, exCode);
+                    case ("AMEX"): return (Exchange.AMEX, exCode);
+
+                    default:
+                        {
+                            Console.WriteLine(">>>>> Unregistered Exchange Code: " + exCode);
+                            return (Exchange.UNKNOWN, exCode);
+                        }
+                }
+            }
+
+            return (Exchange.UNKNOWN, "_");
         }
     }
 }

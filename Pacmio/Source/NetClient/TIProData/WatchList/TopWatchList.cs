@@ -93,42 +93,4 @@ namespace Pacmio.TIProData
             }
         }
     }
-
-    /*
-    public static partial class Client
-    {
-        public static WatchList tls { get; private set; }
-
-        public static void TestTopList()
-        {
-            DateTime time = new DateTime(2020, 09, 03, 06, 30, 00);
-
-            Console.WriteLine("TotalDays = " + (DateTime.Now - time).TotalDays);
-
-            long epoch = time.ToEpoch().ToInt64();
-
-            Console.WriteLine("Epoch = " + epoch);
-
-            tls = new WatchList("Low Price Gappers")
-            {
-                Price = (1.5, 25),
-                Volume = (50e3, double.NaN),
-                GapPercent = (5, -5),
-                AverageTrueRange = (0.25, double.NaN),
-                ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
-            };
-
-            tls.IsSnapshot = true;
-            //tls.IsHistory = true;
-            //tls.HistoricalTime = new DateTime(2020, 06, 10, 06, 30, 00);
-
-            tls.Start();
-
-
-
-
-
-        }
-    }
-    */
 }

@@ -1102,8 +1102,8 @@ namespace TestClient
             tls.SortColumn = "MaxGUP";
 
             //tls.IsSnapshot = true;
-            //tls.IsHistory = true;
-            //tls.HistoricalTime = new DateTime(2020, 09, 03, 06, 30, 00);
+            tls.IsHistory = true;
+            tls.HistoricalTime = new DateTime(2020, 09, 02, 06, 30, 00);
 
             tls.Start();
         }

@@ -27,7 +27,7 @@ namespace Pacmio
         /// </summary>
         private static UnknownItemTable List { get; set; } = new UnknownItemTable();
 
-        public static bool Add(DateTime lastCheckedTime, string symbolName, string typeCode = "_NO_SEC_TYPE_", string businessName = "", string suffix = "", int conId = 0, string ISIN = "", string CUSIP = "", string exchangeCode = "", string exSuffix = "")
+        public static bool CheckIn(DateTime lastCheckedTime, string symbolName, string typeCode = "_NO_SEC_TYPE_", string businessName = "", string suffix = "", int conId = 0, string ISIN = "", string CUSIP = "", string exchangeCode = "", string exSuffix = "")
         {
             var key = (typeCode, symbolName, exchangeCode);
             var value = (ContractStatus.Unknown, lastCheckedTime, conId, exSuffix, businessName, suffix, ISIN, CUSIP);
@@ -47,7 +47,57 @@ namespace Pacmio
             }
         }
 
+        public static DateTime CheckIn(string symbolName, string typeCode = "STK", string exchangeCode = "", string exSuffix = "", int conId = 0, string businessName = "", string suffix = "", string ISIN = "", string CUSIP = "")
+        {
+            var key = (typeCode, symbolName, exchangeCode);
+            if (!List.ContainsKey(key))
+            {
+                List[key] = (ContractStatus.Unknown, DateTime.Now, conId, exSuffix, businessName, suffix, ISIN, CUSIP);
+            }
+            else
+            {
+                
+            }
+
+            return List[key].LastCheckedTime;
+        }
+
         public static bool Contains(string symbolName) { lock (List) return List.Where(n => n.Key.SymbolName == symbolName).Count() > 0; }
+
+        public static void Check(string symbolName, Exchange exchange, string typeCode = "STK")
+        {
+            var clist = typeCode switch
+            {
+                "STK" => ContractList.Fetch(symbolName, exchange).Where(n => n is Stock),
+                _ => throw new NotImplementedException(typeCode + " is not implemented yet")
+            };
+
+            if (clist.Count() == 1)
+            {
+                //return clist.First();
+            }
+            else
+            {
+                var key = (typeCode, symbolName, exchange.ToString());
+
+                if (List.ContainsKey(key))
+                {
+                    
+                }
+                else
+                {
+
+
+                }
+
+
+            }
+
+
+
+
+    
+        }
 
         public static void Rescan(IProgress<int> progress)
         {
@@ -184,7 +234,7 @@ namespace Pacmio
                                     }
                                     catch (Exception e) when (e is IOException || e is FormatException)
                                     {
-                                        Add(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
+                                        CheckIn(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
                                     }
                                 }
                                 else 
@@ -194,7 +244,7 @@ namespace Pacmio
                                     else if (string.IsNullOrWhiteSpace(typeCode))
                                         typeCode = "_NO_SEC_TYPE_";
 
-                                    Add(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
+                                    CheckIn(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
                                 }
                             }
                         }

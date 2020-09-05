@@ -250,15 +250,29 @@ namespace Pacmio.TIProData
             {
                 foreach (RowData row in rows)
                 {
-                    if (row.GetAsString(symbolColumnName) is string symbol && symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
+                    Console.WriteLine(row.ToString());
+                    
+                    var (exchange, exchangeCode) = row.GetExchange();
+                    if (row.GetSymbol(symbolColumnName) is string symbol && exchange != Exchange.UNKNOWN)
                     {
+
+
+
+
                         var list = ContractList.GetList(symbol, Exchanges);
 
                         if (list.Where(n => n is Stock).Count() > 0)
                         {
                             Stock stk = list.First() as Stock;
 
-                            if((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
+                            if (stk.ISIN.Length < 8 && !UnknownStock.Contains(stk))
+                            {
+                                UnknownStock.Add(stk);
+                                ContractList.Fetch(stk);
+                            }
+
+                            // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
+                            if ((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
                             {
                                 sd.Status = MarketTickStatus.Delayed;
 
@@ -279,58 +293,26 @@ namespace Pacmio.TIProData
 
                             List.Add(stk);
 
+                            /*
                             if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
-                                stk.FullName = fullname;
+                                stk.FullName = fullname;*/
 
-                            if (stk.ISIN.Length < 8 && !UnknownStock.Contains(stk))
-                            {
-                                UnknownStock.Add(stk);
-                                ContractList.Fetch(stk);
-                            }
+
 
                             string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
+
                             foreach (string key in Columns.Keys)
                             {
                                 ColumnInfo ci = Columns[key];
 
-                                switch (key) 
+                                if (row.GetValue(ci) is string val)
                                 {
-                                    case ("c_D_Name") when row.GetAsString("c_D_Name") is string fn && fn.Length > 0: stk.FullName = fn; break;
-                                    case ("DESCRIPTION"): break;
-                                }
+                                    rowString += ci.Description + "=" + val + "; ";
 
-
-
-
-
-                                string dataString = row.GetAsString(key);
-                                string format = ci.Format.Trim();
-
-                                if (format == string.Empty)
-                                {
-                                    rowString += ci.Description + "=" + dataString + "; ";
-                                }
-                                else if (format == "p")
-                                {
-                                    if (row.GetAsString("four_digits") == "1")
+                                    if (key == "c_D_Name")
                                     {
-                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N4") + "; ";
+                                        stk.FullName = val;
                                     }
-                                    else
-                                    {
-                                        rowString += ci.Description + "=" + dataString.ToDouble().ToString("N2") + "; ";
-                                    }
-                                }
-                                else
-                                {
-                                    int digits = ci.Format.ToInt32();
-
-                                    if (digits > 7)
-                                        digits = 7;
-                                    else if (digits < 0)
-                                        digits = 0;
-
-                                    rowString += ci.Description + "=" + dataString.ToDouble().ToString("N" + digits) + "; ";
                                 }
                             }
                             
@@ -345,10 +327,6 @@ namespace Pacmio.TIProData
                             }
 
                             Console.WriteLine(rowString);
-
-                            // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
-
-                            Console.WriteLine(row.ToString());
                         }
 
 
@@ -356,6 +334,38 @@ namespace Pacmio.TIProData
                         // This is the exact part needs to be moved to unknown items...
                         else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
                         {
+                            /*
+                            var (exchange, exCode) = row.GetExchange();
+                            exCode = "_" + ((exchange == Exchange.UNKNOWN) ? exCode : exchange.ToString());
+
+
+                            DateTime lastCheckedTime = DateTime.MinValue;
+                 
+
+                            if (exchange == Exchange.UNKNOWN) 
+                            {
+                            
+                            
+                            }
+
+
+
+                            var clist = ContractList.Fetch(symbol).Where(n => n.Name == symbol && Exchanges.Contains(n.Exchange));
+
+                            if (clist.Count() < 1)
+                            {
+                                //var (exchange, code) = row.GetExchange();
+                            }
+                            */
+
+           
+
+
+
+
+
+
+
 
 
                             UnknownSymbols.Add(symbol);
@@ -375,5 +385,10 @@ namespace Pacmio.TIProData
 
             return List;
         }
+
+
+
+
     }
+
 }

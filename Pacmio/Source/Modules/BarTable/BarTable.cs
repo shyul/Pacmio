@@ -149,7 +149,6 @@ namespace Pacmio
             {
                 TimeToRows.Clear();
                 Rows.Clear();
-                Patterns.Clear();
                 ResetCalculationPointer();
                 DataSourceSegments.Clear();
             }
@@ -575,7 +574,6 @@ namespace Pacmio
         private void Sort()
         {
             TimeToRows.Clear();
-            Patterns.Clear();
             Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
             for (int i = 0; i < Count; i++)
             {
@@ -729,8 +727,9 @@ namespace Pacmio
         /// <summary>
         /// Intermediate Storage for Patterns
         /// Yes, all has to be gone when the Bars Are sorted....
+        /// TODO: This part can go back to the Bars!!! By linq
         /// </summary>
-        public Dictionary<int, PatternDatum> Patterns { get; } = new Dictionary<int, PatternDatum>();
+        //public Dictionary<int, PatternDatum> Patterns { get; } = new Dictionary<int, PatternDatum>();
 
         #endregion Pattern
 
@@ -1257,7 +1256,6 @@ namespace Pacmio
             ResetCalculationPointer();
             TimeToRows.Clear();
             Rows.Clear();
-            Patterns.Clear();
 
             var bars = btd.Bars.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
             Range<DateTime> Invalid_Period = null;

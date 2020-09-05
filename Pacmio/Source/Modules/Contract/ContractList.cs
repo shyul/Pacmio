@@ -51,6 +51,9 @@ namespace Pacmio
         public static IEnumerable<Contract> GetList(string symbol)
             => Values.Where(val => val.Name == symbol.ToUpper());
 
+        public static IEnumerable<Contract> GetList(string symbol, Exchange exchange)
+            => Values.Where(val => val.Name == symbol.ToUpper() && val.Exchange == exchange);
+
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols)
             => Values.Where(val => symbols.Contains(val.Name));
 
@@ -72,6 +75,34 @@ namespace Pacmio
         #region Fetch / Update
 
         public static Contract[] Fetch(string symbol, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractSamples(symbol, cts);
+
+
+
+
+
+
+
+
+        public static Contract[] Fetch(string symbol, Exchange exchange, CancellationTokenSource cts = null)
+        {
+            var clist = GetList(symbol, exchange).Where(n => n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+
+            if (clist.Count() == 0)
+            {
+                clist = Fetch(symbol, cts).Where(n => n.Name == symbol && n.Exchange == exchange);
+            }
+
+            return clist.ToArray();
+        }
+
+
+
+
+
+
+
+
+
 
         public static void Fetch(Contract c, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(c, cts);
 
