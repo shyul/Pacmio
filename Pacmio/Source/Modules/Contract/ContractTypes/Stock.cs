@@ -32,28 +32,28 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public HistoricalData HistoricalData
+        public StockData StockData
         {
             get
             {
-                if (m_HistoricalData is null) LoadMarketData();
-                return m_HistoricalData;
+                if (m_StockData is null) LoadMarketData();
+                return m_StockData;
             }
         }
 
         [IgnoreDataMember]
-        private HistoricalData m_HistoricalData = null;
+        private StockData m_StockData = null;
 
         public override void LoadMarketData()
         {
-            m_HistoricalData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<HistoricalData>(MarketDataFileName) : new HistoricalData();
-            m_HistoricalData.Status = MarketTickStatus.Unknown;
-            if (m_HistoricalData.LiveBarTables is null) m_HistoricalData.LiveBarTables = new List<BarTable>();
+            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
+            m_StockData.Initialize(this);
+            //if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new List<BarTable>();
         }
 
         public override void SaveMarketData()
         {
-            if (m_HistoricalData is HistoricalData sd)
+            if (m_StockData is StockData sd)
             {
                 if (!Directory.Exists(MarketDataFilePath)) 
                     Directory.CreateDirectory(MarketDataFilePath);
@@ -63,7 +63,7 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public override MarketData MarketData => HistoricalData;
+        public override MarketData MarketData => StockData;
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";

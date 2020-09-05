@@ -163,7 +163,7 @@
     <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\BidAskData.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketData.cs" />
-    <Compile Include="Source\Modules\Contract\MarketData\HistoricalData.cs" />
+    <Compile Include="Source\Modules\Contract\MarketData\StockData.cs" />
     <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataGridView.cs" />
     <Compile Include="Source\Modules\Contract\MarketData\MarketDataTable.cs" />
@@ -224,7 +224,7 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
-    <Compile Include="Source\NetClient\IBApi\Modules\ScannerList.cs" />
+    <Compile Include="Source\NetClient\IBApi\Types\WatchList.cs" />
     <Compile Include="Source\NetClient\TIProData\Signal\Signal.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
     <Compile Include="Source\NetClient\TIProData\Signal\SignalFilter.cs" />

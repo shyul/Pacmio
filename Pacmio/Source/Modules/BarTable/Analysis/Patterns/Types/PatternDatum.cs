@@ -39,5 +39,19 @@ namespace Pacmio
         public Range<double> LevelRange { get; }
 
         public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
+
+
+
+
+        /// <summary>
+        /// Start Time of the Bar
+        /// </summary>
+        // Need to get Period depending on the time and BarSize
+        public DateTime Time => Period.Start; // { get; private set; } // -- Shall we used Period to reduce the confusion???
+
+        /// <summary>
+        /// The time period of this Bar (Every OHLC is from a period of time)
+        /// </summary>
+        public Period Period { get; private set; }
     }
 }

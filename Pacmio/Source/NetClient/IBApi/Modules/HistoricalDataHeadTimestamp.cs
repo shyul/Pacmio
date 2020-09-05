@@ -90,8 +90,12 @@ namespace Pacmio.IB
             RemoveRequest(requestId, false);
             Contract c = activeBarTable_HistoricalDataHeadTimestamp.Contract;
 
-            if (fields[3] == "200")
+            if (fields[3] == "200") 
+            {
                 c.Status = ContractStatus.Error;
+                c.UpdateTime = DateTime.Now;
+            }
+            
             /*
             if (c.MarketData is HistoricalData sd)
             {
@@ -113,7 +117,7 @@ namespace Pacmio.IB
             {
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
 
-                if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is HistoricalData sd)
+                if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is StockData sd)
                 {
                     sd.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
                 }

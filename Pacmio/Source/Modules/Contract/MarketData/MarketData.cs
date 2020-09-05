@@ -13,16 +13,23 @@ namespace Pacmio
 {
     [Serializable, DataContract]
     [KnownType(typeof(BidAskData))]
-    [KnownType(typeof(HistoricalData))]
+    [KnownType(typeof(StockData))]
     public class MarketData
     {
-        /*
-        public MarketData(Contract c) 
+
+
+        /// <summary>
+        /// Run this after loading
+        /// </summary>
+        /// <param name="c"></param>
+        public virtual void Initialize(Contract c) 
         {
             Contract = c;
-        }*/
+            Status = MarketTickStatus.Unknown;
+        }
 
-        //public Contract Contract { get; }
+        [IgnoreDataMember]
+        public Contract Contract { get; private set; }
 
         #region Basic Info  
 

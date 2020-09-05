@@ -50,7 +50,7 @@ namespace Pacmio
                 }
             }
 
-            if (Contract.MarketData is HistoricalData hd) { hd.LiveBarTables.CheckRemove(this); }
+            if (Contract.MarketData is StockData sd) { sd.LiveBarTables.CheckRemove(this); }
 
             lock (Rows) Rows.Clear();
             lock (TimeToRows) TimeToRows.Clear();
@@ -149,6 +149,7 @@ namespace Pacmio
             {
                 TimeToRows.Clear();
                 Rows.Clear();
+                Patterns.Clear();
                 ResetCalculationPointer();
                 DataSourceSegments.Clear();
             }
@@ -548,7 +549,7 @@ namespace Pacmio
         private void Adjust(bool forwardAdjust = true)
         {
             //Sort();
-            if (Contract.MarketData is HistoricalData sd)
+            if (Contract.MarketData is StockData sd)
             {
                 MultiPeriod<(double Price, double Volume)> barTableAdjust = sd.BarTableAdjust(AdjustDividend);
 
@@ -574,6 +575,7 @@ namespace Pacmio
         private void Sort()
         {
             TimeToRows.Clear();
+            Patterns.Clear();
             Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
             for (int i = 0; i < Count; i++)
             {
@@ -726,13 +728,9 @@ namespace Pacmio
 
         /// <summary>
         /// Intermediate Storage for Patterns
-        /// </summary>
-        public Dictionary<DateTime, PatternDatum> Patterns { get; } = new Dictionary<DateTime, PatternDatum>();
-
-        /// <summary>
         /// Yes, all has to be gone when the Bars Are sorted....
         /// </summary>
-        public Dictionary<int, PatternDatum> PatternsByFurthestIndexItCanGo { get; } = new Dictionary<int, PatternDatum>();
+        public Dictionary<int, PatternDatum> Patterns { get; } = new Dictionary<int, PatternDatum>();
 
         #endregion Pattern
 
@@ -757,16 +755,16 @@ namespace Pacmio
             {
                 m_IsLive = value;
 
-                if (Contract.MarketData is HistoricalData hd)
+                if (Contract.MarketData is StockData sd)
                     if (m_IsLive)
                     {
                         // Add BarTable to the tick receiver
-                        hd.LiveBarTables.CheckAdd(this);
+                        sd.LiveBarTables.CheckAdd(this);
                     }
                     else
                     {
                         // Remove BarTable from the tick receiver
-                        hd.LiveBarTables.CheckRemove(this);
+                        sd.LiveBarTables.CheckRemove(this);
                     }
             }
         }
@@ -1105,7 +1103,7 @@ namespace Pacmio
         /// <returns></returns>
         private static void Fetch_IB(BarTable bt, Period period, CancellationTokenSource cts)
         {
-            if(bt.Contract.Status != ContractStatus.Error) 
+            if (bt.Contract.Status != ContractStatus.Error)
             {
                 var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
 
@@ -1222,7 +1220,7 @@ namespace Pacmio
 
         #region File Operation
 
-        public DateTime EarliestTime => (Contract.MarketData is HistoricalData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
+        public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
@@ -1257,8 +1255,9 @@ namespace Pacmio
         private void LoadFile(BarTableFileData btd, Period pd)
         {
             ResetCalculationPointer();
-            Rows.Clear();
             TimeToRows.Clear();
+            Rows.Clear();
+            Patterns.Clear();
 
             var bars = btd.Bars.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
             Range<DateTime> Invalid_Period = null;

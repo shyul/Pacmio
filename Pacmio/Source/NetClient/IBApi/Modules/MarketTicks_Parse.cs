@@ -218,7 +218,7 @@ namespace Pacmio.IB
                             q.Volume = size * 100;
                             break;
 
-                        case TickType.ShortableShares when c.MarketData is HistoricalData q:
+                        case TickType.ShortableShares when c.MarketData is StockData q:
                             q.ShortableShares = size;
                             break;
 
@@ -313,7 +313,7 @@ namespace Pacmio.IB
                             The RT Trade Volume is similar to RT Volume, but designed to avoid relaying back "Unreportable Trades" shown in TWS Time&Sales via the API.
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
-                        case TickType.RTTradeVolume when c.MarketData is HistoricalData hd:
+                        case TickType.RTTradeVolume when c.MarketData is StockData hd:
                             Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
                             RTVolume(fields[4], c);
 
@@ -363,7 +363,7 @@ namespace Pacmio.IB
             string[] fields = field4.Split(';');
 
             //if (c.MarketData is HistoricalData hd && fields.Length == 6 && fields[5] == "true" && fields[0].Length > 0 && fields[0].ToDouble() is double last && !double.IsNaN(last))
-            if (c.MarketData is HistoricalData hd)// && !double.IsNaN(last))
+            if (c.MarketData is StockData hd)// && !double.IsNaN(last))
             {
                 double last = fields[0].ToDouble();
                 double vol = fields[1].ToDouble() * 100;
@@ -411,7 +411,7 @@ namespace Pacmio.IB
 
                     switch (tickType)
                     {
-                        case TickType.Shortable when c.MarketData is HistoricalData q:
+                        case TickType.Shortable when c.MarketData is StockData q:
                             q.ShortStatus = fields[4].ToDouble(-1);
                             break;
 

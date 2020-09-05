@@ -258,12 +258,12 @@ namespace Pacmio.TIProData
                         {
                             Stock stk = list.First() as Stock;
 
-                            if((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.HistoricalData is HistoricalData hd)
+                            if((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
                             {
-                                hd.Status = MarketTickStatus.Delayed;
+                                sd.Status = MarketTickStatus.Delayed;
 
-                                hd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
-                                hd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;
+                                sd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
+                                sd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;
                                 // Price
 
                                 // Volume
@@ -348,12 +348,20 @@ namespace Pacmio.TIProData
 
                             // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
 
-                            //Console.WriteLine(row.ToString());
+                            Console.WriteLine(row.ToString());
                         }
+
+
+
+                        // This is the exact part needs to be moved to unknown items...
                         else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
                         {
+
+
                             UnknownSymbols.Add(symbol);
                             ContractList.Fetch(symbol);
+
+
                         }
                     }
 

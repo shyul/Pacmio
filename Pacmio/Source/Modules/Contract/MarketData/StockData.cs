@@ -14,39 +14,18 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class HistoricalData : BidAskData
+    public class StockData : BidAskData
     {
+        public override void Initialize(Contract c)
+        {
+            base.Initialize(c);
+            if (LiveBarTables is null) LiveBarTables = new List<BarTable>();
+            RTLastTime = DateTime.MinValue;
+            RTLastPrice = -1;
+        }
+
         [DataMember]
         public DateTime BarTableEarliestTime { get; set; } = DateTime.MinValue;
-
-        [DataMember]
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
-            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
-
-
-
-
-        [DataMember]
-        public double FloatShares { get; set; } = double.NaN;
-
-        [DataMember]
-        public double ShortPercent { get; set; } = double.NaN;
-
-        [DataMember]
-        public double ShortStatus { get; set; } = double.NaN;
-
-        [DataMember]
-        public double ShortableShares { get; set; } = double.NaN;
-
-        [DataMember]
-        public double MarketCap { get; set; } = double.NaN;
-
-
-
-        //public double  
-
-
-
 
         [DataMember]
         public Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)> DividendTable { get; private set; }
@@ -104,8 +83,12 @@ namespace Pacmio
             return list;
         }
 
+        // TODO: 
+        // Queue the Tape Here
+        [IgnoreDataMember]
         public DateTime RTLastTime { get; private set; } = DateTime.MinValue;
 
+        [IgnoreDataMember]
         public double RTLastPrice { get; private set; } = -1;
 
         public void InboundLiveTick(DateTime time, double price, double size)
@@ -131,5 +114,28 @@ namespace Pacmio
 
         [IgnoreDataMember]
         public List<BarTable> LiveBarTables { get; set; } = new List<BarTable>();
+
+        [DataMember]
+        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
+            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+
+        [DataMember]
+        public double MarketCap { get; set; } = double.NaN;
+
+        [DataMember]
+        public double FloatShares { get; set; } = double.NaN;
+
+        [DataMember]
+        public double ShortPercent { get; set; } = double.NaN;
+
+        [DataMember]
+        public double ShortableShares { get; set; } = double.NaN;
+
+        [DataMember]
+        public double ShortStatus { get; set; } = double.NaN;
+
+        // News
+
+        // Social Media
     }
 }

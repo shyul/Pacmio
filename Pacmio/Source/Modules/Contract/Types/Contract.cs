@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -335,8 +336,8 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Close && MarketData is BidAskData q => q.PreviousClose,
                     NumericColumn dc when dc == Column_Volume && MarketData is BidAskData q => q.Volume,
 
-                    NumericColumn dc when dc == Column_Short && MarketData is HistoricalData q => q.ShortStatus,
-                    NumericColumn dc when dc == Column_ShortShares && MarketData is HistoricalData q => q.ShortableShares,
+                    NumericColumn dc when dc == Column_Short && MarketData is StockData q => q.ShortStatus,
+                    NumericColumn dc when dc == Column_ShortShares && MarketData is StockData q => q.ShortableShares,
 
                     _ => null,
                 };

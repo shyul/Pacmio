@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,26 +15,22 @@ using Xu;
 namespace Pacmio
 {
     using UnknownItemTable = Dictionary<(string TypeCode, string SymbolName, string ExchangeCode),
-       (ContractStatus Status, int ConId, string ExSuffix, string BusinessName, string Suffix, string ISIN, string CUSIP)>;
+       (ContractStatus Status, DateTime LastCheckedTime, int ConId, string ExSuffix, string BusinessName, string Suffix, string ISIN, string CUSIP)>;
 
     /// <summary>
     /// Master List of all unknown symbols
     /// </summary>
     public static class UnknownItemList
     {
-        //public static Dictionary<string, Dictionary<string, HashSet<string>>> Industry { get; private set; } = new Dictionary<string, Dictionary<string, HashSet<string>>>();
-
-
         /// <summary>
         /// Stores previously found invalid symbol names here to prevent any further repeating query.
         /// </summary>
         private static UnknownItemTable List { get; set; } = new UnknownItemTable();
 
-        public static bool Add(string symbolName, string typeCode, string businessName = "", string suffix = "", int conId = 0, string ISIN = "", string CUSIP = "", string exchangeCode = "", string exSuffix = "")
+        public static bool Add(DateTime lastCheckedTime, string symbolName, string typeCode = "_NO_SEC_TYPE_", string businessName = "", string suffix = "", int conId = 0, string ISIN = "", string CUSIP = "", string exchangeCode = "", string exSuffix = "")
         {
-            (string TypeCode, string SymbolName, string ExchangeCode) key = (typeCode, symbolName, exchangeCode);
-
-            (ContractStatus Status, int ConId, string ExSuffix, string BusinessName, string Suffix, string ISIN, string CUSIP) value = (ContractStatus.Unknown, conId, exSuffix, businessName, suffix, ISIN, CUSIP);
+            var key = (typeCode, symbolName, exchangeCode);
+            var value = (ContractStatus.Unknown, lastCheckedTime, conId, exSuffix, businessName, suffix, ISIN, CUSIP);
 
             lock (List)
             {
@@ -50,40 +47,30 @@ namespace Pacmio
             }
         }
 
-        public static bool Contains(string value) { lock (List) return List.Where(n => n.Key.SymbolName == value).Count() > 0; }
+        public static bool Contains(string symbolName) { lock (List) return List.Where(n => n.Key.SymbolName == symbolName).Count() > 0; }
 
         public static void Rescan(IProgress<int> progress)
         {
             int total = List.Count;
-            HashSet<string> symbols = new HashSet<string>();
+
             UnknownItemTable temp = new UnknownItemTable();
 
             lock (List)
             {
                 for (int i = 0; i < total; i++)
                 {
-                    (string TypeCode, string SymbolName, string ExchangeCode) key = List.ElementAt(i).Key;
-                    (ContractStatus Status, int ConId, string ExSuffix, string BusinessName, string Suffix, string ISIN, string CUSIP) value = List.ElementAt(i).Value;
+                    (string TypeCode, string SymbolName, string ExchangeCode) = List.ElementAt(i).Key;
 
-                    if (value.ConId > 0)
-                    {
-                        temp[(key.TypeCode, Quandl.ConvertToPacmioOrIbSymbolName(key.SymbolName), key.ExchangeCode)] = value;
-                        //temp[(key.TypeCode, Quandl.ConvertSymbolName(key.SymbolName), "_VALUE")] = value;
-                    }
-                    else if (ContractList.GetList(key.SymbolName).Count() == 0)
-                    {
+                    var value = List.ElementAt(i).Value;
+                    //(ContractStatus Status, DateTime LastCheckedTime, int ConId, string ExSuffix, string BusinessName, string Suffix, string ISIN, string CUSIP) = value;
 
-                        temp[(key.TypeCode, Quandl.ConvertToPacmioOrIbSymbolName(key.SymbolName), key.ExchangeCode)] = value;
+                    if (value.ConId > 0 || ContractList.GetList(SymbolName).Count() == 0)
+                    {
+                        temp[(TypeCode, Quandl.ConvertToPacmioOrIbSymbolName(SymbolName), ExchangeCode)] = value;
                     }
 
-                    Console.Write(key.SymbolName + ". ");
-                    /*
-                    if (key.ExchangeCode.Length == 0)
-                        if (GetSymbols(key.SymbolName).Count == 0)
-                        {
-                            if (!symbols.Contains(key.SymbolName)) symbols.Add(key.SymbolName);
-                        }
-                        */
+                    Console.Write(SymbolName + ". ");
+
                     float percent = i * 100 / total;
                     if (percent % 1 == 0) progress.Report((int)percent);
                 }
@@ -91,7 +78,6 @@ namespace Pacmio
                 List.Clear();
             }
 
-            //IBClient.RequestMatchSymbols(progress, symbols.ToArray());
             foreach (var item in temp)
             {
                 List[item.Key] = item.Value;
@@ -104,50 +90,11 @@ namespace Pacmio
 
         public static void Save()
         {
-            /*
-            Industry.SerializeJsonFile(Root.ResourcePath + "Industry.Json");
+            StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP,LastCheckedTime\n");
 
-            StringBuilder sb0 = new StringBuilder("Index,Type\n");
-
-            int industry_index = 0;
-            foreach (string industry in Industry.Keys) 
+            lock (List) 
             {
-                if (!string.IsNullOrWhiteSpace(industry.Trim()))
-                {
-                    sb0.AppendLine(industry_index + "," + industry.CsvEncode());
-
-                    Dictionary<string, HashSet<string>> catgoryList = Industry[industry];
-                    int catgory_index = 0;
-                    foreach (string category in catgoryList.Keys)
-                    {
-                        if (!string.IsNullOrWhiteSpace(category.Trim())) 
-                        {
-                            sb0.AppendLine(industry_index + "." + catgory_index + "," + category.CsvEncode());
-
-                            HashSet<string> subCatgoryList = catgoryList[category];
-                            int subCatgory_index = 0;
-                            foreach (string subCategory in subCatgoryList)
-                            {
-                                if (!string.IsNullOrWhiteSpace(subCategory.Trim())) 
-                                {
-                                    sb0.AppendLine(industry_index + "." + catgory_index + "." + subCatgory_index + "," + subCategory.CsvEncode());
-                                    subCatgory_index++;
-                                }
-                            }
-                            catgory_index++;
-                        } 
-                    }
-                    industry_index++;
-                }
-            }
-
-            sb0.ToFile(Root.ResourcePath + "Industry.csv");*/
-
-            StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
-
-            var sorted = List.OrderBy(n => n.Key.SymbolName);
-
-            lock (List)
+                var sorted = List.OrderBy(n => n.Key.SymbolName).ThenBy(n => n.Value.LastCheckedTime);
                 foreach (var item in sorted)
                 {
                     sb.AppendLine(
@@ -160,20 +107,16 @@ namespace Pacmio
                         item.Value.BusinessName.CsvEncode() + "," +
                         item.Value.Suffix.CsvEncode() + "," +
                         item.Value.ISIN.CsvEncode() + "," +
-                        item.Value.CUSIP.CsvEncode());
+                        item.Value.CUSIP.CsvEncode() + "," +
+                        item.Value.LastCheckedTime.ToString());
                 }
+            }
 
             sb.ToFile(FileName);
         }
 
         public static void Load()
         {
-            /*
-            if (File.Exists(Root.ResourcePath + "Industry.Json"))
-            {
-                Industry = Serialization.DeserializeJsonFile<Dictionary<string, Dictionary<string, HashSet<string>>>>(Root.ResourcePath + "Industry.Json");
-            }*/
-
             if (File.Exists(FileName))
             {
                 lock (List)
@@ -188,21 +131,8 @@ namespace Pacmio
                         {
                             string[] fields = sr.CsvReadFields();
 
-                            if (fields.Length == 10)
+                            if (fields.Length == 11)
                             {
-                                /*
-                                0 Status + "," +
-                                1 TypeCode.CsvEncode() + "," +
-                                2 ConId + "," +
-                                3 SymbolName.CsvEncode() + "," +
-                                4 ExchangeCode.CsvEncode() + "," +
-                                5 ExSuffix.CsvEncode() + "," +
-                                6 BusinessName.CsvEncode() + "," +
-                                7 Suffix.CsvEncode() + "," +
-                                8 ISIN.CsvEncode() + "," +
-                                9 CUSIP.CsvEncode());
-                                */
-
                                 ContractStatus status = fields[0].ParseEnum<ContractStatus>();
                                 int conId = fields[2].Trim().ToInt32(0);
                                 string symbolName = fields[3].TrimCsvValueField();
@@ -213,8 +143,9 @@ namespace Pacmio
                                 string suffix = fields[7].TrimCsvValueField();
                                 string ISIN = fields[8].TrimCsvValueField();
                                 string CUSIP = fields[9].TrimCsvValueField();
+                                DateTime lastCheckedTime = (fields[10].TrimCsvValueField() is string timeString && !string.IsNullOrEmpty(timeString)) ? DateTime.Parse(timeString) : DateTime.MinValue;
 
-                                if (fields[1].Length > 0 && (fields[4].Length > 0 && !fields[4].Contains("_")))
+                                if (typeCode.Length > 0 && (exchangeCode.Length > 0 && !exchangeCode.Contains("_")))
                                 {
                                     try
                                     {
@@ -222,12 +153,12 @@ namespace Pacmio
                                         {
                                             case ("STOCK"):
                                                 Exchange exchange = exchangeCode.ParseEnum<Exchange>();
-                                                Stock c = ContractList.GetOrAdd(new Stock(symbolName, exchange));
-                                                c.Status = status;
-                                                c.ConId = conId;
-                                                c.ExchangeSuffix = exSuffix;
+                                                Stock stk = ContractList.GetOrAdd(new Stock(symbolName, exchange));
+                                                stk.Status = status;
+                                                stk.ConId = conId;
+                                                stk.ExchangeSuffix = exSuffix;
 
-                                                if (c is IBusiness ib)
+                                                if (stk is IBusiness ib)
                                                 {
                                                     ib.ISIN = ISIN;
 
@@ -239,11 +170,11 @@ namespace Pacmio
                                                     }
                                                 }
 
-                                                c.FullName = businessName;
+                                                stk.FullName = businessName;
 
-                                                CollectionTool.FromString(c.NameSuffix, suffix);
+                                                CollectionTool.FromString(stk.NameSuffix, suffix);
 
-                                                Log.Print("Added new symbol from Unknown" + c.ToString());
+                                                Console.WriteLine("Added new symbol from Unknown" + stk.ToString());
                                                 break;
 
                                             default:
@@ -253,11 +184,18 @@ namespace Pacmio
                                     }
                                     catch (Exception e) when (e is IOException || e is FormatException)
                                     {
-                                        Add(symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
+                                        Add(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
                                     }
                                 }
-                                else
-                                    Add(symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
+                                else 
+                                {
+                                    if (typeCode == "_STK")
+                                        typeCode = "STK";
+                                    else if (string.IsNullOrWhiteSpace(typeCode))
+                                        typeCode = "_NO_SEC_TYPE_";
+
+                                    Add(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
+                                }
                             }
                         }
                     }

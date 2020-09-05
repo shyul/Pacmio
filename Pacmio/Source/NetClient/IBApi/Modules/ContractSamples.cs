@@ -55,10 +55,6 @@ namespace Pacmio.IB
         {
             int requestId = fields[1].ToInt32(-1);
 
-            //if (requestId != DataRequestID) throw new Exception("DataRequestID miss aligned!");
-
-            //if (requestId == DataRequestID)
-            //{
             bool isUnknown = true;
             int num = fields[2].ToInt32();
 
@@ -78,7 +74,7 @@ namespace Pacmio.IB
 
                     if (exchangeStr == "VALUE")
                     {
-                        UnknownItemList.Add(symbolStr, "_" + secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_VALUE");
+                        UnknownItemList.Add(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_VALUE");
                     }
                     else
                     {
@@ -106,17 +102,16 @@ namespace Pacmio.IB
                         }
                         else
                         {
-                            UnknownItemList.Add(symbolStr, "_" + secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_" + exchangeStr);
+                            UnknownItemList.Add(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_" + exchangeStr);
                         }
                     }
 
                     pt = pt + 6 + DerivativeSecTypeCount;
                 }
-
-                if (isUnknown)
-                    UnknownItemList.Add(active_ContractSample, "");
             }
-            //}
+
+            if (isUnknown)
+                UnknownItemList.Add(DateTime.Now, active_ContractSample);
 
             active_ContractSample = string.Empty;
 

@@ -214,6 +214,7 @@ namespace Pacmio.IB
                 if (fields[3] == "200") 
                 {
                     active_HistoricalDataBarTable.Contract.Status = ContractStatus.Error;
+                    active_HistoricalDataBarTable.Contract.UpdateTime = DateTime.Now;
                 }
                 else if (fields[3] == "366")
                 {

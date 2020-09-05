@@ -164,7 +164,10 @@ namespace Pacmio.IB
             ActiveMarketTicks.TryRemove(requestId, out Contract c);
 
             if (fields[3] == "200")
+            {
                 c.Status = ContractStatus.Error;
+                c.UpdateTime = DateTime.Now;
+            }
 
             Console.WriteLine("RequestMarketData errors: " + fields.ToStringWithIndex());
         }
