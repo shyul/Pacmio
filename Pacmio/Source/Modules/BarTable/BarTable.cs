@@ -722,6 +722,20 @@ namespace Pacmio
 
         #endregion Data/Bar Analysis (TA) Calculation
 
+        #region Pattern
+
+        /// <summary>
+        /// Intermediate Storage for Patterns
+        /// </summary>
+        public Dictionary<DateTime, PatternDatum> Patterns { get; } = new Dictionary<DateTime, PatternDatum>();
+
+        /// <summary>
+        /// Yes, all has to be gone when the Bars Are sorted....
+        /// </summary>
+        public Dictionary<int, PatternDatum> PatternsByFurthestIndexItCanGo { get; } = new Dictionary<int, PatternDatum>();
+
+        #endregion Pattern
+
         #region BarChart / DataView
 
         public List<IDataView> DataViews { get; } = new List<IDataView>();

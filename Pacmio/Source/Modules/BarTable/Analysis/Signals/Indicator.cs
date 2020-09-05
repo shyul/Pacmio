@@ -25,10 +25,5 @@ namespace Pacmio
     }
 
 
-    public abstract class Filter : BarAnalysis
-    {
-        public BarFreq BarFreq { get; }
 
-        public SignalColumn[] SignalColumns { get; protected set; }
-    }
 }

@@ -117,6 +117,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PatternDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\VolumeByPrice.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Filters\Execution.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Filters\Filter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Strategy\Research\ScannerType.cs" />
@@ -333,8 +335,6 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Modules\BarTable\Analysis\Signals\Filters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

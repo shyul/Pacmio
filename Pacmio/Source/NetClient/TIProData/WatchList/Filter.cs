@@ -240,11 +240,7 @@ namespace Pacmio.TIProData
 
 
 
-        public static void MergeSettings(Scanner s) 
-        {
-        
-        
-        }
+
 
 
         public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol") 
