@@ -17,9 +17,9 @@ using TradeIdeas.TIProData.Configuration;
 
 namespace Pacmio.TIProData
 {
-    public class TopWatchList : Filter, IWatchList
+    public class TopListHandler : TopListConfig, IWatchList
     {
-        public TopWatchList(string name, int numberOfRows = 100)
+        public TopListHandler(string name, int numberOfRows = 100)
         {
             Name = name;
             NumberOfRows = numberOfRows;

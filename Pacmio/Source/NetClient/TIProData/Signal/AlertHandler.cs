@@ -18,9 +18,9 @@ using System.Collections.Concurrent;
 
 namespace Pacmio.TIProData
 {
-    public class Signal : SignalFilter, ISignalSource
+    public class AlertHandler : AlertConfig, ISignalSource
     {
-        public Signal(string name, int numberOfRows = 100)
+        public AlertHandler(string name, int numberOfRows = 100)
         {
             Name = name;
             NumberOfRows = numberOfRows;

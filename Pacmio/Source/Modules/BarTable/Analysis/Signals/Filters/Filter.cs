@@ -52,7 +52,7 @@ namespace Pacmio
         // Get time zone information from the contract
         //public bool ValidTime() => ValidTime(DateTime.Now);
 
-        public TIProData.TopWatchList TopWatchList { get; }
+        public TIProData.TopListHandler TopWatchList { get; }
 
         // Output: name/source of the value, and value itself
         public (bool pushToLowerTimeFrame, List<PivotLevel> importantLevels) Calculate(Contract c, List<PivotLevel> Levels) 

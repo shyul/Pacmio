@@ -49,9 +49,9 @@ namespace Pacmio
 
         public virtual (double Min, double Max) GapPercent { get; set; }
 
-        protected bool GetConfigBool(string key, string expectedValue) => ConfigList.ContainsKey(key) && ConfigList[key] == expectedValue;
+        protected bool GetConfigBool(string key, string expectedValue = "on") => ConfigList.ContainsKey(key) && ConfigList[key] == expectedValue;
 
-        protected void SetConfig(string key, bool isSet, string value)
+        protected void SetConfig(string key, bool isSet, string value = "on")
         {
             if (isSet)
                 ConfigList[key] = value;

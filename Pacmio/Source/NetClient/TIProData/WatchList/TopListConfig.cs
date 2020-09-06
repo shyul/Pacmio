@@ -17,7 +17,7 @@ using TradeIdeas.TIProData.Configuration;
 
 namespace Pacmio.TIProData
 {
-    public abstract class Filter : Scanner
+    public abstract class TopListConfig : Scanner
     {
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
         protected bool m_IsActive = false;
@@ -71,6 +71,17 @@ namespace Pacmio.TIProData
             }
         }
 
+        public (double Min, double Max) Volume5Days
+        {
+            get => (GetConfigDouble("MinVol5D"), GetConfigDouble("MaxVol5D"));
+
+            set
+            {
+                SetConfig("MinVol5D", value.Min);
+                SetConfig("MaxVol5D", value.Max);
+            }
+        }
+
         public override (double Min, double Max) MarketCap
         {
             get => (GetConfigDouble("MinMCap"), GetConfigDouble("MaxMCap"));
@@ -81,6 +92,30 @@ namespace Pacmio.TIProData
                 SetConfig("MaxMCap", value.Max);
             }
         }
+
+        public (double Min, double Max) Float
+        {
+            get => (GetConfigDouble("MinFloat"), GetConfigDouble("MaxFloat"));
+
+            set
+            {
+                SetConfig("MinFloat", value.Min);
+                SetConfig("MaxFloat", value.Max);
+            }
+        }
+
+
+        public (double Min, double Max) ShortFloatPercent
+        {
+            get => (GetConfigDouble("MinSFloat"), GetConfigDouble("MaxSFloat"));
+
+            set
+            {
+                SetConfig("MinSFloat", value.Min);
+                SetConfig("MaxSFloat", value.Max);
+            }
+        }
+
 
         public override (double Min, double Max) GainPercent
         {
@@ -183,12 +218,12 @@ namespace Pacmio.TIProData
             {
                 if (Name.Length > 1) ConfigList["WN"] = Name;
 
-                SetConfig("X_NYSE", Exchanges.Contains(Exchange.NYSE), "on");
-                SetConfig("XN", Exchanges.Contains(Exchange.NASDAQ), "on");
-                SetConfig("X_ARCA", Exchanges.Contains(Exchange.ARCA), "on");
-                SetConfig("X_AMEX", Exchanges.Contains(Exchange.AMEX), "on");
-                SetConfig("X_BATS", Exchanges.Contains(Exchange.BATS), "on");
-                SetConfig("X_PINK", Exchanges.Contains(Exchange.OTCMKT), "on");
+                SetConfig("X_NYSE", Exchanges.Contains(Exchange.NYSE));
+                SetConfig("XN", Exchanges.Contains(Exchange.NASDAQ));
+                SetConfig("X_ARCA", Exchanges.Contains(Exchange.ARCA));
+                SetConfig("X_AMEX", Exchanges.Contains(Exchange.AMEX));
+                SetConfig("X_BATS", Exchanges.Contains(Exchange.BATS));
+                SetConfig("X_PINK", Exchanges.Contains(Exchange.OTCMKT));
 
                 if (IsHistory)
                 {

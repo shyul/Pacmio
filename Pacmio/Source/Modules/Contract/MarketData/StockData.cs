@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
@@ -134,7 +135,37 @@ namespace Pacmio
         [DataMember]
         public double ShortStatus { get; set; } = double.NaN;
 
+
+
+
+        // Add O H L and Last to daily tables 
+
+        public void StartTicks()
+        {
+            List<string> param = new List<string>();
+
+            // Also Fetch BarTable first if they are current...?
+        }
+
+        public void StopTicks()
+        {
+
+        }
+
+
         // News
+
+        [DataMember]
+        public bool EnableNews { get; set; } = false;
+
+        /// <summary>
+        /// Be aware of toggling changes
+        /// </summary>
+        [DataMember]
+        public bool EnableShortableShares { get; set; } = false;
+
+
+
 
         // Social Media
     }

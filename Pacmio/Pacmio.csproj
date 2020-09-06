@@ -225,11 +225,11 @@
     <Compile Include="Source\NetClient\IBApi\Modules\Order\Order_Status.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
     <Compile Include="Source\NetClient\IBApi\Types\WatchList.cs" />
-    <Compile Include="Source\NetClient\TIProData\Signal\Signal.cs" />
+    <Compile Include="Source\NetClient\TIProData\Signal\AlertHandler.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
-    <Compile Include="Source\NetClient\TIProData\Signal\SignalFilter.cs" />
-    <Compile Include="Source\NetClient\TIProData\WatchList\Filter.cs" />
-    <Compile Include="Source\NetClient\TIProData\WatchList\TopWatchList.cs" />
+    <Compile Include="Source\NetClient\TIProData\Signal\AlertConfig.cs" />
+    <Compile Include="Source\NetClient\TIProData\WatchList\TopListConfig.cs" />
+    <Compile Include="Source\NetClient\TIProData\WatchList\TopListHandler.cs" />
     <Compile Include="Source\UnknownContract.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
