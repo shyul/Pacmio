@@ -152,7 +152,7 @@ namespace Pacmio
             // Load Industry Sectors Code Dictionary
             BusinessInfoList.Load();
             ContractList.Load();
-            UnknownItemList.Load();
+            UnknownContractList.Load();
             AccountManager.Load();
             //TradeInfoManager.Load();
             //OrderManager.Load();
@@ -177,7 +177,7 @@ namespace Pacmio
             //TradeInfoManager.Save();
             //OrderManager.Save();
             AccountManager.Save();
-            UnknownItemList.Save();
+            UnknownContractList.Save();
         }
 
         #endregion File Storage Utilities

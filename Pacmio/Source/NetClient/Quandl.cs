@@ -199,10 +199,12 @@ namespace Pacmio
                                 }
                                 else
                                 {
+                                    UnknownContractList.CheckIn(currentSymbolName);
+                                    /*
                                     if (!UnknownItemList.Contains(currentSymbolName))
                                     {
                                         UnknownItemList.CheckIn(DateTime.Now, currentSymbolName, "STK");
-                                    }
+                                    }*/
                                     btdIsValid = false;
                                 }
                             }

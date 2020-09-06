@@ -230,7 +230,7 @@
     <Compile Include="Source\NetClient\TIProData\Signal\SignalFilter.cs" />
     <Compile Include="Source\NetClient\TIProData\WatchList\Filter.cs" />
     <Compile Include="Source\NetClient\TIProData\WatchList\TopWatchList.cs" />
-    <Compile Include="Source\UnknownItemList.cs" />
+    <Compile Include="Source\UnknownContract.cs" />
     <Compile Include="Source\Common.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />

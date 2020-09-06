@@ -85,11 +85,19 @@ namespace Pacmio
 
         public static Contract[] Fetch(string symbol, Exchange exchange, CancellationTokenSource cts = null)
         {
+            if (exchange == Exchange.UNKNOWN) return new Contract[] { };
+
             var clist = GetList(symbol, exchange).Where(n => n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
 
             if (clist.Count() == 0)
             {
                 clist = Fetch(symbol, cts).Where(n => n.Name == symbol && n.Exchange == exchange);
+
+                foreach(Contract c in clist) 
+                {
+                    if (cts.IsCancellationRequested) break;
+                    Fetch(c, cts);
+                }
             }
 
             return clist.ToArray();

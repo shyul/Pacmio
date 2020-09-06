@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PatternColumn : Column//, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
+    public class PatternColumn : Column //, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
         public PatternColumn(IChartPattern source)
         {

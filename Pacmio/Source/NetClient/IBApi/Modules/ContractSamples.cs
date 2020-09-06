@@ -74,7 +74,11 @@ namespace Pacmio.IB
 
                     if (exchangeStr == "VALUE")
                     {
-                        UnknownItemList.CheckIn(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_VALUE");
+                        //UnknownContractList.CheckIn(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_VALUE");
+
+                        var uc = UnknownContractList.CheckIn(symbolStr, "_VALUE", secTypeCode);
+                        uc.ConId = conIdStr.ToInt32(0);
+                        uc.LastCheckedTime = DateTime.Now;
                     }
                     else
                     {
@@ -102,7 +106,11 @@ namespace Pacmio.IB
                         }
                         else
                         {
-                            UnknownItemList.CheckIn(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_" + exchangeStr);
+                            var uc = UnknownContractList.CheckIn(symbolStr, "_" + exchangeStr, secTypeCode);
+                            uc.ConId = conIdStr.ToInt32(0);
+                            uc.LastCheckedTime = DateTime.Now;
+
+                            //UnknownContractList.CheckIn(DateTime.Now, symbolStr, secTypeCode, "", "", conIdStr.ToInt32(0), "", "", "_" + exchangeStr);
                         }
                     }
 
@@ -110,8 +118,13 @@ namespace Pacmio.IB
                 }
             }
 
-            if (isUnknown)
-                UnknownItemList.CheckIn(DateTime.Now, active_ContractSample);
+            if (isUnknown) 
+            {
+                var uc = UnknownContractList.CheckIn(active_ContractSample);
+                uc.LastCheckedTime = DateTime.Now;
+                //UnknownContractList.CheckIn(DateTime.Now, active_ContractSample);
+            }
+          
 
             active_ContractSample = string.Empty;
 

@@ -184,6 +184,51 @@ namespace Pacmio.TIProData
                 return null;
         }
 
+        public static Contract GetContract(this RowData row, string symbolColumnName = "symbol", string exchangeColumnName = "EXCHANGE") 
+        {
+            if (row.GetSymbol(symbolColumnName) is string symbolName && 
+                symbolName.Length > 0 && 
+                Regex.IsMatch(symbolName, @"^[a-zA-Z]+$") && 
+                GetString(row, exchangeColumnName) is string exchangeCode)
+            {
+                Exchange exchange = exchangeCode switch
+                {
+                    "NYSE" => Exchange.NYSE,
+                    "NASD" => Exchange.NASDAQ,
+                    "AMEX" => Exchange.AMEX,
+                    "ARCA" => Exchange.ARCA,
+                    "BATS" => Exchange.BATS,
+                    "PINK" => Exchange.OTCMKT,
+                    //null => Exchange.UNKNOWN,
+                    _ => Exchange.UNKNOWN
+                };
+
+                var list = ContractList.Fetch(symbolName, exchange);
+
+                if (list.Length == 1) 
+                    return list.First();
+                else
+                {
+
+                    // Add UnknowItem
+
+                }
+            }
+            else
+            {
+
+                // Add UnknowItem
+            }
+
+
+
+
+
+
+            return null;
+        }
+
+
         public static (Exchange Exchange, string Code) GetExchange(this RowData row)
         {
             if (GetString(row, "EXCHANGE") is string exCode)
@@ -193,6 +238,9 @@ namespace Pacmio.TIProData
                     case ("NYSE"): return (Exchange.NYSE, exCode);
                     case ("NASD"): return (Exchange.NASDAQ, exCode);
                     case ("AMEX"): return (Exchange.AMEX, exCode);
+                    case ("ARCA"): return (Exchange.ARCA, exCode);
+                    case ("BATS"): return (Exchange.BATS, exCode);
+                    case ("PINK"): return (Exchange.OTCMKT, exCode);
 
                     default:
                         {

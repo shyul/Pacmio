@@ -1101,6 +1101,9 @@ namespace TestClient
 
             tls.SortColumn = "MaxGUP";
 
+            tls.Exchanges.Clear();
+            tls.ExtraConfig = tls.ExtraConfig.TrimEnd('&') + "&XX=on&X_CAV=on&X_CAT=on&X_SMAL=on&X_OTCQX=on&X_OTCQB=on&X_ARCA=on";
+
             //tls.IsSnapshot = true;
             tls.IsHistory = true;
             tls.HistoricalTime = new DateTime(2020, 09, 02, 06, 30, 00);
