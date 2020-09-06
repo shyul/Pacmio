@@ -219,9 +219,6 @@ namespace Pacmio.TIProData
             }
         }
 
-        public HashSet<Stock> UnknownStock { get; } = new HashSet<Stock>();
-
-        
         public void InitColumns() 
         {
             ConfigList["form"] = "1";

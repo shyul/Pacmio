@@ -111,17 +111,7 @@ namespace Pacmio
             }
         }
 
-        #region Output
-
-        protected HashSet<string> UnknownSymbols { get; } = new HashSet<string>();
-
-
-
-        #endregion Output
-
-
         #region Equality // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-
         public bool Equals(Scanner other) => other is Scanner sc && GetType() == other.GetType() && ConfigString == sc.ConfigString;
 
         public override bool Equals(object other) => other is Scanner sc && Equals(sc);

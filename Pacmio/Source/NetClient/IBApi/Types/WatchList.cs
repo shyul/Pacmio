@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using Xu;
 
@@ -116,7 +117,32 @@ namespace Pacmio.IB
 
         public ICollection<Contract> List { get; } = new List<Contract>();
 
-        public HashSet<Contract> UnknownContract { get; } = new HashSet<Contract>();
+
+        public Contract GetContract(int conId, string symbolName) 
+        {
+            bool tried = false;
+
+        StartLoad:
+            var list = ContractList.GetList(conId).Where(n => n.Name == symbolName && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+
+            if (list.Count() == 1)
+            {
+                return list.First();
+            }
+            else if (!tried)
+            {
+                tried = true;
+                var fetchList = ContractList.Fetch(symbolName).Where(n => n.Name == symbolName && n.ConId == conId && n is Stock);
+                if (fetchList.Count() > 0)
+                {
+                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractList.Fetch(stk); });
+                }
+                goto StartLoad;
+            }
+
+            return null;
+        }
+
 
         public void ScannerData_Handler(string[] fields)
         {
@@ -129,10 +155,18 @@ namespace Pacmio.IB
 
                 for (int i = 4; i < fields.Length; i += 16)
                 {
-                    int rank = fields[i].ToInt32(-1);
+                    // int rank = fields[i].ToInt32(-1);
                     int conId = fields[i + 1].ToInt32(-1);
                     string symbolName = fields[i + 2];
 
+
+                    if (GetContract(conId, symbolName) is Contract c)
+                    {
+                        List.Add(c);
+                    }
+
+
+                    /*
                     var list = ContractList.GetList(symbolName, "US");
 
                     if(list.Count() == 1 && list.First() is Stock stk) 
@@ -157,7 +191,7 @@ namespace Pacmio.IB
                                 UnknownContract.Add(c);
                             }
                         }
-                    }
+                    }*/ 
 
                     /*
                     string typeName = fields[i + 3];
@@ -180,15 +214,17 @@ namespace Pacmio.IB
 
             }
 
-
-            int j = 0;
-            foreach (Contract c in List)
+            lock (List)
             {
-                if (c is Stock stk)
-                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
-                else
-                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
-                j++;
+                int j = 0;
+                foreach (Contract c in List)
+                {
+                    if (c is Stock stk)
+                        Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
+                    else
+                        Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
+                    j++;
+                }
             }
 
             Console.WriteLine("Scanner Result End.\n\n");

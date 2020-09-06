@@ -206,7 +206,9 @@ namespace Pacmio.TIProData
 
                     if (exchange != Exchange.UNKNOWN)
                     {
-                    LoadList:
+                        bool tried = false;
+
+                    StartLoad:
                         var list = ContractList.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
 
                         if (list.Count() == 1)
@@ -220,8 +222,9 @@ namespace Pacmio.TIProData
 
                             return stk;
                         }
-                        else
+                        else if(!tried)
                         {
+                            tried = true;
                             var uc = UnknownContractList.CheckIn(symbolName, exchangeCode);
                             if ((DateTime.Now - uc.LastCheckedTime).TotalDays > 100)
                             {
@@ -230,10 +233,10 @@ namespace Pacmio.TIProData
                                 if (fetchList.Count() > 0)
                                 {
                                     UnknownContractList.Remove(uc);
-                                    fetchList.ToList().ForEach(n => { var stk = n as Stock; if (stk.ISIN.Length < 8) ContractList.Fetch(stk); });
+                                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractList.Fetch(stk); });
                                 }
 
-                                goto LoadList;
+                                goto StartLoad;
                             }
                         }
                     }

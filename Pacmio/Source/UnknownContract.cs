@@ -115,7 +115,8 @@ namespace Pacmio
         {
             UnknownContract[] list = List.Select(n => n.Value).ToArray();
             list.SerializeJsonFile(FileName);
-            //Export(Root.ResourcePath + "UnknownItems.csv");
+
+            Export(Root.ResourcePath + "UnknownItems.csv");
         }
 
         public static void Load()
