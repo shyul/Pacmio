@@ -254,7 +254,7 @@ namespace Pacmio.TIProData
             }
         }
 
-        public void InitColumns() 
+        public void InitColumns()
         {
             ConfigList["form"] = "1";
             ConfigList["omh"] = "1";
@@ -267,7 +267,7 @@ namespace Pacmio.TIProData
             ConfigList["show5"] = "STP"; // Important
             ConfigList["show6"] = "RV";
             ConfigList["show7"] = "EarningD";
-            
+
         }
 
 
@@ -275,7 +275,7 @@ namespace Pacmio.TIProData
 
 
 
-        public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol") 
+        public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol")
         {
             List<Contract> List = new List<Contract>();
             lock (Columns)

@@ -215,7 +215,7 @@ namespace Pacmio
         [IgnoreDataMember]
         public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketTicks.Values.Contains(this);
 
-        [IgnoreDataMember] 
+        [IgnoreDataMember]
         public virtual MarketData MarketData { get; }
 
         public abstract void LoadMarketData();

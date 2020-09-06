@@ -222,7 +222,7 @@ namespace Pacmio.TIProData
 
                             return stk;
                         }
-                        else if(!tried)
+                        else if (!tried)
                         {
                             tried = true;
                             var uc = UnknownContractList.CheckIn(symbolName, exchangeCode);

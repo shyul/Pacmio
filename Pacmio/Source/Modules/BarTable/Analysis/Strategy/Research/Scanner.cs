@@ -61,16 +61,23 @@ namespace Pacmio
 
         protected double GetConfigDouble(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToDouble() : double.NaN;
 
-        protected void SetConfig(string key, double value)
+        protected void SetConfig(string key, double value, double min = double.MinValue, double max = double.MaxValue)
         {
             if (double.IsNaN(value))
-            { 
-                if (ConfigList.ContainsKey(key)) 
-                    ConfigList.Remove(key); 
+            {
+                if (ConfigList.ContainsKey(key))
+                    ConfigList.Remove(key);
             }
             else
+            {
+                if (value < min) value = min;
+                else if (value > max) value = max;
+
                 ConfigList[key] = value.ToString("0.#######");
+            }
         }
+
+        protected void SetConfigPercent(string key, double value) => SetConfig(key, value, 0D, 100D);
 
         protected int GetConfigInt(string key) => ConfigList.ContainsKey(key) ? ConfigList[key].ToInt32() : 0;
 
