@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using Xu;
-using System.Security.Policy;
+using Pacmio;
 
 namespace Pacmio.IB
 {
@@ -88,13 +88,39 @@ namespace Pacmio.IB
 
         public int RequestId { get; set; } = 0;
 
-        public string ContractType { get; set; } = "STK";
+        public ContractTypes ContractType { get; set; } = ContractTypes.USStocks;
+
+        public enum ContractTypes
+        {
+            USStocks,
+            USEquityETFs,
+            USFixedIncomeETF,
+            USFutures,
+            AmericaNonUSStocks,
+        }
+
+        public string ContractTypeString
+        {
+            get
+            {
+                return ContractType switch
+                {
+                    ContractTypes.USStocks => "STK",
+                    ContractTypes.USEquityETFs => "ETF.EQ.US",
+                    ContractTypes.USFixedIncomeETF => "ETF.FI.US",
+                    ContractTypes.USFutures => "FUT.US",
+                    ContractTypes.AmericaNonUSStocks => "STOCK.NA",
+
+                    _ => "STK",
+                };
+            }
+        }
 
         public string ContractLocation { get; set; } = "STK.US";
 
         public string ContractTypeFilter { get; set; } = "ALL";
 
-        public string SortType { get; set; } = string.Empty; // "TOP_PERC_GAIN";
+        public string ScanType { get; set; } = string.Empty; // "TOP_PERC_GAIN";
                                                              // "MOST_ACTIVE"
                                                              // "TOP_OPEN_PERC_GAIN"
                                                              // "HALTED"

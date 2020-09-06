@@ -43,9 +43,9 @@ namespace Pacmio.IB
                     requestId.ParamPos(),
 
                     info.NumberOfRows.ParamPos(),
-                    info.ContractType, // STK
+                    info.ContractTypeString, // STK
                     info.ContractLocation, // "STK.US"
-                    info.SortType, // "TOP_PERC_GAIN"
+                    info.ScanType, // "TOP_PERC_GAIN"
 
                     abovePrice.Param(),
                     belowPrice.Param(),

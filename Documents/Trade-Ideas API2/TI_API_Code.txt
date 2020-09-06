@@ -335,7 +335,9 @@ Vol5 | Volume 5 Minute | % | MinVol5 | MaxVol5 | Vol5:  'Volume 5 Minute' ('%')
 Vol10 | Volume 10 Minute | % | MinVol10 | MaxVol10 | Vol10:  'Volume 10 Minute' ('%')
 Vol15 | Volume 15 Minute | % | MinVol15 | MaxVol15 | Vol15:  'Volume 15 Minute' ('%')
 Vol30 | Volume 30 Minute | % | MinVol30 | MaxVol30 | Vol30:  'Volume 30 Minute' ('%')
+
 PMVol | Post Market Volume | Shares | MinPMVol | MaxPMVol | PMVol:  'Post Market Volume' ('Shares')
+
 STH | StockTwits Average Activity | Mentions / Day | MinSTH | MaxSTH | STH:  'StockTwits Average Activity' ('Mentions / Day')
 STP | StockTwits Relative Activity | % | MinSTP | MaxSTP | STP:  'StockTwits Relative Activity' ('%')
 VWV | Volatility | $ | MinVWV | MaxVWV | VWV:  'Volatility' ('$')
@@ -429,9 +431,11 @@ VWAP3 | VWAP 3 | $ | MinVWAP3 | MaxVWAP3 | VWAP3:  'VWAP 3' ('$')
 VWAP4 | VWAP 4 | $ | MinVWAP4 | MaxVWAP4 | VWAP4:  'VWAP 4' ('$')
 VWAP5 | VWAP 5 | $ | MinVWAP5 | MaxVWAP5 | VWAP5:  'VWAP 5' ('$')
 VWAPStop | VWAP Stop | $ | MinVWAPStop | MaxVWAPStop | VWAPStop:  'VWAP Stop' ('$')
+
 FCD | Change from the Close | $ | MinFCD | MaxFCD | FCD:  'Change from the Close' ('$')
 FCP | Change from the Close | % | MinFCP | MaxFCP | FCP:  'Change from the Close' ('%')
 FCR | Change from the Close | Bars | MinFCR | MaxFCR | FCR:  'Change from the Close' ('Bars')
+
 FOD | Change from the Open | $ | MinFOD | MaxFOD | FOD:  'Change from the Open' ('$')
 FOP | Change from the Open | % | MinFOP | MaxFOP | FOP:  'Change from the Open' ('%')
 FOR | Change from the Open | Bars | MinFOR | MaxFOR | FOR:  'Change from the Open' ('Bars')
@@ -471,13 +475,19 @@ R9MO | Position in 9 Month Range | % | MinR9MO | MaxR9MO | R9MO:  'Position in 9
 RY | Position in Year Range | % | MinRY | MaxRY | RY:  'Position in Year Range' ('%')
 R2Y | Position in 2 Year Range | % | MinR2Y | MaxR2Y | R2Y:  'Position in 2 Year Range' ('%')
 RL | Position in Lifetime Range | % | MinRL | MaxRL | RL:  'Position in Lifetime Range' ('%')
+
 RSI1 | 1 Minute RSI | 0 - 100 | MinRSI1 | MaxRSI1 | RSI1:  '1 Minute RSI' ('0 - 100')
 RSI2 | 2 Minute RSI | 0 - 100 | MinRSI2 | MaxRSI2 | RSI2:  '2 Minute RSI' ('0 - 100')
 RSI5 | 5 Minute RSI | 0 - 100 | MinRSI5 | MaxRSI5 | RSI5:  '5 Minute RSI' ('0 - 100')
 RSI15 | 15 Minute RSI | 0 - 100 | MinRSI15 | MaxRSI15 | RSI15:  '15 Minute RSI' ('0 - 100')
 RSI60 | 60 Minute RSI | 0 - 100 | MinRSI60 | MaxRSI60 | RSI60:  '60 Minute RSI' ('0 - 100')
 DRSI | Daily RSI | 0 - 100 | MinDRSI | MaxDRSI | DRSI:  'Daily RSI' ('0 - 100')
+
+
+
 Boll5 | Position in Bollinger Bands (5 Minute) | % | MinBoll5 | MaxBoll5 | Boll5:  'Position in Bollinger Bands (5 Minute)' ('%')
+
+
 Boll15 | Position in Bollinger Bands (15 Minute) | % | MinBoll15 | MaxBoll15 | Boll15:  'Position in Bollinger Bands (15 Minute)' ('%')
 Boll60 | Position in Bollinger Bands (60 Minute) | % | MinBoll60 | MaxBoll60 | Boll60:  'Position in Bollinger Bands (60 Minute)' ('%')
 Boll | Position in Bollinger Bands (Daily) | % | MinBoll | MaxBoll | Boll:  'Position in Bollinger Bands (Daily)' ('%')

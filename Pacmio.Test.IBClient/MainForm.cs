@@ -453,7 +453,7 @@ namespace TestClient
 
             Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 100)
             {
-                SortType = "MOST_ACTIVE",
+                ScanType = "MOST_ACTIVE",
                 Price = (10, 100),
                 VolumeMinimum = 1e7,
                 MarketCap = (1e8, double.NaN),
@@ -466,7 +466,7 @@ namespace TestClient
             //FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
             //FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
 
-            wcl = ScannerManager.Add(wcl) as Pacmio.IB.WatchList;
+            wcl = ScannerManager.Add(wcl);
 
             wcl.Start();
 
