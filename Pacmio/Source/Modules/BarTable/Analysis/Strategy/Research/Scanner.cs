@@ -115,7 +115,7 @@ namespace Pacmio
             get
             {
                 string extraConfig = ExtraConfig;
-                if (!extraConfig.EndsWith(";")) extraConfig += ";";
+                if (extraConfig.Length > 0 && !extraConfig.EndsWith(";")) extraConfig += ";";
                 return extraConfig + string.Join(";", ConfigList.OrderBy(n => n.Key).Select(n => n.Key + "=" + n.Value).ToArray());
             }
         }

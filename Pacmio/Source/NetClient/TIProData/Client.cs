@@ -2,7 +2,9 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// Trade-Ideas API
+/// Trade-Ideas API: 
+/// 1. https://www.trade-ideas.com/Help.html
+/// 2. https://pro.trade-ideas.com/professional/tidocumentation/
 /// 
 /// ***************************************************************************
 

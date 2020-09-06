@@ -14,8 +14,14 @@ namespace Pacmio
 {
     public interface IWatchList
     {
+        void Start();
+
+        void Stop();
+
+        ICollection<Contract> Snapshot();
+
         ICollection<Contract> List { get; }
 
-        void Snapshot();
+        // Add event / Interrupt source
     }
 }

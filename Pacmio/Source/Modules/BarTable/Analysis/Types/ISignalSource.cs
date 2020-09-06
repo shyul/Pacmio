@@ -14,6 +14,12 @@ namespace Pacmio
 {
     public interface ISignalSource
     {
+        void Start();
+
+        void Stop();
+
         ConcurrentQueue<Contract> Queue { get; }
+
+        // Add event / Interrupt source
     }
 }

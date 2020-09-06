@@ -57,8 +57,7 @@ namespace Pacmio
                 Volume = (minVolume, double.NaN),
                 GapPercent = (percent, -percent),
                 AverageTrueRange = (minATR, double.NaN),
-                ExtraConfig = "form=1&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
-            }; // &sort=MaxGUP
+            };
 
             return Add(tls);
         }
@@ -73,8 +72,6 @@ namespace Pacmio
                 Volume5Days = (3e5, double.NaN),
                 //NewHigh = 0,
                 Float = (double.NaN, 25e6),
-                //ExtraConfig = "O=2000000000000000000000000000001_1D_0&form=1&omh=1&col_ver=1&show0=D_Symbol&show1=D_Type&show2=D_Time&show3=D_Desc&show4=Price&show5=RV&show6=TV&show7=FCP&show8=Vol1&show9=Vol5&show10=PV&show11=Count&show12=Float&show13=SFloat&show14=D_Name",
-                ExtraConfig = "O=2000000000000000000000000000001_1D_0&SL=X1o5&col_ver=1&show0=D_Symbol&show1=D_Type&show2=D_Time&show3=D_Desc&show4=Price&show5=RV&show6=TV&show7=FCP&show8=Vol1&show9=Vol5&show10=PV&show11=Count&show12=Float&show13=SFloat&show14=D_Name",
             };
 
             return Add(tal);

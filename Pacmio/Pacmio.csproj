@@ -95,6 +95,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PivotPointAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PreMarketVolume.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeRatio.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />

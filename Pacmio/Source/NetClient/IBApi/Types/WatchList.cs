@@ -44,10 +44,14 @@ namespace Pacmio.IB
                 IsActive = false;
             }
         }
-        public void Snapshot()
+        public ICollection<Contract> Snapshot()
         {
+            Start();
 
 
+
+
+            return List;
         }
 
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
@@ -152,7 +156,7 @@ namespace Pacmio.IB
         public void ScannerData_Handler(string[] fields)
         {
             LastRefreshTime = DateTime.Now;
-            if (IsSnapshot) Stop();
+            if (IsSnapshot) { Stop(); }
 
             lock (List) 
             {

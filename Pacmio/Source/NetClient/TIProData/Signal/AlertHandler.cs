@@ -2,7 +2,9 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// Trade-Ideas API
+/// Trade-Ideas API: 
+/// 1. https://www.trade-ideas.com/Help.html
+/// 2. https://pro.trade-ideas.com/professional/tidocumentation/
 /// 
 /// ***************************************************************************
 
@@ -24,6 +26,12 @@ namespace Pacmio.TIProData
         {
             Name = name;
             NumberOfRows = numberOfRows;
+
+            ConfigList["O"] = "2000000000000000000000000000001_1D_0";
+            ConfigList["SL"] = "X1o5";
+            ConfigList["col_ver"] = "1";
+
+            ShowColumns.AddRange(new string[] { "D_Symbol", "D_Type", "D_Time", "D_Desc", "Count", "Price", "TV", "Float", "SFloat", "STP", "STH", "EarningD", "D_Name" });
         }
 
         private StreamingAlerts StreamingAlerts { get; set; }
@@ -69,15 +77,7 @@ namespace Pacmio.TIProData
             {
                 Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");
                 ConfigColumns(sender.Columns);
-
             }
-
-            /*
-            if (sender != StreamingAlerts)
-                Console.WriteLine("Ignoring StreamingAlertsConfig.\r\n");
-            else
-                Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");*/
-
         }
 
         ConcurrentQueue<Contract> ISignalSource.Queue { get; } = new ConcurrentQueue<Contract>();

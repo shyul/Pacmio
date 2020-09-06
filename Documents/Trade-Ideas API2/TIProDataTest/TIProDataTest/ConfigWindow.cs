@@ -80,9 +80,31 @@ namespace WindowsFormsApplication1
                 }
                 recentStatusLabel.Text = "Received response.";
                 alertsListBox.Items.Clear();
-                alertsListBox.Items.AddRange(_configurationWindowManager.AlertsInOrder.ToArray());
+
+                var alertlist = _configurationWindowManager.AlertsInOrder.ToArray();
+         
+                alertsListBox.Items.AddRange(alertlist);
+                Console.WriteLine("\n\n Alerts ******************* \n ");
+
+                foreach (Alert a in alertlist) 
+                {
+                    Console.WriteLine(a.InternalCode + " | " + a.Description + " | " + a.FilterDescription + " | " + a.ToString());
+                }
+
+           
                 filtersListBox.Items.Clear();
-                filtersListBox.Items.AddRange(_configurationWindowManager.FiltersInOrder.ToArray());
+
+                var filterList = _configurationWindowManager.FiltersInOrder.ToArray();
+
+                filtersListBox.Items.AddRange(filterList);
+
+                Console.WriteLine("\n\n Filters ******************* \n ");
+                foreach (Filter a in filterList)
+                {
+                    Console.WriteLine(a.InternalCode + " | " + a.Description + " | " + a.Units + " | " + a.MinCode + " | " + a.MaxCode + " | " + a.ToString()); // a.ToString());
+                }
+
+
                 exchangesCheckedListBox.Items.Clear();
                 exchangesCheckedListBox.Items.AddRange(_configurationWindowManager.ExchangesInOrder.ToArray());
                 symbolListsCheckedListBox.Items.Clear();

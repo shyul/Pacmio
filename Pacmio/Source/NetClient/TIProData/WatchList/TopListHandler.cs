@@ -2,7 +2,9 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// Trade-Ideas API
+/// Trade-Ideas API: 
+/// 1. https://www.trade-ideas.com/Help.html
+/// 2. https://pro.trade-ideas.com/professional/tidocumentation/
 /// 
 /// ***************************************************************************
 
@@ -23,15 +25,36 @@ namespace Pacmio.TIProData
         {
             Name = name;
             NumberOfRows = numberOfRows;
+            ConfigList["form"] = "1";
+            ConfigList["omh"] = "1";
+            ConfigList["col_ver"] = "1";
+
+            ShowColumns.AddRange(new string[] { "D_Symbol", "Price", "TV", "Float", "SFloat", "STP", "STH", "EarningD", "D_Name" });
         }
 
         private TopList TopList { get; set; }
 
-        public override void Start()
+        public override void Start() => Start(false, DateTime.Now);
+
+        public void Start(bool isHistorical, DateTime historicalTime)
         {
-            if (!IsActive && Client.Connected)
+            if (Client.Connected)
             {
                 Stop();
+
+                SetConfig("hist", isHistorical, "1");
+                IsSnapshot = isHistorical;
+
+                if (isHistorical)
+                {
+                    long epoch = historicalTime.ToEpoch().ToInt64();
+                    ConfigList["exact_time"] = epoch.ToString();
+                }
+                else
+                {
+                    if (ConfigList.ContainsKey("exact_time"))
+                        ConfigList.Remove("exact_time");
+                }
 
                 IsActive = true;
                 string configStr = ConfigString;
@@ -49,68 +72,30 @@ namespace Pacmio.TIProData
         {
             if (m_IsActive)
             {
+                Console.WriteLine("#### Stop TopList: " + Name);
+
                 if (TopList is TopList)
                     TopList.Stop();
+
                 IsActive = false;
             }
         }
 
-        public void Snapshot() 
+        public ICollection<Contract> Snapshot()
         {
-        
-        
+            Start();
+            while (IsActive) { } // TODO: Timeout
+            return List;
         }
 
-        public bool IsHistory
+        public ICollection<Contract> Snapshot(DateTime historicalTime)
         {
-            get => GetConfigBool("hist", "1");
-            set
-            {
-                SetConfig("hist", value, "1");
-                SetHistoricalTime(value);
-            }
+            Start(true, historicalTime);
+            while (IsActive) { } // TODO: Timeout
+            return List;
         }
-
-        public DateTime HistoricalTime
-        {
-            get => m_HistoricalTime;
-
-            set
-            {
-                DateTime time = value;
-
-                if ((DateTime.Now - time).TotalDays > 90)
-                    time = DateTime.Now.AddDays(-90);
-
-                m_HistoricalTime = time;
-                SetHistoricalTime(IsHistory);
-            }
-        }
-
-        private DateTime m_HistoricalTime;
-
-        public void SetHistoricalTime(bool value) 
-        {
-            if (value)
-            {
-                long epoch = HistoricalTime.ToEpoch().ToInt64();
-                ConfigList["exact_time"] = epoch.ToString();
-            }
-            else
-            {
-                if (ConfigList.ContainsKey("exact_time"))
-                    ConfigList.Remove("exact_time");
-            }
-        }
-
-
-
 
         public string SortColumn { get => GetConfigString("sort"); set => SetConfig("sort", value); }
-
-
-
-
 
         void TopListStatus_Handler(TopList sender)
         {
@@ -118,17 +103,6 @@ namespace Pacmio.TIProData
             {
                 Console.WriteLine("WindowName: " + sender.TopListInfo.WindowName);
                 ConfigColumns(sender.TopListInfo.Columns);
-                /*
-                lock (Columns)
-                {
-                    Columns.Clear();
-                    foreach (ColumnInfo c in sender.TopListInfo.Columns)
-                    {
-                        Columns[c.WireName] = c;
-                        Console.WriteLine(c.WireName + " | " + c.Description + " | " + c.Format + " | " + c.Units + " | " + c.InternalCode + " | " + c.Graphics + " | " + c.TextHeader + " | " + c.PreferredWidth);
-                    }
-                }*/
-                //Console.WriteLine(sender.TopListInfo.ToString());
             }
         }
 
