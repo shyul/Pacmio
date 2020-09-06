@@ -50,152 +50,44 @@ namespace Pacmio.TIProData
         private DateTime m_HistoricalTime;
 
 
-        public override (double Min, double Max) Price
-        {
-            get => (GetConfigDouble("MinPrice"), GetConfigDouble("MaxPrice"));
-
-            set
-            {
-                SetConfig("MinPrice", value.Min);
-                SetConfig("MaxPrice", value.Max);
-            }
-        }
-
-        public (double Min, double Max) Volume
-        {
-            get => (GetConfigDouble("MinTV"), GetConfigDouble("MaxTV"));
-
-            set
-            {
-                SetConfig("MinTV", value.Min);
-                SetConfig("MaxTV", value.Max);
-            }
-        }
-
-        public (double Min, double Max) Volume5Days
-        {
-            get => (GetConfigDouble("MinVol5D"), GetConfigDouble("MaxVol5D"));
-
-            set
-            {
-                SetConfig("MinVol5D", value.Min);
-                SetConfig("MaxVol5D", value.Max);
-            }
-        }
-
-        public override (double Min, double Max) MarketCap
-        {
-            get => (GetConfigDouble("MinMCap"), GetConfigDouble("MaxMCap"));
-
-            set
-            {
-                SetConfig("MinMCap", value.Min);
-                SetConfig("MaxMCap", value.Max);
-            }
-        }
-
-        public (double Min, double Max) Float
-        {
-            get => (GetConfigDouble("MinFloat"), GetConfigDouble("MaxFloat"));
-
-            set
-            {
-                SetConfig("MinFloat", value.Min);
-                SetConfig("MaxFloat", value.Max);
-            }
-        }
-
-
-        public (double Min, double Max) ShortFloatPercent
-        {
-            get => (GetConfigDouble("MinSFloat"), GetConfigDouble("MaxSFloat"));
-
-            set
-            {
-                SetConfig("MinSFloat", value.Min);
-                SetConfig("MaxSFloat", value.Max);
-            }
-        }
-
-
-        public override (double Min, double Max) GainPercent
-        {
-            get => (GetConfigDouble("MinFCP"), GetConfigDouble("MaxFCP"));
-
-            set
-            {
-                SetConfig("MinFCP", value.Min);
-                SetConfig("MaxFCP", value.Max);
-            }
-        }
+        public override (double Min, double Max) Price { get => GetConfigRangeDouble("Price"); set => SetConfigRange("Price", value); }
 
 
 
-        public (double Min, double Max) Gap
-        {
-            get => (GetConfigDouble("MinGUD"), GetConfigDouble("MaxGUD"));
+        public override (double Min, double Max) MarketCap { get => GetConfigRangeDouble("MCap"); set => SetConfigRange("MCap", value); }
 
-            set
-            {
-                SetConfig("MinGUD", value.Min);
-                SetConfig("MaxGUD", value.Max);
-            }
-        }
+        public (double Min, double Max) Volume { get => GetConfigRangeDouble("TV"); set => SetConfigRange("TV", value); }
+        public (double Min, double Max) Volume5Days { get => GetConfigRangeDouble("Vol5D"); set => SetConfigRange("Vol5D", value); }
+        public (double Min, double Max) Float { get => GetConfigRangeDouble("Float"); set => SetConfigRange("Float", value); }
+        public (double Min, double Max) ShortFloatPercent { get => GetConfigRangeDouble("SFloat"); set => SetConfigRange("SFloat", value); }
 
-        public override (double Min, double Max) GapPercent
-        {
-            get => (GetConfigDouble("MinGUP"), GetConfigDouble("MaxGUP"));
 
-            set
-            {
-                SetConfig("MinGUP", value.Min);
-                SetConfig("MaxGUP", value.Max);
-            }
-        }
-
-        public (double Min, double Max) GapBars
-        {
-            get => (GetConfigDouble("MinGUR"), GetConfigDouble("MaxGUR"));
-
-            set
-            {
-                SetConfig("MinGUR", value.Min);
-                SetConfig("MaxGUR", value.Max);
-            }
-        }
+        public override (double Min, double Max) GainPercent { get => GetConfigRangeDouble("FCP"); set => SetConfigRange("FCP", value); }
 
 
 
 
-        public (double Min, double Max) AverageTrueRange
-        {
-            get => (GetConfigDouble("MinATR"), GetConfigDouble("MaxATR"));
+        public (double Min, double Max) Gap { get => GetConfigRangeDouble("GUD"); set => SetConfigRange("GUD", value); }
+        public override (double Min, double Max) GapPercent { get => GetConfigRangeDouble("GUP"); set => SetConfigRange("GUP", value); }
+        public (double Min, double Max) GapBars { get => GetConfigRangeDouble("GUR"); set => SetConfigRange("GUR", value); }
 
-            set
-            {
-                SetConfig("MinATR", value.Min);
-                SetConfig("MaxATR", value.Max);
-            }
-        }
 
-        public (double Min, double Max) Volatility
-        {
-            get => (GetConfigDouble("MinVWV"), GetConfigDouble("MaxVWV"));
 
-            set
-            {
-                SetConfig("MinVWV", value.Min);
-                SetConfig("MaxVWV", value.Max);
-            }
-        }
+        public (double Min, double Max) ADX { get => GetConfigRangeDouble("ADX"); set => SetConfigRange("ADX", value); }
 
-        public (double Min, double Max) VolatilityPercent { get => GetConfigRange("VWVP"); set => SetConfigRange("VWVP", value); }
+        public (double Min, double Max) AverageTrueRange { get => GetConfigRangeDouble("ATR"); set => SetConfigRange("ATR", value); }
 
-        public (double Min, double Max) Wiggle { get => GetConfigRange("Wiggle"); set => SetConfigRange("Wiggle", value); }
+        public (double Min, double Max) Volatility { get => GetConfigRangeDouble("VWV"); set => SetConfigRange("VWV", value); }
 
-        public (double Min, double Max) GetConfigRange(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
+        public (double Min, double Max) VolatilityPercent { get => GetConfigRangeDouble("VWVP"); set => SetConfigRange("VWVP", value); }
+        public (double Min, double Max) Wiggle { get => GetConfigRangeDouble("Wiggle"); set => SetConfigRange("Wiggle", value); }
+
+
+        public (double Min, double Max) GetConfigRangeDouble(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
         public void SetConfigRange(string key, (double Min, double Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
 
+        public (int Min, int Max) GetConfigRangeInt(string key) => (GetConfigInt("Min" + key), GetConfigInt("Max" + key));
+        public void SetConfigRange(string key, (int Min, int Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
 
 
         public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
