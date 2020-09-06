@@ -34,7 +34,7 @@ namespace Pacmio
 
         public static int DegreeOfParallelism = 24;
 
-        #region IB Client
+        #region Net Client
 
         public static void NetConnectUpdate(ConnectionStatus status, DateTime time, string message = "")
         {
@@ -108,7 +108,7 @@ namespace Pacmio
             }
         }
 
-        #endregion IB Client
+        #endregion Net Client
 
         #region Background Tasks
 

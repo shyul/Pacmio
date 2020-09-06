@@ -1104,8 +1104,18 @@ namespace TestClient
             //tls.Exchanges.Clear();
             //tls.ExtraConfig = tls.ExtraConfig.TrimEnd('&') + "&XX=on&X_CAV=on&X_CAT=on&X_SMAL=on&X_OTCQX=on&X_OTCQB=on&X_ARCA=on";
 
-            tls.Start();
-            tls.Snapshot(new DateTime(2020, 09, 02, 06, 30, 00));
+            //tls.Start();
+            var list = tls.Snapshot(new DateTime(2020, 09, 02, 06, 30, 00));
+
+            int j = 0;
+            foreach (Contract c in list)
+            {
+                if (c is Stock stk)
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
+                else
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
+                j++;
+            }
         }
 
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)

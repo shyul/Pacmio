@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
+using System.Threading;
 using System.Linq;
 using Xu;
 
@@ -23,14 +23,24 @@ namespace Pacmio.IB
             NumberOfRows = numberOfRows;
         }
 
-        public override void Start()
+        public override void Start() => Start(false);
+
+        public void Start(bool isSnapshot)
         {
-            if (!IsActive && Client.Connected)
+            if (Client.Connected)
             {
+                Stop();
+
+                IsSnapshot = isSnapshot;
                 IsActive = true;
                 string configStr = ConfigString;
-                Console.WriteLine(Name + " | " + configStr);
                 Client.SendRequest_ScannerSubscription(this);
+
+                Console.WriteLine("#### Start IB WatchList: " + Name + " | " + configStr);
+            }
+            else
+            {
+                Console.WriteLine("#### No IB connection, unable to start WatchList: " + Name);
             }
         }
 
@@ -38,20 +48,35 @@ namespace Pacmio.IB
         {
             if (m_IsActive)
             {
-                if(Client.Connected) 
+                Console.WriteLine("#### Stop IB WatchList: " + Name);
+
+                if (Client.Connected)
                     Client.SendCancel_ScannerSubscription(RequestId);
 
                 IsActive = false;
             }
         }
+
         public ICollection<Contract> Snapshot()
         {
-            Start();
+            Start(true);
 
+            int timeout = 200;
+            while (IsActive)
+            {
+                Thread.Sleep(10);
+                timeout--;
 
+                if (timeout < 0)
+                {
+                    return null;
+                }
+            }
 
-
-            return List;
+            lock (List)
+            {
+                return List.ToArray();
+            }
         }
 
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
@@ -67,9 +92,9 @@ namespace Pacmio.IB
         public string ContractTypeFilter { get; set; } = "ALL";
 
         public string SortType { get; set; } = string.Empty; // "TOP_PERC_GAIN";
-                                                         // "MOST_ACTIVE"
-                                                         // "TOP_OPEN_PERC_GAIN"
-                                                         // "HALTED"
+                                                             // "MOST_ACTIVE"
+                                                             // "TOP_OPEN_PERC_GAIN"
+                                                             // "HALTED"
 
         //public string FilterOptions { get; set; } = string.Empty; // (23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
         // (23)"priceAbove=5;avgVolumeAbove=500000;marketCapAbove1e6=1000;"
@@ -127,7 +152,7 @@ namespace Pacmio.IB
         public ICollection<Contract> List { get; } = new List<Contract>();
 
 
-        public Contract GetContract(int conId, string symbolName) 
+        public Contract GetContract(int conId, string symbolName)
         {
             bool tried = false;
 
@@ -158,7 +183,7 @@ namespace Pacmio.IB
             LastRefreshTime = DateTime.Now;
             if (IsSnapshot) { Stop(); }
 
-            lock (List) 
+            lock (List)
             {
                 List.Clear();
 
@@ -173,50 +198,6 @@ namespace Pacmio.IB
                     {
                         List.Add(c);
                     }
-
-
-                    /*
-                    var list = ContractList.GetList(symbolName, "US");
-
-                    if(list.Count() == 1 && list.First() is Stock stk) 
-                    {
-                        List.Add(stk);
-                    }
-                    else if(list.Count() < 1)
-                    {
-                        if (!UnknownSymbols.Contains(symbolName)) 
-                        {
-                            ContractList.Fetch(symbolName);
-                            UnknownSymbols.Add(symbolName);
-                        }
-                    }
-                    else
-                    {
-                        foreach(Contract c in list) 
-                        {
-                            if (!UnknownContract.Contains(c)) 
-                            {
-                                ContractList.Fetch(c);
-                                UnknownContract.Add(c);
-                            }
-                        }
-                    }*/ 
-
-                    /*
-                    string typeName = fields[i + 3];
-                    string lastTradeDateOrContractMonth = fields[i + 4];
-                    double strike = fields[i + 5].ToDouble();
-                    string right = fields[i + 6];
-                    string exchange = fields[i + 7]; // SMART, which is useless
-                    string currency = fields[i + 8];
-                    string localSymbol = fields[i + 9];
-                    string MarketName = fields[i + 10];
-                    string tradingClass = fields[i + 11]; // "SCM"
-                    string distance = fields[i + 12];
-                    string benchmark = fields[i + 13];
-                    string projection = fields[i + 14];
-                    string legsStr = fields[i + 15];
-                    */
                 }
 
                 //ScannerManager.Updated(info); 

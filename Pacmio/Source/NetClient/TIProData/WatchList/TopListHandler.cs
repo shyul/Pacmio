@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading;
 using Xu;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
@@ -34,16 +34,16 @@ namespace Pacmio.TIProData
 
         private TopList TopList { get; set; }
 
-        public override void Start() => Start(false, DateTime.Now);
+        public override void Start() => Start(false, false, DateTime.Now);
 
-        public void Start(bool isHistorical, DateTime historicalTime)
+        public void Start(bool isSnapshot, bool isHistorical, DateTime historicalTime)
         {
             if (Client.Connected)
             {
                 Stop();
 
                 SetConfig("hist", isHistorical, "1");
-                IsSnapshot = isHistorical;
+                IsSnapshot = isSnapshot || isHistorical;
 
                 if (isHistorical)
                 {
@@ -58,13 +58,18 @@ namespace Pacmio.TIProData
 
                 IsActive = true;
                 string configStr = ConfigString;
-                Console.WriteLine(Name + " | " + configStr);
 
                 var toplist = Client.Connection.TopListManager.GetTopList(configStr);
                 TopList = toplist is TopList tl ? tl : null;
                 TopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
                 TopList.TopListData += new TopListData(TopListData_Handler);
                 TopList.Start();
+
+                Console.WriteLine("#### Start TopList: " + Name + " | " + configStr);
+            }
+            else
+            {
+                Console.WriteLine("#### No TI connection, unable to start TopList: " + Name);
             }
         }
 
@@ -83,16 +88,46 @@ namespace Pacmio.TIProData
 
         public ICollection<Contract> Snapshot()
         {
-            Start();
-            while (IsActive) { } // TODO: Timeout
-            return List;
+            Start(true, false, DateTime.Now);
+
+            int timeout = 200;
+            while (IsActive)
+            {
+                Thread.Sleep(10);
+                timeout--;
+
+                if (timeout < 0)
+                {
+                    return null;
+                }
+            }
+
+            lock (List)
+            {
+                return List.ToArray();
+            }
         }
 
         public ICollection<Contract> Snapshot(DateTime historicalTime)
         {
-            Start(true, historicalTime);
-            while (IsActive) { } // TODO: Timeout
-            return List;
+            Start(false, true, historicalTime);
+
+            int timeout = 200;
+            while (IsActive)
+            {
+                Thread.Sleep(10);
+                timeout--;
+
+                if (timeout < 0)
+                {
+                    return null;
+                }
+            }
+
+            lock (List)
+            {
+                return List.ToArray();
+            }
         }
 
         public string SortColumn { get => GetConfigString("sort"); set => SetConfig("sort", value); }
@@ -112,6 +147,7 @@ namespace Pacmio.TIProData
         {
             LastRefreshTime = DateTime.Now;
             if (IsSnapshot) Stop();
+
             lock (List)
             {
                 List = PrintAllRows(rows);
