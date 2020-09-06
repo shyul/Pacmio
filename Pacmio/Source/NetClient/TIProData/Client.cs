@@ -184,12 +184,13 @@ namespace Pacmio.TIProData
                 return null;
         }
 
-        public static Contract GetContract(this RowData row, string symbolColumnName = "symbol", string exchangeColumnName = "EXCHANGE") 
+        public static Stock GetContract(this RowData row, string symbolColumnName = "symbol", string exchangeColumnName = "EXCHANGE")
         {
-            if (row.GetSymbol(symbolColumnName) is string symbolName && 
-                symbolName.Length > 0 && 
-                Regex.IsMatch(symbolName, @"^[a-zA-Z]+$") && 
-                GetString(row, exchangeColumnName) is string exchangeCode)
+            string symbolName = row.GetSymbol(symbolColumnName);
+            string exchangeCode = GetString(row, exchangeColumnName);
+
+            if (!string.IsNullOrWhiteSpace(symbolName) &&
+                Regex.IsMatch(symbolName, @"^[a-zA-Z]+$"))
             {
                 Exchange exchange = exchangeCode switch
                 {
@@ -203,27 +204,42 @@ namespace Pacmio.TIProData
                     _ => Exchange.UNKNOWN
                 };
 
-                var list = ContractList.Fetch(symbolName, exchange);
+                if (exchange != Exchange.UNKNOWN)
+                {
+                LoadList:
+                    var list = ContractList.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
 
-                if (list.Length == 1) 
-                    return list.First();
+                    if (list.Count() == 1)
+                    {
+                        Stock stk = list.First() as Stock;
+
+                        if (stk.ISIN.Length < 8)
+                        {
+                            ContractList.Fetch(stk);
+                        }
+
+                        return stk;
+                    }
+                    else
+                    {
+                        var uc = UnknownContractList.CheckIn(symbolName, exchangeCode);
+                        if ((DateTime.Now - uc.LastCheckedTime).TotalDays > 100)
+                        {
+                            uc.LastCheckedTime = DateTime.Now;
+                            list = ContractList.Fetch(symbolName);
+                            goto LoadList;
+                        }
+                    }
+                }
                 else
                 {
-
-                    // Add UnknowItem
-
+                    UnknownContractList.CheckIn(symbolName, exchangeCode).LastCheckedTime = DateTime.Now;
                 }
             }
             else
             {
-
-                // Add UnknowItem
+                UnknownContractList.CheckIn(symbolName, exchangeCode).LastCheckedTime = DateTime.Now;
             }
-
-
-
-
-
 
             return null;
         }

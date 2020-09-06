@@ -251,135 +251,68 @@ namespace Pacmio.TIProData
                 foreach (RowData row in rows)
                 {
                     Console.WriteLine(row.ToString());
-                    
-                    var (exchange, exchangeCode) = row.GetExchange();
-                    if (row.GetSymbol(symbolColumnName) is string symbol && exchange != Exchange.UNKNOWN)
+
+                    if (row.GetContract(symbolColumnName) is Stock stk)
                     {
-
-
-
-
-                        var list = ContractList.GetList(symbol, Exchanges);
-
-                        if (list.Where(n => n is Stock).Count() > 0)
+                        // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
+                        if ((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
                         {
-                            Stock stk = list.First() as Stock;
+                            sd.Status = MarketTickStatus.Delayed;
 
-                            if (stk.ISIN.Length < 8 && !UnknownStock.Contains(stk))
+                            sd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
+                            sd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;
+                            // Price
+
+                            // Volume
+
+                            // 
+
+                            // Social
+
+                            // Float Short
+
+                            // Float
+                        }
+
+                        List.Add(stk);
+
+                        /*
+                        if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
+                            stk.FullName = fullname;*/
+
+
+
+                        string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
+
+                        foreach (string key in Columns.Keys)
+                        {
+                            ColumnInfo ci = Columns[key];
+
+                            if (row.GetValue(ci) is string val)
                             {
-                                UnknownStock.Add(stk);
-                                ContractList.Fetch(stk);
-                            }
+                                rowString += ci.Description + "=" + val + "; ";
 
-                            // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
-                            if ((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
-                            {
-                                sd.Status = MarketTickStatus.Delayed;
-
-                                sd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
-                                sd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;
-                                // Price
-
-                                // Volume
-
-                                // 
-
-                                // Social
-
-                                // Float Short
-
-                                // Float
-                            }
-
-                            List.Add(stk);
-
-                            /*
-                            if (list.Count() == 1 && row.GetAsString("c_D_Name") is string fullname && fullname.Length > 0)
-                                stk.FullName = fullname;*/
-
-
-
-                            string rowString = stk.ToString() + " >> " + stk.ISIN + " >> " + stk.FullName + " >> ";
-
-                            foreach (string key in Columns.Keys)
-                            {
-                                ColumnInfo ci = Columns[key];
-
-                                if (row.GetValue(ci) is string val)
+                                if (key == "c_D_Name")
                                 {
-                                    rowString += ci.Description + "=" + val + "; ";
-
-                                    if (key == "c_D_Name")
-                                    {
-                                        stk.FullName = val;
-                                    }
+                                    stk.FullName = val;
                                 }
                             }
-                            
-                            if (row.GetAsString("DESCRIPTION") is string desc && desc.Length > 0)
-                            {
-                                rowString += " | desc = " + desc;
-                            }
-
-                            if (row.GetAsString("ALT_DESCRIPTION") is string adesc && adesc.Length > 0)
-                            {
-                                rowString += " | adesc = " + adesc;
-                            }
-
-                            Console.WriteLine(rowString);
                         }
 
-
-
-                        // This is the exact part needs to be moved to unknown items...
-                        else if (IB.Client.Connected && !UnknownSymbols.Contains(symbol))
+                        if (row.GetAsString("DESCRIPTION") is string desc && desc.Length > 0)
                         {
-                            /*
-                            var (exchange, exCode) = row.GetExchange();
-                            exCode = "_" + ((exchange == Exchange.UNKNOWN) ? exCode : exchange.ToString());
-
-
-                            DateTime lastCheckedTime = DateTime.MinValue;
-                 
-
-                            if (exchange == Exchange.UNKNOWN) 
-                            {
-                            
-                            
-                            }
-
-
-
-                            var clist = ContractList.Fetch(symbol).Where(n => n.Name == symbol && Exchanges.Contains(n.Exchange));
-
-                            if (clist.Count() < 1)
-                            {
-                                //var (exchange, code) = row.GetExchange();
-                            }
-                            */
-
-           
-
-
-
-
-
-
-
-
-
-                            UnknownSymbols.Add(symbol);
-                            ContractList.Fetch(symbol);
-
-
+                            rowString += " | desc = " + desc;
                         }
+
+                        if (row.GetAsString("ALT_DESCRIPTION") is string adesc && adesc.Length > 0)
+                        {
+                            rowString += " | adesc = " + adesc;
+                        }
+
+                        Console.WriteLine(rowString);
+
                     }
-
-
-
                 }
-
-
                 // Trigger the list is updated event!!
             }
 
