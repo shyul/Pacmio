@@ -182,14 +182,14 @@ namespace Pacmio.TIProData
             {
                 if (symbolName.EndsWith(".U"))
                 {
-                    symbolName = symbolName.ReplaceEnd(".U", " U");
+                    symbolName = symbolName.Replace(".", " ");
                 }
                 else
                 {
 
                 }
 
-                if (Regex.IsMatch(symbolName, @"^[a-zA-Z]+$"))
+                if (Regex.IsMatch(symbolName, @"^[a-zA-Z ]+$"))
                 {
                     string exchangeCode = GetString(row, exchangeColumnName);
                     Exchange exchange = exchangeCode switch

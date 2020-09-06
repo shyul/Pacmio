@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Pacmio
         /// <summary>
         /// Master List of Business Informations.
         /// </summary>
-        private static readonly Dictionary<string, BusinessInfo> List = new Dictionary<string, BusinessInfo>();
+        private static ConcurrentDictionary<string, BusinessInfo> List { get; } = new ConcurrentDictionary<string, BusinessInfo>();
 
         private static string BusinessInfoFile(string isin)
         {
@@ -37,14 +38,8 @@ namespace Pacmio
             else if (!List.ContainsKey(isin))
             {
                 string fileName = BusinessInfoFile(isin);
-                BusinessInfo bi = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
-
-                if (!List.ContainsKey(isin))
-                    List.Add(isin, bi);
-
-                //List[isin] = bi;
-
-                return List[isin];
+                BusinessInfo bi = List[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
+                return bi;
             }
             else
                 return List[isin];
@@ -52,7 +47,7 @@ namespace Pacmio
 
         private static string IndustrySectorsFile => Root.ResourcePath + @"IndustrySectors.csv";
 
-        public static Dictionary<(string Type, string Code), string> IndustrySectors = new Dictionary<(string Type, string Code), string>();
+        public static Dictionary<(string Type, string Code), string> IndustrySectors { get; } = new Dictionary<(string Type, string Code), string>();
 
         public static void AddIndustrySector(string Type, string Code, string Text) => IndustrySectors[(Type, Code)] = Text;
 
