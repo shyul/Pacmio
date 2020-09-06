@@ -22,10 +22,9 @@ namespace Pacmio.TIProData
 {
     public class AlertHandler : AlertConfig, ISignalSource
     {
-        public AlertHandler(string name, int numberOfRows = 100)
+        public AlertHandler(string name)
         {
             Name = name;
-            NumberOfRows = numberOfRows;
 
             ConfigList["O"] = "2000000000000000000000000000001_1D_0";
             ConfigList["SL"] = "X1o5";

@@ -1121,12 +1121,7 @@ namespace TestClient
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)
         {
             Pacmio.TIProData.AlertHandler tls = ScannerManager.AddTradeIdeasAlert();
-
-            //tls.IsHistory = true;
-            //tls.HistoricalTime = new DateTime(2020, 09, 02, 06, 35, 00);
-
-            //tls.Start();
-
+            tls.Start();
         }
     }
     public static class DataGridHelper

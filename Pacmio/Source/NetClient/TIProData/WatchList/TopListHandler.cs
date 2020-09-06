@@ -21,10 +21,9 @@ namespace Pacmio.TIProData
 {
     public class TopListHandler : TopListConfig, IWatchList
     {
-        public TopListHandler(string name, int numberOfRows = 100)
+        public TopListHandler(string name)
         {
             Name = name;
-            NumberOfRows = numberOfRows;
             ConfigList["form"] = "1";
             ConfigList["omh"] = "1";
             ConfigList["col_ver"] = "1";

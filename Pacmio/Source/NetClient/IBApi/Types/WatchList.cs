@@ -12,12 +12,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using Xu;
+using System.Security.Policy;
 
 namespace Pacmio.IB
 {
     public class WatchList : Scanner, IWatchList
     {
-        public WatchList(string name, int numberOfRows = 25)
+        public WatchList(string name, int numberOfRows = 100)
         {
             Name = name;
             NumberOfRows = numberOfRows;
@@ -82,6 +83,8 @@ namespace Pacmio.IB
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
 
         private bool m_IsActive = false;
+
+        public int NumberOfRows { get; set; }
 
         public int RequestId { get; set; } = 0;
 

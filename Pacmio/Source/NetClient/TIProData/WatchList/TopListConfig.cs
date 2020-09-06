@@ -26,7 +26,7 @@ namespace Pacmio.TIProData
 
         public override string Name { get => GetConfigString("WN"); set => SetConfig("WN", value); }
 
-        public override int NumberOfRows { get => GetConfigInt("count"); set => SetConfig("count", value); }
+        public int Count { get => GetConfigInt("count"); set => SetConfig("count", value); }
 
 
 
