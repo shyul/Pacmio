@@ -174,99 +174,77 @@ namespace Pacmio.TIProData
                 return s.ToDouble();
         }
 
-        public static string GetSymbol(this RowData row, string key = "symbol")
-        {
-            string symbol = GetString(row, key);
-
-            if (symbol.Length > 0 && Regex.IsMatch(symbol, @"^[a-zA-Z]+$"))
-                return symbol;
-            else
-                return null;
-        }
-
         public static Stock GetContract(this RowData row, string symbolColumnName = "symbol", string exchangeColumnName = "EXCHANGE")
         {
-            string symbolName = row.GetSymbol(symbolColumnName);
-            string exchangeCode = GetString(row, exchangeColumnName);
+            string symbolName = GetString(row, symbolColumnName);
 
-            if (!string.IsNullOrWhiteSpace(symbolName) &&
-                Regex.IsMatch(symbolName, @"^[a-zA-Z]+$"))
+            if (!string.IsNullOrWhiteSpace(symbolName))
             {
-                Exchange exchange = exchangeCode switch
+                if (symbolName.EndsWith(".U"))
                 {
-                    "NYSE" => Exchange.NYSE,
-                    "NASD" => Exchange.NASDAQ,
-                    "AMEX" => Exchange.AMEX,
-                    "ARCA" => Exchange.ARCA,
-                    "BATS" => Exchange.BATS,
-                    "PINK" => Exchange.OTCMKT,
-                    //null => Exchange.UNKNOWN,
-                    _ => Exchange.UNKNOWN
-                };
-
-                if (exchange != Exchange.UNKNOWN)
-                {
-                LoadList:
-                    var list = ContractList.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
-
-                    if (list.Count() == 1)
-                    {
-                        Stock stk = list.First() as Stock;
-
-                        if (stk.ISIN.Length < 8)
-                        {
-                            ContractList.Fetch(stk);
-                        }
-
-                        return stk;
-                    }
-                    else
-                    {
-                        var uc = UnknownContractList.CheckIn(symbolName, exchangeCode);
-                        if ((DateTime.Now - uc.LastCheckedTime).TotalDays > 100)
-                        {
-                            uc.LastCheckedTime = DateTime.Now;
-                            list = ContractList.Fetch(symbolName);
-                            goto LoadList;
-                        }
-                    }
+                    symbolName = symbolName.ReplaceEnd(".U", " U");
                 }
                 else
                 {
-                    UnknownContractList.CheckIn(symbolName, exchangeCode).LastCheckedTime = DateTime.Now;
+
                 }
-            }
-            else
-            {
-                UnknownContractList.CheckIn(symbolName, exchangeCode).LastCheckedTime = DateTime.Now;
+
+                if (Regex.IsMatch(symbolName, @"^[a-zA-Z]+$"))
+                {
+                    string exchangeCode = GetString(row, exchangeColumnName);
+                    Exchange exchange = exchangeCode switch
+                    {
+                        "NYSE" => Exchange.NYSE,
+                        "NASD" => Exchange.NASDAQ,
+                        "AMEX" => Exchange.AMEX,
+                        "ARCA" => Exchange.ARCA,
+                        "BATS" => Exchange.BATS,
+                        "PINK" => Exchange.OTCMKT,
+                        //null => Exchange.UNKNOWN,
+                        _ => Exchange.UNKNOWN
+                    };
+
+                    if (exchange != Exchange.UNKNOWN)
+                    {
+                    LoadList:
+                        var list = ContractList.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+
+                        if (list.Count() == 1)
+                        {
+                            Stock stk = list.First() as Stock;
+
+
+
+
+
+
+                            return stk;
+                        }
+                        else
+                        {
+                            var uc = UnknownContractList.CheckIn(symbolName, exchangeCode);
+                            if ((DateTime.Now - uc.LastCheckedTime).TotalDays > 100)
+                            {
+                                uc.LastCheckedTime = DateTime.Now;
+                                var fetchList = ContractList.Fetch(symbolName).Where(n => n is Stock && n.Name == symbolName && n.Exchange == exchange);
+                                if (fetchList.Count() > 0)
+                                {
+                                    UnknownContractList.Remove(uc);
+                                    fetchList.ToList().ForEach(n => { var stk = n as Stock; if (stk.ISIN.Length < 8) ContractList.Fetch(stk); });
+                                }
+
+                                goto LoadList;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        UnknownContractList.CheckIn(symbolName, exchangeCode).LastCheckedTime = DateTime.Now;
+                    }
+                }
             }
 
             return null;
-        }
-
-
-        public static (Exchange Exchange, string Code) GetExchange(this RowData row)
-        {
-            if (GetString(row, "EXCHANGE") is string exCode)
-            {
-                switch (exCode)
-                {
-                    case ("NYSE"): return (Exchange.NYSE, exCode);
-                    case ("NASD"): return (Exchange.NASDAQ, exCode);
-                    case ("AMEX"): return (Exchange.AMEX, exCode);
-                    case ("ARCA"): return (Exchange.ARCA, exCode);
-                    case ("BATS"): return (Exchange.BATS, exCode);
-                    case ("PINK"): return (Exchange.OTCMKT, exCode);
-
-                    default:
-                        {
-                            Console.WriteLine(">>>>> Unregistered Exchange Code: " + exCode);
-                            return (Exchange.UNKNOWN, exCode);
-                        }
-                }
-            }
-
-            return (Exchange.UNKNOWN, "_");
         }
     }
 }

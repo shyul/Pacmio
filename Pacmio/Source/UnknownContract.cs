@@ -98,6 +98,15 @@ namespace Pacmio
             }
         }
 
+        public static void Remove(UnknownContract uc)
+        {
+            lock (List)
+            {
+                if (List.ContainsKey(uc.Key))
+                    List.Remove(uc.Key);
+            }
+        }
+
         #region File system
 
         private static string FileName => Root.ResourcePath + "UnknownItems.json"; // Root.ResourcePath + "UnknownItems.csv";
@@ -111,15 +120,14 @@ namespace Pacmio
 
         public static void Load()
         {
-            //Import(FileName);
-
-            var list = Serialization.DeserializeJsonFile<UnknownContract[]>(FileName);
-
-            lock (List) 
+            if (Serialization.DeserializeJsonFile<UnknownContract[]>(FileName) is UnknownContract[] list)
             {
-                foreach (var uc in list)
+                lock (List)
                 {
-                    List.Add(uc.Key, uc);
+                    foreach (var uc in list)
+                    {
+                        List.Add(uc.Key, uc);
+                    }
                 }
             }
         }
@@ -230,7 +238,7 @@ namespace Pacmio
                                         //CheckIn(lastCheckedTime, symbolName, typeCode, businessName, suffix, conId, ISIN, CUSIP, exchangeCode, exSuffix);
                                     }
                                 }
-                                else 
+                                else
                                 {
                                     var uc = CheckIn(symbolName, exchangeCode, typeCode);
                                     uc.LastCheckedTime = lastCheckedTime;
