@@ -26,28 +26,11 @@ namespace Pacmio.TIProData
 
         public override int NumberOfRows { get => GetConfigInt("count"); set => SetConfig("count", value); }
 
-        public override bool IsSnapshot { get => m_IsSnapshot || IsHistory; set => m_IsSnapshot = value; }
+        //public override bool IsSnapshot { get => m_IsSnapshot || IsHistory; set => m_IsSnapshot = value; }
 
-        private bool m_IsSnapshot = false;
+        //private bool m_IsSnapshot = false;
 
-        public bool IsHistory { get => GetConfigBool("hist", "1"); set { SetConfig("hist", value, "1"); } }
 
-        public DateTime HistoricalTime
-        {
-            get => m_HistoricalTime;
-
-            set
-            {
-                DateTime time = value;
-
-                if ((DateTime.Now - time).TotalDays > 90)
-                    time = DateTime.Now.AddDays(-90);
-
-                m_HistoricalTime = time;
-            }
-        }
-
-        private DateTime m_HistoricalTime;
 
 
         public override (double Min, double Max) Price { get => GetConfigRangeDouble("Price"); set => SetConfigRange("Price", value); }
@@ -57,6 +40,7 @@ namespace Pacmio.TIProData
         public override (double Min, double Max) MarketCap { get => GetConfigRangeDouble("MCap"); set => SetConfigRange("MCap", value); }
 
         public (double Min, double Max) Volume { get => GetConfigRangeDouble("TV"); set => SetConfigRange("TV", value); }
+        public (double Min, double Max) RelativeVolume { get => GetConfigRangeDouble("RV"); set => SetConfigRange("RV", value); }
         public (double Min, double Max) Volume5Days { get => GetConfigRangeDouble("Vol5D"); set => SetConfigRange("Vol5D", value); }
         public (double Min, double Max) Float { get => GetConfigRangeDouble("Float"); set => SetConfigRange("Float", value); }
         public (double Min, double Max) ShortFloatPercent { get => GetConfigRangeDouble("SFloat"); set => SetConfigRange("SFloat", value); }
@@ -104,14 +88,14 @@ namespace Pacmio.TIProData
                 SetConfig("X_AMEX", Exchanges.Contains(Exchange.AMEX));
                 SetConfig("X_BATS", Exchanges.Contains(Exchange.BATS));
                 SetConfig("X_PINK", Exchanges.Contains(Exchange.OTCMKT));
-
+                /*
                 if (IsHistory)
                 {
                     long epoch = HistoricalTime.ToEpoch().ToInt64();
                     ConfigList["exact_time"] = epoch.ToString();
                 }
                 else if (ConfigList.ContainsKey("exact_time"))
-                    ConfigList.Remove("exact_time");
+                    ConfigList.Remove("exact_time");*/
 
                 string extraConfig = ExtraConfig;
                 if (!extraConfig.EndsWith("&")) extraConfig += "&";

@@ -29,6 +29,8 @@ namespace Pacmio
 
         public abstract void Stop();
 
+
+
         public virtual bool IsActive { get; set; } = false;
 
         public virtual bool IsSnapshot { get; set; } = false;
@@ -118,7 +120,9 @@ namespace Pacmio
             }
         }
 
-        #region Equality // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+        #region Equality 
+        
+        // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
         public bool Equals(Scanner other) => other is Scanner sc && GetType() == other.GetType() && ConfigString == sc.ConfigString;
 
         public override bool Equals(object other) => other is Scanner sc && Equals(sc);

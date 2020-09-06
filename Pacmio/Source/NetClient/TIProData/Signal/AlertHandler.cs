@@ -58,6 +58,8 @@ namespace Pacmio.TIProData
             }
         }
 
+
+
         private int alertCount;
         private int messageCount;
 

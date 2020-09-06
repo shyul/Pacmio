@@ -15,5 +15,7 @@ namespace Pacmio
     public interface IWatchList
     {
         ICollection<Contract> List { get; }
+
+        void Snapshot();
     }
 }

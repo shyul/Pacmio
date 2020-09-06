@@ -44,6 +44,11 @@ namespace Pacmio.IB
                 IsActive = false;
             }
         }
+        public void Snapshot()
+        {
+
+
+        }
 
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
 

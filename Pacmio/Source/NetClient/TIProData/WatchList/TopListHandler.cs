@@ -55,6 +55,57 @@ namespace Pacmio.TIProData
             }
         }
 
+        public void Snapshot() 
+        {
+        
+        
+        }
+
+        public bool IsHistory
+        {
+            get => GetConfigBool("hist", "1");
+            set
+            {
+                SetConfig("hist", value, "1");
+                SetHistoricalTime(value);
+            }
+        }
+
+        public DateTime HistoricalTime
+        {
+            get => m_HistoricalTime;
+
+            set
+            {
+                DateTime time = value;
+
+                if ((DateTime.Now - time).TotalDays > 90)
+                    time = DateTime.Now.AddDays(-90);
+
+                m_HistoricalTime = time;
+                SetHistoricalTime(IsHistory);
+            }
+        }
+
+        private DateTime m_HistoricalTime;
+
+        public void SetHistoricalTime(bool value) 
+        {
+            if (value)
+            {
+                long epoch = HistoricalTime.ToEpoch().ToInt64();
+                ConfigList["exact_time"] = epoch.ToString();
+            }
+            else
+            {
+                if (ConfigList.ContainsKey("exact_time"))
+                    ConfigList.Remove("exact_time");
+            }
+        }
+
+
+
+
         public string SortColumn { get => GetConfigString("sort"); set => SetConfig("sort", value); }
 
 
