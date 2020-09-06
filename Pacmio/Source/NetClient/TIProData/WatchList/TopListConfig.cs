@@ -49,6 +49,7 @@ namespace Pacmio.TIProData
 
         private DateTime m_HistoricalTime;
 
+
         public override (double Min, double Max) Price
         {
             get => (GetConfigDouble("MinPrice"), GetConfigDouble("MaxPrice"));
@@ -188,27 +189,14 @@ namespace Pacmio.TIProData
             }
         }
 
-        public (double Min, double Max) VolatilityPercent
-        {
-            get => (GetConfigDouble("MinVWVP"), GetConfigDouble("MaxVWVP"));
+        public (double Min, double Max) VolatilityPercent { get => GetConfigRange("VWVP"); set => SetConfigRange("VWVP", value); }
 
-            set
-            {
-                SetConfig("MinVWVP", value.Min);
-                SetConfig("MaxVWVP", value.Max);
-            }
-        }
+        public (double Min, double Max) Wiggle { get => GetConfigRange("Wiggle"); set => SetConfigRange("Wiggle", value); }
 
-        public (double Min, double Max) Wiggle
-        {
-            get => (GetConfigDouble("MinWiggle"), GetConfigDouble("MaxWiggle"));
+        public (double Min, double Max) GetConfigRange(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
+        public void SetConfigRange(string key, (double Min, double Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
 
-            set
-            {
-                SetConfig("MinWiggle", value.Min);
-                SetConfig("MaxWiggle", value.Max);
-            }
-        }
+
 
         public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
 
@@ -350,6 +338,7 @@ namespace Pacmio.TIProData
 
             return List;
         }
+
 
 
 
