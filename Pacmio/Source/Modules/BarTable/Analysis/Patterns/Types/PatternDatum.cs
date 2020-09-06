@@ -10,48 +10,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
 {
-    public class PatternDatum
+    public class PatternDatum : IEnumerable<IPivot>
     {
         public PatternDatum(double min, double max)
         {
-            LevelRange = new Range<double>(double.MaxValue, double.MinValue);
-            LevelRange.Insert(min);
+            LevelRange = new Range<double>(min);
             LevelRange.Insert(max);
         }
-        /*
-        public PatternDatum() 
-        {
-            LevelRange = new Range<double>(double.MaxValue, double.MinValue);
-        }
-        */
+
         public void Add(IPivot p) 
         {
             Pivots.Add(p);
             WeightRange.Insert(p.Weight);
         }
-        
-        public List<IPivot> Pivots { get; } = new List<IPivot>();
 
         public Range<double> LevelRange { get; }
 
         public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
 
+        private List<IPivot> Pivots { get; } = new List<IPivot>();
 
-
-
-        /// <summary>
-        /// Start Time of the Bar
-        /// </summary>
-        // Need to get Period depending on the time and BarSize
-        public DateTime Time => Period.Start; // { get; private set; } // -- Shall we used Period to reduce the confusion???
+        public IEnumerator<IPivot> GetEnumerator() => Pivots.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Pivots.GetEnumerator();
 
         /// <summary>
-        /// The time period of this Bar (Every OHLC is from a period of time)
+        /// Acompany with the MaximumTrailingIndex, this time limits the perticular datum's effective time boundary
         /// </summary>
-        public Period Period { get; private set; }
+        public DateTime MaximumEffectiveTime { get; set; } = DateTime.MaxValue;
     }
 }

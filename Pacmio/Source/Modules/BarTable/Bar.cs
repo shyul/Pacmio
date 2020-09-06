@@ -287,7 +287,7 @@ namespace Pacmio
 
         public Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
 
-        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n.Pivots);
+        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n); //.Pivots);
 
         public PatternDatum this[PatternColumn column]
         {

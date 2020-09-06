@@ -151,7 +151,7 @@ namespace Pacmio.Analysis
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
                 double maxWeight = pd.WeightRange.Max;
-                foreach (IPivot ip in pd.Pivots)
+                foreach (IPivot ip in pd)//.Pivots)
                 {
                     if (ip is PivotLine line)
                     {
