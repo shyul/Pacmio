@@ -93,7 +93,7 @@ namespace Pacmio.TIProData
                     AlertCount += rows.Count;
                     Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + LastRefreshTime + "\n\n");
                     Task.Run(() => {
-                        PrintAllRows(rows, "SYMBOL");
+                        GetContractList(rows, "SYMBOL");
                         if (IsSnapshot) Stop();
                         Console.WriteLine("\n\n######## TI Alert Result End.\n\n");
                     });

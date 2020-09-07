@@ -84,13 +84,17 @@ namespace Pacmio
             return list;
         }
 
-        // TODO: 
-        // Queue the Tape Here
+        [DataMember]
+        public bool IsFilteredRTStream { get; set; } = true;
+
         [IgnoreDataMember]
         public DateTime RTLastTime { get; private set; } = DateTime.MinValue;
 
         [IgnoreDataMember]
         public double RTLastPrice { get; private set; } = -1;
+
+        // TODO: 
+        // Queue the Tape Here
 
         public void InboundLiveTick(DateTime time, double price, double size)
         {
@@ -98,18 +102,28 @@ namespace Pacmio
             {
                 RTLastTime = time;
 
-                if (double.IsNaN(price))
+                if (double.IsNaN(price)) 
+                {
                     price = RTLastPrice;
-                else
+
+                    // Even tick
+                }
+                else 
+                {
+                    if (price > RTLastPrice)
+                    {
+                        // Is an advancing tick
+                    }
+                    else
+                    {
+                        // Is a declining tick
+                    }
+
                     RTLastPrice = price;
+                }
 
                 if (price > 0)
                 {
-                    // Construct the Tape Here !!!
-
-
-
-
                     lock (LiveBarTables)
                     {
                         Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt => {
@@ -136,6 +150,11 @@ namespace Pacmio
         [IgnoreDataMember]
         public List<BarTable> LiveBarTables { get; set; } = new List<BarTable>();
 
+
+
+        [DataMember]
+        public bool EnableMarketDepth { get; set; } = true;
+
         [DataMember]
         public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
             = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
@@ -146,7 +165,6 @@ namespace Pacmio
         // Position in Range
 
         // L2
-
 
 
 

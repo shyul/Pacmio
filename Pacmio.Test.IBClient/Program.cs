@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Xu.WindowsNativeMethods;
+using System.Reflection;
+using Xu;
 
 namespace TestClient
 {
@@ -40,7 +42,28 @@ namespace TestClient
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
 
+
                     Root.Load();
+
+
+                    var infoList = typeof(Contract).GetProperties();
+
+                    foreach(PropertyInfo info in infoList) 
+                    {
+                        string s = info.Name + " | ";
+
+                        var t = info.GetCustomAttributes(true);
+
+                        foreach(object obj in t) 
+                        {
+                            if(obj is Attribute attr) 
+                            {
+                                s += attr.GetType().Name + " | ";
+                            }
+                        }
+
+                        Console.WriteLine(s);
+                    }
 
                     Application.Run(new MainForm());
 

@@ -26,75 +26,6 @@ namespace Pacmio.TIProData
 
         public virtual int MessageCount { get; protected set; } = 0;
 
-        public override string Name { get => GetConfigString("WN"); set => SetConfig("WN", value); }
-
-        public int Count { get => GetConfigInt("count"); set => SetConfig("count", value); }
-
-
-
-
-
-
-        public override (double Min, double Max) Price { get => GetConfigRangeDouble("Price"); set => SetConfigRange("Price", value); }
-
-
-
-        public override (double Min, double Max) MarketCap { get => GetConfigRangeDouble("MCap"); set => SetConfigRange("MCap", value); }
-
-        public (double Min, double Max) Volume { get => GetConfigRangeDouble("TV"); set => SetConfigRange("TV", value); }
-        public (double Min, double Max) RelativeVolume { get => GetConfigRangeDouble("RV"); set => SetConfigRange("RV", value); }
-        public (double Min, double Max) Volume5Days { get => GetConfigRangeDouble("Vol5D"); set => SetConfigRange("Vol5D", value); }
-        public (double Min, double Max) Float { get => GetConfigRangeDouble("Float"); set => SetConfigRange("Float", value); }
-        public (double Min, double Max) ShortFloatPercent { get => GetConfigRangeDouble("SFloat"); set => SetConfigRange("SFloat", value); }
-
-        public (double Min, double Max) Gain { get => GetConfigRangeDouble("FCD"); set => SetConfigRange("FCD", value); }
-        public override (double Min, double Max) GainPercent { get => GetConfigRangeDouble("FCP"); set => SetConfigRange("FCP", value); }
-
-
-
-
-        public (double Min, double Max) Gap { get => GetConfigRangeDouble("GUD"); set => SetConfigRange("GUD", value); }
-        public override (double Min, double Max) GapPercent { get => GetConfigRangeDouble("GUP"); set => SetConfigRange("GUP", value); }
-        public (double Min, double Max) GapBars { get => GetConfigRangeDouble("GUR"); set => SetConfigRange("GUR", value); }
-
-        public (double Min, double Max) RSI1Min { get => GetConfigRangeDouble("RSI1"); set => SetConfigPercent("RSI1", value); }
-        public (double Min, double Max) RSI2Min { get => GetConfigRangeDouble("RSI2"); set => SetConfigPercent("RSI2", value); }
-        public (double Min, double Max) RSI5Min { get => GetConfigRangeDouble("RSI5"); set => SetConfigPercent("RSI5", value); }
-        public (double Min, double Max) RSI15Min { get => GetConfigRangeDouble("RSI15"); set => SetConfigPercent("RSI15", value); }
-        public (double Min, double Max) RSI60Min { get => GetConfigRangeDouble("RSI60"); set => SetConfigPercent("RSI60", value); }
-
-        public (double Min, double Max) RSI { get => GetConfigRangeDouble("DRSI"); set => SetConfigPercent("DRSI", value); }
-        public (double Min, double Max) ADX { get => GetConfigRangeDouble("ADX"); set => SetConfigRange("ADX", value); }
-
-        public (double Min, double Max) AverageTrueRange { get => GetConfigRangeDouble("ATR"); set => SetConfigRange("ATR", value); }
-
-        public (double Min, double Max) Volatility { get => GetConfigRangeDouble("VWV"); set => SetConfigRange("VWV", value); }
-
-        public (double Min, double Max) VolatilityPercent { get => GetConfigRangeDouble("VWVP"); set => SetConfigRange("VWVP", value); }
-        public (double Min, double Max) Wiggle { get => GetConfigRangeDouble("Wiggle"); set => SetConfigRange("Wiggle", value); }
-
-
-        public (double Min, double Max) GetConfigRangeDouble(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
-        public void SetConfigRange(string key, (double Min, double Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
-        public void SetConfigPercent(string key, (double Min, double Max) value)
-        {
-            double min = Math.Min(value.Min, value.Max);
-            if (min < 0) min = 0; else if (min > 100) min = 100;
-
-            double max = Math.Max(value.Min, value.Max);
-            if (max < 0) max = 0; else if (max > 100) max = 100; 
-
-            SetConfig("Min" + key, min); SetConfig("Max" + key, max);
-        }
-
-        public (int Min, int Max) GetConfigRangeInt(string key) => (GetConfigInt("Min" + key), GetConfigInt("Max" + key));
-        public void SetConfigRange(string key, (int Min, int Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
-
-
-        public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
-
-        public List<string> ShowColumns { get; } = new List<string>();
-
         public override string ConfigString
         {
             get
@@ -134,10 +65,8 @@ namespace Pacmio.TIProData
             }
         }
 
-        public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol")
+        public List<Contract> GetContractList(List<RowData> rows, string symbolColumnName = "symbol")
         {
-            //Console.WriteLine("Received " + rows.Count + " alerts.");
-
             List<Contract> List = new List<Contract>();
             lock (Columns)
             {
@@ -212,7 +141,90 @@ namespace Pacmio.TIProData
             return List;
         }
 
+        #region Utilities
 
+        public (double Min, double Max) GetConfigRangeDouble(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
+        public void SetConfigRange(string key, (double Min, double Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
+        public void SetConfigPercent(string key, (double Min, double Max) value)
+        {
+            double min = Math.Min(value.Min, value.Max);
+            if (min < 0) min = 0; else if (min > 100) min = 100;
+
+            double max = Math.Max(value.Min, value.Max);
+            if (max < 0) max = 0; else if (max > 100) max = 100;
+
+            SetConfig("Min" + key, min); SetConfig("Max" + key, max);
+        }
+
+        public (int Min, int Max) GetConfigRangeInt(string key) => (GetConfigInt("Min" + key), GetConfigInt("Max" + key));
+        public void SetConfigRange(string key, (int Min, int Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
+
+        #endregion Utilities
+
+        public override string Name { get => GetConfigString("WN"); set => SetConfig("WN", value); }
+
+        public List<string> ShowColumns { get; } = new List<string>();
+
+        public List<Exchange> Exchanges { get; } = new List<Exchange>() { Exchange.NYSE, Exchange.NASDAQ, Exchange.ARCA, Exchange.AMEX, Exchange.BATS };
+
+        public int Count { get => GetConfigInt("count"); set => SetConfig("count", value); }
+
+        public override (double Min, double Max) Price { get => GetConfigRangeDouble("Price"); set => SetConfigRange("Price", value); }
+
+        public override (double Min, double Max) MarketCap { get => GetConfigRangeDouble("MCap"); set => SetConfigRange("MCap", value); }
+
+        public (double Min, double Max) Volume { get => GetConfigRangeDouble("TV"); set => SetConfigRange("TV", value); }
+        public (double Min, double Max) RelativeVolume { get => GetConfigRangeDouble("RV"); set => SetConfigRange("RV", value); }
+        public (double Min, double Max) Volume5Days { get => GetConfigRangeDouble("Vol5D"); set => SetConfigRange("Vol5D", value); }
+        public (double Min, double Max) Float { get => GetConfigRangeDouble("Float"); set => SetConfigRange("Float", value); }
+        public (double Min, double Max) ShortFloatPercent { get => GetConfigRangeDouble("SFloat"); set => SetConfigRange("SFloat", value); }
+
+        public (double Min, double Max) Gain { get => GetConfigRangeDouble("FCD"); set => SetConfigRange("FCD", value); }
+        public override (double Min, double Max) GainPercent { get => GetConfigRangeDouble("FCP"); set => SetConfigRange("FCP", value); }
+
+        public (double Min, double Max) Gap { get => GetConfigRangeDouble("GUD"); set => SetConfigRange("GUD", value); }
+        public override (double Min, double Max) GapPercent { get => GetConfigRangeDouble("GUP"); set => SetConfigRange("GUP", value); }
+        public (double Min, double Max) GapBars { get => GetConfigRangeDouble("GUR"); set => SetConfigRange("GUR", value); }
+
+        /// <summary>
+        /// These filters refer to Wilder’s Relative Strength Index (RSI), using the standard value of 14 periods.
+        /// The server recomputes this value every 1, 2, 5, 15, or 60 minutes, at the same time as new bars or candlesticks would appear on a 1, 2, 5, 15, or 60 minute stock chart.
+        /// These filters do not use pre- or post-market data.
+        /// RSI1 | 1 Minute RSI | 0 - 100 | MinRSI1 | MaxRSI1 | RSI1:  '1 Minute RSI' ('0 - 100')
+        /// RSI2 | 2 Minute RSI | 0 - 100 | MinRSI2 | MaxRSI2 | RSI2:  '2 Minute RSI' ('0 - 100')
+        /// RSI5 | 5 Minute RSI | 0 - 100 | MinRSI5 | MaxRSI5 | RSI5:  '5 Minute RSI' ('0 - 100')
+        /// RSI15 | 15 Minute RSI | 0 - 100 | MinRSI15 | MaxRSI15 | RSI15:  '15 Minute RSI' ('0 - 100')
+        /// RSI60 | 60 Minute RSI | 0 - 100 | MinRSI60 | MaxRSI60 | RSI60:  '60 Minute RSI' ('0 - 100')
+        /// </summary>
+        public (double Min, double Max) RSI1Min { get => GetConfigRangeDouble("RSI1"); set => SetConfigPercent("RSI1", value); }
+        public (double Min, double Max) RSI2Min { get => GetConfigRangeDouble("RSI2"); set => SetConfigPercent("RSI2", value); }
+        public (double Min, double Max) RSI5Min { get => GetConfigRangeDouble("RSI5"); set => SetConfigPercent("RSI5", value); }
+        public (double Min, double Max) RSI15Min { get => GetConfigRangeDouble("RSI15"); set => SetConfigPercent("RSI15", value); }
+        public (double Min, double Max) RSI60Min { get => GetConfigRangeDouble("RSI60"); set => SetConfigPercent("RSI60", value); }
+
+        /// <summary>
+        /// These filters refer to Wilder’s Relative Strength Index (RSI), using the standard value of 14 periods.  The server recomputes this value every night, after the close.
+        /// These filters are only available for stocks with sufficient history; if we do not have at least 14 days of history, the server will not report an RSI for that stock.
+        /// Available historical information of up to one year is factored into the RSI using Wilder’s Smoothing.
+        /// DRSI | Daily RSI | 0 - 100 | MinDRSI | MaxDRSI | DRSI:  'Daily RSI' ('0 - 100')
+        /// </summary>
+        public (double Min, double Max) RSI { get => GetConfigRangeDouble("DRSI"); set => SetConfigPercent("DRSI", value); }
+
+        /// <summary>
+        /// These filters look at the Average Directional Index, or ADX, for a stock.  These look at a daily chart and use a 14 period smoothing factor.
+        /// The ADX is traditionally used to determine if a stock is trending or not.Values less than 25 indicate a sideways or choppy motion.
+        /// Values between 30 and 50 typically indicate a strong trend.Values can be anywhere between 0 and 100, but very large values are unusual, 
+        /// and they denote stocks doing very unusual things.
+        /// ADX | Average Directional Index | % | MinADX | MaxADX | ADX:  'Average Directional Index' ('%')
+        /// </summary>
+        public (double Min, double Max) ADX { get => GetConfigRangeDouble("ADX"); set => SetConfigRange("ADX", value); }
+
+        public (double Min, double Max) AverageTrueRange { get => GetConfigRangeDouble("ATR"); set => SetConfigRange("ATR", value); }
+
+        public (double Min, double Max) Volatility { get => GetConfigRangeDouble("VWV"); set => SetConfigRange("VWV", value); }
+
+        public (double Min, double Max) VolatilityPercent { get => GetConfigRangeDouble("VWVP"); set => SetConfigRange("VWVP", value); }
+        public (double Min, double Max) Wiggle { get => GetConfigRangeDouble("Wiggle"); set => SetConfigRange("Wiggle", value); }
 
 
 
@@ -380,12 +392,7 @@ RY | Position in Year Range | % | MinRY | MaxRY | RY:  'Position in Year Range' 
 R2Y | Position in 2 Year Range | % | MinR2Y | MaxR2Y | R2Y:  'Position in 2 Year Range' ('%')
 RL | Position in Lifetime Range | % | MinRL | MaxRL | RL:  'Position in Lifetime Range' ('%')
 
-RSI1 | 1 Minute RSI | 0 - 100 | MinRSI1 | MaxRSI1 | RSI1:  '1 Minute RSI' ('0 - 100')
-RSI2 | 2 Minute RSI | 0 - 100 | MinRSI2 | MaxRSI2 | RSI2:  '2 Minute RSI' ('0 - 100')
-RSI5 | 5 Minute RSI | 0 - 100 | MinRSI5 | MaxRSI5 | RSI5:  '5 Minute RSI' ('0 - 100')
-RSI15 | 15 Minute RSI | 0 - 100 | MinRSI15 | MaxRSI15 | RSI15:  '15 Minute RSI' ('0 - 100')
-RSI60 | 60 Minute RSI | 0 - 100 | MinRSI60 | MaxRSI60 | RSI60:  '60 Minute RSI' ('0 - 100')
-DRSI | Daily RSI | 0 - 100 | MinDRSI | MaxDRSI | DRSI:  'Daily RSI' ('0 - 100')
+
 
 
 
@@ -397,7 +404,7 @@ Boll60 | Position in Bollinger Bands (60 Minute) | % | MinBoll60 | MaxBoll60 | B
 Boll | Position in Bollinger Bands (Daily) | % | MinBoll | MaxBoll | Boll:  'Position in Bollinger Bands (Daily)' ('%')
 RC | Range Contraction | Days | MinRC | MaxRC | RC:  'Range Contraction' ('Days')
 LR130 | Linear Regression Divergence | 0 - 1 | MinLR130 | MaxLR130 | LR130:  'Linear Regression Divergence' ('0 - 1')
-ADX | Average Directional Index | % | MinADX | MaxADX | ADX:  'Average Directional Index' ('%')
+
 PDIMDI | Directional Indicator | % | MinPDIMDI | MaxPDIMDI | PDIMDI:  'Directional Indicator' ('%')
 MA200P | Change from 200 Day SMA | % | MinMA200P | MaxMA200P | MA200P:  'Change from 200 Day SMA' ('%')
 MA200R | Change from 200 Day SMA | Bars | MinMA200R | MaxMA200R | MA200R:  'Change from 200 Day SMA' ('Bars')

@@ -157,7 +157,7 @@ namespace Pacmio.TIProData
                     {
                         lock (List)
                         {
-                            List = PrintAllRows(rows);
+                            List = GetContractList(rows);
                         }
                         if (IsSnapshot) Stop();
                         Console.WriteLine("\n\n######## TI TopList Result End.\n\n");
