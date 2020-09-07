@@ -76,13 +76,13 @@ namespace Pacmio.TIProData
 
         public (double Min, double Max) GetConfigRangeDouble(string key) => (GetConfigDouble("Min" + key), GetConfigDouble("Max" + key));
         public void SetConfigRange(string key, (double Min, double Max) value) { SetConfig("Min" + key, value.Min); SetConfig("Max" + key, value.Max); }
-        public void SetConfigPercent(string key, (double Min, double Max) value) 
+        public void SetConfigPercent(string key, (double Min, double Max) value)
         {
             double min = Math.Min(value.Min, value.Max);
             if (min < 0) min = 0; else if (min > 100) min = 100;
 
             double max = Math.Max(value.Min, value.Max);
-            if (max < 0) max = 0; else if (max > 100) max = 100;
+            if (max < 0) max = 0; else if (max > 100) max = 100; 
 
             SetConfig("Min" + key, min); SetConfig("Max" + key, max);
         }

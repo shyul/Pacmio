@@ -37,7 +37,7 @@ namespace Pacmio.TIProData
 
         public override void Start()
         {
-            if (!IsActive && Client.Connected)
+            if (Client.Connected)
             {
                 Stop();
 
@@ -46,12 +46,17 @@ namespace Pacmio.TIProData
 
                 IsActive = true;
                 string configStr = ConfigString;
-                Console.WriteLine(Name + " | " + configStr);
 
                 StreamingAlerts = Client.Connection.StreamingAlertsManager.GetAlerts(configStr);
                 StreamingAlerts.StreamingAlertsData += new StreamingAlertsData(AlertsData_Handler);
                 StreamingAlerts.StreamingAlertsConfig += new StreamingAlertsConfig(AlertsConfig_Handler);
                 StreamingAlerts.Start();
+
+                Console.WriteLine("#### Start Alert: " + Name + " | " + configStr);
+            }
+            else
+            {
+                Console.WriteLine("#### No TI connection, unable to start Alert: " + Name);
             }
         }
 
@@ -80,22 +85,25 @@ namespace Pacmio.TIProData
         void AlertsData_Handler(List<RowData> rows, StreamingAlerts sender)
         {
             MessageCount++;
-            if (LastRefreshTime < DateTime.Now && sender == StreamingAlerts)
+            if (sender == StreamingAlerts && LastRefreshTime < DateTime.Now)
             {
-                AlertCount += rows.Count;
                 LastRefreshTime = DateTime.Now;
-                Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + LastRefreshTime + "\n\n");
-
-                Task.Run(() => {
-                    PrintAllRows(rows, "SYMBOL");
-                    if (IsSnapshot) Stop();
-                    Console.WriteLine("\n\n######## TI Alert Result End.\n\n");
-                });
+                if (rows.Count > 0)
+                {
+                    AlertCount += rows.Count;
+                    Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + LastRefreshTime + "\n\n");
+                    Task.Run(() => {
+                        PrintAllRows(rows, "SYMBOL");
+                        if (IsSnapshot) Stop();
+                        Console.WriteLine("\n\n######## TI Alert Result End.\n\n");
+                    });
+                }
             }
             else
             {
                 Console.WriteLine("######## Ignoring TI StreamingAlertsData.\n\n");
             }
+
         }
     }
 }

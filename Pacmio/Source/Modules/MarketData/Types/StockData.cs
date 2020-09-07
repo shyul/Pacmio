@@ -99,17 +99,37 @@ namespace Pacmio
                 RTLastTime = time;
 
                 if (double.IsNaN(price))
-                {
                     price = RTLastPrice;
-                }
                 else
-                {
                     RTLastPrice = price;
-                }
 
                 if (price > 0)
+                {
+                    // Construct the Tape Here !!!
+
+
+
+
                     lock (LiveBarTables)
-                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), n => n.AddPriceTick(time, price, size));
+                    {
+                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt => {
+                            if (bt.BarFreq >= BarFreq.Daily && bt.LastTime < time.Date)
+                            {
+                                if (!double.IsNaN(Open) && !double.IsNaN(Open) && !double.IsNaN(Open) && !double.IsNaN(Volume))
+                                {
+                                    Bar b = new Bar(bt, time.Date, DataSource.Tick, Open, High, Low, LastPrice, Volume, Open, High, Low, LastPrice, Volume);
+                                    bt.MergeFromSmallerBar(b);
+
+                                }
+                            }
+
+                            if (bt.BarFreq < BarFreq.Daily || bt.LastTime == time.Date)
+                            {
+                                bt.AddPriceTick(time, price, size);
+                            }
+                        });
+                    }
+                }
             }
         }
 
@@ -119,6 +139,16 @@ namespace Pacmio
         [DataMember]
         public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
             = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+
+
+        // Tape
+
+        // Position in Range
+
+        // L2
+
+
+
 
         [DataMember]
         public double MarketCap { get; set; } = double.NaN;

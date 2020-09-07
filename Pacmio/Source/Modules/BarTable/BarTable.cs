@@ -282,7 +282,7 @@ namespace Pacmio
             return isModified;
         }
 
-        private bool MergeFromSmallerBar(Bar b)
+        public bool MergeFromSmallerBar(Bar b)
         {
             bool isModified = false;
             if (b.BarFreq < BarFreq)

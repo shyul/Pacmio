@@ -32,7 +32,7 @@ namespace Pacmio.TIProData
             ShowColumns.AddRange(new string[] { "D_Symbol", "Price", "TV", "Float", "SFloat", "STP", "STH", "EarningD", "D_Name" });
         }
 
-        private TopList TopList { get; set; }
+        private TopList StreamingTopList { get; set; }
 
         public override void Start() => Start(false, false, DateTime.Now);
 
@@ -61,11 +61,10 @@ namespace Pacmio.TIProData
                 IsActive = true;
                 string configStr = ConfigString;
 
-                var toplist = Client.Connection.TopListManager.GetTopList(configStr);
-                TopList = toplist is TopList tl ? tl : null;
-                TopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
-                TopList.TopListData += new TopListData(TopListData_Handler);
-                TopList.Start();
+                StreamingTopList = Client.Connection.TopListManager.GetTopList(configStr);
+                StreamingTopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
+                StreamingTopList.TopListData += new TopListData(TopListData_Handler);
+                StreamingTopList.Start();
 
                 Console.WriteLine("#### Start TopList: " + Name + " | " + configStr);
             }
@@ -81,8 +80,8 @@ namespace Pacmio.TIProData
             {
                 Console.WriteLine("#### Stop TopList: " + Name);
 
-                if (TopList is TopList)
-                    TopList.Stop();
+                if (StreamingTopList is TopList)
+                    StreamingTopList.Stop();
 
                 IsActive = false;
             }
@@ -136,7 +135,7 @@ namespace Pacmio.TIProData
 
         void TopListStatus_Handler(TopList sender)
         {
-            if (sender == TopList)
+            if (sender == StreamingTopList)
             {
                 Console.WriteLine("TopList Handler Name: " + sender.TopListInfo.WindowName + ", Config = " + sender.TopListInfo.Config);
                 ConfigColumns(sender.TopListInfo.Columns);
@@ -148,25 +147,28 @@ namespace Pacmio.TIProData
         private void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
             MessageCount++;
-
-            if (LastRefreshTime < DateTime.Now && sender == TopList)
+            if (sender == StreamingTopList && LastRefreshTime < DateTime.Now)
             {
                 LastRefreshTime = DateTime.Now;
-                Console.WriteLine("\n\n######## TI TopList " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | " + LastRefreshTime + "\n\n");
-
-                Task.Run(() => {
-                    lock (List)
+                if (rows.Count > 0)
+                {
+                    Console.WriteLine("\n\n######## TI TopList " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | " + LastRefreshTime + "\n\n");
+                    Task.Run(() =>
                     {
-                        List = PrintAllRows(rows);
-                    }
-                    if (IsSnapshot) Stop();
-                    Console.WriteLine("\n\n######## TI TopList Result End.\n\n");
-                });
+                        lock (List)
+                        {
+                            List = PrintAllRows(rows);
+                        }
+                        if (IsSnapshot) Stop();
+                        Console.WriteLine("\n\n######## TI TopList Result End.\n\n");
+                    });
+                }
             }
             else
             {
                 Console.WriteLine("######## Ignoring TI TopList Result!!\n\n");
             }
+
         }
     }
 }
