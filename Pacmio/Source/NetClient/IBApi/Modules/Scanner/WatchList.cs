@@ -10,9 +10,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using Xu;
-using Pacmio;
 
 namespace Pacmio.IB
 {
@@ -209,44 +209,46 @@ namespace Pacmio.IB
 
         public void ScannerData_Handler(string[] fields)
         {
-            LastRefreshTime = DateTime.Now;
-            if (IsSnapshot) { Stop(); }
-
-            lock (List)
+            if (LastRefreshTime < DateTime.Now)
             {
-                List.Clear();
+                LastRefreshTime = DateTime.Now;
+                Console.WriteLine("\n\n" + LastRefreshTime + " ######## IB WatchList Result Received.\n\n");
 
-                for (int i = 4; i < fields.Length; i += 16)
-                {
-                    // int rank = fields[i].ToInt32(-1);
-                    int conId = fields[i + 1].ToInt32(-1);
-                    string symbolName = fields[i + 2];
-
-
-                    if (GetContract(conId, symbolName) is Contract c)
+                Task.Run(() => {
+                    lock (List)
                     {
-                        List.Add(c);
+                        List.Clear();
+
+                        for (int i = 4; i < fields.Length; i += 16)
+                        {
+                            int rank = fields[i].ToInt32(-1);
+                            int conId = fields[i + 1].ToInt32(-1);
+                            string symbolName = fields[i + 2];
+
+                            if (GetContract(conId, symbolName) is Contract c)
+                                List.Add(c);
+                        }
+
+                        PrintWatchList(List);
                     }
-                }
 
-                //ScannerManager.Updated(info); 
-
+                    if (IsSnapshot) Stop();
+                    Console.WriteLine("\n\n ######## IB WatchList Result End.\n\n");
+                });
             }
+        }
 
-            lock (List)
+        public static void PrintWatchList(ICollection<Contract> list)
+        {
+            int j = 0;
+            foreach (Contract c in list)
             {
-                int j = 0;
-                foreach (Contract c in List)
-                {
-                    if (c is Stock stk)
-                        Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
-                    else
-                        Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
-                    j++;
-                }
+                if (c is Stock stk)
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
+                else
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
+                j++;
             }
-
-            Console.WriteLine("Scanner Result End.\n\n");
         }
     }
 }

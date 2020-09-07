@@ -24,7 +24,7 @@ namespace Pacmio
             Root.Form.AddForm(DockStyle.Fill, 0, gv);
         }
 
-        private static readonly List<MarketDataGridView> List = new List<MarketDataGridView>();
+        private static List<MarketDataGridView> List { get; } = new List<MarketDataGridView>();
 
         /// <summary>
         /// Update All UI Elements when a new tick comes in

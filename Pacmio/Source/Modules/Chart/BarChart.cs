@@ -19,7 +19,7 @@ namespace Pacmio
 {
     public sealed class BarChart : ChartWidget
     {
-        public static readonly List<BarChart> List = new List<BarChart>();
+        public static List<BarChart> List { get; } = new List<BarChart>();
 
         public static void RemoveAll()
         {
@@ -88,9 +88,9 @@ namespace Pacmio
 
         public override string Description { get => MainArea.PriceSeries.Description; set => MainArea.PriceSeries.Description = value; }
 
-        public readonly MainBarChartArea MainArea;
-        public readonly SignalArea SignalArea;
-        public readonly PositionArea PositionArea;
+        public MainBarChartArea MainArea { get; }
+        public SignalArea SignalArea { get; }
+        public PositionArea PositionArea { get; }
 
         public void Config(BarTable bt)
         {

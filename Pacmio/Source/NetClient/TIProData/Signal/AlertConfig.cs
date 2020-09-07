@@ -21,6 +21,8 @@ namespace Pacmio.TIProData
 {
     public abstract class AlertConfig : TopListConfig
     {
+        public virtual int AlertCount { get; protected set; } = 0;
+
         #region Price Actions
 
         public int NewHigh { get => GetConfigIntQ("NHP"); set => SetConfigQ("NHP", value); }

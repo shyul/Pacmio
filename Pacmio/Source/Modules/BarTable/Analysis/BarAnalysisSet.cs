@@ -38,7 +38,7 @@ namespace Pacmio
             }
         }
 
-        private readonly List<BarAnalysis> m_List = new List<BarAnalysis>();
+        private List<BarAnalysis> m_List { get; } = new List<BarAnalysis>();
 
         public int Count => m_List.Count;
 

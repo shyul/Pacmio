@@ -240,7 +240,7 @@ namespace Pacmio.IB
             lock (ServerList) ServerList.Clear();
             //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "ServerList.Clear();");
 
-            lock (ActiveMarketTicks) ActiveMarketTicks.Clear();
+            lock (ActiveMarketDataTicks) ActiveMarketDataTicks.Clear();
 
             // Flush Request IDs
             lock (ActiveRequestIds) ActiveRequestIds.Clear();

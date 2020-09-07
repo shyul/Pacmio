@@ -58,10 +58,10 @@ namespace Pacmio.IB
             // Console.WriteLine("\nParse Market Data Type: " + fields.ToFlat());
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32(-1);
-            lock (ActiveMarketTicks)
-                if (msgVersion == "1" && ActiveMarketTicks.ContainsKey(requestId) && fields.Length == 4)
+            lock (ActiveMarketDataTicks)
+                if (msgVersion == "1" && ActiveMarketDataTicks.ContainsKey(requestId) && fields.Length == 4)
                 {
-                    Contract c = ActiveMarketTicks[requestId];
+                    Contract c = ActiveMarketDataTicks[requestId];
                     if (c is Stock stk) stk.Status = ContractStatus.Alive;
 
                     c.MarketData.Status = (MarketTickStatus)fields[3].ToInt32(0);
@@ -105,10 +105,10 @@ namespace Pacmio.IB
             // Console.WriteLine("\nParse Tick Req Params: " + fields.ToFlat());
 
             int tickerId = fields[1].ToInt32(-1);
-            lock (ActiveMarketTicks)
-                if (ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketDataTicks)
+                if (ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketTicks[tickerId];
+                    Contract c = ActiveMarketDataTicks[tickerId];
 
                     c.MarketData.MinimumTick = fields[2].ToDouble(0);
                     c.MarketData.BBOExchangeId = fields[3];
@@ -131,10 +131,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveMarketTicks)
-                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 7)
+            lock (ActiveMarketDataTicks)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 7)
                 {
-                    Contract c = ActiveMarketTicks[tickerId];
+                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
                     double price = fields[4].ToDouble();
                     double size = fields[5].ToDouble();
@@ -193,10 +193,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveMarketTicks)
-                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketDataTicks)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketTicks[tickerId];
+                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
                     double size = fields[4].ToDouble();
 
@@ -258,10 +258,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveMarketTicks)
-                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketDataTicks)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketTicks[tickerId];
+                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
@@ -358,7 +358,7 @@ namespace Pacmio.IB
         }
 
         //  contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
-        private static void RTVolume(string field4, Contract c) 
+        private static void RTVolume(string field4, Contract c)
         {
             string[] fields = field4.Split(';');
 
@@ -403,10 +403,10 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveMarketTicks)
-                if (msgVersion == "6" && ActiveMarketTicks.ContainsKey(tickerId) && fields.Length == 5)
+            lock (ActiveMarketDataTicks)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketTicks[tickerId];
+                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)

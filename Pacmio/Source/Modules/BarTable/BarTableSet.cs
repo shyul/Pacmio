@@ -19,9 +19,9 @@ namespace Pacmio
 {
     public class BarTableSet : IDisposable
     {
-        public readonly Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
+        public Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings { get; } = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
 
-        public readonly HashSet<BarTable> BarTables = new HashSet<BarTable>();
+        public HashSet<BarTable> BarTables { get; } = new HashSet<BarTable>();
 
         private object DataLockObject { get; } = new object();
 

@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public static class TradeInfoManager
     {
-        private static readonly Dictionary<string, TradeInfo> List = new Dictionary<string, TradeInfo>();
+        private static Dictionary<string, TradeInfo> List { get; } = new Dictionary<string, TradeInfo>();
 
         public static TradeInfo GetOrAdd(string execId)
         {

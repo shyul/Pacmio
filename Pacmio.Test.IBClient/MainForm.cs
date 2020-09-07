@@ -883,7 +883,7 @@ namespace TestClient
 
         private void BtnMarketDataSyncTicks_Click(object sender, EventArgs e)
         {
-            foreach (Contract c in Pacmio.IB.Client.ActiveMarketTicks.Values)
+            foreach (Contract c in Pacmio.IB.Client.ActiveMarketDataTicks.Values)
             {
                 MarketDataGridView.MarketDataTable.Add(c);
             }
@@ -1105,16 +1105,10 @@ namespace TestClient
             //tls.ExtraConfig = tls.ExtraConfig.TrimEnd('&') + "&XX=on&X_CAV=on&X_CAT=on&X_SMAL=on&X_OTCQX=on&X_OTCQB=on&X_ARCA=on";
 
             //tls.Start();
-            var list = tls.Snapshot(new DateTime(2020, 09, 02, 06, 30, 00));
 
-            int j = 0;
-            foreach (Contract c in list)
+            if (tls.Snapshot(new DateTime(2020, 09, 02, 06, 30, 00)) is ICollection<Contract> list)
             {
-                if (c is Stock stk)
-                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
-                else
-                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
-                j++;
+                Pacmio.IB.WatchList.PrintWatchList(list);
             }
         }
 

@@ -24,7 +24,7 @@ namespace Pacmio
         /// <summary>
         /// The Master List of all symbols are here
         /// </summary>
-        private static readonly ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract> List
+        private static ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract> List { get; }
             = new ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract>();
 
         public static int Count => List.Count;

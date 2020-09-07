@@ -208,25 +208,22 @@ namespace Pacmio
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual bool Request_MarketTicks(string param = "233,236,375") => IB.Client.SendRequest_MarketTicks(this, param);
+        public virtual bool Request_MarketTicks(string param = "233,236,375") => IB.Client.SendRequest_MarketData(this, param);
 
         public virtual void Cancel_MarketTicks() => IB.Client.SendCancel_MarketTicks(MarketData.TickerId);
 
         [IgnoreDataMember]
-        public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketTicks.Values.Contains(this);
-
-        [IgnoreDataMember]
         public virtual MarketData MarketData { get; }
-
-        public abstract void LoadMarketData();
-
-        public abstract void SaveMarketData();
 
         [IgnoreDataMember]
         public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
 
         [IgnoreDataMember]
         public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
+
+        public abstract void LoadMarketData();
+
+        public abstract void SaveMarketData();
 
         #endregion Status and Market Data
 

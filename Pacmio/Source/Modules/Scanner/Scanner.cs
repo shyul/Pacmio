@@ -29,8 +29,6 @@ namespace Pacmio
 
         public abstract void Stop();
 
-
-
         public virtual bool IsActive { get; set; } = false;
 
         public virtual bool IsSnapshot { get; set; } = false;

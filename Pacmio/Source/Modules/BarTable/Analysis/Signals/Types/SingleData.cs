@@ -86,7 +86,7 @@ namespace Pacmio
 
         public SignalColumn SignalColumn { get; protected set; }
 
-        public readonly Dictionary<SingleDataType, double[]> TypeToScore = new Dictionary<SingleDataType, double[]>
+        public Dictionary<SingleDataType, double[]> TypeToScore { get; } = new Dictionary<SingleDataType, double[]>
         {
             { SingleDataType.Above, new double[] { 2 } },
             { SingleDataType.CrossDown, new double[] { -4, -3.5, -3, -2 } },

@@ -10,13 +10,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Xu;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
-using System.Collections.Concurrent;
 
 namespace Pacmio.TIProData
 {
@@ -35,13 +35,14 @@ namespace Pacmio.TIProData
 
         private StreamingAlerts StreamingAlerts { get; set; }
 
-
-
         public override void Start()
         {
             if (!IsActive && Client.Connected)
             {
                 Stop();
+
+                MessageCount = 0;
+                AlertCount = 0;
 
                 IsActive = true;
                 string configStr = ConfigString;
@@ -65,46 +66,36 @@ namespace Pacmio.TIProData
             }
         }
 
-
-
-        private int alertCount;
-        private int messageCount;
-
         void AlertsConfig_Handler(StreamingAlerts sender)
         {
             if (sender == StreamingAlerts)
             {
-                Console.WriteLine("Name = " + StreamingAlerts.WindowName + ", ShortForm = " + StreamingAlerts.Config + "\r\n");
+                Console.WriteLine("Alert Handler Name = " + StreamingAlerts.WindowName + ", Config = " + StreamingAlerts.Config + "\n\n");
                 ConfigColumns(sender.Columns);
             }
         }
 
-        ConcurrentQueue<Contract> ISignalSource.Queue { get; } = new ConcurrentQueue<Contract>();
+        public ConcurrentQueue<Contract> Queue { get; } = new ConcurrentQueue<Contract>();
 
-        void AlertsData_Handler(List<RowData> data, StreamingAlerts source)
+        void AlertsData_Handler(List<RowData> rows, StreamingAlerts sender)
         {
+            MessageCount++;
+            if (LastRefreshTime < DateTime.Now && sender == StreamingAlerts)
+            {
+                AlertCount += rows.Count;
+                LastRefreshTime = DateTime.Now;
+                Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + LastRefreshTime + "\n\n");
 
-            if (source != StreamingAlerts)
-                Console.WriteLine("Ignoring StreamingAlertsData.\r\n");
+                Task.Run(() => {
+                    PrintAllRows(rows, "SYMBOL");
+                    if (IsSnapshot) Stop();
+                    Console.WriteLine("\n\n######## TI Alert Result End.\n\n");
+                });
+            }
             else
             {
-                alertCount += data.Count;
-                Console.WriteLine("Alert Count:  " + alertCount);
-                messageCount++;
-                Console.WriteLine("Message Count:  " + messageCount);
-                Console.WriteLine("Received " + data.Count + " alerts.\r\n");
-
-                PrintAllRows(data, "SYMBOL");
-                /*
-                foreach (RowData alert in data)
-                {
-                    Console.WriteLine(alert.ToString());
-                }*/
+                Console.WriteLine("######## Ignoring TI StreamingAlertsData.\n\n");
             }
-
         }
-
-
-
     }
 }

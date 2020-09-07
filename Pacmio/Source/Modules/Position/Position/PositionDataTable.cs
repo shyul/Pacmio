@@ -12,7 +12,7 @@ namespace Pacmio
 {
     public sealed class PositionDataTable : IContractTable, IStringTable
     {
-        private readonly List<PositionStatus> Rows = new List<PositionStatus>();
+        private List<PositionStatus> Rows { get; } = new List<PositionStatus>();
 
         public int Count => Rows.Count;
 

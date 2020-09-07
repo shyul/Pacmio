@@ -14,13 +14,13 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static int MaximumSubscription { get; set; } = 95;
+        public static int MaximumSubscription { get; set; } = 99;
 
-        public static int ActiveSubscriptionCount => ActiveMarketTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
+        public static int ActiveSubscriptionCount => ActiveMarketDataTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
 
         public static bool SubscriptionOverflow => ActiveSubscriptionCount > MaximumSubscription - 5;
 
-        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketTicks = new ConcurrentDictionary<int, Contract>();
+        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketDataTicks = new ConcurrentDictionary<int, Contract>();
 
         /// <summary>
         /// enericTickList:
@@ -70,17 +70,17 @@ namespace Pacmio.IB
         /// <param name="regulatorySnaphsot">Regulatory Snapshots</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        internal static bool SendRequest_MarketTicks(Contract c, string genericTickList = "236,375",
+        internal static bool SendRequest_MarketData(Contract c, string genericTickList = "236,375",
             bool snapshot = false, bool regulatorySnaphsot = false,
             ICollection<(string, string)> options = null)
         {
             var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
-            if (Connected && valid_exchange && !ActiveMarketTicks.Values.Contains(c) && !SubscriptionOverflow)
+            if (Connected && valid_exchange && !ActiveMarketDataTicks.Values.Contains(c) && !SubscriptionOverflow)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
                 c.MarketData.TickerId = requestId;
-                ActiveMarketTicks.CheckAdd(requestId, c);
+                ActiveMarketDataTicks.CheckAdd(requestId, c);
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -181,9 +181,9 @@ namespace Pacmio.IB
         public static void SendCancel_MarketTicks(int requestId)
         {
             RemoveRequest(requestId, RequestType.RequestMarketData);
-            lock (ActiveMarketTicks)
+            lock (ActiveMarketDataTicks)
             {
-                ActiveMarketTicks.TryRemove(requestId, out Contract c);
+                ActiveMarketDataTicks.TryRemove(requestId, out Contract c);
                 c.MarketData.Status = MarketTickStatus.DelayedFrozen;
                 c.MarketData.TickerId = int.MinValue;
             }

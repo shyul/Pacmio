@@ -17,7 +17,7 @@ namespace Pacmio
     /// </summary>
     public static class AccountManager
     {
-        public static readonly HashSet<Account> List = new HashSet<Account>();
+        public static HashSet<Account> List { get; } = new HashSet<Account>();
 
         public static int Count => List.Count;
 

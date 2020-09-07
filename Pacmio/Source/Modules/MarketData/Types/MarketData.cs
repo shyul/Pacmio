@@ -22,7 +22,7 @@ namespace Pacmio
         /// Run this after loading
         /// </summary>
         /// <param name="c"></param>
-        public virtual void Initialize(Contract c) 
+        public virtual void Initialize(Contract c)
         {
             Contract = c;
             Status = MarketTickStatus.Unknown;
@@ -30,6 +30,9 @@ namespace Pacmio
 
         [IgnoreDataMember]
         public Contract Contract { get; private set; }
+
+        [IgnoreDataMember]
+        public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketDataTicks.Values.Contains(Contract);
 
         #region Basic Info  
 

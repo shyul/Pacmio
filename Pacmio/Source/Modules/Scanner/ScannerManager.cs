@@ -78,6 +78,5 @@ namespace Pacmio
         }
 
         public static void Request_ScannerParameters() => IB.Client.SendRequest_ScannerParameters();
-
     }
 }

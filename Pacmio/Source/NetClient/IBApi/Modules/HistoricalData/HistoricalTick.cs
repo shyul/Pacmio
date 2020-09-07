@@ -161,7 +161,7 @@ namespace Pacmio.IB
         {
             int requestId = fields[2].ToInt32(-1);
             RemoveRequest(requestId, false);
-            ActiveMarketTicks.TryRemove(requestId, out Contract c);
+            ActiveMarketDataTicks.TryRemove(requestId, out Contract c);
 
             if (fields[3] == "200")
             {

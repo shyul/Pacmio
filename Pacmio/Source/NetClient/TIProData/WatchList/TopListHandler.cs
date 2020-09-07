@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 using TradeIdeas.TIProData;
 using TradeIdeas.TIProData.Configuration;
@@ -40,6 +41,8 @@ namespace Pacmio.TIProData
             if (Client.Connected)
             {
                 Stop();
+
+                MessageCount = 0;
 
                 SetConfig("hist", isHistorical, "1");
                 IsSnapshot = isSnapshot || isHistorical;
@@ -135,7 +138,7 @@ namespace Pacmio.TIProData
         {
             if (sender == TopList)
             {
-                Console.WriteLine("WindowName: " + sender.TopListInfo.WindowName);
+                Console.WriteLine("TopList Handler Name: " + sender.TopListInfo.WindowName + ", Config = " + sender.TopListInfo.Config);
                 ConfigColumns(sender.TopListInfo.Columns);
             }
         }
@@ -144,12 +147,25 @@ namespace Pacmio.TIProData
 
         private void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
-            LastRefreshTime = DateTime.Now;
-            if (IsSnapshot) Stop();
+            MessageCount++;
 
-            lock (List)
+            if (LastRefreshTime < DateTime.Now && sender == TopList)
             {
-                List = PrintAllRows(rows);
+                LastRefreshTime = DateTime.Now;
+                Console.WriteLine("\n\n######## TI TopList " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | " + LastRefreshTime + "\n\n");
+
+                Task.Run(() => {
+                    lock (List)
+                    {
+                        List = PrintAllRows(rows);
+                    }
+                    if (IsSnapshot) Stop();
+                    Console.WriteLine("\n\n######## TI TopList Result End.\n\n");
+                });
+            }
+            else
+            {
+                Console.WriteLine("######## Ignoring TI TopList Result!!\n\n");
             }
         }
     }

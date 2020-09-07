@@ -55,7 +55,7 @@ namespace Pacmio
         {
             if (m_StockData is StockData sd)
             {
-                if (!Directory.Exists(MarketDataFilePath)) 
+                if (!Directory.Exists(MarketDataFilePath))
                     Directory.CreateDirectory(MarketDataFilePath);
 
                 sd.SerializeJsonFile(MarketDataFileName);

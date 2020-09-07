@@ -4,6 +4,9 @@
 /// 
 /// Interactive Brokers API
 /// 
+/// 1. https://interactivebrokers.github.io/tws-api/smart_components.html
+/// 2. https://interactivebrokers.github.io/tws-api/classIBApi_1_1EClient.html#aa5de1b3f68e143c6b10d5eda83d2ffe3
+/// 
 /// ***************************************************************************
 
 using System;

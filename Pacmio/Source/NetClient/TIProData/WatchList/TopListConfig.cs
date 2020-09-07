@@ -24,6 +24,8 @@ namespace Pacmio.TIProData
         public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
         protected bool m_IsActive = false;
 
+        public virtual int MessageCount { get; protected set; } = 0;
+
         public override string Name { get => GetConfigString("WN"); set => SetConfig("WN", value); }
 
         public int Count { get => GetConfigInt("count"); set => SetConfig("count", value); }
@@ -134,6 +136,8 @@ namespace Pacmio.TIProData
 
         public List<Contract> PrintAllRows(List<RowData> rows, string symbolColumnName = "symbol")
         {
+            //Console.WriteLine("Received " + rows.Count + " alerts.");
+
             List<Contract> List = new List<Contract>();
             lock (Columns)
             {
@@ -144,7 +148,7 @@ namespace Pacmio.TIProData
                     if (row.GetContract(symbolColumnName) is Stock stk)
                     {
                         // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
-                        if ((!IsSnapshot) && (!stk.IsActiveMarketTick) && stk.StockData is StockData sd)
+                        if ((!IsSnapshot) && stk.StockData is StockData sd && (!sd.IsActiveMarketTick))
                         {
                             sd.Status = MarketTickStatus.Delayed;
 

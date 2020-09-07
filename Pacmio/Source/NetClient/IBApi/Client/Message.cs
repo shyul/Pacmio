@@ -22,16 +22,20 @@ namespace Pacmio.IB
     public static partial class Client
     {
         #region Receive Data
-        // => new Task(() => ReceiveWork(), taskCancellationTokenSource.Token);
+
         private static Task ReceiveTask { get; set; }
-        // => new BinaryReader(tcpClient.GetStream());
+
         private static BinaryReader TcpReader { get; set; }
+
         private static bool IsReceiveDataAvailable => IsSocketConnected() && TcpClient.GetStream().DataAvailable;
 
-        private static readonly ConcurrentQueue<string[]> receiveDataBuffer = new ConcurrentQueue<string[]>();
-        private static int ReceiveDataBufferCount => receiveDataBuffer.Count;
+        private static ConcurrentQueue<string[]> receiveDataBuffer { get; } = new ConcurrentQueue<string[]>();
+        //private static int ReceiveDataBufferCount => receiveDataBuffer.Count;
+
         private static bool IsReceiveDataEmpty => receiveDataBuffer.IsEmpty;
+
         private static void FlushReceiveData() { lock (receiveDataBuffer) while (!IsReceiveDataEmpty) receiveDataBuffer.TryDequeue(out _); } //(out string[] fields); }
+        
         public static int ReceivedMessageCount { get; private set; } = 0;
 
         private const int MaximumReceivedMessageSize = 0x00FFFFFF;

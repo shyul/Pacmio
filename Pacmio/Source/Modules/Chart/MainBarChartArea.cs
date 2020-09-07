@@ -48,9 +48,9 @@ namespace Pacmio
             });
         }
 
-        public readonly OhlcSeries PriceSeries;
+        public OhlcSeries PriceSeries { get; }
 
-        public readonly AdColumnSeries VolumeSeries;
+        public AdColumnSeries VolumeSeries { get; }
 
         public override void DrawCursor(Graphics g, ITable table)
         {

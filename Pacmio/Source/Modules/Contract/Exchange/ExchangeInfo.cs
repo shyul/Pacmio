@@ -382,6 +382,6 @@ namespace Pacmio
                 return (false, Exchange.NASDAQ, string.Empty);
         }
 
-        public static readonly List<Exchange> US_Exchanges = new List<Exchange>() { Exchange.BATS, Exchange.NASDAQ, Exchange.NYSE, Exchange.ARCA, Exchange.AMEX, Exchange.OTCBB };
+        public static List<Exchange> US_Exchanges { get; } = new List<Exchange>() { Exchange.BATS, Exchange.NASDAQ, Exchange.NYSE, Exchange.ARCA, Exchange.AMEX, Exchange.OTCBB };
     }
 }
