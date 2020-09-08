@@ -31,10 +31,10 @@ namespace Pacmio
         /// <summary>
         /// The Contract's IB's unique id
         /// </summary>
-        [DataMember, Category("IDs"), GridColumn("Contract ID")]
+        [DataMember, Browsable(true), ReadOnly(true), Category("IDs"), DisplayName("Contract ID")]
         public int ConId { get; set; } = -2;
 
-        [DataMember, Category("IDs"), GridColumn("Symbol")]
+        [DataMember, Browsable(true), ReadOnly(true), Category("IDs"), DisplayName("Symbol")]
         public virtual string Name { get; protected set; }
 
         [IgnoreDataMember]
@@ -66,7 +66,7 @@ namespace Pacmio
         [DataMember]
         public Exchange Exchange { get; protected set; }
 
-        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Exchange"), Category("Basic Information")]
         public virtual string ExchangeName
         {
             get
@@ -80,7 +80,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange Full Name")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Exchange Full Name"), Category("Basic Information")]
         public virtual string ExchangeFullName
         {
             get
@@ -93,7 +93,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange Country")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Exchange Country"), Category("Basic Information")]
         public virtual string Country
         {
             get
@@ -106,10 +106,10 @@ namespace Pacmio
             }
         }
 
-        [DataMember, Category("Exchange"), GridColumn("Suffix")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Suffix"), Category("Exchange"),]
         public string ExchangeSuffix { get; set; } = string.Empty;
 
-        [IgnoreDataMember, GridColumn("Currency Symbol")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Currency Symbol")]
         public virtual string CurrencySymbol
         {
             get
@@ -122,7 +122,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, GridColumn("Currency Code")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Currency Code")]
         public virtual string CurrencyCode
         {
             get
@@ -177,10 +177,10 @@ namespace Pacmio
         [IgnoreDataMember]
         public (string name, Exchange exchange, string typeName) Info => (Name, Exchange, TypeName);
 
-        [IgnoreDataMember, GridColumn("Security Type")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public abstract string TypeName { get; }
 
-        [IgnoreDataMember, GridColumn("Security Type Full Name")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public abstract string TypeFullName { get; }
 
         #endregion Contract Type Information
@@ -196,7 +196,7 @@ namespace Pacmio
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
 
-        [DataMember, Category("Basic Information"), GridColumn("Security Status")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Security Status"), Category("Basic Information")]
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         #endregion Data Update
@@ -302,71 +302,5 @@ namespace Pacmio
         public static bool operator !=(Contract s1, (string, Exchange, string) s2) => !s1.Equals(s2);
 
         #endregion Equality
-
-        #region Grid View
-        /*
-        public virtual object this[Column column]
-        {
-            get
-            {
-                return column switch
-                {
-                    ContractColumn _ => this,
-
-                    StringColumn sc when sc == Column_Status => Status.ToString(),
-                    StringColumn sc when sc == Column_TradeTime => MarketData.LastTradeTime.ToString(),
-
-                    StringColumn sc when sc == Column_BidExchange && MarketData is BidAskData q => q.BidExchange,
-                    NumericColumn dc when dc == Column_BidSize && MarketData is BidAskData q => q.BidSize,
-                    NumericColumn dc when dc == Column_Bid && MarketData is BidAskData q => q.Bid,
-
-                    NumericColumn dc when dc == Column_Ask && MarketData is BidAskData q => q.Ask,
-                    NumericColumn dc when dc == Column_AskSize && MarketData is BidAskData q => q.AskSize,
-                    StringColumn sc when sc == Column_AskExchange && MarketData is BidAskData q => q.AskExchange,
-
-                    NumericColumn dc when dc == Column_Last => MarketData.LastPrice,
-                    NumericColumn dc when dc == Column_LastSize && MarketData is BidAskData q => q.LastSize,
-                    StringColumn sc when sc == Column_LastExchange && MarketData is BidAskData q => q.LastExchange,
-
-                    NumericColumn dc when dc == Column_Open && MarketData is BidAskData q => q.Open,
-                    NumericColumn dc when dc == Column_High && MarketData is BidAskData q => q.High,
-                    NumericColumn dc when dc == Column_Low && MarketData is BidAskData q => q.Low,
-                    NumericColumn dc when dc == Column_Close && MarketData is BidAskData q => q.PreviousClose,
-                    NumericColumn dc when dc == Column_Volume && MarketData is BidAskData q => q.Volume,
-
-                    NumericColumn dc when dc == Column_Short && MarketData is StockData q => q.ShortStatus,
-                    NumericColumn dc when dc == Column_ShortShares && MarketData is StockData q => q.ShortableShares,
-
-                    _ => null,
-                };
-            }
-        }
-
-        public static readonly StringColumn Column_Status = new StringColumn("STATUS");
-        public static readonly ContractColumn Column_Contract = new ContractColumn("Contract");
-        public static readonly StringColumn Column_TradeTime = new StringColumn("TRADE_TIME");
-
-        public static readonly StringColumn Column_BidExchange = new StringColumn("BID_EXCHANGE");
-        public static readonly NumericColumn Column_BidSize = new NumericColumn("BID_SIZE");
-        public static readonly NumericColumn Column_Bid = new NumericColumn("BID");
-
-        public static readonly NumericColumn Column_Ask = new NumericColumn("ASK");
-        public static readonly NumericColumn Column_AskSize = new NumericColumn("ASK_SIZE");
-        public static readonly StringColumn Column_AskExchange = new StringColumn("ASK_EXCHANGE");
-
-        public static readonly NumericColumn Column_Last = new NumericColumn("LAST");
-        public static readonly NumericColumn Column_LastSize = new NumericColumn("LAST_SIZE");
-        public static readonly StringColumn Column_LastExchange = new StringColumn("LAST_EXCHANGE");
-
-        public static readonly NumericColumn Column_Open = new NumericColumn("OPEN");
-        public static readonly NumericColumn Column_High = new NumericColumn("HIGH");
-        public static readonly NumericColumn Column_Low = new NumericColumn("LOW");
-        public static readonly NumericColumn Column_Close = new NumericColumn("CLOSE");
-        public static readonly NumericColumn Column_Volume = new NumericColumn("VOLUME");
-
-        public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
-        public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
-        */
-        #endregion Grid View
     }
 }

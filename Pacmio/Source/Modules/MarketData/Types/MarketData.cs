@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Xu;
@@ -27,7 +28,7 @@ namespace Pacmio
             Status = MarketTickStatus.Unknown;
         }
 
-        [IgnoreDataMember, GridColumn("Contract")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract")]
         public Contract Contract { get; private set; }
 
         [IgnoreDataMember]
@@ -67,7 +68,7 @@ namespace Pacmio
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;
 
-        [DataMember, GridColumn("Status")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status")]
         public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
 
         [DataMember]

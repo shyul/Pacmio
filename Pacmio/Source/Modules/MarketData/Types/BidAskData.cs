@@ -5,6 +5,7 @@
 /// ***************************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using Xu.GridView;
 
@@ -19,43 +20,43 @@ namespace Pacmio
             // Contract = c;
         }*/
 
-        [DataMember, GridColumn("Ask")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask")]
         public double Ask { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Ask Size")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Size")]
         public double AskSize { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Ask Exchange")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Exchange")]
         public string AskExchange { get; set; } = string.Empty;
 
-        [DataMember, GridColumn("Bid")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid")]
         public double Bid { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Bid Size")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Size")]
         public double BidSize { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Bid Exchange")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Exchange")]
         public string BidExchange { get; set; } = string.Empty;
 
-        [DataMember, GridColumn("Open")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open")]
         public double Open { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("High")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("High")]
         public double High { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Low")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low")]
         public double Low { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Last Size")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last Size")]
         public double LastSize { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Volume")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume")]
         public double Volume { get; set; } = double.NaN;
 
-        [DataMember, GridColumn("Last Exchange")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last Exchange")]
         public string LastExchange { get; set; } = string.Empty;
 
-        [DataMember, GridColumn("Previous Close")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Previous Close")]
         public double PreviousClose { get; set; } = double.NaN;
     }
 }
