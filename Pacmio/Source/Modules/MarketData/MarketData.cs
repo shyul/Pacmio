@@ -28,7 +28,7 @@ namespace Pacmio
             Status = MarketTickStatus.Unknown;
         }
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(TextCellRenderer), 150, true)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
         public Contract Contract { get; private set; }
 
         [IgnoreDataMember]

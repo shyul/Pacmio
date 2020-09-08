@@ -127,20 +127,28 @@ namespace Pacmio
                 {
                     lock (LiveBarTables)
                     {
-                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt => {
-                            if (bt.BarFreq >= BarFreq.Daily && bt.LastTime < time.Date)
-                            {
-                                if (!double.IsNaN(Open) && !double.IsNaN(Open) && !double.IsNaN(Open) && !double.IsNaN(Volume))
-                                {
-                                    Bar b = new Bar(bt, time.Date, DataSource.Tick, Open, High, Low, LastPrice, Volume, Open, High, Low, LastPrice, Volume);
-                                    bt.MergeFromSmallerBar(b);
-
-                                }
-                            }
-
-                            if (bt.BarFreq < BarFreq.Daily || bt.LastTime == time.Date)
+                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt => 
+                        {
+                            if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
                             {
                                 bt.AddPriceTick(time, price, size);
+                            }
+                            else if (bt.BarFreq >= BarFreq.Daily)// && bt.LastTime < time.Date)
+                            {
+                                DateTime date = time.Date;
+                                //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTime.Date + " | time = " + time.Date);
+                                if (bt.LastTime.Date < date)
+                                {
+                                    if ((!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
+                                    {
+                                        //Console.WriteLine(">>> [[[[ (bt.LastTime.Date < time.Date) " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
+                                        bt.MergeFromSmallerBar(new Bar(bt, date, DataSource.Tick, Open, High, Low, LastPrice, Volume, Open, High, Low, LastPrice, Volume));
+                                    }
+                                }
+                                else if (bt.LastTime == date)
+                                {
+                                    bt.AddPriceTick(date, price, size);
+                                }
                             }
                         });
                     }

@@ -75,7 +75,7 @@ namespace TestClient
             */
 
             AccountManager.UpdatedHandler += AccountUpdatedHandler;
-            MarketDataManager.Add(MarketDataGridView);
+            WatchListManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
@@ -1109,12 +1109,12 @@ namespace TestClient
             //tls.Exchanges.Clear();
             //tls.ExtraConfig = tls.ExtraConfig.TrimEnd('&') + "&XX=on&X_CAV=on&X_CAT=on&X_SMAL=on&X_OTCQX=on&X_OTCQB=on&X_ARCA=on";
 
-            //tls.Start();
-
+            tls.Start();
+            /*
             if (tls.Snapshot(new DateTime(2020, 09, 02, 06, 30, 00)) is ICollection<Contract> list)
             {
                 Pacmio.IB.WatchList.PrintWatchList(list);
-            }
+            }*/
         }
 
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)

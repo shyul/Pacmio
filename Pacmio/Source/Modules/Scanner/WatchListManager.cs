@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class MarketDataManager
+    public static class WatchListManager
     {
         public static void Add(MarketDataGridView gv)
         {
@@ -49,6 +49,31 @@ namespace Pacmio
                 return null;
             }
         }
+
+
     }
+
+
+    public interface IWatchList2
+    {
+
+    }
+
+
+    public interface IWatchList
+    {
+        void Start();
+
+        void Stop();
+
+        ICollection<Contract> Snapshot();
+
+        ICollection<Contract> List { get; }
+
+        // Add event / Interrupt source
+    }
+
+
+
 }
 

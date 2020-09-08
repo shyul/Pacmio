@@ -65,7 +65,7 @@ namespace Pacmio.IB
                     if (c is Stock stk) stk.Status = ContractStatus.Alive;
 
                     c.MarketData.Status = (MarketTickStatus)fields[3].ToInt32(0);
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
         }
 
@@ -115,7 +115,7 @@ namespace Pacmio.IB
 
                     int snapshotPermissions = fields[4].ToInt32(-1);
 
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
                 else
                     SendCancel_MarketTicks(tickerId);
@@ -180,7 +180,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
         }
 
@@ -228,7 +228,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
         }
 
@@ -353,7 +353,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
         }
 
@@ -421,7 +421,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    MarketDataManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(c);
                 }
         }
 

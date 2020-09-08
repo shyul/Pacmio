@@ -12,16 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface IWatchList
+    public class TickDatum
     {
-        void Start();
-
-        void Stop();
-
-        ICollection<Contract> Snapshot();
-
-        ICollection<Contract> List { get; }
-
-        // Add event / Interrupt source
     }
 }

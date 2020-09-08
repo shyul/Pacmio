@@ -285,15 +285,16 @@ namespace Pacmio
         public bool MergeFromSmallerBar(Bar b)
         {
             bool isModified = false;
+            // Get time and index of time
+            DateTime time = Frequency.Align(b.Time, 0);
+
             if (b.BarFreq < BarFreq)
             {
-                // Get time and index of time
-                DateTime time = Frequency.Align(b.Time, 0);
                 if (!Contains(time))
                 {
                     Bar nb = new Bar(this, time, b.Source,
-                                -1, -1, -1, -1, -1,
-                                b.Open, b.High, b.Low, b.Close, b.Volume)
+                        -1, -1, -1, -1, -1, // b.Open, b.High, b.Low, b.Close, b.Volume, // - 1, -1, -1, -1, -1,
+                        b.Open, b.High, b.Low, b.Close, b.Volume)
                     {
                         DataSourcePeriod = b.Period // Make sure it knows the Bar data sample time is shorter than the BarSize
                     };
@@ -329,6 +330,20 @@ namespace Pacmio
                     if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
                 }
             }
+            else
+            {
+                if (!Contains(time))
+                {
+                    Bar nb = new Bar(this, time, b.Source,
+                        b.Open, b.High, b.Low, b.Close, b.Volume, // -1, -1, -1, -1, -1, // b.Open, b.High, b.Low, b.Close, b.Volume,
+                        b.Open, b.High, b.Low, b.Close, b.Volume)
+                    {
+                        DataSourcePeriod = b.Period // Make sure it knows the Bar data sample time is shorter than the BarSize
+                    };
+                    isModified = Add(nb);
+                }
+            }
+
             return isModified;
         }
 
@@ -716,6 +731,7 @@ namespace Pacmio
             {
                 Console.WriteLine("------------------");
                 Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
+                Console.WriteLine(Name + " | LastBar.Close = " + LastBar.Close);
                 Console.WriteLine("==================\n");
             }
         }
@@ -862,7 +878,7 @@ namespace Pacmio
         {
             if (Enabled && IsLive)
             {
-                //Console.WriteLine("Inbound Tick = " + price + " | " + size);
+                Console.WriteLine(">>> [[[ Inbound Tick = " + price + " | " + size);
                 //lock (DataLockObject) 
                 Add(time, price, size);
 
