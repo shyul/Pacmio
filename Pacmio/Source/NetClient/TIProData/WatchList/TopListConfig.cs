@@ -77,7 +77,7 @@ namespace Pacmio.TIProData
                     if (row.GetContract(symbolColumnName) is Stock stk)
                     {
                         // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
-                        if ((!IsSnapshot) && stk.StockData is StockData sd && (!sd.IsActiveMarketTick))
+                        if ((!IsSnapshot) && stk.StockData is StockData sd && (!sd.IsTickActive))
                         {
                             sd.Status = MarketTickStatus.Delayed;
 

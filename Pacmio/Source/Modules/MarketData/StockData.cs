@@ -139,6 +139,7 @@ namespace Pacmio
                                 //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTime.Date + " | time = " + time.Date);
                                 if (bt.LastTime.Date < date)
                                 {
+                                    // Also check the Stock Data time stamp here! Is it current???
                                     if (bt.Status == TableStatus.Ready && (!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
                                     {
                                         Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + date + " | " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
@@ -168,19 +169,7 @@ namespace Pacmio
 
 
 
-        [DataMember]
-        public bool EnableMarketDepth { get; set; } = true;
 
-        [DataMember]
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
-            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
-
-
-        // Tape
-
-        // Position in Range
-
-        // L2
 
 
 
@@ -199,26 +188,6 @@ namespace Pacmio
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Short"), GridColumnOrder(17), CellRenderer(typeof(NumberCellRenderer), 60)]
         public double ShortStatus { get; set; } = double.NaN;
 
-
-
-
-        // Add O H L and Last to daily tables 
-
-        public void StartTicks()
-        {
-            List<string> param = new List<string>();
-
-            // Also Fetch BarTable first if they are current...?
-        }
-
-        public void StopTicks()
-        {
-
-        }
-
-
-        // News
-
         [DataMember]
         public bool EnableNews { get; set; } = false;
 
@@ -227,6 +196,42 @@ namespace Pacmio
         /// </summary>
         [DataMember]
         public bool EnableShortableShares { get; set; } = false;
+
+        public override bool StartTicks()
+        {
+            List<string> param = new List<string>();
+
+            if (EnableNews) 
+            {
+            
+            }
+
+
+
+            string tickList = "233,236,375";
+
+            return IB.Client.SendRequest_MarketData(Contract, tickList); 
+        }
+
+        [DataMember]
+        public bool EnableMarketDepth { get; set; } = true;
+
+        [DataMember]
+        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
+            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+
+
+        // Tape
+
+        // Position in Range
+
+        // L2
+
+
+
+        // News
+
+
 
 
 

@@ -229,7 +229,6 @@ namespace Pacmio
 
             if (this[time] is Bar b)
             {
-                
                 if (b.Source >= DataSource.IB)
                 {
                     if (last > b.High) // New High
@@ -255,23 +254,25 @@ namespace Pacmio
                     {
                         b.Actual_Close = b.Close = last;
                         b.DataSourcePeriod.Insert(tickTime);
-
-                        //Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
-
                         isModified = true;
+
+                        Console.WriteLine("]]]]]]]]]]]]]]]]]]]] " + b.DataSourcePeriod + " | " + b.Period);
                     }
                     else
                     {
-                        Console.WriteLine("********** Inbound Tick Time Overflow ***********" + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
+                        Console.WriteLine("********** Inbound Tick Time Overflow ***********");
                     }
 
                     b.Volume += volume;
                     b.Actual_Volume = b.Volume;
-
                     b.Source = DataSource.Realtime;
-                }
 
-                Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
+                    Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent + " | " + b.Period);
+                }
+                else
+                {
+                    Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
+                }
             }
             else
             {
@@ -953,8 +954,9 @@ namespace Pacmio
                     Status = TableStatus.Downloading;
 
                     IsLive = period.IsCurrent;
-                    if (IsLive) Contract.Request_MarketTicks();
-
+                    //if (IsLive) Contract.Request_MarketTicks();
+                    if (IsLive) Contract.MarketData.StartTicks();
+                    
                     ResetCalculationPointer();
                     SyncFile(period);
                     Sort();

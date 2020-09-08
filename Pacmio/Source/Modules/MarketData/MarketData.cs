@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Xu;
 using Xu.GridView;
+using System.Threading;
 
 namespace Pacmio
 {
@@ -30,13 +31,6 @@ namespace Pacmio
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
         public Contract Contract { get; private set; }
-
-        [IgnoreDataMember]
-        public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketDataTicks.Values.Contains(Contract);
-
-
-
-
 
 
 
@@ -64,6 +58,24 @@ namespace Pacmio
 
         [DataMember]
         public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
+
+
+        [IgnoreDataMember]
+        public virtual bool IsTickActive => IB.Client.ActiveMarketDataTicks.Values.Contains(Contract);
+
+        /// <summary>
+        /// https://interactivebrokers.github.io/tws-api/tick_types.html
+        /// string genericTickList = "236,375";  // 292 is news and 233 is RTVolume
+        /// 
+        /// Has to support option change...
+        /// 
+        /// 
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual bool StartTicks() => IB.Client.SendRequest_MarketData(Contract, "233,236,375");
+
+        public virtual void StopTicks() => IB.Client.SendCancel_MarketTicks(TickerId);
 
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;

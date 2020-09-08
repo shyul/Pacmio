@@ -533,7 +533,7 @@ namespace TestClient
             string tickList = TextBoxGenericTickList.Text;
             foreach (Contract c in list)
             {
-                c.Request_MarketTicks(tickList);
+                c.MarketData.StartTicks();// (tickList);
             }
 
         }
@@ -893,7 +893,7 @@ namespace TestClient
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.Request_MarketTicks(TextBoxGenericTickList.Text);
+            ContractTest.ActiveContract.MarketData.StartTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
                 MarketDataGridView.Add(s);
@@ -911,7 +911,7 @@ namespace TestClient
 
             foreach (Contract c in cList)
             {
-                Console.WriteLine("MarketQuote: " + c.Request_MarketTicks(tickList));
+                Console.WriteLine("MarketQuote: " + c.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
 
                 if (c is Stock s)
                     MarketDataGridView.Add(s);
