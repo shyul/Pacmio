@@ -2,11 +2,13 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 using Xu.WindowsNativeMethods;
-using System.Reflection;
+using System.Collections.Generic;
 using Xu;
+
 
 namespace TestClient
 {
@@ -45,25 +47,52 @@ namespace TestClient
 
                     Root.Load();
 
-
                     var infoList = typeof(Contract).GetProperties();
 
-                    foreach(PropertyInfo info in infoList) 
+                    List<PropertyInfo> listOfBrowsable = new List<PropertyInfo>();
+
+                    foreach (PropertyInfo info in infoList)
                     {
                         string s = info.Name + " | ";
 
                         var t = info.GetCustomAttributes(true);
 
-                        foreach(object obj in t) 
+                        foreach (object obj in t)
                         {
-                            if(obj is Attribute attr) 
+                            if (obj is Attribute attr)
                             {
+
+
                                 s += attr.GetType().Name + " | ";
+                            }
+
+                            if (obj is BrowsableAttribute bra && bra.Browsable)
+                            {
+                                listOfBrowsable.Add(info);
                             }
                         }
 
                         Console.WriteLine(s);
                     }
+
+
+                    foreach (Contract c in ContractList.Values)
+                    {
+                        
+
+                        string s = string.Empty;
+                        foreach (PropertyInfo pi in listOfBrowsable)
+                        {
+                            s += pi.GetValue(c) + " | ";
+                        }
+
+                        Console.WriteLine(s);
+                    }
+
+
+
+
+
 
                     Application.Run(new MainForm());
 

@@ -149,8 +149,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
     <Compile Include="Source\Modules\Position\BarPositionData.cs" />
-    <Compile Include="Source\Modules\Contract\GridView\ContractColumn.cs" />
-    <Compile Include="Source\Modules\Contract\GridView\IContractTable.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
@@ -162,13 +160,11 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Contract\GridView\ContractGridStripe.cs" />
     <Compile Include="Source\Modules\MarketData\Types\BidAskData.cs" />
     <Compile Include="Source\Modules\MarketData\Types\MarketData.cs" />
     <Compile Include="Source\Modules\MarketData\Types\StockData.cs" />
     <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataGridView.cs" />
-    <Compile Include="Source\Modules\MarketData\MarketDataTable.cs" />
     <Compile Include="Source\Modules\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
@@ -178,8 +174,6 @@
     <Compile Include="Source\Modules\Strategy\Research\ResearchManager.cs" />
     <Compile Include="Source\Modules\Account\Account.cs" />
     <Compile Include="Source\Modules\Contract\Types\TradeData.cs" />
-    <Compile Include="Source\Modules\Position\Position\PositionDataTable.cs" />
-    <Compile Include="Source\Modules\Position\Position\PositionGridView.cs" />
     <Compile Include="Source\Modules\Position\Position\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Contract\Order\TradeInfoManager.cs" />

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using Xu;
+using Xu.GridView;
 
 namespace Pacmio
 {
@@ -21,7 +22,7 @@ namespace Pacmio
     [KnownType(typeof(Option))]
     [KnownType(typeof(MutualFund))]
     [KnownType(typeof(Forex))]
-    public abstract class Contract : IRow, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
         public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
 
@@ -30,10 +31,10 @@ namespace Pacmio
         /// <summary>
         /// The Contract's IB's unique id
         /// </summary>
-        [DataMember, Browsable(true), ReadOnly(true), Category("IDs"), DisplayName("Contract ID")]
+        [DataMember, Category("IDs"), GridColumn("Contract ID")]
         public int ConId { get; set; } = -2;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Symbol")]
+        [DataMember, Category("IDs"), GridColumn("Symbol")]
         public virtual string Name { get; protected set; }
 
         [IgnoreDataMember]
@@ -42,7 +43,7 @@ namespace Pacmio
         [DataMember]
         protected string m_fullName = string.Empty;
 
-        [DataMember, Browsable(false)]
+        [DataMember]
         public HashSet<string> NameSuffix { get; set; } = new HashSet<string>();
 
         #endregion Identification
@@ -62,10 +63,10 @@ namespace Pacmio
         /// <summary>
         /// The destination exchange.
         /// </summary>
-        [DataMember, Browsable(false)]
+        [DataMember]
         public Exchange Exchange { get; protected set; }
 
-        [IgnoreDataMember, Browsable(true), Category("Basic Information"), DisplayName("Exchange"), ReadOnly(true)]
+        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange")]
         public virtual string ExchangeName
         {
             get
@@ -79,7 +80,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, Browsable(true), Category("Basic Information"), DisplayName("Exchange Full Name"), ReadOnly(true)]
+        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange Full Name")]
         public virtual string ExchangeFullName
         {
             get
@@ -92,7 +93,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, Browsable(true), Category("Basic Information"), DisplayName("Exchange Country"), ReadOnly(true)]
+        [IgnoreDataMember, Category("Basic Information"), GridColumn("Exchange Country")]
         public virtual string Country
         {
             get
@@ -105,10 +106,10 @@ namespace Pacmio
             }
         }
 
-        [DataMember, Browsable(true), ReadOnly(true), Category("Exchange"), DisplayName("Suffix")]
+        [DataMember, Category("Exchange"), GridColumn("Suffix")]
         public string ExchangeSuffix { get; set; } = string.Empty;
 
-        [IgnoreDataMember, ReadOnly(true), DisplayName("Currency Symbol")]
+        [IgnoreDataMember, GridColumn("Currency Symbol")]
         public virtual string CurrencySymbol
         {
             get
@@ -121,7 +122,7 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, ReadOnly(true), DisplayName("Currency Code")]
+        [IgnoreDataMember, GridColumn("Currency Code")]
         public virtual string CurrencyCode
         {
             get
@@ -134,10 +135,10 @@ namespace Pacmio
             }
         }
 
-        [IgnoreDataMember, Browsable(false), ReadOnly(true)]
+        [IgnoreDataMember]
         public virtual TimeZoneInfo TimeZone => WorkHours.TimeZoneInfo;
 
-        [IgnoreDataMember, Browsable(false), ReadOnly(true)]
+        [IgnoreDataMember]
         public virtual WorkHours WorkHours
         {
             get
@@ -176,10 +177,10 @@ namespace Pacmio
         [IgnoreDataMember]
         public (string name, Exchange exchange, string typeName) Info => (Name, Exchange, TypeName);
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
+        [IgnoreDataMember, GridColumn("Security Type")]
         public abstract string TypeName { get; }
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
+        [IgnoreDataMember, GridColumn("Security Type Full Name")]
         public abstract string TypeFullName { get; }
 
         #endregion Contract Type Information
@@ -189,13 +190,13 @@ namespace Pacmio
         [IgnoreDataMember]
         public virtual bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && ((DateTime.Now - MarketData.TradingPeriods.Stop).Days > MarketData.TradingPeriods.Count || FullName.Length < 2);
 
-        [DataMember, Browsable(false)]
+        [DataMember]
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();
 
-        [DataMember, Browsable(true), Category("Basic Information"), DisplayName("Security Status")]
+        [DataMember, Category("Basic Information"), GridColumn("Security Status")]
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         #endregion Data Update
@@ -303,7 +304,7 @@ namespace Pacmio
         #endregion Equality
 
         #region Grid View
-
+        /*
         public virtual object this[Column column]
         {
             get
@@ -365,7 +366,7 @@ namespace Pacmio
 
         public static readonly NumericColumn Column_Short = new NumericColumn("SHORT");
         public static readonly NumericColumn Column_ShortShares = new NumericColumn("S_SHARES");
-
+        */
         #endregion Grid View
     }
 }

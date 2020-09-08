@@ -4,33 +4,60 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using Xu;
 using Xu.GridView;
 
-
 namespace Pacmio
 {
-    public class MarketDataGridView : GridWidget
+    public class MarketDataGridView : GridWidget<StockData>
     {
-        public MarketDataGridView(string name, MarketDataTable mdt) : base(name)
+        public MarketDataGridView(string name) : base(name)
         {
-            MarketDataTable = mdt;
+
 
         }
 
+        public void Add(Contract c)
+        {
+            if (c is Stock s)
+            {
+                Console.WriteLine("MarketDataGridView Adding: " + s.ToString());
 
-        public MarketDataTable MarketDataTable { get; }
+                List<StockData> newRows = new List<StockData>();
+                if (Rows is StockData[] rows) newRows.AddRange(rows);
 
-        public Contract SelectedContract { get; }
+                newRows.CheckAdd(s.StockData);
+                Update(newRows);
+            }
+        }
+
+        public void Remove(Contract c)
+        {
+            if (c is Stock s)
+            {
+                List<StockData> list = new List<StockData>();
+                if (Rows is StockData[] rows) list.AddRange(rows);
+                list.CheckRemove(s.StockData);
+                Update(list);
+            }
+        }
+
+        public bool Contains(Contract c) => Rows is StockData[] rows && rows.Where(n => n.Contract == c).Count() > 0;
+
+        public Contract SelectedContract => Rows[SelectedIndex].Contract;
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
 
-        public override ITable Table { get => MarketDataTable; set { } }
+        
 
-        public override IEnumerable<GridStripe> Stripes => StripesSet;
 
+
+        /*
         private readonly List<GridStripe> StripesSet = new List<GridStripe>() {
 
             new StringGridStripe() { Name = "Status", Column = Contract.Column_Status, Importance = Importance.Major, Order = 0, Width = 70, AutoWidth = false },
@@ -58,6 +85,6 @@ namespace Pacmio
             new NumberGridStripe() { Name = "Short", Column = Contract.Column_Short, Importance = Importance.Minor, Order = 17, Width = 60, AutoWidth = false },
             new NumberGridStripe() { Name = "S.Shares", Column = Contract.Column_ShortShares, Importance = Importance.Minor, Order = 18, Width = 80, AutoWidth = false },
 
-        };
+        };*/
     }
 }

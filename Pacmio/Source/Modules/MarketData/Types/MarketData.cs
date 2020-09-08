@@ -8,16 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Xu;
+using Xu.GridView;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
     [KnownType(typeof(BidAskData))]
     [KnownType(typeof(StockData))]
-    public class MarketData
+    public class MarketData : IEquatable<MarketData>
     {
-
-
         /// <summary>
         /// Run this after loading
         /// </summary>
@@ -28,11 +27,18 @@ namespace Pacmio
             Status = MarketTickStatus.Unknown;
         }
 
-        [IgnoreDataMember]
+        [IgnoreDataMember, GridColumn("Contract")]
         public Contract Contract { get; private set; }
 
         [IgnoreDataMember]
         public virtual bool IsActiveMarketTick => IB.Client.ActiveMarketDataTicks.Values.Contains(Contract);
+
+
+
+
+
+
+
 
         #region Basic Info  
 
@@ -61,7 +67,7 @@ namespace Pacmio
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;
 
-        [DataMember]
+        [DataMember, GridColumn("Status")]
         public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
 
         [DataMember]
@@ -83,5 +89,21 @@ namespace Pacmio
 
 
         #endregion Trade
+
+        #region Equality 
+
+        // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+        public bool Equals(MarketData other) => other is MarketData md && GetType() == other.GetType() && Contract == md.Contract;
+
+        public override bool Equals(object other) => other is MarketData md && Equals(md);
+
+        public static bool operator ==(MarketData s1, MarketData s2) => s1.Equals(s2);
+        public static bool operator !=(MarketData s1, MarketData s2) => !s1.Equals(s2);
+
+        public override int GetHashCode() => Contract.GetHashCode() ^ GetType().GetHashCode();
+
+        public override string ToString() => GetType().Name + " for " + Contract.ToString();
+
+        #endregion Equality
     }
 }

@@ -60,7 +60,7 @@ namespace TestClient
 
         int MainProgBarValue = 0;
 
-        public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data", new MarketDataTable());
+        public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data");
 
         public MainForm()
         {
@@ -885,7 +885,8 @@ namespace TestClient
         {
             foreach (Contract c in Pacmio.IB.Client.ActiveMarketDataTicks.Values)
             {
-                MarketDataGridView.MarketDataTable.Add(c);
+                if(c is Stock s)
+                MarketDataGridView.Add(s);
             }
         }
 
@@ -893,7 +894,9 @@ namespace TestClient
         {
             if (!Root.NetConnected || !ValidateSymbol()) return;
             ContractTest.ActiveContract.Request_MarketTicks(TextBoxGenericTickList.Text);
-            MarketDataGridView.MarketDataTable.Add(ContractTest.ActiveContract);
+
+            if (ContractTest.ActiveContract is Stock s)
+                MarketDataGridView.Add(s);
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
@@ -909,7 +912,9 @@ namespace TestClient
             foreach (Contract c in cList)
             {
                 Console.WriteLine("MarketQuote: " + c.Request_MarketTicks(tickList));
-                MarketDataGridView.MarketDataTable.Add(c);
+
+                if (c is Stock s)
+                    MarketDataGridView.Add(s);
             }
 
             Root.Form?.Show();

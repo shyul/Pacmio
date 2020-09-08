@@ -9,7 +9,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class PositionStatus : IRow
+    public class PositionStatus
     {
         public PositionStatus(Contract c)
         {
@@ -63,34 +63,5 @@ namespace Pacmio
         // All trend line and level (support-resistance) lines from higher time frames are buffered here.
 
         #endregion Risk Management
-
-        #region Grid View
-
-        public object this[Column column]
-        {
-            get
-            {
-                return column switch
-                {
-                    ContractColumn _ => Contract,
-                    NumericColumn sc when sc == Column_Quantity => Quantity,
-                    NumericColumn sc when sc == Column_AveragePrice => AveragePrice,
-                    NumericColumn dc when dc == Column_Value => Value,
-                    NumericColumn dc when dc == Contract.Column_Last => Contract.MarketData.LastPrice,
-                    NumericColumn dc when dc == Column_PNL => 20,
-
-                    _ => null,
-                };
-            }
-        }
-
-        public static readonly NumericColumn Column_Quantity = new NumericColumn("QUANTITY");
-        public static readonly NumericColumn Column_AveragePrice = new NumericColumn("AVG_PRICE");
-        public static readonly NumericColumn Column_Value = new NumericColumn("VALUE");
-
-
-        public static readonly NumericColumn Column_PNL = new NumericColumn("PNL");
-
-        #endregion Grid View
     }
 }

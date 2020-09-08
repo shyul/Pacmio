@@ -34,16 +34,8 @@ namespace Pacmio
         {
             Task.Run(() =>
             {
-                List.Where(n => n.MarketDataTable.Contains(c)).ToList().ForEach(n => n.SetAsyncUpdateUI());
+                List.Where(n => n.Contains(c)).ToList().ForEach(n => n.SetAsyncUpdateUI());
             });
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void CleanUp()
-        {
-
         }
 
         public static Contract SelectedContract
@@ -53,12 +45,9 @@ namespace Pacmio
                 if (DockCanvas.ActiveDockForm is MarketDataGridView gv)
                 {
                     return gv.SelectedContract;
-
                 }
-
                 return null;
             }
-
         }
     }
 }
