@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.ComponentModel;
 using Xu;
+using Xu.GridView;
 
 namespace Pacmio
 {
@@ -177,10 +178,10 @@ namespace Pacmio
         [DataMember]
         public double ShortPercent { get; set; } = double.NaN;
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("S.Shares"), GridColumnOrder(18), CellRenderer(typeof(NumberCellRenderer), 80)]
         public double ShortableShares { get; set; } = double.NaN;
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Short"), GridColumnOrder(17), CellRenderer(typeof(NumberCellRenderer), 60)]
         public double ShortStatus { get; set; } = double.NaN;
 
 

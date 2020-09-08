@@ -28,7 +28,7 @@ namespace Pacmio
             Status = MarketTickStatus.Unknown;
         }
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract")]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(TextCellRenderer), 150, true)]
         public Contract Contract { get; private set; }
 
         [IgnoreDataMember]
@@ -68,7 +68,7 @@ namespace Pacmio
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status")]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 70)]
         public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
 
         [DataMember]
@@ -77,10 +77,10 @@ namespace Pacmio
         [DataMember]
         public string BBOExchangeId { get; set; } = string.Empty;
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), CellRenderer(typeof(NumberCellRenderer), 60, false)]
         public double LastPrice { get; set; } = double.NaN;
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Trade Time"), GridColumnOrder(2, 0, 0), CellRenderer(typeof(TextCellRenderer), 120, true)]
         public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
 
         #endregion Quote

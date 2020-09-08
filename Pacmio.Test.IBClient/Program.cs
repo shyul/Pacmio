@@ -46,7 +46,7 @@ namespace TestClient
 
 
                     Root.Load();
-
+                    /*
                     var infoList = typeof(Contract).GetProperties();
 
                     List<PropertyInfo> listOfBrowsable = new List<PropertyInfo>();
@@ -89,7 +89,7 @@ namespace TestClient
                         Console.WriteLine(s);
                     }
 
-
+                    */
 
 
 

@@ -22,7 +22,7 @@ namespace Pacmio
     [KnownType(typeof(Option))]
     [KnownType(typeof(MutualFund))]
     [KnownType(typeof(Forex))]
-    public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public abstract class Contract : IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>, IComparable<Contract>, IComparable
     {
         public override string ToString() => "[" + Name + "] " + TypeName + " " + CurrencyCode + " @ " + Exchange;
 
@@ -302,5 +302,9 @@ namespace Pacmio
         public static bool operator !=(Contract s1, (string, Exchange, string) s2) => !s1.Equals(s2);
 
         #endregion Equality
+
+        public int CompareTo(Contract other) => Name.CompareTo(other.Name);
+
+        public int CompareTo(object other) => other is Contract c ? CompareTo(c) : 0;
     }
 }
