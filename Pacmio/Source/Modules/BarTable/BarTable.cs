@@ -244,18 +244,25 @@ namespace Pacmio
                         isModified = true;
                     }
 
-                    if (tickTime <= b.DataSourcePeriod.Start) // Eariler Open
+                    if (tickTime <= b.DataSourcePeriod.Start && tickTime > b.Period.Start) // Eariler Open
                     {
                         b.Actual_Open = b.Open = last;
                         b.DataSourcePeriod.Insert(tickTime);
                         isModified = true;
                     }
 
-                    if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
+                    if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
                     {
                         b.Actual_Close = b.Close = last;
                         b.DataSourcePeriod.Insert(tickTime);
+
+                        //Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
+
                         isModified = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("********** Inbound Tick Time Overflow ***********" + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
                     }
 
                     b.Volume += volume;
@@ -320,9 +327,21 @@ namespace Pacmio
                     return Add(new Bar(this, b));
                 }
             }
-            else if (b.BarFreq == BarFreq)
+            else if (b.BarFreq == BarFreq && b.Table == this && !Contains(b.Time))
             {
-                return Add(new Bar(this, b));
+                Rows.Add(b);
+
+                if (Count > 0)
+                {
+                    if (b.Time < LastTime) // If bars are added to the head or in the middle of the table
+                        Sort(); // Sort without adjust -- you never know if it needs reverse adjust or forward adjust here.
+                    else           //else // If bars are add to the tail of the table, then we just append
+                        TimeToRows.CheckAdd(b.Time, Count - 1);
+                }
+                else
+                    TimeToRows.CheckAdd(b.Time, 0);
+
+                return true;
             }
             return isModified;
         }

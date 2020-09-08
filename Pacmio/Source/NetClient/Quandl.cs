@@ -151,7 +151,6 @@ namespace Pacmio
                 string line = sr.ReadLine();
                 string[] headers = line.CsvReadFields();
                 Period pd = new Period();
-                pd.Reset();
 
                 if (headers.Length == 14)
                     while (!sr.EndOfStream && !cts.IsCancellationRequested)

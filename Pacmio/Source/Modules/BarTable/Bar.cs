@@ -25,9 +25,9 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time)
         {
             Table = bt;
-            DataSourcePeriod = Period = Frequency.AlignPeriod(time); // TODO: Can't be ticks here!!!
-            //Period = Frequency.AlignPeriod(time);
-            //DataSourcePeriod = new Period(time);
+            //DataSourcePeriod = Period = Frequency.AlignPeriod(time); // TODO: Can't be ticks here!!!
+            Period = Frequency.AlignPeriod(time);
+            DataSourcePeriod = new Period(time);
         }
 
         public Bar(BarTable bt, Bar small_b)
