@@ -139,17 +139,23 @@ namespace Pacmio
                                 //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTime.Date + " | time = " + time.Date);
                                 if (bt.LastTime.Date < date)
                                 {
-                                    if ((!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
+                                    if (bt.Status == TableStatus.Ready && (!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
                                     {
-                                        //Console.WriteLine(">>> [[[[ (bt.LastTime.Date < time.Date) " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
+                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + date + " | " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
                                         Bar b = new Bar(bt, date, Open, High, Low, LastPrice, Volume);
+                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + b.DataSourcePeriod.Stop);
                                         bt.MergeFromSmallerBar(b);
+                                        Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
+                                        Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
+
                                     }
                                 }
                                 else if (bt.LastTime == date)
                                 {
                                     bt.AddPriceTick(time, price, size);
                                 }
+
+                                //Console.WriteLine("bt.Status = " + bt.Status);
                             }
                         });
                     }

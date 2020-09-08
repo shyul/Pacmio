@@ -305,7 +305,7 @@ namespace Pacmio.IB
                             https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                         */
                         case TickType.RTVolumeTimeSales:
-                            Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
+                            //Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
                             RTVolume(fields[4], c);
                             break;
 
@@ -314,7 +314,7 @@ namespace Pacmio.IB
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
                         case TickType.RTTradeVolume when c.MarketData is StockData hd:
-                            Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
+                            //Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
                             RTVolume(fields[4], c);
 
                             /*

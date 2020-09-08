@@ -187,6 +187,7 @@ namespace Pacmio
                 }
                 else
                     TimeToRows.CheckAdd(b.Time, 0);
+
                 return true;
             }
             else
@@ -224,14 +225,13 @@ namespace Pacmio
         private bool Add(DateTime tickTime, double last, double volume)
         {
             bool isModified = false;
-            DateTime time = Frequency.Align(tickTime, 0);
+            DateTime time = Frequency.Align(tickTime);
 
             if (this[time] is Bar b)
             {
+                
                 if (b.Source >= DataSource.IB)
                 {
-                    Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Stop);
-
                     if (last > b.High) // New High
                     {
                         b.Actual_High = b.High = last; // Also update 
@@ -251,34 +251,27 @@ namespace Pacmio
                         isModified = true;
                     }
 
-                    //if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
-                    //{
+                    if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
+                    {
                         b.Actual_Close = b.Close = last;
                         b.DataSourcePeriod.Insert(tickTime);
                         isModified = true;
-                    //}
+                    }
 
                     b.Volume += volume;
                     b.Actual_Volume = b.Volume;
 
                     b.Source = DataSource.Realtime;
                 }
+
+                Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent);
             }
             else
             {
                 if (Count > 0 && this[LastIndex].Source >= DataSource.IB)
                     this[LastIndex].Source = DataSource.Realtime;
 
-                /*
-                Bar nb = new Bar(this, time, DataSource.Tick,
-                            last, last, last, last, volume, // - 1, -1, -1, -1, -1, // Ticks are actual trade values
-                            last, last, last, last, volume)
-                {
-                    DataSourcePeriod = new Period(time) // Make sure it knows the Bar data sample time is shorter than the BarSize
-                };*/
-
-                Bar nb = new Bar(this, tickTime, last, volume);
-                isModified = Add(nb);
+                isModified = Add(new Bar(this, tickTime, last, volume));
             }
 
             return isModified;
@@ -287,20 +280,11 @@ namespace Pacmio
         public bool MergeFromSmallerBar(Bar b)
         {
             bool isModified = false;
-            // Get time and index of time
-            DateTime time = Frequency.Align(b.Time, 0);
 
             if (b.BarFreq < BarFreq)
             {
-                if (!Contains(time))
+                if (this[Frequency.Align(b.Time)] is Bar nb)
                 {
-                    Bar nb = new Bar(this, b);
-                    isModified = Add(nb);
-                }
-                else
-                {
-                    Bar nb = this[time];
-
                     if (b.High > nb.High) // New High
                     {
                         nb.High = b.High;
@@ -331,16 +315,15 @@ namespace Pacmio
 
                     if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
                 }
+                else
+                {
+                    return Add(new Bar(this, b));
+                }
             }
             else if (b.BarFreq == BarFreq)
             {
-                if (!Contains(time))
-                {
-                    Bar nb = new Bar(this, b);
-                    isModified = Add(nb);
-                }
+                return Add(new Bar(this, b));
             }
-
             return isModified;
         }
 
@@ -875,7 +858,7 @@ namespace Pacmio
         {
             if (Enabled && IsLive)
             {
-         
+
                 //lock (DataLockObject) 
                 Add(tickTime, last, volume);
 

@@ -26,7 +26,7 @@ namespace Pacmio
         {
             Table = bt;
             DataSourcePeriod = Period = Frequency.AlignPeriod(time); // TODO: Can't be ticks here!!!
-
+            //Period = Frequency.AlignPeriod(time);
             //DataSourcePeriod = new Period(time);
         }
 
@@ -56,11 +56,11 @@ namespace Pacmio
                 throw new Exception("Source Bar has to be at smaller time frame!");
         }
 
-        public Bar(BarTable bt, DateTime tickTime, double last, double volume)
+        public Bar(BarTable bt, DateTime time, double last, double volume)
         {
             Table = bt;
-            Period = Frequency.AlignPeriod(tickTime);
-            DataSourcePeriod = new Period(tickTime);
+            Period = Frequency.AlignPeriod(time);
+            DataSourcePeriod = new Period(time);
             Source = DataSource.Tick;
 
             Open = High = Low = Close = Actual_Open = Actual_High = Actual_Low = Actual_Close = last;
