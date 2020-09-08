@@ -1,4 +1,8 @@
-1. New Peak detect algorithm
+1. Add(new Bar(this, time) { DataSourcePeriod = new Period(time) });
+2. Test Monthly Chart
+3. StockData renovation :)
+
+## Tip: Market follows large cap stocks
 
 
 Task for Initial Strategy:

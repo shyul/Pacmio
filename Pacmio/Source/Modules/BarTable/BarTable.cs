@@ -251,12 +251,12 @@ namespace Pacmio
                         isModified = true;
                     }
 
-                    if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
-                    {
+                    //if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
+                    //{
                         b.Actual_Close = b.Close = last;
                         b.DataSourcePeriod.Insert(tickTime);
                         isModified = true;
-                    }
+                    //}
 
                     b.Volume += volume;
                     b.Actual_Volume = b.Volume;
@@ -269,13 +269,15 @@ namespace Pacmio
                 if (Count > 0 && this[LastIndex].Source >= DataSource.IB)
                     this[LastIndex].Source = DataSource.Realtime;
 
+                /*
                 Bar nb = new Bar(this, time, DataSource.Tick,
                             last, last, last, last, volume, // - 1, -1, -1, -1, -1, // Ticks are actual trade values
                             last, last, last, last, volume)
                 {
                     DataSourcePeriod = new Period(time) // Make sure it knows the Bar data sample time is shorter than the BarSize
-                };
+                };*/
 
+                Bar nb = new Bar(this, tickTime, last, volume);
                 isModified = Add(nb);
             }
 
@@ -292,27 +294,25 @@ namespace Pacmio
             {
                 if (!Contains(time))
                 {
-                    Bar nb = new Bar(this, time, b.Source,
-                        -1, -1, -1, -1, -1, // b.Open, b.High, b.Low, b.Close, b.Volume, // - 1, -1, -1, -1, -1,
-                        b.Open, b.High, b.Low, b.Close, b.Volume)
-                    {
-                        DataSourcePeriod = b.Period // Make sure it knows the Bar data sample time is shorter than the BarSize
-                    };
+                    Bar nb = new Bar(this, b);
                     isModified = Add(nb);
                 }
                 else
                 {
                     Bar nb = this[time];
+
                     if (b.High > nb.High) // New High
                     {
                         nb.High = b.High;
                         isModified = true;
                     }
+
                     if (b.Low < nb.Low) // New Low
                     {
                         nb.Low = b.Low;
                         isModified = true;
                     }
+
                     if (b.Period.Stop <= nb.DataSourcePeriod.Start) // Eariler Open
                     {
                         nb.Open = b.Open;
@@ -320,6 +320,7 @@ namespace Pacmio
                         nb.DataSourcePeriod.Insert(b.Period.Start);
                         isModified = true;
                     }
+
                     if (b.Period.Start >= nb.DataSourcePeriod.Stop) // Later Close
                     {
                         nb.Close = b.Close;
@@ -327,6 +328,7 @@ namespace Pacmio
                         nb.DataSourcePeriod.Insert(b.Period.Stop);
                         isModified = true;
                     }
+
                     if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
                 }
             }
@@ -334,12 +336,7 @@ namespace Pacmio
             {
                 if (!Contains(time))
                 {
-                    Bar nb = new Bar(this, time, b.Source,
-                        b.Open, b.High, b.Low, b.Close, b.Volume, // -1, -1, -1, -1, -1, // b.Open, b.High, b.Low, b.Close, b.Volume,
-                        b.Open, b.High, b.Low, b.Close, b.Volume)
-                    {
-                        DataSourcePeriod = b.Period // Make sure it knows the Bar data sample time is shorter than the BarSize
-                    };
+                    Bar nb = new Bar(this, b);
                     isModified = Add(nb);
                 }
             }
@@ -548,7 +545,7 @@ namespace Pacmio
             time = Frequency.Align(time, 0); // Align time
 
             if (!Contains(time))
-                Add(new Bar(this, time) { DataSourcePeriod = new Period(time) });
+                Add(new Bar(this, time));
 
             return this[time];
         }
@@ -1289,13 +1286,16 @@ namespace Pacmio
                 }
                 else
                 {
-                    Bar b = GetOrAdd(pb.Key);
-                    b.Source = pb.Value.SRC;
-                    b.Actual_Open = pb.Value.O;
-                    b.Actual_High = pb.Value.H;
-                    b.Actual_Low = pb.Value.L;
-                    b.Actual_Close = pb.Value.C;
-                    b.Actual_Volume = pb.Value.V;
+                    if (pb.Value.SRC < DataSource.Tick)
+                    {
+                        Bar b = GetOrAdd(pb.Key);
+                        b.Source = pb.Value.SRC;
+                        b.Actual_Open = pb.Value.O;
+                        b.Actual_High = pb.Value.H;
+                        b.Actual_Low = pb.Value.L;
+                        b.Actual_Close = pb.Value.C;
+                        b.Actual_Volume = pb.Value.V;
+                    }
                 }
             }
 

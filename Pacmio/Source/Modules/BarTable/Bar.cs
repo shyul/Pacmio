@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Xu;
 using Xu.Chart;
 
@@ -24,15 +25,69 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time)
         {
             Table = bt;
-            Period = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency.AlignPeriod(time);
+            DataSourcePeriod = Period = Frequency.AlignPeriod(time); // TODO: Can't be ticks here!!!
+
+            //DataSourcePeriod = new Period(time);
         }
 
+        public Bar(BarTable bt, Bar small_b)
+        {
+            Table = bt;
+
+            if (BarFreq >= small_b.BarFreq) // Merge From A Smaller Bar
+            {
+                Period = Frequency.AlignPeriod(small_b.Time);
+                DataSourcePeriod = new Period(small_b.Period);
+                Source = small_b.Source;
+
+                Actual_Open = small_b.Actual_Open;
+                Actual_High = small_b.Actual_High;
+                Actual_Low = small_b.Actual_Low;
+                Actual_Close = small_b.Actual_Close;
+                Actual_Volume = small_b.Actual_Volume;
+
+                Open = small_b.Open;
+                High = small_b.High;
+                Low = small_b.Low;
+                Close = small_b.Close;
+                Volume = small_b.Volume;
+            }
+            else
+                throw new Exception("Source Bar has to be at smaller time frame!");
+        }
+
+        public Bar(BarTable bt, DateTime tickTime, double last, double volume)
+        {
+            Table = bt;
+            Period = Frequency.AlignPeriod(tickTime);
+            DataSourcePeriod = new Period(tickTime);
+            Source = DataSource.Tick;
+
+            Open = High = Low = Close = Actual_Open = Actual_High = Actual_Low = Actual_Close = last;
+            Volume = Actual_Volume = volume;
+        }
+
+        public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume)
+        {
+            Table = bt;
+            Period = Frequency.AlignPeriod(time);
+            DataSourcePeriod = new Period(time);
+            Source = DataSource.Tick;
+            Open = Actual_Open = open;
+            High = Actual_High = high;
+            Low = Actual_Low = low;
+            Close = Actual_Close = close;
+            Volume = Actual_Volume = volume;
+        }
+
+
+        /*
         public Bar(BarTable bt, DateTime time, DataSource source,
             double actual_open, double actual_high, double actual_low, double actual_close, double actual_volume,
             double open, double high, double low, double close, double volume)
         {
             Table = bt;
-            Period = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency.AlignPeriod(time);
+            Period = Frequency.AlignPeriod(time);
             Source = source;
 
             if (actual_open > 0 && actual_high > 0 && actual_low > 0 && actual_close > 0 && actual_volume >= 0)
@@ -52,18 +107,12 @@ namespace Pacmio
                 Close = close;
                 Volume = volume;
             }
-        }
+        }*/
 
         /// <summary>
         /// BarTable this Bar belongs to. And unable to change through the entire life cycle of the Bar.
         /// </summary>
         public BarTable Table { get; }
-
-        public override int GetHashCode() => Time.GetHashCode();
-
-        #endregion Ctor
-
-        #region Time and Period Info
 
         /// <summary>
         /// BarSize of the Bar
@@ -74,6 +123,14 @@ namespace Pacmio
         /// Attached to the Table's frequency.
         /// </summary>
         public Frequency Frequency => Table.Frequency; //BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
+
+
+
+        #endregion Ctor
+
+        #region Time and Period Info
+
+
 
         public int Index { get; set; } = 0;
 
@@ -86,13 +143,13 @@ namespace Pacmio
         /// <summary>
         /// The time period of this Bar (Every OHLC is from a period of time)
         /// </summary>
-        public Period Period { get; private set; }
+        public Period Period { get; }
 
         /// <summary>
         /// The actual period according from the datasource
         /// For identifing partial bar (If the Period "Contains" and "Wider" than DataSourcePeriod)
         /// </summary>
-        public Period DataSourcePeriod { get; set; } = new Period();
+        public Period DataSourcePeriod { get; }
 
         #endregion
 
@@ -440,5 +497,7 @@ namespace Pacmio
             PositionDatums.Clear();
             SignalDatums.Clear();
         }
+
+        public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();
     }
 }

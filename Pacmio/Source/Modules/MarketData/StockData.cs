@@ -142,13 +142,7 @@ namespace Pacmio
                                     if ((!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
                                     {
                                         //Console.WriteLine(">>> [[[[ (bt.LastTime.Date < time.Date) " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
-                                        Bar b = new Bar(bt, date, DataSource.Tick,
-                                            Open, High, Low, LastPrice, Volume,
-                                            Open, High, Low, LastPrice, Volume)
-                                        { 
-                                            DataSourcePeriod = new Period(date) 
-                                        };
-
+                                        Bar b = new Bar(bt, date, Open, High, Low, LastPrice, Volume);
                                         bt.MergeFromSmallerBar(b);
                                     }
                                 }
