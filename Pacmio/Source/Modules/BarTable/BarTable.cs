@@ -226,7 +226,45 @@ namespace Pacmio
             bool isModified = false;
             DateTime time = Frequency.Align(tickTime, 0);
 
-            if (!Contains(time))
+            if (this[time] is Bar b)
+            {
+                if (b.Source >= DataSource.IB)
+                {
+                    Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Stop);
+
+                    if (last > b.High) // New High
+                    {
+                        b.Actual_High = b.High = last; // Also update 
+                        isModified = true;
+                    }
+
+                    if (last < b.Low) // New Low
+                    {
+                        b.Actual_Low = b.Low = last;
+                        isModified = true;
+                    }
+
+                    if (tickTime <= b.DataSourcePeriod.Start) // Eariler Open
+                    {
+                        b.Actual_Open = b.Open = last;
+                        b.DataSourcePeriod.Insert(tickTime);
+                        isModified = true;
+                    }
+
+                    if (tickTime >= b.DataSourcePeriod.Stop) // Later Close
+                    {
+                        b.Actual_Close = b.Close = last;
+                        b.DataSourcePeriod.Insert(tickTime);
+                        isModified = true;
+                    }
+
+                    b.Volume += volume;
+                    b.Actual_Volume = b.Volume;
+
+                    b.Source = DataSource.Realtime;
+                }
+            }
+            else
             {
                 if (Count > 0 && this[LastIndex].Source >= DataSource.IB)
                     this[LastIndex].Source = DataSource.Realtime;
@@ -239,44 +277,6 @@ namespace Pacmio
                 };
 
                 isModified = Add(nb);
-            }
-            else
-            {
-                Bar nb = this[time];
-
-                if (nb.Source >= DataSource.IB)
-                {
-                    if (last > nb.High) // New High
-                    {
-                        nb.Actual_High = nb.High = last; // Also update 
-                        isModified = true;
-                    }
-
-                    if (last < nb.Low) // New Low
-                    {
-                        nb.Actual_Low = nb.Low = last;
-                        isModified = true;
-                    }
-
-                    if (tickTime <= nb.DataSourcePeriod.Start) // Eariler Open
-                    {
-                        nb.Actual_Open = nb.Open = last;
-                        nb.DataSourcePeriod.Insert(tickTime);
-                        isModified = true;
-                    }
-
-                    if (tickTime >= nb.DataSourcePeriod.Stop) // Later Close
-                    {
-                        nb.Actual_Close = nb.Close = last;
-                        nb.DataSourcePeriod.Insert(tickTime);
-                        isModified = true;
-                    }
-
-                    nb.Volume += volume;
-                    nb.Actual_Volume = nb.Volume;
-
-                    nb.Source = DataSource.Realtime;
-                }
             }
 
             return isModified;
@@ -330,7 +330,7 @@ namespace Pacmio
                     if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
                 }
             }
-            else
+            else if (b.BarFreq == BarFreq)
             {
                 if (!Contains(time))
                 {
@@ -548,7 +548,7 @@ namespace Pacmio
             time = Frequency.Align(time, 0); // Align time
 
             if (!Contains(time))
-                Add(new Bar(this, time));
+                Add(new Bar(this, time) { DataSourcePeriod = new Period(time) });
 
             return this[time];
         }
@@ -731,7 +731,7 @@ namespace Pacmio
             {
                 Console.WriteLine("------------------");
                 Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
-                Console.WriteLine(Name + " | LastBar.Close = " + LastBar.Close);
+                Console.WriteLine(Name + " | LastTime = " + LastTime + " | LastBar.Close = " + LastBar.Close);
                 Console.WriteLine("==================\n");
             }
         }
@@ -874,13 +874,13 @@ namespace Pacmio
 
         private bool CalculateTickRequested { get; set; } = false;
 
-        public void AddPriceTick(DateTime time, double price, double size)
+        public void AddPriceTick(DateTime tickTime, double last, double volume)
         {
             if (Enabled && IsLive)
             {
-                Console.WriteLine(">>> [[[ Inbound Tick = " + price + " | " + size);
+         
                 //lock (DataLockObject) 
-                Add(time, price, size);
+                Add(tickTime, last, volume);
 
                 if (Status == TableStatus.Ready)
                 {
