@@ -71,9 +71,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.Name + ((ExchangeSuffix.Length > 0) ? (" " + ExchangeSuffix) : string.Empty);
                 else
                     return "UNKNOWN";
@@ -85,8 +83,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.FullName + ((ExchangeSuffix.Length > 0) ? (" " + ExchangeSuffix) : string.Empty);
                 else
                     return "Unknown Exchange";
@@ -98,8 +95,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.Region.Name;
                 else
                     return "Unknown Country";
@@ -114,8 +110,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.Region.CurrencySymbol;
                 else
                     return "X";
@@ -127,8 +122,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.Region.ISOCurrencySymbol;
                 else
                     return string.Empty;
@@ -143,8 +137,7 @@ namespace Pacmio
         {
             get
             {
-                (bool valid, ExchangeInfo exi) = Exchange.GetAttribute<ExchangeInfo>();
-                if (valid)
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
                     return exi.WorkHours;
                 else
                     return ExchangeInfo.WorkHoursAll;

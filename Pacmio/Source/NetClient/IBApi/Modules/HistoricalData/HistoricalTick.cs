@@ -55,11 +55,9 @@ namespace Pacmio.IB
             int numberOfTicks = 1000, bool useRTH = true, bool ignoreSize = false, bool includeExpired = false,
             ICollection<(string, string)> options = null)
         {
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
-            var (valid_barType, barTypeCode) = ApiCode.GetIbCode(barType);
-
-
-            if (IsReady_HistoricalTick && valid_barType && valid_exchange)
+            if (IsReady_HistoricalTick && 
+                ApiCode.GetCode(barType) is string barTypeCode && 
+                ApiCode.GetCode(c.Exchange) is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalTicks);
                 requestId_HistoricalTick = requestId;

@@ -109,11 +109,10 @@ namespace Pacmio.IB
 
             endTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(endTime, c.TimeZone), TimeZoneInfo.Local);
 
-            var (valid_barFreq, barFreqCode) = ApiCode.GetIbCode(bt.BarFreq);
-            var (valid_barType, barTypeCode) = ApiCode.GetIbCode(bt.Type);
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
-
-            if (valid_barFreq && valid_barType && valid_exchange && DataRequestReady)
+            if (ApiCode.GetCode(bt.BarFreq) is string barFreqCode && 
+                ApiCode.GetCode(bt.Type) is string barTypeCode && 
+                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
+                DataRequestReady)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalData);
                 DataRequestID = requestId;

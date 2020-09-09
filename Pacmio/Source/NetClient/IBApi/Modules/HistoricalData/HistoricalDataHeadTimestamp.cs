@@ -26,11 +26,10 @@ namespace Pacmio.IB
         private static void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
         {
             Contract c = bt.Contract;
-            var (valid_barFreq, _) = ApiCode.GetIbCode(bt.BarFreq);
-            var (valid_barType, barTypeCode) = ApiCode.GetIbCode(bt.Type);
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
 
-            if (valid_barFreq && valid_barType && valid_exchange && DataRequestReady) // Also please check the RHD is already active?
+            if (ApiCode.GetCode(bt.Type) is string barTypeCode && 
+                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
+                DataRequestReady) // Also please check the RHD is already active?
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHeadTimestamp);
                 DataRequestID = requestId;

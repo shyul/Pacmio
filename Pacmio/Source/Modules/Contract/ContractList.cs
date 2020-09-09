@@ -64,13 +64,13 @@ namespace Pacmio
             => Values.Where(val => symbols.Contains(val.Name) && exchanges.Contains(val.Exchange));
 
         public static IEnumerable<Contract> GetList(string symbol, string countryCode)
-            => GetList(symbol, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
+            => GetList(symbol, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>()?.Region.Name == countryCode));
 
         public static IEnumerable<Contract> GetList(IEnumerable<string> symbols, string countryCode)
-            => GetList(symbols, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode));
+            => GetList(symbols, Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>()?.Region.Name == countryCode));
 
         public static IEnumerable<Contract> GetListByCountry(string countryCode)
-            => Values.AsParallel().Where(val => Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>().Result?.Region.Name == countryCode).Contains(val.Exchange));
+            => Values.AsParallel().Where(val => Enum.GetValues(typeof(Exchange)).Cast<Exchange>().Where(n => n.GetAttribute<ExchangeInfo>()?.Region.Name == countryCode).Contains(val.Exchange));
 
         #region Fetch / Update
 

@@ -17,7 +17,7 @@ namespace Pacmio.Analysis
         {
             BarTableSet = barTableSet;
             BarFreq = barFreq;
-            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
+            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
 
         }

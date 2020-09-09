@@ -6,7 +6,9 @@
 /// 
 /// ***************************************************************************
 
+using Pacmio.Analysis;
 using System;
+using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
 
@@ -19,6 +21,15 @@ namespace Pacmio.IB
 
         public string Code { get; private set; }
 
+        public static string GetCode(Enum eu)
+        {
+            if (eu.GetAttribute<ApiCode>() is ApiCode ac)
+                return ac.Code;
+            else
+                return null;
+        }
+
+        /*
         public static (bool Valid, string Code) GetIbCode(Enum eu)
         {
             (bool IsValid, ApiCode Result) = eu.GetAttribute<ApiCode>();
@@ -29,15 +40,26 @@ namespace Pacmio.IB
                 return (false, string.Empty);
         }
 
+        */
+
+
+
+
         public static (bool Valid, T Enum) GetEnum<T>(string code) where T : Enum//  struct, IConvertible
         {
-            foreach (T item in (T[])Enum.GetValues(typeof(T)))
+            /*
+            foreach (T item in Enum.GetValues(typeof(T)) as T[])
             {
                 (bool IsValid, ApiCode Result) = item.GetAttribute<ApiCode>();
                 if (IsValid && Result.Code == code) return (true, item);
-            }
+            }*/
 
-            return (false, default(T));
+            var res = (Enum.GetValues(typeof(T)) as T[]).Where(n => n.GetAttribute<ApiCode>() is ApiCode res && res.Code == code);
+
+            if (res.Count() > 0) 
+                return (true, res.First());
+            else
+                return (false, default(T));
         }
     }
 }

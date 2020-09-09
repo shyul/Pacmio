@@ -65,13 +65,12 @@ namespace Pacmio.IB
                 {
                     type = ActiveRequestIds[requestId];
 
-                    (bool hasCancellationCode, RequestCancellationCode Result) = type.GetAttribute<RequestCancellationCode>();
-                    if (hasCancellationCode && cancel)
+                    if (type.GetAttribute<RequestCancellationCode>() is RequestCancellationCode rcc && cancel)
                     {
-                        RequestType cancelRequest = Result.Type;
+                        RequestType cancelRequest = rcc.Type;
                         Send(new string[] {
                             ((int)cancelRequest).ToString(),
-                            Result.Version.ToString(),
+                            rcc.Version.ToString(),
                             requestId.ToString(),
                         });
 
@@ -97,13 +96,12 @@ namespace Pacmio.IB
                 {
                     Log.Print(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + "Request >> " + requestId);
 
-                    (bool hasCancellationCode, RequestCancellationCode Result) = type.GetAttribute<RequestCancellationCode>();
-                    if (hasCancellationCode)
+                    if (type.GetAttribute<RequestCancellationCode>() is RequestCancellationCode rcc)
                     {
-                        RequestType cancelRequest = Result.Type;
+                        RequestType cancelRequest = rcc.Type;
                         Send(new string[] {
                             ((int)cancelRequest).ToString(),
-                            Result.Version.ToString(),
+                            rcc.Version.ToString(),
                             requestId.ToString(),
                         });
                     }

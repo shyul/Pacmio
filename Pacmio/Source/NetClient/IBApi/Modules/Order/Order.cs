@@ -26,13 +26,12 @@ namespace Pacmio.IB
         {
             Contract c = od.Contract;
 
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
-            var (valid_orderType, orderTypeCode) = ApiCode.GetIbCode(od.Type);
-            var (valid_tif, TifCode) = ApiCode.GetIbCode(od.TimeInForce);
-
             Console.WriteLine("\n##### Place Order: " + c.ToString() + " #####");
 
-            if (Connected && valid_exchange && c is IBusiness it && valid_orderType && valid_tif && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
+            if (Connected && ApiCode.GetCode(c.Exchange) is string exchangeCode &&
+                c is IBusiness it &&
+                ApiCode.GetCode(od.Type) is string orderTypeCode &&
+                ApiCode.GetCode(od.TimeInForce) is string TifCode && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
                 od.Status = OrderStatus.Inactive;
 

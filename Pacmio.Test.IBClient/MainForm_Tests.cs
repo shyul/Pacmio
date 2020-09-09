@@ -153,8 +153,7 @@ namespace TestClient
                 foreach (PropertyInfo p in a.GetType().GetProperties())
                 {
                     string tagName = p.Name + " = ";
-                    (bool IsValid, DisplayNameAttribute Result) = p.GetAttribute<DisplayNameAttribute>();
-                    if (IsValid) tagName = Result.DisplayName + " = ";
+                    if (p.GetAttribute<DisplayNameAttribute>() is DisplayNameAttribute Result) tagName = Result.DisplayName + " = ";
 
                     if (p.PropertyType == typeof(double))
                     {

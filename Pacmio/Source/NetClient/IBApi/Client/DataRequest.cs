@@ -221,8 +221,7 @@ namespace Pacmio.IB
 
         public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)
         {
-            var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
-            if (cts.Continue() && HistoricalData_Connected && bfi_valid && period.Start < DateTime.Now)
+            if (cts.Continue() && HistoricalData_Connected && bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && period.Start < DateTime.Now)
             {
                 // We will download, but won't log the period if the stop may extended to the future.
                 IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);

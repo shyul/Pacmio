@@ -1,3 +1,6 @@
+0. IB Api code: (Enum.GetValues(typeof(T)) as T[])
+
+
 0. Period as class instead of struct impact !!!
 1. Add(new Bar(this, time) { DataSourcePeriod = new Period(time) });
 2. Test Monthly Chart

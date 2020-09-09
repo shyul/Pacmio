@@ -74,9 +74,10 @@ namespace Pacmio.IB
             bool snapshot = false, bool regulatorySnaphsot = false,
             ICollection<(string, string)> options = null)
         {
-            var (valid_exchange, exchangeCode) = ApiCode.GetIbCode(c.Exchange);
-
-            if (Connected && valid_exchange && !ActiveMarketDataTicks.Values.Contains(c) && !SubscriptionOverflow)
+            if (Connected && 
+                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
+                !ActiveMarketDataTicks.Values.Contains(c) && 
+                !SubscriptionOverflow)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
                 c.MarketData.TickerId = requestId;

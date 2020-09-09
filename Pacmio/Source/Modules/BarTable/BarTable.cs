@@ -29,7 +29,7 @@ namespace Pacmio
         {
             Contract = c;
             BarFreq = barFreq;
-            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
+            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
 
             CalculateTickCancelTs = new CancellationTokenSource();
@@ -1121,9 +1121,7 @@ namespace Pacmio
         {
             if (bt.Contract.Status != ContractStatus.Error)
             {
-                var (bfi_valid, bfi) = bt.BarFreq.GetAttribute<BarFreqInfo>();
-
-                if (bfi_valid && IB.Client.Connected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
+                if (bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && IB.Client.Connected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
                 {
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request: " + period);
 

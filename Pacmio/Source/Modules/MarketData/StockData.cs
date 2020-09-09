@@ -189,26 +189,28 @@ namespace Pacmio
         public double ShortStatus { get; set; } = double.NaN;
 
         [DataMember]
-        public bool EnableNews { get; set; } = false;
+        public bool EnableNews { get; set; } = true;
 
         /// <summary>
         /// Be aware of toggling changes
         /// </summary>
         [DataMember]
-        public bool EnableShortableShares { get; set; } = false;
+        public bool EnableShortableShares { get; set; } = true;
+
+        [DataMember]
+        public bool FilteredTicks { get; set; } = true;
 
         public override bool StartTicks()
         {
-            List<string> param = new List<string>();
-
-            if (EnableNews) 
-            {
-            
-            }
+            string tickList = FilteredTicks ? "375," : "233,";
+            if (EnableShortableShares) tickList += "236,";
+            if (EnableNews) tickList += "292,";
 
 
 
-            string tickList = "233,236,375";
+
+
+            //string tickList = "233,236,375";
 
             return IB.Client.SendRequest_MarketData(Contract, tickList); 
         }
