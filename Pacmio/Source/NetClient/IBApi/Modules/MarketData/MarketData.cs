@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Xu;
+using System;
 
 namespace Pacmio.IB
 {
@@ -68,6 +69,8 @@ namespace Pacmio.IB
             bool snapshot = false, bool regulatorySnaphsot = false,
             ICollection<(string, string)> options = null)
         {
+            Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
+
             if (Connected && 
                 ApiCode.GetCode(c.Exchange) is string exchangeCode && 
                 !ActiveMarketDataTicks.Values.Contains(c) && 

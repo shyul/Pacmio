@@ -120,6 +120,11 @@ namespace Pacmio.IB
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
+        /// <summary>
+        /// Request Market Depth fatal errors: (0)"4"-(1)"2"-(2)"4"-(3)"309"-(4)"Max number (3) of market depth requests has been reached"
+        /// RequestMarketDepth returned with errors: (0)"4"-(1)"2"-(2)"1"-(3)"2152"-(4)"Exchanges - Depth: BATS; ARCA; ISLAND; BEX; IEX; Top: BYX; AMEX; CHX; NYSENAT; PSX; EDGEA; ISE; DRCTEDGE; Need additional market data permissions - Depth: NYSE; LTSE; "
+        /// </summary>
+        /// <param name="fields"></param>
         private static void ParseError_MarketDepth(string[] fields)
         {
             if (fields[3] == "2152")
