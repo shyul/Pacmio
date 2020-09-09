@@ -150,6 +150,7 @@ namespace Pacmio
             if (!Directory.Exists(CachePath)) Directory.CreateDirectory(CachePath);
 
             // Load Industry Sectors Code Dictionary
+            IB.Client.Load();
             BusinessInfoList.Load();
             ContractList.Load();
             UnknownContractList.Load();
@@ -172,6 +173,7 @@ namespace Pacmio
             // Save settings
             Settings.SerializeJsonFile(SettingFile);
 
+            IB.Client.Save();
             BusinessInfoList.Save();
             ContractList.Save();
             //TradeInfoManager.Save();

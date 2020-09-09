@@ -39,33 +39,30 @@ namespace Pacmio.IB
         private static void Parse_MktDepthExchanges(string[] fields)
         {
             IsReady_MktDepthExchanges = true;
+            int num = fields[1].ToInt32();
 
-            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+            lock (Parameters)
+            {
+                for (int i = 0; i < num; i++)
+                {
+                    int pt = (i * 5) + 2;
+
+                    string exchangeCode = fields[pt];
+                    string typeCode = fields[pt + 1];
+                    string listExchange = fields[pt + 2];
+                    string serviceDataType = fields[pt + 3];
+                    int aggGroup = fields[pt + 4].ToInt32();
+
+                    Parameters.ExchangeDescription[(exchangeCode, typeCode)] = (listExchange, serviceDataType, aggGroup);
+
+                    Console.WriteLine(exchangeCode + ": " + typeCode + " | " + serviceDataType);
+                }
+            }
+
+            //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
 
-    }
-
-    public class Parameters 
-    {
-    
-    
-    }
-
-
-    public class MarketDepthDataDescription
-    {
-
-
-        public string ExchangeCode { get; }
-
-        public string TypeCode { get; }
-
-        public string ListingExch { get; }
-
-        public string ServiceDataType { get; }
-
-        public int AggGroup { get; }
     }
 }
 
