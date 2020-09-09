@@ -29,23 +29,7 @@ namespace Pacmio.IB
                 return null;
         }
 
-        /*
-        public static (bool Valid, string Code) GetIbCode(Enum eu)
-        {
-            (bool IsValid, ApiCode Result) = eu.GetAttribute<ApiCode>();
-
-            if (IsValid)
-                return (true, Result.Code);
-            else
-                return (false, string.Empty);
-        }
-
-        */
-
-
-
-
-        public static (bool Valid, T Enum) GetEnum<T>(string code) where T : Enum//  struct, IConvertible
+        public static T GetEnum<T>(string code) where T : Enum
         {
             /*
             foreach (T item in Enum.GetValues(typeof(T)) as T[])
@@ -54,12 +38,16 @@ namespace Pacmio.IB
                 if (IsValid && Result.Code == code) return (true, item);
             }*/
 
-            var res = (Enum.GetValues(typeof(T)) as T[]).Where(n => n.GetAttribute<ApiCode>() is ApiCode res && res.Code == code);
+            var res = ReflectionTool.ToArray<T>().Where(n => n.GetAttribute<ApiCode>() is ApiCode res && res.Code == code);
 
-            if (res.Count() > 0) 
-                return (true, res.First());
+            if (res.Count() > 0)
+                return res.First();
             else
-                return (false, default(T));
+            {
+                Console.WriteLine("???? Unknown IB API Code: " + code);
+                return default(T);
+            }
+
         }
     }
 }

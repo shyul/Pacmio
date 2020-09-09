@@ -17,11 +17,14 @@ namespace Pacmio
     [Serializable, DataContract]
     public enum OrderTimeInForce : int
     {
+        [EnumMember, Description("Unknown")]
+        UNKNOWN = 0,
+
         /// <summary>
         /// Valid for the day only.
         /// </summary>
-        [ApiCode("DAY"), Description("Day")]
-        Day = 0,
+        [EnumMember, ApiCode("DAY"), Description("Day")]
+        Day = 10,
 
         /// <summary>
         /// Good until canceled. The order will continue to work within the system and in the marketplace until it executes or is canceled. 
@@ -34,43 +37,43 @@ namespace Pacmio
         /// Orders submitted to IB that remain in force for more than one day will not be reduced for dividends. To allow adjustment to your order price on ex-dividend date, 
         /// consider using a Good-Til-Date/Time (GTD) or Good-after-Time/Date (GAT) order type, or a combination of the two.
         /// </summary>
-        [ApiCode("GTC"), Description("Good until canceled")]
-        GoodUntilCanceled = 1,
+        [EnumMember, ApiCode("GTC"), Description("Good until canceled")]
+        GoodUntilCanceled = 11,
 
         /// <summary>
         /// Immediate or Cancel. Any portion that is not filled as soon as it becomes available in the market is canceled.
         /// </summary>
-        [ApiCode("IOC"), Description("Immediate or cancel")]
-        ImmediateOrCancel = 2,
+        [EnumMember, ApiCode("IOC"), Description("Immediate or cancel")]
+        ImmediateOrCancel = 12,
 
         /// <summary>
         /// Good until Date. It will remain working within the system and in the marketplace until it executes or until the close of the market on the date specified.
         /// </summary>
-        [ApiCode("GTD"), Description("Good until date")]
-        GoodUntilDate = 3,
+        [EnumMember, ApiCode("GTD"), Description("Good until date")]
+        GoodUntilDate = 13,
 
         /// <summary>
         /// Good until Date. It will remain working within the system and in the marketplace until it executes or until the close of the market on the date specified.
         /// </summary>
-        [ApiCode("GAT"), Description("Good after date")]
-        GoodAfterDate = 4,
+        [EnumMember, ApiCode("GAT"), Description("Good after date")]
+        GoodAfterDate = 14,
 
         /// <summary>
         /// Use OPG to send a market-on-open (MOO) or limit-on-open (LOO) order.
         /// </summary>
-        [ApiCode("OPG"), Description("Good on open")]
-        GoodOnOpen = 5,
+        [EnumMember, ApiCode("OPG"), Description("Good on open")]
+        GoodOnOpen = 15,
 
         /// <summary>
         /// If the entire Fill-or-Kill order does not execute as soon as it becomes available, the entire order is canceled.
         /// </summary>
-        [ApiCode("FOK"), Description("Fill-or-Kill")]
-        FillOrKill = 6,
+        [EnumMember, ApiCode("FOK"), Description("Fill-or-Kill")]
+        FillOrKill = 16,
 
         /// <summary>
         /// Day until Canceled.
         /// </summary>
-        [ApiCode("DTC"), Description("Day until canceled")]
-        DayUntilCanceled = 7
+        [EnumMember, ApiCode("DTC"), Description("Day until canceled")]
+        DayUntilCanceled = 17
     }
 }

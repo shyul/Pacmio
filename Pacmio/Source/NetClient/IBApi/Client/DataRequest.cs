@@ -33,12 +33,26 @@ namespace Pacmio.IB
 
         private static object RequestLockObject { get; } = new object();
 
-        #region Trade History
+        #region Account
 
 
 
 
-        #endregion Trade History
+        #endregion Account
+
+        #region Other
+
+
+
+
+        #endregion Other
+
+        #region Order History
+
+
+
+
+        #endregion Order History
 
         #region Fetch Contract
 
@@ -261,5 +275,12 @@ namespace Pacmio.IB
         }
 
         #endregion Fetch Historical Data
+
+        #region Fetch Fundamental Data
+
+
+
+
+        #endregion Fetch Fundamental Data
     }
 }

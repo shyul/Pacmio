@@ -55,10 +55,10 @@ namespace Pacmio.IB
                 int totalQuantity = fields[13].ToInt32(0);
                 od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
 
-                od.Type = ApiCode.GetEnum<OrderType>(fields[14]).Enum;
+                od.Type = ApiCode.GetEnum<OrderType>(fields[14]);
                 od.LimitPrice = fields[15].ToDouble();
                 od.AuxPrice = fields[16].ToDouble();
-                od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[17]).Enum;
+                od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[17]);
 
                 if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[27].Length > 5)
                 {
@@ -119,7 +119,7 @@ namespace Pacmio.IB
                 // N = 76
                 N += 1; // readSolicited();
                         // N = 77; //Console.WriteLine("4) N = " + N);
-                od.Status = ApiCode.GetEnum<OrderStatus>(fields[N]).Enum;
+                od.Status = ApiCode.GetEnum<OrderStatus>(fields[N]);
 
 
             }

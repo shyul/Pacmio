@@ -31,7 +31,7 @@ namespace Pacmio.IB
             if (Connected && ApiCode.GetCode(c.Exchange) is string exchangeCode &&
                 c is IBusiness it &&
                 ApiCode.GetCode(od.Type) is string orderTypeCode &&
-                ApiCode.GetCode(od.TimeInForce) is string TifCode && od.Quantity != 0)// && !modify))// && c.IsValid) // Also please check the RHD is active?
+                ApiCode.GetCode(od.TimeInForce) is string TifCode && od.Quantity != 0) // && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
                 od.Status = OrderStatus.Inactive;
 

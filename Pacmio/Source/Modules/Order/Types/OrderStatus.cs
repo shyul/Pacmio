@@ -17,41 +17,44 @@ namespace Pacmio
     [Serializable, DataContract]
     public enum OrderStatus : int
     {
-        [ApiCode("Inactive"), Description("Inactive")]
-        Inactive = 0,
+        [EnumMember, Description("Unknown")]
+        UNKNOWN = 0,
+
+        [EnumMember, ApiCode("Inactive"), Description("Inactive")]
+        Inactive = 10,
 
         /// <summary>
         /// Indicates order has not yet been sent to IB server, 
         /// for instance if there is a delay in receiving the security definition. 
         /// Uncommonly received.
         /// </summary>
-        [ApiCode("ApiPending"), Description("Api Pending")]
-        ApiPending = 1,
+        [EnumMember, ApiCode("ApiPending"), Description("Api Pending")]
+        ApiPending = 11,
 
         /// <summary>
         /// Indicates the order was sent from TWS,
         /// but confirmation has not been received that it has been received by the destination.
         /// Most commonly because exchange is closed.
         /// </summary>
-        [ApiCode("PendingSubmit"), Description("Pending Submit")]
-        PendingSubmit = 2,
+        [EnumMember, ApiCode("PendingSubmit"), Description("Pending Submit")]
+        PendingSubmit = 12,
 
-        [ApiCode("PreSubmitted"), Description("Pre-Submitted")]
-        PreSubmitted = 3,
+        [EnumMember, ApiCode("PreSubmitted"), Description("Pre-Submitted")]
+        PreSubmitted = 13,
 
-        [ApiCode("Submitted"), Description("Submitted")]
-        Submitted = 4,
+        [EnumMember, ApiCode("Submitted"), Description("Submitted")]
+        Submitted = 14,
 
-        [ApiCode("Filled"), Description("Filled")]
-        Filled = 5,
+        [EnumMember, ApiCode("Filled"), Description("Filled")]
+        Filled = 15,
 
-        [ApiCode("PendingCancel"), Description("Pending Cancel")]
+        [EnumMember, ApiCode("PendingCancel"), Description("Pending Cancel")]
         PendingCancel = 100,
 
-        [ApiCode("ApiCancelled"), Description("API Cancelled")]
+        [EnumMember, ApiCode("ApiCancelled"), Description("API Cancelled")]
         ApiCancelled = 101,
 
-        [ApiCode("Cancelled"), Description("Cancelled")]
+        [EnumMember, ApiCode("Cancelled"), Description("Cancelled")]
         Cancelled = 102,
     }
 }

@@ -63,6 +63,7 @@ namespace Pacmio.IB
         CancelMarketData = 2,
 
         RequestMktDepthExchanges = 82,
+        RequestSmartComponents = 83,
 
         [RequestCancellationCode(CancelMarketDepth)]
         RequestMarketDepth = 10,  // OK --
@@ -153,7 +154,7 @@ namespace Pacmio.IB
         RequestSoftDollarTiers = 79,
         RequestFamilyCodes = 80,
 
-        RequestSmartComponents = 83,
+
         RequestNewsArticle = 84,
         RequestNewsProviders = 85,
         RequestHistoricalNews = 86,

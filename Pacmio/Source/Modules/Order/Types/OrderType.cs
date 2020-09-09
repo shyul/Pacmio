@@ -18,12 +18,15 @@ namespace Pacmio
     [Serializable, DataContract]
     public enum OrderType : int
     {
+        [EnumMember, Description("Unknown")]
+        UNKNOWN = 0,
+
         /// <summary>
         /// A Market order is an order to buy or sell at the market bid or offer price. A market order may increase the likelihood of a fill and the speed of execution, 
         /// but unlike the Limit order a Market order provides no price protection and may fill at a price far lower/higher than the current displayed bid/ask.
         /// </summary>
         [EnumMember, ApiCode("MKT"), Description("Market")]
-        Market = 0,
+        Market = 10,
 
         /// <summary>
         /// A Market-to-Limit (MTL) order is submitted as a market order to execute at the current best market price.
@@ -31,7 +34,7 @@ namespace Pacmio
         /// the limit price equal to the price at which the filled portion of the order executed.
         /// </summary>
         [EnumMember, ApiCode("MTL"), Description("Market Limit")]
-        MarketLimit = 1,
+        MarketLimit = 11,
 
         /// <summary>
         /// A Market if Touched (MIT) is an order to buy (or sell) an instrument below (or above) the market.
@@ -42,7 +45,7 @@ namespace Pacmio
         /// An MIT order is similar to a stop order, except that an MIT sell order is placed above the current market price, and a stop sell order is placed below.
         /// </summary>
         [EnumMember, ApiCode("MIT"), Description("Market If Touched")]
-        MarketIfTouched = 2,
+        MarketIfTouched = 12,
 
         /// <summary>
         /// A Limit order is an order to buy or sell at a specified price or better. 
@@ -50,7 +53,7 @@ namespace Pacmio
         /// it will not fill at a price less favorable than your limit price, but it does not guarantee a fill.
         /// </summary>
         [EnumMember, ApiCode("LMT"), Description("Limit")]
-        Limit = 3,
+        Limit = 13,
 
         /// <summary>
         /// A Stop order is an instruction to submit a buy or sell market order if and when the user-specified stop trigger price is attained or penetrated.
@@ -60,7 +63,7 @@ namespace Pacmio
         /// It is typically used to limit a loss or help protect a profit on a short sale.
         /// </summary>
         [EnumMember, ApiCode("STP"), Description("Stop")]
-        Stop = 4,
+        Stop = 14,
 
         /// <summary>
         /// A Stop-Limit order is an instruction to submit a buy or sell limit order when the user-specified stop trigger price is attained or penetrated. 
@@ -68,7 +71,7 @@ namespace Pacmio
         /// the order becomes executable and enters the market as a limit order, which is an order to buy or sell at a specified price or better.
         /// </summary>
         [EnumMember, ApiCode("STP LMT"), Description("Stop Limit")]
-        StopLimit = 5,
+        StopLimit = 15,
 
         /// <summary>
         /// A Limit if Touched is an order to buy (or sell) a contract at a specified price or better, below (or above) the market. 
@@ -76,7 +79,7 @@ namespace Pacmio
         /// An LIT order is similar to a stop limit order, except that an LIT sell order is placed above the current market price, and a stop limit sell order is placed below.
         /// </summary>
         [EnumMember, ApiCode("LIT"), Description("Limit If Touched")]
-        LimitIfTouched = 6,
+        LimitIfTouched = 16,
 
         /// <summary>
         /// A sell trailing stop order sets the stop price at a fixed amount below the market price with an attached "trailing" amount.
@@ -86,7 +89,7 @@ namespace Pacmio
         /// Note that Trailing Stop orders can have the trailing amount specified as a percent, as in the example below, or as an absolute amount which is specified in the auxPrice field.
         /// </summary>
         [EnumMember, ApiCode("TRAIL"), Description("Trailing Stop")]
-        TrailingStop = 10,
+        TrailingStop = 20,
 
         /// <summary>
         /// A trailing stop limit order is designed to allow an investor to specify a limit on the maximum possible loss, without setting a limit on the maximum possible gain. 
@@ -104,12 +107,12 @@ namespace Pacmio
         /// Not both the 'limit price' and 'limit price offset' fields can be set in TRAIL LIMIT orders.
         /// </summary>
         [EnumMember, ApiCode("TRAIL LIMIT"), Description("Trailing Stop Limit")]
-        TrailingStopLimit = 11,
+        TrailingStopLimit = 21,
 
         /// <summary>
         /// 
         /// </summary>
         [EnumMember, ApiCode("MIDPRICE"), Description("IB Mid-Price Algo")]
-        MidPrice = 20,
+        MidPrice = 50,
     }
 }

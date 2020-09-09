@@ -24,7 +24,7 @@ namespace Pacmio.IB
             int permId = fields[6].ToInt32();
             OrderInfo od = TradeData.GetOrAdd(orderId, permId);
 
-            od.Status = ApiCode.GetEnum<OrderStatus>(fields[2]).Enum;
+            od.Status = ApiCode.GetEnum<OrderStatus>(fields[2]);
             od.FilledQuantity = fields[3].ToDouble();
             od.RemainingQuantity = fields[4].ToDouble();
             od.AveragePrice = fields[5].ToDouble();

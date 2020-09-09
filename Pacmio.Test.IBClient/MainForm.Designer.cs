@@ -74,6 +74,7 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnRequestTIProAlert = new System.Windows.Forms.Button();
             this.BtnRequestTIProScanner = new System.Windows.Forms.Button();
             this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
             this.BtnCancelAllScanner = new System.Windows.Forms.Button();
@@ -190,7 +191,8 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnRequestTIProAlert = new System.Windows.Forms.Button();
+            this.BtnSmartComponents = new System.Windows.Forms.Button();
+            this.BtnRequestMarketDepthExch = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -653,6 +655,8 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnRequestMarketDepthExch);
+            this.tabMarketData.Controls.Add(this.BtnSmartComponents);
             this.tabMarketData.Controls.Add(this.BtnRequestTIProAlert);
             this.tabMarketData.Controls.Add(this.BtnRequestTIProScanner);
             this.tabMarketData.Controls.Add(this.BtnMarketDataSyncTicks);
@@ -673,6 +677,16 @@ namespace TestClient
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
+            // 
+            // BtnRequestTIProAlert
+            // 
+            this.BtnRequestTIProAlert.Location = new System.Drawing.Point(506, 375);
+            this.BtnRequestTIProAlert.Name = "BtnRequestTIProAlert";
+            this.BtnRequestTIProAlert.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestTIProAlert.TabIndex = 52;
+            this.BtnRequestTIProAlert.Text = "Request TI Pro Alert";
+            this.BtnRequestTIProAlert.UseVisualStyleBackColor = true;
+            this.BtnRequestTIProAlert.Click += new System.EventHandler(this.BtnRequestTIProAlert_Click);
             // 
             // BtnRequestTIProScanner
             // 
@@ -1886,15 +1900,25 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnRequestTIProAlert
+            // BtnSmartComponents
             // 
-            this.BtnRequestTIProAlert.Location = new System.Drawing.Point(506, 375);
-            this.BtnRequestTIProAlert.Name = "BtnRequestTIProAlert";
-            this.BtnRequestTIProAlert.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestTIProAlert.TabIndex = 52;
-            this.BtnRequestTIProAlert.Text = "Request TI Pro Alert";
-            this.BtnRequestTIProAlert.UseVisualStyleBackColor = true;
-            this.BtnRequestTIProAlert.Click += new System.EventHandler(this.BtnRequestTIProAlert_Click);
+            this.BtnSmartComponents.Location = new System.Drawing.Point(145, 234);
+            this.BtnSmartComponents.Name = "BtnSmartComponents";
+            this.BtnSmartComponents.Size = new System.Drawing.Size(162, 23);
+            this.BtnSmartComponents.TabIndex = 53;
+            this.BtnSmartComponents.Text = "Request Smart Components";
+            this.BtnSmartComponents.UseVisualStyleBackColor = true;
+            this.BtnSmartComponents.Click += new System.EventHandler(this.BtnSmartComponents_Click);
+            // 
+            // BtnRequestMarketDepthExch
+            // 
+            this.BtnRequestMarketDepthExch.Location = new System.Drawing.Point(145, 263);
+            this.BtnRequestMarketDepthExch.Name = "BtnRequestMarketDepthExch";
+            this.BtnRequestMarketDepthExch.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestMarketDepthExch.TabIndex = 54;
+            this.BtnRequestMarketDepthExch.Text = "Request Market Depth Exch";
+            this.BtnRequestMarketDepthExch.UseVisualStyleBackColor = true;
+            this.BtnRequestMarketDepthExch.Click += new System.EventHandler(this.BtnRequestMarketDepthExch_Click);
             // 
             // MainForm
             // 
@@ -2111,5 +2135,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnHistoricalDataContractSet1;
         private System.Windows.Forms.Button BtnRequestTIProScanner;
         private System.Windows.Forms.Button BtnRequestTIProAlert;
+        private System.Windows.Forms.Button BtnRequestMarketDepthExch;
+        private System.Windows.Forms.Button BtnSmartComponents;
     }
 }
