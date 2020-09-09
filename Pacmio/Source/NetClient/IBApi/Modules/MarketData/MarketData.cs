@@ -6,20 +6,14 @@
 /// 
 /// ***************************************************************************
 
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Xu;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static int MaximumSubscription { get; set; } = 99;
-
-        public static int ActiveSubscriptionCount => ActiveMarketDataTicks.Count + ActiveRealTimeBars.Count + ScanRequestList.Count;
-
-        public static bool SubscriptionOverflow => ActiveSubscriptionCount > MaximumSubscription - 5;
-
         public static readonly ConcurrentDictionary<int, Contract> ActiveMarketDataTicks = new ConcurrentDictionary<int, Contract>();
 
         /// <summary>

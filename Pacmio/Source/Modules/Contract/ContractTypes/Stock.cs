@@ -131,16 +131,7 @@ namespace Pacmio
 
         #endregion Order and Trade Data
 
-        #region Market Depth
 
-        public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(this);
-
-        /// <summary>
-        /// TODO: Cancel_MarketDepth()
-        /// </summary>
-        public virtual void Cancel_MarketDepth() { }
-
-        #endregion Market Depth
 
         #region Equality
 

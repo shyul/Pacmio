@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace Pacmio
         {
             base.Initialize(c);
             if (LiveBarTables is null) LiveBarTables = new List<BarTable>();
+            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
+
             RTLastTime = DateTime.MinValue;
             RTLastPrice = -1;
         }
@@ -103,13 +106,13 @@ namespace Pacmio
             {
                 RTLastTime = time;
 
-                if (double.IsNaN(price)) 
+                if (double.IsNaN(price))
                 {
                     price = RTLastPrice;
 
                     // Even tick
                 }
-                else 
+                else
                 {
                     if (price > RTLastPrice)
                     {
@@ -127,7 +130,7 @@ namespace Pacmio
                 {
                     lock (LiveBarTables)
                     {
-                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt => 
+                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt =>
                         {
                             if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
                             {
@@ -212,16 +215,48 @@ namespace Pacmio
 
             //string tickList = "233,236,375";
 
-            return IB.Client.SendRequest_MarketData(Contract, tickList); 
+            return IB.Client.SendRequest_MarketData(Contract, tickList);
         }
 
         [DataMember]
         public bool EnableMarketDepth { get; set; } = true;
 
-        [DataMember]
-        public Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)> MarketDepth { get; private set; }
-            = new Dictionary<int, (DateTime Time, double Price, double Size, Exchange MarketMaker)>();
+        [IgnoreDataMember]
+        private ConcurrentDictionary<int, MarketDepthDatum> m_MarketDepth { get; set; }
 
+        public MarketDepthDatum[] MarketDepth()
+        {
+            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
+
+            lock (m_MarketDepth)
+            {
+                return m_MarketDepth.OrderBy(n => n.Key).Select(n => n.Value).ToArray();
+            }
+        }
+
+        public MarketDepthDatum GetMarketDepth(int position)
+        {
+            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
+
+            lock (m_MarketDepth)
+            {
+                if (!m_MarketDepth.ContainsKey(position))
+                    m_MarketDepth.TryAdd(position, new MarketDepthDatum(position));
+
+                return m_MarketDepth[position];
+            }
+        }
+
+        #region Market Depth
+
+        //public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(Contract);
+
+        /// <summary>
+        /// TODO: Cancel_MarketDepth()
+        /// </summary>
+        //public virtual void Cancel_MarketDepth() { }
+
+        #endregion Market Depth
 
         // Tape
 

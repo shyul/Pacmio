@@ -928,10 +928,10 @@ namespace TestClient
         {
             if (!Root.NetConnected || !ValidateSymbol()) return;
 
-            if (ContractTest.ActiveContract is Stock imd)
+            if (ContractTest.ActiveContract is Stock s)
             {
-
-                Console.WriteLine("MarketDepth: " + imd.Request_MarketDepth());
+                MarketDepthManager.Add(s);
+                Console.WriteLine("MarketDepth: " + s);
             }
         }
 

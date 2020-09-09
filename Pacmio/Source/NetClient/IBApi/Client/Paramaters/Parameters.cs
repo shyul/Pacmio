@@ -20,11 +20,14 @@ namespace Pacmio.IB
     public class Parameters
     {
         [DataMember]
-        public Dictionary<(string ExhcangeCode, string TypeCode), (string ListingExch, string ServiceDataType, int AggGroup)> ExchangeDescription { get; }
+        public int MaximumSubscription { get; private set; } = 99;
+
+        [DataMember]
+        public Dictionary<(string ExhcangeCode, string TypeCode), (string ListingExch, string ServiceDataType, int AggGroup)> ExchangeDescription { get; private set; }
             = new Dictionary<(string ExhcangeCode, string TypeCode), (string ListingExch, string ServiceDataType, int AggGroup)>();
 
         [DataMember]
-        public Dictionary<string, Dictionary<string, string>> SmartComponents { get; } = new Dictionary<string, Dictionary<string, string>>();
+        public Dictionary<string, Dictionary<string, string>> SmartComponents { get; private set; } = new Dictionary<string, Dictionary<string, string>>();
 
         public Dictionary<string, string> GetSmartComponents(string bboExchange)
         {

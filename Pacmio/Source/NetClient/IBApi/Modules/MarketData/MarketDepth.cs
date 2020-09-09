@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reflection;
 using Xu;
 
@@ -16,6 +17,9 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
+
+        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketDepth = new ConcurrentDictionary<int, Contract>();
+
         /// <summary>
         /// Send MarketDepth: (0)"10"-(1)"5"-(2)"20000001"-(3)"0"-(4)"FB"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"20"-(16)"1"
         /// Exchanges - Depth: BATS; ARCA; ISLAND; BEX; IEX; 
@@ -28,6 +32,8 @@ namespace Pacmio.IB
             if (Connected && ApiCode.GetCode(c.Exchange) is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
+
+                ActiveMarketDepth.TryAdd(requestId, c);
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -77,7 +83,56 @@ namespace Pacmio.IB
 
         private static void Parse_MarketDepthL2(string[] fields)
         {
-            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+            string msgVersion = fields[1];
+            int requestId = fields[2].ToInt32(-1);
+
+            if (msgVersion == "1" && ActiveMarketDepth.ContainsKey(requestId)) 
+            {
+                Contract c = ActiveMarketDepth[requestId];
+                if(c.MarketData is StockData sd) 
+                {
+                    int position = fields[3].ToInt32(-1);
+                    MarketDepthDatum md = sd.GetMarketDepth(position);
+
+                    if(fields[6] == "0") 
+                    {
+                        md.AskExchangeCode = fields[4];
+                        md.Ask = fields[7].ToDouble();
+                        md.AskSize = fields[8].ToDouble() * 100;
+                        md.AskTime = DateTime.Now;
+                        md.AskIsSmartDepth = fields[9] == "1";
+                        md.AskOperation = fields[5].ToInt32();
+                    }
+                    else
+                    {
+                        md.BidExchangeCode = fields[4];
+                        md.Bid = fields[7].ToDouble();
+                        md.BidSize = fields[8].ToDouble() * 100;
+                        md.BidTime = DateTime.Now;
+                        md.BidIsSmartDepth = fields[9] == "1";
+                        md.BidOperation = fields[5].ToInt32();
+                    }
+                }
+                MarketDepthManager.UpdateUI(c);
+            }
+        
+
+            //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+        }
+
+        private static void ParseError_MarketDepth(string[] fields)
+        {
+            if (fields[3] == "2152")
+            {
+                Console.WriteLine("Request Market Depth: " + fields[4]);
+            }
+            else
+            {
+                int requestId = fields[2].ToInt32(-1);
+                RemoveRequest(requestId, false);
+                ActiveMarketDepth.TryRemove(requestId, out Contract c);
+                Console.WriteLine("Request Market Depth fatal errors: " + fields.ToStringWithIndex());
+            }
         }
     }
 }
@@ -90,4 +145,9 @@ Received MarketDepthL2: (0)"13"-(1)"1"-(2)"20000001"-(3)"1"-(4)"AMEX"-(5)"0"-(6)
 Received MarketDepthL2: (0)"13"-(1)"1"-(2)"20000001"-(3)"2"-(4)"IEX"-(5)"0"-(6)"1"-(7)"213.50"-(8)"3"-(9)"1"
 Received MarketDepthL2: (0)"13"-(1)"1"-(2)"20000001"-(3)"3"-(4)"IEX"-(5)"0"-(6)"1"-(7)"210.00"-(8)"1"-(9)"1"
 Received MarketDepthL2: (0)"13"-(1)"1"-(2)"20000001"-(3)"4"-(4)"IEX"-(5)"0"-(6)"1"-(7)"180.00"-(8)"1"-(9)"1"
+
+MarketDepth: [AAPL] STOCK USD @ NASDAQ
+Send RequestMarketDepth: (0)"10"-(1)"5"-(2)"1"-(3)"265598"-(4)"AAPL"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"20"-(16)"1"-(17)""
+RequestMarketDepth returned with errors: (0)"4"-(1)"2"-(2)"1"-(3)"2152"-(4)"Exchanges - Depth: BATS; ARCA; ISLAND; BEX; IEX; Top: BYX; AMEX; CHX; NYSENAT; PSX; EDGEA; ISE; DRCTEDGE; Need additional market data permissions - Depth: NYSE; LTSE; "
+12:20:37 Removing RequestMarketDepth and Cancel: 1 | CancelMarketDepth
 */

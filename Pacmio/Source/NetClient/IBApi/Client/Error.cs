@@ -54,6 +54,10 @@ namespace Pacmio.IB
                         ParseError_HistoricalTick(fields);
                         break;
 
+                    case RequestType.RequestMarketDepth:
+                        ParseError_MarketDepth(fields);
+                        break;
+
                     case RequestType.RequestFundamentalData:
                     default:
                         Console.WriteLine(type + " returned with errors: " + fields.ToStringWithIndex());
