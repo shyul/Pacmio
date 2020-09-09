@@ -74,6 +74,8 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnRequestMarketDepthExch = new System.Windows.Forms.Button();
+            this.BtnSmartComponents = new System.Windows.Forms.Button();
             this.BtnRequestTIProAlert = new System.Windows.Forms.Button();
             this.BtnRequestTIProScanner = new System.Windows.Forms.Button();
             this.BtnMarketDataSyncTicks = new System.Windows.Forms.Button();
@@ -191,8 +193,8 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnSmartComponents = new System.Windows.Forms.Button();
-            this.BtnRequestMarketDepthExch = new System.Windows.Forms.Button();
+            this.BtnRequestNewsProvider = new System.Windows.Forms.Button();
+            this.BtnRequestNewsArticle = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -655,6 +657,8 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.BtnRequestNewsArticle);
+            this.tabMarketData.Controls.Add(this.BtnRequestNewsProvider);
             this.tabMarketData.Controls.Add(this.BtnRequestMarketDepthExch);
             this.tabMarketData.Controls.Add(this.BtnSmartComponents);
             this.tabMarketData.Controls.Add(this.BtnRequestTIProAlert);
@@ -677,6 +681,26 @@ namespace TestClient
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
+            // 
+            // BtnRequestMarketDepthExch
+            // 
+            this.BtnRequestMarketDepthExch.Location = new System.Drawing.Point(145, 263);
+            this.BtnRequestMarketDepthExch.Name = "BtnRequestMarketDepthExch";
+            this.BtnRequestMarketDepthExch.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestMarketDepthExch.TabIndex = 54;
+            this.BtnRequestMarketDepthExch.Text = "Request Market Depth Exch";
+            this.BtnRequestMarketDepthExch.UseVisualStyleBackColor = true;
+            this.BtnRequestMarketDepthExch.Click += new System.EventHandler(this.BtnRequestMarketDepthExch_Click);
+            // 
+            // BtnSmartComponents
+            // 
+            this.BtnSmartComponents.Location = new System.Drawing.Point(145, 234);
+            this.BtnSmartComponents.Name = "BtnSmartComponents";
+            this.BtnSmartComponents.Size = new System.Drawing.Size(162, 23);
+            this.BtnSmartComponents.TabIndex = 53;
+            this.BtnSmartComponents.Text = "Request Smart Components";
+            this.BtnSmartComponents.UseVisualStyleBackColor = true;
+            this.BtnSmartComponents.Click += new System.EventHandler(this.BtnSmartComponents_Click);
             // 
             // BtnRequestTIProAlert
             // 
@@ -1900,25 +1924,25 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnSmartComponents
+            // BtnRequestNewsProvider
             // 
-            this.BtnSmartComponents.Location = new System.Drawing.Point(145, 234);
-            this.BtnSmartComponents.Name = "BtnSmartComponents";
-            this.BtnSmartComponents.Size = new System.Drawing.Size(162, 23);
-            this.BtnSmartComponents.TabIndex = 53;
-            this.BtnSmartComponents.Text = "Request Smart Components";
-            this.BtnSmartComponents.UseVisualStyleBackColor = true;
-            this.BtnSmartComponents.Click += new System.EventHandler(this.BtnSmartComponents_Click);
+            this.BtnRequestNewsProvider.Location = new System.Drawing.Point(145, 292);
+            this.BtnRequestNewsProvider.Name = "BtnRequestNewsProvider";
+            this.BtnRequestNewsProvider.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestNewsProvider.TabIndex = 55;
+            this.BtnRequestNewsProvider.Text = "Request News Provider";
+            this.BtnRequestNewsProvider.UseVisualStyleBackColor = true;
+            this.BtnRequestNewsProvider.Click += new System.EventHandler(this.BtnRequestNewProvider_Click);
             // 
-            // BtnRequestMarketDepthExch
+            // BtnRequestNewsArticle
             // 
-            this.BtnRequestMarketDepthExch.Location = new System.Drawing.Point(145, 263);
-            this.BtnRequestMarketDepthExch.Name = "BtnRequestMarketDepthExch";
-            this.BtnRequestMarketDepthExch.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestMarketDepthExch.TabIndex = 54;
-            this.BtnRequestMarketDepthExch.Text = "Request Market Depth Exch";
-            this.BtnRequestMarketDepthExch.UseVisualStyleBackColor = true;
-            this.BtnRequestMarketDepthExch.Click += new System.EventHandler(this.BtnRequestMarketDepthExch_Click);
+            this.BtnRequestNewsArticle.Location = new System.Drawing.Point(148, 363);
+            this.BtnRequestNewsArticle.Name = "BtnRequestNewsArticle";
+            this.BtnRequestNewsArticle.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestNewsArticle.TabIndex = 56;
+            this.BtnRequestNewsArticle.Text = "Request New Article";
+            this.BtnRequestNewsArticle.UseVisualStyleBackColor = true;
+            this.BtnRequestNewsArticle.Click += new System.EventHandler(this.BtnRequestNewsArticle_Click);
             // 
             // MainForm
             // 
@@ -2137,5 +2161,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnRequestTIProAlert;
         private System.Windows.Forms.Button BtnRequestMarketDepthExch;
         private System.Windows.Forms.Button BtnSmartComponents;
+        private System.Windows.Forms.Button BtnRequestNewsProvider;
+        private System.Windows.Forms.Button BtnRequestNewsArticle;
     }
 }

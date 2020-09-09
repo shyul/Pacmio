@@ -7,20 +7,18 @@
 /// 
 /// ***************************************************************************
 
-using System.Collections.Concurrent;
+using System;
 using Xu;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static readonly ConcurrentDictionary<string, string> NewsProviders = new ConcurrentDictionary<string, string>();
-
         /// <summary>
         /// Send RequestNewsProviders: (0)"85"
         /// </summary>
         /// <param name="value"></param>
-        internal static void SendRequest_NewsProviders() // Valid control send
+        public static void SendRequest_NewsProviders() // Valid control send
         {
             if (Connected)
             {
@@ -35,10 +33,22 @@ namespace Pacmio.IB
         private static void Parse_NewsProviders(string[] fields)
         {
             string msgVersion = fields[1];
-            if (msgVersion == "4")
+            if (msgVersion == "3" || msgVersion == "4")
             {
-                for (int i = 2; i < fields.Length; i += 2)
-                    NewsProviders.CheckAdd(fields[i], fields[i + 1]);
+                lock (Parameters)
+                {
+                    for (int i = 2; i < fields.Length; i += 2)
+                    {
+                        string code = fields[i];
+                        string name = fields[i + 1];
+                        Parameters.NewsProviders[code] = name;
+                        Console.WriteLine(code + " | " + name);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(fields.ToStringWithIndex());
             }
         }
     }

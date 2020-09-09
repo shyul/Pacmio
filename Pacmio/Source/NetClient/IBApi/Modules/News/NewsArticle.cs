@@ -7,6 +7,7 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
 using Xu;
 
@@ -18,7 +19,7 @@ namespace Pacmio.IB
         /// (0)"84"-(1)"90010000"-(2)"BRFG"-(3)"BRFG$0bc6e1ef"
         /// </summary>
         /// <param name="value"></param>
-        public static void RequestNewsArticle(string providerCode, string articleId, ICollection<(string, string)> newsArticleOptions = null)
+        public static void SendRequest_NewsArticle(string providerCode, string articleId, ICollection<(string, string)> newsArticleOptions = null)
         {
             if (Connected)
             {
@@ -41,10 +42,18 @@ namespace Pacmio.IB
         private static void Parse_NewsArticle(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
+
+            Console.WriteLine(fields.ToStringWithIndex());
         }
     }
 
     /*
+     * 
+    
+    [TIProData] Ping: 18.5138ms
+    Send RequestNewsArticle: (0)"84"-(1)"2"-(2)"BRFG"-(3)"BRFG$0d4d7115"-(4)""
+    RequestNewsArticle returned with errors: (0)"4"-(1)"2"-(2)"2"-(3)"10172"-(4)"Failed to request news article:Not allowed"
+
     Received Error: (0)"4"-(1)"2"-(2)"90020000"-(3)"321"-(4)"Error validating request:-'cg' : cause - Not subscribed for 'BZ' provider"
     Send RequestHistoricalNews: (0)"86"-(1)"90020000"-(2)"8314"-(3)"BRFG"-(4)"2020-01-28 16:21:07.0"-(5)"2020-01-29 16:21:07.0"-(6)"5"
     Received Error: (0)"4"-(1)"2"-(2)"-1"-(3)"2106"-(4)"HMDS data farm connection is OK:ushmds"

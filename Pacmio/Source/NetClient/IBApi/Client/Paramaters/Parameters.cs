@@ -37,7 +37,10 @@ namespace Pacmio.IB
             return SmartComponents[bboExchange];
         }
 
-        public static string FileName => Root.ResourcePath + "IBParameters.Json";
+        [DataMember]
+        public Dictionary<string, string> NewsProviders { get; private set; } = new Dictionary<string, string>();
+
+        public static string FileName => Root.ResourcePath + "IbParameters.Json";
     }
 
 

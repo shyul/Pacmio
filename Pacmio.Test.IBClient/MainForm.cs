@@ -1132,6 +1132,24 @@ namespace TestClient
         {
             Pacmio.IB.Client.SendRequest_MktDepthExchanges();
         }
+
+        private void BtnRequestNewProvider_Click(object sender, EventArgs e)
+        {
+            Pacmio.IB.Client.SendRequest_NewsProviders();
+        }
+
+        /*
+        Parse_TickNews: (0)"84"-(1)"1"-(2)"1596196993000"-(3)"BRFUPDN"-(4)"BRFUPDN$0d4cf703"-(5)"JMP Securities reiterated Facebook (FB) coverage with Mkt Outperform and target $305"
+        Parse_TickNews: (0)"84"-(1)"1"-(2)"1596210397000"-(3)"BRFG"-(4)"BRFG$0d4d7115"-(5)"Facebook's blowout results highlight the resiliency of its business model"-(6)"K:1.00"
+        Parse_TickNews: (0)"84"-(1)"1"-(2)"1596197004000"-(3)"BRFUPDN"-(4)"BRFUPDN$0d4cce59"-(5)"Barclays reiterated Facebook (FB) coverage with Overweight and target $285"
+        Parse_TickNews: (0)"84"-(1)"1"-(2)"1596543523000"-(3)"BRFUPDN"-(4)"BRFUPDN$0d51773a"-(5)"Argus reiterated Facebook (FB) coverage with Buy and target $300"
+        Parse_TickNews: (0)"84"-(1)"1"-(2)"1598358178000"-(3)"BRFUPDN"-(4)"BRFUPDN$0d6f3944"-(5)"UBS reiterated Facebook (FB) coverage with Buy and target $330"-(6)"K:1.00"
+         
+         */
+        private void BtnRequestNewsArticle_Click(object sender, EventArgs e)
+        {
+            Pacmio.IB.Client.SendRequest_NewsArticle("BRFG", "BRFG$0d4d7115");
+        }
     }
     public static class DataGridHelper
     {
