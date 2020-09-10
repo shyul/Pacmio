@@ -942,14 +942,22 @@ namespace TestClient
             var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
 
-            foreach (Contract c in cList)
-            {
-                Console.WriteLine("MarketQuote Snapshot: " + c); 
-                c.MarketData.SnapshotTicks();
+            Task.Run(() => {
 
-                if (c is Stock s)
-                    MarketDataGridView.Add(s.StockData);
-            }
+                foreach (Contract c in cList)
+                {
+                    Console.WriteLine("MarketQuote Snapshot: " + c);
+                    //c.MarketData.SnapshotTicks();
+
+                    Pacmio.IB.Client.DataRequest_MarketData(c.MarketData);
+
+
+                    if (c is Stock s)
+                        MarketDataGridView.Add(s.StockData);
+                }
+            });
+
+
 
             Root.Form?.Show();
         }

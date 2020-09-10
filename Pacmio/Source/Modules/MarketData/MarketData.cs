@@ -79,7 +79,7 @@ namespace Pacmio
         //[DataMember]
         //public int TickerId { get; set; } = int.MinValue;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100)]
         public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
 
         [DataMember]

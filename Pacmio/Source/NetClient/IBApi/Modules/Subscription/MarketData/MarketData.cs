@@ -11,11 +11,25 @@ using System.Collections.Concurrent;
 using Xu;
 using System;
 using System.Reflection;
+using System.Threading;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
+        public static void DataRequest_MarketData(MarketData md) 
+        {
+            lock (RequestLockObject) 
+            {
+                SendRequest_MarketData(md, true);
+
+                while (IsActive(md)) 
+                {
+                    Thread.Sleep(10);
+                }
+            }
+        }
+
         /// <summary>
         /// enericTickList:
         ///     100 Option Volume(currently for stocks)
