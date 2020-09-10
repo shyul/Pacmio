@@ -131,6 +131,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderRequest.cs" />
+    <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\MarketDataRequestStatus.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketDepth\MarketDepth_Parse.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\Subscriptions.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\Scanner\ScannerType.cs" />

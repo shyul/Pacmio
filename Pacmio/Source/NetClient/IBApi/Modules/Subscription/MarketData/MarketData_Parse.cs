@@ -101,18 +101,15 @@ namespace Pacmio.IB
         private static void Parse_TickReqParams(string[] fields)
         {
             Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
-            // Console.WriteLine("\nParse Tick Req Params: " + fields.ToFlat());
 
             int tickerId = fields[1].ToInt32(-1);
 
-            if (GetMarketData(tickerId) is MarketData md && fields.Length == 5)
+            if (GetMarketDataRequestStatus(tickerId) is MarketDataRequestStatus mds && fields.Length == 5)
             {
-                md.MinimumTick = fields[2].ToDouble(0);
-                md.BBOExchangeId = fields[3];
-
-                int snapshotPermissions = fields[4].ToInt32(-1);
-
-                WatchListManager.UpdateUI(md);
+                mds.MarketData.MinimumTick = fields[2].ToDouble(0);
+                mds.BBOExchangeId = fields[3];
+                mds.SnapshotPermissions = fields[4].ToInt32(-1);
+                WatchListManager.UpdateUI(mds.MarketData);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -121,6 +118,7 @@ namespace Pacmio.IB
         /// <summary>
         /// TickPrice
         /// (0)"1"-(1)"6"-(2)"24"-(3)"4"-(4)"186.40"-(5)"2"-(6)"0"-
+        /// Parse_TickPrice | MarkPrice: (0)"1"-(1)"6"-(2)"1"-(3)"37"-(4)"118.51000214"-(5)"0"-(6)"0"
         /// </summary>
         /// <param name="fields"></param>
         private static void Parse_TickPrice(string[] fields)
@@ -169,6 +167,10 @@ namespace Pacmio.IB
 
                     case TickType.LastClose:
                         md.PreviousClose = price;
+                        break;
+
+                    case TickType.MarkPrice:
+                        md.MarkPrice = price;
                         break;
 
                     default:
@@ -253,6 +255,9 @@ namespace Pacmio.IB
         /// Z: BATS
         /// </summary>
         /// <param name="fields"></param>
+
+        // Parse_TickString: (0)"46"-(1)"6"-(2)"1"-(3)"47"-(4)"TTMNPMGN=21.33376;NLOW=52.9275;ACFSHR=3.646175;ALTCL=-99999.99;TTMPRCFPS=27.58134;TTMCFSHR=3.94469;ASFCF=-2922;AEPSNORM=2.97145;TTMRECTURN=17.10003;AATCA=162819;QCSHPS=5.42871;TTMFCF=57657;LATESTADATE=2020-06-27;APTMGNPCT=25.26655;IAD=3.2799999999999994;TTMNIAC=58424;EV_Cur=1949856;QATCA=140065;PR2TANBK=26.69417;TTMFCFSHR=3.25113;NPRICE=112.82;ASICF=56391;REVTRENDGR=7.31487;QSCEX=-1565;PRICE2BK=26.74602;ALSTD=-99999.99;AOTLO=69391;TTMPAYRAT=24.05176;QPR2REV=32.39099;;TTMREVCHG=5.72241;TTMROAPCT=18.2694;QTOTCE=72282;APENORM=37.968;QLTCL=95318;QSFCF=872;TTMROIPCT=25.70568;DIVGRPCT=11.2299;QOTLO=16271;TTMEPSCHG=-71.42684;YIELD=0.7268215;TTMREVPS=15.44208;TTMEBT=68317;ADIV5YAVG=0.614;Frac52Wk=0.7339798;NHIG=137.98;ASCEX=-10495;QTA=317344;TTMGROSMGN=38.18781;QTL=245062;AFPRD=-7819;QCURRATIO=1.46945;TTMREV=273857;TTMINVTURN=46.16855;QCASH=93025;QLSTD=11166;TTMOPMGN=24.51571;TTMPR2REV=1.764841;QSICF=-3600;TTMNIPEREM=426452.6;EPSCHNGYR=18.37973;TTMPRFCFPS=33.46529;TTMPTMGN=24.94623;AREVPS=13.99112;AEBTNORM=65737;ASOPI=63930;NetDebt_I=20348;PRYTDPCTR=49.01821;TTMEBITD=78671;AFEEPSNTM=3.645;EPSTRENDGR=12.99319;QTOTD2EQ=156.8482;QSOPI=13091;QBVPS=4.2182;YLD5YAVG=1.4865;PR13WKPCT=31.4264;PR52WKPCT=110.3173;AROAPCT=15.69236;QTOTLTD=94048;TTMEPSXCLX=3.28931;QPRCFPS=117.66112511613206;QTANBVPS=4.2182;AROIPCT=22.89958;QEBIT=13091;QEBITDA=15843;MKTCAP=1929508;TTMINTCOV=-99999.99;TTMROEPCT=69.24818;TTMREVPERE=1998956;AEPSXCLXOR=2.971447;QFPRD=-441;REVCHNGYR=10.92011;AFPSS=-66116;CURRENCY=USD;EV2EBITDA_Cur=123.0737;PEEXCLXOR=34.29899;QQUICKRATI=1.42772;ASINN=-99999.99;QFPSS=-15891;BETA=1.32555;ANIACNORM=55256;PR1WKPCT=-15.91891;QLTD2EQ=130.9842;QSINN=-99999.99;PR4WKPCT=3.149714;AEBIT=64352"
+
         private static void Parse_TickString(string[] fields)
         {
             string msgVersion = fields[1];

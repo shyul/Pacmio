@@ -83,6 +83,8 @@ namespace Pacmio
 
         public static UnknownContract CheckIn(string symbolName, string exchangeCode = "", string typeCode = "STK")
         {
+            Console.WriteLine("Checking unknown item: " + symbolName);
+
             lock (List)
             {
                 var key = (symbolName, exchangeCode, typeCode);
@@ -104,6 +106,31 @@ namespace Pacmio
             {
                 if (List.ContainsKey(uc.Key))
                     List.Remove(uc.Key);
+            }
+        }
+
+        public static void Remove(string symbol)
+        {
+            lock (List)
+            {
+                var key = (symbol, "", "STK");
+                if (List.ContainsKey(key))
+                {
+                    List.Remove(key);
+                }
+            }
+        }
+
+        public static bool Contains(string symbol)
+        {
+            lock (List)
+            {
+                if (List.ContainsKey((symbol, "", "STK")))
+                {
+                    return true;
+                }
+                else
+                    return false;
             }
         }
 

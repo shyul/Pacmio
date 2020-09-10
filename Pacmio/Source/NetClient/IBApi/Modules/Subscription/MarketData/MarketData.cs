@@ -17,13 +17,13 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static void DataRequest_MarketData(MarketData md) 
+        public static void DataRequest_MarketData(MarketData md)
         {
-            lock (RequestLockObject) 
+            lock (RequestLockObject)
             {
                 SendRequest_MarketData(md, true);
 
-                while (IsActive(md)) 
+                while (ActiveSubscriptionCount > 80) //(IsActive(md)) 
                 {
                     Thread.Sleep(10);
                 }
@@ -74,33 +74,40 @@ namespace Pacmio.IB
         /// </summary>
         /// <param name="c"></param>
         /// <param name="genericTickList">"233,236,258"</param>
-        /// <param name="snapshot">snapshot means a single request</param>
+        /// <param name="isSnapshot">snapshot means a single request</param>
         /// <param name="regulatorySnaphsot">Regulatory Snapshots</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        internal static bool SendRequest_MarketData(MarketData md, bool snapshot = false,
+        internal static bool SendRequest_MarketData(MarketData md, bool isSnapshot = false,
             bool regulatorySnaphsot = false, ICollection<(string, string)> options = null)
         {
             Contract c = md.Contract;
+            string genericTickList = "221,"; // "258,";// string.Empty;
 
-            var (tickerId, requestType, exchangeCode) = RegisterMarketDataRequest(md);
+            if (!isSnapshot)
+            {
+                if (md is StockData sd)
+                {
+                    genericTickList += sd.FilteredTicks ? "375," : "233,";
+                    if (sd.EnableShortableShares) genericTickList += "236,";
+                    if (sd.EnableNews) genericTickList += "292,";
+                }
+
+                genericTickList = genericTickList.TrimEnd(',');
+            }
+
+            if (isSnapshot || genericTickList != GetMarketDataRequestStatus(md).GenericTickList)
+            {
+                if (IsActive(md))
+                    UnregisterMarketDataRequest(md, true);
+            }
+
+            var (tickerId, requestType, exchangeCode, mds) = RegisterMarketDataRequest(md);
 
             if (tickerId > 0)
             {
-                string genericTickList = string.Empty;
-
-                if (!snapshot)
-                {
-                    if (md is StockData sd)
-                    {
-                        genericTickList += sd.FilteredTicks ? "375," : "233,";
-                        if (sd.EnableShortableShares) genericTickList += "236,";
-                        if (sd.EnableNews) genericTickList += "292,";
-                    }
-
-                    genericTickList = genericTickList.TrimEnd(',');
-                    Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
-                }
+                mds.IsSnapshot = isSnapshot;
+                mds.GenericTickList = genericTickList;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -171,7 +178,7 @@ namespace Pacmio.IB
 
                 paramsList.AddRange(new string[] {
                     genericTickList,
-                    snapshot.Param(),
+                    isSnapshot.Param(),
                     regulatorySnaphsot.Param(),
                     options.Param(),
                 });
@@ -195,7 +202,7 @@ namespace Pacmio.IB
             if (fields[1] == "1")
             {
                 int tickerId = fields[2].ToInt32(-1);
-                UnregisterMarketDataRequest(tickerId, false);
+                WatchListManager.UpdateUI(UnregisterMarketDataRequest(tickerId, false).MarketData);
             }
         }
 

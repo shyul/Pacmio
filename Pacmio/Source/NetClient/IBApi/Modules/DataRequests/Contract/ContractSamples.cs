@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xu;
 
 namespace Pacmio.IB
@@ -22,8 +23,8 @@ namespace Pacmio.IB
         private static int requestId_ContractSamples = -1;
         */
 
-        private static string active_ContractSample = string.Empty;
-        private static readonly List<Contract> active_ContractSamples = new List<Contract>();
+        private static string ActiveContractSample { get; set; } = string.Empty;
+        private static List<Contract> ActiveContractSampleList { get; } = new List<Contract>();
 
         private static void SendRequest_ContractSamples(string symbol) // Valid control send
         {
@@ -34,8 +35,8 @@ namespace Pacmio.IB
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMatchingSymbols);
 
                 DataRequestID = requestId;
-                active_ContractSamples.Clear();
-                active_ContractSample = symbol;
+                ActiveContractSampleList.Clear();
+                ActiveContractSample = symbol;
 
                 SendRequest(new string[] {
                     requestType, // 81
@@ -46,7 +47,7 @@ namespace Pacmio.IB
 
         private static void SendCancel_ContractSamples()
         {
-            active_ContractSample = string.Empty;
+            ActiveContractSample = string.Empty;
             RemoveRequest(DataRequestID, true);
             DataRequestID = -1;
         }
@@ -68,9 +69,12 @@ namespace Pacmio.IB
                     string exchangeStr = fields[pt + 3];
                     string secTypeCode = fields[pt + 2]; // STK
                                                          //string currencyStr = fields[pt + 4];
+
+                    Console.WriteLine("Sample: " + symbolStr + " | " + exchangeStr + " | " + secTypeCode + " | " + conIdStr);
+
                     int DerivativeSecTypeCount = fields[pt + 5].ToInt32(0);
 
-                    if (symbolStr == active_ContractSample) isUnknown = false;
+                    if (symbolStr == ActiveContractSample) isUnknown = false;
 
                     if (exchangeStr == "VALUE")
                     {
@@ -88,8 +92,6 @@ namespace Pacmio.IB
 
                         if (symbolInfoValid)
                         {
-
-
                             c.MarketData.DerivativeTypes.Clear();// = new List<ContractType>();
 
                             for (int i = 0; i < DerivativeSecTypeCount; i++)
@@ -101,7 +103,7 @@ namespace Pacmio.IB
                             }
 
                             //Console.WriteLine("RequestMatching: " + symbolStr + " | " + exchangeStr + " | " + secTypeStr + " | " + DerivativeSecTypeCount.ToString());
-                            active_ContractSamples.Add(c);
+                            ActiveContractSampleList.Add(c);
                             ContractList.GetOrAdd(c);
                             c.UpdateTime = DateTime.Now;
                         }
@@ -119,15 +121,24 @@ namespace Pacmio.IB
                 }
             }
 
-            if (isUnknown) 
+            if (isUnknown || ActiveContractSampleList.Where(n => n.Name == ActiveContractSample).Count() < 1)
             {
-                var uc = UnknownContractList.CheckIn(active_ContractSample);
+                var uc = UnknownContractList.CheckIn(ActiveContractSample);
                 uc.LastCheckedTime = DateTime.Now;
-                //UnknownContractList.CheckIn(DateTime.Now, active_ContractSample);
             }
-          
+            else
+            {
+                UnknownContractList.Remove(ActiveContractSample);
+                /*
+                if (UnknownContractList.Contains(ActiveContractSample)) 
+                {
 
-            active_ContractSample = string.Empty;
+          
+                }*/
+            }
+
+
+            ActiveContractSample = string.Empty;
 
             if (requestId > -1) RemoveRequest(requestId, false);
             DataRequestID = -1;

@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Xu;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 namespace Pacmio.IB
 {
@@ -65,9 +64,19 @@ namespace Pacmio.IB
                     return null;
         }
 
+        private static MarketDataRequestStatus GetMarketDataRequestStatus(int tickerId)
+        {
+            lock (ActiveMarketDataTickerIds)
+                if (ActiveMarketDataTickerIds.ContainsKey(tickerId))
+                    return ActiveMarketDataTickerIds[tickerId];
+                else
+                    return null;
+        }
+
+
         public static IEnumerable<MarketData> ActiveMarketData => MarketDataTickers.Select(n => n.Value).Where(n => n.IsActive).Select(n => n.MarketData);
 
-        private static (int tickerId, string requestType, string exchangeCode) RegisterMarketDataRequest(MarketData md)
+        private static (int tickerId, string requestType, string exchangeCode, MarketDataRequestStatus mds) RegisterMarketDataRequest(MarketData md)
         {
             lock (ActiveMarketDataTickerIds)
             {
@@ -78,11 +87,11 @@ namespace Pacmio.IB
                     (int tickerId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
                     mds.TickerId = tickerId;
                     ActiveMarketDataTickerIds[tickerId] = mds;
-                    return (tickerId, requestType, exchangeCode);
+                    return (tickerId, requestType, exchangeCode, mds);
                 }
-
-                return (-1, null, null);
             }
+
+            return (int.MinValue, null, null, null);
         }
 
         private static MarketDataRequestStatus UnregisterMarketDataRequest(int tickerId, bool cancel = false)
@@ -130,14 +139,5 @@ namespace Pacmio.IB
         }
     }
 
-    public class MarketDataRequestStatus
-    {
-        public MarketDataRequestStatus(MarketData md) => MarketData = md;
 
-        public MarketData MarketData { get; }
-
-        public bool IsActive { get; set; } = false;
-
-        public int TickerId { get; set; } = int.MinValue;
-    }
 }

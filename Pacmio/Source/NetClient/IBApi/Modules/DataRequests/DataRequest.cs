@@ -84,7 +84,7 @@ namespace Pacmio.IB
                         }
                     }
 
-                    return active_ContractSamples.ToArray();
+                    return ActiveContractSampleList.ToArray();
                 }
 
             End:

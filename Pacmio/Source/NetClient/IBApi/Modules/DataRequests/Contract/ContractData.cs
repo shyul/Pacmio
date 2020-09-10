@@ -46,7 +46,7 @@ namespace Pacmio.IB
                     requestType, // 9
                     "8",
                     requestId.ToString(),
-                    c.ConId.Param(), // "0"
+                    "0", // c.ConId.Param(), // "0"
                     c.Name,
                     c.TypeCode(),
                     lastTradeDateOrContractMonth,

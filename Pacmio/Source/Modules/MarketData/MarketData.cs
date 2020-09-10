@@ -85,8 +85,8 @@ namespace Pacmio
         [DataMember]
         public double MinimumTick { get; set; } = double.NaN;
 
-        [DataMember]
-        public string BBOExchangeId { get; set; } = string.Empty;
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), CellRenderer(typeof(NumberCellRenderer), 60)]
+        public double PreviousClose { get; set; } = double.NaN;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), CellRenderer(typeof(NumberCellRenderer), 60)]
         public double Open { get; set; } = double.NaN;
@@ -97,12 +97,11 @@ namespace Pacmio
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), CellRenderer(typeof(NumberCellRenderer), 60)]
         public double Low { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), CellRenderer(typeof(NumberCellRenderer), 60)]
-        public double PreviousClose { get; set; } = double.NaN;
-
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), CellRenderer(typeof(NumberCellRenderer), 70)]
         public double Volume { get; set; } = double.NaN;
 
+        [DataMember]
+        public double MarkPrice { get; set; } = double.NaN;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), CellRenderer(typeof(NumberCellRenderer), 60, false)]
         public double LastPrice { get; set; } = double.NaN;
@@ -119,6 +118,24 @@ namespace Pacmio
         #endregion Quote
 
         #region Trade
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

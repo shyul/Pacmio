@@ -93,7 +93,7 @@ namespace Pacmio
             {
                 clist = Fetch(symbol, cts).Where(n => n.Name == symbol && n.Exchange == exchange);
 
-                foreach(Contract c in clist) 
+                foreach (Contract c in clist)
                 {
                     if (cts.IsCancellationRequested) break;
                     Fetch(c, cts);
@@ -203,9 +203,10 @@ namespace Pacmio
             List<string> existing_symbols = new List<string>();
             GetList(symbols, countryCode).Where(n => (DateTime.Now - n.UpdateTime).Days < 7).Select(n => n.Name).ToList().ForEach(n => existing_symbols.CheckAdd(n));
 
-            var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
+            var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n) && (!UnknownContractList.Contains(n)));
             int count = non_existing_symbols.Count();
             Console.WriteLine("non_existing_symbols.Count() = " + count);
+
             if (count > 0 && IB.Client.Connected)
             {
                 int i = 0;
@@ -216,9 +217,9 @@ namespace Pacmio
                     else
                     {
                         Thread.Sleep(10);
-                        if (Fetch(symbol, cts) is Contract[] cx)
+                        if (Fetch(symbol, cts) is Contract[] cs0)
                         {
-                            var clist = cx.Where(n => (DateTime.Now - n.UpdateTime).Days > 6);
+                            var clist = cs0.Where(n => (DateTime.Now - n.UpdateTime).Days > 6);
                             foreach (Contract c in clist)
                             {
                                 if (cts is CancellationTokenSource cs1 && cs1.IsCancellationRequested)
