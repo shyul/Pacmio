@@ -282,5 +282,12 @@ namespace Pacmio.IB
 
 
         #endregion Fetch Fundamental Data
+
+        #region News
+
+
+
+
+        #endregion News
     }
 }

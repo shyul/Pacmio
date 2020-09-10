@@ -17,6 +17,7 @@ namespace Pacmio.IB
     {
         /// <summary>
         /// (0)"84"-(1)"90010000"-(2)"BRFG"-(3)"BRFG$0bc6e1ef"
+        /// Send RequestNewsArticle: (0)"84"-(1)"2"-(2)"BRFG"-(3)"BRFG$0d4d7115"-(4)""
         /// </summary>
         /// <param name="value"></param>
         public static void SendRequest_NewsArticle(string providerCode, string articleId, ICollection<(string, string)> newsArticleOptions = null)
@@ -51,7 +52,7 @@ namespace Pacmio.IB
      * 
     
     [TIProData] Ping: 18.5138ms
-    Send RequestNewsArticle: (0)"84"-(1)"2"-(2)"BRFG"-(3)"BRFG$0d4d7115"-(4)""
+    
     RequestNewsArticle returned with errors: (0)"4"-(1)"2"-(2)"2"-(3)"10172"-(4)"Failed to request news article:Not allowed"
 
     Received Error: (0)"4"-(1)"2"-(2)"90020000"-(3)"321"-(4)"Error validating request:-'cg' : cause - Not subscribed for 'BZ' provider"
