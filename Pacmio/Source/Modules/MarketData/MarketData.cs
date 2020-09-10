@@ -32,9 +32,6 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
         public Contract Contract { get; private set; }
 
-
-
-
         #region Basic Info  
 
         [DataMember]
@@ -61,7 +58,7 @@ namespace Pacmio
 
 
         [IgnoreDataMember]
-        public virtual bool IsTickActive => IB.Client.ActiveMarketDataTicks.Values.Contains(this);
+        public virtual bool IsTickActive => IB.Client.IsActive(this);
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -77,10 +74,10 @@ namespace Pacmio
 
         public virtual void SnapshotTicks() => IB.Client.SendRequest_MarketData(this, true);
 
-        public virtual void StopTicks() => IB.Client.SendCancel_MarketData(TickerId);
+        public virtual void StopTicks() => IB.Client.SendCancel_MarketData(this);
 
-        [DataMember]
-        public int TickerId { get; set; } = int.MinValue;
+        //[DataMember]
+        //public int TickerId { get; set; } = int.MinValue;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 70)]
         public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;

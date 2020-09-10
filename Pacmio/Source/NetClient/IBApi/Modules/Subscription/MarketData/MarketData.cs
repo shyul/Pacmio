@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Xu;
 using System;
+using System.Reflection;
 
 namespace Pacmio.IB
 {
@@ -68,29 +69,24 @@ namespace Pacmio.IB
         {
             Contract c = md.Contract;
 
-            string genericTickList = string.Empty;
+            var (tickerId, requestType, exchangeCode) = RegisterMarketDataRequest(md);
 
-            if (!snapshot)
+            if (tickerId > 0)
             {
-                if (md is StockData sd)
+                string genericTickList = string.Empty;
+
+                if (!snapshot)
                 {
-                    genericTickList += sd.FilteredTicks ? "375," : "233,";
-                    if (sd.EnableShortableShares) genericTickList += "236,";
-                    if (sd.EnableNews) genericTickList += "292,";
+                    if (md is StockData sd)
+                    {
+                        genericTickList += sd.FilteredTicks ? "375," : "233,";
+                        if (sd.EnableShortableShares) genericTickList += "236,";
+                        if (sd.EnableNews) genericTickList += "292,";
+                    }
+
+                    genericTickList = genericTickList.TrimEnd(',');
+                    Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
                 }
-
-                genericTickList = genericTickList.TrimEnd(',');
-                Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
-            }
-
-            if (Connected &&
-                ApiCode.GetCode(c.Exchange) is string exchangeCode &&
-                !ActiveMarketDataTicks.Values.Contains(md) &&
-                !SubscriptionOverflow)
-            {
-                (int tickerId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
-                md.TickerId = tickerId;
-                ActiveMarketDataTicks.CheckAdd(tickerId, md);
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -173,32 +169,45 @@ namespace Pacmio.IB
             return false;
         }
 
-        public static void SendCancel_MarketData(int tickerId)
+        public static void SendCancel_MarketData(MarketData md) => UnregisterMarketDataRequest(md, true);
+
+        /// <summary>
+        /// Unknown Message: 57: (0)"57"-(1)"1"-(2)"97" 
+        /// </summary>
+        /// <param name="fields"></param>
+        private static void Parse_TickSnapshotEnd(string[] fields)
         {
-            RemoveRequest(tickerId, RequestType.RequestMarketData);
-            lock (ActiveMarketDataTicks)
+            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+            if (fields[1] == "1")
             {
-                if (ActiveMarketDataTicks.TryRemove(tickerId, out MarketData md))
-                {
-                    md.Status = MarketTickStatus.DelayedFrozen;
-                    md.TickerId = int.MinValue;
-                }
+                int tickerId = fields[2].ToInt32(-1);
+                UnregisterMarketDataRequest(tickerId, false);
             }
         }
 
         private static void ParseError_MarketData(string[] fields)
         {
-            int requestId = fields[2].ToInt32(-1);
-            RemoveRequest(requestId, false);
-            ActiveMarketDataTicks.TryRemove(requestId, out MarketData md);
+            int tickerId = fields[2].ToInt32(-1);
+
+            if (UnregisterMarketDataRequest(tickerId) is MarketDataRequestStatus mds && fields[3] == "200")
+            {
+                mds.MarketData.Contract.Status = ContractStatus.Error;
+                mds.MarketData.Contract.UpdateTime = DateTime.Now;
+            }
+
+            /*
+            RemoveRequest(tickerId, false);
+            ActiveMarketDataTicks.TryRemove(tickerId, out MarketData md);
 
             if (fields[3] == "200")
             {
                 md.Contract.Status = ContractStatus.Error;
                 md.Contract.UpdateTime = DateTime.Now;
-            }
+            }*/
 
             Console.WriteLine("RequestHistoricalTick errors: " + fields.ToStringWithIndex());
         }
     }
+
+
 }

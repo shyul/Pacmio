@@ -883,7 +883,7 @@ namespace TestClient
 
         private void BtnMarketDataSyncTicks_Click(object sender, EventArgs e)
         {
-            foreach (var md in Pacmio.IB.Client.ActiveMarketDataTicks.Values)
+            foreach (var md in Pacmio.IB.Client.ActiveMarketData)
             {
                 if(md is StockData sd)
                 MarketDataGridView.Add(sd);
@@ -924,6 +924,7 @@ namespace TestClient
 
             foreach (Contract c in cList)
             {
+                while (Pacmio.IB.Client.SubscriptionOverflow) { Thread.Sleep(10); }
                 Console.WriteLine("MarketQuote: " + c.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
 
                 if (c is Stock s)
