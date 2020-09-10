@@ -18,7 +18,6 @@ namespace Pacmio.IB
     public static partial class Client
     {
 
-        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketDepth = new ConcurrentDictionary<int, Contract>();
 
         /// <summary>
         /// Send MarketDepth: (0)"10"-(1)"5"-(2)"20000001"-(3)"0"-(4)"FB"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"20"-(16)"1"

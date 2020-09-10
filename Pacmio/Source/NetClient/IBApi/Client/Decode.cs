@@ -224,6 +224,10 @@ namespace Pacmio.IB
                                 Parse_RealTimeBars(fields);
                                 break;
 
+                            case IncomingMessage.TickSnapshotEnd:
+                                Parse_TickSnapshotEnd(fields);
+                                break;
+
                             #endregion Market Data
 
                             #region News
@@ -314,7 +318,6 @@ namespace Pacmio.IB
                                 Parse_Errors(fields);
                                 break;
 
-                            case IncomingMessage.TickSnapshotEnd:
                             case IncomingMessage.NewsBulletins:
                             case IncomingMessage.ReceiveFA:
                             case IncomingMessage.BondContractData:

@@ -54,19 +54,19 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void Parse_MarketDataType(string[] fields)
         {
-            //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
-            // Console.WriteLine("\nParse Market Data Type: " + fields.ToFlat());
             string msgVersion = fields[1];
-            int requestId = fields[2].ToInt32(-1);
+            int tickerId = fields[2].ToInt32(-1);
             lock (ActiveMarketDataTicks)
-                if (msgVersion == "1" && ActiveMarketDataTicks.ContainsKey(requestId) && fields.Length == 4)
+            {
+                if (msgVersion == "1" && ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 4)
                 {
-                    Contract c = ActiveMarketDataTicks[requestId];
-                    if (c is Stock stk) stk.Status = ContractStatus.Alive;
-
-                    c.MarketData.Status = (MarketTickStatus)fields[3].ToInt32(0);
-                    WatchListManager.UpdateUI(c);
+                    md.Contract.Status = ContractStatus.Alive;
+                    md.Status = (MarketTickStatus)(fields[3].ToInt32(0));
+                    WatchListManager.UpdateUI(md);
                 }
+                else
+                    SendCancel_MarketData(tickerId);
+            }
         }
 
         /// <summary>
@@ -106,19 +106,17 @@ namespace Pacmio.IB
 
             int tickerId = fields[1].ToInt32(-1);
             lock (ActiveMarketDataTicks)
-                if (ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
+                if (ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketDataTicks[tickerId];
-
-                    c.MarketData.MinimumTick = fields[2].ToDouble(0);
-                    c.MarketData.BBOExchangeId = fields[3];
+                    md.MinimumTick = fields[2].ToDouble(0);
+                    md.BBOExchangeId = fields[3];
 
                     int snapshotPermissions = fields[4].ToInt32(-1);
 
-                    WatchListManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(md);
                 }
                 else
-                    SendCancel_MarketTicks(tickerId);
+                    SendCancel_MarketData(tickerId);
         }
 
         /// <summary>
@@ -131,48 +129,48 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
 
-            lock (ActiveMarketDataTicks)
-                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 7)
+            lock (ActiveMarketDataTicks) 
+            {
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 7)
                 {
-                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
                     double price = fields[4].ToDouble();
                     double size = fields[5].ToDouble();
                     //int attrMask = fields[6].ToInt32(-1);
 
-                    if (price < 0) c.MarketData.Status = MarketTickStatus.Unknown;
+                    if (!(price >= 0)) md.Status = MarketTickStatus.Unknown;
 
                     switch (tickType)
                     {
-                        case TickType.BidPrice when c.MarketData is BidAskData q:
+                        case TickType.BidPrice when md is BidAskData q:
                             q.Bid = price;
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskPrice when c.MarketData is BidAskData q:
+                        case TickType.AskPrice when md is BidAskData q:
                             q.Ask = price;
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastPrice when c.MarketData is BidAskData q:
-                            q.LastPrice = price;
-                            q.LastSize = size * 100;
+                        case TickType.LastPrice:
+                            md.LastPrice = price;
+                            md.LastSize = size * 100;
                             break;
 
-                        case TickType.Open when c.MarketData is BidAskData q:
-                            q.Open = price;
+                        case TickType.Open:
+                            md.Open = price;
                             break;
 
-                        case TickType.High when c.MarketData is BidAskData q:
-                            q.High = price;
+                        case TickType.High:
+                            md.High = price;
                             break;
 
-                        case TickType.Low when c.MarketData is BidAskData q:
-                            q.Low = price;
+                        case TickType.Low:
+                            md.Low = price;
                             break;
 
-                        case TickType.LastClose when c.MarketData is BidAskData q:
-                            q.PreviousClose = price;
+                        case TickType.LastClose:
+                            md.PreviousClose = price;
                             break;
 
                         default:
@@ -180,8 +178,11 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    WatchListManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(md);
                 }
+                else
+                    SendCancel_MarketData(tickerId);
+            }
         }
 
         /// <summary>
@@ -194,31 +195,30 @@ namespace Pacmio.IB
             int tickerId = fields[2].ToInt32(-1);
 
             lock (ActiveMarketDataTicks)
-                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
                     double size = fields[4].ToDouble();
 
                     switch (tickType)
                     {
-                        case TickType.BidSize when c.MarketData is BidAskData q:
+                        case TickType.BidSize when md is BidAskData q:
                             q.BidSize = size * 100;
                             break;
 
-                        case TickType.AskSize when c.MarketData is BidAskData q:
+                        case TickType.AskSize when md is BidAskData q:
                             q.AskSize = size * 100;
                             break;
 
-                        case TickType.LastSize when c.MarketData is BidAskData q:
+                        case TickType.LastSize when md is BidAskData q:
                             q.LastSize = size * 100;
                             break;
 
-                        case TickType.Volume when c.MarketData is BidAskData q:
-                            q.Volume = size * 100;
+                        case TickType.Volume:
+                            md.Volume = size * 100;
                             break;
 
-                        case TickType.ShortableShares when c.MarketData is StockData q:
+                        case TickType.ShortableShares when md is StockData q:
                             q.ShortableShares = size;
                             break;
 
@@ -228,8 +228,10 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    WatchListManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(md);
                 }
+                else
+                    SendCancel_MarketData(tickerId);
         }
 
         /// <summary>
@@ -259,28 +261,27 @@ namespace Pacmio.IB
             int tickerId = fields[2].ToInt32(-1);
 
             lock (ActiveMarketDataTicks)
-                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
                     {
-                        case TickType.AskExchange when c.MarketData is BidAskData q:
+                        case TickType.AskExchange when md is BidAskData q:
                             q.AskExchange = fields[4];
                             break;
 
-                        case TickType.BidExchange when c.MarketData is BidAskData q:
+                        case TickType.BidExchange when md is BidAskData q:
                             q.BidExchange = fields[4];
                             break;
 
-                        case TickType.LastExchange when c.MarketData is BidAskData q:
-                            q.LastExchange = fields[4];
+                        case TickType.LastExchange:
+                            md.LastExchange = fields[4];
                             break;
 
                         case TickType.LastTimestamp:
                             long epoch = fields[4].ToInt64(0); // (3)"45"-(4)"1580146441"
-                            c.MarketData.LastTradeTime = TimeTool.FromEpoch(epoch);
+                            md.LastTradeTime = TimeTool.FromEpoch(epoch);
                             break;
 
                         /*
@@ -304,48 +305,18 @@ namespace Pacmio.IB
 
                             https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                         */
-                        case TickType.RTVolumeTimeSales:
+                        case TickType.RTVolumeTimeSales when md is StockData sd:
                             //Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
-                            RTVolume(fields[4], c);
+                            RTVolume(fields[4], sd);
                             break;
 
                         /*
                             The RT Trade Volume is similar to RT Volume, but designed to avoid relaying back "Unreportable Trades" shown in TWS Time&Sales via the API.
                             RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                         */
-                        case TickType.RTTradeVolume when c.MarketData is StockData hd:
+                        case TickType.RTTradeVolume when md is StockData sd:
                             //Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
-                            RTVolume(fields[4], c);
-
-                            /*
-                            string[] volFields = fields[4].Split(';');
-
-                            double last = volFields[0].ToDouble();
-                            if (double.IsNaN(last)) last = hd.LastPrice;
-
-                            double vol = volFields[1].ToDouble() * 100;
-                            if (vol == 0) vol = 20;
-
-                            long epochMs = volFields[2].ToInt64();
-                            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
-
-                            //double totalVol = volFields[3].ToDouble() * 100;
-                            hd.InboundLiveTick(time, last, vol);*/
-
-                            // if c.ActiveStrategy is Strategy s --> s.Evaluate(c);
-
-                            /*
-                            if (!TicksList.ContainsKey(c)) 
-                                TicksList[c] = new StringBuilder();
-                            else if(TicksList[c].Length > 16e3)
-                            {
-                                string path = Root.ResourcePath + "HistoricalData\\" + c.Type.ToString() + "\\" + c.Exchange.ToString() + "\\Ticks\\";
-                                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                                File.WriteAllText(path + "$" + c.Name + ".csv", TicksList[c].ToString());
-                            }
-
-                            TicksList[c].AppendLine(string.Join(",", fields));
-                            */
+                            RTVolume(fields[4], sd);
                             break;
 
                         default:
@@ -353,49 +324,30 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    WatchListManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(md);
                 }
+                else
+                    SendCancel_MarketData(tickerId);
         }
 
         //  contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
-        private static void RTVolume(string field4, Contract c)
+        private static void RTVolume(string field4, StockData sd)
         {
             string[] fields = field4.Split(';');
+            double last = fields[0].ToDouble();
+            double vol = fields[1].ToDouble() * 100;
+            if (vol == 0) vol = 33;
 
-            //if (c.MarketData is HistoricalData hd && fields.Length == 6 && fields[5] == "true" && fields[0].Length > 0 && fields[0].ToDouble() is double last && !double.IsNaN(last))
-            if (c.MarketData is StockData hd)// && !double.IsNaN(last))
-            {
-                double last = fields[0].ToDouble();
-                double vol = fields[1].ToDouble() * 100;
-                if (vol == 0) vol = 33;
-
-                long epochMs = fields[2].ToInt64();
-                DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
-
-                //double totalVol = volFields[3].ToDouble() * 100;
-                hd.InboundLiveTick(time, last, vol);
-
-                /*
-                double last = fields[0].ToDouble();
-                if (double.IsNaN(last)) last = hd.LastPrice;
-
-                double vol = fields[1].ToDouble() * 100;
-                if (vol == 0) vol = 38;
-
-                long epochMs = fields[2].ToInt64();
-                DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), c.TimeZone);
-
-                //double totalVol = volFields[3].ToDouble() * 100;
-                hd.InboundLiveTick(time, last, vol);*/
-            }
-
-
+            long epochMs = fields[2].ToInt64();
+            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), sd.Contract.TimeZone);
+            sd.InboundLiveTick(time, last, vol);
         }
 
 
         /// <summary>
         /// TickGeneric
         /// (0)"45"-(1)"6"-(2)"6"-(3)"46"-(4)"3.0"
+        /// Parse_TickGeneric: (0)"45"-(1)"6"-(2)"97"-(3)"49"-(4)"0.0"
         /// </summary>
         /// <param name="fields"></param>
         private static void Parse_TickGeneric(string[] fields)
@@ -404,15 +356,22 @@ namespace Pacmio.IB
             int tickerId = fields[2].ToInt32(-1);
 
             lock (ActiveMarketDataTicks)
-                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && fields.Length == 5)
+                if (msgVersion == "6" && ActiveMarketDataTicks.ContainsKey(tickerId) && ActiveMarketDataTicks[tickerId] is MarketData md && fields.Length == 5)
                 {
-                    Contract c = ActiveMarketDataTicks[tickerId];
                     TickType tickType = fields[3].ToTickType();
 
                     switch (tickType)
                     {
-                        case TickType.Shortable when c.MarketData is StockData q:
+                        case TickType.Shortable when md is StockData q:
                             q.ShortStatus = fields[4].ToDouble(-1);
+                            break;
+
+                        case TickType.Halted:
+                            //q.ShortStatus = fields[4].ToDouble(-1);
+                            md.Status = MarketTickStatus.Frozen;
+
+                            // Halted!!!
+
                             break;
 
                         default:
@@ -421,7 +380,7 @@ namespace Pacmio.IB
                             break;
                     }
 
-                    WatchListManager.UpdateUI(c);
+                    WatchListManager.UpdateUI(md);
                 }
         }
 
@@ -479,6 +438,34 @@ namespace Pacmio.IB
             //long epoch = fields[2].ToInt64(0); // (3)"45"-(4)"1580146441"
 
 
+
+        }
+
+        /// <summary>
+        /// Unknown Message: 57: (0)"57"-(1)"1"-(2)"97" 
+        /// </summary>
+        /// <param name="fields"></param>
+        private static void Parse_TickSnapshotEnd(string[] fields)
+        {
+            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+
+            //int tickerId = fields[1].ToInt32(-1);
+            //long epoch = fields[2].ToInt64(0); // (3)"45"-(4)"1580146441"
+
+            if (fields[1] == "1")
+            {
+                int tickerId = fields[2].ToInt32(-1);
+                RemoveRequest(tickerId, false);
+                lock (ActiveMarketDataTicks)
+                {
+                    /*
+                    if (ActiveMarketDataTicks.TryRemove(tickerId, out MarketData md))
+                    {
+                        md.Status = MarketTickStatus.DelayedFrozen;
+                        md.TickerId = int.MinValue;
+                    }*/
+                }
+            }
 
         }
     }

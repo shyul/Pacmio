@@ -30,11 +30,11 @@ namespace Pacmio
         /// Update All UI Elements when a new tick comes in
         /// </summary>
         /// <param name="c"></param>
-        public static void UpdateUI(Contract c)
+        public static void UpdateUI(MarketData md)
         {
             Task.Run(() =>
             {
-                List.Where(n => n.Contains(c)).ToList().ForEach(n => n.SetAsyncUpdateUI());
+                List.Where(n => n.Contains(md)).ToList().ForEach(n => n.SetAsyncUpdateUI());
             });
         }
 

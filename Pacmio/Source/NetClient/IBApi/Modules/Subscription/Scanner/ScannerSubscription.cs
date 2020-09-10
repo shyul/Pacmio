@@ -15,7 +15,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly ConcurrentDictionary<int, WatchList> ScanRequestList = new ConcurrentDictionary<int, WatchList>();
+
 
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"TOP_PERC_GAIN"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=1000000;"
@@ -34,7 +34,7 @@ namespace Pacmio.IB
                 (int requestId, string typeStr) = RegisterRequest(RequestType.RequestScannerSubscription);
 
                 info.RequestId = requestId;
-                ScanRequestList[requestId] = info;
+                ActiveScanners[requestId] = info;
 
                 //ScannerManager.GetOrAdd(info);
 
@@ -75,7 +75,7 @@ namespace Pacmio.IB
 
         public static void SendCancel_ScannerSubscription(int requestId)
         {
-            ScanRequestList.TryRemove(requestId, out _);
+            ActiveScanners.TryRemove(requestId, out _);
             RemoveRequest(requestId, RequestType.RequestScannerSubscription);
             // Emit update cancelled.
         }
@@ -102,9 +102,9 @@ namespace Pacmio.IB
                 {
                     Console.WriteLine("Scanner Subscription Error: " + fields.ToStringWithIndex());
                     RemoveRequest(requestId);
-                    if (ScanRequestList.ContainsKey(requestId))
+                    if (ActiveScanners.ContainsKey(requestId))
                     {
-                        ScanRequestList.TryRemove(requestId, out WatchList info);
+                        ActiveScanners.TryRemove(requestId, out WatchList info);
                         ScannerManager.List.Remove(info);
                     }
                 }
@@ -131,10 +131,10 @@ namespace Pacmio.IB
 
             int requestId = fields[2].ToInt32(-1);
 
-            if (msgVersion == "3" && ScanRequestList.ContainsKey(requestId))
+            if (msgVersion == "3" && ActiveScanners.ContainsKey(requestId))
             {
                 //int numberOfElements = fields[3].ToInt32(-1);
-                WatchList info = ScanRequestList[requestId];
+                WatchList info = ActiveScanners[requestId];
                 info.ScannerData_Handler(fields);
             }
         }

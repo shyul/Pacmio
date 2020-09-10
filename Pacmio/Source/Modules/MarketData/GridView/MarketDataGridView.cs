@@ -22,32 +22,26 @@ namespace Pacmio
 
         }
 
-        public void Add(Contract c)
+        public void Add(StockData s)
         {
-            if (c is Stock s)
-            {
-                Console.WriteLine("MarketDataGridView Adding: " + s.ToString());
+            Console.WriteLine("MarketDataGridView Adding: " + s.Contract.ToString());
 
-                List<StockData> newRows = new List<StockData>();
-                if (Rows is StockData[] rows) newRows.AddRange(rows);
+            List<StockData> newRows = new List<StockData>();
+            if (Rows is StockData[] rows) newRows.AddRange(rows);
 
-                newRows.CheckAdd(s.StockData);
-                Update(newRows);
-            }
+            newRows.CheckAdd(s);
+            Update(newRows);
         }
 
-        public void Remove(Contract c)
+        public void Remove(StockData s)
         {
-            if (c is Stock s)
-            {
-                List<StockData> list = new List<StockData>();
-                if (Rows is StockData[] rows) list.AddRange(rows);
-                list.CheckRemove(s.StockData);
-                Update(list);
-            }
+            List<StockData> list = new List<StockData>();
+            if (Rows is StockData[] rows) list.AddRange(rows);
+            list.CheckRemove(s);
+            Update(list);
         }
 
-        public bool Contains(Contract c) => Rows is StockData[] rows && rows.Where(n => n.Contract == c).Count() > 0;
+        public bool Contains(MarketData md) => Rows is StockData[] rows && rows.Where(n => n == md).Count() > 0;
 
         public Contract SelectedContract => Rows[SelectedIndex].Contract;
 

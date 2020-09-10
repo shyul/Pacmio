@@ -883,10 +883,10 @@ namespace TestClient
 
         private void BtnMarketDataSyncTicks_Click(object sender, EventArgs e)
         {
-            foreach (Contract c in Pacmio.IB.Client.ActiveMarketDataTicks.Values)
+            foreach (var md in Pacmio.IB.Client.ActiveMarketDataTicks.Values)
             {
-                if(c is Stock s)
-                MarketDataGridView.Add(s);
+                if(md is StockData sd)
+                MarketDataGridView.Add(sd);
             }
         }
 
@@ -896,7 +896,20 @@ namespace TestClient
             ContractTest.ActiveContract.MarketData.StartTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
-                MarketDataGridView.Add(s);
+                MarketDataGridView.Add(s.StockData);
+
+            Root.Form?.Show();
+        }
+
+        private void BtnSnapshotContract_Click(object sender, EventArgs e)
+        {
+            if (!Root.NetConnected || !ValidateSymbol()) return;
+            ContractTest.ActiveContract.MarketData.SnapshotTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
+
+            if (ContractTest.ActiveContract is Stock s)
+                MarketDataGridView.Add(s.StockData);
+
+            Root.Form?.Show();
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
@@ -914,13 +927,31 @@ namespace TestClient
                 Console.WriteLine("MarketQuote: " + c.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
 
                 if (c is Stock s)
-                    MarketDataGridView.Add(s);
+                    MarketDataGridView.Add(s.StockData);
             }
 
             Root.Form?.Show();
         }
 
+        private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
+        {
+            string symbolText = TextBoxMultiContracts.Text;
+            var symbols = ContractList.GetSymbolList(ref symbolText);
 
+            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+            //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
+
+            foreach (Contract c in cList)
+            {
+                Console.WriteLine("MarketQuote Snapshot: " + c); 
+                c.MarketData.SnapshotTicks();
+
+                if (c is Stock s)
+                    MarketDataGridView.Add(s.StockData);
+            }
+
+            Root.Form?.Show();
+        }
 
 
 
@@ -1150,6 +1181,8 @@ namespace TestClient
         {
             Pacmio.IB.Client.SendRequest_NewsArticle("BRFG", "BRFG$0d4d7115");
         }
+
+
     }
     public static class DataGridHelper
     {

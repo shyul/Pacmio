@@ -205,20 +205,10 @@ namespace Pacmio
 
         public override bool StartTicks()
         {
+            FilteredTicks = true;
             EnableNews = true;
             EnableShortableShares = true;
-
-            string tickList = FilteredTicks ? "375" : "233";
-            if (EnableShortableShares) tickList += ",236";
-            if (EnableNews) tickList += ",292";
-
-
-
-            //tickList = tickList.TrimEnd(',');
-
-            //string tickList = "233,236,375";
-
-            return IB.Client.SendRequest_MarketData(Contract, tickList);
+            return IB.Client.SendRequest_MarketData(this);
         }
 
         [DataMember]

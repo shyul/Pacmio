@@ -61,7 +61,7 @@ namespace Pacmio
 
 
         [IgnoreDataMember]
-        public virtual bool IsTickActive => IB.Client.ActiveMarketDataTicks.Values.Contains(Contract);
+        public virtual bool IsTickActive => IB.Client.ActiveMarketDataTicks.Values.Contains(this);
 
         /// <summary>
         /// https://interactivebrokers.github.io/tws-api/tick_types.html
@@ -73,9 +73,11 @@ namespace Pacmio
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual bool StartTicks() => IB.Client.SendRequest_MarketData(Contract, "233,236,375");
+        public virtual bool StartTicks() => IB.Client.SendRequest_MarketData(this);
 
-        public virtual void StopTicks() => IB.Client.SendCancel_MarketTicks(TickerId);
+        public virtual void SnapshotTicks() => IB.Client.SendRequest_MarketData(this, true);
+
+        public virtual void StopTicks() => IB.Client.SendCancel_MarketData(TickerId);
 
         [DataMember]
         public int TickerId { get; set; } = int.MinValue;
@@ -89,8 +91,30 @@ namespace Pacmio
         [DataMember]
         public string BBOExchangeId { get; set; } = string.Empty;
 
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), CellRenderer(typeof(NumberCellRenderer), 60)]
+        public double Open { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("High"), GridColumnOrder(13), CellRenderer(typeof(NumberCellRenderer), 60)]
+        public double High { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), CellRenderer(typeof(NumberCellRenderer), 60)]
+        public double Low { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), CellRenderer(typeof(NumberCellRenderer), 60)]
+        public double PreviousClose { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), CellRenderer(typeof(NumberCellRenderer), 70)]
+        public double Volume { get; set; } = double.NaN;
+
+
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), CellRenderer(typeof(NumberCellRenderer), 60, false)]
         public double LastPrice { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last Size"), GridColumnOrder(10), CellRenderer(typeof(NumberCellRenderer), 70)]
+        public double LastSize { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last.Ex"), GridColumnOrder(11), CellRenderer(typeof(TextCellRenderer), 50)]
+        public string LastExchange { get; set; } = string.Empty;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Trade Time"), GridColumnOrder(2, 0, 0), CellRenderer(typeof(TextCellRenderer), 120, true)]
         public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
@@ -106,7 +130,7 @@ namespace Pacmio
         #region Equality 
 
         // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-        public bool Equals(MarketData other) => other is MarketData md && GetType() == other.GetType() && Contract == md.Contract;
+        public bool Equals(MarketData other) => GetType() == other.GetType() && other is MarketData md && Contract == md.Contract;
 
         public override bool Equals(object other) => other is MarketData md && Equals(md);
 

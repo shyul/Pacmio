@@ -15,8 +15,6 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static readonly ConcurrentDictionary<int, Contract> ActiveMarketDataTicks = new ConcurrentDictionary<int, Contract>();
-
         /// <summary>
         /// enericTickList:
         ///     100 Option Volume(currently for stocks)
@@ -65,20 +63,34 @@ namespace Pacmio.IB
         /// <param name="regulatorySnaphsot">Regulatory Snapshots</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        internal static bool SendRequest_MarketData(Contract c, string genericTickList = "236,375",
-            bool snapshot = false, bool regulatorySnaphsot = false,
-            ICollection<(string, string)> options = null)
+        internal static bool SendRequest_MarketData(MarketData md, bool snapshot = false,
+            bool regulatorySnaphsot = false, ICollection<(string, string)> options = null)
         {
-            Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
+            Contract c = md.Contract;
 
-            if (Connected && 
-                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
-                !ActiveMarketDataTicks.Values.Contains(c) && 
+            string genericTickList = string.Empty;
+
+            if (!snapshot)
+            {
+                if (md is StockData sd)
+                {
+                    genericTickList += sd.FilteredTicks ? "375," : "233,";
+                    if (sd.EnableShortableShares) genericTickList += "236,";
+                    if (sd.EnableNews) genericTickList += "292,";
+                }
+
+                genericTickList = genericTickList.TrimEnd(',');
+                Console.WriteLine("]]]]]]]]]]]]]]]]]" + c.ToString() + ": " + genericTickList);
+            }
+
+            if (Connected &&
+                ApiCode.GetCode(c.Exchange) is string exchangeCode &&
+                !ActiveMarketDataTicks.Values.Contains(md) &&
                 !SubscriptionOverflow)
             {
-                (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
-                c.MarketData.TickerId = requestId;
-                ActiveMarketDataTicks.CheckAdd(requestId, c);
+                (int tickerId, string requestType) = RegisterRequest(RequestType.RequestMarketData);
+                md.TickerId = tickerId;
+                ActiveMarketDataTicks.CheckAdd(tickerId, md);
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -96,7 +108,7 @@ namespace Pacmio.IB
                 List<string> paramsList = new List<string>() {
                     requestType,
                     "11",
-                    requestId.Param(),
+                    tickerId.Param(),
                     c.ConId.Param(), // Contract id
                     c.Name, // Contract Symbol
                     c.TypeCode(), // Contract SecType
@@ -109,11 +121,6 @@ namespace Pacmio.IB
                     c.CurrencyCode, //  "USD", // Contract Currency
                     string.Empty, // Contract Local Symnbol
                     string.Empty, // Contract Trading Class
-                    //"0",
-                    //genericTickList,
-                    //snapshot.Param(),
-                    //regulatorySnaphsot.Param(),
-                    //options.Param(),
                 };
 
                 if (c is ICombo ic)
@@ -133,11 +140,6 @@ namespace Pacmio.IB
                                 leg.Action,
                                 leg.Exchange,
                             });
-                            /*
-                            paramsList.Add(leg.ConId.ParamPos());
-                            paramsList.Add(leg.Ratio.Param());
-                            paramsList.Add(leg.Action);
-                            paramsList.Add(leg.Exchange);*/
                         }
                     }
                 }
@@ -151,15 +153,10 @@ namespace Pacmio.IB
                         deltaNeutralContract.Delta.Param(),
                         deltaNeutralContract.Price.Param(),
                     });
-                    /*
-                    paramsList.Add("1"); // true
-                    paramsList.Add(deltaNeutralContract.ConId.ParamPos());
-                    paramsList.Add(deltaNeutralContract.Delta.Param());
-                    paramsList.Add(deltaNeutralContract.Price.Param());*/
                 }
                 else
                 {
-                    paramsList.Add("0"); // 15
+                    paramsList.Add("0");
                 }
 
                 paramsList.AddRange(new string[] {
@@ -176,15 +173,32 @@ namespace Pacmio.IB
             return false;
         }
 
-        public static void SendCancel_MarketTicks(int requestId)
+        public static void SendCancel_MarketData(int tickerId)
         {
-            RemoveRequest(requestId, RequestType.RequestMarketData);
+            RemoveRequest(tickerId, RequestType.RequestMarketData);
             lock (ActiveMarketDataTicks)
             {
-                ActiveMarketDataTicks.TryRemove(requestId, out Contract c);
-                c.MarketData.Status = MarketTickStatus.DelayedFrozen;
-                c.MarketData.TickerId = int.MinValue;
+                if (ActiveMarketDataTicks.TryRemove(tickerId, out MarketData md))
+                {
+                    md.Status = MarketTickStatus.DelayedFrozen;
+                    md.TickerId = int.MinValue;
+                }
             }
+        }
+
+        private static void ParseError_MarketData(string[] fields)
+        {
+            int requestId = fields[2].ToInt32(-1);
+            RemoveRequest(requestId, false);
+            ActiveMarketDataTicks.TryRemove(requestId, out MarketData md);
+
+            if (fields[3] == "200")
+            {
+                md.Contract.Status = ContractStatus.Error;
+                md.Contract.UpdateTime = DateTime.Now;
+            }
+
+            Console.WriteLine("RequestHistoricalTick errors: " + fields.ToStringWithIndex());
         }
     }
 }
