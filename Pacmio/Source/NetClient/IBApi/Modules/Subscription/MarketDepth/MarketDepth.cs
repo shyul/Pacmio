@@ -28,7 +28,7 @@ namespace Pacmio.IB
         /// <returns></returns>
         internal static bool SendRequest_MarketDepth(Contract c, int numRows = 20, bool isSmartDepth = true, ICollection<(string, string)> options = null)
         {
-            if (Connected && ApiCode.GetCode(c.Exchange) is string exchangeCode)
+            if (Connected && c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
 

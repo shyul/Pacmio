@@ -60,6 +60,8 @@ namespace Pacmio.IB
 
         public static void Load()
         {
+            Util.InitializeLookUpTables();
+
             if (Parameters is null)
             {
                 if (File.Exists(Parameters.FileName))

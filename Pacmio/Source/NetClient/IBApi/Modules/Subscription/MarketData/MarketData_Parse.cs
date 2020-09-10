@@ -283,7 +283,7 @@ namespace Pacmio.IB
 
                     case TickType.LastTimestamp:
                         long epoch = fields[4].ToInt64(0); // (3)"45"-(4)"1580146441"
-                        md.LastTradeTime = TimeTool.FromEpoch(epoch);
+                        md.LastTradeTime = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.FromEpoch(epoch), md.Contract.TimeZone);
                         break;
 
                     /*

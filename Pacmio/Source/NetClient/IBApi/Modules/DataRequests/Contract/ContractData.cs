@@ -22,7 +22,7 @@ namespace Pacmio.IB
 
         private static void SendRequest_ContractData(Contract c, bool includeExpired = false)
         {
-            if (DataRequestReady && ApiCode.GetCode(c.Exchange) is string exchangeCode)
+            if (DataRequestReady && c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestContractData);
                 DataRequestID = requestId;

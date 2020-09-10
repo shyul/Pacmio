@@ -82,10 +82,10 @@ namespace Pacmio.IB
             int totalQuantity = fields[14].ToInt32(0);
             od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;
 
-            od.Type = ApiCode.GetEnum<OrderType>(fields[15]);
+            od.Type = fields[15].ToOrderType();
             od.LimitPrice = fields[16].ToDouble();
             od.AuxPrice = fields[17].ToDouble();
-            od.TimeInForce = ApiCode.GetEnum<OrderTimeInForce>(fields[18]);
+            od.TimeInForce = fields[18].ToOrderTimeInForce();
             // fields[19]  // order.OcaGroup = eDecoder.ReadString();
             od.AccountCode = fields[20];
             // fields[21]  // order.OpenClose = eDecoder.ReadString();
@@ -166,7 +166,7 @@ namespace Pacmio.IB
             //Console.WriteLine("4) N = " + N);
 
             bool whatIf = fields[N] == "1" ? true : false;
-            od.Status = (whatIf) ? OrderStatus.Inactive : ApiCode.GetEnum<OrderStatus>(fields[N + 1]);
+            od.Status = (whatIf) ? OrderStatus.Inactive : fields[N + 1].ToOrderStatus(); //  ApiCode.GetEnum<OrderStatus>();
 
             if (whatIf)
             {

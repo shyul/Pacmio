@@ -28,10 +28,10 @@ namespace Pacmio.IB
 
             Console.WriteLine("\n##### Place Order: " + c.ToString() + " #####");
 
-            if (Connected && ApiCode.GetCode(c.Exchange) is string exchangeCode &&
+            if (Connected && c.Exchange.Param() is string exchangeCode &&
                 c is IBusiness it &&
-                ApiCode.GetCode(od.Type) is string orderTypeCode &&
-                ApiCode.GetCode(od.TimeInForce) is string TifCode && od.Quantity != 0) // && !modify))// && c.IsValid) // Also please check the RHD is active?
+                od.Type.Param() is string orderTypeCode &&
+                od.TimeInForce.Param() is string TifCode && od.Quantity != 0) // && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
                 od.Status = OrderStatus.Inactive;
 

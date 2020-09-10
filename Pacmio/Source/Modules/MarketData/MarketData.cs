@@ -100,9 +100,6 @@ namespace Pacmio
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), CellRenderer(typeof(NumberCellRenderer), 70)]
         public double Volume { get; set; } = double.NaN;
 
-        [DataMember]
-        public double MarkPrice { get; set; } = double.NaN;
-
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), CellRenderer(typeof(NumberCellRenderer), 60, false)]
         public double LastPrice { get; set; } = double.NaN;
 
@@ -119,7 +116,8 @@ namespace Pacmio
 
         #region Trade
 
-
+        [DataMember]
+        public double MarkPrice { get; set; } = double.NaN;
 
 
 

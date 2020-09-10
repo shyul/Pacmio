@@ -27,7 +27,7 @@ namespace Pacmio.IB
         internal static bool SendRequest_RealTimeBars(Contract c, ICollection<(string, string)> options = null)
         {
             if (Connected && 
-                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
+                c.Exchange.Param() is string exchangeCode && 
                 !ActiveRealTimeBars.Values.Contains(c) && 
                 !SubscriptionOverflow)
             {

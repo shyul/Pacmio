@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Xu;
 
@@ -33,6 +34,14 @@ namespace Pacmio.IB
                 }
 
             return tagValuesStr.ToString();
+        }
+
+        public static string Param(this Enum eu)
+        {
+            if (eu.GetAttribute<ApiCode>() is ApiCode ac)
+                return ac.Code;
+            else
+                return null;
         }
 
         //private const string FORMAT_FILTERDATE = "yyyymmdd-hh:mm:ss";
@@ -160,7 +169,115 @@ namespace Pacmio.IB
                 return (false, null);
         }
 
+        /*
+        public static T GetEnum<T>(string code) where T : Enum
+        {
+            var res = ReflectionTool.ToArray<T>().Where(n => n.GetAttribute<ApiCode>() is ApiCode res && res.Code == code);
 
+            if (res.Count() > 0)
+                return res.First();
+            else
+            {
+                Console.WriteLine("???? Unknown IB API Code: " + code);
+                return default(T);
+            }
+        }*/
+
+        /*
+        foreach (T item in Enum.GetValues(typeof(T)) as T[])
+        {
+            (bool IsValid, ApiCode Result) = item.GetAttribute<ApiCode>();
+            if (IsValid && Result.Code == code) return (true, item);
+        }*/
+
+
+        private static void InitializeEnumLookUpTable<T>(Dictionary<string, T> table) where T : Enum
+        {
+            lock (table) 
+            {
+                table.Clear(); 
+                ReflectionTool.ToArray<T>().ToList().ForEach(n => {
+                    if (n.GetAttribute<ApiCode>() is ApiCode res) 
+                        table[res.Code] = n;
+                });
+            }
+        }
+
+        public static void InitializeLookUpTables() 
+        {
+            InitializeEnumLookUpTable(OrderTypeLUT);
+            InitializeEnumLookUpTable(OrderTimeInForceLUT);
+            InitializeEnumLookUpTable(OrderStatusLUT);
+        }
+
+        private static Dictionary<string, OrderType> OrderTypeLUT { get; } = new Dictionary<string, OrderType>();
+        private static Dictionary<string, OrderTimeInForce> OrderTimeInForceLUT { get; } = new Dictionary<string, OrderTimeInForce>();
+        private static Dictionary<string, OrderStatus> OrderStatusLUT { get; } = new Dictionary<string, OrderStatus>();
+
+        public static OrderType ToOrderType(this string value)
+        {
+            lock (OrderTypeLUT)
+                if (OrderTypeLUT.ContainsKey(value))
+                    return OrderTypeLUT[value];
+                else
+                    throw new Exception("Unknown OrderType Code: " + value);
+            /*
+            return value switch
+            {
+                "MKT" => OrderType.Market,
+                "MTL" => OrderType.MarketLimit,
+                "MIT" => OrderType.MarketIfTouched,
+                "LMT" => OrderType.Limit,
+                "STP" => OrderType.Stop,
+                "STP LMT" => OrderType.StopLimit,
+                "TRAIL" => OrderType.TrailingStop,
+                "TRAIL LIMIT" => OrderType.TrailingStopLimit,
+                "MIDPRICE" => OrderType.MidPrice,
+
+                _ => OrderType.UNKNOWN
+            };*/
+        }
+
+        public static OrderTimeInForce ToOrderTimeInForce(this string value)
+        {
+            lock (OrderTimeInForceLUT)
+                if (OrderTimeInForceLUT.ContainsKey(value))
+                    return OrderTimeInForceLUT[value];
+                else
+                    throw new Exception("Unknown OrderTimeInForce Code: " + value);
+
+            /*
+            return value switch
+            {
+                "DAY" => OrderTimeInForce.Day,
+                _ => OrderTimeInForce.UNKNOWN
+            };*/
+        }
+
+        public static OrderStatus ToOrderStatus(this string value)
+        {
+            lock (OrderStatusLUT)
+                if (OrderStatusLUT.ContainsKey(value))
+                    return OrderStatusLUT[value];
+                else
+                    throw new Exception("Unknown OrderStatus Code: " + value);
+
+            /*
+            return value switch
+            {
+                "Inactive" => OrderStatus.Inactive,
+                "ApiPending" => OrderStatus.ApiPending,
+                "PendingSubmit" => OrderStatus.PendingSubmit,
+                "PreSubmitted" => OrderStatus.PreSubmitted,
+                "Submitted" => OrderStatus.Submitted,
+                "Filled" => OrderStatus.Filled,
+                "PendingCancel" => OrderStatus.PendingCancel,
+                "ApiCancelled" => OrderStatus.ApiCancelled,
+                "Cancelled" => OrderStatus.Cancelled,
+
+                _ => OrderStatus.UNKNOWN
+            };*/
+        }
 
         public static TickType ToTickType(this string value)
         {

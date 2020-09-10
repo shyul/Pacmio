@@ -56,8 +56,8 @@ namespace Pacmio.IB
             ICollection<(string, string)> options = null)
         {
             if (IsReady_HistoricalTick && 
-                ApiCode.GetCode(barType) is string barTypeCode && 
-                ApiCode.GetCode(c.Exchange) is string exchangeCode)
+                barType.Param() is string barTypeCode && 
+                c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalTicks);
                 requestId_HistoricalTick = requestId;

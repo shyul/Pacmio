@@ -81,7 +81,7 @@ namespace Pacmio.IB
             lock (ActiveMarketDataTickerIds)
             {
                 MarketDataRequestStatus mds = GetMarketDataRequestStatus(md);
-                if (Connected && !SubscriptionOverflow && !mds.IsActive && ApiCode.GetCode(md.Contract.Exchange) is string exchangeCode)
+                if (Connected && !SubscriptionOverflow && !mds.IsActive && md.Contract.Exchange.Param() is string exchangeCode)
                 {
                     mds.IsActive = true;
                     (int tickerId, string requestType) = RegisterRequest(RequestType.RequestMarketData);

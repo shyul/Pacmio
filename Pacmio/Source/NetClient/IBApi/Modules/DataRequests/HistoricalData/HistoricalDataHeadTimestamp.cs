@@ -27,8 +27,8 @@ namespace Pacmio.IB
         {
             Contract c = bt.Contract;
 
-            if (ApiCode.GetCode(bt.Type) is string barTypeCode && 
-                ApiCode.GetCode(c.Exchange) is string exchangeCode && 
+            if (bt.Type.Param() is string barTypeCode && 
+                c.Exchange.Param() is string exchangeCode && 
                 DataRequestReady) // Also please check the RHD is already active?
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHeadTimestamp);
