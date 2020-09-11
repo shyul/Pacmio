@@ -20,9 +20,5 @@ namespace Pacmio.IB
         public ApiCode(string code) => Code = code;
 
         public string Code { get; private set; }
-
-
-
-
     }
 }

@@ -18,6 +18,12 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
+        public Account Account { get; }
+
+        public OrderInfo CurrentOrder { get; private set; }
+
+
+
         #region Position Information
 
         public TradeActionType ActionType
@@ -33,6 +39,23 @@ namespace Pacmio
             }
         }
 
+        public double ExpectedQuantity
+        {
+            get => m_ExpectedQuantity;
+            set
+            {
+                if (value > m_ExpectedQuantity)
+                {
+                    // Remove Quantity
+                }
+                else if (value < m_ExpectedQuantity)
+                {
+                    // Add Quantity
+                }
+
+            }
+        }
+        private double m_ExpectedQuantity = 0;
         public double Quantity { get; set; } = 0;
 
         public double AveragePrice { get; set; } = double.NaN;

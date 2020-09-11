@@ -17,7 +17,7 @@ namespace Pacmio
     [Serializable, DataContract]
     [KnownType(typeof(BidAskData))]
     [KnownType(typeof(StockData))]
-    public class MarketData : IEquatable<MarketData>
+    public class MarketData : IEquatable<MarketData>, IEquatable<Contract>
     {
         /// <summary>
         /// Run this after loading
@@ -32,24 +32,7 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
         public Contract Contract { get; private set; }
 
-        #region Basic Info  
 
-        [DataMember]
-        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
-
-        [DataMember]
-        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
-
-        [DataMember]
-        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
-
-        /// <summary>
-        /// TODO: Change to Rules
-        /// </summary>
-        [DataMember]
-        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
-
-        #endregion Basic Info 
 
         #region Quote
 
@@ -117,13 +100,30 @@ namespace Pacmio
         #region Trade
 
         [DataMember]
-        public double MarkPrice { get; set; } = double.NaN;
+        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
+
+        /// <summary>
+        /// TODO: Change to Rules
+        /// </summary>
+        [DataMember]
+        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
 
 
+        [IgnoreDataMember]
+        public double MarkPrice { get; set; } = double.NaN; // Modify, to feed the value into Position
 
+        [IgnoreDataMember] // Initialize
+        public Dictionary<Account, PositionStatus> Position { get; } = new Dictionary<Account, PositionStatus>();
 
-
+        [IgnoreDataMember] // Initialize
+        public List<IDataView> DataViews { get; } = new List<IDataView>();
 
 
 
@@ -143,11 +143,14 @@ namespace Pacmio
 
         // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
         public bool Equals(MarketData other) => GetType() == other.GetType() && other is MarketData md && Contract == md.Contract;
-
-        public override bool Equals(object other) => other is MarketData md && Equals(md);
-
         public static bool operator ==(MarketData s1, MarketData s2) => s1.Equals(s2);
         public static bool operator !=(MarketData s1, MarketData s2) => !s1.Equals(s2);
+
+        public bool Equals(Contract other) => Contract == other;
+        public static bool operator ==(MarketData s1, Contract s2) => s1.Equals(s2);
+        public static bool operator !=(MarketData s1, Contract s2) => !s1.Equals(s2);
+
+        public override bool Equals(object other) => other is MarketData md && Equals(md);
 
         public override int GetHashCode() => Contract.GetHashCode() ^ GetType().GetHashCode();
 

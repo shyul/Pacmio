@@ -266,15 +266,7 @@ namespace Pacmio
                 return false;
         }
 
-        public bool Equals(Contract other)
-        {
-            if (this is null || other is null)
-                return false;
-            else if (ConId > 0)
-                return ConId == other.ConId;
-            else
-                return Info == other.Info;
-        }
+        public bool Equals(Contract other) => other is Contract c && GetType() == c.GetType() && ((ConId > 0 && ConId == other.ConId) || Info == other.Info);
 
         public bool Equals((string name, Exchange exchange, string typeName) other) => Info == other;
 

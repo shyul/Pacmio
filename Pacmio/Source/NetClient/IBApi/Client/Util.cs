@@ -23,6 +23,7 @@ namespace Pacmio.IB
         public static string Param(this double value) => (double.IsNaN(value) || value == double.MaxValue || value == double.MinValue) ? string.Empty : value.ToString();
         public static string ParamPos(this int value) => (value < 0 || value == int.MaxValue) ? string.Empty : value.ToString(CultureInfo.InvariantCulture);
         public static string Param(this int value) => value.ToString(CultureInfo.InvariantCulture);
+        public static string Param(this Enum eu) => eu.GetAttribute<ApiCode>() is ApiCode ac ? ac.Code : null;
         public static string Param(this ICollection<(string, string)> options)
         {
             StringBuilder tagValuesStr = new StringBuilder();
@@ -34,14 +35,6 @@ namespace Pacmio.IB
                 }
 
             return tagValuesStr.ToString();
-        }
-
-        public static string Param(this Enum eu)
-        {
-            if (eu.GetAttribute<ApiCode>() is ApiCode ac)
-                return ac.Code;
-            else
-                return null;
         }
 
         //private const string FORMAT_FILTERDATE = "yyyymmdd-hh:mm:ss";
