@@ -70,7 +70,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                foreach (Account ac in AccountManager.List)
+                foreach (Account ac in AccountManager.m_List)
                 {
                     foreach (Contract c in ac.Positions.Keys)
                     {

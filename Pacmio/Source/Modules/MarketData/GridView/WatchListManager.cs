@@ -54,24 +54,10 @@ namespace Pacmio
     }
 
 
-    public interface IWatchList2
-    {
-
-    }
 
 
-    public interface IWatchList
-    {
-        void Start();
 
-        void Stop();
 
-        ICollection<Contract> Snapshot();
-
-        ICollection<Contract> List { get; }
-
-        // Add event / Interrupt source
-    }
 
 
 

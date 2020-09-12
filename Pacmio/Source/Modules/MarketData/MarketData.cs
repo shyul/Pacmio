@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Xu;
 using Xu.GridView;
-using System.Threading;
 
 namespace Pacmio
 {
@@ -117,7 +116,22 @@ namespace Pacmio
 
 
         [IgnoreDataMember]
-        public double MarkPrice { get; set; } = double.NaN; // Modify, to feed the value into Position
+        public double MarkPrice
+        {
+            get => m_MarkPrice;
+            set
+            {
+                m_MarkPrice = value;
+                foreach (Account ac in AccountManager.List)
+                {
+                    PositionStatus ps = ac[Contract];
+                    ps.MarkPrice = m_MarkPrice;
+                }
+            }
+        }
+
+        [DataMember]
+        private double m_MarkPrice = double.NaN;
 
         [IgnoreDataMember]
         public PositionStatus this[Account ac] => ac[Contract];

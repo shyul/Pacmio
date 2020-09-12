@@ -15,35 +15,33 @@ namespace Pacmio
 {
     public static class TradeInfoManager
     {
-        private static Dictionary<string, TradeInfo> List { get; } = new Dictionary<string, TradeInfo>();
+        private static Dictionary<string, TradeInfo> TradeHistory { get; } = new Dictionary<string, TradeInfo>();
 
         public static TradeInfo GetOrAdd(string execId)
         {
-            lock (List)
+            lock (TradeHistory)
             {
-                if (!List.ContainsKey(execId)) List.Add(execId, new TradeInfo(execId));
-                return List[execId];
+                if (!TradeHistory.ContainsKey(execId)) TradeHistory.Add(execId, new TradeInfo(execId));
+                return TradeHistory[execId];
             }
         }
 
-        //public static void Add(TradeInfo ti) => List.Add(ti.ExecId, ti);
-
         public static TradeInfo Get(string execId)
         {
-            if (List.ContainsKey(execId))
-                return List[execId];
+            if (TradeHistory.ContainsKey(execId))
+                return TradeHistory[execId];
             else
                 return null;
         }
 
         public static IEnumerable<TradeInfo> Get(Contract c)
         {
-            return List.Select(n => n.Value).Where(n => (n.Contract is Stock) && c == n.Contract).OrderBy(n => n.ExecuteTime);
+            return TradeHistory.Select(n => n.Value).Where(n => (n.Contract is Stock) && c == n.Contract).OrderBy(n => n.ExecuteTime);
         }
 
-        public static int Count => List.Count;
+        public static int Count => TradeHistory.Count;
 
-        public static double TotalPnL() => TotalPnL(List.Values);
+        public static double TotalPnL() => TotalPnL(TradeHistory.Values);
 
         public static double TotalPnL(this IEnumerable<TradeInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
 
@@ -73,8 +71,8 @@ namespace Pacmio
 
         public static void Save()
         {
-            lock (List)
-                List.Values.ToList().SerializeJsonFile(FileName);
+            lock (TradeHistory)
+                TradeHistory.Values.ToList().SerializeJsonFile(FileName);
         }
 
         public static void Load()
@@ -84,7 +82,7 @@ namespace Pacmio
                 List<TradeInfo> data = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
                 data.AsParallel().ForAll(ti =>
                 {
-                    lock (List) List[ti.ExecId] = ti;
+                    lock (TradeHistory) TradeHistory[ti.ExecId] = ti;
 
                     if (ti.Contract is Contract c)
                     {
@@ -94,7 +92,7 @@ namespace Pacmio
             }
         }
 
-        public static void ExportTradeLog(string fileName) => List.Values.ExportTradeLog(fileName);
+        public static void ExportTradeLog(string fileName) => TradeHistory.Values.ExportTradeLog(fileName);
 
         public static void ExportTradeLog(this IEnumerable<TradeInfo> log, string fileName)
         {

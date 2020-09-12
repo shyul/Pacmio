@@ -162,7 +162,7 @@ namespace Pacmio
         public static void CloseAllPositions()
         {
             CancelAllOrders();
-            foreach (Account ac in AccountManager.List)
+            foreach (Account ac in AccountManager.m_List)
                 ac.CloseAllPositions();
         }
 

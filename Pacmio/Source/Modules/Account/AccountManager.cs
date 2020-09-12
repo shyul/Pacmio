@@ -17,13 +17,15 @@ namespace Pacmio
     /// </summary>
     public static class AccountManager
     {
-        public static HashSet<Account> List { get; } = new HashSet<Account>();
+        private static HashSet<Account> m_List { get; } = new HashSet<Account>();
 
-        public static int Count => List.Count;
+        public static IEnumerable<Account> List => m_List;
+
+        public static int Count => m_List.Count;
 
         public static Account Get(string accountCode)
         {
-            var res = List.Where(n => n.AccountCode == accountCode);
+            var res = m_List.Where(n => n.AccountCode == accountCode);
 
             if (res.Count() > 0) return res.First();
             else return null;
@@ -31,13 +33,13 @@ namespace Pacmio
 
         public static Account GetOrAdd(string accountCode)
         {
-            var res = List.Where(n => n.AccountCode == accountCode);
+            var res = m_List.Where(n => n.AccountCode == accountCode);
 
             if (res.Count() > 0) return res.First();
             else
             {
                 Account ac = new Account(accountCode);
-                List.Add(ac);
+                m_List.Add(ac);
                 return ac;
             }
         }
@@ -72,9 +74,9 @@ namespace Pacmio
 
         public static void Save()
         {
-            lock (List)
+            lock (m_List)
             {
-                List.ToArray().SerializeJsonFile(FileName);
+                m_List.ToArray().SerializeJsonFile(FileName);
             }
         }
 
@@ -86,7 +88,7 @@ namespace Pacmio
                 foreach (Account ac in list)
                 {
                     ac.Setup();
-                    List.CheckAdd(ac);
+                    m_List.CheckAdd(ac);
                 }
             }
 

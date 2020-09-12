@@ -60,7 +60,12 @@ namespace Pacmio
             }
             else
             {
-                ActionType = ps.ActionType;
+                if (Quantity > 0)
+                    ActionType = TradeActionType.LongHold;
+                else if (Quantity < 0)
+                    ActionType = TradeActionType.ShortHold;
+                else
+                    ActionType = TradeActionType.None;
             }
 
             Quantity = new_qty;
