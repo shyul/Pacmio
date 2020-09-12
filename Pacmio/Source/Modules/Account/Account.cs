@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Xu;
 
@@ -52,13 +53,15 @@ namespace Pacmio
         [IgnoreDataMember]
         public double PositionValue => (Positions is null || Positions.Count < 1) ? 0 : Positions.Values.Select(n => n.Value).Sum();
 
+        public PositionStatus this[Contract c] => GetPosition(c);
+
         [IgnoreDataMember]
         public ConcurrentDictionary<Contract, PositionStatus> Positions { get; private set; }
 
         public PositionStatus GetPosition(Contract c)
         {
             if (!Positions.ContainsKey(c))
-                Positions.TryAdd(c, new PositionStatus(c));
+                Positions.TryAdd(c, new PositionStatus(this, c.MarketData));
 
             return Positions[c];
         }

@@ -119,16 +119,28 @@ namespace Pacmio
         [IgnoreDataMember]
         public double MarkPrice { get; set; } = double.NaN; // Modify, to feed the value into Position
 
-        [IgnoreDataMember] // Initialize
-        public Dictionary<Account, PositionStatus> Position { get; } = new Dictionary<Account, PositionStatus>();
+        [IgnoreDataMember]
+        public PositionStatus this[Account ac] => ac[Contract];
+
+
+
 
         [IgnoreDataMember] // Initialize
         public List<IDataView> DataViews { get; } = new List<IDataView>();
 
 
+        public void Update()
+        {
+            UpdateTime = DateTime.Now;
 
+            foreach (IDataView idv in DataViews)
+            {
+                idv.SetAsyncUpdateUI();
+            }
+        }
 
-
+        [DataMember]
+        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
 
 

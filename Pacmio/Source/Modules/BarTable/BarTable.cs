@@ -46,7 +46,7 @@ namespace Pacmio
             {
                 foreach (IDataView dv in DataViews)
                 {
-                    dv.Table = null;
+                    dv.RemoveData();
                 }
             }
 

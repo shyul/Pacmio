@@ -92,6 +92,15 @@ namespace Pacmio
         public SignalArea SignalArea { get; }
         public PositionArea PositionArea { get; }
 
+        public override void RemoveData() 
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+                m_BarTable = null;
+            }
+        }
+
         public void Config(BarTable bt)
         {
             lock (GraphicsLockObject)

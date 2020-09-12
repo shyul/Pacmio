@@ -14,7 +14,7 @@ namespace Pacmio
         {
             Contract = c;
             TradeRule = tr;
-            Status = new PositionStatus(c);
+            //Status = new PositionStatus(c);
         }
 
         public readonly Contract Contract;

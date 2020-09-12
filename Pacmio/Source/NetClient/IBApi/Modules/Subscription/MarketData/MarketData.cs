@@ -88,13 +88,16 @@ namespace Pacmio.IB
             {
                 if (md is StockData sd)
                 {
-                    genericTickList += sd.FilteredTicks ? "375," : "233,";
+                    //genericTickList += sd.FilteredTicks ? "375," : "233,";
+                    genericTickList += sd.FilteredTicks ? "233,375," : "233,375,";
                     if (sd.EnableShortableShares) genericTickList += "236,";
                     if (sd.EnableNews) genericTickList += "292,";
                 }
 
                 genericTickList = genericTickList.TrimEnd(',');
             }
+
+         
 
             if (isSnapshot || genericTickList != GetMarketDataRequestStatus(md).GenericTickList)
             {
@@ -103,6 +106,8 @@ namespace Pacmio.IB
             }
 
             var (tickerId, requestType, exchangeCode, mds) = RegisterMarketDataRequest(md);
+
+            Console.WriteLine("Add MarketData: " + c + " | " + isSnapshot + " | " + genericTickList + " | " + tickerId);
 
             if (tickerId > 0)
             {

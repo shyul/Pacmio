@@ -11,16 +11,23 @@ namespace Pacmio
 {
     public class PositionStatus
     {
-        public PositionStatus(Contract c)
+        public PositionStatus(Account ac, MarketData md) 
         {
-            Contract = c;
+            Account = ac;
+            MarketData = md; 
         }
-
-        public Contract Contract { get; }
 
         public Account Account { get; }
 
+        public MarketData MarketData { get; }
+
+        public Contract Contract => MarketData.Contract;
+
+     
+
         public OrderInfo CurrentOrder { get; private set; }
+
+
 
 
 
