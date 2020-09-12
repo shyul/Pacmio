@@ -207,7 +207,7 @@ namespace Pacmio.IB
             if (fields[1] == "1")
             {
                 int tickerId = fields[2].ToInt32(-1);
-                WatchListManager.UpdateUI(UnregisterMarketDataRequest(tickerId, false).MarketData);
+                if (UnregisterMarketDataRequest(tickerId, false) is MarketDataRequestStatus mds) mds.MarketData.Update();
             }
         }
 

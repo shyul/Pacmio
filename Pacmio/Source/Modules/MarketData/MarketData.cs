@@ -124,8 +124,8 @@ namespace Pacmio
                 m_MarkPrice = value;
                 foreach (Account ac in AccountManager.List)
                 {
-                    PositionStatus ps = ac[Contract];
-                    ps.MarkPrice = m_MarkPrice;
+                    Position ps = ac[Contract];
+                    //ps.MarkPrice = m_MarkPrice;
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace Pacmio
         private double m_MarkPrice = double.NaN;
 
         [IgnoreDataMember]
-        public PositionStatus this[Account ac] => ac[Contract];
+        public Position this[Account ac] => ac[Contract];
 
 
 
@@ -142,15 +142,24 @@ namespace Pacmio
         [IgnoreDataMember] // Initialize
         public List<IDataView> DataViews { get; } = new List<IDataView>();
 
+        [IgnoreDataMember]
+        public List<IMarketDataAnalysis> PositionAnalyses { get; } = new List<IMarketDataAnalysis>();
 
         public void Update()
         {
             UpdateTime = DateTime.Now;
+            
+            foreach (IMarketDataAnalysis idv in PositionAnalyses)
+            {
+                idv.Update();
+            }
 
             foreach (IDataView idv in DataViews)
             {
                 idv.SetAsyncUpdateUI();
             }
+
+
         }
 
         [DataMember]
@@ -183,5 +192,10 @@ namespace Pacmio
         public override string ToString() => GetType().Name + " for " + Contract.ToString();
 
         #endregion Equality
+    }
+
+    public interface IMarketDataAnalysis
+    {
+        void Update();
     }
 }

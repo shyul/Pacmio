@@ -46,7 +46,7 @@ namespace Pacmio
 
         #region Data Requests
 
-        public static object GraphicsLockObject { get; } = new object();
+        public static object PositionLockObject { get; } = new object();
 
         public static void Request_AccountSummary() => IB.Client.SendRequest_AccountSummary();
 

@@ -33,11 +33,11 @@ namespace Pacmio
             return comms + exchange_fee + transaction_fee + finra_fee + nyse_pass_fee;
         }
 
-        public static TradeInfo AddLiquidity(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
+        public static TradeInfo AddLiquidity(this Position ps, double price) => ps.Trade(-ps.Quantity, price);
 
-        public static TradeInfo Close(this PositionStatus ps, double price) => ps.Trade(-ps.Quantity, price);
+        public static TradeInfo Close(this Position ps, double price) => ps.Trade(-ps.Quantity, price);
 
-        public static TradeInfo Trade(this PositionStatus ps, double quantity, double price)
+        public static TradeInfo Trade(this Position ps, double quantity, double price)
         {
             Count++;
             double proceeds = 0; // Cash flow: positive means cash to stock (add liquidity), negative means stock to cash (removing liquidity)

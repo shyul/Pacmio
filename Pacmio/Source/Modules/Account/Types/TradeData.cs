@@ -162,7 +162,7 @@ namespace Pacmio
         public static void CloseAllPositions()
         {
             CancelAllOrders();
-            foreach (Account ac in AccountManager.m_List)
+            foreach (Account ac in AccountManager.List)
                 ac.CloseAllPositions();
         }
 
@@ -182,7 +182,7 @@ namespace Pacmio
         public Dictionary<string, OrderInfo> CurrentOrder { get; private set; } = new Dictionary<string, OrderInfo>();
 
         [DataMember]
-        public Dictionary<string, PositionStatus> Positions { get; private set; } = new Dictionary<string, PositionStatus>();
+        public Dictionary<string, Position> Positions { get; private set; } = new Dictionary<string, Position>();
 
 
 

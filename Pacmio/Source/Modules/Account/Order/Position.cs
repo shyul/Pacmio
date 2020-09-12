@@ -9,12 +9,13 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Xu;
 using Xu.GridView;
+using IbXmlAE;
 
 namespace Pacmio
 {
-    public class PositionStatus
+    public class Position
     {
-        public PositionStatus(Account ac, MarketData md)
+        public Position(Account ac, MarketData md)
         {
             Account = ac;
             MarketData = md;
@@ -28,14 +29,13 @@ namespace Pacmio
 
         #region Order
 
-
         public OrderInfo CurrentOrder { get; private set; }
 
         public OrderStatus OrderStatus => CurrentOrder is OrderInfo od ? od.Status : OrderStatus.Inactive;
 
-        public IEnumerable<OrderInfo> OrderHistory { get; }
+        public List<OrderInfo> OrderHistory { get; } = new List<OrderInfo>();
 
-        public IEnumerable<TradeInfo> TradeHistory { get; }
+        public List<TradeInfo> TradeHistory { get; } = new List<TradeInfo>();
 
 
 
@@ -49,7 +49,10 @@ namespace Pacmio
 
                 if (qty > 0) // Remove Quantity
                 {
-
+                    // 1. Try modify current order
+                    // 2. Wait until current order is settled
+                    // 3. Get the actual number
+                    // 4. Setup new order and make up that number! 
 
                 }
                 else if (qty < 0) // Add Quantity
@@ -62,44 +65,25 @@ namespace Pacmio
         }
         private double m_ExpectedQuantity = 0;
 
-        public double EntryLimit { get; set; } = double.NaN;
-
-        public double ExitLimit { get; set; } = double.NaN;
-
         #endregion Order
 
         #region Position Information
-
-
-
 
         public double Quantity { get; set; } = 0;
 
         public double AveragePrice { get; set; } = double.NaN;
 
-        public double MarkPrice
-        {
-            get => m_MarkPrice;
-            set
-            {
-                m_MarkPrice = value;
-                if (Quantity < 0 && m_MarkPrice > ExitLimit)
-                {
+        public double Value => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
 
-                }
+        public double MarkPrice => MarketData.MarkPrice;
 
-
-            }
-        }
-        private double m_MarkPrice = double.NaN;
+        public double PnL => double.IsNaN(AveragePrice) ? 0 : (MarkPrice - AveragePrice) * Quantity;
 
 
 
-
-
-
-
-
+        /// <summary>
+        /// To be deleted! Merge this feature to IMarketDataAnalysis
+        /// </summary>
         public double BreakEvenPrice
         {
             get
@@ -109,7 +93,7 @@ namespace Pacmio
             }
         }
 
-        public double Value => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
+
 
         #endregion  Position Information
 
@@ -134,8 +118,5 @@ namespace Pacmio
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
     }
 
-    public class PositionAnalysis
-    {
 
-    }
 }

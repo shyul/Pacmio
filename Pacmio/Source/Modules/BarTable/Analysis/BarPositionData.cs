@@ -47,7 +47,7 @@ namespace Pacmio
                 Reset();
         }
 
-        public void Snapshot(PositionStatus ps)
+        public void Snapshot(Position ps)
         {
             double new_qty = ps.Quantity;
             if (Quantity < new_qty)

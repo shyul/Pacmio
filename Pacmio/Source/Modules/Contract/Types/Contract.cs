@@ -214,7 +214,7 @@ namespace Pacmio
         #region Order and Trade Data
 
         [IgnoreDataMember]
-        public PositionStatus this[Account ac] => MarketData[ac];
+        public Position this[Account ac] => MarketData[ac];
 
         [IgnoreDataMember]
         public virtual TradeData TradeData

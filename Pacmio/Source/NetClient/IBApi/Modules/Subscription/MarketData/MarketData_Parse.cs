@@ -61,7 +61,9 @@ namespace Pacmio.IB
             {
                 md.Contract.Status = ContractStatus.Alive;
                 md.Status = (MarketTickStatus)(fields[3].ToInt32(0));
-                WatchListManager.UpdateUI(md);
+
+                md.Update();
+                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -109,7 +111,9 @@ namespace Pacmio.IB
                 mds.MarketData.MinimumTick = fields[2].ToDouble(0);
                 mds.BBOExchangeId = fields[3];
                 mds.SnapshotPermissions = fields[4].ToInt32(-1);
-                WatchListManager.UpdateUI(mds.MarketData);
+
+                // WatchListManager.UpdateUI(mds.MarketData);
+                mds.MarketData.Update();
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -178,7 +182,8 @@ namespace Pacmio.IB
                         break;
                 }
 
-                WatchListManager.UpdateUI(md);
+                md.Update();
+                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -228,7 +233,8 @@ namespace Pacmio.IB
                         break;
                 }
 
-                WatchListManager.UpdateUI(md);
+                md.Update();
+                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -326,7 +332,8 @@ namespace Pacmio.IB
                         break;
                 }
 
-                WatchListManager.UpdateUI(md);
+                md.Update();
+                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -381,7 +388,8 @@ namespace Pacmio.IB
                         break;
                 }
 
-                WatchListManager.UpdateUI(md);
+                md.Update();
+                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);

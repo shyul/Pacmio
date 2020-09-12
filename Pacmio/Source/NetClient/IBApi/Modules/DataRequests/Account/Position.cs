@@ -51,7 +51,7 @@ namespace Pacmio.IB
                     if (totalQuantity != 0)
                     {
                         double averagePrice = fields[15].ToDouble();
-                        PositionStatus ps = ac.GetPosition(c);
+                        Position ps = ac.GetPosition(c);
                         ps.Quantity = totalQuantity;
                         ps.AveragePrice = averagePrice;
                         UpdatedPositions.CheckAdd((ac, c));
@@ -70,7 +70,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                foreach (Account ac in AccountManager.m_List)
+                foreach (Account ac in AccountManager.List)
                 {
                     foreach (Contract c in ac.Positions.Keys)
                     {

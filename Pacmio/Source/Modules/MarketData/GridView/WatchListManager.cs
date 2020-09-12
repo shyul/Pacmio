@@ -19,6 +19,7 @@ namespace Pacmio
             if (!List.Contains(gv))
             {
                 List.Add(gv);
+                //gv.
             }
             gv.ReadyToShow = true;
             Root.Form.AddForm(DockStyle.Fill, 0, gv);
@@ -30,13 +31,15 @@ namespace Pacmio
         /// Update All UI Elements when a new tick comes in
         /// </summary>
         /// <param name="c"></param>
+        /// 
+        /*
         public static void UpdateUI(MarketData md)
         {
             Task.Run(() =>
             {
                 List.Where(n => n.Contains(md)).ToList().ForEach(n => n.SetAsyncUpdateUI());
             });
-        }
+        }*/
 
         public static Contract SelectedContract
         {

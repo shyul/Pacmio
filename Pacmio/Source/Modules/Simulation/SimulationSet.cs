@@ -21,7 +21,7 @@ namespace Pacmio
 
         public readonly Strategy TradeRule;
 
-        public readonly PositionStatus Status;
+        public readonly Position Status;
 
         public readonly SimulationResult Result = new SimulationResult();
 

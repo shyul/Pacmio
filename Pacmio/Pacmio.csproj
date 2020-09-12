@@ -184,13 +184,13 @@
     <Compile Include="Source\Modules\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\Strategy\Research\ResearchManager.cs" />
     <Compile Include="Source\Modules\Account\Account.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\TradeData.cs" />
+    <Compile Include="Source\Modules\Account\Types\TradeData.cs" />
     <Compile Include="Source\Modules\Account\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Account\TradeInfoManager.cs" />
-    <Compile Include="Source\Modules\Account\Order\PositionStatus.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\LiquidityType.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\TradeActionType.cs" />
+    <Compile Include="Source\Modules\Account\Order\Position.cs" />
+    <Compile Include="Source\Modules\Account\Types\LiquidityType.cs" />
+    <Compile Include="Source\Modules\Account\Types\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ADX.cs" />
@@ -222,8 +222,8 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IOption.cs" />
     <Compile Include="Source\Modules\BusinessInfo\BusinessInfo.cs" />
     <Compile Include="Source\Modules\Account\Order\OrderInfo.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\OrderStatus.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\OrderTimeInForce.cs" />
+    <Compile Include="Source\Modules\Account\Types\OrderStatus.cs" />
+    <Compile Include="Source\Modules\Account\Types\OrderTimeInForce.cs" />
     <Compile Include="Source\Modules\Account\Order\TradeInfo.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\DataRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\OrderHistory\CompletedOrders.cs" />
@@ -246,7 +246,7 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Account\AccountManager.cs" />
     <Compile Include="Source\Modules\Scanner\ScannerManager.cs" />
-    <Compile Include="Source\Modules\Account\Order\Types\OrderType.cs" />
+    <Compile Include="Source\Modules\Account\Types\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\OrderHistory\ExecutionData.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\FundamentalData.cs" />

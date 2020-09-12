@@ -26,7 +26,7 @@ namespace Pacmio
 
         public void Setup()
         {
-            Positions = new ConcurrentDictionary<Contract, PositionStatus>();
+            Positions = new ConcurrentDictionary<Contract, Position>();
             CurrentOrders = new ConcurrentDictionary<Contract, OrderInfo>();
         }
 
@@ -53,15 +53,15 @@ namespace Pacmio
         [IgnoreDataMember]
         public double PositionValue => (Positions is null || Positions.Count < 1) ? 0 : Positions.Values.Select(n => n.Value).Sum();
 
-        public PositionStatus this[Contract c] => GetPosition(c);
+        public Position this[Contract c] => GetPosition(c);
 
         [IgnoreDataMember]
-        public ConcurrentDictionary<Contract, PositionStatus> Positions { get; private set; }
+        public ConcurrentDictionary<Contract, Position> Positions { get; private set; }
 
-        public PositionStatus GetPosition(Contract c)
+        public Position GetPosition(Contract c)
         {
             if (!Positions.ContainsKey(c))
-                Positions.TryAdd(c, new PositionStatus(this, c.MarketData));
+                Positions.TryAdd(c, new Position(this, c.MarketData));
 
             return Positions[c];
         }
@@ -70,19 +70,11 @@ namespace Pacmio
 
         #region Order
 
-
-
-
-
         /// <summary>
         /// Latest Order for each Contract 
         /// </summary>
         [IgnoreDataMember]
         public ConcurrentDictionary<Contract, OrderInfo> CurrentOrders { get; private set; }
-
-
-
-
 
 
         public void CloseAllPositions()

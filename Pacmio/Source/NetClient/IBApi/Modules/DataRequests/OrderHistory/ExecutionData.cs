@@ -113,7 +113,7 @@ namespace Pacmio.IB
             else
             {
                 ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
-                PositionStatus ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
+                Position ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
             }
 
             //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
