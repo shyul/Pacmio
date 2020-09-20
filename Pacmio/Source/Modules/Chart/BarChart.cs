@@ -92,7 +92,7 @@ namespace Pacmio
         public SignalArea SignalArea { get; }
         public PositionArea PositionArea { get; }
 
-        public override void RemoveData() 
+        public override void RemoveDataSource() 
         {
             lock (GraphicsLockObject)
             {
@@ -113,7 +113,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            SetAsyncUpdateUI();
+            DataIsUpdated();
         }
 
         public void Config(BarAnalysisSet bas)
@@ -128,7 +128,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            SetAsyncUpdateUI();
+            DataIsUpdated();
         }
 
         public void Config(Strategy s)
@@ -143,7 +143,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            SetAsyncUpdateUI();
+            DataIsUpdated();
         }
 
         public void Config(BarTable bt, BarAnalysisSet bas)
@@ -158,7 +158,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            SetAsyncUpdateUI();
+            DataIsUpdated();
         }
 
         public void Config(BarTable bt, Strategy s)
@@ -173,7 +173,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            SetAsyncUpdateUI();
+            DataIsUpdated();
         }
 
         private void RemoveAllChartSeries()

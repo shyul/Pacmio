@@ -156,7 +156,7 @@ namespace Pacmio
 
             foreach (IDataView idv in DataViews)
             {
-                idv.SetAsyncUpdateUI();
+                idv.DataIsUpdated();
             }
 
 

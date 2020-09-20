@@ -46,7 +46,7 @@ namespace Pacmio
             {
                 foreach (IDataView dv in DataViews)
                 {
-                    dv.RemoveData();
+                    dv.RemoveDataSource();
                 }
             }
 
@@ -806,7 +806,7 @@ namespace Pacmio
                 }
                 else if (!ReadyToShow)
                 {
-                    lock (DataViews) DataViews.ForEach(n => { n.SetAsyncUpdateUI(); });
+                    lock (DataViews) DataViews.ForEach(n => { n.DataIsUpdated(); });
                 }
             }
         }
