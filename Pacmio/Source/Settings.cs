@@ -25,7 +25,7 @@ namespace Pacmio
         public string CachePath { get; set; } = Path.GetTempPath() + "Pacmio\\";
 
         [DataMember, Browsable(true), Category("1: Basic")]
-        public string QuandlKey { get; set; }
+        public string QuandlKey { get; set; } = "key";
 
         #region IBClient
 
