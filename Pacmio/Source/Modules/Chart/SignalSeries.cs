@@ -40,7 +40,7 @@ namespace Pacmio
 
         public Strategy Strategy { get; }
 
-        public override void RefreshAxis(IArea area, ITable table)
+        public override void RefreshAxis(IIndexArea area, ITable table)
         {
             ContinuousAxis axisY = area.AxisY(Side);
 
@@ -101,7 +101,7 @@ namespace Pacmio
             return labels;
         }
 
-        public override void Draw(Graphics g, IArea area, ITable table)
+        public override void Draw(Graphics g, IIndexArea area, ITable table)
         {
             if (BarChart.HasSignalColumn)
             {

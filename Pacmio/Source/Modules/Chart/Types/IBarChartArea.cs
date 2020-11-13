@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface IBarChartArea : IArea
+    public interface IBarChartArea : IIndexArea
     {
         BarChart BarChart { get; }
 

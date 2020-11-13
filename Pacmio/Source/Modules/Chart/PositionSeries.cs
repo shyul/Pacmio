@@ -39,7 +39,7 @@ namespace Pacmio
             return labels;
         }
 
-        public override void Draw(Graphics g, IArea area, ITable table)
+        public override void Draw(Graphics g, IIndexArea area, ITable table)
         {
             var (pointList, pt, _, _) = GetPixel(area, Side);
 
@@ -67,7 +67,7 @@ namespace Pacmio
             g.SmoothingMode = SmoothingMode.Default;
         }
 
-        public (List<(int index, Point point)>, int, int, int) GetPixel(IArea area, AlignType side)
+        public (List<(int index, Point point)>, int, int, int) GetPixel(IIndexArea area, AlignType side)
         {
             List<(int index, Point point)> points = new List<(int index, Point point)>();
             int max_y = area.Bottom;
