@@ -1,1 +1,5 @@
-Record=TopLevelDocument|FileName=BarTable.schdoc
+Record=TopLevelDocument|FileName=BarTable.schdoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=BarTable.schdoc|FileName=Order.schdoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=BarTable.schdoc|FileName=Signal.schdoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=BarTable.schdoc|FileName=SignalSeries.schdoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=BarTable.schdoc|FileName=Strategy.schdoc|SheetNumber= 

@@ -92,9 +92,7 @@ namespace Pacmio
         public static bool operator !=(BarTableFileData left, Contract right) => !(left == right);
         public override bool Equals(object other)
         {
-            if (other is null)
-                return false;
-            else if (other is Contract c)
+            if (other is Contract c)
                 return Equals(c);
             else if (other is BarTableFileData bi)
                 return Equals(bi);
@@ -103,6 +101,7 @@ namespace Pacmio
             else
                 return false;
         }
+
         public override int GetHashCode() => Contract.GetHashCode() ^ BarFreq.GetHashCode() ^ Type.GetHashCode();
 
         #endregion Equality

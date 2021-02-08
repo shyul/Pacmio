@@ -96,8 +96,10 @@ namespace Pacmio
 
         public Indicator DailyFilter { get; }
 
-        public Indicator TradeIndicator { get;
-        
+        public Indicator TradeIndicator
+        {
+            get;
+
         }
 
         public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)

@@ -698,7 +698,7 @@ namespace Pacmio
                 Console.WriteLine("Table: " + Name + " | Count: " + Count);
             }
 
-            DateTime total_time = DateTime.Now;
+            DateTime total_start_time = DateTime.Now;
 
             int startPt = Count;
 
@@ -711,7 +711,7 @@ namespace Pacmio
 
                 foreach (BarAnalysis ba in analyses)
                 {
-                    DateTime single_time = DateTime.Now;
+                    DateTime single_start_time = DateTime.Now;
 
                     BarAnalysisPointer bap = GetBarAnalysisPointer(ba);
                     int original_start = bap.StartPt;
@@ -721,7 +721,7 @@ namespace Pacmio
 
                     if (debugInfo)
                     {
-                        Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_time).TotalMilliseconds.ToString() + "ms");
+                        Console.WriteLine(ba.Name + " | (" + original_start + "->" + bap.StartPt + ") | Time " + (DateTime.Now - single_start_time).TotalMilliseconds.ToString() + "ms");
                     }
                 }
             }
@@ -730,7 +730,7 @@ namespace Pacmio
             if (debugInfo)
             {
                 Console.WriteLine("------------------");
-                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
+                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
                 Console.WriteLine(Name + " | LastTime = " + LastTime + " | LastBar.Close = " + LastBar.Close);
                 Console.WriteLine("==================\n");
             }
@@ -956,7 +956,7 @@ namespace Pacmio
                     IsLive = period.IsCurrent;
                     //if (IsLive) Contract.Request_MarketTicks();
                     if (IsLive) Contract.MarketData.StartTicks();
-                    
+
                     ResetCalculationPointer();
                     SyncFile(period);
                     Sort();
