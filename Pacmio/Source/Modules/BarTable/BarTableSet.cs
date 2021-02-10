@@ -2,7 +2,12 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
 /// 
-/// BarTable Data Types
+/// BarTableSet
+/// 1. For Live Trading Only
+/// 2. Shall be static
+/// 3. Avoid duplicated data;
+/// 4. Avoid duplocated calculations
+/// 5. Thus, imporved and centrallized data parallelism
 /// 
 /// ***************************************************************************
 
