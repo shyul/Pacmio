@@ -296,7 +296,7 @@ namespace Pacmio
 
         #endregion Numeric Column
 
-        #region Tag Column
+        #region Tag / String Column
 
         private Dictionary<TagColumn, TagInfo> TagDatums { get; } = new Dictionary<TagColumn, TagInfo>();
 
@@ -316,7 +316,7 @@ namespace Pacmio
             }
         }
 
-        #endregion Tag Column
+        #endregion Tag / String Column
 
         #region Trailing Pivot Points
 
