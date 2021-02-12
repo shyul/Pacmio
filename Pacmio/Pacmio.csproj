@@ -182,7 +182,7 @@
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\Strategy\StrategyManager.cs" />
-    <Compile Include="Source\Modules\Strategy\Research\ResearchManager.cs" />
+    <Compile Include="Source\Modules\Strategy\StrategyFactory.cs" />
     <Compile Include="Source\Modules\Account\Account.cs" />
     <Compile Include="Source\Modules\Account\Types\TradeData.cs" />
     <Compile Include="Source\Modules\Account\PositionSimTools.cs" />

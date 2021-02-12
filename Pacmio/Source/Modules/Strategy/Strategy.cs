@@ -33,32 +33,6 @@ namespace Pacmio
     // 60% is HFT trading!
     public abstract class Strategy : IEquatable<Strategy>
     {
-        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
-
-        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
-
-        // Step 2: Define Signal Group
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public Strategy(string name)
         {
             Name = name;
@@ -68,30 +42,11 @@ namespace Pacmio
 
         public int Order { get; set; } = 0;
 
-        protected Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> Analyses { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
+        public MultiTimePeriod TradeTimeOfDay { get; set; }
 
-        public virtual void ClearBarAnalysisSet() => Analyses.Clear();
+        public bool IsDayTrade => true;
 
-        //public BarFreq FilterBarFreq { get; set; }
-
-        public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
-        {
-            get
-            {
-                if (Analyses.ContainsKey((BarFreq, BarType)))
-                    return Analyses[(BarFreq, BarType)];
-                else
-                    return null;
-            }
-            set
-            {
-                if (value is BarAnalysisSet bas)
-                    Analyses[(BarFreq, BarType)] = new BarAnalysisSet(bas);
-                else if (Analyses.ContainsKey((BarFreq, BarType)))
-                    Analyses.Remove((BarFreq, BarType));
-            }
-        }
-
+        // Example custom indicators for filter / trade result
         public SMA DailySMA5 { get; }
 
         public Indicator DailyFilter { get; }
@@ -102,9 +57,41 @@ namespace Pacmio
 
         }
 
+
+        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
+
+        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
+
+        // Step 2: Define Signal Group
+
+        /// <summary>
+        /// Bar Analysis vs Multi Time Frame
+        /// </summary>
+        protected Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> BarAnalysisSets { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
+
+        public virtual void ClearBarAnalysisSet() => BarAnalysisSets.Clear();
+
+        public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
+        {
+            get
+            {
+                if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
+                    return BarAnalysisSets[(BarFreq, BarType)];
+                else
+                    return null;
+            }
+            set
+            {
+                if (value is BarAnalysisSet bas)
+                    BarAnalysisSets[(BarFreq, BarType)] = new BarAnalysisSet(bas);
+                else if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
+                    BarAnalysisSets.Remove((BarFreq, BarType));
+            }
+        }
+
         public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)
         {
-            var list = Analyses.OrderByDescending(n => n.Key.BarFreq);
+            var list = BarAnalysisSets.OrderByDescending(n => n.Key.BarFreq);
 
             int i = 0;
             foreach (var item in list)
@@ -132,9 +119,38 @@ namespace Pacmio
             Evaluate(c);
         }
 
+
+
+        // !!! The Function Actually Makes The Purchase
+        public void Evaluate(Contract c)
+        {
+
+        }
+
+        #region Trading Timing
+
+
+        public (int, Frequency) WaitLengthForStandingOrder { get; }
+
+        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; }
+
+        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
+
+
+        /// <summary>
+        /// The number of days for getting the bench mark
+        /// </summary>
+        public virtual int SimulateDays => 5;
+
+        /// <summary>
+        /// The number of days enters the actual trade (Evaluate) or tradelog for simulation | final bench mark
+        /// </summary>
+        public virtual int TradingDays => 1;
+
+
         public virtual void Simulate(Contract c, Period pd, CancellationTokenSource cts)
         {
-            var list = Analyses.OrderByDescending(n => n.Key.BarFreq);
+            var list = BarAnalysisSets.OrderByDescending(n => n.Key.BarFreq);
 
 
             int i = 0;
@@ -154,28 +170,6 @@ namespace Pacmio
             }
         }
 
-        // !!! The Function Actually Makes The Purchase
-        public void Evaluate(Contract c)
-        {
-
-        }
-
-        #region Trading Timing
-
-        /// <summary>
-        /// The number of days for getting the bench mark
-        /// </summary>
-        public int TrainingDays { get; set; } = 2;
-
-        /// <summary>
-        /// The number of days enters the actual trade (Evaluate) or tradelog for simulation | final bench mark
-        /// </summary>
-        public int TradingDays { get; set; } = 1;
-
-        /// <summary>
-        /// Use MultiTime here.
-        /// </summary>
-        public Range<Time> TradingTimeRange { get; set; } = new Range<Time>(new Time(9, 30), new Time(16, 0));
 
         #endregion Trading Timing
 

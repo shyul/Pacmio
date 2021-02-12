@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace Pacmio
 {
-    public static class ResearchManager
+    public static class StrategyFactory
     {
+
     }
 }
