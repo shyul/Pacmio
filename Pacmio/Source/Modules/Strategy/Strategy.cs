@@ -89,18 +89,14 @@ namespace Pacmio
             }
         }
 
-        public virtual void Calculate(Contract c, Period pd, CancellationTokenSource cts)
+        public virtual void Simulate(Contract c, Period pd, CancellationTokenSource cts)
         {
             var list = BarAnalysisSets.OrderByDescending(n => n.Key.BarFreq);
 
             int i = 0;
             foreach (var item in list)
             {
-                BarTable bt = StrategyManager.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
-
-
-
-
+                BarTable bt = StrategyFactory.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
                 BarAnalysisSet bas = item.Value;
 
                 // Find all BarTables here
@@ -118,8 +114,6 @@ namespace Pacmio
             // Evaluate at the end
             Evaluate(c);
         }
-
-
 
         // !!! The Function Actually Makes The Purchase
         public void Evaluate(Contract c)
@@ -148,27 +142,7 @@ namespace Pacmio
         public virtual int TradingDays => 1;
 
 
-        public virtual void Simulate(Contract c, Period pd, CancellationTokenSource cts)
-        {
-            var list = BarAnalysisSets.OrderByDescending(n => n.Key.BarFreq);
 
-
-            int i = 0;
-            foreach (var item in list)
-            {
-                BarTable bt = StrategyManager.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
-                BarAnalysisSet bas = item.Value;
-
-                // Apply intermediate result and level
-                bt.CalculateOnly(bas);
-
-                // Get intermediate result and level
-
-                // Get decision wether to pursue the lower time frames....
-
-                i++;
-            }
-        }
 
 
         #endregion Trading Timing
