@@ -29,6 +29,8 @@ namespace Pacmio
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
 
+        public string Account { get; set; }
+
         public Scanner Scanner { get; set; }
 
         public EntryMethod EntryMethod { get; set; }
