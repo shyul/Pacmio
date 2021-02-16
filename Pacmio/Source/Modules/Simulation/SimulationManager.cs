@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Xu;
 
 namespace Pacmio
 {
@@ -13,12 +15,25 @@ namespace Pacmio
     {
         public static double InitialFund { get; set; } = 50000;
 
+        
 
         public static readonly List<SimulationSet> List = new List<SimulationSet>();
 
         // Per Contract and Per TradeRule 
 
+        public static int MaxDegreeOfParallelism => Root.DegreeOfParallelism;
 
+        /// <summary>
+        /// List of all available Contracts
+        /// </summary>
+        public static List<Contract> ContractList { get; } = new List<Contract>();
+
+        public static BarTableSet BarTableSet { get; } = new BarTableSet();
+
+        public static void Simulate(Period pd, CancellationTokenSource cts)
+        {
+
+        }
 
         public static void Train(Contract c)
         {

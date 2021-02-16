@@ -15,8 +15,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using Xu;
 
 namespace Pacmio
 {
@@ -25,25 +23,16 @@ namespace Pacmio
         /// <summary>
         /// List of all available Strategies
         /// </summary>
-        public static List<Strategy> StrategyList { get; } = new List<Strategy>();
-
+        public static List<Strategy> List { get; } = new List<Strategy>();
 
         /// <summary>
-        /// List of all available Contracts
+        /// Build the list of the strategies with different parameters
         /// </summary>
-        public static List<Contract> ContractList { get; } = new List<Contract>();
-
-        public static BarTableSet BarTableSet { get; } = new BarTableSet();
-
-        public static int MaxDegreeOfParallelism => Root.DegreeOfParallelism;
-
-        public static void Simulate(Period pd, CancellationTokenSource cts)
+        public static void BuildStrategy()
         {
+            
 
         }
-
-
-
 
         // New Types for Bar
         // ===================

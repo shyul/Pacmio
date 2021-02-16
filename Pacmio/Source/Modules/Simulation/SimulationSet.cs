@@ -5,6 +5,8 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Generic;
+
 
 namespace Pacmio
 {
@@ -24,6 +26,8 @@ namespace Pacmio
         public readonly Position Status;
 
         public readonly SimulationResult Result = new SimulationResult();
+
+
 
         #region Simulation Actions
 

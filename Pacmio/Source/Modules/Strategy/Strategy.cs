@@ -29,7 +29,11 @@ namespace Pacmio
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
 
-        public string WatchListFilterSetting { get; set; } = string.Empty;
+        public Scanner Scanner { get; set; }
+
+        public EntryMethod EntryMethod { get; set; }
+
+        public ExitMethod ExitMethod { get; set; }
 
         // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
 
@@ -86,16 +90,6 @@ namespace Pacmio
 
         #endregion Training Settings
 
-        #region Order Settings
 
-        public MultiTimePeriod TradeTimeOfDay { get; set; }
-
-        public (int, Frequency) WaitLengthForOutstandingOrder { get; }
-
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; }
-
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
-
-        #endregion Order Settings
     }
 }
