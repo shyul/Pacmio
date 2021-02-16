@@ -4,6 +4,8 @@
 /// 
 /// The trade rule applies to each contract
 /// 
+/// 60% of the tradings today are done by HFT!
+/// 
 /// ***************************************************************************
 
 using IbXmlScannerParameter;
@@ -17,48 +19,17 @@ using Xu;
 
 namespace Pacmio
 {
-
-    public class BarTableSetting : IEquatable<BarTableSetting>
-    {
-        public BarFreq BarFreq { get; set; }
-
-        public BarType BarType { get; set; }
-
-        public bool Equals(BarTableSetting other)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    // 60% is HFT trading!
     public abstract class Strategy : IEquatable<Strategy>
     {
-        public Strategy(string name)
-        {
-            Name = name;
-        }
+        public virtual string Name => "Default TradeRule";
 
-        public string Name { get; set; } = "Default TradeRule";
+        public virtual int Order { get; set; } = 0;
 
-        public int Order { get; set; } = 0;
-
-        public MultiTimePeriod TradeTimeOfDay { get; set; }
-
-        public bool IsDayTrade => true;
-
-        // Example custom indicators for filter / trade result
-        public SMA DailySMA5 { get; }
-
-        public Indicator DailyFilter { get; }
-
-        public Indicator TradeIndicator
-        {
-            get;
-
-        }
-
+        public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
+
+        public string WatchListFilterSetting { get; set; } = string.Empty;
 
         // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
 
@@ -89,64 +60,42 @@ namespace Pacmio
             }
         }
 
-        public virtual void Simulate(Contract c, Period pd, CancellationTokenSource cts)
-        {
-            var list = BarAnalysisSets.OrderByDescending(n => n.Key.BarFreq);
+        // Getting the tradabe score, and priority
+        // The example values are showing using the trailing 5 days value to yield risk / reward ratio, win rate, and standard deviation of the returns.
+        // The above result will yield the score for sorting the strategy
+        // The the score will be valid for 1 day trading.
 
-            int i = 0;
-            foreach (var item in list)
-            {
-                BarTable bt = StrategyFactory.BarTableSet.AddContract(c, item.Key.BarFreq, item.Key.BarType, ref pd, cts);
-                BarAnalysisSet bas = item.Value;
+        #region Training Settings
 
-                // Find all BarTables here
-                // Sort the BarFreq and calculate higher time scale first
+        /// <summary>
+        /// The unit for training time frames
+        /// </summary>
+        public virtual BarFreq SimulateBarFreq { get; set; } = BarFreq.Daily;
 
-                // Lower Time Frame BarTable get loaded...
+        /// <summary>
+        /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
+        /// The commission model shall be defined by Simulate Engine.
+        /// </summary>
+        public virtual int SimulateLength { get; set; } = 5;
 
-                // Lowest Time Frame gets Position Information
+        /// <summary>
+        /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
+        /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
+        /// </summary>
+        public virtual int TradingLength { get; set; } = 1;
 
-                bt.CalculateOnly(bas);
+        #endregion Training Settings
 
-                i++;
-            }
+        #region Order Settings
 
-            // Evaluate at the end
-            Evaluate(c);
-        }
+        public MultiTimePeriod TradeTimeOfDay { get; set; }
 
-        // !!! The Function Actually Makes The Purchase
-        public void Evaluate(Contract c)
-        {
-
-        }
-
-        #region Trading Timing
-
-
-        public (int, Frequency) WaitLengthForStandingOrder { get; }
+        public (int, Frequency) WaitLengthForOutstandingOrder { get; }
 
         public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; }
 
         public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
 
-
-        /// <summary>
-        /// The number of days for getting the bench mark
-        /// </summary>
-        public virtual int SimulateDays => 5;
-
-        /// <summary>
-        /// The number of days enters the actual trade (Evaluate) or tradelog for simulation | final bench mark
-        /// </summary>
-        public virtual int TradingDays => 1;
-
-
-
-
-
-        #endregion Trading Timing
-
-        public bool Equals(Strategy other) => other is Strategy tr && Name == tr.Name;
+        #endregion Order Settings
     }
 }

@@ -15,9 +15,9 @@ namespace Pacmio.Analysis
 {
     public class MovingAverageCrossStrategy : Strategy
     {
-        public MovingAverageCrossStrategy(string name) : base(name)
+        public MovingAverageCrossStrategy()
         {
-            Name = name;
+
             SignalColumn = new SignalColumn(Name);
 
         }
