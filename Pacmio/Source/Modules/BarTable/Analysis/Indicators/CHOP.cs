@@ -1,6 +1,6 @@
 ﻿/// ***************************************************************************
 /// Pacmio Research Enivironment
-/// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
+/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// Ref 1: https://www.tradingview.com/scripts/choppinessindex/?solution=43000501980
 /// Ref 2: https://www.incrediblecharts.com/indicators/choppiness-index.php

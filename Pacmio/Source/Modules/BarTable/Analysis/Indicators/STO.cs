@@ -1,6 +1,6 @@
 ﻿/// ***************************************************************************
 /// Pacmio Research Enivironment
-/// Copyright 2001-2008, 2014-2020 Xu Li - me@xuli.us
+/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// https://school.stockcharts.com/doku.php?id=technical_indicators:stochastic_oscillator_fast_slow_and_full
 /// https://docs.anychart.com/Stock_Charts/Technical_Indicators/Mathematical_Description#kdj

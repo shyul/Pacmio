@@ -130,6 +130,7 @@
     <Compile Include="Source\Modules\MarketData\Types\News.cs" />
     <Compile Include="Source\Modules\MarketData\Types\TickDatum.cs" />
     <Compile Include="Source\Modules\Strategy\EntryMethod.cs" />
+    <Compile Include="Source\Modules\Trade\OrderTool.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderRequest.cs" />
