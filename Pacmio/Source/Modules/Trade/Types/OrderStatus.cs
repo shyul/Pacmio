@@ -21,7 +21,10 @@ namespace Pacmio
         UNKNOWN = 0,
 
         [EnumMember, ApiCode("Inactive"), Description("Inactive")]
-        Inactive = 10,
+        Inactive = 5,
+
+        [EnumMember, Description("Started")]
+        Started = 10,
 
         /// <summary>
         /// Indicates order has not yet been sent to IB server, 

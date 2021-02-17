@@ -147,15 +147,7 @@ namespace Pacmio
             IB.Client.PlaceOrder(od);
         }
 
-        public static void ModifyOrder(OrderInfo od)
-        {
 
-        }
-
-        public static void CancelOrder(OrderInfo od)
-        {
-
-        }
 
         public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
 

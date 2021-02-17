@@ -186,7 +186,7 @@
     <Compile Include="Source\Modules\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\Strategy\StrategyFactory.cs" />
     <Compile Include="Source\Modules\Trade\Account.cs" />
-    <Compile Include="Source\Modules\Trade\Types\TradeData.cs" />
+    <Compile Include="Source\Modules\Trade\OrderTool_TradeData.cs" />
     <Compile Include="Source\Modules\Trade\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfoManager.cs" />

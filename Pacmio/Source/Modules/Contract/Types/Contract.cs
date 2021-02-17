@@ -216,6 +216,14 @@ namespace Pacmio
         [IgnoreDataMember]
         public Position this[Account ac] => MarketData[ac];
 
+        
+        
+        
+        [IgnoreDataMember]
+        public PositionStatus PositionStatus { get; set; }
+
+
+
         [IgnoreDataMember]
         public virtual TradeData TradeData
         {

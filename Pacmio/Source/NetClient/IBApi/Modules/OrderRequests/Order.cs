@@ -31,9 +31,9 @@ namespace Pacmio.IB
             if (Connected && c.Exchange.Param() is string exchangeCode &&
                 c is IBusiness it &&
                 od.Type.Param() is string orderTypeCode &&
-                od.TimeInForce.Param() is string TifCode && od.Quantity != 0) // && !modify))// && c.IsValid) // Also please check the RHD is active?
+                od.TimeInForce.Param() is string TifCode && od.Quantity != 0 && od.Status == OrderStatus.Inactive) // && !modify))// && c.IsValid) // Also please check the RHD is active?
             {
-                od.Status = OrderStatus.Inactive;
+                od.Status = OrderStatus.Started;
 
                 if ((!modify && !ActiveRequestContains(od.OrderId)) || od.OrderId == -1)
                 {
@@ -191,6 +191,14 @@ namespace Pacmio.IB
                 od.OrderTime = DateTime.Now;
 
                 SendRequest(paramsList);
+            }
+            else if (od.Status == OrderStatus.Cancelled)
+            {
+                Console.WriteLine("This order is already cancelled.");
+            }
+            else
+            {
+                throw new Exception("Invalid Order Parameter, please double check!");
             }
         }
 
