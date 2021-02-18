@@ -265,7 +265,7 @@ namespace TestClient
 
         private void BtnGetOpenOrders_Click(object sender, EventArgs e)
         {
-            TradeData.Request_AllOpenOrders();
+            OrderInfoManager.Request_AllOpenOrders();
             //OrderManager.Request_OpenOrders();
         }
 
@@ -540,7 +540,7 @@ namespace TestClient
 
         private void BtnGlobalCancel_Click(object sender, EventArgs e)
         {
-            TradeData.CancelAllOrders();
+            OrderInfoManager.CancelAllOrders();
         }
 
         private void BtnRequestExecData_Click(object sender, EventArgs e)
@@ -552,7 +552,7 @@ namespace TestClient
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            TradeData.CloseAllPositions();
+            OrderInfoManager.CloseAllPositions();
         }
 
         private void BtnArmLiveTrade_Click(object sender, EventArgs e)
@@ -1005,7 +1005,7 @@ namespace TestClient
                     DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
                 }
 
-                TradeData.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                OrderInfoManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
             }
         }
 
@@ -1041,7 +1041,7 @@ namespace TestClient
                         DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
                     }
 
-                    TradeData.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                    OrderInfoManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
                 }
             }, Cts.Token);
         }
@@ -1106,7 +1106,7 @@ namespace TestClient
 
         private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
         {
-            TradeData.Request_CompleteOrders(false);
+            OrderInfoManager.Request_CompleteOrders(false);
         }
 
 

@@ -94,11 +94,11 @@ namespace Pacmio.IB
 
             // TODO: Check ExecutionData LiquidityType
 
-            if (ti.Description == TradeData.EntryOrderDescription)
+            if (ti.Description == OrderInfoManager.EntryOrderDescription)
                 ti.LastLiquidity = LiquidityType.Added;
-            else if (ti.Description == TradeData.ExitOrderDescription ||
-                    ti.Description == TradeData.StopLossOrderDescription ||
-                    ti.Description == TradeData.ProfitTakerOrderDescription)
+            else if (ti.Description == OrderInfoManager.ExitOrderDescription ||
+                    ti.Description == OrderInfoManager.StopLossOrderDescription ||
+                    ti.Description == OrderInfoManager.ProfitTakerOrderDescription)
                 ti.LastLiquidity = LiquidityType.Removed;
             else
                 ti.LastLiquidity = (LiquidityType)fields[30].ToInt32();

@@ -14,7 +14,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract(Name = "TradeData")]
-    public class TradeData
+    public class OrderInfoManager
     {
         #region Order / Active List
 
