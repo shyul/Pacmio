@@ -70,11 +70,6 @@ namespace Pacmio
 
         #region Order
 
-        /// <summary>
-        /// Latest Order for each Contract 
-        /// </summary>
-        [IgnoreDataMember]
-        public ConcurrentDictionary<Contract, OrderInfo> CurrentOrders { get; private set; }
 
 
         public void CloseAllPositions()
@@ -88,23 +83,7 @@ namespace Pacmio
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bt"></param>
-        /// <param name="time">Decision Bar's Time / Last Bar's time</param>
-        /// <param name="quantity"></param>
-        /// <param name="stop"></param>
-        /// <param name="limit"></param>
-        public void Entry(Contract c, double quantity)
-        {
 
-        }
-
-        public void EntryBraket(Contract c, double quantity, double stopLoss, double profitLimit)
-        {
-
-        }
 
         /// <summary>
         /// // This is how it closes the position
@@ -133,17 +112,7 @@ namespace Pacmio
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bt"></param>
-        /// <param name="time">Decision Bar's Time / Last Bar's time</param>
-        /// <param name="stopLoss"></param>
-        /// <param name="limitProfit"></param>
-        public void Modify(Contract c, double stop, double limit = double.NaN)
-        {
 
-        }
 
 
         #endregion Order

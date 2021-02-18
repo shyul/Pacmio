@@ -23,7 +23,7 @@ namespace Pacmio.IB
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[6].ToInt32();
 
-            if (OrderInfoManager.GetOrAdd(orderId, permId) is OrderInfo od)
+            if (OrderManager.QueryForOrder(orderId, permId) is OrderInfo od)
             {
                 od.Status = fields[2].ToOrderStatus();
                 od.FilledQuantity = fields[3].ToDouble();

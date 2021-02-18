@@ -39,7 +39,7 @@ namespace Pacmio.IB
                 {
                     var (orderId, _) = RegisterRequest(RequestType.PlaceOrder);
                     od.OrderId = orderId;
-                    OrderInfoManager.AddActive(od);
+                    OrderManager.InsertOrderWithoutPermId(od);
                 }
 
                 string lastTradeDateOrContractMonth = "";

@@ -87,7 +87,8 @@ namespace Pacmio
         public Account Account => AccountManager.Get(AccountCode);
 
         [DataMember]
-        public int ConId
+        public int ConId { get; private set; }
+        /*
         {
             get
             {
@@ -107,11 +108,16 @@ namespace Pacmio
                 }
             }
         }
+        */
 
-        private int m_ConId = -1;
+
+
 
         [IgnoreDataMember]
-        public Contract Contract { get; set; }
+        public Contract Contract => ContractList.GetOrFetch(ConId);
+
+        //[IgnoreDataMember]
+        //private Contract m_Contract { get; set; }
 
         [DataMember]
         public double Quantity { get; set; } = double.NaN;
@@ -222,11 +228,19 @@ namespace Pacmio
                 return false;
         }
 
-        public bool Equals(OrderInfo other) => PermId > 0 && PermId == other.PermId;
+        public bool Equals(OrderInfo other)
+        {
+            if (PermId > 0)
+                return PermId == other.PermId;
+            else if (OrderId > 0)
+                return OrderId == other.OrderId;
+            else
+                return Contract == other.Contract;
+        }
 
         public bool Equals(TradeInfo other) => PermId == other.PermId;
 
-        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || Contract == other;
+        public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId);
 
         public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Info == other;
 

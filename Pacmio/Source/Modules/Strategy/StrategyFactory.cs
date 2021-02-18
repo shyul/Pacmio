@@ -21,6 +21,11 @@ namespace Pacmio
     public static class StrategyFactory
     {
         /// <summary>
+        /// Each strategy can have only one account
+        /// </summary>
+        public static Dictionary<Strategy, Account> ActiveStrategyList { get; } = new Dictionary<Strategy, Account>();
+
+        /// <summary>
         /// List of all available Strategies
         /// </summary>
         public static List<Strategy> List { get; } = new List<Strategy>();

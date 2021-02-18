@@ -75,136 +75,145 @@ namespace Pacmio.IB
         {
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[25].ToInt32();
-            int conId = fields[2].ToInt32(-1);
 
-            OrderInfo od = OrderInfoManager.GetOrAdd(orderId, permId, conId);
-
-            int totalQuantity = fields[14].ToInt32(0);
-            od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;
-
-            od.Type = fields[15].ToOrderType();
-            od.LimitPrice = fields[16].ToDouble();
-            od.AuxPrice = fields[17].ToDouble();
-            od.TimeInForce = fields[18].ToOrderTimeInForce();
-            // fields[19]  // order.OcaGroup = eDecoder.ReadString();
-            od.AccountCode = fields[20];
-            // fields[21]  // order.OpenClose = eDecoder.ReadString();
-            // fields[22]  // order.Origin = eDecoder.ReadInt();
-            od.Description = fields[23];  // order.OrderRef = eDecoder.ReadString();
-            od.ClientId = fields[24].ToInt32();
-
-            od.OutsideRegularTradeHours = fields[26] == "1";
-            od.Hidden = fields[27] == "1";
-            od.ModeCode = fields[35];
-
-            if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[29].Length > 5)
+            if (OrderManager.QueryForOrder(orderId, permId) is OrderInfo od) 
             {
-                od.EffectiveDateTime = DateTime.ParseExact(fields[29].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-            else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[36].Length > 5)
-            {
-                od.EffectiveDateTime = DateTime.ParseExact(fields[36].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
+                int conId = fields[2].ToInt32(-1);
 
-            od.AllOrNone = fields[52] == "1";
+                if (od.ConId != conId) 
+                    throw new Exception("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
 
-            int N = 66;
-            if (!string.IsNullOrWhiteSpace(fields[62]))
-            {
-                N += 8;
-            }
+                int totalQuantity = fields[14].ToInt32(0);
+                od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;
 
-            od.TrailStopPrice = fields[N].ToDouble(); // 74
-            od.TrailingPercent = fields[N + 1].ToDouble(); // 75
+                od.Type = fields[15].ToOrderType();
+                od.LimitPrice = fields[16].ToDouble();
+                od.AuxPrice = fields[17].ToDouble();
+                od.TimeInForce = fields[18].ToOrderTimeInForce();
+                // fields[19]  // order.OcaGroup = eDecoder.ReadString();
+                od.AccountCode = fields[20];
+                // fields[21]  // order.OpenClose = eDecoder.ReadString();
+                // fields[22]  // order.Origin = eDecoder.ReadInt();
+                od.Description = fields[23];  // order.OrderRef = eDecoder.ReadString();
+                od.ClientId = fields[24].ToInt32();
 
-            // N + 2 / 76
-            // N + 3 / 77
-            // N + 4 / 78
+                od.OutsideRegularTradeHours = fields[26] == "1";
+                od.Hidden = fields[27] == "1";
+                od.ModeCode = fields[35];
 
-            int comboLegCount = fields[N + 5].ToInt32(); // 79
+                if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[29].Length > 5)
+                {
+                    od.EffectiveDateTime = DateTime.ParseExact(fields[29].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+                else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[36].Length > 5)
+                {
+                    od.EffectiveDateTime = DateTime.ParseExact(fields[36].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                }
 
-            N += 6 + comboLegCount * 8;
+                od.AllOrNone = fields[52] == "1";
 
-            int orderComboLegCount = fields[N].ToInt32(); // 80
+                int N = 66;
+                if (!string.IsNullOrWhiteSpace(fields[62]))
+                {
+                    N += 8;
+                }
 
-            N += 1 + orderComboLegCount;
-            // N = 81
-            //Console.WriteLine("1) N = " + N);
+                od.TrailStopPrice = fields[N].ToDouble(); // 74
+                od.TrailingPercent = fields[N + 1].ToDouble(); // 75
 
-            int smartComboRoutingParamsCount = fields[N].ToInt32(); // 81
+                // N + 2 / 76
+                // N + 3 / 77
+                // N + 4 / 78
 
-            N += 3 + smartComboRoutingParamsCount * 2;
-            // N = 84
-            //Console.WriteLine("2) N = " + N);
+                int comboLegCount = fields[N + 5].ToInt32(); // 79
 
-            N += (double.IsNaN(fields[N].ToDouble())) ? 1 : 8;
-            // N = 85 
+                N += 6 + comboLegCount * 8;
 
-            N += (string.IsNullOrWhiteSpace(fields[N])) ? 1 : 2;
-            // N = 86
-            //Console.WriteLine("3) N = " + N);
+                int orderComboLegCount = fields[N].ToInt32(); // 80
 
-            N += 4;
-            // N = 90
-            N += (fields[N] == "1") ? 4 : 1;
-            // N = 91
-            //Console.WriteLine("3.5) N = " + N);
-            // readAlgoParams()
-            if (!string.IsNullOrWhiteSpace(fields[N]))
-            {
+                N += 1 + orderComboLegCount;
+                // N = 81
+                //Console.WriteLine("1) N = " + N);
+
+                int smartComboRoutingParamsCount = fields[N].ToInt32(); // 81
+
+                N += 3 + smartComboRoutingParamsCount * 2;
+                // N = 84
+                //Console.WriteLine("2) N = " + N);
+
+                N += (double.IsNaN(fields[N].ToDouble())) ? 1 : 8;
+                // N = 85 
+
+                N += (string.IsNullOrWhiteSpace(fields[N])) ? 1 : 2;
+                // N = 86
+                //Console.WriteLine("3) N = " + N);
+
+                N += 4;
+                // N = 90
+                N += (fields[N] == "1") ? 4 : 1;
+                // N = 91
+                //Console.WriteLine("3.5) N = " + N);
+                // readAlgoParams()
+                if (!string.IsNullOrWhiteSpace(fields[N]))
+                {
+                    N += 1;
+                    int algoParamsCount = fields[N].ToInt32();
+                    N += 1 + algoParamsCount * 2;
+                }
+                else
+                {
+                    N += 1;
+                }
+                // N = 92
                 N += 1;
-                int algoParamsCount = fields[N].ToInt32();
-                N += 1 + algoParamsCount * 2;
-            }
-            else
-            {
-                N += 1;
-            }
-            // N = 92
-            N += 1;
-            // N = 93;
-            //Console.WriteLine("4) N = " + N);
+                // N = 93;
+                //Console.WriteLine("4) N = " + N);
 
-            bool whatIf = fields[N] == "1" ? true : false;
-            od.Status = (whatIf) ? OrderStatus.Inactive : fields[N + 1].ToOrderStatus(); //  ApiCode.GetEnum<OrderStatus>();
+                bool whatIf = fields[N] == "1" ? true : false;
+                od.Status = (whatIf) ? OrderStatus.Inactive : fields[N + 1].ToOrderStatus(); //  ApiCode.GetEnum<OrderStatus>();
 
-            if (whatIf)
-            {
-                string InitMarginBefore = fields[N + 2];
-                string MaintMarginBefore = fields[N + 3];
-                string EquityWithLoanBefore = fields[N + 4];
-                string InitMarginChange = fields[N + 5];
-                string MaintMarginChange = fields[N + 6];
-                string EquityWithLoanChange = fields[N + 7];
-                string InitMarginAfter = fields[N + 8];
-                string MaintMarginAfter = fields[N + 9];
-                string EquityWithLoanAfter = fields[N + 10];
-                string Commission = fields[N + 11];
-                string MinCommission = fields[N + 12];
-                string MaxCommission = fields[N + 13];
-                string CommissionCurrency = fields[N + 14];
-                string WarningText = fields[N + 15];
+                if (whatIf)
+                {
+                    string InitMarginBefore = fields[N + 2];
+                    string MaintMarginBefore = fields[N + 3];
+                    string EquityWithLoanBefore = fields[N + 4];
+                    string InitMarginChange = fields[N + 5];
+                    string MaintMarginChange = fields[N + 6];
+                    string EquityWithLoanChange = fields[N + 7];
+                    string InitMarginAfter = fields[N + 8];
+                    string MaintMarginAfter = fields[N + 9];
+                    string EquityWithLoanAfter = fields[N + 10];
+                    string Commission = fields[N + 11];
+                    string MinCommission = fields[N + 12];
+                    string MaxCommission = fields[N + 13];
+                    string CommissionCurrency = fields[N + 14];
+                    string WarningText = fields[N + 15];
 
-                Console.WriteLine("InitMarginBefore = " + InitMarginBefore);
-                Console.WriteLine("MaintMarginBefore = " + MaintMarginBefore);
-                Console.WriteLine("EquityWithLoanBefore = " + EquityWithLoanBefore);
-                Console.WriteLine("InitMarginChange = " + InitMarginChange);
-                Console.WriteLine("MaintMarginChange = " + MaintMarginChange);
-                Console.WriteLine("EquityWithLoanChange = " + EquityWithLoanChange);
-                Console.WriteLine("InitMarginAfter = " + InitMarginAfter);
-                Console.WriteLine("MaintMarginAfter = " + MaintMarginAfter);
-                Console.WriteLine("EquityWithLoanAfter = " + EquityWithLoanAfter);
-                Console.WriteLine("Commission = " + Commission);
-                Console.WriteLine("MinCommission = " + MinCommission);
-                Console.WriteLine("MaxCommission = " + MaxCommission);
-                Console.WriteLine("CommissionCurrency = " + CommissionCurrency);
-                Console.WriteLine("WarningText = " + WarningText);
+                    Console.WriteLine("InitMarginBefore = " + InitMarginBefore);
+                    Console.WriteLine("MaintMarginBefore = " + MaintMarginBefore);
+                    Console.WriteLine("EquityWithLoanBefore = " + EquityWithLoanBefore);
+                    Console.WriteLine("InitMarginChange = " + InitMarginChange);
+                    Console.WriteLine("MaintMarginChange = " + MaintMarginChange);
+                    Console.WriteLine("EquityWithLoanChange = " + EquityWithLoanChange);
+                    Console.WriteLine("InitMarginAfter = " + InitMarginAfter);
+                    Console.WriteLine("MaintMarginAfter = " + MaintMarginAfter);
+                    Console.WriteLine("EquityWithLoanAfter = " + EquityWithLoanAfter);
+                    Console.WriteLine("Commission = " + Commission);
+                    Console.WriteLine("MinCommission = " + MinCommission);
+                    Console.WriteLine("MaxCommission = " + MaxCommission);
+                    Console.WriteLine("CommissionCurrency = " + CommissionCurrency);
+                    Console.WriteLine("WarningText = " + WarningText);
+                }
+
+                Console.WriteLine("\nParse Open Order | " + od.Status + ": " + fields.ToStringWithIndex());
+
+                //OrderManager.Update(od);
+                // Emit the signal
+
             }
 
-            Console.WriteLine("\nParse Open Order | " + od.Status + ": " + fields.ToStringWithIndex());
 
-            //OrderManager.Update(od);
-            // Emit the signal
+
         }
 
         /// <summary>

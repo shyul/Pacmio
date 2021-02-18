@@ -16,9 +16,12 @@ using System.Threading;
 
 namespace Pacmio
 {
-    public static class OrderTool
+    public static class OrderTools
     {
-        public static Queue<OrderInfo> Queue { get; } = new Queue<OrderInfo>();
+
+
+
+
 
         public static void ExecuteOrder(this Contract c, Account ac, double quantity, double limitPrice)
         {
@@ -36,9 +39,9 @@ namespace Pacmio
                     OutsideRegularTradeHours = true,
                 };
 
-                lock (Queue)
+                lock (NewlyInitiatedOrders)
                 {
-                    Queue.Enqueue(od);
+                    NewlyInitiatedOrders.Enqueue(od);
                 }
             }
         }
@@ -47,7 +50,7 @@ namespace Pacmio
         {
             if (c.PositionStatus.CurrentOrder is OrderInfo od)
             {
-                lock (Queue)
+                lock (NewlyInitiatedOrders)
                 {
                     if (od.Status == OrderStatus.Inactive)
                     {
@@ -61,7 +64,7 @@ namespace Pacmio
             }
         }
 
-        public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
+        private static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
 
         public static void StartTask()
         {
@@ -81,14 +84,14 @@ namespace Pacmio
 
         private static Task PlaceOrderTask { get; set; }
 
-        public static void PlaceOrderWorker()
+        private static void PlaceOrderWorker()
         {
-            if (Queue.Count > 0)
+            if (NewlyInitiatedOrders.Count > 0)
             {
-                lock (Queue)
+                lock (NewlyInitiatedOrders)
                 {
                     // The only function to allow dequeue
-                    if (Queue.Dequeue() is OrderInfo od && od.Status == OrderStatus.Inactive)
+                    if (NewlyInitiatedOrders.Dequeue() is OrderInfo od && od.Status == OrderStatus.Inactive)
                     {
                         // The only function to allow dequeue
                         IB.Client.PlaceOrder(od); // a copy of code in TradeData.cs

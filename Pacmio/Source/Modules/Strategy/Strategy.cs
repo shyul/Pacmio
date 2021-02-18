@@ -23,6 +23,8 @@ namespace Pacmio
     {
         public virtual string Name => "Default TradeRule";
 
+        public override int GetHashCode() => Name.GetHashCode();
+
         public virtual int Order { get; set; } = 0;
 
         public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
