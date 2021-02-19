@@ -69,16 +69,16 @@ namespace Pacmio.IB
                     {
                         RequestType cancelRequest = rcc.Type;
                         Send(new string[] {
-                            ((int)cancelRequest).ToString(),
-                            rcc.Version.ToString(),
-                            requestId.ToString(),
+                            cancelRequest.Param(), //((int)cancelRequest).ToString(),
+                            rcc.Version.Param(),
+                            requestId.Param(),
                         });
 
-                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + " and Cancel: " + requestId + " | " + cancelRequest);
+                        Console.WriteLine(" Removing [" + type + " | " + cancelRequest + "] Request >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId/orderId = " + requestId);
                     }
                     else
                     {
-                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + " Id Only: " + requestId);
+                        Console.WriteLine(" Removing [" + type + "] Request only from the ActiveRequestIds list >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId = " + requestId);
                     }
 
                     ActiveRequestIds.TryRemove(requestId, out _);
@@ -94,17 +94,23 @@ namespace Pacmio.IB
             {
                 if (ActiveRequestIds.ContainsKey(requestId) && ActiveRequestIds[requestId] == type)
                 {
-                    Log.Print(DateTime.Now.ToString("HH:mm:ss") + " Removing " + type + "Request >> " + requestId);
-
                     if (type.GetAttribute<RequestCancellationCode>() is RequestCancellationCode rcc)
                     {
                         RequestType cancelRequest = rcc.Type;
+
                         Send(new string[] {
-                            ((int)cancelRequest).ToString(),
-                            rcc.Version.ToString(),
-                            requestId.ToString(),
+                            cancelRequest.Param(),
+                            rcc.Version.Param(),
+                            requestId.Param(),
                         });
+
+                        Console.WriteLine(" Removing [" + type + " | " + cancelRequest + "] Request >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId/orderId = " + requestId);
                     }
+                    else
+                    {
+                        Console.WriteLine(" Removing [" + type + "] Request only from the ActiveRequestIds list >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId = " + requestId);
+                    }
+
                     ActiveRequestIds.TryRemove(requestId, out _);
                 }
             }

@@ -47,9 +47,13 @@ namespace Pacmio.IB
             if (ContractList.GetOrFetch(conId) is Contract c)
             {
                 int permId = fields[23].ToInt32();
-                OrderInfo od = c.TradeData.GetOrAdd(permId);
+
+                //OrderInfo od = c.TradeData. 0GetOrAdd(permId); //
+
+                OrderInfo od = OrderManager.GetOrCreateOrderByPermId(permId); //
 
                 if (od.Contract is null) od.Contract = c;
+                //if (od.Contract is null) od.Contract = c;
                 //od.ConId = fields[1].ToInt32(-1);
 
                 int totalQuantity = fields[13].ToInt32(0);

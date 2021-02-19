@@ -540,7 +540,7 @@ namespace TestClient
 
         private void BtnGlobalCancel_Click(object sender, EventArgs e)
         {
-            OrderInfoManager.CancelAllOrders();
+            OrderManager.CancelAllOrders();
         }
 
         private void BtnRequestExecData_Click(object sender, EventArgs e)
@@ -987,25 +987,10 @@ namespace TestClient
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
                 OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
 
-                OrderInfo od = new OrderInfo()
-                {
-                    Contract = ContractTest.ActiveContract,
-                    Quantity = TextBoxOrderSettingQuantity.Text.ToInt32(0),
-                    Type = orderType,
-                    LimitPrice = TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
-                    AuxPrice = TextBoxOrderSettingStopPrice.Text.ToDouble(0),
-                    TimeInForce = tif,
-                    AccountCode = "DU332281",
-                    OutsideRegularTradeHours = true,
-                };
-
-                if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
-                {
-                    od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
-                    DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
-                }
-
-                OrderInfoManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                ContractTest.ActiveContract.PlaceOrder("DU332281", TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                    TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
+                    TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
+                    TextBoxOrderSettingStopPrice.Text.ToDouble(0)); // TODO: CheckBoxOrderWhatIf.Checked);
             }
         }
 
@@ -1023,25 +1008,10 @@ namespace TestClient
 
                 foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
                 {
-                    OrderInfo od = new OrderInfo()
-                    {
-                        Contract = c,
-                        Quantity = TextBoxOrderSettingQuantity.Text.ToInt32(0),
-                        Type = orderType,
-                        LimitPrice = TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
-                        AuxPrice = TextBoxOrderSettingStopPrice.Text.ToDouble(0),
-                        TimeInForce = tif,
-                        AccountCode = "DU332281",
-                        OutsideRegularTradeHours = true,
-                    };
-
-                    if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
-                    {
-                        od.EffectiveDateTime = DateTime.Now.AddSeconds(30);
-                        DateTimePickerOrderSettingGTD.Value = od.EffectiveDateTime;
-                    }
-
-                    OrderInfoManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
+                    c.PlaceOrder("DU332281", TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                        TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
+                        TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
+                        TextBoxOrderSettingStopPrice.Text.ToDouble(0)); // TODO: CheckBoxOrderWhatIf.Checked);
                 }
             }, Cts.Token);
         }

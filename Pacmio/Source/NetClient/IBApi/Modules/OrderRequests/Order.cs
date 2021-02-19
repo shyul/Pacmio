@@ -203,17 +203,7 @@ namespace Pacmio.IB
         }
 
 
-        public static void CancelOrder(int orderId)
-        {
-            RemoveRequest(orderId, RequestType.PlaceOrder);
-            // Emit update cancelled.
-
-
-
-            RemoveRequest(orderId, RequestType.CancelOrder);
-
-
-        }
+        public static void CancelOrder(int orderId) => RemoveRequest(orderId, RequestType.PlaceOrder);
 
         internal static void SendRequest_GlobalCancel()
         {

@@ -61,7 +61,7 @@ namespace Pacmio.IB
         {
             // int requestId = fields[1].ToInt32();
             string execId = fields[14];
-            TradeInfo ti = TradeInfoManager.GetOrAdd(execId);
+            TradeInfo ti = TradeManager.GetOrCreateTradeByExecId(execId);
 
             ti.OrderId = fields[2].ToInt32();
             ti.ConId = fields[3].ToInt32();
@@ -94,11 +94,10 @@ namespace Pacmio.IB
 
             // TODO: Check ExecutionData LiquidityType
 
-            if (ti.Description == OrderInfoManager.EntryOrderDescription)
+            if (ti.Description == OrderManager.EntryOrderDescription)
                 ti.LastLiquidity = LiquidityType.Added;
-            else if (ti.Description == OrderInfoManager.ExitOrderDescription ||
-                    ti.Description == OrderInfoManager.StopLossOrderDescription ||
-                    ti.Description == OrderInfoManager.ProfitTakerOrderDescription)
+            else if (ti.Description == OrderManager.StopLossOrderDescription ||
+                    ti.Description == OrderManager.ProfitTakerOrderDescription)
                 ti.LastLiquidity = LiquidityType.Removed;
             else
                 ti.LastLiquidity = (LiquidityType)fields[30].ToInt32();
@@ -144,7 +143,7 @@ namespace Pacmio.IB
         private static void Parse_CommissionsReport(string[] fields)
         {
             string execId = fields[2];
-            TradeInfo ti = TradeInfoManager.GetOrAdd(execId);
+            TradeInfo ti = TradeManager.GetOrCreateTradeByExecId(execId);
             ti.Commissions = fields[3].ToDouble();
 
             string pnlstring = fields[5];

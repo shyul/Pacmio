@@ -87,37 +87,40 @@ namespace Pacmio
         public Account Account => AccountManager.Get(AccountCode);
 
         [DataMember]
-        public int ConId { get; private set; }
-        /*
+        public int ConId { get; set; } = -1;
+
+        [IgnoreDataMember]
+        public Contract Contract
         {
             get
             {
-                if (Contract is Contract c)
-                    return c.ConId;
+                if (ConId > 0)
+                {
+                    if (!(m_Contract is Contract c && c.ConId == ConId))
+                    {
+                        m_Contract = ContractList.GetOrFetch(ConId);
+                    }
+
+                    return m_Contract;
+                }
+
                 else
-                    return m_ConId;
+                    return null;
             }
 
             set
             {
-                if (value != m_ConId || Contract is null || Contract.ConId != value)
-                {
-                    Contract = ContractList.GetOrFetch(m_ConId);
-                    Console.WriteLine("Added Contract to OrderInfo: " + Contract);
-                    m_ConId = value;
-                }
+                m_Contract = value;
+
+                if (m_Contract is Contract c)
+                    ConId = c.ConId;
+                else
+                    ConId = -1;
             }
         }
-        */
-
-
-
 
         [IgnoreDataMember]
-        public Contract Contract => ContractList.GetOrFetch(ConId);
-
-        //[IgnoreDataMember]
-        //private Contract m_Contract { get; set; }
+        private Contract m_Contract;
 
         [DataMember]
         public double Quantity { get; set; } = double.NaN;
