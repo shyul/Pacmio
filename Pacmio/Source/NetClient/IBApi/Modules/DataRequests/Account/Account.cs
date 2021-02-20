@@ -14,6 +14,54 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
+        internal static bool IsReady_AccountSummary => Connected && !ActiveRequestContains(RequestType.RequestAccountSummary);
+
+        private const string ACCOUNT_SUMMARY_TAGS = "AccountType,NetLiquidation,TotalCashValue,SettledCash,AccruedCash,BuyingPower,EquityWithLoanValue,PreviousEquityWithLoanValue,"
+                             + "GrossPositionValue,ReqTEquity,ReqTMargin,SMA,InitMarginReq,MaintMarginReq,AvailableFunds,ExcessLiquidity,Cushion,FullInitMarginReq,FullMaintMarginReq,FullAvailableFunds,"
+                             + "FullExcessLiquidity,LookAheadNextChange,LookAheadInitMarginReq,LookAheadMaintMarginReq,LookAheadAvailableFunds,LookAheadExcessLiquidity,HighestSeverity,DayTradesRemaining,Leverage";
+
+        internal static bool SendRequest_AccountSummary(string group = "All", string tags = ACCOUNT_SUMMARY_TAGS)
+        {
+            if (IsReady_AccountSummary)
+            {
+                (int requestId, string requestType) = RegisterRequest(RequestType.RequestAccountSummary);
+
+                SendRequest(new string[] {
+                    requestType, // 62
+                    "1",
+                    requestId.ToString(),
+                    group,
+                    tags,
+                });
+
+                return true;
+            }
+            return false;
+        }
+
+        private static void Parse_AccountSummary(string[] fields)
+        {
+            Console.WriteLine(fields[3] + " >> Summary Item: " + fields.ToStringWithIndex());
+            if (fields[1] == "1")
+            {
+                string accountId = fields[3];
+                AccountInfo ac = PositionManager.GetOrCreateAccountById(accountId);
+                ac.UpdateFields(fields[4], fields[5]);
+                PositionManager.UpdatedTime = DateTime.Now;
+            }
+        }
+
+        private static void Parse_AccountSummaryEnd(string[] fields)
+        {
+            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+            if (fields.Length == 3 && fields[1] == "1")
+            {
+                int reqId = int.Parse(fields[2]);
+                RemoveRequest(reqId);
+                PositionManager.Update(1, "Account updated by IBClient");
+            }
+        }
+
         /// <summary>
         /// Send RequestFamilyCodes: (0)"80"-
         /// Received FamilyCodes: (0)"78"-(1)"3"-(2)"Uxxxxxx"-(3)""-(4)"Uxxxxxx"-(5)""-(6)"Uxxxxxx"-
@@ -25,15 +73,15 @@ namespace Pacmio.IB
             {
                 string[] accountCodes = fields[2].Split(',');
 
-                foreach (string accountCode in accountCodes)
+                foreach (string accountId in accountCodes)
                 {
-                    if (accountCode.Length > 0)
+                    if (accountId.Length > 0)
                     {
-                        AccountManager.GetOrAdd(accountCode);
+                        PositionManager.GetOrCreateAccountById(accountId);
                     }
                 }
 
-                AccountManager.UpdatedTime = DateTime.Now;
+                PositionManager.UpdatedTime = DateTime.Now;
             }
         }
 
@@ -60,7 +108,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                AccountManager.UpdatedTime = DateTime.Now;
+                PositionManager.UpdatedTime = DateTime.Now;
                 Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             }
         }

@@ -37,11 +37,48 @@ namespace Pacmio
         public DateTime ExecuteTime { get; set; }
 
         [DataMember, Browsable(true)]
-        public string AccountCode { get; set; }
+        public string AccountId { get; set; }
 
         [IgnoreDataMember]
-        public Account Account => AccountManager.Get(AccountCode);
+        public AccountInfo Account => PositionManager.Get(AccountId);
 
+        [DataMember]
+        public int ConId { get; set; } = -1;
+
+        [IgnoreDataMember]
+        public Contract Contract
+        {
+            get
+            {
+                if (ConId > 0)
+                {
+                    if (!(m_Contract is Contract c && c.ConId == ConId))
+                    {
+                        m_Contract = ContractList.GetOrFetch(ConId);
+                    }
+
+                    return m_Contract;
+                }
+
+                else
+                    return null;
+            }
+
+            set
+            {
+                m_Contract = value;
+
+                if (m_Contract is Contract c)
+                    ConId = c.ConId;
+                else
+                    ConId = -1;
+            }
+        }
+
+        [IgnoreDataMember]
+        private Contract m_Contract = null;
+
+        /*
         [DataMember]
         public int ConId
         {
@@ -68,6 +105,7 @@ namespace Pacmio
 
         [IgnoreDataMember]
         public Contract Contract { get; set; }
+        */
 
         /// <summary>
         /// Positive means long position

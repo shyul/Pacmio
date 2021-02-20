@@ -15,24 +15,17 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class Account : IEquatable<Account>, IEquatable<string>
+    public sealed class AccountInfo : IEquatable<AccountInfo>, IEquatable<string>
     {
-        public Account(string accountCode)
+        public AccountInfo(string accountId)
         {
-            AccountCode = accountCode;
-            Setup();
+            AccountId = accountId;
         }
 
-        public void Setup()
-        {
-            Positions = new ConcurrentDictionary<Contract, Position>();
-            CurrentOrders = new ConcurrentDictionary<Contract, OrderInfo>();
-        }
-
-        public override string ToString() => AccountCode;
+        public override string ToString() => AccountId;
 
         [IgnoreDataMember]
-        public string Name => "Account: " + AccountCode;
+        public string Name => "Account: " + AccountId;
 
         [DataMember]
         public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
@@ -50,20 +43,52 @@ namespace Pacmio
         public double TotalSizeIB => BuyingPower + PositionValueIB;
 
         [IgnoreDataMember]
-        public double PositionValue => (Positions is null || Positions.Count < 1) ? 0 : Positions.Values.Select(n => n.Value).Sum();
-
-        public Position this[Contract c] => GetPosition(c);
+        public double PositionValue
+        {
+            get
+            {
+                lock (PositionPerEachContractLUT)
+                {
+                    return (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> lut && lut.Count > 0) ? lut.Values.Select(n => n.Value).Sum() : 0;
+                }
+            }
+        }
 
         [IgnoreDataMember]
-        public ConcurrentDictionary<Contract, Position> Positions { get; private set; }
-
-        public Position GetPosition(Contract c)
+        public PositionInfo this[Contract c]
         {
-            if (!Positions.ContainsKey(c))
-                Positions.TryAdd(c, new Position(this, c.MarketData));
-
-            return Positions[c];
+            get
+            {
+                lock (PositionPerEachContractLUT)
+                {
+                    return (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> lut && lut.ContainsKey(c)) ? lut[c] : null;
+                }
+            }
         }
+
+        public PositionInfo GetOrCreatePositionByContract(Contract c)
+        {
+            lock (PositionPerEachContractLUT)
+            {
+                if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
+                if (!PositionPerEachContractLUT.ContainsKey(c))
+                    PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
+            }
+            return PositionPerEachContractLUT[c];
+        }
+
+        public void RemovePositionByContract(Contract c)
+        {
+            lock (PositionPerEachContractLUT)
+            {
+                if (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> && PositionPerEachContractLUT.ContainsKey(c))
+                    PositionPerEachContractLUT.Remove(c);
+            }
+        }
+
+        [IgnoreDataMember]
+        private Dictionary<Contract, PositionInfo> PositionPerEachContractLUT { get; set; }
 
         #endregion Positions
 
@@ -73,7 +98,7 @@ namespace Pacmio
 
         public void CloseAllPositions()
         {
-            foreach (var item in Positions)
+            foreach (var item in PositionPerEachContractLUT)
             {
 
 
@@ -92,7 +117,7 @@ namespace Pacmio
         /// <param name="time"></param>
         public void Close(Contract c)
         {
-            double qty = -Positions[c].Quantity;
+            double qty = -PositionPerEachContractLUT[c].Quantity;
             if (qty != 0)
             {
                 OrderInfo od = new OrderInfo()
@@ -103,7 +128,7 @@ namespace Pacmio
                     LimitPrice = 0,
                     AuxPrice = 0,
                     TimeInForce = OrderTimeInForce.GoodUntilCanceled,
-                    AccountCode = AccountCode,
+                    AccountId = AccountId,
                     OutsideRegularTradeHours = true,
                 };
 
@@ -120,7 +145,7 @@ namespace Pacmio
 
         [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Account Code")]
         [Description("The account ID number.")]
-        public string AccountCode { get; private set; }
+        public string AccountId { get; private set; }
 
         [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Account Type")]
         [Description("Identifies the IB account structure.")]
@@ -613,7 +638,7 @@ namespace Pacmio
         {
             switch (tagName)
             {
-                case ("AccountCode"):
+                case ("AccountId"):
                     AccountCodeSys = value;
                     break;
                 case ("AccountReady"):
@@ -1001,17 +1026,17 @@ namespace Pacmio
 
         #region Equality
 
-        public bool Equals(Account other) => AccountCode == other.AccountCode;
-        public bool Equals(string other) => AccountCode == other;
+        public bool Equals(AccountInfo other) => AccountId == other.AccountId;
+        public bool Equals(string other) => AccountId == other;
 
-        public static bool operator ==(Account s1, Account s2) => s1.Equals(s2);
-        public static bool operator !=(Account s1, Account s2) => !s1.Equals(s2);
-        public static bool operator ==(Account s1, string s2) => s1.Equals(s2);
-        public static bool operator !=(Account s1, string s2) => !s1.Equals(s2);
+        public static bool operator ==(AccountInfo s1, AccountInfo s2) => s1.Equals(s2);
+        public static bool operator !=(AccountInfo s1, AccountInfo s2) => !s1.Equals(s2);
+        public static bool operator ==(AccountInfo s1, string s2) => s1.Equals(s2);
+        public static bool operator !=(AccountInfo s1, string s2) => !s1.Equals(s2);
 
         public override bool Equals(object other)
         {
-            if (other is Account ac)
+            if (other is AccountInfo ac)
                 return Equals(ac);
             else if (other is string s)
                 return Equals(s);
@@ -1019,7 +1044,7 @@ namespace Pacmio
                 return false;
         }
 
-        public override int GetHashCode() => AccountCode.GetHashCode();
+        public override int GetHashCode() => AccountId.GetHashCode();
 
         #endregion Equality
 

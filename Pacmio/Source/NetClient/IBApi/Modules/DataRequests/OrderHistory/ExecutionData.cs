@@ -66,12 +66,10 @@ namespace Pacmio.IB
             ti.OrderId = fields[2].ToInt32();
             ti.ConId = fields[3].ToInt32();
 
-            if (ti.Contract is Contract c) c.TradeData.Add(ti);
-
             ti.PermId = fields[21].ToInt32();
             ti.ClientId = fields[22].ToInt32();
             ti.Description = fields[26];
-            ti.AccountCode = fields[16];
+            ti.AccountId = fields[16];
             ti.FillExchangeCode = fields[17];
 
             double quantity = fields[19].ToDouble();
@@ -112,13 +110,16 @@ namespace Pacmio.IB
             else
             {
                 ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
-                Position ps = AccountManager.GetOrAdd(ti.AccountCode).GetPosition(ti.Contract);
+                Position ps = PositionManager.GetOrCreateAccountById(ti.AccountId).GetPosition(ti.Contract);
             }
 
             //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
             string evRule = fields[27];
             double evMultiplier = fields[28].ToDouble();
+
+            // TODO: Emit trade log is updated so the BarTable / BarChart with bonding strategy / and Contract Position can be updated too
+
             Console.WriteLine("\nParse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
         }
 

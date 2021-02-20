@@ -13,12 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public enum TradeType
-    {
-        Entry,
-        StopLoss,
-        ProfitTaker,
-    }
+
 
     public static class OrderManager
     {
@@ -46,7 +41,7 @@ namespace Pacmio
         /// <param name="type"></param>
         /// <param name="limitPrice"></param>
         /// <param name="stopPrice"></param>
-        public static void PlaceOrder(this Contract c, string accountCode, double quantity,
+        public static void PlaceOrder(this Contract c, string accountId, double quantity,
             TradeType tradeType, OrderTimeInForce tif, DateTime effectiveDateTime, bool outsideRegularTradeHours = true,
             OrderType type = OrderType.Market, bool useSmart = true, double limitPrice = 0, double stopPrice = 0,
             bool whatIf = false, bool modify = false)
@@ -59,7 +54,7 @@ namespace Pacmio
                 _ => string.Empty
             };
 
-            if (c.PositionStatus.CurrentOrder is null)
+            if (c.PositionStatus.LatestOrder is null)
             {
                 OrderInfo od = new OrderInfo()
                 {
@@ -69,7 +64,7 @@ namespace Pacmio
                     LimitPrice = limitPrice,
                     AuxPrice = stopPrice,
                     TimeInForce = tif,
-                    AccountCode = accountCode,
+                    AccountId = accountId,
                     OutsideRegularTradeHours = outsideRegularTradeHours,
 
                     Description = desc
@@ -107,7 +102,7 @@ namespace Pacmio
         public static void CloseAllPositions()
         {
             CancelAllOrders();
-            foreach (Account ac in AccountManager.List)
+            foreach (AccountInfo ac in PositionManager.List)
                 ac.CloseAllPositions();
         }
 
@@ -120,9 +115,6 @@ namespace Pacmio
         public static void Request_AllOpenOrders() => IB.Client.SendRequest_AllOpenOrders();
 
         public static void Request_CompleteOrders(bool apiOnly = false) => IB.Client.SendRequest_CompletedOrders(apiOnly);
-
-
-
 
 
         #endregion Order History

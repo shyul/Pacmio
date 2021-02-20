@@ -174,7 +174,7 @@ namespace Pacmio.IB
                         break;
 
                     case TickType.MarkPrice:
-                        md.MarkPrice = price;
+                        md.MarketPrice = price;
                         break;
 
                     default:

@@ -81,10 +81,40 @@ namespace Pacmio
         public string Description { get; set; }
 
         [DataMember]
-        public string AccountCode { get; set; } = string.Empty;
+        public string AccountId { get; set; } = null;
 
         [IgnoreDataMember]
-        public Account Account => AccountManager.Get(AccountCode);
+        public AccountInfo Account
+        {
+            get
+            {
+                if (AccountId is string id)
+                {
+                    if (!(m_Account is AccountInfo ac && ac == id))
+                    {
+                        m_Account = PositionManager.GetAccountById(AccountId);
+                    }
+
+                    return m_Account;
+                }
+
+                else
+                    return null;
+            }
+
+            set
+            {
+                m_Account = value;
+
+                if (m_Account is AccountInfo ac)
+                    AccountId = ac.AccountId;
+                else
+                    AccountId = null;
+            }
+        }
+
+        [IgnoreDataMember]
+        private AccountInfo m_Account = null;
 
         [DataMember]
         public int ConId { get; set; } = -1;
@@ -120,7 +150,7 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        private Contract m_Contract;
+        private Contract m_Contract = null;
 
         [DataMember]
         public double Quantity { get; set; } = double.NaN;

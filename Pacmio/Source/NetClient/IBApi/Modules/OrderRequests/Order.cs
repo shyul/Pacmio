@@ -90,7 +90,7 @@ namespace Pacmio.IB
                     
                     TifCode, // 21
                     string.Empty, // 22
-                    od.AccountCode, // 23
+                    od.AccountId, // 23
                     string.Empty, // 24 OpenClose
                     "0", // 25 // Origin
                     od.Description, // 26 // OrderRef

@@ -97,11 +97,11 @@ namespace Pacmio.IB
                             #region Position
 
                             case IncomingMessage.Position:
-                                ParsePoistion(fields);
+                                Parse_Position(fields);
                                 break;
 
                             case IncomingMessage.PositionEnd:
-                                ParsePoistionEnd(fields);
+                                Parse_PositionEnd(fields);
                                 break;
 
                             case IncomingMessage.PositionMulti:

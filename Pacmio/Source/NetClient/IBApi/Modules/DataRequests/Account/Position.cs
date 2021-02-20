@@ -14,20 +14,27 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly HashSet<(Account, Contract)> UpdatedPositions = new HashSet<(Account, Contract)>();
+        internal static bool IsReady_Position => Connected && !IsBusy_Position;
+
+        private static bool IsBusy_Position { get; set; } = false;
+
+        private static List<(AccountInfo, Contract)> UpdatedPositions { get; } = new List<(AccountInfo, Contract)>();
 
         /// <summary>
         /// Subscribes to position updates for all accessible accounts.
         /// All positions sent initially, and then only updates as positions change.
         /// Send RequestPositions: (0)"61"-(1)"1"-
         /// </summary>
-        internal static void SendRequest_Postion()
+        internal static void SendRequest_Position()
         {
-            UpdatedPositions.Clear();
-            if (Connected) // !IsActiveAccountSummary &&
+            if (IsReady_Position) // !IsActiveAccountSummary &&
             {
+                IsBusy_Position = true;
+                UpdatedPositions.Clear();
                 SendRequest(new string[] { RequestType.RequestPositions.Param(), "1" });
             }
+            else
+                throw new Exception("We are still busy with last position request.");
         }
 
         /// <summary>
@@ -35,7 +42,7 @@ namespace Pacmio.IB
         /// (10)"NASDAQ"-(11)"USD"-(12)"FB"-(13)"NMS"-(14)"162"-(15)"184.27472345"-
         /// </summary>
         /// <param name="fields"></param>
-        private static void ParsePoistion(string[] fields)
+        private static void Parse_Position(string[] fields)
         {
             int msgVersion = fields[1].ToInt32(-1);
             if (msgVersion == 3)
@@ -44,16 +51,16 @@ namespace Pacmio.IB
 
                 if (contractValid)
                 {
-                    string accountCode = fields[2];
-                    Account ac = AccountManager.GetOrAdd(accountCode);
+                    string accountId = fields[2];
+                    AccountInfo ac = PositionManager.GetOrCreateAccountById(accountId);
                     c.Status = ContractStatus.Alive;
                     double totalQuantity = fields[14].ToDouble();
                     if (totalQuantity != 0)
                     {
                         double averagePrice = fields[15].ToDouble();
-                        Position ps = ac.GetPosition(c);
+                        PositionInfo ps = ac.GetOrCreatePositionByContract(c);
                         ps.Quantity = totalQuantity;
-                        ps.AveragePrice = averagePrice;
+                        ps.AverageEntryPrice = averagePrice;
                         UpdatedPositions.CheckAdd((ac, c));
                     }
                 }
@@ -66,28 +73,27 @@ namespace Pacmio.IB
         /// Received PositionEnd: (0)"62"-(1)"1"
         /// </summary>
         /// <param name="fields"></param>
-        private static void ParsePoistionEnd(string[] fields)
+        private static void Parse_PositionEnd(string[] fields)
         {
             if (fields[1] == "1")
             {
-                foreach (Account ac in AccountManager.List)
+                foreach (AccountInfo ac in PositionManager.List)
                 {
-                    foreach (Contract c in ac.Positions.Keys)
+                    foreach (Contract c in ac.PositionContractList)
                     {
                         var item = (ac, c);
                         if (!UpdatedPositions.Contains(item))
                         {
-                            if (ac.Positions.ContainsKey(c))
-                            {
-                                ac.Positions[c].Quantity = 0;
-                                ac.Positions[c].AveragePrice = double.NaN;
-                            }
+                            ac[c].Quantity = 0;
+                            ac[c].AveragePrice = double.NaN;
                         }
                     }
                 }
                 UpdatedPositions.Clear();
+                IsBusy_Position = false;
             }
-            AccountManager.Update(2, "\nPosition End");
+
+            PositionManager.Update(2, "\nPosition End");
         }
 
         //

@@ -82,14 +82,14 @@ namespace TestClient
                         int i = 0;
                         foreach (InteractiveBrokersAccount ac in AccountManager.List)
                         {
-                            Console.WriteLine(ac.AccountCode + " ac.Positions.Count = " + ac.Positions.Count);
+                            Console.WriteLine(ac.AccountId + " ac.Positions.Count = " + ac.Positions.Count);
                             foreach (Contract c in ac.Positions.Keys) 
                             {
                                 var pos = ac.Positions[c];
 
                                 PositionsGrid.Rows.Add(1);
                                 PositionsGrid[0, i].Value = c.Name + " @ " + c.Exchange;
-                                PositionsGrid[1, i].Value = ac.AccountCode;
+                                PositionsGrid[1, i].Value = ac.AccountId;
                                 PositionsGrid[2, i].Value = pos.Quantity;
                                 PositionsGrid[3, i].Value = pos.AveragePrice;
                                 PositionsGrid[4, i].Value = pos.Value;
@@ -129,9 +129,9 @@ namespace TestClient
         {
             ListBoxAccount.Items.Clear();
             TreeViewAccount.Nodes.Clear();
-            foreach (var a in AccountManager.List)
+            foreach (var a in PositionManager.List)
             {
-                ListBoxAccount.Items.Add(a.AccountCode);
+                ListBoxAccount.Items.Add(a.AccountId);
 
                 //if (a.AccountReady) 
                 //
@@ -148,7 +148,7 @@ namespace TestClient
                 }
                 dayTradingString = dayTradingString.Trim().TrimEnd(',') + " ]";
 
-                TreeNode tr = new TreeNode(a.AccountCode + ": " + a.AccountType + " " + dayTradingString);
+                TreeNode tr = new TreeNode(a.AccountId + ": " + a.AccountType + " " + dayTradingString);
 
                 foreach (PropertyInfo p in a.GetType().GetProperties())
                 {

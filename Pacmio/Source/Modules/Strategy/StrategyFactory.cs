@@ -23,7 +23,7 @@ namespace Pacmio
         /// <summary>
         /// Each strategy can have only one account
         /// </summary>
-        public static Dictionary<Strategy, Account> ActiveStrategyList { get; } = new Dictionary<Strategy, Account>();
+        public static Dictionary<Strategy, AccountInfo> ActiveStrategyList { get; } = new Dictionary<Strategy, AccountInfo>();
 
         /// <summary>
         /// List of all available Strategies

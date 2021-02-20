@@ -10,6 +10,19 @@ using System.Runtime.Serialization;
 namespace Pacmio
 {
     [Serializable, DataContract]
+    public enum TradeType : int
+    {
+        [EnumMember]
+        Entry = 0,
+
+        [EnumMember]
+        StopLoss = -1,
+
+        [EnumMember]
+        ProfitTaker = 1,
+    }
+
+    [Serializable, DataContract]
     public enum LiquidityType : int
     {
         [EnumMember]

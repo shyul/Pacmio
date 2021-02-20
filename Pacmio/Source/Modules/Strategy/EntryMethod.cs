@@ -16,66 +16,11 @@ namespace Pacmio
     {
         public static int DaysOfTradeHistoryToLoad { get; } = 365;
 
-        public static Dictionary<Contract, PositionStatus> Positions { get; }
+        public static Dictionary<Contract, PositionInfo> Positions { get; }
     
     }
 
-    /// <summary>
-    /// Only used in live trades, and emulations
-    /// </summary>
-    public class PositionStatus
-    {
-        public PositionStatus(MarketData md)
-        {
-            MarketData = md;
-        }
 
-        public MarketData MarketData { get; }
-
-        public Contract Contract => MarketData.Contract;
-
-        public double DecisionPrice { get; set; }
-
-        public DateTime PositionOpenTime { get; set; }
-
-        public double MarkPrice => MarketData.MarkPrice; 
-
-        public double AverageEntryPrice { get; set; }
-
-        public double Quantity { get; set; } = 0;
-
-        public Strategy AssignedStrategy { get; set; }
-
-        public OrderInfo CurrentOrder { get; private set; }
-
-        public OrderStatus OrderStatus => CurrentOrder is OrderInfo od ? od.Status : OrderStatus.Inactive;
-
-        
-
-        /// <summary>
-        /// When the order if filled
-        /// </summary>
-        public void CloseCurrentOrder()
-        {
-            // If this order is still alive,
-            // Cancel it here!
-
-            if (CurrentOrder is OrderInfo od && !OrderHistory.Contains(od))
-            {
-                OrderHistory.Add(od);
-            }
-
-            CurrentOrder = null;
-        }
-
-        public List<OrderInfo> OrderHistory { get; } = new List<OrderInfo>();
-
-        public OrderInfo LastOrder => OrderHistory.OrderBy(n => n.OrderTime).LastOrDefault();
-
-        public string Account => LastOrder.AccountCode;
-
-        public DateTime LastTradeTime => LastOrder.OrderTime;
-    }
 
     public class EntryMethod
     {

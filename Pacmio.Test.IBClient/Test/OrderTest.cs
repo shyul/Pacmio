@@ -9,7 +9,7 @@ namespace TestClient
 {
     public static class OrderTest
     {
-        public static Account LiveAccount { get; set; }
+        public static AccountInfo LiveAccount { get; set; }
 
         private static readonly DataTable Table = new DataTable("Order List");
 
@@ -110,7 +110,7 @@ namespace TestClient
                 row["Time In Force"] = tif;
                 row["Status"] = od.Status.ToString();
                 row["Mode Code"] = od.ModeCode;
-                row["Account"] = od.AccountCode;
+                row["Account"] = od.AccountId;
                 row["Order Id"] = od.OrderId;
                 row["Client Id"] = od.ClientId;
                 row["Exec Time"] = od.OrderTime;
@@ -120,7 +120,7 @@ namespace TestClient
             {
                 Table.Rows.Add(od.PermId, contractName,
                     od.Quantity, orderType, od.Quantity * od.LimitPrice,
-                   tif, od.Status.ToString(), od.ModeCode, od.AccountCode, od.OrderId, od.ClientId, od.OrderTime);
+                   tif, od.Status.ToString(), od.ModeCode, od.AccountId, od.OrderId, od.ClientId, od.OrderTime);
             }
         }
     }

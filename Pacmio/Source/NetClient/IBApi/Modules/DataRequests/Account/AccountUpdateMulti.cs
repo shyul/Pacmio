@@ -17,7 +17,7 @@ namespace Pacmio.IB
         public static bool IsActiveAccountUpdateMulti => ActiveRequestContains(RequestType.RequestAccountUpdatesMulti);
         //private int RequestIdAccountUpdateMulti = -1;
 
-        public static void RequestAccountUpdateMulti(string account = "", string modelCode = "", bool ledgerAndNLV = false)
+        public static void SendRequest_AccountUpdateMulti(string account = "", string modelCode = "", bool ledgerAndNLV = false)
         {
             if (!IsActiveAccountUpdateMulti && Connected)
             {
@@ -63,7 +63,7 @@ namespace Pacmio.IB
             {
                 int reqId = int.Parse(fields[2]);
                 RemoveRequest(reqId);
-                AccountManager.UpdatedTime = DateTime.Now;
+                PositionManager.UpdatedTime = DateTime.Now;
             }
         }
     }

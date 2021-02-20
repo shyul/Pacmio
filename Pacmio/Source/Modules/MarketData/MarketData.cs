@@ -116,13 +116,13 @@ namespace Pacmio
 
 
         [IgnoreDataMember]
-        public double MarkPrice
+        public double MarketPrice
         {
-            get => m_MarkPrice;
+            get => m_MarketPrice;
             set
             {
-                m_MarkPrice = value;
-                foreach (Account ac in AccountManager.List)
+                m_MarketPrice = value;
+                foreach (AccountInfo ac in PositionManager.List)
                 {
                     Position ps = ac[Contract];
                     //ps.MarkPrice = m_MarkPrice;
@@ -131,10 +131,10 @@ namespace Pacmio
         }
 
         [DataMember]
-        private double m_MarkPrice = double.NaN;
+        private double m_MarketPrice = double.NaN;
 
         [IgnoreDataMember]
-        public Position this[Account ac] => ac[Contract];
+        public Position this[AccountInfo ac] => ac[Contract];
 
 
 
