@@ -1,9 +1,15 @@
-﻿using System;
+﻿/// ***************************************************************************
+/// Pacmio Research Enivironment
+/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// ***************************************************************************
+
+using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Xu;
 
 namespace Pacmio
 {
@@ -205,8 +211,28 @@ namespace Pacmio
 
         #region File system
 
+        private static string FileName => Root.ResourcePath + "OrderLog.Json";
 
+        public static void Save()
+        {
+            lock (PermIdToOrderLUT)
+                PermIdToOrderLUT.Values.ToList().SerializeJsonFile(FileName);
+        }
 
+        public static void Load()
+        {
+            if (File.Exists(FileName))
+            {
+                List<OrderInfo> data = Serialization.DeserializeJsonFile<List<OrderInfo>>(FileName);
+                lock (PermIdToOrderLUT)
+                {
+                    data.AsParallel().ForAll(od =>
+                    {
+                        PermIdToOrderLUT[od.PermId] = od;
+                    });
+                }
+            }
+        }
 
         #endregion File system
     }

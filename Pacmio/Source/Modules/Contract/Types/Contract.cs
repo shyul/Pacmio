@@ -224,38 +224,11 @@ namespace Pacmio
 
 
 
-        [IgnoreDataMember]
-        public virtual OrderInfoManager TradeData
-        {
-            get
-            {
-                if (m_TradeData is null) LoadTradeData();
-                return m_TradeData;
-            }
-        }
 
-        [IgnoreDataMember]
-        private OrderInfoManager m_TradeData = null;
 
-        public virtual void LoadTradeData()
-        {
-            m_TradeData = File.Exists(TradeDataFileName) ? Serialization.DeserializeJsonFile<OrderInfoManager>(TradeDataFileName) : new OrderInfoManager();
-        }
 
-        public virtual void SaveTradeData()
-        {
-            if (m_TradeData is OrderInfoManager td)
-            {
-                if (!Directory.Exists(TradeDataFilePath)) Directory.CreateDirectory(TradeDataFilePath);
-                td.SerializeJsonFile(TradeDataFileName);
-            }
-        }
 
-        [IgnoreDataMember]
-        public virtual string TradeDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_TradeData\\";
 
-        [IgnoreDataMember]
-        public virtual string TradeDataFileName => TradeDataFilePath + "$" + Name + ".json";
 
         #endregion Order and Trade Data
 

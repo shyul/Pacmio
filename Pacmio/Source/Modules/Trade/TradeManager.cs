@@ -107,11 +107,6 @@ namespace Pacmio
                     data.AsParallel().ForAll(ti =>
                     {
                         ExecIdToTradeLUT[ti.ExecId] = ti;
-
-                        if (ti.Contract is Contract c)
-                        {
-                            c.TradeData.Add(ti);
-                        }
                     });
                 }
             }
