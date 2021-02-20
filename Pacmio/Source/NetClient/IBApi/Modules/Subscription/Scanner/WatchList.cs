@@ -186,7 +186,7 @@ namespace Pacmio.IB
             bool tried = false;
 
         StartLoad:
-            var list = ContractList.GetList(conId).Where(n => n.Name == symbolName && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+            var list = ContractManager.GetList(conId).Where(n => n.Name == symbolName && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
 
             if (list.Count() == 1)
             {
@@ -195,10 +195,10 @@ namespace Pacmio.IB
             else if (!tried)
             {
                 tried = true;
-                var fetchList = ContractList.Fetch(symbolName).Where(n => n.Name == symbolName && n.ConId == conId && n is Stock);
+                var fetchList = ContractManager.Fetch(symbolName).Where(n => n.Name == symbolName && n.ConId == conId && n is Stock);
                 if (fetchList.Count() > 0)
                 {
-                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractList.Fetch(stk); });
+                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractManager.Fetch(stk); });
                 }
                 goto StartLoad;
             }

@@ -223,7 +223,7 @@ namespace Pacmio
                                         {
                                             case ("STOCK"):
                                                 Exchange exchange = exchangeCode.ParseEnum<Exchange>();
-                                                Stock stk = ContractList.GetOrAdd(new Stock(symbolName, exchange));
+                                                Stock stk = ContractManager.GetOrAdd(new Stock(symbolName, exchange));
                                                 stk.Status = ContractStatus.Unknown;
                                                 stk.ConId = conId;
                                                 stk.ExchangeSuffix = exchangeSuffix;

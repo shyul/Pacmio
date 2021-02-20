@@ -23,7 +23,7 @@ namespace TestClient
         public bool ValidateSymbol()
         {
             string symbol = TextBoxSingleContractName.Text.ToUpper();
-            var siList = ContractList.GetOrFetch(symbol, "US");
+            var siList = ContractManager.GetOrFetch(symbol, "US");
 
             if (siList.Count() > 0)
             {

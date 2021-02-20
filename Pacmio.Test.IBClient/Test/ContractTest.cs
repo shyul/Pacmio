@@ -77,8 +77,8 @@ namespace TestClient
 
             name = name.ToUpper();
             var result = string.IsNullOrWhiteSpace(name) ?
-                ContractList.Values.Where(all) :
-                ContractList.Values.Where(searchName);
+                ContractManager.Values.Where(all) :
+                ContractManager.Values.Where(searchName);
 
             var rows = result.Select(selector).ToArray();
 

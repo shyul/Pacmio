@@ -136,7 +136,7 @@ namespace Pacmio
             Contract currentContract = null;
             bool btdIsValid = false;
 
-            IEnumerable<Contract> cList = ContractList.Values.AsParallel().Where(n => n is Stock s && s.Country == "US");// && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
+            IEnumerable<Contract> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US");// && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
 
             Dictionary<string, Contract> symbolList = cList.ToDictionary(n => n.Name, n => n);
 
@@ -383,7 +383,7 @@ namespace Pacmio
                                 if (Symbols.CheckAdd(symbol))
                                 {
                                     Console.Write(symbol + ". ");
-                                    ContractList.GetOrFetch(symbol, "US");
+                                    ContractManager.GetOrFetch(symbol, "US");
                                 }
 
                             }

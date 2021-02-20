@@ -245,7 +245,7 @@ namespace TestClient
         {
             string symbol = TextBoxSingleContractName.Text.ToUpper();
             Cts = new CancellationTokenSource();
-            ContractList.GetOrFetch(symbol, "US", true, Cts);
+            ContractManager.GetOrFetch(symbol, "US", true, Cts);
         }
 
         #endregion Symbols
@@ -313,8 +313,8 @@ namespace TestClient
             BarType type = BarType;
             //IAnalysisSetting tr = new TestStrategy(freq);
 
-            var symbols = ContractList.GetSymbolList(ref symbolText);
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
+            var symbols = ContractManager.GetSymbolList(ref symbolText);
+            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
@@ -376,8 +376,8 @@ namespace TestClient
 
             Task.Run(() =>
             {
-                var symbols = ContractList.GetSymbolList(ref symbolText);
-                var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+                var symbols = ContractManager.GetSymbolList(ref symbolText);
+                var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
                 BarTable.Download(cList, new List<(BarFreq freq, BarType type, Period period)>() { (freq, type, HistoricalPeriod) }, Cts, Progress);
                 //BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
                 //BarTableTest.BarTableSet.AddContract(cList, freq, type, HistoricalPeriod, Cts, Progress);
@@ -399,7 +399,7 @@ namespace TestClient
             Cts = new CancellationTokenSource();
             Task.Run(() =>
             {
-                var list = ContractList.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
+                var list = ContractManager.Values.AsParallel().Where(n => n is Stock && !n.Name.Contains(' ') && (n.Exchange == Exchange.NASDAQ || n.Exchange == Exchange.NYSE) && n.Status == ContractStatus.Alive && !n.NameSuffix.Contains("ETF") && !n.NameSuffix.Contains("ETN") && !n.NameSuffix.Contains("ADR")).Select(n => (Stock)n);
                 //StrategyManager.GetWatchList(list, Cts, Progress);
             }, Cts.Token);
         }
@@ -496,7 +496,7 @@ namespace TestClient
                                             "TQQQ","BA","B","T", "ADI", "TXN", "INTC","NVDA","D","QBIO","JPM",
                                             "WFC","W", "GILD","ABBV","MSFT","AMGN","UPRO","ALXN", "IBM" };
 
-            foreach (Contract c in ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null))
+            foreach (Contract c in ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null))
             {
                 Console.WriteLine("Request Realtime Bars: " + c.ToString());
                 //c.Request_RealTimeBars();
@@ -529,7 +529,7 @@ namespace TestClient
             AccountPositionManager.Request_AccountSummary();
 
             string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
-            var list = ContractList.GetOrFetch(symbols, "US", null, null);
+            var list = ContractManager.GetOrFetch(symbols, "US", null, null);
             string tickList = TextBoxGenericTickList.Text;
             foreach (Contract c in list)
             {
@@ -647,7 +647,7 @@ namespace TestClient
         private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task.Run(() => { ContractList.RemoveDuplicateStock("US", Cts); });
+            Task.Run(() => { ContractManager.RemoveDuplicateStock("US", Cts); });
         }
 
         #region Quandl Tools
@@ -761,7 +761,7 @@ namespace TestClient
                             symbollist.AddRange(symbols);
                         }
 
-                        ContractList.GetOrFetch(symbollist, TextBoxValidCountryCode.Text, Cts, Progress);
+                        ContractManager.GetOrFetch(symbollist, TextBoxValidCountryCode.Text, Cts, Progress);
                     }
                 }, Cts.Token);
             }
@@ -776,7 +776,7 @@ namespace TestClient
                 Task.Run(() =>
                 {
                     string sourceFileName = Root.OpenFile.FileName;
-                    ContractList.ImportNasdaq(sourceFileName, Cts, Progress);
+                    ContractManager.ImportNasdaq(sourceFileName, Cts, Progress);
                 }, Cts.Token);
             }
         }
@@ -786,7 +786,7 @@ namespace TestClient
             Cts = new CancellationTokenSource();
             Task.Run(() =>
             {
-                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && (DateTime.Now - n.UpdateTime).Days > 7, Cts, Progress);
+                ContractManager.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && (DateTime.Now - n.UpdateTime).Days > 7, Cts, Progress);
             }, Cts.Token);
         }
 
@@ -797,7 +797,7 @@ namespace TestClient
             {
                 //ContractList.UpdateContractData("US", n => (DateTime.Now - n.UpdateTime).Minutes > 180, Cts, Progress);
                 //ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && string.IsNullOrWhiteSpace(ib.Industry), Cts, Progress);
-                ContractList.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && ib.Industry is null, Cts, Progress);
+                ContractManager.UpdateContractData("US", n => n.Status != ContractStatus.Incomplete && n is IBusiness ib && ib.Industry is null, Cts, Progress);
             }, Cts.Token);
         }
 
@@ -810,7 +810,7 @@ namespace TestClient
                 Cts = new CancellationTokenSource();
                 Task.Run(() =>
                 {
-                    ContractList.ImportCSV(Root.OpenFile.FileName, Cts, Progress);
+                    ContractManager.ImportCSV(Root.OpenFile.FileName, Cts, Progress);
                 }, Cts.Token);
             }
         }
@@ -824,7 +824,7 @@ namespace TestClient
                 Cts = new CancellationTokenSource();
                 Task.Run(() =>
                 {
-                    ContractList.ExportCSV(Root.SaveFile.FileName, Cts, Progress);
+                    ContractManager.ExportCSV(Root.SaveFile.FileName, Cts, Progress);
                 }, Cts.Token);
             }
         }
@@ -832,10 +832,10 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var SymbolList = ContractList.GetSymbolList(ref symbolText);
+            var SymbolList = ContractManager.GetSymbolList(ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
             Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
-            var list = ContractList.GetList(SymbolList.Where(n => n.Length > 0), "US");
+            var list = ContractManager.GetList(SymbolList.Where(n => n.Length > 0), "US");
 
             HashSet<string> existingSymbols = new HashSet<string>();
             var existingSymbolsArray = list.Select(n => n.Name);
@@ -854,7 +854,7 @@ namespace TestClient
 
             //var list = ContractList.Values.Where(n => SymbolList.Contains(n.Name));
             //var list = ContractList.Values.Where(n => n.Name == "AAPL");
-            Console.WriteLine("ContractList.Values.Count() = " + ContractList.Values.Count());
+            Console.WriteLine("ContractList.Values.Count() = " + ContractManager.Values.Count());
             Console.WriteLine("list.Count() = " + list.Count());
 
             /*
@@ -917,9 +917,9 @@ namespace TestClient
             string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
 
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractList.GetSymbolList(ref symbolText);
+            var symbols = ContractManager.GetSymbolList(ref symbolText);
 
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
 
             foreach (Contract c in cList)
@@ -937,9 +937,9 @@ namespace TestClient
         private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractList.GetSymbolList(ref symbolText);
+            var symbols = ContractManager.GetSymbolList(ref symbolText);
 
-            var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
 
             Task.Run(() => {
@@ -1003,8 +1003,8 @@ namespace TestClient
 
             Task.Run(() =>
             {
-                var symbols = ContractList.GetSymbolList(ref symbolText);
-                var cList = ContractList.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+                var symbols = ContractManager.GetSymbolList(ref symbolText);
+                var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
 
                 foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
                 {

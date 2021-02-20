@@ -128,7 +128,7 @@ namespace Pacmio
                 {
                     if (!(m_Contract is Contract c && c.ConId == ConId))
                     {
-                        m_Contract = ContractList.GetOrFetch(ConId);
+                        m_Contract = ContractManager.GetOrFetch(ConId);
                     }
 
                     return m_Contract;

@@ -104,7 +104,7 @@ namespace Pacmio.IB
 
                             //Console.WriteLine("RequestMatching: " + symbolStr + " | " + exchangeStr + " | " + secTypeStr + " | " + DerivativeSecTypeCount.ToString());
                             ActiveContractSampleList.Add(c);
-                            ContractList.GetOrAdd(c);
+                            ContractManager.GetOrAdd(c);
                             c.UpdateTime = DateTime.Now;
                         }
                         else

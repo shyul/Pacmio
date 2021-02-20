@@ -44,7 +44,7 @@ namespace Pacmio.IB
         {
             int conId = fields[1].ToInt32(-1);
 
-            if (ContractList.GetOrFetch(conId) is Contract c)
+            if (ContractManager.GetOrFetch(conId) is Contract c)
             {
                 int permId = fields[23].ToInt32();
 

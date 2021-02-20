@@ -211,7 +211,7 @@ namespace Pacmio.TIProData
                         bool tried = false;
 
                     StartLoad:
-                        var list = ContractList.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+                        var list = ContractManager.GetList(symbolName, exchange).Where(n => n is Stock && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
 
                         if (list.Count() == 1)
                         {
@@ -231,11 +231,11 @@ namespace Pacmio.TIProData
                             if ((DateTime.Now - uc.LastCheckedTime).TotalDays > 100)
                             {
                                 uc.LastCheckedTime = DateTime.Now;
-                                var fetchList = ContractList.Fetch(symbolName).Where(n => n is Stock && n.Name == symbolName && n.Exchange == exchange);
+                                var fetchList = ContractManager.Fetch(symbolName).Where(n => n is Stock && n.Name == symbolName && n.Exchange == exchange);
                                 if (fetchList.Count() > 0)
                                 {
                                     UnknownContractList.Remove(uc);
-                                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractList.Fetch(stk); });
+                                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractManager.Fetch(stk); });
                                 }
 
                                 goto StartLoad;

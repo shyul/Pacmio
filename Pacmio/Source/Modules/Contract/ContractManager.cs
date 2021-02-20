@@ -19,30 +19,30 @@ namespace Pacmio
     /// <summary>
     /// Master List of all symbols
     /// </summary>
-    public static class ContractList
+    public static class ContractManager
     {
         /// <summary>
         /// The Master List of all symbols are here
         /// </summary>
-        private static ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract> List { get; }
+        private static ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract> ContractLUT { get; }
             = new ConcurrentDictionary<(string name, Exchange exchange, string typeName), Contract>();
 
-        public static int Count => List.Count;
+        public static int Count => ContractLUT.Count;
         public static bool IsEmpty => Count == 0;
-        public static IEnumerable<Contract> Values => List.Values;
+        public static IEnumerable<Contract> Values => ContractLUT.Values;
 
         public static bool Remove((string name, Exchange exchange, string typeName) info)
         {
-            bool successful = List.TryRemove(info, out _);
+            bool successful = ContractLUT.TryRemove(info, out _);
             return successful;
         }
 
         public static T GetOrAdd<T>(T c) where T : Contract
         {
-            if (!List.ContainsKey(c.Info))
-                List.TryAdd(c.Info, c);
+            if (!ContractLUT.ContainsKey(c.Info))
+                ContractLUT.TryAdd(c.Info, c);
 
-            return (T)List[c.Info];
+            return (T)ContractLUT[c.Info];
         }
 
         public static IEnumerable<Contract> GetList(int conId)
@@ -460,7 +460,7 @@ namespace Pacmio
 
             Console.WriteLine("Start sorting the list!");
 
-            List<Contract> sorted = List.Values.AsParallel()
+            List<Contract> sorted = ContractLUT.Values.AsParallel()
                 .OrderBy(n => n.TypeName)
                 .ThenBy(n => n.Exchange)
                 .ThenBy(n => n.Name)

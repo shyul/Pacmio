@@ -124,7 +124,7 @@ namespace Pacmio.IB
                 {
                     case ("STK"):
                         {
-                            Stock c = ContractList.GetOrAdd(new Stock(symbolName, exchange));
+                            Stock c = ContractManager.GetOrAdd(new Stock(symbolName, exchange));
                             if (!string.IsNullOrEmpty(suffix)) c.ExchangeSuffix = suffix;
                             c.ConId = conIdStr.ToInt32(0);
                             if (c.ConId == 0)
@@ -139,7 +139,7 @@ namespace Pacmio.IB
                         }
                     case ("IND"):
                         {
-                            Index c = ContractList.GetOrAdd(new Index(symbolName, exchange));
+                            Index c = ContractManager.GetOrAdd(new Index(symbolName, exchange));
                             c.ConId = conIdStr.ToInt32(0);
                             if (c.ConId == 0)
                             {
