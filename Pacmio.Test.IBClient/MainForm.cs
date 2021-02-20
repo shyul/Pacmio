@@ -66,7 +66,7 @@ namespace TestClient
         {
             InitializeComponent();
 
-            OrderTest.LiveAccount = PositionManager.GetOrCreateAccountById("DU332281");
+            OrderTest.LiveAccount = AccountPositionManager.GetOrCreateAccountById("DU332281");
             /*
             ContractTest.InitializeTable(GridViewContractSearchResult);
             OrderTest.InitializeTable(GridViewAllOrders);
@@ -74,7 +74,7 @@ namespace TestClient
 
             */
 
-            PositionManager.UpdatedHandler += AccountUpdatedHandler;
+            AccountPositionManager.UpdatedHandler += AccountUpdatedHandler;
             WatchListManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
@@ -254,13 +254,13 @@ namespace TestClient
 
         private void BtnAccountSummary_Click(object sender, EventArgs e)
         {
-            PositionManager.Request_AccountSummary();
+            AccountPositionManager.Request_AccountSummary();
         }
 
 
         private void BtnRequestPostion_Click(object sender, EventArgs e)
         {
-            PositionManager.Request_Position();
+            AccountPositionManager.Request_Position();
         }
 
         private void BtnGetOpenOrders_Click(object sender, EventArgs e)
@@ -526,7 +526,7 @@ namespace TestClient
         private void TestMassOrder_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            PositionManager.Request_AccountSummary();
+            AccountPositionManager.Request_AccountSummary();
 
             string[] symbols = new string[] { "XLNX", "TQQQ", "ET", "LULU", "BAC", "JPM" };
             var list = ContractList.GetOrFetch(symbols, "US", null, null);

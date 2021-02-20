@@ -21,7 +21,7 @@ namespace TestClient
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
-                    PositionManager.UpdatedHandler += (int status, DateTime time, string msg) =>
+                    AccountPositionManager.UpdatedHandler += (int status, DateTime time, string msg) =>
                     {
                         Console.WriteLine("TestClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg);
                     };

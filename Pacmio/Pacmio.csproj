@@ -245,7 +245,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
-    <Compile Include="Source\Modules\Trade\Position\PositionManager.cs" />
+    <Compile Include="Source\Modules\Trade\Position\AccountPositionManager.cs" />
     <Compile Include="Source\Modules\Strategy\Scanner\ScannerManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />

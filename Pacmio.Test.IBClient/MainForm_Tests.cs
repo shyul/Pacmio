@@ -129,7 +129,7 @@ namespace TestClient
         {
             ListBoxAccount.Items.Clear();
             TreeViewAccount.Nodes.Clear();
-            foreach (var a in PositionManager.List)
+            foreach (var a in AccountPositionManager.List)
             {
                 ListBoxAccount.Items.Add(a.AccountId);
 

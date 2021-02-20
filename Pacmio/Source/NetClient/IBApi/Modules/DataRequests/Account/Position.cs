@@ -28,7 +28,7 @@ namespace Pacmio.IB
             if (IsReady_Position) // !IsActiveAccountSummary &&
             {
                 IsBusy_Position = true;
-                PositionManager.ResetAllPositionRefreshStatus();
+                AccountPositionManager.ResetAllPositionRefreshStatus();
                 SendRequest(new string[] { RequestType.RequestPositions.Param(), "1" });
             }
             else
@@ -50,7 +50,7 @@ namespace Pacmio.IB
                 if (contractValid)
                 {
                     string accountId = fields[2];
-                    AccountInfo ac = PositionManager.GetOrCreateAccountById(accountId);
+                    AccountInfo ac = AccountPositionManager.GetOrCreateAccountById(accountId);
                     c.Status = ContractStatus.Alive;
                     double totalQuantity = fields[14].ToDouble();
                     if (totalQuantity != 0)
@@ -75,11 +75,11 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                PositionManager.ZeroNonRefreshedPositions();
+                AccountPositionManager.ZeroNonRefreshedPositions();
                 IsBusy_Position = false;
             }
 
-            PositionManager.Update(2, "\nPosition End");
+            AccountPositionManager.Update(2, "\nPosition End");
         }
 
         //

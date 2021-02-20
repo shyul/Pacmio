@@ -92,7 +92,7 @@ namespace Pacmio
                 {
                     if (!(m_Account is AccountInfo ac && ac == id))
                     {
-                        m_Account = PositionManager.GetAccountById(AccountId);
+                        m_Account = AccountPositionManager.GetAccountById(AccountId);
                     }
 
                     return m_Account;

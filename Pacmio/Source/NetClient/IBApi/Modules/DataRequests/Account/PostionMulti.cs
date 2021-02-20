@@ -20,7 +20,6 @@ namespace Pacmio.IB
         /// </summary>
         internal static void SendRequest_PostionMulti(string account, string modelCode)
         {
-            UpdatedPositions.Clear();
             if (Connected) // !IsActiveAccountSummary &&
             {
                 (int requestId, string typeStr) = RegisterRequest(RequestType.RequestPositionsMulti);

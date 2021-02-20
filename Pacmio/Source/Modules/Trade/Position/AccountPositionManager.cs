@@ -15,7 +15,7 @@ namespace Pacmio
     /// <summary>
     /// Master List of all Accounts in the program
     /// </summary>
-    public static class PositionManager
+    public static class AccountPositionManager
     {
         private static Dictionary<string, AccountInfo> AccountLUT { get; } = new Dictionary<string, AccountInfo>();
 

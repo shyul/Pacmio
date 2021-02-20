@@ -45,9 +45,9 @@ namespace Pacmio.IB
             if (fields[1] == "1")
             {
                 string accountId = fields[3];
-                AccountInfo ac = PositionManager.GetOrCreateAccountById(accountId);
+                AccountInfo ac = AccountPositionManager.GetOrCreateAccountById(accountId);
                 ac.UpdateFields(fields[4], fields[5]);
-                PositionManager.UpdatedTime = DateTime.Now;
+                AccountPositionManager.UpdatedTime = DateTime.Now;
             }
         }
 
@@ -58,7 +58,7 @@ namespace Pacmio.IB
             {
                 int reqId = int.Parse(fields[2]);
                 RemoveRequest(reqId);
-                PositionManager.Update(1, "Account updated by IBClient");
+                AccountPositionManager.Update(1, "Account updated by IBClient");
             }
         }
 
@@ -77,11 +77,11 @@ namespace Pacmio.IB
                 {
                     if (accountId.Length > 0)
                     {
-                        PositionManager.GetOrCreateAccountById(accountId);
+                        AccountPositionManager.GetOrCreateAccountById(accountId);
                     }
                 }
 
-                PositionManager.UpdatedTime = DateTime.Now;
+                AccountPositionManager.UpdatedTime = DateTime.Now;
             }
         }
 
@@ -108,7 +108,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                PositionManager.UpdatedTime = DateTime.Now;
+                AccountPositionManager.UpdatedTime = DateTime.Now;
                 Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             }
         }

@@ -63,7 +63,7 @@ namespace Pacmio.IB
             {
                 int reqId = int.Parse(fields[2]);
                 RemoveRequest(reqId);
-                PositionManager.UpdatedTime = DateTime.Now;
+                AccountPositionManager.UpdatedTime = DateTime.Now;
             }
         }
     }
