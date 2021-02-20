@@ -260,7 +260,7 @@ namespace TestClient
 
         private void BtnRequestPostion_Click(object sender, EventArgs e)
         {
-            PositionManager.Request_Positionn();
+            PositionManager.Request_Position();
         }
 
         private void BtnGetOpenOrders_Click(object sender, EventArgs e)

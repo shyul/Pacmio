@@ -47,7 +47,7 @@ namespace Pacmio
                 Reset();
         }
 
-        public void Snapshot(Position ps)
+        public void Snapshot(PositionInfo ps)
         {
             double new_qty = ps.Quantity;
             if (Quantity < new_qty)
@@ -69,7 +69,7 @@ namespace Pacmio
             }
 
             Quantity = new_qty;
-            AveragePrice = ps.AveragePrice;
+            AveragePrice = ps.AverageEntryPrice;
         }
 
         public Bar Bar { get; }

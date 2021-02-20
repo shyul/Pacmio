@@ -114,29 +114,8 @@ namespace Pacmio
         public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
 
-
-        [IgnoreDataMember]
-        public double MarketPrice
-        {
-            get => m_MarketPrice;
-            set
-            {
-                m_MarketPrice = value;
-                foreach (AccountInfo ac in PositionManager.List)
-                {
-                    Position ps = ac[Contract];
-                    //ps.MarkPrice = m_MarkPrice;
-                }
-            }
-        }
-
         [DataMember]
-        private double m_MarketPrice = double.NaN;
-
-        [IgnoreDataMember]
-        public Position this[AccountInfo ac] => ac[Contract];
-
-
+        public double MarketPrice { get; set; }
 
 
         [IgnoreDataMember] // Initialize

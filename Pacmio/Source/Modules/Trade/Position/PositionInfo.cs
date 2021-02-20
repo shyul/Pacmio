@@ -21,6 +21,7 @@ namespace Pacmio
         {
             AccountInfo = ac;
             Contract = c;
+            Refreshed = true;
         }
 
         public AccountInfo AccountInfo { get; }
@@ -33,33 +34,40 @@ namespace Pacmio
 
         public double MarketPrice => MarketData.MarketPrice;
 
-
-
-
-
-        public double AverageEntryPrice { get; set; } = double.NaN;
-
-        public double Quantity { get; set; } = 0;
-
-        public double Cost => Quantity * AverageEntryPrice;
+        public double AverageEntryPrice { get; private set; } = double.NaN;
 
         /// <summary>
-        /// TODO: What about short position?
+        /// Get information from Execution data...
         /// </summary>
-        public double Value => Quantity * MarketPrice;
+        public double AverageCommissionPerUnit { get; set; } = double.NaN;
+
+        public double Quantity { get; private set; } = 0;
+
+        public void Reset()
+        {
+            AverageEntryPrice = double.NaN;
+            Quantity = 0;
+            UpdateTime = DateTime.Now;
+
+            // TODO: Emit delta here?? Or TradeInfo list is good enough?
+        }
+
+        public void Set(double qty, double price) 
+        {
+            AverageEntryPrice = price;
+            Quantity = qty;
+            UpdateTime = DateTime.Now;
+            Refreshed = true;
+            // TODO: Emit delta here?? Or TradeInfo list is good enough?
+        }
+
+        public double Cost => double.IsNaN(AverageEntryPrice) ? 0 : Math.Abs(Quantity) * AverageEntryPrice;
 
         public double PnL => double.IsNaN(AverageEntryPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
 
-        public Strategy AssignedStrategy { get; set; }
-
-        public OrderInfo LatestOrder { get; private set; }
-
-        public OrderStatus OrderStatus => LatestOrder is OrderInfo od ? od.Status : OrderStatus.Inactive;
-
-
+        public double Value => Cost + PnL; // - possible commission...
 
         /*
-         * 
         /// <summary>
         /// To be deleted! Merge this feature to IMarketDataAnalysis
         /// </summary>
@@ -73,37 +81,17 @@ namespace Pacmio
         }
          */
 
-        /// <summary>
-        /// When the order if filled
-        /// </summary>
-        public void CancelCurrentOrder()
+        public void EmergencyClose()
         {
+            Contract.CancelAllOrders();
 
+            if (Quantity != 0)
+                Contract.PlaceOrder(AccountInfo, -Quantity, TradeType.StopLoss, OrderTimeInForce.GoodUntilCanceled, DateTime.Now);
         }
 
-        public void Remove()
-        {
+        public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
 
-
-        }
-
-        /*
-         
-        public List<IDataView> DataViews { get; } = new List<IDataView>();
-
-
-        public void Update()
-        {
-            UpdateTime = DateTime.Now;
-
-            foreach (IDataView idv in DataViews)
-            {
-                idv.DataIsUpdated();
-            }
-        }
-
-        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
-         */
+        public bool Refreshed { get; set; } = true;
 
         #region Equality
 

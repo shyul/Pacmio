@@ -19,8 +19,6 @@ namespace Pacmio
     {
         private static Dictionary<string, AccountInfo> AccountLUT { get; } = new Dictionary<string, AccountInfo>();
 
-        public static IEnumerable<AccountInfo> List => AccountLUT.Values;
-
         public static int Count => AccountLUT.Count;
 
         public static AccountInfo GetAccountById(string accountId)
@@ -55,15 +53,35 @@ namespace Pacmio
             IB.Client.SendRequest_AccountSummary();
         }
 
-
-
+        public static void EmergencyClose()
+        {
+            foreach (var ac in AccountLUT.Values)
+            {
+                ac.EmergencyClose();
+            }
+        }
 
         #region Data Requests
 
-
-        public static void Request_Positionn()
+        public static void Request_Position()
         {
             IB.Client.SendRequest_Position();
+        }
+
+        internal static void ResetAllPositionRefreshStatus()
+        {
+            lock (AccountLUT)
+            {
+                foreach (AccountInfo ac in AccountLUT.Values) ac.ResetAllPositionRefreshStatus();
+            }
+        }
+
+        internal static void ZeroNonRefreshedPositions()
+        {
+            lock (AccountLUT)
+            {
+                foreach (AccountInfo ac in AccountLUT.Values) ac.ZeroNonRefreshedPositions();
+            }
         }
 
         #region Updates
@@ -93,9 +111,9 @@ namespace Pacmio
 
         public static void Save()
         {
-            lock (m_List)
+            lock (AccountLUT)
             {
-                m_List.ToArray().SerializeJsonFile(FileName);
+                AccountLUT.Values.ToArray().SerializeJsonFile(FileName);
             }
         }
 
@@ -106,8 +124,7 @@ namespace Pacmio
                 var list = Serialization.DeserializeJsonFile<AccountInfo[]>(FileName);
                 foreach (AccountInfo ac in list)
                 {
-                    ac.Setup();
-                    m_List.CheckAdd(ac);
+                    AccountLUT.CheckAdd(ac.AccountId, ac);
                 }
             }
 

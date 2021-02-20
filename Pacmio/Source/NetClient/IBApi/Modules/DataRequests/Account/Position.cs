@@ -18,8 +18,6 @@ namespace Pacmio.IB
 
         private static bool IsBusy_Position { get; set; } = false;
 
-        private static List<(AccountInfo, Contract)> UpdatedPositions { get; } = new List<(AccountInfo, Contract)>();
-
         /// <summary>
         /// Subscribes to position updates for all accessible accounts.
         /// All positions sent initially, and then only updates as positions change.
@@ -30,7 +28,7 @@ namespace Pacmio.IB
             if (IsReady_Position) // !IsActiveAccountSummary &&
             {
                 IsBusy_Position = true;
-                UpdatedPositions.Clear();
+                PositionManager.ResetAllPositionRefreshStatus();
                 SendRequest(new string[] { RequestType.RequestPositions.Param(), "1" });
             }
             else
@@ -59,10 +57,10 @@ namespace Pacmio.IB
                     {
                         double averagePrice = fields[15].ToDouble();
                         PositionInfo ps = ac.GetOrCreatePositionByContract(c);
-                        ps.Quantity = totalQuantity;
-                        ps.AverageEntryPrice = averagePrice;
-                        UpdatedPositions.CheckAdd((ac, c));
+                        ps.Set(totalQuantity, averagePrice);
                     }
+
+
                 }
             }
 
@@ -77,19 +75,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                foreach (AccountInfo ac in PositionManager.List)
-                {
-                    foreach (Contract c in ac.PositionContractList)
-                    {
-                        var item = (ac, c);
-                        if (!UpdatedPositions.Contains(item))
-                        {
-                            ac[c].Quantity = 0;
-                            ac[c].AveragePrice = double.NaN;
-                        }
-                    }
-                }
-                UpdatedPositions.Clear();
+                PositionManager.ZeroNonRefreshedPositions();
                 IsBusy_Position = false;
             }
 

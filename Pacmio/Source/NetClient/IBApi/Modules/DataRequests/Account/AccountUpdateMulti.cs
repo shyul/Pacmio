@@ -14,12 +14,12 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static bool IsActiveAccountUpdateMulti => ActiveRequestContains(RequestType.RequestAccountUpdatesMulti);
+        public static bool IsReady_AccountUpdateMulti => Connected && !ActiveRequestContains(RequestType.RequestAccountUpdatesMulti);
         //private int RequestIdAccountUpdateMulti = -1;
 
         public static void SendRequest_AccountUpdateMulti(string account = "", string modelCode = "", bool ledgerAndNLV = false)
         {
-            if (!IsActiveAccountUpdateMulti && Connected)
+            if (IsReady_AccountUpdateMulti)
             {
                 (int requestId, string typeStr) = RegisterRequest(RequestType.RequestAccountUpdatesMulti);
                 //RequestIdAccountUpdateMulti = requestId;

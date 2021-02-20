@@ -211,27 +211,6 @@ namespace Pacmio
 
         #endregion Status and Market Data
 
-        #region Order and Trade Data
-
-        [IgnoreDataMember]
-        public Position this[AccountInfo ac] => MarketData[ac];
-
-        
-        
-        
-        [IgnoreDataMember]
-        public PositionInfo PositionStatus { get; set; }
-
-
-
-
-
-
-
-
-
-        #endregion Order and Trade Data
-
         #region Equality
 
         public override int GetHashCode() => Info.GetHashCode();

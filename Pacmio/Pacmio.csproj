@@ -164,7 +164,7 @@
     <Compile Include="Source\Modules\Chart\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\Chart\PositionSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\BarPositionData.cs" />
+    <Compile Include="Source\Modules\BarTable\Position\BarPositionData.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
@@ -191,7 +191,7 @@
     <Compile Include="Source\Modules\Simulation\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Trade\LiquidityType.cs" />
-    <Compile Include="Source\Modules\Trade\Trade\TradeActionType.cs" />
+    <Compile Include="Source\Modules\BarTable\Position\TradeActionType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ADX.cs" />

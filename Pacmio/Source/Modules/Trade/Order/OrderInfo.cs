@@ -80,7 +80,7 @@ namespace Pacmio
         [DataMember, Browsable(true)]
         public string Description { get; set; }
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public string AccountId { get; set; } = null;
 
         [IgnoreDataMember]

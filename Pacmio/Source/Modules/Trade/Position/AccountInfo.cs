@@ -78,12 +78,23 @@ namespace Pacmio
             return PositionPerEachContractLUT[c];
         }
 
-        public void RemovePositionByContract(Contract c)
+        public void ResetAllPositionRefreshStatus()
         {
             lock (PositionPerEachContractLUT)
             {
-                if (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> && PositionPerEachContractLUT.ContainsKey(c))
-                    PositionPerEachContractLUT.Remove(c);
+                PositionPerEachContractLUT.Select(n => n.Value).ToList().ForEach(n => n.Refreshed = false);
+            }
+        }
+
+        public void ZeroNonRefreshedPositions()
+        {
+            lock (PositionPerEachContractLUT)
+            {
+                PositionPerEachContractLUT
+                    .Select(n => n.Value)
+                    .Where(n => !n.Refreshed && n.Quantity != 0)
+                    .ToList()
+                    .ForEach(n => n.Reset());
             }
         }
 
@@ -94,50 +105,13 @@ namespace Pacmio
 
         #region Order
 
-
-
-        public void CloseAllPositions()
+        public void EmergencyClose()
         {
-            foreach (var item in PositionPerEachContractLUT)
+            foreach (var ps in PositionPerEachContractLUT.Values.Where(n => n.Quantity != 0))
             {
-
-
-
-                Close(item.Key);
+                ps.EmergencyClose();
             }
         }
-
-
-
-        /// <summary>
-        /// // This is how it closes the position
-        /// Exit(c, b.Time, -io.GetPosition(c).Quantity);
-        /// </summary>
-        /// <param name="bt"></param>
-        /// <param name="time"></param>
-        public void Close(Contract c)
-        {
-            double qty = -PositionPerEachContractLUT[c].Quantity;
-            if (qty != 0)
-            {
-                OrderInfo od = new OrderInfo()
-                {
-                    Contract = c,
-                    Quantity = qty,
-                    Type = OrderType.Market,
-                    LimitPrice = 0,
-                    AuxPrice = 0,
-                    TimeInForce = OrderTimeInForce.GoodUntilCanceled,
-                    AccountId = AccountId,
-                    OutsideRegularTradeHours = true,
-                };
-
-                //OrderManager.PlaceOrder(od); // TODO: CheckBoxOrderWhatIf.Checked);
-            }
-        }
-
-
-
 
         #endregion Order
 

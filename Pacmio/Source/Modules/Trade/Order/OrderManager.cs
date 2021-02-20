@@ -21,12 +21,17 @@ namespace Pacmio
         public const string StopLossOrderDescription = "Stop Loss";
         public const string ProfitTakerOrderDescription = "Profit Taker";
 
+        /*
+        public static Dictionary<PositionInfo, OrderInfo> PositionToOrderInfoLUT { get; } = new Dictionary<PositionInfo, OrderInfo>();
 
-
-
-
-
-
+        public static OrderInfo GetOrderInfoBy(AccountInfo ac, Contract c) 
+        {
+            PositionInfo ps = ac.GetOrCreatePositionByContract(c);
+            if (PositionToOrderInfoLUT.ContainsKey(ps))
+                return PositionToOrderInfoLUT[ps];
+            else
+                return null;
+        }*/
 
         /// <summary>
         /// 
@@ -41,21 +46,21 @@ namespace Pacmio
         /// <param name="type"></param>
         /// <param name="limitPrice"></param>
         /// <param name="stopPrice"></param>
-        public static void PlaceOrder(this Contract c, string accountId, double quantity,
+        public static void PlaceOrder(this Contract c, AccountInfo ac, double quantity,
             TradeType tradeType, OrderTimeInForce tif, DateTime effectiveDateTime, bool outsideRegularTradeHours = true,
             OrderType type = OrderType.Market, bool useSmart = true, double limitPrice = 0, double stopPrice = 0,
             bool whatIf = false, bool modify = false)
         {
-            string desc = tradeType switch
+            if (quantity != 0)
             {
-                TradeType.Entry => EntryOrderDescription,
-                TradeType.ProfitTaker => ProfitTakerOrderDescription,
-                TradeType.StopLoss => StopLossOrderDescription,
-                _ => string.Empty
-            };
+                string desc = tradeType switch
+                {
+                    TradeType.Entry => EntryOrderDescription,
+                    TradeType.ProfitTaker => ProfitTakerOrderDescription,
+                    TradeType.StopLoss => StopLossOrderDescription,
+                    _ => string.Empty
+                };
 
-            if (c.PositionStatus.LatestOrder is null)
-            {
                 OrderInfo od = new OrderInfo()
                 {
                     Contract = c,
@@ -64,9 +69,8 @@ namespace Pacmio
                     LimitPrice = limitPrice,
                     AuxPrice = stopPrice,
                     TimeInForce = tif,
-                    AccountId = accountId,
+                    AccountId = ac.AccountId,
                     OutsideRegularTradeHours = outsideRegularTradeHours,
-
                     Description = desc
                 };
 
@@ -78,7 +82,7 @@ namespace Pacmio
             }
         }
 
-        public static void CancelOrder(this OrderInfo od)
+        public static void Cancel(this OrderInfo od)
         {
             if (od.Status > OrderStatus.Inactive && od.Status < OrderStatus.Filled)
             {
@@ -92,19 +96,14 @@ namespace Pacmio
 
             foreach (var od in orders)
             {
-                od.CancelOrder();
+                od.Cancel();
             }
         }
 
         public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
 
 
-        public static void CloseAllPositions()
-        {
-            CancelAllOrders();
-            foreach (AccountInfo ac in PositionManager.List)
-                ac.CloseAllPositions();
-        }
+
 
 
 

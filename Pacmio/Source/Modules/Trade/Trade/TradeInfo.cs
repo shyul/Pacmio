@@ -37,10 +37,40 @@ namespace Pacmio
         public DateTime ExecuteTime { get; set; }
 
         [DataMember, Browsable(true)]
-        public string AccountId { get; set; }
+        public string AccountId { get; set; } = null;
 
         [IgnoreDataMember]
-        public AccountInfo Account => PositionManager.Get(AccountId);
+        public AccountInfo Account
+        {
+            get
+            {
+                if (AccountId is string id)
+                {
+                    if (!(m_Account is AccountInfo ac && ac == id))
+                    {
+                        m_Account = PositionManager.GetAccountById(AccountId);
+                    }
+
+                    return m_Account;
+                }
+
+                else
+                    return null;
+            }
+
+            set
+            {
+                m_Account = value;
+
+                if (m_Account is AccountInfo ac)
+                    AccountId = ac.AccountId;
+                else
+                    AccountId = null;
+            }
+        }
+
+        [IgnoreDataMember]
+        private AccountInfo m_Account = null;
 
         [DataMember]
         public int ConId { get; set; } = -1;
