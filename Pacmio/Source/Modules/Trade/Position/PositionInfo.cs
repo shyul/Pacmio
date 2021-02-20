@@ -63,9 +63,9 @@ namespace Pacmio
 
         public double Cost => double.IsNaN(AverageEntryPrice) ? 0 : Math.Abs(Quantity) * AverageEntryPrice;
 
-        public double PnL => double.IsNaN(AverageEntryPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
+        public double UnrealizedPnL => double.IsNaN(AverageEntryPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
 
-        public double Value => Cost + PnL; // - possible commission...
+        public double Value => Cost + UnrealizedPnL; // - possible commission...
 
         /*
         /// <summary>

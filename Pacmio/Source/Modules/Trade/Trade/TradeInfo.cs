@@ -108,41 +108,15 @@ namespace Pacmio
         [IgnoreDataMember]
         private Contract m_Contract = null;
 
-        /*
-        [DataMember]
-        public int ConId
-        {
-            get
-            {
-                if (Contract is Contract c)
-                    return c.ConId;
-                else
-                    return m_ConId;
-            }
-
-            set
-            {
-                if (value != m_ConId || Contract is null || Contract.ConId != value)
-                {
-                    Contract = ContractList.GetOrFetch(m_ConId);
-                    Console.WriteLine("Added Contract to TradeInfo: " + Contract);
-                    m_ConId = value;
-                }
-            }
-        }
-
-        private int m_ConId = -1;
-
         [IgnoreDataMember]
-        public Contract Contract { get; set; }
-        */
+        public PositionInfo Position => Contract is Contract c && Account is AccountInfo ac ? ac[c] : null;
 
         /// <summary>
         /// Positive means long position
         /// Negative means short position
         /// </summary>
         [DataMember, Browsable(true)]
-        public double Quantity { get; set; }
+        public double Quantity { get; set; } = double.NaN;
 
         [DataMember, Browsable(true)]
         public double Price { get; set; }
@@ -157,7 +131,10 @@ namespace Pacmio
         public double RealizedPnL { get; set; }
 
         [DataMember, Browsable(true)]
-        public double Commissions { get; set; }
+        public double Commissions { get; set; } = double.NaN;
+
+        [IgnoreDataMember]
+        public double AverageCommissionPerUnit => (!double.IsNaN(Commissions)) && (!double.IsNaN(Quantity)) && Quantity != 0 ? (Commissions / Quantity) : double.NaN;
 
         [DataMember, Browsable(true)]
         public string ModeCode { get; set; } = string.Empty;

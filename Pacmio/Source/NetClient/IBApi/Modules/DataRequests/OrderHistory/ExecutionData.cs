@@ -100,25 +100,15 @@ namespace Pacmio.IB
             else
                 ti.LastLiquidity = (LiquidityType)fields[30].ToInt32();
 
-            if (ti.Contract is null)
-            {
-                string name = fields[4].ToUpper();
-                string secTypeCode = fields[5].ToUpper();
+            ti.ExecuteTime = ti.Contract is Contract c ? Util.ParseTime(fields[15], c.TimeZone) : Util.ParseTime(fields[15], TimeZoneInfo.Local);
 
-                // Add match contract info task.
-            }
-            else
-            {
-                ti.ExecuteTime = Util.ParseTime(fields[15], ti.Contract.TimeZone);
-                Position ps = PositionManager.GetOrCreateAccountById(ti.AccountId).GetPosition(ti.Contract);
-            }
-
-            //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
+            Console.WriteLine("fields[15] = " + fields[15] + " | ti.ExecuteTime = " + ti.ExecuteTime + " | " + (DateTime.Now - ti.ExecuteTime).TotalSeconds + " Second ago... ");
 
             string evRule = fields[27];
             double evMultiplier = fields[28].ToDouble();
 
             // TODO: Emit trade log is updated so the BarTable / BarChart with bonding strategy / and Contract Position can be updated too
+            //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
             Console.WriteLine("\nParse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
         }
@@ -145,7 +135,14 @@ namespace Pacmio.IB
         {
             string execId = fields[2];
             TradeInfo ti = TradeManager.GetOrCreateTradeByExecId(execId);
+
             ti.Commissions = fields[3].ToDouble();
+
+            if (ti.Position is PositionInfo ps)
+            {
+                double previousAverageComm = ps.AverageCommissionPerUnit;
+                ps.AverageCommissionPerUnit = double.IsNaN(previousAverageComm) ? ti.AverageCommissionPerUnit : (previousAverageComm + ti.AverageCommissionPerUnit) / 2;
+            }
 
             string pnlstring = fields[5];
             ti.RealizedPnL = pnlstring.Contains("1.7976931348623157E308") ? 0 : pnlstring.ToDouble();

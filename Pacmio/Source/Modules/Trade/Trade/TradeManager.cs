@@ -19,9 +19,15 @@ namespace Pacmio
 
         public static int Count => ExecIdToTradeLUT.Count;
 
-        public static double TotalPnL() => TotalPnL(ExecIdToTradeLUT.Values);
+        public static double TotalPnL => GetTotalPnL(ExecIdToTradeLUT.Values);
 
-        public static double TotalPnL(this IEnumerable<TradeInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
+        public static double GetTotalPnL(this IEnumerable<TradeInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
+
+        //public static double TotalCommissions => 
+
+        //public static double GetTotalCommissions(this IEnumerable<TradeInfo> log)
+
+        //public static double GetTotalCommissions(this Contract c, int days = 365)
 
         #region Data Operation
 
