@@ -2,41 +2,20 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// Interactive Brokers API
-/// 
-/// 1. Pre-Market Gapper (10%, total pre-market volume, social media sentiment)
-/// 2. Halted and Resumed
-/// 3. Low Share out-standing / Small-cap / and high *** volume spike ***
-/// 4. Reversal??
-/// 5. Social Mention
-/// 
 /// ***************************************************************************
 
-using Pacmio.IB;
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Web.UI.WebControls;
+using System.Reflection;
+using System.Threading;
 using Xu;
 
 namespace Pacmio
 {
-    public abstract class Scanner : IEquatable<Scanner>, IDisposable
+    public abstract class DynamicWatchList : WatchList
     {
-        public abstract void Start();
-
-        public abstract void Stop();
-
-        public virtual bool IsActive { get; set; } = false;
-
-        public virtual bool IsSnapshot { get; set; } = false;
-
-        public virtual DateTime LastRefreshTime { get; protected set; } = DateTime.MinValue;
-
-        public virtual string Name { get; set; }
-
         public virtual (double Min, double Max) Price { get; set; }
 
         public virtual (double Min, double Max) MarketCap { get; set; }
@@ -94,7 +73,7 @@ namespace Pacmio
 
         protected Dictionary<string, string> ConfigList { get; } = new Dictionary<string, string>();
 
-        public void ImportConfig(Scanner s)
+        public void ImportConfig(DynamicWatchList s)
         {
             foreach (var item in s.ConfigList)
             {
@@ -104,7 +83,7 @@ namespace Pacmio
 
         public string ExtraConfig { get; set; } = string.Empty;
 
-        public virtual string ConfigString
+        public override string ConfigurationString
         {
             get
             {
@@ -114,25 +93,54 @@ namespace Pacmio
             }
         }
 
-        #region Equality 
-        
-        // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-        public bool Equals(Scanner other) => other is Scanner sc && GetType() == other.GetType() && ConfigString == sc.ConfigString;
+        public abstract void Start();
 
-        public override bool Equals(object other) => other is Scanner sc && Equals(sc);
+        public abstract void Stop();
 
-        public static bool operator ==(Scanner s1, Scanner s2) => s1.Equals(s2);
-        public static bool operator !=(Scanner s1, Scanner s2) => !s1.Equals(s2);
+        public abstract IEnumerable<Contract> SingleSnapshot();
 
-        public override int GetHashCode() => ConfigString.GetHashCode() ^ GetType().GetHashCode();
+        public virtual bool IsRunning { get; protected set; } = false;
 
-        public override string ToString() => Name + ": " + ConfigString;
+        public virtual bool IsSnapshot { get; protected set; } = false;
 
-        #endregion Equality
+        public override int NumberOfRows
+        {
+            get
+            {
+                if (m_Contracts is null) m_Contracts = new List<Contract>();
+                lock (m_Contracts)
+                {
+                    return m_Contracts.Count();
+                }
+            }
+        }
 
-        public void Dispose() => Stop();
+        public override IEnumerable<Contract> Contracts
+        {
+            get
+            {
+                if (m_Contracts is null) m_Contracts = new List<Contract>();
+                lock (m_Contracts)
+                {
+                    return m_Contracts.ToArray();
+                }
+            }
+        }
+
+        protected IEnumerable<Contract> m_Contracts = null;
+
+        public void Update(IEnumerable<Contract> list) 
+        {
+            lock (m_Contracts)
+            {
+                m_Contracts = list;
+                if (m_Contracts is null) m_Contracts = new List<Contract>();
+                UpdatedHandler?.Invoke(0, UpdateTime = DateTime.Now, "");
+            }
+        }
+
+        public DateTime UpdateTime { get; protected set; }
+
+        public event StatusEventHandler UpdatedHandler;
     }
-
-
-
 }

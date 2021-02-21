@@ -16,8 +16,6 @@ namespace TestClient
 {
     public partial class MainForm : Form
     {
-        public static AccountInfo TestAccount => AccountPositionManager.GetAccountById("DU332281");
-
         public BarFreq BarFreq => SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
 
         public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
@@ -68,7 +66,7 @@ namespace TestClient
         {
             InitializeComponent();
 
-            OrderTest.LiveAccount = AccountPositionManager.GetOrCreateAccountById("DU332281");
+
             /*
             ContractTest.InitializeTable(GridViewContractSearchResult);
             OrderTest.InitializeTable(GridViewAllOrders);
@@ -315,7 +313,7 @@ namespace TestClient
             BarType type = BarType;
             //IAnalysisSetting tr = new TestStrategy(freq);
 
-            var symbols = ContractManager.GetSymbolList(ref symbolText);
+            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
             var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
@@ -378,7 +376,7 @@ namespace TestClient
 
             Task.Run(() =>
             {
-                var symbols = ContractManager.GetSymbolList(ref symbolText);
+                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
                 BarTable.Download(cList, new List<(BarFreq freq, BarType type, Period period)>() { (freq, type, HistoricalPeriod) }, Cts, Progress);
                 //BarTableTest.BarTableSet.AddContract(cList, BarFreq.Daily, type, new Period(new DateTime(1000, 1, 1), DateTime.Now), Cts, Progress);
@@ -834,7 +832,7 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var SymbolList = ContractManager.GetSymbolList(ref symbolText);
+            var SymbolList = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
             Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
             var list = ContractManager.GetList(SymbolList.Where(n => n.Length > 0), "US");
@@ -887,8 +885,8 @@ namespace TestClient
         {
             foreach (var md in Pacmio.IB.Client.ActiveMarketData)
             {
-                if(md is StockData sd)
-                MarketDataGridView.Add(sd);
+                if (md is StockData sd)
+                    MarketDataGridView.Add(sd);
             }
         }
 
@@ -919,7 +917,7 @@ namespace TestClient
             string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
 
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractManager.GetSymbolList(ref symbolText);
+            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
 
             var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
@@ -939,7 +937,7 @@ namespace TestClient
         private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = ContractManager.GetSymbolList(ref symbolText);
+            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
 
             var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
             //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
@@ -988,7 +986,7 @@ namespace TestClient
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
                 OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
 
-                if (TestAccount is AccountInfo ac)
+                if (OrderTest.Account is AccountInfo ac)
                     ContractTest.ActiveContract.PlaceOrder(ac, TextBoxOrderSettingQuantity.Text.ToInt32(0),
                     TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
                     TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
@@ -1003,10 +1001,10 @@ namespace TestClient
             OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            if (TestAccount is AccountInfo ac)
+            if (OrderTest.Account is AccountInfo ac)
                 Task.Run(() =>
                 {
-                    var symbols = ContractManager.GetSymbolList(ref symbolText);
+                    var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                     var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
 
                     foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
@@ -1023,7 +1021,7 @@ namespace TestClient
         {
             if (Root.NetConnected && ValidateSymbol())
             {
-                AccountInfo iba = OrderTest.LiveAccount;
+                AccountInfo iba = OrderTest.Account;
 
             }
         }

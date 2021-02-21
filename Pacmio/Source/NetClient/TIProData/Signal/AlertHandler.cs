@@ -20,7 +20,7 @@ using TradeIdeas.TIProData.Configuration;
 
 namespace Pacmio.TIProData
 {
-    public class AlertHandler : AlertConfig, ISignalSource
+    public class AlertHandler : AlertConfig, IAlert
     {
         public AlertHandler(string name)
         {

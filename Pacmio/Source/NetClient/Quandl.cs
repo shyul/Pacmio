@@ -254,7 +254,7 @@ namespace Pacmio
                         }
                         else
                         {
-                            Log.Print("\n" + CollectionTool.ToString(fields) + "\n"); //throw new Exception("Error loading QuandlEOD");
+                            Console.WriteLine("\n" + CollectionTool.ToString(fields) + "\n"); //throw new Exception("Error loading QuandlEOD");
 
                         }
 
@@ -262,7 +262,7 @@ namespace Pacmio
                     }
             }
 
-            Log.Print("Job done!! Hooray!\n" + CollectionTool.ToString(Unknown) + "\n");
+            Console.WriteLine("Job done!! Hooray!\n" + CollectionTool.ToString(Unknown) + "\n");
         }
 
         public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, CancellationTokenSource cts, IProgress<float> progress)

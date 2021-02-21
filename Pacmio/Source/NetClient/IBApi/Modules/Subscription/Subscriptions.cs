@@ -15,14 +15,13 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static int ActiveSubscriptionCount => ActiveMarketDataTickerIds.Values.Where(n => n.IsActive).Count() + ActiveMarketDepth.Count + ActiveRealTimeBars.Count + ActiveScanners.Count;
+        public static int ActiveSubscriptionCount => ActiveMarketDataTickerIds.Values.Where(n => n.IsActive).Count() + ActiveMarketDepth.Count + ActiveRealTimeBars.Count + WatchListManager.GetInteractiveBrokerWatchList().Count();
 
         public static bool SubscriptionOverflow => ActiveSubscriptionCount > Parameters.MaximumSubscription - 5;
 
         public static void ClearAllSubscription()
         {
             ActiveMarketDepth.Clear();
-            ActiveScanners.Clear();
             MarketDataTickers.Clear();
             ActiveMarketDataTickerIds.Clear();
         }
@@ -31,14 +30,6 @@ namespace Pacmio.IB
         /// Maximum Request: 3
         /// </summary>
         public static ConcurrentDictionary<int, Contract> ActiveMarketDepth { get; } = new ConcurrentDictionary<int, Contract>();
-
-        private static ConcurrentDictionary<int, WatchList> ActiveScanners { get; } = new ConcurrentDictionary<int, WatchList>();
-
-
-
-
-
-
 
         private static ConcurrentDictionary<MarketData, MarketDataRequestStatus> MarketDataTickers { get; } = new ConcurrentDictionary<MarketData, MarketDataRequestStatus>();
 

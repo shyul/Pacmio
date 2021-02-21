@@ -22,7 +22,7 @@ namespace Pacmio.IB
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
         // Received Error: (0)"4"-(1)"2"-(2)"-1"-(3)"2106"-(4)"HMDS data farm connection is OK:ushmds"
         //Send RequestScannerSubscription: (0)"22"-(1)"3"-(2)"100"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"stkTypes=inc:CORP;marketCapAbove1e6=1000;priceAbove=10;priceBelow=100;usdVolumeAbove=10000000"-(24)""
-        internal static void SendRequest_ScannerSubscription(WatchList info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
+        internal static void SendRequest_ScannerSubscription(InteractiveBrokerWatchList info, // ICollection<(string, string)> scannerSubscriptionFilterOptions = null,
             double abovePrice = double.NaN, double belowPrice = double.NaN, double aboveVolume = double.NaN, double marketCapAbove = double.NaN, double marketCapBelow = double.NaN,
             bool excludeConvertible = false, string scannerSettingPairs = "",
             string moodyRatingAbove = "", string moodyRatingBelow = "", string spRatingAbove = "", string spRatingBelow = "",
@@ -34,18 +34,15 @@ namespace Pacmio.IB
                 (int requestId, string typeStr) = RegisterRequest(RequestType.RequestScannerSubscription);
 
                 info.RequestId = requestId;
-                ActiveScanners[requestId] = info;
-
-                //ScannerManager.GetOrAdd(info);
 
                 SendRequest(new string[] {
                     typeStr,
                     requestId.ParamPos(),
 
                     info.NumberOfRows.ParamPos(),
-                    info.ContractTypeString, // STK
+                    info.ContractType.Param(), // STK
                     info.ContractLocation, // "STK.US"
-                    info.ScanType, // "TOP_PERC_GAIN"
+                    info.ScannerType.Param(), //String, // "TOP_PERC_GAIN"
 
                     abovePrice.Param(),
                     belowPrice.Param(),
@@ -67,7 +64,7 @@ namespace Pacmio.IB
                     averageOptionVolumeAbove.Param(),
                     scannerSettingPairs,
                     info.ContractTypeFilter, // "ALL", "ETF", "STK"??
-                    info.ConfigString, // filterOptions, //scannerSubscriptionFilterOptions.Param(), // ""
+                    info.ConfigurationString, // filterOptions, //scannerSubscriptionFilterOptions.Param(), // ""
                     scannerSubscriptionOptions.Param() // ""
                 });
             }
@@ -75,7 +72,6 @@ namespace Pacmio.IB
 
         public static void SendCancel_ScannerSubscription(int requestId)
         {
-            ActiveScanners.TryRemove(requestId, out _);
             RemoveRequest(requestId, RequestType.RequestScannerSubscription);
             // Emit update cancelled.
         }
@@ -86,33 +82,19 @@ namespace Pacmio.IB
             Scanner Result End.
             Unable to locate this request Id: 3 in the table, maybe this message just tells your something has been properly removed.
             Parse Errors: (0)"4"-(1)"2"-(2)"3"-(3)"162"-(4)"Historical Market Data Service error message:API scanner subscription cancelled: 3"
+
+            
          */
 
         private static void ParseError_ScannerSubscription(string[] fields)
         {
             int requestId = fields[2].ToInt32(-1);
             //string message = fields[4];
-
-            // fields[2] + ": " + message);
-            // Scanner Subscription Error !!!!!!!!!!!!! (0)"4"-(1)"2"-(2)"2"-(3)"165"-(4)"Historical Market Data Service query message:no items retrieved"
-
-            if (requestId > -1)
+            if (WatchListManager.GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt && (fields[3] != "165" || wt.IsSnapshot)) // Scanner Subscription Error !!!!!!!!!!!!! (0)"4"-(1)"2"-(2)"2"-(3)"165"-(4)"Historical Market Data Service query message:no items retrieved"
             {
-                if (fields[3] != "165")
-                {
-                    Console.WriteLine("Scanner Subscription Error: " + fields.ToStringWithIndex());
-                    RemoveRequest(requestId);
-                    if (ActiveScanners.ContainsKey(requestId))
-                    {
-                        ActiveScanners.TryRemove(requestId, out WatchList info);
-                        WatchListManager.List.Remove(info);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Scanner no items retrieved: " + fields.ToStringWithIndex());
-                }
+                wt.Stop();
             }
+            Console.WriteLine("Scanner Subscription Error: " + fields.ToStringWithIndex());
         }
 
         /// <summary>
@@ -125,17 +107,27 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void Parse_ScannerSubscription(string[] fields)
         {
-            //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToFlat());
-
             string msgVersion = fields[1];
-
             int requestId = fields[2].ToInt32(-1);
 
-            if (msgVersion == "3" && ActiveScanners.ContainsKey(requestId))
+            if (msgVersion == "3" && WatchListManager.GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt)
             {
-                //int numberOfElements = fields[3].ToInt32(-1);
-                WatchList info = ActiveScanners[requestId];
-                info.ScannerData_Handler(fields);
+                List<Contract> list = new List<Contract>();
+                for (int i = 4; i < fields.Length; i += 16)
+                {
+                    int rank = fields[i].ToInt32(-1);
+                    int conId = fields[i + 1].ToInt32(-1);
+                    string symbolName = fields[i + 2];
+
+                    if (ContractManager.ValidateContractBy(conId, symbolName) is Contract c)
+                        list.Add(c);
+                }
+
+                wt.Update(list);
+
+                if (wt.IsSnapshot) wt.Stop();
+
+                Console.WriteLine("\n\n" + wt.UpdateTime + " ######## IB WatchList Result Received.\n\n");
             }
         }
 

@@ -12,17 +12,13 @@ using Xu;
 
 namespace Pacmio
 {
-
-
-    public interface IWatchList
+    public interface IAlert
     {
         void Start();
 
         void Stop();
 
-        ICollection<Contract> Snapshot();
-
-        ICollection<Contract> List { get; }
+        ConcurrentQueue<Contract> Queue { get; }
 
         // Add event / Interrupt source
     }

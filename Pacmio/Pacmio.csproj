@@ -134,6 +134,12 @@
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionInfo.cs" />
     <Compile Include="Source\Modules\Trade\Trade\TradeManager.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\DynamicWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\InteractiveBrokerWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\StaticWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\TradeIdeasWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\WatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\WatchListManager.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\DecodeSequentialMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
@@ -149,8 +155,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
-    <Compile Include="Source\Modules\WatchList\Types\ISignalSource.cs" />
-    <Compile Include="Source\Modules\WatchList\Types\IWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\ToBeRemoved\IAlert.cs" />
     <Compile Include="Source\Modules\BarTable\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\ICandleStick.cs" />
     <Compile Include="Source\Forms\Chart\BarChartArea.cs" />
@@ -183,7 +188,7 @@
     <Compile Include="Source\Modules\MarketData\StockData.cs" />
     <Compile Include="Source\Modules\MarketData\MarketTickStatus.cs" />
     <Compile Include="Source\Forms\Grid\MarketDataGridView.cs" />
-    <Compile Include="Source\Modules\WatchList\OldWatchListManager.cs" />
+    <Compile Include="Source\Modules\WatchList\ToBeRemoved\SuperOldWatchListManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />
@@ -235,7 +240,6 @@
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderStatus.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Other\ScanParamSchema.cs" />
-    <Compile Include="Source\NetClient\IBApi\Modules\Subscription\Scanner\WatchList.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\System.cs" />
     <Compile Include="Source\NetClient\TIProData\Signal\AlertHandler.cs" />
     <Compile Include="Source\NetClient\TIProData\Client.cs" />
@@ -248,7 +252,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\Position\AccountPositionManager.cs" />
-    <Compile Include="Source\Modules\WatchList\WatchListManager.cs" />
+    <Compile Include="Source\Modules\WatchList\ToBeRemoved\oldWatchListManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\OrderHistory\ExecutionData.cs" />
@@ -286,7 +290,6 @@
     <Compile Include="Source\NetClient\IBApi\Client\Types\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\WatchList\Scanner.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\IbXmlAE.cs" />

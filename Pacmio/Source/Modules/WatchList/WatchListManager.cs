@@ -5,78 +5,44 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
 {
     public static class WatchListManager
     {
-        public static List<Scanner> List { get; } = new List<Scanner>();
+        private static Dictionary<string, WatchList> NameToListLUT { get; } = new Dictionary<string, WatchList>();
 
-        public static void Start() => List.ForEach(n => n.Start());
-
-        public static void Stop() => List.ForEach(n => n.Stop());
-
-        public static void Clear() { Stop(); List.Clear(); }
-
-        public static int Count => List.Count;
-
-        public static T Add<T>(T sc) where T : Scanner
+        public static IEnumerable<WatchList> List
         {
-            if (List.Contains(sc))
-                return List.Where(n => n == sc).First() as T;
-            else
+            get
             {
-                List.CheckAdd(sc);
-                return sc;
+                lock (NameToListLUT)
+                    return NameToListLUT.Values.ToArray();
             }
         }
 
-        public static T Remove<T>(T sc) where T : Scanner
-        {
-            if (List.Contains(sc))
-            {
-                sc = List.Where(n => n == sc).First() as T;
-                List.Remove(sc);
-            }
 
-            sc.Stop();
-            return sc;
+
+
+
+        public static IEnumerable<InteractiveBrokerWatchList> GetInteractiveBrokerWatchList()
+        {
+            lock (NameToListLUT)
+                return NameToListLUT.Values.Where(n => n is InteractiveBrokerWatchList list).Select(n => n as InteractiveBrokerWatchList).ToArray();
         }
 
-        public static TIProData.TopListHandler AddTradeIdeasTopList(string name = "Gappers List", double minPrice = 1.5, double maxPrice = 25, double minVolume = 50e3, double minPercent = 5, double minATR = 0.25)
+        public static InteractiveBrokerWatchList GetInteractiveBrokerWatchList(int requestId)
         {
-            double percent = Math.Abs(minPercent);
-
-            TIProData.TopListHandler tls = new TIProData.TopListHandler(name)
-            {
-                Price = (minPrice, maxPrice),
-                Volume = (minVolume, double.NaN),
-                GapPercent = (percent, -percent),
-                AverageTrueRange = (minATR, double.NaN),
-            };
-
-            return Add(tls);
+            return GetInteractiveBrokerWatchList().Where(n => n.RequestId == requestId).FirstOrDefault();
         }
 
-        public static TIProData.AlertHandler AddTradeIdeasAlert()
-        {
-            TIProData.AlertHandler tal = new TIProData.AlertHandler("Low Float MOMO")
-            {
-                Price = (1, double.NaN),
-                GainPercent = (1, double.NaN),
-                Volume = (1e5, double.NaN),
-                Volume5Days = (3e5, double.NaN),
-                //NewHigh = 0,
-                Float = (double.NaN, 25e6),
-            };
 
-            return Add(tal);
-        }
 
-        public static void Request_ScannerParameters() => IB.Client.SendRequest_ScannerParameters();
+
     }
 }

@@ -9,7 +9,36 @@ namespace TestClient
 {
     public static class OrderTest
     {
-        public static AccountInfo LiveAccount { get; set; }
+        public static AccountInfo Account => AccountPositionManager.GetOrCreateAccountById("DU332281");
+
+
+
+
+
+
+        // 1. Get the list of actual contract as watchlist configuration
+
+        // 2. Trade these contracts according to the account size... split ??? quantity.
+
+        // 3. Get the quote, and compare for the slipage and delay time,
+
+        // 4. Slipage and delay time report.
+
+        // 5. the log of the process... timing... 
+
+        // 6. Order and Trade Grid --- Tree Grid
+
+
+
+
+
+
+
+
+
+
+
+
 
         private static readonly DataTable Table = new DataTable("Order List");
 

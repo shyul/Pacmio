@@ -90,14 +90,14 @@ namespace Pacmio
 
         #region Updates
 
-        public static DateTime UpdatedTime { get; set; }
+        public static DateTime UpdateTime { get; set; }
 
         public static event StatusEventHandler UpdatedHandler;
 
         public static void Update(int statusCode, string message = "")
         {
-            UpdatedTime = DateTime.Now;
-            UpdatedHandler?.Invoke(statusCode, UpdatedTime, message);
+            UpdateTime = DateTime.Now;
+            UpdatedHandler?.Invoke(statusCode, UpdateTime, message);
         }
 
 

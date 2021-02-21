@@ -187,7 +187,7 @@ namespace Pacmio.IB
 
         public static Task Disconnect => new Task(() =>
         {
-            WatchListManager.List.Where(n => n is WatchList).ToList().ForEach(n => n.Stop());
+            WatchListManager.List.Where(n => n is InteractiveBrokerWatchList).ToList().ForEach(n => { if (n is InteractiveBrokerWatchList wt) wt.Stop(); });
 
             if (ApiStatus == ConnectionStatus.Connected || ApiStatus == ConnectionStatus.Connecting)
             {

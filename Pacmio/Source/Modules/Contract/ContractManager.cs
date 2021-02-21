@@ -140,6 +140,8 @@ namespace Pacmio
             return null;
         }
 
+
+
         public static IEnumerable<Contract> GetOrFetch(string symbol, string countryCode, bool forceUpdate = false, CancellationTokenSource cts = null)
         {
             var list = GetList(symbol, countryCode).Where(n => n.ConId > 0);
@@ -237,24 +239,29 @@ namespace Pacmio
             return GetList(symbols, countryCode);
         }
 
-        public static HashSet<string> GetSymbolList(ref string text)
+        public static Contract ValidateContractBy(int conId, string symbolName)
         {
-            string[] symbolFields = text.Replace('/', ',').CsvReadFields();
-            HashSet<string> symbolItemList = new HashSet<string>();
-            HashSet<string> symbolList = new HashSet<string>();
-            foreach (string field in symbolFields)
+            bool tried = false;
+
+        StartLoad:
+            var list = GetList(conId).Where(n => n.Name == symbolName && n.Status == ContractStatus.Alive && (DateTime.Now - n.UpdateTime).TotalDays < 100);
+
+            if (list.Count() == 1)
             {
-                string symbol = field.TrimCsvValueField().ToUpper();
-
-                if (!string.IsNullOrWhiteSpace(symbol))
-                {
-                    symbolItemList.CheckAdd("\"" + symbol + "\"");
-                    symbolList.CheckAdd(symbol);
-                }
-
+                return list.First();
             }
-            text = symbolItemList.ToString(", ");
-            return symbolList;
+            else if (!tried)
+            {
+                tried = true;
+                var fetchList = Fetch(symbolName).Where(n => n.Name == symbolName && n.ConId == conId && n is Stock);
+                if (fetchList.Count() > 0)
+                {
+                    fetchList.ToList().ForEach(n => { if (n is Stock stk && stk.ISIN.Length < 8) ContractManager.Fetch(stk); });
+                }
+                goto StartLoad;
+            }
+
+            return null;
         }
 
         #endregion Fetch / Update
@@ -629,5 +636,18 @@ namespace Pacmio
         #endregion Export / Import
 
         #endregion Database Tools
+
+        public static void Print(this IEnumerable<Contract> list)
+        {
+            int j = 0;
+            foreach (Contract c in list)
+            {
+                if (c is Stock stk)
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + stk.ISIN + "\t" + c.ExchangeName + "\t" + c.FullName);
+                else
+                    Console.WriteLine("Rank " + j + ": " + c.Name + "\t" + "\t" + "NoISIN" + "\t" + c.ExchangeName + "\t" + c.FullName);
+                j++;
+            }
+        }
     }
 }
