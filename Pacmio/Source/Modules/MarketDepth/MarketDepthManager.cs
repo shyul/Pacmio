@@ -14,6 +14,8 @@ namespace Pacmio
 {
     public static class MarketDepthManager
     {
+        public const int MaximumParallelMarketDepthCount = 3;
+
         public static void Add(Contract c)
         {
 
