@@ -7,6 +7,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
@@ -15,15 +16,21 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static Task DecodeTask { get; set; }
+        private static bool IsFastMessageBufferEmpty => FastMessageBuffer.IsEmpty;
 
-        private static void DecodeWorker()
+        private static void FlushFastMessageBuffer() { lock (FastMessageBuffer) while (!IsFastMessageBufferEmpty) FastMessageBuffer.TryDequeue(out _); } //(out string[] fields); }
+
+        private static ConcurrentQueue<string[]> FastMessageBuffer { get; } = new ConcurrentQueue<string[]>();
+
+        private static Task DecodeFastMessageTask { get; set; }
+
+        private static void DecodeFastMessageWorker()
         {
             while (!IsCancelled)
             {
-                if (!IsReceiveDataEmpty)
+                if (!IsFastMessageBufferEmpty)
                 {
-                    receiveDataBuffer.TryDequeue(out string[] fields);
+                    FastMessageBuffer.TryDequeue(out string[] fields);
                     int messageType = fields[0].ToInt32(-1);
 
                     Task.Run(() =>
@@ -34,22 +41,6 @@ namespace Pacmio.IB
 
                             case IncomingMessage.ManagedAccounts:
                                 Parse_ManagedAccounts(fields); // Adding available accounts
-                                break;
-
-                            case IncomingMessage.AccountSummary:
-                                Parse_AccountSummary(fields);
-                                break;
-
-                            case IncomingMessage.AccountSummaryEnd:
-                                Parse_AccountSummaryEnd(fields);
-                                break;
-
-                            case IncomingMessage.AccountUpdateMulti:
-                                Parse_AccountUpdateMulti(fields);
-                                break;
-
-                            case IncomingMessage.AccountUpdateMultiEnd:
-                                Parse_AccountUpdateMultiEnd(fields);
                                 break;
 
                             case IncomingMessage.AccountValue:
@@ -80,14 +71,6 @@ namespace Pacmio.IB
                                 Parse_ContractSamples(fields);
                                 break;
 
-                            case IncomingMessage.ContractData:
-                                Parse_ContractData(fields);
-                                break;
-
-                            case IncomingMessage.ContractDataEnd:
-                                Parse_ContractDataEnd(fields);
-                                break;
-
                             case IncomingMessage.DeltaNeutralValidation:
                                 Parse_DeltaNeutralValidation(fields);
                                 break;
@@ -96,23 +79,7 @@ namespace Pacmio.IB
 
                             #region Position
 
-                            case IncomingMessage.Position:
-                                Parse_Position(fields);
-                                break;
-
-                            case IncomingMessage.PositionEnd:
-                                Parse_PositionEnd(fields);
-                                break;
-
-                            case IncomingMessage.PositionMulti:
-                                Parse_PositionMulti(fields);
-                                break;
-
-                            case IncomingMessage.PositionMultiEnd:
-                                Parse_PositionMultiEnd(fields);
-                                break;
-
-                            case (IncomingMessage.PortfolioValue):
+                            case IncomingMessage.PortfolioValue:
                                 Parse_PortfolioValue(fields);
                                 break;
 
@@ -124,36 +91,8 @@ namespace Pacmio.IB
                                 Parse_OrderStatus(fields);
                                 break;
 
-                            case (IncomingMessage.OpenOrder):
-                                Parse_OpenOrder(fields);
-                                break;
-
-                            case IncomingMessage.OpenOrderEnd:
-                                Parse_OpenOrderEnd(fields);
-                                break;
-
-                            case IncomingMessage.ExecutionData:
-                                Parse_ExecutionData(fields);
-                                break;
-
-                            case IncomingMessage.ExecutionDataEnd:
-                                Parse_ExecutionDataEnd(fields);
-                                break;
-
-                            case IncomingMessage.CompletedOrder:
-                                Parse_CompletedOrder(fields);
-                                break;
-
-                            case IncomingMessage.CompletedOrdersEnd:
-                                Parse_CompletedOrdersEnd(fields);
-                                break;
-
                             case IncomingMessage.VerifyCompleted:
                                 Parse_VerifyCompleted(fields);
-                                break;
-
-                            case IncomingMessage.CommissionsReport:
-                                Parse_CommissionsReport(fields);
                                 break;
 
                             #endregion Order
@@ -188,23 +127,23 @@ namespace Pacmio.IB
                                 Parse_TickPrice(fields);
                                 break;
 
-                            case (IncomingMessage.TickSize):
+                            case IncomingMessage.TickSize:
                                 Parse_TickSize(fields);
                                 break;
 
-                            case (IncomingMessage.TickString):
+                            case IncomingMessage.TickString:
                                 Parse_TickString(fields);
                                 break;
 
-                            case (IncomingMessage.TickGeneric):
+                            case IncomingMessage.TickGeneric:
                                 Parse_TickGeneric(fields);
                                 break;
 
-                            case (IncomingMessage.TickEFP):
+                            case IncomingMessage.TickEFP:
                                 Parse_TickEFP(fields);
                                 break;
 
-                            case (IncomingMessage.TickOptionComputation):
+                            case IncomingMessage.TickOptionComputation:
                                 Parse_TickOptionComputation(fields);
                                 break;
 
@@ -232,23 +171,15 @@ namespace Pacmio.IB
 
                             #region News
 
-                            case (IncomingMessage.TickNews):
+                            case IncomingMessage.TickNews:
                                 Parse_TickNews(fields);
                                 break;
 
-                            case (IncomingMessage.NewsProviders):
+                            case IncomingMessage.NewsProviders:
                                 Parse_NewsProviders(fields);
                                 break;
 
-                            case (IncomingMessage.HistoricalNews):
-                                Parse_HistoricalNews(fields);
-                                break;
-
-                            case (IncomingMessage.HistoricalNewsEnd):
-                                Parse_HistoricalNewsEnd(fields);
-                                break;
-
-                            case (IncomingMessage.NewsArticle):
+                            case IncomingMessage.NewsArticle:
                                 Parse_NewsArticle(fields);
                                 break;
 
@@ -256,7 +187,7 @@ namespace Pacmio.IB
 
                             #region Historical Data
 
-                            case (IncomingMessage.HistoricalData):
+                            case IncomingMessage.HistoricalData:
                                 Parse_HistoricalData(fields);
                                 break;
 
@@ -264,7 +195,7 @@ namespace Pacmio.IB
                                 Parse_HistoricalDataUpdate(fields);
                                 break;
 
-                            case (IncomingMessage.HeadTimestamp):
+                            case IncomingMessage.HeadTimestamp:
                                 Parse_HistoricalHeadDataTimestamp(fields);
                                 break;
 
@@ -300,21 +231,11 @@ namespace Pacmio.IB
                                 Console.WriteLine("CurrentTime: " + messageType.ToString() + ": " + fields.ToStringWithIndex());
                                 break;
 
-                            case (IncomingMessage.NextValidId):
-                                if (fields.Length == 3 && fields[1] == "1")
-                                {
-                                    RequestId = fields[2].ToInt32(0);
-                                    while (ActiveRequestIds.ContainsKey(RequestId)) RequestId++;
-                                    IsRequestIdValid = true;
-                                    Console.WriteLine("NextValidId is: " + RequestId); // TBD
-                                }
-                                break;
-
-                            case (IncomingMessage.NotValid):
+                            case IncomingMessage.NotValid:
                                 Console.WriteLine("NotValid: " + messageType.ToString() + ": " + fields.ToStringWithIndex());
                                 break;
 
-                            case (IncomingMessage.Error):
+                            case IncomingMessage.Error:
                                 Parse_Errors(fields);
                                 break;
 
@@ -326,8 +247,6 @@ namespace Pacmio.IB
                             case IncomingMessage.DisplayGroupUpdated:
                             case IncomingMessage.VerifyAndAuthMessageApi:
                             case IncomingMessage.VerifyAndAuthCompleted:
-                            case IncomingMessage.SecurityDefinitionOptionParameter:
-                            case IncomingMessage.SecurityDefinitionOptionParameterEnd:
                             case IncomingMessage.SoftDollarTier:
                             case IncomingMessage.FamilyCodes:
                             case IncomingMessage.RerouteMktDataReq:

@@ -59,12 +59,10 @@ namespace Pacmio.IB
                         PositionInfo ps = ac.GetOrCreatePositionByContract(c);
                         ps.Set(totalQuantity, averagePrice);
                     }
-
-
                 }
-            }
 
-            Console.WriteLine("\nParse Poistion | " + fields.ToStringWithIndex());
+                Console.WriteLine("Parse Poistion | " + c?.ToString() + " | " + fields.ToStringWithIndex());
+            }
         }
 
         /// <summary>
@@ -80,10 +78,10 @@ namespace Pacmio.IB
             }*/
 
             AccountPositionManager.ResetNonRefreshedPositions();
-            AccountPositionManager.Update(2, "\nPosition End");
+            AccountPositionManager.Update(2, "Position End");
             IsBusy_Position = false;
 
-            Console.WriteLine("\nParse Poistion Ended | " + fields.ToStringWithIndex());
+            Console.WriteLine("Parse Poistion Ended | " + fields.ToStringWithIndex());
         }
 
         //

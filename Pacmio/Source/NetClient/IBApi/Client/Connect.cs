@@ -125,12 +125,16 @@ namespace Pacmio.IB
                 {
                     TcpReader = new BinaryReader(TcpClient.GetStream());
 
-                    DecodeTask = new Task(() => DecodeWorker(), TaskCancelTs.Token);
+                    DecodeFastMessageTask = new Task(() => DecodeFastMessageWorker(), TaskCancelTs.Token);
+                    DecodeSequentialMessageTask = new Task(() => DecodeSequentialMessageWorker(), TaskCancelTs.Token);
+
                     ReceiveTask = new Task(() => ReceiveWorker(), TaskCancelTs.Token);
                     SendTask = new Task(() => SendWorker(), TaskCancelTs.Token);
                     //DataRequestTask = new Task(() => DataRequestTaskWorker(), TaskCancelTs.Token);
 
-                    DecodeTask.Start();
+                    DecodeFastMessageTask.Start();
+                    DecodeSequentialMessageTask.Start();
+
                     ReceiveTask.Start();
                     SendTask.Start();
                     //DataRequestTask.Start();
@@ -225,10 +229,14 @@ namespace Pacmio.IB
 
 
             i = Timeout + 100;
-            while ((!(DecodeTask is null)) && DecodeTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
-            DecodeTask?.Dispose();
+            while ((!(DecodeFastMessageTask is null)) && DecodeFastMessageTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
+            DecodeFastMessageTask?.Dispose();
             // One exception error here.
             //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "DecodeTask?.Dispose();");
+
+            i = Timeout + 100;
+            while ((!(DecodeSequentialMessageTask is null)) && DecodeSequentialMessageTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
+            DecodeSequentialMessageTask?.Dispose();
 
             TcpReader?.Dispose();
 
@@ -247,7 +255,8 @@ namespace Pacmio.IB
             // Flush send data
             FlushSendData();
             // Flush received data
-            FlushReceiveData();
+            FlushFastMessageBuffer();
+            FlushSequentialMessageBuffer();
 
             TaskCancelTs = new CancellationTokenSource();
 

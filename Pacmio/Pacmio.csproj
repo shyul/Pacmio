@@ -133,6 +133,7 @@
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionInfo.cs" />
     <Compile Include="Source\Modules\Trade\Trade\TradeManager.cs" />
+    <Compile Include="Source\NetClient\IBApi\Client\DecodeSequentialMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderRequest.cs" />
@@ -274,7 +275,7 @@
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Account\Account.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Account\AccountUpdateMulti.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Connect.cs" />
-    <Compile Include="Source\NetClient\IBApi\Client\Decode.cs" />
+    <Compile Include="Source\NetClient\IBApi\Client\DecodeFastMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Message.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Request.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\MarketData.cs" />
