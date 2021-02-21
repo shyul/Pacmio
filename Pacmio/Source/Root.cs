@@ -43,14 +43,14 @@ namespace Pacmio
 
         public static event ConnectionStatusEventHandler OnNetConnectedHandler;
 
-        public static bool NetConnected => IB.Client.Connected && TIProData.Client.Connected;
+        public static bool NetConnected => IB.Client.Connected;// && TIProData.Client.Connected;
 
         public static void NetClientStart()
         {
             if (Settings is null) return;
 
             int timeout = 100;
-
+            /*
             if (!TIProData.Client.Connected)
             {
                 TIProData.Client.Connect();
@@ -66,7 +66,7 @@ namespace Pacmio
                     }
                 }
                 //Thread.Sleep(500);
-            }
+            }*/
 
             if (!IB.Client.Connected)
             {
@@ -101,11 +101,11 @@ namespace Pacmio
                     if (j > timeout) break;
                 }
             }
-
+            /*
             if (TIProData.Client.Connected)
             {
                 TIProData.Client.Disconnect();
-            }
+            }*/
         }
 
         #endregion Net Client

@@ -82,6 +82,8 @@ namespace Pacmio.IB
             AccountPositionManager.ResetNonRefreshedPositions();
             AccountPositionManager.Update(2, "\nPosition End");
             IsBusy_Position = false;
+
+            Console.WriteLine("\nParse Poistion Ended | " + fields.ToStringWithIndex());
         }
 
         //
