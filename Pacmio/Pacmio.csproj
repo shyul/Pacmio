@@ -309,7 +309,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMA.cs" />
     <Compile Include="Source\Modules\Chart\BarChart.cs" />
     <Compile Include="Source\Root.cs" />
-    <Compile Include="Source\Modules\Contract\ContractList.cs" />
+    <Compile Include="Source\Modules\Contract\ContractManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\EMA.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

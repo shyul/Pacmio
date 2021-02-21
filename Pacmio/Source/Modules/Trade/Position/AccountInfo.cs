@@ -47,6 +47,8 @@ namespace Pacmio
         {
             get
             {
+                if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
                 lock (PositionPerEachContractLUT)
                 {
                     return (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> lut && lut.Count > 0) ? lut.Values.Select(n => n.Value).Sum() : 0;
@@ -59,6 +61,8 @@ namespace Pacmio
         {
             get
             {
+                if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
                 lock (PositionPerEachContractLUT)
                 {
                     return (PositionPerEachContractLUT is Dictionary<Contract, PositionInfo> lut && lut.ContainsKey(c)) ? lut[c] : null;
@@ -68,10 +72,10 @@ namespace Pacmio
 
         public PositionInfo GetOrCreatePositionByContract(Contract c)
         {
+            if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
             lock (PositionPerEachContractLUT)
             {
-                if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
-
                 if (!PositionPerEachContractLUT.ContainsKey(c))
                     PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
             }
@@ -80,14 +84,18 @@ namespace Pacmio
 
         public void ResetAllPositionRefreshStatus()
         {
+            if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
             lock (PositionPerEachContractLUT)
             {
                 PositionPerEachContractLUT.Select(n => n.Value).ToList().ForEach(n => n.Refreshed = false);
             }
         }
 
-        public void ZeroNonRefreshedPositions()
+        public void ResetNonRefreshedPositions()
         {
+            if (PositionPerEachContractLUT is null) PositionPerEachContractLUT = new Dictionary<Contract, PositionInfo>();
+
             lock (PositionPerEachContractLUT)
             {
                 PositionPerEachContractLUT
@@ -105,7 +113,7 @@ namespace Pacmio
 
         #region Order
 
-        public void EmergencyClose()
+        public void EmergencyCloseAllPositions()
         {
             foreach (var ps in PositionPerEachContractLUT.Values.Where(n => n.Quantity != 0))
             {

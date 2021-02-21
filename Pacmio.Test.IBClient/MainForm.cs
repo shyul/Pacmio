@@ -16,6 +16,8 @@ namespace TestClient
 {
     public partial class MainForm : Form
     {
+        public static AccountInfo TestAccount => AccountPositionManager.GetAccountById("DU332281");
+
         public BarFreq BarFreq => SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
 
         public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
@@ -83,7 +85,7 @@ namespace TestClient
 
             Root.OnNetConnectedHandler += NetClientOnConnectedHandler;
 
-            TradeInfoManager.UpdatedHandler += TradeTableHandler;
+            TradeManager.UpdatedHandler += TradeTableHandler;
 
             Progress = new Progress<float>(percent =>
             {
@@ -265,7 +267,7 @@ namespace TestClient
 
         private void BtnGetOpenOrders_Click(object sender, EventArgs e)
         {
-            OrderInfoManager.Request_AllOpenOrders();
+            OrderManager.Request_AllOpenOrders();
             //OrderManager.Request_OpenOrders();
         }
 
@@ -546,13 +548,13 @@ namespace TestClient
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            TradeInfoManager.Request_Log();
+            TradeManager.RequestExecutionData();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            OrderInfoManager.CloseAllPositions();
+            AccountPositionManager.EmergencyCloseAllPositions();
         }
 
         private void BtnArmLiveTrade_Click(object sender, EventArgs e)
@@ -566,7 +568,7 @@ namespace TestClient
 
             if (Root.SaveFile.ShowDialog() == DialogResult.OK)
             {
-                TradeInfoManager.ExportTradeLog(Root.SaveFile.FileName);
+                TradeManager.ExportTradeLog(Root.SaveFile.FileName);
             }
         }
 
@@ -981,13 +983,13 @@ namespace TestClient
 
         private void BtnOrder_Click(object sender, EventArgs e)
         {
-
             if (Root.NetConnected && ValidateSymbol())
             {
                 OrderType orderType = ComboxBoxOrderSettingType.Text.ParseEnum<OrderType>();
                 OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
 
-                ContractTest.ActiveContract.PlaceOrder("DU332281", TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                if (TestAccount is AccountInfo ac)
+                    ContractTest.ActiveContract.PlaceOrder(ac, TextBoxOrderSettingQuantity.Text.ToInt32(0),
                     TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
                     TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
                     TextBoxOrderSettingStopPrice.Text.ToDouble(0)); // TODO: CheckBoxOrderWhatIf.Checked);
@@ -1001,19 +1003,20 @@ namespace TestClient
             OrderTimeInForce tif = ComboBoxOrderSettingTIF.Text.ParseEnum<OrderTimeInForce>();
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            Task.Run(() =>
-            {
-                var symbols = ContractManager.GetSymbolList(ref symbolText);
-                var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-
-                foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
+            if (TestAccount is AccountInfo ac)
+                Task.Run(() =>
                 {
-                    c.PlaceOrder("DU332281", TextBoxOrderSettingQuantity.Text.ToInt32(0),
-                        TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
-                        TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
-                        TextBoxOrderSettingStopPrice.Text.ToDouble(0)); // TODO: CheckBoxOrderWhatIf.Checked);
-                }
-            }, Cts.Token);
+                    var symbols = ContractManager.GetSymbolList(ref symbolText);
+                    var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
+
+                    foreach (Contract c in cList.Where(n => n.Status == ContractStatus.Alive))
+                    {
+                        c.PlaceOrder(ac, TextBoxOrderSettingQuantity.Text.ToInt32(0),
+                            TradeType.Entry, tif, DateTime.Now.AddSeconds(30), true, orderType, true,
+                            TextBoxOrderSettingLimitPrice.Text.ToDouble(0),
+                            TextBoxOrderSettingStopPrice.Text.ToDouble(0)); // TODO: CheckBoxOrderWhatIf.Checked);
+                    }
+                }, Cts.Token);
         }
 
         private void BtnOrderBraket_Click(object sender, EventArgs e)
@@ -1022,12 +1025,6 @@ namespace TestClient
             {
                 AccountInfo iba = OrderTest.LiveAccount;
 
-                iba.EntryBraket(
-                    ContractTest.ActiveContract,
-                    TextBoxOrderSettingQuantity.Text.ToInt32(0),
-                    TextBoxOrderSettingStopPrice.Text.ToDouble(0),
-                    TextBoxOrderSettingLimitPrice.Text.ToDouble(0)
-                );
             }
         }
 
@@ -1076,7 +1073,7 @@ namespace TestClient
 
         private void BtnGetCompletedOrders_Click(object sender, EventArgs e)
         {
-            OrderInfoManager.Request_CompleteOrders(false);
+            OrderManager.Request_CompleteOrders(false);
         }
 
 

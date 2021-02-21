@@ -115,7 +115,7 @@ namespace TestClient
                     if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
                     {
                         string execId = msg;
-                        TradeInfo ti = TradeInfoManager.Get(execId);
+                        TradeInfo ti = TradeManager.GetTradeByExecId(execId);
 
                         if (!(ti is null))
                             TradeTest.UpdateTable(ti);

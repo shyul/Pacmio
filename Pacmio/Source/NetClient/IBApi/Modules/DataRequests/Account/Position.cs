@@ -73,13 +73,15 @@ namespace Pacmio.IB
         /// <param name="fields"></param>
         private static void Parse_PositionEnd(string[] fields)
         {
+            /*
             if (fields[1] == "1")
             {
-                AccountPositionManager.ZeroNonRefreshedPositions();
-                IsBusy_Position = false;
-            }
 
+            }*/
+
+            AccountPositionManager.ResetNonRefreshedPositions();
             AccountPositionManager.Update(2, "\nPosition End");
+            IsBusy_Position = false;
         }
 
         //

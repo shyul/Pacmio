@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public static class TradeManager
     {
-        public static void Request_Log() => IB.Client.SendRequest_ExecutionData();
+        public static void RequestExecutionData() => IB.Client.SendRequest_ExecutionData();
 
         public static int Count => ExecIdToTradeLUT.Count;
 

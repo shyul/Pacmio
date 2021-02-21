@@ -19,6 +19,8 @@ namespace Pacmio
     {
         private static Dictionary<string, AccountInfo> AccountLUT { get; } = new Dictionary<string, AccountInfo>();
 
+        public static IEnumerable<AccountInfo> List => AccountLUT.Values;
+
         public static int Count => AccountLUT.Count;
 
         public static AccountInfo GetAccountById(string accountId)
@@ -53,11 +55,11 @@ namespace Pacmio
             IB.Client.SendRequest_AccountSummary();
         }
 
-        public static void EmergencyClose()
+        public static void EmergencyCloseAllPositions()
         {
             foreach (var ac in AccountLUT.Values)
             {
-                ac.EmergencyClose();
+                ac.EmergencyCloseAllPositions();
             }
         }
 
@@ -76,13 +78,15 @@ namespace Pacmio
             }
         }
 
-        internal static void ZeroNonRefreshedPositions()
+        internal static void ResetNonRefreshedPositions()
         {
             lock (AccountLUT)
             {
-                foreach (AccountInfo ac in AccountLUT.Values) ac.ZeroNonRefreshedPositions();
+                foreach (AccountInfo ac in AccountLUT.Values) ac.ResetNonRefreshedPositions();
             }
         }
+
+        #endregion Data Requests
 
         #region Updates
 
@@ -102,8 +106,6 @@ namespace Pacmio
         // Refresh Position Info
 
         #endregion Updates
-
-        #endregion Data Requests
 
         #region File system
 
