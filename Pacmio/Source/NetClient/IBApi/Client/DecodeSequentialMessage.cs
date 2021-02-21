@@ -118,6 +118,10 @@ namespace Pacmio.IB
                             break;
                     }
                 }
+                else
+                {
+                    Thread.Sleep(10);
+                }
             }
         }
     }

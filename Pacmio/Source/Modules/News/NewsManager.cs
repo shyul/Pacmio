@@ -4,15 +4,15 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
 {
-    public class TickDatum
+    public static class NewsManager
     {
     }
 }
