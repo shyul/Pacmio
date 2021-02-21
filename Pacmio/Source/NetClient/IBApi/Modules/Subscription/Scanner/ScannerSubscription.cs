@@ -7,15 +7,16 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Xu;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
-
+        public static InteractiveBrokerWatchList GetInteractiveBrokerWatchList(int requestId)
+            => WatchListManager.WatchListByType<InteractiveBrokerWatchList>().Where(n => n.RequestId == requestId).FirstOrDefault();
 
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"TOP_PERC_GAIN"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"
         // Send RequestScannerSubscription: (0)"22"-(1)"1"-(2)"15"-(3)"STK"-(4)"STK.US"-(5)"MOST_ACTIVE"-(6)""-(7)""-(8)""-(9)""-(10)""-(11)""-(12)""-(13)""-(14)""-(15)""-(16)""-(17)""-(18)""-(19)"0"-(20)""-(21)""-(22)"ALL"-(23)"marketCapAbove1e6=10000;marketCapBelow1e6=1000000;"
@@ -90,7 +91,7 @@ namespace Pacmio.IB
         {
             int requestId = fields[2].ToInt32(-1);
             //string message = fields[4];
-            if (WatchListManager.GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt && (fields[3] != "165" || wt.IsSnapshot)) // Scanner Subscription Error !!!!!!!!!!!!! (0)"4"-(1)"2"-(2)"2"-(3)"165"-(4)"Historical Market Data Service query message:no items retrieved"
+            if (GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt && (fields[3] != "165" || wt.IsSnapshot)) // Scanner Subscription Error !!!!!!!!!!!!! (0)"4"-(1)"2"-(2)"2"-(3)"165"-(4)"Historical Market Data Service query message:no items retrieved"
             {
                 wt.Stop();
             }
@@ -110,7 +111,7 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32(-1);
 
-            if (msgVersion == "3" && WatchListManager.GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt)
+            if (msgVersion == "3" && GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt)
             {
                 List<Contract> list = new List<Contract>();
                 for (int i = 4; i < fields.Length; i += 16)
@@ -124,6 +125,8 @@ namespace Pacmio.IB
                 }
 
                 wt.Update(list);
+
+                list.Print();
 
                 if (wt.IsSnapshot) wt.Stop();
 

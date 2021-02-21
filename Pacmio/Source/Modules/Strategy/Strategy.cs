@@ -33,7 +33,7 @@ namespace Pacmio
 
         public string Account { get; set; }
 
-        public Scanner Scanner { get; set; }
+        public WatchList Scanner { get; set; }
 
         public EntryMethod EntryMethod { get; set; }
 

@@ -19,7 +19,7 @@ namespace Pacmio.IB
 
         public static ScanParameterResponse ScanParameters { get; set; }
 
-        internal static void SendRequest_ScannerParameters()
+        public static void SendRequest_ScannerParameters()
         {
             if (Connected && IsReady_ScannerParameters)
             {

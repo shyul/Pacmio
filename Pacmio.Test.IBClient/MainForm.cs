@@ -451,9 +451,9 @@ namespace TestClient
         {
             if (!Root.NetConnected) return;
 
-            Pacmio.IB.WatchList wcl = new Pacmio.IB.WatchList("Most Active", 100)
+            InteractiveBrokerWatchList wcl = new InteractiveBrokerWatchList("Most Active", 100)
             {
-                ScanType = "MOST_ACTIVE",
+                ScannerType = Pacmio.IB.ScannerType.MOST_ACTIVE, //  "MOST_ACTIVE",
                 Price = (10, 100),
                 VolumeMinimum = 1e7,
                 MarketCap = (1e8, double.NaN),
@@ -484,7 +484,7 @@ namespace TestClient
         private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            WatchListManager.Request_ScannerParameters();
+            Pacmio.IB.Client.SendRequest_ScannerParameters();
         }
 
 
@@ -1107,7 +1107,7 @@ namespace TestClient
                 ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
             };*/
 
-            Pacmio.TIProData.TopListHandler tls = WatchListManager.AddTradeIdeasTopList();
+            Pacmio.TIProData.TopListHandler tls = WatchListTest.AddTradeIdeasTopList();
 
             tls.SortColumn = "MaxGUP";
 
@@ -1124,7 +1124,7 @@ namespace TestClient
 
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)
         {
-            Pacmio.TIProData.AlertHandler tls = WatchListManager.AddTradeIdeasAlert();
+            Pacmio.TIProData.AlertHandler tls = WatchListTest.AddTradeIdeasAlert();
             tls.Start();
         }
 

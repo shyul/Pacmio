@@ -15,7 +15,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        public static int ActiveSubscriptionCount => ActiveMarketDataTickerIds.Values.Where(n => n.IsActive).Count() + ActiveMarketDepth.Count + ActiveRealTimeBars.Count + WatchListManager.GetInteractiveBrokerWatchList().Count();
+        public static int ActiveSubscriptionCount => ActiveMarketDataTickerIds.Values.Where(n => n.IsActive).Count() + ActiveMarketDepth.Count + ActiveRealTimeBars.Count + WatchListManager.WatchListByType<InteractiveBrokerWatchList>().Count();
 
         public static bool SubscriptionOverflow => ActiveSubscriptionCount > Parameters.MaximumSubscription - 5;
 

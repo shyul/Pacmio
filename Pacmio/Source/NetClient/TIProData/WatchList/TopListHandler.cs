@@ -20,7 +20,7 @@ using TradeIdeas.TIProData.Configuration;
 
 namespace Pacmio.TIProData
 {
-    public class TopListHandler : TopListConfig, IWatchList
+    public class TopListHandler : TopListConfig
     {
         public TopListHandler(string name)
         {
@@ -58,8 +58,8 @@ namespace Pacmio.TIProData
                         ConfigList.Remove("exact_time");
                 }
 
-                IsActive = true;
-                string configStr = ConfigString;
+                IsRunning = true;
+                string configStr = ConfigurationString;
 
                 StreamingTopList = Client.Connection.TopListManager.GetTopList(configStr);
                 StreamingTopList.TopListStatus += new TopListStatus(TopListStatus_Handler);
@@ -76,23 +76,23 @@ namespace Pacmio.TIProData
 
         public override void Stop()
         {
-            if (m_IsActive)
+            if (m_IsRunning)
             {
                 Console.WriteLine("#### Stop TopList: " + Name);
 
                 if (StreamingTopList is TopList)
                     StreamingTopList.Stop();
 
-                IsActive = false;
+                IsRunning = false;
             }
         }
 
-        public ICollection<Contract> Snapshot()
+        public override IEnumerable<Contract> SingleSnapshot()
         {
             Start(true, false, DateTime.Now);
 
             int timeout = 200;
-            while (IsActive)
+            while (IsRunning)
             {
                 Thread.Sleep(10);
                 timeout--;
@@ -114,7 +114,7 @@ namespace Pacmio.TIProData
             Start(false, true, historicalTime);
 
             int timeout = 200;
-            while (IsActive)
+            while (IsRunning)
             {
                 Thread.Sleep(10);
                 timeout--;
@@ -147,12 +147,12 @@ namespace Pacmio.TIProData
         private void TopListData_Handler(List<RowData> rows, DateTime? start, DateTime? end, TopList sender)
         {
             MessageCount++;
-            if (sender == StreamingTopList && LastRefreshTime < DateTime.Now)
+            if (sender == StreamingTopList && UpdateTime < DateTime.Now)
             {
-                LastRefreshTime = DateTime.Now;
+                UpdateTime = DateTime.Now;
                 if (rows.Count > 0)
                 {
-                    Console.WriteLine("\n\n######## TI TopList " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | " + LastRefreshTime + "\n\n");
+                    Console.WriteLine("\n\n######## TI TopList " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | " + UpdateTime + "\n\n");
                     Task.Run(() =>
                     {
                         lock (List)

@@ -129,12 +129,12 @@ namespace Pacmio
 
         protected IEnumerable<Contract> m_Contracts = null;
 
-        public void Update(IEnumerable<Contract> list) 
+        public void Update(IEnumerable<Contract> list)
         {
+            if (m_Contracts is null) m_Contracts = new List<Contract>();
             lock (m_Contracts)
             {
                 m_Contracts = list;
-                if (m_Contracts is null) m_Contracts = new List<Contract>();
                 UpdatedHandler?.Invoke(0, UpdateTime = DateTime.Now, "");
             }
         }

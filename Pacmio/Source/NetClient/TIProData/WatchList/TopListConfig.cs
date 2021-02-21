@@ -19,14 +19,14 @@ using TradeIdeas.TIProData.Configuration;
 
 namespace Pacmio.TIProData
 {
-    public abstract class TopListConfig : Scanner
+    public abstract class TopListConfig : DynamicWatchList
     {
-        public override bool IsActive { get => m_IsActive && Client.Connected; set => m_IsActive = value; }
-        protected bool m_IsActive = false;
+        public override bool IsRunning { get => m_IsRunning && Client.Connected; protected set => m_IsRunning = value; }
+        protected bool m_IsRunning = false;
 
         public virtual int MessageCount { get; protected set; } = 0;
 
-        public override string ConfigString
+        public override string ConfigurationString
         {
             get
             {

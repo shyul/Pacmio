@@ -89,6 +89,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Test\TradeTest.cs" />
+    <Compile Include="Test\WatchListTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

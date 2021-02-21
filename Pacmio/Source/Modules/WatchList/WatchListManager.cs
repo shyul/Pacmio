@@ -17,30 +17,75 @@ namespace Pacmio
     {
         private static Dictionary<string, WatchList> NameToListLUT { get; } = new Dictionary<string, WatchList>();
 
-        public static IEnumerable<WatchList> List
+        public static List<WatchList> List
         {
             get
             {
                 lock (NameToListLUT)
-                    return NameToListLUT.Values.ToArray();
+                    return NameToListLUT.Values.ToList();
             }
         }
 
+        public static int Count
+        {
+            get
+            {
+                lock (NameToListLUT)
+                    return NameToListLUT.Count;
+            }
+        }
 
-
-
-
-        public static IEnumerable<InteractiveBrokerWatchList> GetInteractiveBrokerWatchList()
+        public static T Add<T>(T wt) where T : WatchList
         {
             lock (NameToListLUT)
-                return NameToListLUT.Values.Where(n => n is InteractiveBrokerWatchList list).Select(n => n as InteractiveBrokerWatchList).ToArray();
+            {
+                if (NameToListLUT.ContainsKey(wt.Name))
+                {
+                    WatchList result = NameToListLUT[wt.Name];
+                    if (result is T)
+                        return result as T;
+                    else
+                    {
+                        if (result is DynamicWatchList dwt)
+                            dwt.Stop();
+
+                        NameToListLUT.Remove(wt.Name);
+                    }
+                }
+                NameToListLUT.Add(wt.Name, wt);
+                return wt;
+            }
         }
 
-        public static InteractiveBrokerWatchList GetInteractiveBrokerWatchList(int requestId)
+        public static WatchList Remove(WatchList wt)
         {
-            return GetInteractiveBrokerWatchList().Where(n => n.RequestId == requestId).FirstOrDefault();
+            lock (NameToListLUT)
+            {
+                if (NameToListLUT.ContainsKey(wt.Name))
+                {
+                    WatchList result = NameToListLUT[wt.Name];
+                    if (result is DynamicWatchList dwt) dwt.Stop();
+                    NameToListLUT.Remove(wt.Name);
+                    return result;
+                }
+                return null;
+            }
         }
 
+        public static List<T> WatchListByType<T>() where T : WatchList => List.Where(n => n is T list).Select(n => n as T).ToList();
+
+        public static void Start() => WatchListByType<DynamicWatchList>().ForEach(n => n.Start());
+
+        public static void Stop() => WatchListByType<DynamicWatchList>().ForEach(n => n.Stop());
+
+        public static void Clear()
+        {
+            lock (NameToListLUT)
+            {
+                Stop();
+                NameToListLUT.Clear();
+            }
+        }
 
 
 

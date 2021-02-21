@@ -44,8 +44,8 @@ namespace Pacmio.TIProData
                 MessageCount = 0;
                 AlertCount = 0;
 
-                IsActive = true;
-                string configStr = ConfigString;
+                IsRunning = true;
+                string configStr = ConfigurationString;
 
                 StreamingAlerts = Client.Connection.StreamingAlertsManager.GetAlerts(configStr);
                 StreamingAlerts.StreamingAlertsData += new StreamingAlertsData(AlertsData_Handler);
@@ -62,12 +62,12 @@ namespace Pacmio.TIProData
 
         public override void Stop()
         {
-            if (m_IsActive)
+            if (m_IsRunning)
             {
                 if (StreamingAlerts is StreamingAlerts)
                     StreamingAlerts.Stop();
 
-                IsActive = false;
+                IsRunning = false;
             }
         }
 
@@ -85,13 +85,13 @@ namespace Pacmio.TIProData
         void AlertsData_Handler(List<RowData> rows, StreamingAlerts sender)
         {
             MessageCount++;
-            if (sender == StreamingAlerts && LastRefreshTime < DateTime.Now)
+            if (sender == StreamingAlerts && UpdateTime < DateTime.Now)
             {
-                LastRefreshTime = DateTime.Now;
+                UpdateTime = DateTime.Now;
                 if (rows.Count > 0)
                 {
                     AlertCount += rows.Count;
-                    Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + LastRefreshTime + "\n\n");
+                    Console.WriteLine("\n\n######## TI Alert " + rows.Count + " Result Received for [ " + Name + " ] | MessageCount = " + MessageCount + " | AlertCount = " + AlertCount + " | " + UpdateTime + "\n\n");
                     Task.Run(() => {
                         GetContractList(rows, "SYMBOL");
                         if (IsSnapshot) Stop();
@@ -104,6 +104,11 @@ namespace Pacmio.TIProData
                 Console.WriteLine("######## Ignoring TI StreamingAlertsData.\n\n");
             }
 
+        }
+
+        public override IEnumerable<Contract> SingleSnapshot()
+        {
+            throw new NotImplementedException();
         }
     }
 }
