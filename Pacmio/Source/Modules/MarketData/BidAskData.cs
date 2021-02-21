@@ -31,9 +31,5 @@ namespace Pacmio
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Exchange"), GridColumnOrder(3, 12), CellRenderer(typeof(TextCellRenderer), 80, true)]
         public string BidExchange { get; set; } = string.Empty;
-
-
-
-
     }
 }

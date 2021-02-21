@@ -61,9 +61,7 @@ namespace Pacmio.IB
             {
                 md.Contract.Status = ContractStatus.Alive;
                 md.Status = (MarketTickStatus)(fields[3].ToInt32(0));
-
                 md.Update();
-                // WatchListManager.UpdateUI(md);
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);

@@ -187,7 +187,7 @@ namespace Pacmio.IB
 
         public static Task Disconnect => new Task(() =>
         {
-            ScannerManager.List.Where(n => n is WatchList).ToList().ForEach(n => n.Stop());
+            WatchListManager.List.Where(n => n is WatchList).ToList().ForEach(n => n.Stop());
 
             if (ApiStatus == ConnectionStatus.Connected || ApiStatus == ConnectionStatus.Connecting)
             {

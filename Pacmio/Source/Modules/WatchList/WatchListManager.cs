@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class ScannerManager
+    public static class WatchListManager
     {
         public static List<Scanner> List { get; } = new List<Scanner>();
 

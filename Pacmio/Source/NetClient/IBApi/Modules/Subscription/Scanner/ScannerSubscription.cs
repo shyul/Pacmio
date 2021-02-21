@@ -105,7 +105,7 @@ namespace Pacmio.IB
                     if (ActiveScanners.ContainsKey(requestId))
                     {
                         ActiveScanners.TryRemove(requestId, out WatchList info);
-                        ScannerManager.List.Remove(info);
+                        WatchListManager.List.Remove(info);
                     }
                 }
                 else

@@ -124,7 +124,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\Decision\DecisionManager.cs" />
     <Compile Include="Source\Forms\Grid\MarketDepthGridView.cs" />
-    <Compile Include="Source\Modules\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\MarketDepth\MarketDepthManager.cs" />
     <Compile Include="Source\Modules\News\NewsManager.cs" />
     <Compile Include="Source\Modules\Strategy\ExitMethod.cs" />
@@ -150,8 +149,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\SingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
-    <Compile Include="Source\Modules\Scanner\Types\ISignalSource.cs" />
-    <Compile Include="Source\Modules\Scanner\Types\IWatchList.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\ISignalSource.cs" />
+    <Compile Include="Source\Modules\WatchList\Types\IWatchList.cs" />
     <Compile Include="Source\Modules\BarTable\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Types\ICandleStick.cs" />
     <Compile Include="Source\Forms\Chart\BarChartArea.cs" />
@@ -182,9 +181,9 @@
     <Compile Include="Source\Modules\MarketData\BidAskData.cs" />
     <Compile Include="Source\Modules\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\MarketData\StockData.cs" />
-    <Compile Include="Source\Modules\Contract\Types\MarketTickStatus.cs" />
+    <Compile Include="Source\Modules\MarketData\MarketTickStatus.cs" />
     <Compile Include="Source\Forms\Grid\MarketDataGridView.cs" />
-    <Compile Include="Source\Modules\Scanner\WatchListManager.cs" />
+    <Compile Include="Source\Modules\WatchList\OldWatchListManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />
@@ -215,8 +214,8 @@
     <Compile Include="Source\Forms\Chart\MainBarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Bar.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\WaveTrend.cs" />
-    <Compile Include="Source\Modules\Contract\Exchange\ExchangeInfo.cs" />
-    <Compile Include="Source\Modules\Contract\Exchange\ExchangeWorkHours.cs" />
+    <Compile Include="Source\Modules\Exchange\ExchangeInfo.cs" />
+    <Compile Include="Source\Modules\Exchange\ExchangeWorkHours.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\ComboLeg.cs" />
     <Compile Include="Source\Modules\Contract\Types\ContractStatus.cs" />
     <Compile Include="Source\Modules\Contract\Types\ContractTypeInfo.cs" />
@@ -249,7 +248,7 @@
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
     <Compile Include="Source\Modules\Trade\Position\AccountPositionManager.cs" />
-    <Compile Include="Source\Modules\Scanner\ScannerManager.cs" />
+    <Compile Include="Source\Modules\WatchList\WatchListManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\OrderHistory\ExecutionData.cs" />
@@ -287,7 +286,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\Types\ApiCode.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\IncomingMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\RequestType.cs" />
-    <Compile Include="Source\Modules\Scanner\Scanner.cs" />
+    <Compile Include="Source\Modules\WatchList\Scanner.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\TickType.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\IbXmlAE.cs" />
@@ -296,7 +295,7 @@
     <Compile Include="Source\Modules\BusinessInfo\BusinessInfoList.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\ReutersXml.cs" />
     <Compile Include="Source\Modules\DataSource.cs" />
-    <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
+    <Compile Include="Source\Modules\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\NetClient\Quandl.cs" />

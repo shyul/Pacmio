@@ -77,7 +77,7 @@ namespace TestClient
             */
 
             AccountPositionManager.UpdatedHandler += AccountUpdatedHandler;
-            WatchListManager.Add(MarketDataGridView);
+            OldWatchListManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
@@ -468,7 +468,7 @@ namespace TestClient
             //FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
             //FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
 
-            wcl = ScannerManager.Add(wcl);
+            wcl = WatchListManager.Add(wcl);
 
             wcl.Start();
 
@@ -480,13 +480,13 @@ namespace TestClient
 
         private void BtnCancelAllScanner_Click(object sender, EventArgs e)
         {
-            ScannerManager.Stop();
+            WatchListManager.Stop();
         }
 
         private void BtnRequestScannerParameter_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            ScannerManager.Request_ScannerParameters();
+            WatchListManager.Request_ScannerParameters();
         }
 
 
@@ -1109,7 +1109,7 @@ namespace TestClient
                 ExtraConfig = "form=1&sort=MaxGUP&omh=1&col_ver=1&show0=D_Symbol&show1=Price&show2=Float&show3=SFloat&show4=GUP&show5=TV&show6=EarningD&show7=Vol5&show8=STP&show9=RV&show10=D_Name&show11=RD&show12=FCP&show13=D_Sector&show14=",
             };*/
 
-            Pacmio.TIProData.TopListHandler tls = ScannerManager.AddTradeIdeasTopList();
+            Pacmio.TIProData.TopListHandler tls = WatchListManager.AddTradeIdeasTopList();
 
             tls.SortColumn = "MaxGUP";
 
@@ -1126,7 +1126,7 @@ namespace TestClient
 
         private void BtnRequestTIProAlert_Click(object sender, EventArgs e)
         {
-            Pacmio.TIProData.AlertHandler tls = ScannerManager.AddTradeIdeasAlert();
+            Pacmio.TIProData.AlertHandler tls = WatchListManager.AddTradeIdeasAlert();
             tls.Start();
         }
 
