@@ -21,10 +21,12 @@ namespace TestClient
 {
     public class AccountDataAdapter : IDataConsumer, IDisposable
     {
-        public AccountDataAdapter(TreeView tr)
+        public AccountDataAdapter(TreeView tr, ListBox lb)
         {
             TreeViewAccount = tr;
+            ListBoxAccount = lb;
             AccountPositionManager.AccountDataProvider.AddDataConsumer(this);
+            UpdateAccountList();
         }
 
         public void Dispose()
@@ -34,6 +36,8 @@ namespace TestClient
 
         private TreeView TreeViewAccount { get; }
 
+        private ListBox ListBoxAccount { get; }
+
         public void DataIsUpdated()
         {
             Task.Run(() =>
@@ -42,17 +46,18 @@ namespace TestClient
                 {
                     UpdateAccountList();
                     TreeViewAccount.Invalidate(true);
+                    ListBoxAccount.Invalidate(true);
                 });
             });
         }
 
         public void UpdateAccountList()
         {
-            //ListBoxAccount.Items.Clear();
+            ListBoxAccount.Items.Clear();
             TreeViewAccount.Nodes.Clear();
             foreach (var a in AccountPositionManager.List)
             {
-                //ListBoxAccount.Items.Add(a.AccountId);
+                ListBoxAccount.Items.Add(a.AccountId);
 
                 //if (a.AccountReady) 
                 //

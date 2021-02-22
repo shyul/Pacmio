@@ -55,6 +55,7 @@ namespace TestClient
 
         }
 
+        /*
         public void AccountUpdateHandler(int status, DateTime time, string msg)
         {
             Task.Run(() =>
@@ -76,8 +77,7 @@ namespace TestClient
             {
                 ListBoxAccount.Items.Add(a.AccountId);
 
-                //if (a.AccountReady) 
-                //
+
                 string dayTradingString = "[ ";
                 foreach (int d in a.DayTradesRemaining)
                 {
@@ -111,11 +111,11 @@ namespace TestClient
 
                 TreeViewAccount.Nodes.Add(tr);
 
-                //}
+       
             }
 
             TreeViewAccount.ExpandAll();
-        }
+        }*/
 
         public void WatchListUpdateHandler(int status, DateTime time, string msg)
         {

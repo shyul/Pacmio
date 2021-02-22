@@ -70,11 +70,16 @@ namespace TestClient
         {
             InitializeComponent();
 
-            AccountPositionManager.OnUpdateHandler += AccountUpdateHandler;
+
             //MarketDataGridViewManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
-            UpdateAccountList();
+
+            //AccountPositionManager.OnUpdateHandler += AccountUpdateHandler;
+            //UpdateAccountList();
+
+            AccountDataAdapter = new AccountDataAdapter(TreeViewAccount, ListBoxAccount);
+
             ToggleConnect();
 
             Root.OnNetConnectHandler += NetClientOnConnectHandler;

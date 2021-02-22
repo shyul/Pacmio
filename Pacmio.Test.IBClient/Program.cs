@@ -21,10 +21,11 @@ namespace TestClient
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
+                    /*
                     AccountPositionManager.OnUpdateHandler += (int status, DateTime time, string msg) =>
                     {
                         Console.WriteLine("TestClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg);
-                    };
+                    };*/
 
                     /*
                     Account c = new Account("DU");

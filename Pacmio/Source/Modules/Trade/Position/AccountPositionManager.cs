@@ -86,10 +86,16 @@ namespace Pacmio
             }
         }
 
+        internal static void PositionEnd()
+        {
+            ResetNonRefreshedPositions();
+            PositionDataProvider.DataIsUpdated();
+        }
+
         #endregion Data Requests
 
         #region Updates
-
+        /*
         public static DateTime UpdateTime { get; set; }
 
         public static event StatusEventHandler OnUpdateHandler;
@@ -99,7 +105,7 @@ namespace Pacmio
             UpdateTime = DateTime.Now;
             OnUpdateHandler?.Invoke(statusCode, UpdateTime, message);
         }
-
+        */
         public static SimpleDataProvider AccountDataProvider { get; } = new SimpleDataProvider();
 
         public static SimpleDataProvider PositionDataProvider { get; } = new SimpleDataProvider();
@@ -134,7 +140,7 @@ namespace Pacmio
                 }
             }
 
-            Update(1, "Account file loaded.");
+            AccountDataProvider.DataIsUpdated();
         }
 
         #endregion File system
