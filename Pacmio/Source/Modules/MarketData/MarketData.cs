@@ -117,18 +117,18 @@ namespace Pacmio
 
 
         [IgnoreDataMember] // Initialize
-        protected List<IDataView> DataViews { get; set; }
+        protected List<IDataRenderer> DataViews { get; set; }
 
-        public void AddDataView(IDataView dv)
+        public void AddDataView(IDataRenderer dv)
         {
-            if (DataViews is null) DataViews = new List<IDataView>();
+            if (DataViews is null) DataViews = new List<IDataRenderer>();
             lock (DataViews)
             {
                 DataViews.CheckAdd(dv);
             }
         }
 
-        public void RemoveDataView(IDataView dv)
+        public void RemoveDataView(IDataRenderer dv)
         {
             if (DataViews is null) return;
             lock (DataViews)
@@ -154,10 +154,10 @@ namespace Pacmio
                 }
 
             if (DataViews is null)
-                DataViews = new List<IDataView>();
+                DataViews = new List<IDataRenderer>();
 
             lock (DataViews)
-                foreach (IDataView idv in DataViews)
+                foreach (IDataRenderer idv in DataViews)
                 {
                     idv.DataIsUpdated();
                 }

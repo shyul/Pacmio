@@ -44,7 +44,7 @@ namespace Pacmio
 
             lock (DataViews)
             {
-                foreach (IDataView dv in DataViews)
+                foreach (IDataRenderer dv in DataViews)
                 {
                     dv.RemoveDataSource();
                 }
@@ -751,7 +751,7 @@ namespace Pacmio
 
         #region BarChart / DataView
 
-        public List<IDataView> DataViews { get; } = new List<IDataView>();
+        public List<IDataRenderer> DataViews { get; } = new List<IDataRenderer>();
 
         #endregion BarChart / DataView
 

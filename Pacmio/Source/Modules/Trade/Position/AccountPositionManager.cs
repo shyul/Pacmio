@@ -100,6 +100,10 @@ namespace Pacmio
             OnUpdateHandler?.Invoke(statusCode, UpdateTime, message);
         }
 
+        public static SimpleDataProvider AccountDataProvider { get; } = new SimpleDataProvider();
+
+        public static SimpleDataProvider PositionDataProvider { get; } = new SimpleDataProvider();
+
 
         // Refresh Account Info
 

@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test\DataAdapters\AccountDataAdapter.cs" />
     <Compile Include="Test\BarTableTest.cs" />
     <Compile Include="Test\OrderTest.cs" />
     <Compile Include="Test\Other\TestFreqAlign.cs">

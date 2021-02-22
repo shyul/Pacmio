@@ -20,6 +20,8 @@ namespace TestClient
 
         public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
 
+        public AccountDataAdapter AccountDataAdapter { get; }
+
         public Period HistoricalPeriod
         {
             get
