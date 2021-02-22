@@ -16,48 +16,45 @@ namespace Pacmio
 {
     public class MarketDataGridView : GridWidget<StockData>
     {
-        public MarketDataGridView(string name) : base(name)
+        public MarketDataGridView(WatchList wt) : base(wt.Name)
         {
+            WatchList = wt;
 
-            //LoadConfiguration();
-        }
-
-        public void LoadConfiguration(string fileName) 
-        {
-        
-        }
-
-        public void SaveConfiguration()
-        {
-
-        }
-
-        public void Add(StockData s)
-        {
-            Console.WriteLine("MarketDataGridView Adding: " + s.Contract.ToString());
-
-            List<StockData> newRows = new List<StockData>();
-            if (Rows is StockData[] rows)
-            { 
-                newRows.AddRange(rows);
+            if (WatchList is DynamicWatchList dwt)
+            {
+                dwt.OnUpdateHandler += DynamicUpdateHandler;
             }
-            newRows.CheckAdd(s);
-            s.AddDataView(this);
-            Update(newRows);
+            else
+            {
+                Update(WatchList.Contracts);
+            }
         }
 
-        public void Remove(StockData s)
+        public WatchList WatchList { get; }
+
+        public void DynamicUpdateHandler(int status, DateTime time, string msg)
         {
-            List<StockData> list = new List<StockData>();
-            if (Rows is StockData[] rows) list.AddRange(rows);
-            list.CheckRemove(s);
-            s.RemoveDataView(this);
-            Update(list);
+            Update(WatchList.Contracts);
         }
 
-        public bool Contains(MarketData md) => Rows is StockData[] rows && rows.Where(n => n == md).Count() > 0;
+        public void Update(IEnumerable<Contract> list)
+        {
+            var rows = list.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToArray();
+            foreach (var s in rows) s.AddDataView(this);
+            Update(rows);
+        }
 
-        public Contract SelectedContract => Rows[SelectedIndex].Contract;
+        public Contract SelectedContract
+        {
+            get
+            {
+                lock (DataLockObject)
+                    if (Rows.Length > SelectedIndex)
+                        return Rows[SelectedIndex].Contract;
+                    else
+                        return null;
+            }
+        }
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
 

@@ -60,14 +60,16 @@ namespace TestClient
 
         int MainProgBarValue = 0;
 
-        public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data");
+      
+
+        //public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data");
 
         public MainForm()
         {
             InitializeComponent();
 
             AccountPositionManager.OnUpdateHandler += AccountUpdateHandler;
-            OldWatchListManager.Add(MarketDataGridView);
+            //MarketDataGridViewManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
@@ -817,7 +819,10 @@ namespace TestClient
             foreach (var md in Pacmio.IB.Client.ActiveMarketData)
             {
                 if (md is StockData sd)
-                    MarketDataGridView.Add(sd);
+                {
+                    // MarketDataGridView.Add(sd);
+                }
+
             }
         }
 
@@ -827,7 +832,10 @@ namespace TestClient
             ContractTest.ActiveContract.MarketData.StartTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
-                MarketDataGridView.Add(s.StockData);
+            {
+                // MarketDataGridView.Add(s.StockData);
+            }
+
 
             Root.Form?.Show();
         }
@@ -838,29 +846,30 @@ namespace TestClient
             ContractTest.ActiveContract.MarketData.SnapshotTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
-                MarketDataGridView.Add(s.StockData);
-
+            {
+                //MarketDataGridView.Add(s.StockData);
+            }
+          
             Root.Form?.Show();
         }
 
         private void BtnMarketDataAddMultiContracts_Click(object sender, EventArgs e)
         {
-            string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
-
+            //string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Default" };
+            TextBoxMultiContracts.Text = symbolText;
 
-            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-            //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
+            WatchListManager.Add(wt);
+            MarketDataGridViewManager.Add(new MarketDataGridView(wt));
 
-            foreach (Contract c in cList)
-            {
-                while (Pacmio.IB.Client.SubscriptionOverflow) { Thread.Sleep(10); }
-                Console.WriteLine("MarketQuote: " + c.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
-
-                if (c is Stock s)
-                    MarketDataGridView.Add(s.StockData);
-            }
+            Task.Run(() => {
+                foreach (var s in wt.Contracts.Take(60))
+                {
+                    //while (Pacmio.IB.Client.SubscriptionOverflow) { Thread.Sleep(10); }
+                    Console.WriteLine("MarketQuote: " + s.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
+                }
+            });
 
             Root.Form?.Show();
         }
@@ -868,32 +877,23 @@ namespace TestClient
         private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Default" };
+            TextBoxMultiContracts.Text = symbolText;
 
-            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null);
-            //MarketDataGridView GridView = new MarketDataGridView("Market Data", new MarketDataTable());
+            WatchListManager.Add(wt);
+            MarketDataGridViewManager.Add(new MarketDataGridView(wt));
 
             Task.Run(() => {
-
-                foreach (Contract c in cList)
+                foreach (Contract c in wt.Contracts.Take(60))
                 {
                     Console.WriteLine("MarketQuote Snapshot: " + c);
                     //c.MarketData.SnapshotTicks();
-
                     Pacmio.IB.Client.DataRequest_MarketData(c.MarketData);
-
-
-                    if (c is Stock s)
-                        MarketDataGridView.Add(s.StockData);
                 }
             });
 
-
-
             Root.Form?.Show();
         }
-
-
 
         private void BtnRequestMarketDepth_Click(object sender, EventArgs e)
         {

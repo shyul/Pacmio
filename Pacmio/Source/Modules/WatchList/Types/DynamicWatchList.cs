@@ -136,12 +136,12 @@ namespace Pacmio
             {
                 m_Contracts = list;
                 UpdateTime = DateTime.Now;
-                UpdatedHandler?.Invoke(0, UpdateTime, "");
+                OnUpdateHandler?.Invoke(0, UpdateTime, "");
             }
         }
 
         public DateTime UpdateTime { get; protected set; }
 
-        public event StatusEventHandler UpdatedHandler;
+        public event StatusEventHandler OnUpdateHandler;
     }
 }

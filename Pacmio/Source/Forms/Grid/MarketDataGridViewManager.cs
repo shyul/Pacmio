@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class OldWatchListManager
+    public static class MarketDataGridViewManager
     {
         public static void Add(MarketDataGridView gv)
         {
