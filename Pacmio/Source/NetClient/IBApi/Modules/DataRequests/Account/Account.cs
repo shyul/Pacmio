@@ -80,8 +80,7 @@ namespace Pacmio.IB
                         AccountPositionManager.GetOrCreateAccountById(accountId);
                     }
                 }
-
-                AccountPositionManager.AccountDataProvider.UpdateTime = DateTime.Now;
+                AccountPositionManager.AccountDataProvider.DataIsUpdated();
             }
         }
 

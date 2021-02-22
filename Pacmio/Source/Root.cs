@@ -80,8 +80,11 @@ namespace Pacmio
                 {
                     Thread.Sleep(1);
                     j++;
-                    if (j > timeout) break;
+                    if (j > timeout) return;
                 }
+
+                AccountPositionManager.Request_AccountSummary();
+                AccountPositionManager.Request_Position();
             }
         }
 

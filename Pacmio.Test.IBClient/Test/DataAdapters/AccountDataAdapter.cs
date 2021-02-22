@@ -55,6 +55,7 @@ namespace TestClient
         {
             ListBoxAccount.Items.Clear();
             TreeViewAccount.Nodes.Clear();
+
             foreach (var a in AccountPositionManager.List)
             {
                 ListBoxAccount.Items.Add(a.AccountId);

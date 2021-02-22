@@ -95,25 +95,9 @@ namespace Pacmio
         #endregion Data Requests
 
         #region Updates
-        /*
-        public static DateTime UpdateTime { get; set; }
 
-        public static event StatusEventHandler OnUpdateHandler;
-
-        public static void Update(int statusCode, string message = "")
-        {
-            UpdateTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(statusCode, UpdateTime, message);
-        }
-        */
         public static SimpleDataProvider AccountDataProvider { get; } = new SimpleDataProvider();
-
         public static SimpleDataProvider PositionDataProvider { get; } = new SimpleDataProvider();
-
-
-        // Refresh Account Info
-
-        // Refresh Position Info
 
         #endregion Updates
 
