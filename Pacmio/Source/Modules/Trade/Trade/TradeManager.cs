@@ -83,12 +83,12 @@ namespace Pacmio
 
         public static DateTime UpdatedTime { get; set; }
 
-        public static event StatusEventHandler UpdatedHandler;
+        public static event StatusEventHandler OnUpdateHandler;
 
         public static void Update(int statusCode, string message = "")
         {
             UpdatedTime = DateTime.Now;
-            UpdatedHandler?.Invoke(statusCode, UpdatedTime, message);
+            OnUpdateHandler?.Invoke(statusCode, UpdatedTime, message);
         }
 
         #endregion Data Events

@@ -37,46 +37,51 @@ namespace Pacmio
 
         public static T Add<T>(T wt) where T : WatchList
         {
+            WatchList result = null;
+
             lock (NameToListLUT)
             {
                 if (NameToListLUT.ContainsKey(wt.Name))
                 {
-                    WatchList result = NameToListLUT[wt.Name];
-                    if (result is T)
-                        return result as T;
-                    else
+                    result = NameToListLUT[wt.Name];
+                    if (!(result is T))
                     {
                         if (result is DynamicWatchList dwt)
                             dwt.Stop();
 
-                        NameToListLUT.Remove(wt.Name);
+                        NameToListLUT.Remove(result.Name);
+                        NameToListLUT.Add(wt.Name, wt);
+                        result = wt;
                     }
                 }
-                NameToListLUT.Add(wt.Name, wt);
-                return wt;
+                else
+                {
+                    result = wt;
+                    NameToListLUT.Add(result.Name, result);
+                }
             }
+
+            UpdateTime = DateTime.Now;
+            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            return result as T;
         }
 
         public static WatchList Remove(WatchList wt)
         {
+            WatchList result = null;
             lock (NameToListLUT)
             {
                 if (NameToListLUT.ContainsKey(wt.Name))
                 {
-                    WatchList result = NameToListLUT[wt.Name];
+                    result = NameToListLUT[wt.Name];
                     if (result is DynamicWatchList dwt) dwt.Stop();
                     NameToListLUT.Remove(wt.Name);
-                    return result;
                 }
-                return null;
             }
+            UpdateTime = DateTime.Now;
+            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            return result;
         }
-
-        public static List<T> WatchListByType<T>() where T : WatchList => List.Where(n => n is T list).Select(n => n as T).ToList();
-
-        public static void Start() => WatchListByType<DynamicWatchList>().ForEach(n => n.Start());
-
-        public static void Stop() => WatchListByType<DynamicWatchList>().ForEach(n => n.Stop());
 
         public static void Clear()
         {
@@ -85,9 +90,20 @@ namespace Pacmio
                 Stop();
                 NameToListLUT.Clear();
             }
+
+            UpdateTime = DateTime.Now;
+            OnUpdateHandler?.Invoke(0, UpdateTime, "");
         }
 
+        public static List<T> WatchListByType<T>() where T : WatchList => List.Where(n => n is T list).Select(n => n as T).ToList();
 
+        public static void Start() => WatchListByType<DynamicWatchList>().ForEach(n => n.Start());
+
+        public static void Stop() => WatchListByType<DynamicWatchList>().ForEach(n => n.Stop());
+
+        public static DateTime UpdateTime { get; private set; }
+
+        public static event StatusEventHandler OnUpdateHandler;
 
     }
 }

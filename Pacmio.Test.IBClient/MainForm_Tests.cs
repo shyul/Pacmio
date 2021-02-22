@@ -43,86 +43,29 @@ namespace TestClient
             }
         }
 
-        public void NetClientOnConnectedHandler(ConnectionStatus status, DateTime time, string msg)
+        public void NetClientOnConnectHandler(ConnectionStatus status, DateTime time, string msg)
         {
-            Task UpdateUI = new Task(() =>
+            Task.Run(() =>
             {
-                Invoke((MethodInvoker)delegate
+                this?.Invoke(() =>
                 {
                     ToggleConnect();
                 });
             });
-            UpdateUI.Start();
+
         }
 
-        public void AccountUpdatedHandler(int status, DateTime time, string msg)
+        public void AccountUpdateHandler(int status, DateTime time, string msg)
         {
-            Task UpdateUI = new Task(() =>
+            Task.Run(() =>
             {
-                Invoke((MethodInvoker)delegate
+                this?.Invoke(() =>
                 {
                     UpdateAccountList();
                     tabAccount.Invalidate(true);
                 });
             });
-            UpdateUI.Start();
-        }
-        /*
-        public void PositionUpdatedHandler(int status, DateTime time, string msg)
-        {
-            Task UpdateUI = new Task(() => {
-                Invoke((MethodInvoker)delegate {
 
-                    lock (AccountManager.List)
-                    {
-
-
-
-                        PositionsGrid.Rows.Clear();
-                        int i = 0;
-                        foreach (InteractiveBrokersAccount ac in AccountManager.List)
-                        {
-                            Console.WriteLine(ac.AccountId + " ac.Positions.Count = " + ac.Positions.Count);
-                            foreach (Contract c in ac.Positions.Keys) 
-                            {
-                                var pos = ac.Positions[c];
-
-                                PositionsGrid.Rows.Add(1);
-                                PositionsGrid[0, i].Value = c.Name + " @ " + c.Exchange;
-                                PositionsGrid[1, i].Value = ac.AccountId;
-                                PositionsGrid[2, i].Value = pos.Quantity;
-                                PositionsGrid[3, i].Value = pos.AveragePrice;
-                                PositionsGrid[4, i].Value = pos.Value;
-                                i++;
-                            }
-                        }
-                    }
-                    //tabAccount.Invalidate(true);
-                });
-            });
-            UpdateUI.Start();
-        }
-        */
-
-
-        public void TradeTableHandler(int status, DateTime time, string msg)
-        {
-            Task UpdateUI = new Task(() =>
-            {
-                Invoke((MethodInvoker)delegate
-                {
-
-                    if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
-                    {
-                        string execId = msg;
-                        TradeInfo ti = TradeManager.GetTradeByExecId(execId);
-
-                        if (!(ti is null))
-                            TradeTest.UpdateTable(ti);
-                    }
-                });
-            });
-            UpdateUI.Start();
         }
 
         public void UpdateAccountList()
@@ -173,6 +116,87 @@ namespace TestClient
 
             TreeViewAccount.ExpandAll();
         }
+
+        public void WatchListUpdateHandler(int status, DateTime time, string msg)
+        {
+            Task.Run(() =>
+            {
+                this?.Invoke(() =>
+                {
+                    CheckedListBoxWatchLists.Items.Clear();
+                    foreach(WatchList wt in WatchListManager.List) 
+                    {
+                        string name = wt.Name;
+                        bool isRunning = wt is DynamicWatchList dwt ? dwt.IsRunning : false;
+
+                        CheckedListBoxWatchLists.Items.Add(name, isRunning);
+                    }
+
+                    CheckedListBoxWatchLists.Invalidate(true);
+                });
+            });
+        }
+
+        /*
+        public void PositionUpdatedHandler(int status, DateTime time, string msg)
+        {
+            Task UpdateUI = new Task(() => {
+                Invoke((MethodInvoker)delegate {
+
+                    lock (AccountManager.List)
+                    {
+
+
+
+                        PositionsGrid.Rows.Clear();
+                        int i = 0;
+                        foreach (InteractiveBrokersAccount ac in AccountManager.List)
+                        {
+                            Console.WriteLine(ac.AccountId + " ac.Positions.Count = " + ac.Positions.Count);
+                            foreach (Contract c in ac.Positions.Keys) 
+                            {
+                                var pos = ac.Positions[c];
+
+                                PositionsGrid.Rows.Add(1);
+                                PositionsGrid[0, i].Value = c.Name + " @ " + c.Exchange;
+                                PositionsGrid[1, i].Value = ac.AccountId;
+                                PositionsGrid[2, i].Value = pos.Quantity;
+                                PositionsGrid[3, i].Value = pos.AveragePrice;
+                                PositionsGrid[4, i].Value = pos.Value;
+                                i++;
+                            }
+                        }
+                    }
+                    //tabAccount.Invalidate(true);
+                });
+            });
+            UpdateUI.Start();
+        }
+        */
+
+
+        public void TradeUpdateHandler(int status, DateTime time, string msg)
+        {
+            Task UpdateUI = new Task(() =>
+            {
+                //Invoke((MethodInvoker)delegate
+                this?.Invoke(() =>
+                {
+
+                    if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
+                    {
+                        string execId = msg;
+                        TradeInfo ti = TradeManager.GetTradeByExecId(execId);
+
+                        if (!(ti is null))
+                            TradeTest.UpdateTable(ti);
+                    }
+                });
+            });
+            UpdateUI.Start();
+        }
+
+
 
         public void ToggleConnect()
         {

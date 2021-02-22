@@ -21,18 +21,6 @@ namespace Pacmio
         public const string StopLossOrderDescription = "Stop Loss";
         public const string ProfitTakerOrderDescription = "Profit Taker";
 
-        /*
-        public static Dictionary<PositionInfo, OrderInfo> PositionToOrderInfoLUT { get; } = new Dictionary<PositionInfo, OrderInfo>();
-
-        public static OrderInfo GetOrderInfoBy(AccountInfo ac, Contract c) 
-        {
-            PositionInfo ps = ac.GetOrCreatePositionByContract(c);
-            if (PositionToOrderInfoLUT.ContainsKey(ps))
-                return PositionToOrderInfoLUT[ps];
-            else
-                return null;
-        }*/
-
         /// <summary>
         /// 
         /// </summary>

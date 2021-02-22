@@ -92,12 +92,12 @@ namespace Pacmio
 
         public static DateTime UpdateTime { get; set; }
 
-        public static event StatusEventHandler UpdatedHandler;
+        public static event StatusEventHandler OnUpdateHandler;
 
         public static void Update(int statusCode, string message = "")
         {
             UpdateTime = DateTime.Now;
-            UpdatedHandler?.Invoke(statusCode, UpdateTime, message);
+            OnUpdateHandler?.Invoke(statusCode, UpdateTime, message);
         }
 
 

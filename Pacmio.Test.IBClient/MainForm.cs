@@ -66,24 +66,17 @@ namespace TestClient
         {
             InitializeComponent();
 
-
-            /*
-            ContractTest.InitializeTable(GridViewContractSearchResult);
-            OrderTest.InitializeTable(GridViewAllOrders);
-            TradeTest.InitializeTable(GridViewTradeTable);
-
-            */
-
-            AccountPositionManager.UpdatedHandler += AccountUpdatedHandler;
+            AccountPositionManager.OnUpdateHandler += AccountUpdateHandler;
             OldWatchListManager.Add(MarketDataGridView);
 
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
             UpdateAccountList();
             ToggleConnect();
 
-            Root.OnNetConnectedHandler += NetClientOnConnectedHandler;
-
-            TradeManager.UpdatedHandler += TradeTableHandler;
+            Root.OnNetConnectHandler += NetClientOnConnectHandler;
+            TradeManager.OnUpdateHandler += TradeUpdateHandler;
+            WatchListManager.OnUpdateHandler += WatchListUpdateHandler;
+            
 
             Progress = new Progress<float>(percent =>
             {
@@ -450,30 +443,7 @@ namespace TestClient
         private void BtnRequestScanner_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-
-            InteractiveBrokerWatchList wcl = new InteractiveBrokerWatchList("Most Active", 100)
-            {
-                ScannerType = Pacmio.IB.ScannerType.MOST_ACTIVE, //  "MOST_ACTIVE",
-                Price = (10, 100),
-                VolumeMinimum = 1e7,
-                MarketCap = (1e8, double.NaN),
-                ExtraConfig = "stkTypes=inc:CORP",
-            };
-
-            //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-            //FilterOptions = "priceAbove=5;priceBelow=300;avgVolumeAbove=10000000;marketCapAbove1e6=10000;stkTypes=inc:CORP;"
-            //FilterOptions = "openGapPercAbove=1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-            //FilterOptions = "openGapPercBelow=-1;priceAbove=5;priceBelow=50;avgVolumeAbove=10000;marketCapAbove1e6=100;marketCapBelow1e6=100000;stkTypes=inc:CORP;"
-            //FilterOptions = "priceAbove=10;priceBelow=100;avgVolumeAbove=10000000;marketCapAbove1e6=5000;marketCapBelow1e6=20000;stkTypes=inc:CORP;"
-
-            wcl = WatchListManager.Add(wcl);
-
-            wcl.Start();
-
-
-            //ScannerManager.GetOrAdd(info_MOST_ACTIVE);
-            //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_GAIN);
-            //ScannerList.GetOrAdd(info_TOP_OPEN_PERC_LOSE);
+            WatchListTest.AddIBMostActive();
         }
 
         private void BtnCancelAllScanner_Click(object sender, EventArgs e)
@@ -832,49 +802,10 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            var SymbolList = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Test Static WatchList" };
             TextBoxMultiContracts.Text = symbolText;
-            Console.WriteLine("SymbolList.Count() = " + SymbolList.Count);
-            var list = ContractManager.GetList(SymbolList.Where(n => n.Length > 0), "US");
 
-            HashSet<string> existingSymbols = new HashSet<string>();
-            var existingSymbolsArray = list.Select(n => n.Name);
-
-            foreach (string symbol in existingSymbolsArray)
-            {
-                existingSymbols.CheckAdd(symbol);
-            }
-
-            var non_existing_symbols = SymbolList.Where(n => !existingSymbols.Contains(n));
-
-            foreach (string s in non_existing_symbols)
-            {
-                Console.WriteLine("Can't find: " + s);
-            }
-
-            //var list = ContractList.Values.Where(n => SymbolList.Contains(n.Name));
-            //var list = ContractList.Values.Where(n => n.Name == "AAPL");
-            Console.WriteLine("ContractList.Values.Count() = " + ContractManager.Values.Count());
-            Console.WriteLine("list.Count() = " + list.Count());
-
-            /*
-            string[] symbolString = TextBoxSymbols.Text.CsvReadFields();
-            HashSet<string> symbols = new HashSet<string>();
-
-            foreach(string s in symbolString) 
-            {
-                string st = s.TrimCsvValueField();
-
-                if (!string.IsNullOrWhiteSpace(st)) 
-                {
-                    symbols.CheckAdd("\"" + st + "\"");
-                }
-           
-            }
-
-            string rectified = symbols.ToString(", ");
-
-            TextBoxSymbols.Text = rectified;*/
+            WatchListManager.Add(wt);
         }
 
         #endregion Contract Settings

@@ -19,7 +19,24 @@ namespace Pacmio
 
         public StaticWatchList(IEnumerable<string> list, string countryCode = "US", CancellationTokenSource cts = null, IProgress<float> progress = null) :
             this(ContractManager.GetOrFetch(list, countryCode, cts, progress))
-        { }
+        {
+            Console.WriteLine("Count() = " + Contracts.Count());
+
+            HashSet<string> existingSymbols = new HashSet<string>();
+            var existingSymbolsArray = Contracts.Select(n => n.Name);
+
+            foreach (string symbol in existingSymbolsArray)
+            {
+                existingSymbols.CheckAdd(symbol);
+            }
+
+            var non_existing_symbols = list.Where(n => !existingSymbols.Contains(n));
+
+            foreach (string s in non_existing_symbols)
+            {
+                Console.WriteLine("Can't find: " + s);
+            }
+        }
 
         public StaticWatchList(ref string csvList) : this(GetSymbolListFromCsv(ref csvList)) { }
 

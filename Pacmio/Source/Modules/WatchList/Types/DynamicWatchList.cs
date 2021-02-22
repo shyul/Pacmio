@@ -135,7 +135,8 @@ namespace Pacmio
             lock (m_Contracts)
             {
                 m_Contracts = list;
-                UpdatedHandler?.Invoke(0, UpdateTime = DateTime.Now, "");
+                UpdateTime = DateTime.Now;
+                UpdatedHandler?.Invoke(0, UpdateTime, "");
             }
         }
 

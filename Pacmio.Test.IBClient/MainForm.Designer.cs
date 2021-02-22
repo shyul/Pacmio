@@ -74,6 +74,10 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.BtnMarketDataSnapshotMultiContracts = new System.Windows.Forms.Button();
+            this.BtnSnapshotContract = new System.Windows.Forms.Button();
+            this.BtnRequestNewsArticle = new System.Windows.Forms.Button();
+            this.BtnRequestNewsProvider = new System.Windows.Forms.Button();
             this.BtnRequestMarketDepthExch = new System.Windows.Forms.Button();
             this.BtnSmartComponents = new System.Windows.Forms.Button();
             this.BtnRequestTIProAlert = new System.Windows.Forms.Button();
@@ -193,10 +197,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnRequestNewsProvider = new System.Windows.Forms.Button();
-            this.BtnRequestNewsArticle = new System.Windows.Forms.Button();
-            this.BtnSnapshotContract = new System.Windows.Forms.Button();
-            this.BtnMarketDataSnapshotMultiContracts = new System.Windows.Forms.Button();
+            this.CheckedListBoxWatchLists = new System.Windows.Forms.CheckedListBox();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -659,6 +660,7 @@ namespace TestClient
             // 
             // tabMarketData
             // 
+            this.tabMarketData.Controls.Add(this.CheckedListBoxWatchLists);
             this.tabMarketData.Controls.Add(this.BtnMarketDataSnapshotMultiContracts);
             this.tabMarketData.Controls.Add(this.BtnSnapshotContract);
             this.tabMarketData.Controls.Add(this.BtnRequestNewsArticle);
@@ -686,6 +688,46 @@ namespace TestClient
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
             // 
+            // BtnMarketDataSnapshotMultiContracts
+            // 
+            this.BtnMarketDataSnapshotMultiContracts.Location = new System.Drawing.Point(435, 40);
+            this.BtnMarketDataSnapshotMultiContracts.Name = "BtnMarketDataSnapshotMultiContracts";
+            this.BtnMarketDataSnapshotMultiContracts.Size = new System.Drawing.Size(161, 23);
+            this.BtnMarketDataSnapshotMultiContracts.TabIndex = 58;
+            this.BtnMarketDataSnapshotMultiContracts.Text = "Snapshot Multi Contract";
+            this.BtnMarketDataSnapshotMultiContracts.UseVisualStyleBackColor = true;
+            this.BtnMarketDataSnapshotMultiContracts.Click += new System.EventHandler(this.BtnMarketDataSnapshotMultiContracts_Click);
+            // 
+            // BtnSnapshotContract
+            // 
+            this.BtnSnapshotContract.Location = new System.Drawing.Point(435, 11);
+            this.BtnSnapshotContract.Name = "BtnSnapshotContract";
+            this.BtnSnapshotContract.Size = new System.Drawing.Size(161, 23);
+            this.BtnSnapshotContract.TabIndex = 57;
+            this.BtnSnapshotContract.Text = "Snapshot Contract";
+            this.BtnSnapshotContract.UseVisualStyleBackColor = true;
+            this.BtnSnapshotContract.Click += new System.EventHandler(this.BtnSnapshotContract_Click);
+            // 
+            // BtnRequestNewsArticle
+            // 
+            this.BtnRequestNewsArticle.Location = new System.Drawing.Point(148, 363);
+            this.BtnRequestNewsArticle.Name = "BtnRequestNewsArticle";
+            this.BtnRequestNewsArticle.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestNewsArticle.TabIndex = 56;
+            this.BtnRequestNewsArticle.Text = "Request New Article";
+            this.BtnRequestNewsArticle.UseVisualStyleBackColor = true;
+            this.BtnRequestNewsArticle.Click += new System.EventHandler(this.BtnRequestNewsArticle_Click);
+            // 
+            // BtnRequestNewsProvider
+            // 
+            this.BtnRequestNewsProvider.Location = new System.Drawing.Point(145, 292);
+            this.BtnRequestNewsProvider.Name = "BtnRequestNewsProvider";
+            this.BtnRequestNewsProvider.Size = new System.Drawing.Size(162, 23);
+            this.BtnRequestNewsProvider.TabIndex = 55;
+            this.BtnRequestNewsProvider.Text = "Request News Provider";
+            this.BtnRequestNewsProvider.UseVisualStyleBackColor = true;
+            this.BtnRequestNewsProvider.Click += new System.EventHandler(this.BtnRequestNewProvider_Click);
+            // 
             // BtnRequestMarketDepthExch
             // 
             this.BtnRequestMarketDepthExch.Location = new System.Drawing.Point(145, 263);
@@ -708,7 +750,7 @@ namespace TestClient
             // 
             // BtnRequestTIProAlert
             // 
-            this.BtnRequestTIProAlert.Location = new System.Drawing.Point(506, 375);
+            this.BtnRequestTIProAlert.Location = new System.Drawing.Point(416, 363);
             this.BtnRequestTIProAlert.Name = "BtnRequestTIProAlert";
             this.BtnRequestTIProAlert.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestTIProAlert.TabIndex = 52;
@@ -718,7 +760,7 @@ namespace TestClient
             // 
             // BtnRequestTIProScanner
             // 
-            this.BtnRequestTIProScanner.Location = new System.Drawing.Point(506, 346);
+            this.BtnRequestTIProScanner.Location = new System.Drawing.Point(416, 334);
             this.BtnRequestTIProScanner.Name = "BtnRequestTIProScanner";
             this.BtnRequestTIProScanner.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestTIProScanner.TabIndex = 51;
@@ -738,7 +780,7 @@ namespace TestClient
             // 
             // BtnCancelAllScanner
             // 
-            this.BtnCancelAllScanner.Location = new System.Drawing.Point(506, 274);
+            this.BtnCancelAllScanner.Location = new System.Drawing.Point(416, 262);
             this.BtnCancelAllScanner.Name = "BtnCancelAllScanner";
             this.BtnCancelAllScanner.Size = new System.Drawing.Size(162, 23);
             this.BtnCancelAllScanner.TabIndex = 9;
@@ -767,7 +809,7 @@ namespace TestClient
             // 
             // BtnRequestScannerParameter
             // 
-            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(506, 245);
+            this.BtnRequestScannerParameter.Location = new System.Drawing.Point(416, 233);
             this.BtnRequestScannerParameter.Name = "BtnRequestScannerParameter";
             this.BtnRequestScannerParameter.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestScannerParameter.TabIndex = 8;
@@ -794,11 +836,11 @@ namespace TestClient
             // 
             // BtnRequestScanner
             // 
-            this.BtnRequestScanner.Location = new System.Drawing.Point(506, 216);
+            this.BtnRequestScanner.Location = new System.Drawing.Point(416, 204);
             this.BtnRequestScanner.Name = "BtnRequestScanner";
             this.BtnRequestScanner.Size = new System.Drawing.Size(162, 23);
             this.BtnRequestScanner.TabIndex = 6;
-            this.BtnRequestScanner.Text = "Request Scanner";
+            this.BtnRequestScanner.Text = "Request Sample IB Scanner";
             this.BtnRequestScanner.UseVisualStyleBackColor = true;
             this.BtnRequestScanner.Click += new System.EventHandler(this.BtnRequestScanner_Click);
             // 
@@ -1928,45 +1970,13 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnRequestNewsProvider
+            // CheckedListBoxWatchLists
             // 
-            this.BtnRequestNewsProvider.Location = new System.Drawing.Point(145, 292);
-            this.BtnRequestNewsProvider.Name = "BtnRequestNewsProvider";
-            this.BtnRequestNewsProvider.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestNewsProvider.TabIndex = 55;
-            this.BtnRequestNewsProvider.Text = "Request News Provider";
-            this.BtnRequestNewsProvider.UseVisualStyleBackColor = true;
-            this.BtnRequestNewsProvider.Click += new System.EventHandler(this.BtnRequestNewProvider_Click);
-            // 
-            // BtnRequestNewsArticle
-            // 
-            this.BtnRequestNewsArticle.Location = new System.Drawing.Point(148, 363);
-            this.BtnRequestNewsArticle.Name = "BtnRequestNewsArticle";
-            this.BtnRequestNewsArticle.Size = new System.Drawing.Size(162, 23);
-            this.BtnRequestNewsArticle.TabIndex = 56;
-            this.BtnRequestNewsArticle.Text = "Request New Article";
-            this.BtnRequestNewsArticle.UseVisualStyleBackColor = true;
-            this.BtnRequestNewsArticle.Click += new System.EventHandler(this.BtnRequestNewsArticle_Click);
-            // 
-            // BtnSnapshotContract
-            // 
-            this.BtnSnapshotContract.Location = new System.Drawing.Point(435, 11);
-            this.BtnSnapshotContract.Name = "BtnSnapshotContract";
-            this.BtnSnapshotContract.Size = new System.Drawing.Size(161, 23);
-            this.BtnSnapshotContract.TabIndex = 57;
-            this.BtnSnapshotContract.Text = "Snapshot Contract";
-            this.BtnSnapshotContract.UseVisualStyleBackColor = true;
-            this.BtnSnapshotContract.Click += new System.EventHandler(this.BtnSnapshotContract_Click);
-            // 
-            // BtnMarketDataSnapshotMultiContracts
-            // 
-            this.BtnMarketDataSnapshotMultiContracts.Location = new System.Drawing.Point(435, 40);
-            this.BtnMarketDataSnapshotMultiContracts.Name = "BtnMarketDataSnapshotMultiContracts";
-            this.BtnMarketDataSnapshotMultiContracts.Size = new System.Drawing.Size(161, 23);
-            this.BtnMarketDataSnapshotMultiContracts.TabIndex = 58;
-            this.BtnMarketDataSnapshotMultiContracts.Text = "Snapshot Multi Contract";
-            this.BtnMarketDataSnapshotMultiContracts.UseVisualStyleBackColor = true;
-            this.BtnMarketDataSnapshotMultiContracts.Click += new System.EventHandler(this.BtnMarketDataSnapshotMultiContracts_Click);
+            this.CheckedListBoxWatchLists.FormattingEnabled = true;
+            this.CheckedListBoxWatchLists.Location = new System.Drawing.Point(673, 186);
+            this.CheckedListBoxWatchLists.Name = "CheckedListBoxWatchLists";
+            this.CheckedListBoxWatchLists.Size = new System.Drawing.Size(190, 208);
+            this.CheckedListBoxWatchLists.TabIndex = 60;
             // 
             // MainForm
             // 
@@ -2189,5 +2199,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnRequestNewsArticle;
         private System.Windows.Forms.Button BtnSnapshotContract;
         private System.Windows.Forms.Button BtnMarketDataSnapshotMultiContracts;
+        private System.Windows.Forms.CheckedListBox CheckedListBoxWatchLists;
     }
 }

@@ -38,10 +38,10 @@ namespace Pacmio
 
         public static void NetConnectUpdate(ConnectionStatus status, DateTime time, string message = "")
         {
-            OnNetConnectedHandler?.Invoke(status, time, message);
+            OnNetConnectHandler?.Invoke(status, time, message);
         }
 
-        public static event ConnectionStatusEventHandler OnNetConnectedHandler;
+        public static event ConnectionStatusEventHandler OnNetConnectHandler;
 
         public static bool NetConnected => IB.Client.Connected;// && TIProData.Client.Connected;
 
@@ -73,7 +73,7 @@ namespace Pacmio
                 timeout = IB.Client.Timeout + 2000;
                 int j = 0;
 
-                OnNetConnectedHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
+                OnNetConnectHandler += (ConnectionStatus status, DateTime time, string msg) => { Console.WriteLine("IBClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg); };
                 IB.Client.Connect(Settings.IBClientId, Settings.IBServerPort, Settings.IBServerAddress, Settings.IBTimeout);
 
                 while (!IB.Client.Connected)
