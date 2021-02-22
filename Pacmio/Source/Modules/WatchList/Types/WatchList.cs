@@ -18,18 +18,30 @@ namespace Pacmio
     {
         public virtual string Name { get; set; }
 
-        public virtual IEnumerable<Contract> Contracts { get; protected set; }
+        public virtual List<Contract> Contracts { get; protected set; }
 
         public virtual int NumberOfRows { get => Contracts.Count(); set { } }
 
         public abstract string ConfigurationString { get; }
 
-        public virtual string Description => MethodBase.GetCurrentMethod().DeclaringType.Name + " | " + ConfigurationString;
+        public virtual string Description => Name + " | " + ConfigurationString;
 
         public override string ToString() => Description;
 
+
+        public void Update() 
+        {
+            UpdateTime = DateTime.Now;
+            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+        }
+
+        public DateTime UpdateTime { get; protected set; }
+
+        public event StatusEventHandler OnUpdateHandler;
+
         #region Equality
-        public bool Equals(WatchList other) => other is WatchList wt && GetType() == wt.GetType() && Description == wt.Description;
+
+        public virtual bool Equals(WatchList other) => other is WatchList wt && GetType() == wt.GetType() && Description == wt.Description;
 
         public static bool operator ==(WatchList s1, WatchList s2) => s1.Equals(s2);
         public static bool operator !=(WatchList s1, WatchList s2) => !s1.Equals(s2);

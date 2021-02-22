@@ -19,12 +19,15 @@ namespace Pacmio
             if (!List.Contains(gv))
             {
                 List.Add(gv);
-                //gv.
+                Root.Form.AddForm(DockStyle.Fill, 0, gv);
             }
             gv.ReadyToShow = true;
-            Root.Form.AddForm(DockStyle.Fill, 0, gv);
+     
         }
 
+        /// <summary>
+        /// TODO: change to WatchList -> GridViewLUT
+        /// </summary>
         private static List<MarketDataGridView> List { get; } = new List<MarketDataGridView>();
 
         /// <summary>

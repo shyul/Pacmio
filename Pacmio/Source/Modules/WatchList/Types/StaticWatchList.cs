@@ -15,10 +15,20 @@ namespace Pacmio
 {
     public class StaticWatchList : WatchList
     {
-        public StaticWatchList(IEnumerable<Contract> list) => Contracts = list;
+        public StaticWatchList(string name) 
+        { 
+            Name = name;
+            Contracts = new List<Contract>();
+        }
 
-        public StaticWatchList(IEnumerable<string> list, string countryCode = "US", CancellationTokenSource cts = null, IProgress<float> progress = null) :
-            this(ContractManager.GetOrFetch(list, countryCode, cts, progress))
+        public StaticWatchList(string name, List<Contract> list)
+        {
+            Name = name;
+            Contracts = list; 
+        }
+
+        public StaticWatchList(string name, IEnumerable<string> list, string countryCode = "US", CancellationTokenSource cts = null, IProgress<float> progress = null) :
+            this(name, ContractManager.GetOrFetch(list, countryCode, cts, progress).ToList())
         {
             Console.WriteLine("Count() = " + Contracts.Count());
 
@@ -38,9 +48,29 @@ namespace Pacmio
             }
         }
 
-        public StaticWatchList(ref string csvList) : this(GetSymbolListFromCsv(ref csvList)) { }
+        public StaticWatchList(string name, ref string csvList) : this(name, GetSymbolListFromCsv(ref csvList)) { }
+
+        public void Add(Contract c)
+        {
+            if (Contracts is null) Contracts = new List<Contract>();
+            lock (Contracts)
+            {
+                if (Contracts.CheckAdd(c)) Update();
+            }
+        }
+
+        public void Remove(Contract c)
+        {
+            if (Contracts is null) return;
+            lock (Contracts)
+            {
+                if (Contracts.CheckRemove(c)) Update();
+            }
+        }
 
         public override string ConfigurationString => CollectionTool.ToString(Contracts, ',');
+
+        public override bool Equals(WatchList other) => other is StaticWatchList wt && Name == wt.Name;
 
         public static HashSet<string> GetSymbolListFromCsv(ref string csvList)
         {

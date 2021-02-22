@@ -60,7 +60,7 @@ namespace TestClient
 
         int MainProgBarValue = 0;
 
-      
+
 
         //public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data");
 
@@ -78,7 +78,7 @@ namespace TestClient
             Root.OnNetConnectHandler += NetClientOnConnectHandler;
             TradeManager.OnUpdateHandler += TradeUpdateHandler;
             WatchListManager.OnUpdateHandler += WatchListUpdateHandler;
-            
+
 
             Progress = new Progress<float>(percent =>
             {
@@ -804,7 +804,7 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Test Static WatchList" };
+            StaticWatchList wt = new StaticWatchList("Test Static WatchList", ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
 
             WatchListManager.Add(wt);
@@ -820,7 +820,9 @@ namespace TestClient
             {
                 if (md is StockData sd)
                 {
-                    // MarketDataGridView.Add(sd);
+                    StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
+                    wt.Add(sd.Contract);
+                    MarketDataGridViewManager.Add(new MarketDataGridView(wt));
                 }
 
             }
@@ -833,7 +835,9 @@ namespace TestClient
 
             if (ContractTest.ActiveContract is Stock s)
             {
-                // MarketDataGridView.Add(s.StockData);
+                StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
+                wt.Add(s);
+                MarketDataGridViewManager.Add(new MarketDataGridView(wt));
             }
 
 
@@ -847,9 +851,11 @@ namespace TestClient
 
             if (ContractTest.ActiveContract is Stock s)
             {
-                //MarketDataGridView.Add(s.StockData);
+                StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
+                wt.Add(s);
+                MarketDataGridViewManager.Add(new MarketDataGridView(wt));
             }
-          
+
             Root.Form?.Show();
         }
 
@@ -857,10 +863,10 @@ namespace TestClient
         {
             //string tickList = TextBoxGenericTickList.Text; // "236,mdoff,292";
             string symbolText = TextBoxMultiContracts.Text;
-            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Default" };
+            StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Default", ref symbolText));
             TextBoxMultiContracts.Text = symbolText;
 
-            WatchListManager.Add(wt);
+    
             MarketDataGridViewManager.Add(new MarketDataGridView(wt));
 
             Task.Run(() => {
@@ -877,7 +883,7 @@ namespace TestClient
         private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            StaticWatchList wt = new StaticWatchList(ref symbolText) { Name = "Default" };
+            StaticWatchList wt = new StaticWatchList("Default", ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
 
             WatchListManager.Add(wt);

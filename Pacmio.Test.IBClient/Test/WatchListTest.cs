@@ -25,7 +25,7 @@ namespace TestClient
 
         public static InteractiveBrokerWatchList AddIBMostActive() 
         {
-            InteractiveBrokerWatchList wcl = new InteractiveBrokerWatchList("Most Active Sample", 100)
+            InteractiveBrokerWatchList wt = new InteractiveBrokerWatchList("Most Active Sample", 100)
             {
                 ScannerType = Pacmio.IB.ScannerType.MOST_ACTIVE, //  "MOST_ACTIVE",
                 Price = (10, 100),
@@ -34,17 +34,19 @@ namespace TestClient
                 ExtraConfig = "stkTypes=inc:CORP",
             };
 
-            wcl = WatchListManager.Add(wcl);
-            wcl.Start();
+            Console.Write(wt.Name + " | " + wt.ToString());
 
-            return wcl;
+            wt = WatchListManager.Add(wt);
+            wt.Start();
+
+            return wt;
         }
 
         public static TopListHandler AddTradeIdeasTopList(string name = "Gappers List", double minPrice = 1.5, double maxPrice = 25, double minVolume = 50e3, double minPercent = 5, double minATR = 0.25)
         {
             double percent = Math.Abs(minPercent);
 
-          TopListHandler tls = new TopListHandler(name)
+          TopListHandler wt = new TopListHandler(name)
             {
                 Price = (minPrice, maxPrice),
                 Volume = (minVolume, double.NaN),
@@ -52,12 +54,12 @@ namespace TestClient
                 AverageTrueRange = (minATR, double.NaN),
             };
 
-            return WatchListManager.Add(tls);
+            return WatchListManager.Add(wt);
         }
 
         public static AlertHandler AddTradeIdeasAlert()
         {
-            AlertHandler tal = new AlertHandler("Low Float MOMO")
+            AlertHandler wt = new AlertHandler("Low Float MOMO")
             {
                 Price = (1, double.NaN),
                 GainPercent = (1, double.NaN),
@@ -67,7 +69,7 @@ namespace TestClient
                 Float = (double.NaN, 25e6),
             };
 
-            return WatchListManager.Add(tal);
+            return WatchListManager.Add(wt);
         }
     }
 }

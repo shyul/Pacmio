@@ -110,38 +110,36 @@ namespace Pacmio
                 if (m_Contracts is null) m_Contracts = new List<Contract>();
                 lock (m_Contracts)
                 {
-                    return m_Contracts.Count();
+                    return m_Contracts.Count;
                 }
             }
         }
 
-        public override IEnumerable<Contract> Contracts
+        public override List<Contract> Contracts
         {
             get
             {
                 if (m_Contracts is null) m_Contracts = new List<Contract>();
                 lock (m_Contracts)
                 {
-                    return m_Contracts.ToArray();
+                    return m_Contracts;
                 }
             }
         }
 
-        protected IEnumerable<Contract> m_Contracts = null;
+        protected List<Contract> m_Contracts = null;
 
         public void Update(IEnumerable<Contract> list)
         {
             if (m_Contracts is null) m_Contracts = new List<Contract>();
             lock (m_Contracts)
             {
-                m_Contracts = list;
-                UpdateTime = DateTime.Now;
-                OnUpdateHandler?.Invoke(0, UpdateTime, "");
+                m_Contracts = new List<Contract>(list);
             }
+
+            Update();
         }
 
-        public DateTime UpdateTime { get; protected set; }
-
-        public event StatusEventHandler OnUpdateHandler;
+        //public override event StatusEventHandler OnUpdateHandler;
     }
 }

@@ -14,20 +14,13 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class MarketDataGridView : GridWidget<StockData>
+    public class MarketDataGridView : GridWidget<StockData>, IEquatable<MarketDataGridView>
     {
         public MarketDataGridView(WatchList wt) : base(wt.Name)
         {
             WatchList = wt;
-
-            if (WatchList is DynamicWatchList dwt)
-            {
-                dwt.OnUpdateHandler += DynamicUpdateHandler;
-            }
-            else
-            {
-                Update(WatchList.Contracts);
-            }
+            Update(WatchList.Contracts);
+            WatchList.OnUpdateHandler += DynamicUpdateHandler;
         }
 
         public WatchList WatchList { get; }
@@ -43,6 +36,19 @@ namespace Pacmio
             foreach (var s in rows) s.AddDataView(this);
             Update(rows);
         }
+
+        #region Equality
+
+        public bool Equals(MarketDataGridView other) => WatchList is WatchList wt && wt == other.WatchList;
+
+        public static bool operator ==(MarketDataGridView s1, MarketDataGridView s2) => s1.Equals(s2);
+        public static bool operator !=(MarketDataGridView s1, MarketDataGridView s2) => !s1.Equals(s2);
+
+        public override bool Equals(object other) => other is MarketDataGridView mdv ? Equals(mdv) : false;
+
+        public override int GetHashCode() => WatchList.GetHashCode();
+
+        #endregion Equality
 
         public Contract SelectedContract
         {
