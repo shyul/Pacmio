@@ -117,26 +117,50 @@ namespace Pacmio
 
 
         [IgnoreDataMember] // Initialize
-        public List<IDataView> DataViews { get; } = new List<IDataView>();
+        protected List<IDataView> DataViews { get; set; }
+
+        public void AddDataView(IDataView dv)
+        {
+            if (DataViews is null) DataViews = new List<IDataView>();
+            lock (DataViews)
+            {
+                DataViews.CheckAdd(dv);
+            }
+        }
+
+        public void RemoveDataView(IDataView dv)
+        {
+            if (DataViews is null) return;
+            lock (DataViews)
+            {
+                DataViews.CheckRemove(dv);
+            }
+        }
 
         [IgnoreDataMember]
-        public List<IMarketDataAnalysis> PositionAnalyses { get; } = new List<IMarketDataAnalysis>();
+        public List<IMarketDataAnalysis> PositionAnalyses { get; protected set; } = new List<IMarketDataAnalysis>();
 
         public void Update()
         {
             UpdateTime = DateTime.Now;
 
-            foreach (IMarketDataAnalysis idv in PositionAnalyses)
-            {
-                idv.Update();
-            }
+            if (PositionAnalyses is null)
+                PositionAnalyses = new List<IMarketDataAnalysis>();
 
-            foreach (IDataView idv in DataViews)
-            {
-                idv.DataIsUpdated();
-            }
+            lock (PositionAnalyses)
+                foreach (IMarketDataAnalysis idv in PositionAnalyses)
+                {
+                    idv.Update();
+                }
 
+            if (DataViews is null)
+                DataViews = new List<IDataView>();
 
+            lock (DataViews)
+                foreach (IDataView idv in DataViews)
+                {
+                    idv.DataIsUpdated();
+                }
         }
 
         [DataMember]

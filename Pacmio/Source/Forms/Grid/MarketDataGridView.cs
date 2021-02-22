@@ -42,9 +42,7 @@ namespace Pacmio
                 newRows.AddRange(rows);
             }
             newRows.CheckAdd(s);
-            s.DataViews.CheckAdd(this);
-
-
+            s.AddDataView(this);
             Update(newRows);
         }
 
@@ -53,7 +51,7 @@ namespace Pacmio
             List<StockData> list = new List<StockData>();
             if (Rows is StockData[] rows) list.AddRange(rows);
             list.CheckRemove(s);
-            s.DataViews.Remove(this);
+            s.RemoveDataView(this);
             Update(list);
         }
 
