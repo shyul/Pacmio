@@ -57,7 +57,7 @@ namespace Pacmio
             lock (ExecIdToTradeLUT)
                 if (!ExecIdToTradeLUT.ContainsKey(execId))
                 {
-                    res = new TradeInfo(execId);
+                    res = new TradeInfo(execId) { ExecId = execId };
                     ExecIdToTradeLUT[execId] = res;
                     dataChanged = true;
                 }

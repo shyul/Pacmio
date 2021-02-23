@@ -144,11 +144,11 @@ namespace Pacmio
                         }
                         return od;
                     }
-                    else if (PermIdToOrderLUT.ContainsKey(permId))
+                    else if (permId > 0)
                     {
-                        return PermIdToOrderLUT[permId];
+                        return GetOrCreateOrderByPermId(permId);
                     }
-                    else
+                    else 
                         return null;
                 }
             }
@@ -165,7 +165,7 @@ namespace Pacmio
             lock (PermIdToOrderLUT)
                 if (!PermIdToOrderLUT.ContainsKey(permId))
                 {
-                    res = new OrderInfo();
+                    res = new OrderInfo() { PermId = permId };
                     PermIdToOrderLUT[permId] = res;
                 }
                 else

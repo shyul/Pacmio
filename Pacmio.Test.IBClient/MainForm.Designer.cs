@@ -74,6 +74,7 @@ namespace TestClient
             this.TextBoxSearchSymbol = new System.Windows.Forms.TextBox();
             this.BtnSearchSymbol = new System.Windows.Forms.Button();
             this.tabMarketData = new System.Windows.Forms.TabPage();
+            this.CheckedListBoxWatchLists = new System.Windows.Forms.CheckedListBox();
             this.BtnMarketDataSnapshotMultiContracts = new System.Windows.Forms.Button();
             this.BtnSnapshotContract = new System.Windows.Forms.Button();
             this.BtnRequestNewsArticle = new System.Windows.Forms.Button();
@@ -197,7 +198,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.CheckedListBoxWatchLists = new System.Windows.Forms.CheckedListBox();
+            this.BtnRefreshOrderInfoGrid = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -688,6 +689,14 @@ namespace TestClient
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
             // 
+            // CheckedListBoxWatchLists
+            // 
+            this.CheckedListBoxWatchLists.FormattingEnabled = true;
+            this.CheckedListBoxWatchLists.Location = new System.Drawing.Point(673, 186);
+            this.CheckedListBoxWatchLists.Name = "CheckedListBoxWatchLists";
+            this.CheckedListBoxWatchLists.Size = new System.Drawing.Size(190, 208);
+            this.CheckedListBoxWatchLists.TabIndex = 60;
+            // 
             // BtnMarketDataSnapshotMultiContracts
             // 
             this.BtnMarketDataSnapshotMultiContracts.Location = new System.Drawing.Point(435, 40);
@@ -883,6 +892,7 @@ namespace TestClient
             // 
             // tabOrder
             // 
+            this.tabOrder.Controls.Add(this.BtnRefreshOrderInfoGrid);
             this.tabOrder.Controls.Add(this.BtnTestMassiveOrder);
             this.tabOrder.Controls.Add(this.GroupBoxOrderSetting);
             this.tabOrder.Controls.Add(this.GroupBoxPositions);
@@ -1970,13 +1980,15 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // CheckedListBoxWatchLists
+            // BtnRefreshOrderInfoGrid
             // 
-            this.CheckedListBoxWatchLists.FormattingEnabled = true;
-            this.CheckedListBoxWatchLists.Location = new System.Drawing.Point(673, 186);
-            this.CheckedListBoxWatchLists.Name = "CheckedListBoxWatchLists";
-            this.CheckedListBoxWatchLists.Size = new System.Drawing.Size(190, 208);
-            this.CheckedListBoxWatchLists.TabIndex = 60;
+            this.BtnRefreshOrderInfoGrid.Location = new System.Drawing.Point(722, 108);
+            this.BtnRefreshOrderInfoGrid.Name = "BtnRefreshOrderInfoGrid";
+            this.BtnRefreshOrderInfoGrid.Size = new System.Drawing.Size(158, 23);
+            this.BtnRefreshOrderInfoGrid.TabIndex = 84;
+            this.BtnRefreshOrderInfoGrid.Text = "Refresh OrderInfo Grid";
+            this.BtnRefreshOrderInfoGrid.UseVisualStyleBackColor = true;
+            this.BtnRefreshOrderInfoGrid.Click += new System.EventHandler(this.BtnRefreshOrderInfoGrid_Click);
             // 
             // MainForm
             // 
@@ -2200,5 +2212,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnSnapshotContract;
         private System.Windows.Forms.Button BtnMarketDataSnapshotMultiContracts;
         private System.Windows.Forms.CheckedListBox CheckedListBoxWatchLists;
+        private System.Windows.Forms.Button BtnRefreshOrderInfoGrid;
     }
 }

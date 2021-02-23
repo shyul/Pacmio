@@ -9,6 +9,8 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using Xu;
+using Xu.GridView;
 
 namespace Pacmio
 {
@@ -26,7 +28,7 @@ namespace Pacmio
         /// <summary>
         /// The Host order identifier.
         /// </summary>
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("PermId"), GridColumnOrder(6), CellRenderer(typeof(NumberCellRenderer), 60)]
         public int PermId { get; set; } = -1;
 
         /// <summary>
@@ -46,10 +48,10 @@ namespace Pacmio
 
         #endregion Identification Numbers
 
-        [DataMember, Browsable(true)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Description"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100)]
         public string Description { get; set; }
 
-        [DataMember, Browsable(true)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("AccountId"), GridColumnOrder(1), CellRenderer(typeof(TextCellRenderer), 100)]
         public string AccountId { get; set; } = null;
 
         [IgnoreDataMember]
@@ -85,10 +87,10 @@ namespace Pacmio
         [IgnoreDataMember]
         private AccountInfo m_Account = null;
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("ConId"), GridColumnOrder(2), CellRenderer(typeof(NumberCellRenderer), 60)]
         public int ConId { get; set; } = -1;
 
-        [IgnoreDataMember]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
         public Contract Contract
         {
             get
@@ -123,7 +125,7 @@ namespace Pacmio
 
         #region Status
 
-        [DataMember]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 60)]
         public DateTime OrderTime { get; set; }
 
         [DataMember]

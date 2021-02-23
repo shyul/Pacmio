@@ -17,14 +17,15 @@ namespace Pacmio
     {
         public OrderInfoGridView() : base("Order Info")
         {
-            Rows = OrderManager.List;
+            //Rows = OrderManager.List;
             OrderManager.DataProvider.AddDataConsumer(this);
         }
 
+        /*
         public override void DataIsUpdated() 
         {
             Update(OrderManager.List);
             base.DataIsUpdated();
-        }
+        }*/
     }
 }

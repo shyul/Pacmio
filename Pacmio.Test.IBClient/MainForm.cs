@@ -1105,7 +1105,15 @@ namespace TestClient
             Pacmio.IB.Client.SendRequest_NewsArticle("BRFG", "BRFG$0d4d7115");
         }
 
+        private void BtnRefreshOrderInfoGrid_Click(object sender, EventArgs e)
+        {
+            foreach(OrderInfo od in OrderManager.List) 
+            {
+                Console.WriteLine("OrderInfo PermId = " + od.PermId + " | " + od.Contract + " | " + od.Status);
+            }
 
+            OrderInfoGridView.Update(OrderManager.List);
+        }
     }
     public static class DataGridHelper
     {
