@@ -52,15 +52,21 @@ namespace Pacmio
             if (string.IsNullOrWhiteSpace(execId))
                 throw new Exception("The execId has to be valid.");
 
+            TradeInfo res = null;
+            bool dataChanged = false;
             lock (ExecIdToTradeLUT)
                 if (!ExecIdToTradeLUT.ContainsKey(execId))
                 {
-                    TradeInfo ti = new TradeInfo(execId);
-                    ExecIdToTradeLUT[execId] = ti;
-                    return ti;
+                    res = new TradeInfo(execId);
+                    ExecIdToTradeLUT[execId] = res;
+                    dataChanged = true;
                 }
                 else
-                    return ExecIdToTradeLUT[execId];
+                    res = ExecIdToTradeLUT[execId];
+
+            if(dataChanged) DataProvider.DataIsUpdated();
+            return res;
+
         }
 
         public static TradeInfo GetTradeByExecId(string execId)
@@ -81,15 +87,7 @@ namespace Pacmio
 
         #region Data Events
 
-        public static DateTime UpdatedTime { get; set; }
-
-        public static event StatusEventHandler OnUpdateHandler;
-
-        public static void Update(int statusCode, string message = "")
-        {
-            UpdatedTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(statusCode, UpdatedTime, message);
-        }
+        public static SimpleDataProvider DataProvider { get; } = new SimpleDataProvider();
 
         #endregion Data Events
 
@@ -115,6 +113,7 @@ namespace Pacmio
                         ExecIdToTradeLUT[ti.ExecId] = ti;
                     });
                 }
+                DataProvider.DataIsUpdated();
             }
         }
 

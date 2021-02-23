@@ -175,26 +175,7 @@ namespace TestClient
         */
 
 
-        public void TradeUpdateHandler(int status, DateTime time, string msg)
-        {
-            Task UpdateUI = new Task(() =>
-            {
-                //Invoke((MethodInvoker)delegate
-                this?.Invoke(() =>
-                {
 
-                    if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
-                    {
-                        string execId = msg;
-                        TradeInfo ti = TradeManager.GetTradeByExecId(execId);
-
-                        if (!(ti is null))
-                            TradeTest.UpdateTable(ti);
-                    }
-                });
-            });
-            UpdateUI.Start();
-        }
 
 
 

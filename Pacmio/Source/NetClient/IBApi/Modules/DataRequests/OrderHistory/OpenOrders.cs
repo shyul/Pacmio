@@ -81,9 +81,15 @@ namespace Pacmio.IB
                 int conId = fields[2].ToInt32(-1);
 
                 if (od.ConId != conId) 
-                    throw new Exception("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
+                {
+                    //throw new Exception("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
+                    Console.WriteLine("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
+                }
+                    
 
-                int totalQuantity = fields[14].ToInt32(0);
+                od.ConId = conId;
+
+                double totalQuantity = fields[14].ToDouble();
                 od.Quantity = fields[13] == "BUY" ? totalQuantity : -totalQuantity;
 
                 od.Type = fields[15].ToOrderType();
@@ -229,7 +235,7 @@ namespace Pacmio.IB
 
             Console.WriteLine("\nParse Open Order End: " + fields.ToStringWithIndex());
             // TODO: fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion
-            //OrderManager.Update();
+            OrderManager.DataProvider.DataIsUpdated();
         }
     }
 }

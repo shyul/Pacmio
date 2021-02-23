@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using Xu;
 using Xu.GridView;
 
@@ -55,8 +54,8 @@ namespace Pacmio
             get
             {
                 lock (DataLockObject)
-                    if (Rows.Length > SelectedIndex)
-                        return Rows[SelectedIndex].Contract;
+                    if (Rows.Count() > SelectedIndex)
+                        return Rows.ElementAt(SelectedIndex).Contract;
                     else
                         return null;
             }

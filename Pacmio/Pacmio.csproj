@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Forms\Grid\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="Source\Modules\News\News.cs" />
     <Compile Include="Source\Modules\Strategy\EntryMethod.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
-    <Compile Include="Source\Modules\Trade\Position\PositionInfo.cs" />
+    <Compile Include="Source\Modules\Trade\AccountPosition\PositionInfo.cs" />
     <Compile Include="Source\Modules\Trade\Trade\TradeManager.cs" />
     <Compile Include="Source\Modules\WatchList\Types\DynamicWatchList.cs" />
     <Compile Include="Source\Modules\WatchList\Types\InteractiveBrokerWatchList.cs" />
@@ -194,7 +195,7 @@
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\Strategy\StrategyFactory.cs" />
-    <Compile Include="Source\Modules\Trade\Position\AccountInfo.cs" />
+    <Compile Include="Source\Modules\Trade\AccountPosition\AccountInfo.cs" />
     <Compile Include="Source\Modules\Simulation\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\Trade\LiquidityType.cs" />
@@ -251,7 +252,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\MACD.cs" />
     <Compile Include="Source\Modules\Contract\Interfaces\IBusiness.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Stock.cs" />
-    <Compile Include="Source\Modules\Trade\Position\AccountPositionManager.cs" />
+    <Compile Include="Source\Modules\Trade\AccountPosition\AccountPositionManager.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Error.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\OrderHistory\ExecutionData.cs" />

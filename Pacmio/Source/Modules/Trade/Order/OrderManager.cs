@@ -13,8 +13,6 @@ using Xu;
 
 namespace Pacmio
 {
-
-
     public static class OrderManager
     {
         public const string EntryOrderDescription = "Entry";
@@ -90,11 +88,6 @@ namespace Pacmio
 
         public static void CancelAllOrders() => IB.Client.SendRequest_GlobalCancel();
 
-
-
-
-
-
         #region Order History
 
         public static void Request_OpenOrders() => IB.Client.SendRequest_OpenOrders();
@@ -124,6 +117,7 @@ namespace Pacmio
                     throw new Exception("Duplicated Order Id found in 'OrderIdToOrderLUT', the fresh order list. This is not allowed.");
 
                 OrderIdToOrderLUT[od.OrderId] = od;
+                DataProvider.DataIsUpdated();
             }
         }
 
@@ -162,20 +156,23 @@ namespace Pacmio
 
         private static Dictionary<int, OrderInfo> OrderIdToOrderLUT { get; } = new Dictionary<int, OrderInfo>();
 
-
         public static OrderInfo GetOrCreateOrderByPermId(int permId)
         {
             if (permId < 0)
                 throw new Exception("The permId has to be greater than 0: " + permId);
 
-            if (!PermIdToOrderLUT.ContainsKey(permId))
-            {
-                OrderInfo od = new OrderInfo();
-                PermIdToOrderLUT[permId] = od;
-                return od;
-            }
-            else
-                return PermIdToOrderLUT[permId];
+            OrderInfo res = null;
+            lock (PermIdToOrderLUT)
+                if (!PermIdToOrderLUT.ContainsKey(permId))
+                {
+                    res = new OrderInfo();
+                    PermIdToOrderLUT[permId] = res;
+                }
+                else
+                    res = PermIdToOrderLUT[permId];
+
+            DataProvider.DataIsUpdated();
+            return res;
         }
 
         public static IEnumerable<OrderInfo> QueryForOrders(this Contract c)
@@ -187,6 +184,14 @@ namespace Pacmio
         }
 
         private static Dictionary<int, OrderInfo> PermIdToOrderLUT { get; } = new Dictionary<int, OrderInfo>();
+
+        public static IEnumerable<OrderInfo> List => PermIdToOrderLUT.Values;
+
+        #region Updates
+
+        public static SimpleDataProvider DataProvider { get; } = new SimpleDataProvider();
+
+        #endregion Updates
 
         #region File system
 

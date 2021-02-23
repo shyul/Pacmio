@@ -19,7 +19,7 @@ using System.Threading;
 
 namespace TestClient
 {
-    public class AccountDataAdapter : IDataConsumer, IDisposable
+    public class AccountDataAdapter : IDataConsumer
     {
         public AccountDataAdapter(TreeView tr, ListBox lb)
         {

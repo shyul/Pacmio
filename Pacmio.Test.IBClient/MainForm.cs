@@ -21,6 +21,7 @@ namespace TestClient
         public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
 
         public AccountDataAdapter AccountDataAdapter { get; }
+        public OrderInfoGridView OrderInfoGridView { get; } = new OrderInfoGridView();
 
         public Period HistoricalPeriod
         {
@@ -83,7 +84,11 @@ namespace TestClient
             ToggleConnect();
 
             Root.OnNetConnectHandler += NetClientOnConnectHandler;
-            TradeManager.OnUpdateHandler += TradeUpdateHandler;
+
+            Root.Form.AddForm(DockStyle.Fill, 0, OrderInfoGridView);
+            //TradeManager.OnUpdateHandler += TradeUpdateHandler;
+
+
             WatchListManager.OnUpdateHandler += WatchListUpdateHandler;
 
 

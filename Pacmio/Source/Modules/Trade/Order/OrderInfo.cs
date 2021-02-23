@@ -46,37 +46,6 @@ namespace Pacmio
 
         #endregion Identification Numbers
 
-        #region Status
-
-        [DataMember]
-        public DateTime OrderTime { get; set; }
-
-        [DataMember]
-        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
-
-        [IgnoreDataMember]
-        public bool IsEditable => Status == OrderStatus.Inactive || Status == OrderStatus.ApiPending || Status == OrderStatus.PendingSubmit || Status == OrderStatus.PreSubmitted || Status == OrderStatus.Submitted;
-
-        [DataMember]
-        public double FilledQuantity { get; set; } = 0;
-
-        [DataMember]
-        public double RemainingQuantity { get; set; } = 0;
-
-        [DataMember]
-        public double LastFillPrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public double AveragePrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public double MarketCapPrice { get; set; } = double.NaN;
-
-        [DataMember]
-        public string HeldNotice { get; set; } = string.Empty;
-
-        #endregion
-
         [DataMember, Browsable(true)]
         public string Description { get; set; }
 
@@ -152,8 +121,39 @@ namespace Pacmio
         [IgnoreDataMember]
         private Contract m_Contract = null;
 
+        #region Status
+
+        [DataMember]
+        public DateTime OrderTime { get; set; }
+
+        [DataMember]
+        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
+
+        [IgnoreDataMember]
+        public bool IsEditable => Status == OrderStatus.Inactive || Status == OrderStatus.ApiPending || Status == OrderStatus.PendingSubmit || Status == OrderStatus.PreSubmitted || Status == OrderStatus.Submitted;
+
         [DataMember]
         public double Quantity { get; set; } = double.NaN;
+
+        [DataMember]
+        public double FilledQuantity { get; set; } = 0;
+
+        [DataMember]
+        public double RemainingQuantity { get; set; } = 0;
+
+        [DataMember]
+        public double LastFillPrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public double AveragePrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public double MarketCapPrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public string HeldNotice { get; set; } = string.Empty;
+
+        #endregion
 
         /// <summary>
         /// The LIMIT price.
@@ -237,11 +237,8 @@ namespace Pacmio
         [DataMember]
         public bool OutsideRegularTradeHours { get; set; } = true;
 
-
-
         [DataMember, Browsable(true)]
         public string ModeCode { get; set; } = string.Empty;
-
 
         #region Equality
 

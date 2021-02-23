@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Test\DataAdapters\AccountDataAdapter.cs" />
     <Compile Include="Test\BarTableTest.cs" />
+    <Compile Include="Test\DataAdapters\TradeDataAdapter.cs" />
     <Compile Include="Test\OrderTest.cs" />
     <Compile Include="Test\Other\TestFreqAlign.cs">
       <SubType>Form</SubType>

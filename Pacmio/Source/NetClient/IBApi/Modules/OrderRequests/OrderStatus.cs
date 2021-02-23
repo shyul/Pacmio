@@ -23,7 +23,8 @@ namespace Pacmio.IB
             int orderId = fields[1].ToInt32(-1);
             int permId = fields[6].ToInt32();
 
-            if (OrderManager.QueryForOrder(orderId, permId) is OrderInfo od)
+            //if (OrderManager.QueryForOrder(orderId, permId) is OrderInfo od)
+            if (permId > 0 && OrderManager.GetOrCreateOrderByPermId(permId) is OrderInfo od)
             {
                 od.Status = fields[2].ToOrderStatus();
                 od.FilledQuantity = fields[3].ToDouble();
@@ -39,6 +40,9 @@ namespace Pacmio.IB
                 {
                     RemoveRequest(orderId, false);
                 }
+
+                Console.WriteLine("Added Order Status: " + fields.ToStringWithIndex());
+                OrderManager.DataProvider.DataIsUpdated();
             }
             else
             {

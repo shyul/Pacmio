@@ -56,7 +56,7 @@ namespace Pacmio.IB
                 //if (od.Contract is null) od.Contract = c;
                 //od.ConId = fields[1].ToInt32(-1);
 
-                int totalQuantity = fields[13].ToInt32(0);
+                double totalQuantity = fields[13].ToDouble();
                 od.Quantity = fields[12] == "BUY" ? totalQuantity : -totalQuantity;
 
                 od.Type = fields[14].ToOrderType();
@@ -134,6 +134,8 @@ namespace Pacmio.IB
         private static void Parse_CompletedOrdersEnd(string[] fields)
         {
             IsReady_CompletedOrders = true;
+            OrderManager.DataProvider.DataIsUpdated();
+
             Console.WriteLine("\nCompleted Orders End: " + fields.ToStringWithIndex());
             // TODO: Tranmit message
         }
