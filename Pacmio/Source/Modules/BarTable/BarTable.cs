@@ -21,7 +21,7 @@ namespace Pacmio
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
     public sealed class BarTable : ITagTable, IEquatable<BarTable>,
-        IEquatable<(Contract c, BarFreq barFreq, BarType type)>, IDisposable
+        IEquatable<(Contract c, BarFreq barFreq, BarType type)>, IDataProvider, IDataConsumer
     {
         #region Ctor
 
@@ -37,6 +37,23 @@ namespace Pacmio
             CalculateTickTask.Start();
         }
 
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            return false;
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return false;
+        }
+
+        public DateTime UpdateTime { get; private set; }
+
+        public void DataIsUpdated() 
+        {
+            UpdateTime = DateTime.Now;
+        }
+
         public void Dispose()
         {
             IsLive = false;
@@ -46,6 +63,8 @@ namespace Pacmio
             {
                 foreach (IDataRenderer dv in DataViews)
                 {
+                    RemoveDataConsumer(dv);
+
                     dv.RemoveDataSource();
                 }
             }
@@ -1188,7 +1207,7 @@ namespace Pacmio
                 }
             }
 
-        End:
+            End:
             return;
         }
 

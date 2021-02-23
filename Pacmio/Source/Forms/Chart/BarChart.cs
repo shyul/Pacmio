@@ -61,6 +61,7 @@ namespace Pacmio
 
         protected override void Dispose(bool disposing)
         {
+            BarTable.RemoveDataConsumer(this);
             Close();
             GC.Collect();
         }

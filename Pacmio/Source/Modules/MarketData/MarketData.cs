@@ -16,7 +16,7 @@ namespace Pacmio
     [Serializable, DataContract]
     [KnownType(typeof(BidAskData))]
     [KnownType(typeof(StockData))]
-    public class MarketData : IEquatable<MarketData>, IEquatable<Contract>
+    public class MarketData : IEquatable<MarketData>, IEquatable<Contract>, IDataProvider
     {
         /// <summary>
         /// Run this after loading
