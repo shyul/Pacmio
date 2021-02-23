@@ -117,33 +117,36 @@ namespace Pacmio
 
 
         [IgnoreDataMember] // Initialize
-        protected List<IDataRenderer> DataViews { get; set; }
+        protected List<IDataConsumer> DataConsumers { get; set; }
 
-        public void AddDataView(IDataRenderer dv)
+        public bool AddDataConsumer(IDataConsumer idk)
         {
-            if (DataViews is null) DataViews = new List<IDataRenderer>();
-            lock (DataViews)
+            if (DataConsumers is null) 
+                DataConsumers = new List<IDataConsumer>();
+
+            lock (DataConsumers)
             {
-                DataViews.CheckAdd(dv);
+                return DataConsumers.CheckAdd(idk);
             }
         }
 
-        public void RemoveDataView(IDataRenderer dv)
+        public bool RemoveDataConsumer(IDataConsumer idk)
         {
-            if (DataViews is null) return;
-            lock (DataViews)
+            if (DataConsumers is null) 
+                return false;
+
+            lock (DataConsumers)
             {
-                DataViews.CheckRemove(dv);
+                return DataConsumers.CheckRemove(idk);
             }
         }
-
+        /*
         [IgnoreDataMember]
         public List<IMarketDataAnalysis> PositionAnalyses { get; protected set; } = new List<IMarketDataAnalysis>();
-
+        */
         public void Update()
         {
-            UpdateTime = DateTime.Now;
-
+            /*
             if (PositionAnalyses is null)
                 PositionAnalyses = new List<IMarketDataAnalysis>();
 
@@ -151,27 +154,22 @@ namespace Pacmio
                 foreach (IMarketDataAnalysis idv in PositionAnalyses)
                 {
                     idv.Update();
-                }
+                }*/
 
-            if (DataViews is null)
-                DataViews = new List<IDataRenderer>();
+            if (DataConsumers is null)
+                DataConsumers = new List<IDataConsumer>();
 
-            lock (DataViews)
-                foreach (IDataRenderer idv in DataViews)
+            lock (DataConsumers)
+                foreach (IDataConsumer idk in DataConsumers)
                 {
-                    idv.DataIsUpdated();
+                    idk.DataIsUpdated();
                 }
+
+            UpdateTime = DateTime.Now;
         }
 
         [DataMember]
-        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
-
-
-
-
-
-
-
+        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
 
         #endregion Trade
 
