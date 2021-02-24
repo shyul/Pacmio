@@ -834,7 +834,7 @@ namespace TestClient
                 {
                     StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
                     wt.Add(sd.Contract);
-                    MarketDataGridViewManager.Add(new MarketDataGridView(wt));
+                    WatchListGridViewManager.Add(new WatchListGridView(wt));
                 }
 
             }
@@ -849,7 +849,7 @@ namespace TestClient
             {
                 StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
                 wt.Add(s);
-                MarketDataGridViewManager.Add(new MarketDataGridView(wt));
+                WatchListGridViewManager.Add(new WatchListGridView(wt));
             }
 
 
@@ -865,7 +865,7 @@ namespace TestClient
             {
                 StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
                 wt.Add(s);
-                MarketDataGridViewManager.Add(new MarketDataGridView(wt));
+                WatchListGridViewManager.Add(new WatchListGridView(wt));
             }
 
             Root.Form?.Show();
@@ -879,7 +879,7 @@ namespace TestClient
             TextBoxMultiContracts.Text = symbolText;
 
     
-            MarketDataGridViewManager.Add(new MarketDataGridView(wt));
+            WatchListGridViewManager.Add(new WatchListGridView(wt));
 
             Task.Run(() => {
                 foreach (var s in wt.Contracts.Take(60))
@@ -899,7 +899,7 @@ namespace TestClient
             TextBoxMultiContracts.Text = symbolText;
 
             WatchListManager.Add(wt);
-            MarketDataGridViewManager.Add(new MarketDataGridView(wt));
+            WatchListGridViewManager.Add(new WatchListGridView(wt));
 
             Task.Run(() => {
                 foreach (Contract c in wt.Contracts.Take(60))

@@ -12,9 +12,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class MarketDataGridViewManager
+    public static class WatchListGridViewManager
     {
-        public static void Add(MarketDataGridView gv)
+        public static void Add(WatchListGridView gv)
         {
             if (!List.Contains(gv))
             {
@@ -28,7 +28,7 @@ namespace Pacmio
         /// <summary>
         /// TODO: change to WatchList -> GridViewLUT
         /// </summary>
-        private static List<MarketDataGridView> List { get; } = new List<MarketDataGridView>();
+        private static List<WatchListGridView> List { get; } = new List<WatchListGridView>();
 
         /// <summary>
         /// Update All UI Elements when a new tick comes in
@@ -48,24 +48,13 @@ namespace Pacmio
         {
             get
             {
-                if (DockCanvas.ActiveDockForm is MarketDataGridView gv)
+                if (DockCanvas.ActiveDockForm is WatchListGridView gv)
                 {
                     return gv.SelectedContract;
                 }
                 return null;
             }
         }
-
-
     }
-
-
-
-
-
-
-
-
-
 }
 

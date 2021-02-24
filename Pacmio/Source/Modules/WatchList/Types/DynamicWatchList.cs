@@ -137,7 +137,7 @@ namespace Pacmio
                 m_Contracts = new List<Contract>(list);
             }
 
-            Update();
+            DataIsUpdated();
         }
 
         //public override event StatusEventHandler OnUpdateHandler;

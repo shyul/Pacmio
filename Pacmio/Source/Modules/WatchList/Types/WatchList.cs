@@ -14,7 +14,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class WatchList : IEquatable<WatchList>
+    public abstract class WatchList : IEquatable<WatchList>, IDataProvider
     {
         public virtual string Name { get; set; }
 
@@ -28,16 +28,25 @@ namespace Pacmio
 
         public override string ToString() => Description;
 
+        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
-        public void Update() 
+        public List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
         {
-            UpdateTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            return DataConsumers.CheckAdd(idk);
         }
 
-        public DateTime UpdateTime { get; protected set; }
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckRemove(idk);
+        }
 
-        public event StatusEventHandler OnUpdateHandler;
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers.ForEach(n => n.DataIsUpdated());
+        }
 
         #region Equality
 

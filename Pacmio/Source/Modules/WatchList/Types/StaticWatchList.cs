@@ -15,8 +15,8 @@ namespace Pacmio
 {
     public class StaticWatchList : WatchList
     {
-        public StaticWatchList(string name) 
-        { 
+        public StaticWatchList(string name)
+        {
             Name = name;
             Contracts = new List<Contract>();
         }
@@ -24,7 +24,7 @@ namespace Pacmio
         public StaticWatchList(string name, List<Contract> list)
         {
             Name = name;
-            Contracts = list; 
+            Contracts = list;
         }
 
         public StaticWatchList(string name, IEnumerable<string> list, string countryCode = "US", CancellationTokenSource cts = null, IProgress<float> progress = null) :
@@ -55,7 +55,8 @@ namespace Pacmio
             if (Contracts is null) Contracts = new List<Contract>();
             lock (Contracts)
             {
-                if (Contracts.CheckAdd(c)) Update();
+                if (Contracts.CheckAdd(c))
+                    DataIsUpdated();
             }
         }
 
@@ -64,7 +65,8 @@ namespace Pacmio
             if (Contracts is null) return;
             lock (Contracts)
             {
-                if (Contracts.CheckRemove(c)) Update();
+                if (Contracts.CheckRemove(c))
+                    DataIsUpdated();
             }
         }
 

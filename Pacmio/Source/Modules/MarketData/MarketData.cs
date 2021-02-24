@@ -144,24 +144,22 @@ namespace Pacmio
 
         public void Update()
         {
-            if (DataConsumers is null)
-                DataConsumers = new List<IDataConsumer>();
+            UpdateTime = DateTime.Now;
 
-            lock (DataConsumers) 
+            if (DataConsumers is not null)
             {
-                Parallel.ForEach(DataConsumers, idk => {
+                IDataConsumer[] dataConsumerList = null;
+
+                lock (DataConsumers)
+                {
+                    dataConsumerList = DataConsumers.ToArray();
+                }
+
+                Parallel.ForEach(dataConsumerList, idk =>
+                {
                     idk.DataIsUpdated();
                 });
-
-                /*
-                foreach (IDataConsumer idk in DataConsumers)
-                {
-
-                }*/
             }
-
-
-            UpdateTime = DateTime.Now;
         }
 
         [DataMember]

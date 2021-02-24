@@ -188,8 +188,8 @@
     <Compile Include="Source\Modules\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\MarketData\StockData.cs" />
     <Compile Include="Source\Modules\MarketData\MarketTickStatus.cs" />
-    <Compile Include="Source\Forms\Grid\MarketDataGridView.cs" />
-    <Compile Include="Source\Forms\Grid\MarketDataGridViewManager.cs" />
+    <Compile Include="Source\Forms\Grid\WatchListGridView.cs" />
+    <Compile Include="Source\Forms\Grid\WatchListGridViewManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />
