@@ -767,7 +767,7 @@ namespace Pacmio
 
         public DateTime UpdateTime { get; private set; }
 
-        public void DataIsUpdated()
+        public void DataIsUpdated(IDataProvider provider)
         {
             UpdateTime = DateTime.Now;
         }
@@ -825,7 +825,7 @@ namespace Pacmio
                 }
                 else if (!ReadyToShow)
                 {
-                    lock (DataConsumers) DataConsumers.ForEach(n => { n.DataIsUpdated(); });
+                    lock (DataConsumers) DataConsumers.ForEach(n => { n.DataIsUpdated(this); });
                 }
             }
         }
@@ -1207,7 +1207,7 @@ namespace Pacmio
                 }
             }
 
-        End:
+            End:
             return;
         }
 

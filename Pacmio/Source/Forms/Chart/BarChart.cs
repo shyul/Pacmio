@@ -114,7 +114,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            DataIsUpdated();
+            m_AsyncUpdateUI = true;
         }
 
         public void Config(BarAnalysisSet bas)
@@ -129,7 +129,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            DataIsUpdated();
+            m_AsyncUpdateUI = true;
         }
 
         public void Config(Strategy s)
@@ -144,7 +144,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            DataIsUpdated();
+            m_AsyncUpdateUI = true;
         }
 
         public void Config(BarTable bt, BarAnalysisSet bas)
@@ -159,7 +159,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            DataIsUpdated();
+            m_AsyncUpdateUI = true;
         }
 
         public void Config(BarTable bt, Strategy s)
@@ -174,7 +174,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
-            DataIsUpdated();
+            m_AsyncUpdateUI = true;
         }
 
         private void RemoveAllChartSeries()

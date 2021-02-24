@@ -23,9 +23,9 @@ namespace Pacmio
 
         public int MaximumRows { get; set; } = int.MaxValue;
 
-        public override void DataIsUpdated() 
+        public override void DataIsUpdated(IDataProvider provider) 
         {
-            base.DataIsUpdated();
+            base.DataIsUpdated(provider);
         }
 
 

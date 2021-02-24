@@ -157,7 +157,7 @@ namespace Pacmio
 
                 Parallel.ForEach(dataConsumerList, idk =>
                 {
-                    idk.DataIsUpdated();
+                    idk.DataIsUpdated(this);
                 });
             }
         }

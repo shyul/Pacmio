@@ -45,7 +45,7 @@ namespace Pacmio
         public void DataIsUpdated()
         {
             UpdateTime = DateTime.Now;
-            DataConsumers.ForEach(n => n.DataIsUpdated());
+            DataConsumers.ForEach(n => n.DataIsUpdated(this));
         }
 
         #region Equality

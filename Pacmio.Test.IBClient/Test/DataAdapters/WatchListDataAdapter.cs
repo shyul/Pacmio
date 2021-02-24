@@ -29,7 +29,7 @@ namespace TestClient
 
         private CheckedListBox CheckedListBox;
 
-        public void DataIsUpdated()
+        public void DataIsUpdated(IDataProvider provider)
         {
             Task.Run(() =>
             {

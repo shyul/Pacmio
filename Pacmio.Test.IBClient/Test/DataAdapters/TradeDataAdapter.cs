@@ -26,7 +26,7 @@ namespace TestClient
             TradeManager.DataProvider.AddDataConsumer(this);
         }
 
-        public void DataIsUpdated()
+        public void DataIsUpdated(IDataProvider provider)
         {
             Task.Run(() =>
             {

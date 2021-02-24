@@ -38,7 +38,7 @@ namespace TestClient
 
         private ListBox ListBoxAccount { get; }
 
-        public void DataIsUpdated()
+        public void DataIsUpdated(IDataProvider provider)
         {
             Task.Run(() =>
             {

@@ -19,12 +19,12 @@ namespace Pacmio
         public WatchListGridView(WatchList wt) : base("WatchList: " + wt.Name)
         {
             WatchList = wt;
-            DataIsUpdated();
+            DataIsUpdated(null);
         }
 
         public WatchList WatchList { get; }
 
-        public override void DataIsUpdated()
+        public override void DataIsUpdated(IDataProvider provider)
         {
             SourceRows = WatchList.Contracts.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToList();
 
@@ -34,7 +34,7 @@ namespace Pacmio
 
             foreach (var s in SourceRows) s.AddDataConsumer(this);
 
-            base.DataIsUpdated();
+            base.DataIsUpdated(provider);
         }
 
         #region Equality
