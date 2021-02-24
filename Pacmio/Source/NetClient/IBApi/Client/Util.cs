@@ -45,7 +45,7 @@ namespace Pacmio.IB
         {
             value = value.Trim();
             if (value.Length == FORMAT_DATEONLY.Length)
-                return DateTime.ParseExact(value, FORMAT_DATEONLY, CultureInfo.InvariantCulture);//.ToDestination(tzi);
+                return DateTime.ParseExact(value, FORMAT_DATEONLY, CultureInfo.InvariantCulture);
             else if (value.Length == FORMAT_DATETIME.Length)
                 return DateTime.ParseExact(value, FORMAT_DATETIME, CultureInfo.InvariantCulture).ToDestination(tzi);
             else

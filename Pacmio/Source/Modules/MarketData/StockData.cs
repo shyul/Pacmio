@@ -22,7 +22,6 @@ namespace Pacmio
         public override void Initialize(Contract c)
         {
             base.Initialize(c);
-            if (LiveBarTables is null) LiveBarTables = new List<BarTable>();
             if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
 
             RTLastTime = DateTime.MinValue;
@@ -128,9 +127,9 @@ namespace Pacmio
 
                 if (price > 0)
                 {
-                    lock (LiveBarTables)
+                    lock (DataConsumers)
                     {
-                        Parallel.ForEach(LiveBarTables.Where(n => n.IsLive), bt =>
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable b && b.IsLive).Select(n => n as BarTable), bt =>
                         {
                             if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
                             {
@@ -166,15 +165,6 @@ namespace Pacmio
                 }
             }
         }
-
-        [IgnoreDataMember]
-        public List<BarTable> LiveBarTables { get; set; } = new List<BarTable>();
-
-
-
-
-
-
 
         [DataMember]
         public double MarketCap { get; set; } = double.NaN;

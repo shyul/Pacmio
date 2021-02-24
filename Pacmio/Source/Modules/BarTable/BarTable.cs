@@ -37,39 +37,22 @@ namespace Pacmio
             CalculateTickTask.Start();
         }
 
-        public bool AddDataConsumer(IDataConsumer idk)
-        {
-            return false;
-        }
-
-        public bool RemoveDataConsumer(IDataConsumer idk)
-        {
-            return false;
-        }
-
-        public DateTime UpdateTime { get; private set; }
-
-        public void DataIsUpdated() 
-        {
-            UpdateTime = DateTime.Now;
-        }
-
         public void Dispose()
         {
             IsLive = false;
             CalculateTickCancelTs.Cancel();
 
-            lock (DataViews)
+            lock (DataConsumers)
             {
-                foreach (IDataRenderer dv in DataViews)
+                foreach (IDataRenderer idr in DataConsumers)
                 {
-                    RemoveDataConsumer(dv);
-
-                    dv.RemoveDataSource();
+                    RemoveDataConsumer(idr);
+                    //idr.RemoveDataSource();
                 }
             }
 
-            if (Contract.MarketData is StockData sd) { sd.LiveBarTables.CheckRemove(this); }
+            if (Contract.MarketData is StockData sd)
+                sd.RemoveDataConsumer(this);
 
             lock (Rows) Rows.Clear();
             lock (TimeToRows) TimeToRows.Clear();
@@ -770,7 +753,24 @@ namespace Pacmio
 
         #region BarChart / DataView
 
-        public List<IDataRenderer> DataViews { get; } = new List<IDataRenderer>();
+        private List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckRemove(idk);
+        }
+
+        public DateTime UpdateTime { get; private set; }
+
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+        }
 
         #endregion BarChart / DataView
 
@@ -793,12 +793,12 @@ namespace Pacmio
                     if (m_IsLive)
                     {
                         // Add BarTable to the tick receiver
-                        sd.LiveBarTables.CheckAdd(this);
+                        sd.AddDataConsumer(this);
                     }
                     else
                     {
                         // Remove BarTable from the tick receiver
-                        sd.LiveBarTables.CheckRemove(this);
+                        sd.RemoveDataConsumer(this);
                     }
             }
         }
@@ -817,15 +817,15 @@ namespace Pacmio
 
                 if (m_Status == TableStatus.CalculateFinished)
                 {
-                    lock (DataViews) DataViews.ForEach(n => { n.PointerToEnd(); });
+                    lock (DataConsumers) DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
                 }
                 else if (m_Status == TableStatus.TickingFinished)
                 {
-                    lock (DataViews) DataViews.ForEach(n => { n.PointerToNextTick(); });
+                    lock (DataConsumers) DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
                 }
                 else if (!ReadyToShow)
                 {
-                    lock (DataViews) DataViews.ForEach(n => { n.DataIsUpdated(); });
+                    lock (DataConsumers) DataConsumers.ForEach(n => { n.DataIsUpdated(); });
                 }
             }
         }
@@ -867,9 +867,9 @@ namespace Pacmio
                 {
                     if (Status == TableStatus.Calculating)
                     {
-                        lock (DataViews)
+                        lock (DataConsumers)
                         {
-                            DataViews.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).ToList().ForEach(n => { n.PointerToEnd(); });
+                            DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
                         }
                         m_Status = TableStatus.Ready;
                     }
@@ -883,9 +883,9 @@ namespace Pacmio
                 {
                     Status = TableStatus.Calculating;
                     Calculate(bas);
-                    lock (DataViews)
+                    lock (DataConsumers)
                     {
-                        DataViews.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).ToList().ForEach(n => { n.PointerToEnd(); });
+                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
                     }
                     m_Status = TableStatus.Ready;
                 }
@@ -1207,7 +1207,7 @@ namespace Pacmio
                 }
             }
 
-            End:
+        End:
             return;
         }
 

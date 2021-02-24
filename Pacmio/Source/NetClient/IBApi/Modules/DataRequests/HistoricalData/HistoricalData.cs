@@ -109,9 +109,9 @@ namespace Pacmio.IB
 
             endTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(endTime, c.TimeZone), TimeZoneInfo.Local);
 
-            if (bt.BarFreq.Param() is string barFreqCode && 
-                bt.Type.Param() is string barTypeCode && 
-                c.Exchange.Param() is string exchangeCode && 
+            if (bt.BarFreq.Param() is string barFreqCode &&
+                bt.Type.Param() is string barTypeCode &&
+                c.Exchange.Param() is string exchangeCode &&
                 DataRequestReady)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalData);
@@ -210,7 +210,7 @@ namespace Pacmio.IB
                 }
 
                 //ActiveBarTable_HistoricalData = null;
-                if (fields[3] == "200") 
+                if (fields[3] == "200")
                 {
                     active_HistoricalDataBarTable.Contract.Status = ContractStatus.Error;
                     active_HistoricalDataBarTable.Contract.UpdateTime = DateTime.Now;
@@ -227,6 +227,8 @@ namespace Pacmio.IB
             int requestId = fields[1].ToInt32(-1);
             int num = fields[4].ToInt32();
 
+            Console.WriteLine(ActiveTimeZone_HistoricalData.DisplayName);
+
             if (fields.Length == 5 + num * 8 && requestId == DataRequestID)
             {
                 /*
@@ -241,8 +243,8 @@ namespace Pacmio.IB
                 for (int i = 0; i < num; i++)
                 {
                     int pt = (i * 8) + 5;
-
-                    time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData);
+                
+                    time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData); Console.WriteLine(fields[pt]);
                     double open = fields[pt + 1].ToDouble(-1);
                     double high = fields[pt + 2].ToDouble(-1);
                     double low = fields[pt + 3].ToDouble(-1);

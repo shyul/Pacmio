@@ -7,6 +7,7 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Xu;
 using Xu.GridView;
@@ -121,7 +122,7 @@ namespace Pacmio
 
         public bool AddDataConsumer(IDataConsumer idk)
         {
-            if (DataConsumers is null) 
+            if (DataConsumers is null)
                 DataConsumers = new List<IDataConsumer>();
 
             lock (DataConsumers)
@@ -132,7 +133,7 @@ namespace Pacmio
 
         public bool RemoveDataConsumer(IDataConsumer idk)
         {
-            if (DataConsumers is null) 
+            if (DataConsumers is null)
                 return false;
 
             lock (DataConsumers)
@@ -140,30 +141,25 @@ namespace Pacmio
                 return DataConsumers.CheckRemove(idk);
             }
         }
-        /*
-        [IgnoreDataMember]
-        public List<IMarketDataAnalysis> PositionAnalyses { get; protected set; } = new List<IMarketDataAnalysis>();
-        */
+
         public void Update()
         {
-            /*
-            if (PositionAnalyses is null)
-                PositionAnalyses = new List<IMarketDataAnalysis>();
-
-            lock (PositionAnalyses)
-                foreach (IMarketDataAnalysis idv in PositionAnalyses)
-                {
-                    idv.Update();
-                }*/
-
             if (DataConsumers is null)
                 DataConsumers = new List<IDataConsumer>();
 
-            lock (DataConsumers)
+            lock (DataConsumers) 
+            {
+                Parallel.ForEach(DataConsumers, idk => {
+                    idk.DataIsUpdated();
+                });
+
+                /*
                 foreach (IDataConsumer idk in DataConsumers)
                 {
-                    idk.DataIsUpdated();
-                }
+
+                }*/
+            }
+
 
             UpdateTime = DateTime.Now;
         }
@@ -191,10 +187,5 @@ namespace Pacmio
         public override string ToString() => GetType().Name + " for " + Contract.ToString();
 
         #endregion Equality
-    }
-
-    public interface IMarketDataAnalysis
-    {
-        void Update();
     }
 }

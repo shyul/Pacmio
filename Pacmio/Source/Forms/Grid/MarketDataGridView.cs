@@ -32,7 +32,7 @@ namespace Pacmio
         public void Update(IEnumerable<Contract> list)
         {
             var rows = list.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToArray();
-            foreach (var s in rows) s.AddDataView(this);
+            foreach (var s in rows) s.AddDataConsumer(this);
             Update(rows);
         }
 

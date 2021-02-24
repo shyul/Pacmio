@@ -71,9 +71,9 @@ namespace Pacmio
             Console.WriteLine(TabName + ": The BarChart is closing");
 
             lock (List) List.CheckRemove(this);
-            if (m_BarTable is BarTable)
+            if (m_BarTable is BarTable bt)
             {
-                lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckRemove(this);
+                bt.RemoveDataConsumer(this);
             }
             AsyncUpdateUITask_Cts.Cancel();
             HostContainer?.Remove(this);
@@ -225,16 +225,16 @@ namespace Pacmio
 
             private set
             {
-                if (m_BarTable is BarTable)
+                if (m_BarTable is BarTable bt0)
                 {
-                    lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckRemove(this);
+                    bt0.RemoveDataConsumer(this);
                 }
 
                 m_BarTable = value;
 
                 if (m_BarTable is BarTable bt)
                 {
-                    lock (m_BarTable.DataViews) m_BarTable.DataViews.CheckAdd(this);
+                    bt.AddDataConsumer(this);
 
                     if (m_Strategy is Strategy s)
                     {
