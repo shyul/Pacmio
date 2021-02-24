@@ -29,7 +29,7 @@ namespace Pacmio
         {
             if (Contract is Stock s)
             {
-                Update(s.StockData.MarketDepth());
+                DataIsUpdated();// Update(s.StockData.MarketDepth());
             }
         }
 

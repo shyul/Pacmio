@@ -878,7 +878,7 @@ namespace TestClient
             StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Default", ref symbolText));
             TextBoxMultiContracts.Text = symbolText;
 
-    
+
             WatchListGridViewManager.Add(new WatchListGridView(wt));
 
             Task.Run(() => {
@@ -1107,12 +1107,12 @@ namespace TestClient
 
         private void BtnRefreshOrderInfoGrid_Click(object sender, EventArgs e)
         {
-            foreach(OrderInfo od in OrderManager.List) 
+            foreach (OrderInfo od in OrderManager.List)
             {
                 Console.WriteLine("OrderInfo PermId = " + od.PermId + " | " + od.Contract + " | " + od.Status);
             }
 
-            OrderInfoGridView.Update(OrderManager.List);
+            //OrderInfoGridView.Update(OrderManager.List);
         }
     }
     public static class DataGridHelper

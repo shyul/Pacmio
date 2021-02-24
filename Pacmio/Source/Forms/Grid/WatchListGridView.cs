@@ -26,44 +26,13 @@ namespace Pacmio
 
         public override void DataIsUpdated()
         {
-            var rows = WatchList.Contracts.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToList();
+            SourceRows = WatchList.Contracts.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToList();
 
             if (Rows is not null)
-                foreach (var s in Rows.Where(n => !rows.Contains(n)))
+                foreach (var s in Rows.Where(n => !SourceRows.Contains(n)))
                     s.RemoveDataConsumer(this);
 
-            foreach (var s in rows) s.AddDataConsumer(this);
-
-            var pi = ColumnConfigurations.Where(n => n.Key.PropertyType is IComparable && n.Value.SortPriority < int.MaxValue).OrderBy(n => n.Value.SortPriority).Select(n => n.Key);
-
-            if (pi.Count() > 0)
-            {
-                var orderedList = rows.OrderBy(n => pi.First().GetValue(n, null));
-
-                if (pi.Count() > 1)
-                {
-                    foreach (PropertyInfo p in pi.Skip(1))
-                    {
-                        orderedList = orderedList.ThenBy(n => p.GetValue(n, null));
-                    }
-                }
-
-                lock (DataLockObject)
-                    lock (GraphicsLockObject)
-                    {
-                        Rows = orderedList.ToArray();
-                    }
-            }
-            else
-            {
-                lock (DataLockObject)
-                    lock (GraphicsLockObject)
-                    {
-                        Rows = rows.ToArray();
-                    }
-            }
-
-            Console.WriteLine("WatchList is updated!");
+            foreach (var s in SourceRows) s.AddDataConsumer(this);
 
             base.DataIsUpdated();
         }
