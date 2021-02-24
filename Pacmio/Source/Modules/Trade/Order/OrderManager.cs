@@ -117,7 +117,7 @@ namespace Pacmio
                     throw new Exception("Duplicated Order Id found in 'OrderIdToOrderLUT', the fresh order list. This is not allowed.");
 
                 OrderIdToOrderLUT[od.OrderId] = od;
-                DataProvider.DataIsUpdated();
+                DataProvider.Updated();
             }
         }
 
@@ -171,7 +171,7 @@ namespace Pacmio
                 else
                     res = PermIdToOrderLUT[permId];
 
-            DataProvider.DataIsUpdated();
+            DataProvider.Updated();
             return res;
         }
 

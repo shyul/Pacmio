@@ -23,6 +23,8 @@ namespace TestClient
         public AccountDataAdapter AccountDataAdapter { get; }
         public OrderInfoGridView OrderInfoGridView { get; } = new OrderInfoGridView();
 
+        public WatchListDataAdapter WatchListDataAdapter { get; }
+
         public Period HistoricalPeriod
         {
             get
@@ -63,34 +65,20 @@ namespace TestClient
 
         int MainProgBarValue = 0;
 
-
-
-        //public static MarketDataGridView MarketDataGridView { get; } = new MarketDataGridView("Market Data");
-
         public MainForm()
         {
             InitializeComponent();
 
-
-            //MarketDataGridViewManager.Add(MarketDataGridView);
-
             TextBoxIPAddress.Text = Root.Settings.IBServerAddress;
 
-            //AccountPositionManager.OnUpdateHandler += AccountUpdateHandler;
-            //UpdateAccountList();
-
             AccountDataAdapter = new AccountDataAdapter(TreeViewAccount, ListBoxAccount);
+            WatchListDataAdapter = new WatchListDataAdapter(CheckedListBoxWatchLists);
 
             ToggleConnect();
 
             Root.OnNetConnectHandler += NetClientOnConnectHandler;
 
             Root.Form.AddForm(DockStyle.Fill, 0, OrderInfoGridView);
-            //TradeManager.OnUpdateHandler += TradeUpdateHandler;
-
-
-            WatchListManager.OnUpdateHandler += WatchListUpdateHandler;
-
 
             Progress = new Progress<float>(percent =>
             {

@@ -64,7 +64,7 @@ namespace Pacmio
                 else
                     res = ExecIdToTradeLUT[execId];
 
-            if(dataChanged) DataProvider.DataIsUpdated();
+            if(dataChanged) DataProvider.Updated();
             return res;
 
         }
@@ -113,7 +113,7 @@ namespace Pacmio
                         ExecIdToTradeLUT[ti.ExecId] = ti;
                     });
                 }
-                DataProvider.DataIsUpdated();
+                DataProvider.Updated();
             }
         }
 

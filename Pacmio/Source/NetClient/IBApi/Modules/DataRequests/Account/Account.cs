@@ -58,7 +58,7 @@ namespace Pacmio.IB
             {
                 int reqId = int.Parse(fields[2]);
                 RemoveRequest(reqId);
-                AccountPositionManager.AccountDataProvider.DataIsUpdated();
+                AccountPositionManager.AccountDataProvider.Updated();
             }
         }
 
@@ -80,7 +80,7 @@ namespace Pacmio.IB
                         AccountPositionManager.GetOrCreateAccountById(accountId);
                     }
                 }
-                AccountPositionManager.AccountDataProvider.DataIsUpdated();
+                AccountPositionManager.AccountDataProvider.Updated();
             }
         }
 
@@ -107,7 +107,7 @@ namespace Pacmio.IB
         {
             if (fields[1] == "1")
             {
-                AccountPositionManager.AccountDataProvider.DataIsUpdated();
+                AccountPositionManager.AccountDataProvider.Updated();
                 Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
             }
         }

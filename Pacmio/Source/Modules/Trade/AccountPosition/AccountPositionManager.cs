@@ -89,7 +89,7 @@ namespace Pacmio
         internal static void PositionEnd()
         {
             ResetNonRefreshedPositions();
-            PositionDataProvider.DataIsUpdated();
+            PositionDataProvider.Updated();
         }
 
         #endregion Data Requests
@@ -124,7 +124,7 @@ namespace Pacmio
                 }
             }
 
-            AccountDataProvider.DataIsUpdated();
+            AccountDataProvider.Updated();
         }
 
         #endregion File system

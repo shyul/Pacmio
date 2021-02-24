@@ -134,7 +134,7 @@ namespace Pacmio.IB
         private static void Parse_CompletedOrdersEnd(string[] fields)
         {
             IsReady_CompletedOrders = true;
-            OrderManager.DataProvider.DataIsUpdated();
+            OrderManager.DataProvider.Updated();
 
             Console.WriteLine("\nCompleted Orders End: " + fields.ToStringWithIndex());
             // TODO: Tranmit message

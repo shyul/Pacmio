@@ -61,8 +61,7 @@ namespace Pacmio
                 }
             }
 
-            UpdateTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            DataProvider.Updated();
             return result as T;
         }
 
@@ -78,8 +77,7 @@ namespace Pacmio
                     NameToListLUT.Remove(wt.Name);
                 }
             }
-            UpdateTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            DataProvider.Updated();
             return result;
         }
 
@@ -91,8 +89,7 @@ namespace Pacmio
                 NameToListLUT.Clear();
             }
 
-            UpdateTime = DateTime.Now;
-            OnUpdateHandler?.Invoke(0, UpdateTime, "");
+            DataProvider.Updated();
         }
 
         public static List<T> WatchListByType<T>() where T : WatchList => List.Where(n => n is T list).Select(n => n as T).ToList();
@@ -101,8 +98,10 @@ namespace Pacmio
 
         public static void Stop() => WatchListByType<DynamicWatchList>().ForEach(n => n.Stop());
 
-        public static DateTime UpdateTime { get; private set; }
+        #region Updates
 
-        public static event StatusEventHandler OnUpdateHandler;
+        public static SimpleDataProvider DataProvider { get; } = new SimpleDataProvider();
+
+        #endregion Updates
     }
 }

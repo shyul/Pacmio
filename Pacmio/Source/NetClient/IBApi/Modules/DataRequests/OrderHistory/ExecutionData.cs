@@ -110,7 +110,7 @@ namespace Pacmio.IB
             // TODO: Emit trade log is updated so the BarTable / BarChart with bonding strategy / and Contract Position can be updated too
             //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
-            TradeManager.DataProvider.DataIsUpdated();
+            TradeManager.DataProvider.Updated();
 
             Console.WriteLine("\nParse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
         }
@@ -159,7 +159,7 @@ namespace Pacmio.IB
                 yieldRedemptionDate = fields[7].ToInt32();
             }
             Console.WriteLine("\nCommissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
-            TradeManager.DataProvider.DataIsUpdated();
+            TradeManager.DataProvider.Updated();
         }
     }
 }

@@ -235,7 +235,7 @@ namespace Pacmio.IB
 
             Console.WriteLine("\nParse Open Order End: " + fields.ToStringWithIndex());
             // TODO: fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion
-            OrderManager.DataProvider.DataIsUpdated();
+            OrderManager.DataProvider.Updated();
         }
     }
 }

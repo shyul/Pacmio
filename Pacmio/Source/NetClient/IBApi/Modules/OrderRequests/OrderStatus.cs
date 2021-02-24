@@ -42,7 +42,7 @@ namespace Pacmio.IB
                 }
 
                 Console.WriteLine("Added Order Status: " + fields.ToStringWithIndex());
-                OrderManager.DataProvider.DataIsUpdated();
+                OrderManager.DataProvider.Updated();
             }
             else
             {
