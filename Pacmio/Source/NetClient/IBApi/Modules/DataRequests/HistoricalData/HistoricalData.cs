@@ -243,8 +243,8 @@ namespace Pacmio.IB
                 for (int i = 0; i < num; i++)
                 {
                     int pt = (i * 8) + 5;
-                
-                    time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData); Console.WriteLine(fields[pt]);
+
+                    time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData);
                     double open = fields[pt + 1].ToDouble(-1);
                     double high = fields[pt + 2].ToDouble(-1);
                     double low = fields[pt + 3].ToDouble(-1);
