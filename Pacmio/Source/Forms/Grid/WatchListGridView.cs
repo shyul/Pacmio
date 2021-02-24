@@ -16,7 +16,7 @@ namespace Pacmio
 {
     public class WatchListGridView : GridWidget<StockData>, IEquatable<WatchListGridView>
     {
-        public WatchListGridView(WatchList wt) : base(wt.Name)
+        public WatchListGridView(WatchList wt) : base("WatchList: " + wt.Name)
         {
             WatchList = wt;
             DataIsUpdated();

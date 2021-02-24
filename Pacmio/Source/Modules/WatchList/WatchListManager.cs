@@ -104,6 +104,5 @@ namespace Pacmio
         public static DateTime UpdateTime { get; private set; }
 
         public static event StatusEventHandler OnUpdateHandler;
-
     }
 }

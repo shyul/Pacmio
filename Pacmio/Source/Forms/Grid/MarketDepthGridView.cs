@@ -19,9 +19,7 @@ namespace Pacmio
         public MarketDepthGridView(Contract c) : base(c.ToString() + " | Market Depth")
         {
             Contract = c;
-
         }
-
 
         public Contract Contract { get; }
 

@@ -15,17 +15,19 @@ namespace Pacmio
 {
     public class OrderInfoGridView : GridWidget<OrderInfo>//, IDataConsumer
     {
-        public OrderInfoGridView() : base("Order Info")
+        public OrderInfoGridView() : base("Order History")
         {
-            //Rows = OrderManager.List;
+            SourceRows = OrderManager.List;
             OrderManager.DataProvider.AddDataConsumer(this);
         }
 
-        /*
+        public int MaximumRows { get; set; } = int.MaxValue;
+
         public override void DataIsUpdated() 
         {
-            Update(OrderManager.List);
             base.DataIsUpdated();
-        }*/
+        }
+
+
     }
 }
