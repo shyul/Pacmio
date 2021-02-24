@@ -96,6 +96,7 @@ namespace TestClient
             this.button4 = new System.Windows.Forms.Button();
             this.BtnMarketDataAddContract = new System.Windows.Forms.Button();
             this.tabOrder = new System.Windows.Forms.TabPage();
+            this.BtnRefreshOrderInfoGrid = new System.Windows.Forms.Button();
             this.BtnTestMassiveOrder = new System.Windows.Forms.Button();
             this.GroupBoxOrderSetting = new System.Windows.Forms.GroupBox();
             this.BtnOrderSettingApplyCurrentPrice = new System.Windows.Forms.Button();
@@ -198,7 +199,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnRefreshOrderInfoGrid = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -221,7 +221,7 @@ namespace TestClient
             // btnConnect
             // 
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnConnect.Location = new System.Drawing.Point(16, 803);
+            this.btnConnect.Location = new System.Drawing.Point(16, 1164);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(100, 40);
             this.btnConnect.TabIndex = 0;
@@ -251,24 +251,14 @@ namespace TestClient
             this.MainTab.Controls.Add(this.tabSimulation);
             this.MainTab.Controls.Add(this.tabAccount);
             this.MainTab.Controls.Add(this.tabFileData);
-            this.MainTab.Location = new System.Drawing.Point(12, 190);
+            this.MainTab.Location = new System.Drawing.Point(12, 260);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
-            this.MainTab.Size = new System.Drawing.Size(960, 510);
+            this.MainTab.Size = new System.Drawing.Size(960, 801);
             this.MainTab.TabIndex = 3;
             // 
             // tabHistoricalData
             // 
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet8);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet7);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet6);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet5);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet4);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet3);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet2);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataContractSet1);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataConfigMinuteLastWeek);
-            this.tabHistoricalData.Controls.Add(this.BtnHistoricalDataConfigDailyFull);
             this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
@@ -282,14 +272,14 @@ namespace TestClient
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHistoricalData.Size = new System.Drawing.Size(952, 484);
+            this.tabHistoricalData.Size = new System.Drawing.Size(952, 775);
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
             // 
             // BtnHistoricalDataContractSet8
             // 
-            this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(364, 35);
+            this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(118, 205);
             this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
             this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet8.TabIndex = 56;
@@ -299,7 +289,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet7
             // 
-            this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(313, 35);
+            this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(67, 205);
             this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
             this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet7.TabIndex = 55;
@@ -309,7 +299,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet6
             // 
-            this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(262, 35);
+            this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(16, 205);
             this.BtnHistoricalDataContractSet6.Name = "BtnHistoricalDataContractSet6";
             this.BtnHistoricalDataContractSet6.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet6.TabIndex = 54;
@@ -319,7 +309,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet5
             // 
-            this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(211, 35);
+            this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(220, 176);
             this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
             this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet5.TabIndex = 53;
@@ -329,7 +319,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet4
             // 
-            this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(160, 35);
+            this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(169, 176);
             this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
             this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet4.TabIndex = 51;
@@ -339,7 +329,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet3
             // 
-            this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(109, 35);
+            this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(118, 176);
             this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
             this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet3.TabIndex = 50;
@@ -349,7 +339,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet2
             // 
-            this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(58, 35);
+            this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(67, 176);
             this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
             this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet2.TabIndex = 49;
@@ -359,7 +349,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet1
             // 
-            this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(7, 35);
+            this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(16, 176);
             this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
             this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet1.TabIndex = 48;
@@ -369,9 +359,9 @@ namespace TestClient
             // 
             // BtnHistoricalDataConfigMinuteLastWeek
             // 
-            this.BtnHistoricalDataConfigMinuteLastWeek.Location = new System.Drawing.Point(211, 6);
+            this.BtnHistoricalDataConfigMinuteLastWeek.Location = new System.Drawing.Point(10, 205);
             this.BtnHistoricalDataConfigMinuteLastWeek.Name = "BtnHistoricalDataConfigMinuteLastWeek";
-            this.BtnHistoricalDataConfigMinuteLastWeek.Size = new System.Drawing.Size(198, 23);
+            this.BtnHistoricalDataConfigMinuteLastWeek.Size = new System.Drawing.Size(173, 23);
             this.BtnHistoricalDataConfigMinuteLastWeek.TabIndex = 47;
             this.BtnHistoricalDataConfigMinuteLastWeek.Text = "1 Minute / Last Week";
             this.BtnHistoricalDataConfigMinuteLastWeek.UseVisualStyleBackColor = true;
@@ -379,9 +369,9 @@ namespace TestClient
             // 
             // BtnHistoricalDataConfigDailyFull
             // 
-            this.BtnHistoricalDataConfigDailyFull.Location = new System.Drawing.Point(7, 6);
+            this.BtnHistoricalDataConfigDailyFull.Location = new System.Drawing.Point(10, 176);
             this.BtnHistoricalDataConfigDailyFull.Name = "BtnHistoricalDataConfigDailyFull";
-            this.BtnHistoricalDataConfigDailyFull.Size = new System.Drawing.Size(198, 23);
+            this.BtnHistoricalDataConfigDailyFull.Size = new System.Drawing.Size(173, 23);
             this.BtnHistoricalDataConfigDailyFull.TabIndex = 46;
             this.BtnHistoricalDataConfigDailyFull.Text = "Daily / Full";
             this.BtnHistoricalDataConfigDailyFull.UseVisualStyleBackColor = true;
@@ -389,7 +379,7 @@ namespace TestClient
             // 
             // BtnLoadMultiHistoricalChart
             // 
-            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 108);
+            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 35);
             this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
             this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadMultiHistoricalChart.TabIndex = 45;
@@ -400,7 +390,7 @@ namespace TestClient
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(261, 84);
+            this.label12.Location = new System.Drawing.Point(261, 11);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(55, 13);
             this.label12.TabIndex = 44;
@@ -418,7 +408,7 @@ namespace TestClient
             // 
             // BtnCloseChart
             // 
-            this.BtnCloseChart.Location = new System.Drawing.Point(7, 166);
+            this.BtnCloseChart.Location = new System.Drawing.Point(7, 93);
             this.BtnCloseChart.Name = "BtnCloseChart";
             this.BtnCloseChart.Size = new System.Drawing.Size(230, 23);
             this.BtnCloseChart.TabIndex = 37;
@@ -428,7 +418,7 @@ namespace TestClient
             // ListViewAllCharts
             // 
             this.ListViewAllCharts.HideSelection = false;
-            this.ListViewAllCharts.Location = new System.Drawing.Point(264, 100);
+            this.ListViewAllCharts.Location = new System.Drawing.Point(264, 27);
             this.ListViewAllCharts.Name = "ListViewAllCharts";
             this.ListViewAllCharts.Size = new System.Drawing.Size(279, 238);
             this.ListViewAllCharts.TabIndex = 36;
@@ -436,7 +426,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 250);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 177);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -466,7 +456,7 @@ namespace TestClient
             // 
             // BtnChartsUpdateAll
             // 
-            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 221);
+            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 148);
             this.BtnChartsUpdateAll.Name = "BtnChartsUpdateAll";
             this.BtnChartsUpdateAll.Size = new System.Drawing.Size(230, 23);
             this.BtnChartsUpdateAll.TabIndex = 2;
@@ -477,7 +467,7 @@ namespace TestClient
             // BtnLoadHistoricalChart
             // 
             this.BtnLoadHistoricalChart.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 79);
+            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 6);
             this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
             this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadHistoricalChart.TabIndex = 0;
@@ -493,7 +483,7 @@ namespace TestClient
             this.tabContract.Controls.Add(this.BtnSearchSymbol);
             this.tabContract.Location = new System.Drawing.Point(4, 22);
             this.tabContract.Name = "tabContract";
-            this.tabContract.Size = new System.Drawing.Size(952, 484);
+            this.tabContract.Size = new System.Drawing.Size(952, 845);
             this.tabContract.TabIndex = 2;
             this.tabContract.Text = "Contract";
             this.tabContract.UseVisualStyleBackColor = true;
@@ -515,7 +505,7 @@ namespace TestClient
             this.GroupBoxContractInfo.Controls.Add(this.TextBoxSymbolSummaryB);
             this.GroupBoxContractInfo.Location = new System.Drawing.Point(398, 3);
             this.GroupBoxContractInfo.Name = "GroupBoxContractInfo";
-            this.GroupBoxContractInfo.Size = new System.Drawing.Size(551, 478);
+            this.GroupBoxContractInfo.Size = new System.Drawing.Size(551, 839);
             this.GroupBoxContractInfo.TabIndex = 63;
             this.GroupBoxContractInfo.TabStop = false;
             this.GroupBoxContractInfo.Text = "Contract Information";
@@ -684,7 +674,7 @@ namespace TestClient
             this.tabMarketData.Controls.Add(this.BtnMarketDataAddContract);
             this.tabMarketData.Location = new System.Drawing.Point(4, 22);
             this.tabMarketData.Name = "tabMarketData";
-            this.tabMarketData.Size = new System.Drawing.Size(952, 484);
+            this.tabMarketData.Size = new System.Drawing.Size(952, 845);
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
@@ -906,6 +896,16 @@ namespace TestClient
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
+            // 
+            // BtnRefreshOrderInfoGrid
+            // 
+            this.BtnRefreshOrderInfoGrid.Location = new System.Drawing.Point(722, 108);
+            this.BtnRefreshOrderInfoGrid.Name = "BtnRefreshOrderInfoGrid";
+            this.BtnRefreshOrderInfoGrid.Size = new System.Drawing.Size(158, 23);
+            this.BtnRefreshOrderInfoGrid.TabIndex = 84;
+            this.BtnRefreshOrderInfoGrid.Text = "Refresh OrderInfo Grid";
+            this.BtnRefreshOrderInfoGrid.UseVisualStyleBackColor = true;
+            this.BtnRefreshOrderInfoGrid.Click += new System.EventHandler(this.BtnRefreshOrderInfoGrid_Click);
             // 
             // BtnTestMassiveOrder
             // 
@@ -1360,7 +1360,7 @@ namespace TestClient
             this.tabFileData.Controls.Add(this.BtnImportContracts);
             this.tabFileData.Location = new System.Drawing.Point(4, 22);
             this.tabFileData.Name = "tabFileData";
-            this.tabFileData.Size = new System.Drawing.Size(952, 484);
+            this.tabFileData.Size = new System.Drawing.Size(952, 743);
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
@@ -1572,7 +1572,7 @@ namespace TestClient
             // BtnMarketDataFormHide
             // 
             this.BtnMarketDataFormHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 718);
+            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 1079);
             this.BtnMarketDataFormHide.Name = "BtnMarketDataFormHide";
             this.BtnMarketDataFormHide.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormHide.TabIndex = 6;
@@ -1583,7 +1583,7 @@ namespace TestClient
             // BtnMarketDataFormShow
             // 
             this.BtnMarketDataFormShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 718);
+            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 1079);
             this.BtnMarketDataFormShow.Name = "BtnMarketDataFormShow";
             this.BtnMarketDataFormShow.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormShow.TabIndex = 5;
@@ -1605,7 +1605,7 @@ namespace TestClient
             // DownloadBarTableDetialedProgressBar
             // 
             this.DownloadBarTableDetialedProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 757);
+            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 1118);
             this.DownloadBarTableDetialedProgressBar.Name = "DownloadBarTableDetialedProgressBar";
             this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 15);
             this.DownloadBarTableDetialedProgressBar.TabIndex = 11;
@@ -1617,7 +1617,7 @@ namespace TestClient
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxMultiContracts.Location = new System.Drawing.Point(6, 21);
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
-            this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 143);
+            this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 213);
             this.TextBoxMultiContracts.TabIndex = 9;
             this.TextBoxMultiContracts.Text = resources.GetString("TextBoxMultiContracts.Text");
             // 
@@ -1711,7 +1711,7 @@ namespace TestClient
             // 
             this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ListBoxAccount.FormattingEnabled = true;
-            this.ListBoxAccount.Location = new System.Drawing.Point(88, 718);
+            this.ListBoxAccount.Location = new System.Drawing.Point(88, 1079);
             this.ListBoxAccount.Name = "ListBoxAccount";
             this.ListBoxAccount.Size = new System.Drawing.Size(0, 121);
             this.ListBoxAccount.TabIndex = 4;
@@ -1720,7 +1720,7 @@ namespace TestClient
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LbStatus.AutoSize = true;
-            this.LbStatus.Location = new System.Drawing.Point(122, 805);
+            this.LbStatus.Location = new System.Drawing.Point(122, 1166);
             this.LbStatus.Name = "LbStatus";
             this.LbStatus.Size = new System.Drawing.Size(42, 13);
             this.LbStatus.TabIndex = 11;
@@ -1797,7 +1797,7 @@ namespace TestClient
             // MainProgBar
             // 
             this.MainProgBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MainProgBar.Location = new System.Drawing.Point(125, 782);
+            this.MainProgBar.Location = new System.Drawing.Point(125, 1143);
             this.MainProgBar.Name = "MainProgBar";
             this.MainProgBar.Size = new System.Drawing.Size(487, 15);
             this.MainProgBar.TabIndex = 25;
@@ -1817,7 +1817,7 @@ namespace TestClient
             this.BtnMasterCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BtnMasterCancel.BackColor = System.Drawing.Color.DarkRed;
             this.BtnMasterCancel.ForeColor = System.Drawing.Color.White;
-            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 757);
+            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 1118);
             this.BtnMasterCancel.Name = "BtnMasterCancel";
             this.BtnMasterCancel.Size = new System.Drawing.Size(100, 40);
             this.BtnMasterCancel.TabIndex = 38;
@@ -1828,7 +1828,7 @@ namespace TestClient
             // TextBoxIPAddress
             // 
             this.TextBoxIPAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 821);
+            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 1182);
             this.TextBoxIPAddress.Name = "TextBoxIPAddress";
             this.TextBoxIPAddress.Size = new System.Drawing.Size(150, 22);
             this.TextBoxIPAddress.TabIndex = 65;
@@ -1836,13 +1836,21 @@ namespace TestClient
             // 
             // GroupBoxSingleContract
             // 
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet8);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxValidCountryCode);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet7);
             this.GroupBoxSingleContract.Controls.Add(this.label14);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet6);
             this.GroupBoxSingleContract.Controls.Add(this.BtnValidUSSymbol);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet5);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxSingleContractName);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet4);
             this.GroupBoxSingleContract.Controls.Add(this.LabelSingleContractName);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet3);
             this.GroupBoxSingleContract.Controls.Add(this.textBox1);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet2);
             this.GroupBoxSingleContract.Controls.Add(this.LabelSingleContractType);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet1);
             this.GroupBoxSingleContract.Controls.Add(this.SelectBoxSingleContractSecurityType);
             this.GroupBoxSingleContract.Controls.Add(this.label3);
             this.GroupBoxSingleContract.Controls.Add(this.LabelSingleContractExchange);
@@ -1855,7 +1863,7 @@ namespace TestClient
             this.GroupBoxSingleContract.Controls.Add(this.LabelSingleContractExpire);
             this.GroupBoxSingleContract.Location = new System.Drawing.Point(12, 14);
             this.GroupBoxSingleContract.Name = "GroupBoxSingleContract";
-            this.GroupBoxSingleContract.Size = new System.Drawing.Size(281, 170);
+            this.GroupBoxSingleContract.Size = new System.Drawing.Size(281, 240);
             this.GroupBoxSingleContract.TabIndex = 66;
             this.GroupBoxSingleContract.TabStop = false;
             this.GroupBoxSingleContract.Text = "Single Contract";
@@ -1961,10 +1969,12 @@ namespace TestClient
             this.GroupBoxBarTableSetting.Controls.Add(this.SelectHistoricalDataBarFreq);
             this.GroupBoxBarTableSetting.Controls.Add(this.SelectHistoricalDataBarType);
             this.GroupBoxBarTableSetting.Controls.Add(this.LabelBarFreq);
+            this.GroupBoxBarTableSetting.Controls.Add(this.BtnHistoricalDataConfigMinuteLastWeek);
             this.GroupBoxBarTableSetting.Controls.Add(this.CheckBoxChartToCurrent);
+            this.GroupBoxBarTableSetting.Controls.Add(this.BtnHistoricalDataConfigDailyFull);
             this.GroupBoxBarTableSetting.Location = new System.Drawing.Point(299, 14);
             this.GroupBoxBarTableSetting.Name = "GroupBoxBarTableSetting";
-            this.GroupBoxBarTableSetting.Size = new System.Drawing.Size(193, 170);
+            this.GroupBoxBarTableSetting.Size = new System.Drawing.Size(193, 240);
             this.GroupBoxBarTableSetting.TabIndex = 68;
             this.GroupBoxBarTableSetting.TabStop = false;
             this.GroupBoxBarTableSetting.Text = "BarTable Setting";
@@ -1975,26 +1985,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.Controls.Add(this.BtnFormatSymbolsList);
             this.GroupBoxMultiContracts.Location = new System.Drawing.Point(498, 14);
             this.GroupBoxMultiContracts.Name = "GroupBoxMultiContracts";
-            this.GroupBoxMultiContracts.Size = new System.Drawing.Size(474, 170);
+            this.GroupBoxMultiContracts.Size = new System.Drawing.Size(474, 240);
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnRefreshOrderInfoGrid
-            // 
-            this.BtnRefreshOrderInfoGrid.Location = new System.Drawing.Point(722, 108);
-            this.BtnRefreshOrderInfoGrid.Name = "BtnRefreshOrderInfoGrid";
-            this.BtnRefreshOrderInfoGrid.Size = new System.Drawing.Size(158, 23);
-            this.BtnRefreshOrderInfoGrid.TabIndex = 84;
-            this.BtnRefreshOrderInfoGrid.Text = "Refresh OrderInfo Grid";
-            this.BtnRefreshOrderInfoGrid.UseVisualStyleBackColor = true;
-            this.BtnRefreshOrderInfoGrid.Click += new System.EventHandler(this.BtnRefreshOrderInfoGrid_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 861);
+            this.ClientSize = new System.Drawing.Size(984, 1222);
             this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
             this.Controls.Add(this.BtnMarketDataFormShow);
             this.Controls.Add(this.BtnMarketDataFormHide);
