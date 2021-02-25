@@ -154,7 +154,7 @@ namespace Pacmio
 
             // Load Industry Sectors Code Dictionary
             IB.Client.Load();
-            BusinessInfoList.Load();
+            BusinessInfoManager.Load();
             ContractManager.Load();
             UnknownContractList.Load();
             AccountPositionManager.Load();
@@ -177,7 +177,7 @@ namespace Pacmio
             Settings.SerializeJsonFile(SettingFile);
 
             IB.Client.Save();
-            BusinessInfoList.Save();
+            BusinessInfoManager.Save();
             ContractManager.Save();
             //TradeInfoManager.Save();
             //OrderManager.Save();

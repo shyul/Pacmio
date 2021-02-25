@@ -15,7 +15,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class BusinessInfoList
+    public static class BusinessInfoManager
     {
         /// <summary>
         /// Master List of Business Informations.

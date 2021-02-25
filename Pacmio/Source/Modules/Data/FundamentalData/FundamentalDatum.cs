@@ -4,15 +4,17 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.ComponentModel;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Runtime.Serialization;
 using Xu;
+using Xu.GridView;
 
 namespace Pacmio
 {
-    public static class NewsManager
+    public class FundamentalDatum2
     {
     }
 }
