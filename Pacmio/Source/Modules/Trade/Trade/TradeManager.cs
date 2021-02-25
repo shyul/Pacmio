@@ -83,6 +83,8 @@ namespace Pacmio
 
         private static Dictionary<string, TradeInfo> ExecIdToTradeLUT { get; } = new Dictionary<string, TradeInfo>();
 
+        public static IEnumerable<TradeInfo> List => ExecIdToTradeLUT.Values;
+
         #endregion Data Operation
 
         #region Data Events

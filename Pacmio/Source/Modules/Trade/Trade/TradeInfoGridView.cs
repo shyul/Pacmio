@@ -13,21 +13,21 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class OrderInfoGridView : GridWidget<OrderInfo>//, IDataConsumer
+    public class TradeInfoGridView : GridWidget<TradeInfo>
     {
-        public OrderInfoGridView() : base("Order History")
+        public TradeInfoGridView() : base("Order History")
         {
-            SourceRows = OrderManager.List;
-            OrderManager.DataProvider.AddDataConsumer(this);
+            SourceRows = TradeManager.List;
+            TradeManager.DataProvider.AddDataConsumer(this);
+            DataIsUpdated(null);
         }
 
-        public int MaximumRows { get; set; } = int.MaxValue;
-
-        public override void DataIsUpdated(IDataProvider provider) 
+        ~TradeInfoGridView()
         {
-            base.DataIsUpdated(provider);
+            TradeManager.DataProvider.RemoveDataConsumer(this);
+            Dispose();
         }
 
-
+        //public int MaximumRows { get; set; } = int.MaxValue;
     }
 }

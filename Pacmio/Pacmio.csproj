@@ -90,7 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Forms\Grid\OrderInfoGridView.cs" />
+    <Compile Include="Source\Modules\Trade\Order\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
@@ -135,6 +135,7 @@
     <Compile Include="Source\Modules\Strategy\EntryMethod.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\AccountPosition\PositionInfo.cs" />
+    <Compile Include="Source\Modules\Trade\Trade\TradeInfoGridView.cs" />
     <Compile Include="Source\Modules\Trade\Trade\TradeManager.cs" />
     <Compile Include="Source\Modules\WatchList\Types\DynamicWatchList.cs" />
     <Compile Include="Source\Modules\WatchList\Types\InteractiveBrokerWatchList.cs" />
@@ -189,8 +190,8 @@
     <Compile Include="Source\Modules\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\MarketData\StockData.cs" />
     <Compile Include="Source\Modules\MarketData\MarketTickStatus.cs" />
-    <Compile Include="Source\Forms\Grid\WatchListGridView.cs" />
-    <Compile Include="Source\Forms\Grid\WatchListGridViewManager.cs" />
+    <Compile Include="Source\Modules\WatchList\WatchListGridView.cs" />
+    <Compile Include="Source\Modules\WatchList\WatchListGridViewManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Simulation\SimulationSet.cs" />

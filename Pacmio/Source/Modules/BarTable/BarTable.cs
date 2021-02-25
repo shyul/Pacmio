@@ -37,6 +37,8 @@ namespace Pacmio
             CalculateTickTask.Start();
         }
 
+        ~BarTable() => Dispose();
+
         public void Dispose()
         {
             IsLive = false;

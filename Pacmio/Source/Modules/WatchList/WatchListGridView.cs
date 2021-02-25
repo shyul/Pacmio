@@ -22,6 +22,12 @@ namespace Pacmio
             DataIsUpdated(null);
         }
 
+        ~WatchListGridView()
+        {
+            WatchList.RemoveDataConsumer(this);
+            Dispose();
+        }
+
         public WatchList WatchList { get; }
 
         public override void DataIsUpdated(IDataProvider provider)

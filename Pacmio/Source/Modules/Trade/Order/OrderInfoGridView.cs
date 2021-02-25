@@ -13,24 +13,21 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class MarketDepthGridView : GridWidget<MarketDepthDatum>
+    public class OrderInfoGridView : GridWidget<OrderInfo>
     {
-        public MarketDepthGridView(MarketDepth mdt) : base("Market Depth | " + mdt.Contract.Name)
+        public OrderInfoGridView() : base("Order History")
         {
-            MarketDepth = mdt;
-            SourceRows = MarketDepth.List;
-            MarketDepth.AddDataConsumer(this);
+            SourceRows = OrderManager.List;
+            OrderManager.DataProvider.AddDataConsumer(this);
             DataIsUpdated(null);
         }
 
-        ~MarketDepthGridView()
+        ~OrderInfoGridView()
         {
-            MarketDepth.RemoveDataConsumer(this);
+            OrderManager.DataProvider.RemoveDataConsumer(this);
             Dispose();
         }
 
-        public MarketDepth MarketDepth { get; }
-
-        public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
+        //public int MaximumRows { get; set; } = int.MaxValue;
     }
 }
