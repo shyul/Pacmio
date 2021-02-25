@@ -38,16 +38,6 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
-            this.BtnHistoricalDataContractSet8 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet7 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet6 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet5 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet4 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet3 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet2 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataContractSet1 = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataConfigMinuteLastWeek = new System.Windows.Forms.Button();
-            this.BtnHistoricalDataConfigDailyFull = new System.Windows.Forms.Button();
             this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
@@ -159,6 +149,16 @@ namespace TestClient
             this.BtnDownloadMultiTables = new System.Windows.Forms.Button();
             this.BtnExportContracts = new System.Windows.Forms.Button();
             this.BtnImportContracts = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet8 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet7 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet6 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet5 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet4 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet3 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet2 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet1 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataConfigMinuteLastWeek = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataConfigDailyFull = new System.Windows.Forms.Button();
             this.BtnValidUSSymbol = new System.Windows.Forms.Button();
             this.BtnMarketDataFormHide = new System.Windows.Forms.Button();
             this.BtnMarketDataFormShow = new System.Windows.Forms.Button();
@@ -221,7 +221,7 @@ namespace TestClient
             // btnConnect
             // 
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnConnect.Location = new System.Drawing.Point(16, 1164);
+            this.btnConnect.Location = new System.Drawing.Point(16, 1038);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(100, 40);
             this.btnConnect.TabIndex = 0;
@@ -241,8 +241,8 @@ namespace TestClient
             // 
             // MainTab
             // 
-            this.MainTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.MainTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainTab.Controls.Add(this.tabHistoricalData);
             this.MainTab.Controls.Add(this.tabContract);
@@ -254,7 +254,7 @@ namespace TestClient
             this.MainTab.Location = new System.Drawing.Point(12, 260);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
-            this.MainTab.Size = new System.Drawing.Size(960, 801);
+            this.MainTab.Size = new System.Drawing.Size(960, 675);
             this.MainTab.TabIndex = 3;
             // 
             // tabHistoricalData
@@ -272,110 +272,10 @@ namespace TestClient
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHistoricalData.Size = new System.Drawing.Size(952, 775);
+            this.tabHistoricalData.Size = new System.Drawing.Size(952, 649);
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
-            // 
-            // BtnHistoricalDataContractSet8
-            // 
-            this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(118, 205);
-            this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
-            this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet8.TabIndex = 56;
-            this.BtnHistoricalDataContractSet8.Text = "FB";
-            this.BtnHistoricalDataContractSet8.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet8.Click += new System.EventHandler(this.BtnHistoricalDataContractSet8_Click);
-            // 
-            // BtnHistoricalDataContractSet7
-            // 
-            this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(67, 205);
-            this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
-            this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet7.TabIndex = 55;
-            this.BtnHistoricalDataContractSet7.Text = "AAPL";
-            this.BtnHistoricalDataContractSet7.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet7.Click += new System.EventHandler(this.BtnHistoricalDataContractSet7_Click);
-            // 
-            // BtnHistoricalDataContractSet6
-            // 
-            this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(16, 205);
-            this.BtnHistoricalDataContractSet6.Name = "BtnHistoricalDataContractSet6";
-            this.BtnHistoricalDataContractSet6.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet6.TabIndex = 54;
-            this.BtnHistoricalDataContractSet6.Text = "TSLA";
-            this.BtnHistoricalDataContractSet6.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet6.Click += new System.EventHandler(this.BtnHistoricalDataContractSet6_Click);
-            // 
-            // BtnHistoricalDataContractSet5
-            // 
-            this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(220, 176);
-            this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
-            this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet5.TabIndex = 53;
-            this.BtnHistoricalDataContractSet5.Text = "GLD";
-            this.BtnHistoricalDataContractSet5.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet5.Click += new System.EventHandler(this.BtnHistoricalDataContractSet5_Click);
-            // 
-            // BtnHistoricalDataContractSet4
-            // 
-            this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(169, 176);
-            this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
-            this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet4.TabIndex = 51;
-            this.BtnHistoricalDataContractSet4.Text = "IWM";
-            this.BtnHistoricalDataContractSet4.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet4.Click += new System.EventHandler(this.BtnHistoricalDataContractSet4_Click);
-            // 
-            // BtnHistoricalDataContractSet3
-            // 
-            this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(118, 176);
-            this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
-            this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet3.TabIndex = 50;
-            this.BtnHistoricalDataContractSet3.Text = "VXX";
-            this.BtnHistoricalDataContractSet3.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet3.Click += new System.EventHandler(this.BtnHistoricalDataContractSet3_Click);
-            // 
-            // BtnHistoricalDataContractSet2
-            // 
-            this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(67, 176);
-            this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
-            this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet2.TabIndex = 49;
-            this.BtnHistoricalDataContractSet2.Text = "SPY";
-            this.BtnHistoricalDataContractSet2.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet2.Click += new System.EventHandler(this.BtnHistoricalDataContractSet2_Click);
-            // 
-            // BtnHistoricalDataContractSet1
-            // 
-            this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(16, 176);
-            this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
-            this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
-            this.BtnHistoricalDataContractSet1.TabIndex = 48;
-            this.BtnHistoricalDataContractSet1.Text = "QQQ";
-            this.BtnHistoricalDataContractSet1.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataContractSet1.Click += new System.EventHandler(this.BtnHistoricalDataContractSet1_Click);
-            // 
-            // BtnHistoricalDataConfigMinuteLastWeek
-            // 
-            this.BtnHistoricalDataConfigMinuteLastWeek.Location = new System.Drawing.Point(10, 205);
-            this.BtnHistoricalDataConfigMinuteLastWeek.Name = "BtnHistoricalDataConfigMinuteLastWeek";
-            this.BtnHistoricalDataConfigMinuteLastWeek.Size = new System.Drawing.Size(173, 23);
-            this.BtnHistoricalDataConfigMinuteLastWeek.TabIndex = 47;
-            this.BtnHistoricalDataConfigMinuteLastWeek.Text = "1 Minute / Last Week";
-            this.BtnHistoricalDataConfigMinuteLastWeek.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataConfigMinuteLastWeek.Click += new System.EventHandler(this.BtnHistoricalDataConfigMinuteLastWeek_Click);
-            // 
-            // BtnHistoricalDataConfigDailyFull
-            // 
-            this.BtnHistoricalDataConfigDailyFull.Location = new System.Drawing.Point(10, 176);
-            this.BtnHistoricalDataConfigDailyFull.Name = "BtnHistoricalDataConfigDailyFull";
-            this.BtnHistoricalDataConfigDailyFull.Size = new System.Drawing.Size(173, 23);
-            this.BtnHistoricalDataConfigDailyFull.TabIndex = 46;
-            this.BtnHistoricalDataConfigDailyFull.Text = "Daily / Full";
-            this.BtnHistoricalDataConfigDailyFull.UseVisualStyleBackColor = true;
-            this.BtnHistoricalDataConfigDailyFull.Click += new System.EventHandler(this.BtnHistoricalDataConfigDailyFull_Click);
             // 
             // BtnLoadMultiHistoricalChart
             // 
@@ -483,15 +383,15 @@ namespace TestClient
             this.tabContract.Controls.Add(this.BtnSearchSymbol);
             this.tabContract.Location = new System.Drawing.Point(4, 22);
             this.tabContract.Name = "tabContract";
-            this.tabContract.Size = new System.Drawing.Size(952, 845);
+            this.tabContract.Size = new System.Drawing.Size(952, 649);
             this.tabContract.TabIndex = 2;
             this.tabContract.Text = "Contract";
             this.tabContract.UseVisualStyleBackColor = true;
             // 
             // GroupBoxContractInfo
             // 
-            this.GroupBoxContractInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.GroupBoxContractInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBoxContractInfo.Controls.Add(this.TextBoxSymbolFullName);
             this.GroupBoxContractInfo.Controls.Add(this.LbSymbolISIN);
@@ -505,14 +405,14 @@ namespace TestClient
             this.GroupBoxContractInfo.Controls.Add(this.TextBoxSymbolSummaryB);
             this.GroupBoxContractInfo.Location = new System.Drawing.Point(398, 3);
             this.GroupBoxContractInfo.Name = "GroupBoxContractInfo";
-            this.GroupBoxContractInfo.Size = new System.Drawing.Size(551, 839);
+            this.GroupBoxContractInfo.Size = new System.Drawing.Size(551, 643);
             this.GroupBoxContractInfo.TabIndex = 63;
             this.GroupBoxContractInfo.TabStop = false;
             this.GroupBoxContractInfo.Text = "Contract Information";
             // 
             // TextBoxSymbolFullName
             // 
-            this.TextBoxSymbolFullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBoxSymbolFullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolFullName.Location = new System.Drawing.Point(57, 21);
             this.TextBoxSymbolFullName.Name = "TextBoxSymbolFullName";
@@ -532,7 +432,7 @@ namespace TestClient
             // TextBoxSymbolIds
             // 
             this.TextBoxSymbolIds.AcceptsReturn = true;
-            this.TextBoxSymbolIds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBoxSymbolIds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolIds.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolIds.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -574,7 +474,8 @@ namespace TestClient
             // TextBoxSymbolSummaryF
             // 
             this.TextBoxSymbolSummaryF.AcceptsReturn = true;
-            this.TextBoxSymbolSummaryF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBoxSymbolSummaryF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolSummaryF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolSummaryF.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -583,7 +484,7 @@ namespace TestClient
             this.TextBoxSymbolSummaryF.Name = "TextBoxSymbolSummaryF";
             this.TextBoxSymbolSummaryF.ReadOnly = true;
             this.TextBoxSymbolSummaryF.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TextBoxSymbolSummaryF.Size = new System.Drawing.Size(532, 288);
+            this.TextBoxSymbolSummaryF.Size = new System.Drawing.Size(532, 224);
             this.TextBoxSymbolSummaryF.TabIndex = 59;
             // 
             // LbBusinessSummary
@@ -609,7 +510,7 @@ namespace TestClient
             // TextBoxSymbolSummaryB
             // 
             this.TextBoxSymbolSummaryB.AcceptsReturn = true;
-            this.TextBoxSymbolSummaryB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBoxSymbolSummaryB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolSummaryB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolSummaryB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -674,7 +575,7 @@ namespace TestClient
             this.tabMarketData.Controls.Add(this.BtnMarketDataAddContract);
             this.tabMarketData.Location = new System.Drawing.Point(4, 22);
             this.tabMarketData.Name = "tabMarketData";
-            this.tabMarketData.Size = new System.Drawing.Size(952, 845);
+            this.tabMarketData.Size = new System.Drawing.Size(952, 649);
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
@@ -892,7 +793,7 @@ namespace TestClient
             this.tabOrder.Controls.Add(this.BtnGetOpenOrders);
             this.tabOrder.Location = new System.Drawing.Point(4, 22);
             this.tabOrder.Name = "tabOrder";
-            this.tabOrder.Size = new System.Drawing.Size(952, 484);
+            this.tabOrder.Size = new System.Drawing.Size(952, 649);
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
@@ -1213,7 +1114,7 @@ namespace TestClient
             this.ib_banner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ib_banner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ib_banner.Image = global::TestClient.Properties.Resources.LogoIcon;
-            this.ib_banner.Location = new System.Drawing.Point(696, 427);
+            this.ib_banner.Location = new System.Drawing.Point(712, 610);
             this.ib_banner.Name = "ib_banner";
             this.ib_banner.Size = new System.Drawing.Size(237, 36);
             this.ib_banner.TabIndex = 10;
@@ -1248,7 +1149,7 @@ namespace TestClient
             this.tabSimulation.Controls.Add(this.BtnArmLiveTrade);
             this.tabSimulation.Location = new System.Drawing.Point(4, 22);
             this.tabSimulation.Name = "tabSimulation";
-            this.tabSimulation.Size = new System.Drawing.Size(952, 484);
+            this.tabSimulation.Size = new System.Drawing.Size(952, 649);
             this.tabSimulation.TabIndex = 9;
             this.tabSimulation.Text = "Simulation";
             this.tabSimulation.UseVisualStyleBackColor = true;
@@ -1306,10 +1207,11 @@ namespace TestClient
             this.tabAccount.Controls.Add(this.BtnRequestPnL);
             this.tabAccount.Controls.Add(this.TreeViewAccount);
             this.tabAccount.Controls.Add(this.btnAccountSummary);
+            this.tabAccount.Controls.Add(this.ListBoxAccount);
             this.tabAccount.Location = new System.Drawing.Point(4, 22);
             this.tabAccount.Name = "tabAccount";
             this.tabAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAccount.Size = new System.Drawing.Size(952, 484);
+            this.tabAccount.Size = new System.Drawing.Size(952, 649);
             this.tabAccount.TabIndex = 0;
             this.tabAccount.Text = "Account";
             this.tabAccount.UseVisualStyleBackColor = true;
@@ -1336,11 +1238,11 @@ namespace TestClient
             // 
             // TreeViewAccount
             // 
-            this.TreeViewAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TreeViewAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewAccount.Location = new System.Drawing.Point(6, 35);
             this.TreeViewAccount.Name = "TreeViewAccount";
-            this.TreeViewAccount.Size = new System.Drawing.Size(516, 443);
+            this.TreeViewAccount.Size = new System.Drawing.Size(516, 608);
             this.TreeViewAccount.TabIndex = 5;
             // 
             // tabFileData
@@ -1360,7 +1262,7 @@ namespace TestClient
             this.tabFileData.Controls.Add(this.BtnImportContracts);
             this.tabFileData.Location = new System.Drawing.Point(4, 22);
             this.tabFileData.Name = "tabFileData";
-            this.tabFileData.Size = new System.Drawing.Size(952, 743);
+            this.tabFileData.Size = new System.Drawing.Size(952, 787);
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
@@ -1559,6 +1461,106 @@ namespace TestClient
             this.BtnImportContracts.UseVisualStyleBackColor = true;
             this.BtnImportContracts.Click += new System.EventHandler(this.BtnImportContracts_Click);
             // 
+            // BtnHistoricalDataContractSet8
+            // 
+            this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(118, 205);
+            this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
+            this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet8.TabIndex = 56;
+            this.BtnHistoricalDataContractSet8.Text = "FB";
+            this.BtnHistoricalDataContractSet8.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet8.Click += new System.EventHandler(this.BtnHistoricalDataContractSet8_Click);
+            // 
+            // BtnHistoricalDataContractSet7
+            // 
+            this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(67, 205);
+            this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
+            this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet7.TabIndex = 55;
+            this.BtnHistoricalDataContractSet7.Text = "AAPL";
+            this.BtnHistoricalDataContractSet7.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet7.Click += new System.EventHandler(this.BtnHistoricalDataContractSet7_Click);
+            // 
+            // BtnHistoricalDataContractSet6
+            // 
+            this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(16, 205);
+            this.BtnHistoricalDataContractSet6.Name = "BtnHistoricalDataContractSet6";
+            this.BtnHistoricalDataContractSet6.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet6.TabIndex = 54;
+            this.BtnHistoricalDataContractSet6.Text = "TSLA";
+            this.BtnHistoricalDataContractSet6.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet6.Click += new System.EventHandler(this.BtnHistoricalDataContractSet6_Click);
+            // 
+            // BtnHistoricalDataContractSet5
+            // 
+            this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(220, 176);
+            this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
+            this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet5.TabIndex = 53;
+            this.BtnHistoricalDataContractSet5.Text = "GLD";
+            this.BtnHistoricalDataContractSet5.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet5.Click += new System.EventHandler(this.BtnHistoricalDataContractSet5_Click);
+            // 
+            // BtnHistoricalDataContractSet4
+            // 
+            this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(169, 176);
+            this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
+            this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet4.TabIndex = 51;
+            this.BtnHistoricalDataContractSet4.Text = "IWM";
+            this.BtnHistoricalDataContractSet4.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet4.Click += new System.EventHandler(this.BtnHistoricalDataContractSet4_Click);
+            // 
+            // BtnHistoricalDataContractSet3
+            // 
+            this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(118, 176);
+            this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
+            this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet3.TabIndex = 50;
+            this.BtnHistoricalDataContractSet3.Text = "VXX";
+            this.BtnHistoricalDataContractSet3.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet3.Click += new System.EventHandler(this.BtnHistoricalDataContractSet3_Click);
+            // 
+            // BtnHistoricalDataContractSet2
+            // 
+            this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(67, 176);
+            this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
+            this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet2.TabIndex = 49;
+            this.BtnHistoricalDataContractSet2.Text = "SPY";
+            this.BtnHistoricalDataContractSet2.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet2.Click += new System.EventHandler(this.BtnHistoricalDataContractSet2_Click);
+            // 
+            // BtnHistoricalDataContractSet1
+            // 
+            this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(16, 176);
+            this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
+            this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet1.TabIndex = 48;
+            this.BtnHistoricalDataContractSet1.Text = "QQQ";
+            this.BtnHistoricalDataContractSet1.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet1.Click += new System.EventHandler(this.BtnHistoricalDataContractSet1_Click);
+            // 
+            // BtnHistoricalDataConfigMinuteLastWeek
+            // 
+            this.BtnHistoricalDataConfigMinuteLastWeek.Location = new System.Drawing.Point(10, 205);
+            this.BtnHistoricalDataConfigMinuteLastWeek.Name = "BtnHistoricalDataConfigMinuteLastWeek";
+            this.BtnHistoricalDataConfigMinuteLastWeek.Size = new System.Drawing.Size(173, 23);
+            this.BtnHistoricalDataConfigMinuteLastWeek.TabIndex = 47;
+            this.BtnHistoricalDataConfigMinuteLastWeek.Text = "1 Minute / Last Week";
+            this.BtnHistoricalDataConfigMinuteLastWeek.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataConfigMinuteLastWeek.Click += new System.EventHandler(this.BtnHistoricalDataConfigMinuteLastWeek_Click);
+            // 
+            // BtnHistoricalDataConfigDailyFull
+            // 
+            this.BtnHistoricalDataConfigDailyFull.Location = new System.Drawing.Point(10, 176);
+            this.BtnHistoricalDataConfigDailyFull.Name = "BtnHistoricalDataConfigDailyFull";
+            this.BtnHistoricalDataConfigDailyFull.Size = new System.Drawing.Size(173, 23);
+            this.BtnHistoricalDataConfigDailyFull.TabIndex = 46;
+            this.BtnHistoricalDataConfigDailyFull.Text = "Daily / Full";
+            this.BtnHistoricalDataConfigDailyFull.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataConfigDailyFull.Click += new System.EventHandler(this.BtnHistoricalDataConfigDailyFull_Click);
+            // 
             // BtnValidUSSymbol
             // 
             this.BtnValidUSSymbol.Location = new System.Drawing.Point(191, 21);
@@ -1572,7 +1574,7 @@ namespace TestClient
             // BtnMarketDataFormHide
             // 
             this.BtnMarketDataFormHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 1079);
+            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 953);
             this.BtnMarketDataFormHide.Name = "BtnMarketDataFormHide";
             this.BtnMarketDataFormHide.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormHide.TabIndex = 6;
@@ -1583,7 +1585,7 @@ namespace TestClient
             // BtnMarketDataFormShow
             // 
             this.BtnMarketDataFormShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 1079);
+            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 953);
             this.BtnMarketDataFormShow.Name = "BtnMarketDataFormShow";
             this.BtnMarketDataFormShow.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormShow.TabIndex = 5;
@@ -1605,15 +1607,15 @@ namespace TestClient
             // DownloadBarTableDetialedProgressBar
             // 
             this.DownloadBarTableDetialedProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 1118);
+            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 992);
             this.DownloadBarTableDetialedProgressBar.Name = "DownloadBarTableDetialedProgressBar";
             this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 15);
             this.DownloadBarTableDetialedProgressBar.TabIndex = 11;
             // 
             // TextBoxMultiContracts
             // 
-            this.TextBoxMultiContracts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBoxMultiContracts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxMultiContracts.Location = new System.Drawing.Point(6, 21);
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
@@ -1711,16 +1713,16 @@ namespace TestClient
             // 
             this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ListBoxAccount.FormattingEnabled = true;
-            this.ListBoxAccount.Location = new System.Drawing.Point(88, 1079);
+            this.ListBoxAccount.Location = new System.Drawing.Point(538, 35);
             this.ListBoxAccount.Name = "ListBoxAccount";
-            this.ListBoxAccount.Size = new System.Drawing.Size(0, 121);
+            this.ListBoxAccount.Size = new System.Drawing.Size(144, 147);
             this.ListBoxAccount.TabIndex = 4;
             // 
             // LbStatus
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LbStatus.AutoSize = true;
-            this.LbStatus.Location = new System.Drawing.Point(122, 1166);
+            this.LbStatus.Location = new System.Drawing.Point(122, 1040);
             this.LbStatus.Name = "LbStatus";
             this.LbStatus.Size = new System.Drawing.Size(42, 13);
             this.LbStatus.TabIndex = 11;
@@ -1797,7 +1799,7 @@ namespace TestClient
             // MainProgBar
             // 
             this.MainProgBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MainProgBar.Location = new System.Drawing.Point(125, 1143);
+            this.MainProgBar.Location = new System.Drawing.Point(125, 1017);
             this.MainProgBar.Name = "MainProgBar";
             this.MainProgBar.Size = new System.Drawing.Size(487, 15);
             this.MainProgBar.TabIndex = 25;
@@ -1817,7 +1819,7 @@ namespace TestClient
             this.BtnMasterCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BtnMasterCancel.BackColor = System.Drawing.Color.DarkRed;
             this.BtnMasterCancel.ForeColor = System.Drawing.Color.White;
-            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 1118);
+            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 992);
             this.BtnMasterCancel.Name = "BtnMasterCancel";
             this.BtnMasterCancel.Size = new System.Drawing.Size(100, 40);
             this.BtnMasterCancel.TabIndex = 38;
@@ -1828,7 +1830,7 @@ namespace TestClient
             // TextBoxIPAddress
             // 
             this.TextBoxIPAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 1182);
+            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 1056);
             this.TextBoxIPAddress.Name = "TextBoxIPAddress";
             this.TextBoxIPAddress.Size = new System.Drawing.Size(150, 22);
             this.TextBoxIPAddress.TabIndex = 65;
@@ -1994,7 +1996,7 @@ namespace TestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 1222);
+            this.ClientSize = new System.Drawing.Size(984, 1096);
             this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
             this.Controls.Add(this.BtnMarketDataFormShow);
             this.Controls.Add(this.BtnMarketDataFormHide);
@@ -2004,7 +2006,6 @@ namespace TestClient
             this.Controls.Add(this.TextBoxIPAddress);
             this.Controls.Add(this.BtnMasterCancel);
             this.Controls.Add(this.MainProgBar);
-            this.Controls.Add(this.ListBoxAccount);
             this.Controls.Add(this.LbStatus);
             this.Controls.Add(this.MainTab);
             this.Controls.Add(this.btnConnect);

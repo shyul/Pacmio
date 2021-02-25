@@ -46,6 +46,7 @@ namespace Pacmio.IB
             {
                 string accountId = fields[3];
                 AccountInfo ac = AccountPositionManager.GetOrCreateAccountById(accountId);
+                ac.IsLive = true;
                 ac.UpdateFields(fields[4], fields[5]);
                 //AccountPositionManager.AccountDataProvider.DataIsUpdated();
             }
@@ -77,7 +78,8 @@ namespace Pacmio.IB
                 {
                     if (accountId.Length > 0)
                     {
-                        AccountPositionManager.GetOrCreateAccountById(accountId);
+                        AccountInfo ac = AccountPositionManager.GetOrCreateAccountById(accountId);
+                        ac.IsLive = true;
                     }
                 }
                 AccountPositionManager.AccountDataProvider.Updated();

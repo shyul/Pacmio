@@ -120,6 +120,7 @@ namespace Pacmio
                 var list = Serialization.DeserializeJsonFile<AccountInfo[]>(FileName);
                 foreach (AccountInfo ac in list)
                 {
+                    ac.IsLive = false;
                     AccountLUT.CheckAdd(ac.AccountId, ac);
                 }
             }

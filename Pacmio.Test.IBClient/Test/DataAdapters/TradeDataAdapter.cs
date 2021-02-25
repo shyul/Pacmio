@@ -32,18 +32,10 @@ namespace TestClient
             {
                 Console.WriteLine("Trade History is updated. " + TradeManager.Count);
 
-                /*
-                this?.Invoke(() =>
-                {
-                    if (status == IncomingMessage.ExecutionData || status == IncomingMessage.CommissionsReport)
-                    {
-                        string execId = msg;
-                        TradeInfo ti = TradeManager.GetTradeByExecId(execId);
 
-                        if (!(ti is null))
-                            TradeTest.UpdateTable(ti);
-                    }
-                });*/
+
+
+
             });
         }
 

@@ -128,8 +128,6 @@
   <ItemGroup>
     <None Include="Resources\LogoIcon.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

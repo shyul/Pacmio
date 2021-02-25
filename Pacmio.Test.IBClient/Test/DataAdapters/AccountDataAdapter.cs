@@ -56,14 +56,12 @@ namespace TestClient
             ListBoxAccount.Items.Clear();
             TreeViewAccount.Nodes.Clear();
 
-            foreach (var a in AccountPositionManager.List)
+            foreach (var ac in AccountPositionManager.List)
             {
-                ListBoxAccount.Items.Add(a.AccountId);
+                if (ac.IsLive) ListBoxAccount.Items.Add(ac.AccountId);
 
-                //if (a.AccountReady) 
-                //
                 string dayTradingString = "[ ";
-                foreach (int d in a.DayTradesRemaining)
+                foreach (int d in ac.DayTradesRemaining)
                 {
                     if (d == -1)
                     {
@@ -75,16 +73,16 @@ namespace TestClient
                 }
                 dayTradingString = dayTradingString.Trim().TrimEnd(',') + " ]";
 
-                TreeNode tr = new TreeNode(a.AccountId + ": " + a.AccountType + " " + dayTradingString);
+                TreeNode tr = new TreeNode(ac.AccountId + ": " + ac.AccountType + " " + dayTradingString);
 
-                foreach (PropertyInfo p in a.GetType().GetProperties())
+                foreach (PropertyInfo p in ac.GetType().GetProperties())
                 {
                     string tagName = p.Name + " = ";
                     if (p.GetAttribute<DisplayNameAttribute>() is DisplayNameAttribute Result) tagName = Result.DisplayName + " = ";
 
                     if (p.PropertyType == typeof(double))
                     {
-                        double v = (double)p.GetValue(a);
+                        double v = (double)p.GetValue(ac);
                         if (!double.IsNaN(v))
                         {
                             tagName += v.ToString();
@@ -94,8 +92,6 @@ namespace TestClient
                 }
 
                 TreeViewAccount.Nodes.Add(tr);
-
-                //}
             }
 
             TreeViewAccount.ExpandAll();

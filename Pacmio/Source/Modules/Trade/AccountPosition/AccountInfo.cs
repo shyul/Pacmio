@@ -15,7 +15,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class AccountInfo : IEquatable<AccountInfo>, IEquatable<string>
+    public sealed class AccountInfo : IEquatable<AccountInfo>, IEquatable<string>, IDataProvider
     {
         public AccountInfo(string accountId)
         {
@@ -25,10 +25,33 @@ namespace Pacmio
         public override string ToString() => AccountId;
 
         [IgnoreDataMember]
+        public bool IsLive { get; set; } = false;
+
+        [IgnoreDataMember]
         public string Name => "Account: " + AccountId;
 
         [DataMember]
         public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
+
+        [IgnoreDataMember]
+        public List<IDataConsumer> DataConsumers { get; private set; }
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            if (DataConsumers is null) DataConsumers = new List<IDataConsumer>();
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return (DataConsumers is not null) ? DataConsumers.CheckRemove(idk) : false;
+        }
+
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers?.ForEach(n => n.DataIsUpdated(this));
+        }
 
         [DataMember, Browsable(true), ReadOnly(true)]
         [Description("Number of Open/Close trades one could do before Pattern Day Trading is detected")]
@@ -139,7 +162,7 @@ namespace Pacmio
 
         [DataMember, Browsable(false), ReadOnly(true), Category("1: Basic")]
         [Description("For internal use only")]
-        public bool AccountReady { get; private set; }
+        public bool AccountReady { get; private set; } = false;
 
         [DataMember, Browsable(false), ReadOnly(true), Category("1: Basic"), DisplayName("Account Or Group")]
         [Description("AccountOrGroup: (All) to return account summary data for all accounts, or set to a specific Advisor Account Group name that has already been created in TWS Global Configuration.")]
@@ -1000,11 +1023,8 @@ namespace Pacmio
                     break;
             }
 
-            UpdateTime = DateTime.Now;
+            DataIsUpdated();
         }
-
-
-
 
         #region Equality
 
