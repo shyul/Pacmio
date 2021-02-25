@@ -19,16 +19,14 @@ namespace Pacmio
     /// </summary>
     public class MarketDepthDatum
     {
-        public MarketDepthDatum(int position) => Position = position;
+        public MarketDepthDatum(int depth) => Depth = depth;
 
         /// <summary>
         /// Position of the Depth
         /// </summary>
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Position"), GridColumnOrder(1, 10), CellRenderer(typeof(NumberCellRenderer), 70)]
-        public int Position { get; }
-
-
+        public int Depth { get; }
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask"), GridColumnOrder(5, 10), CellRenderer(typeof(NumberCellRenderer), 70)]
         public double Ask { get; set; }

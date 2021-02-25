@@ -22,8 +22,6 @@ namespace Pacmio
         public override void Initialize(Contract c)
         {
             base.Initialize(c);
-            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
-
             RTLastTime = DateTime.MinValue;
             RTLastPrice = -1;
         }
@@ -201,45 +199,7 @@ namespace Pacmio
             return IB.Client.SendRequest_MarketData(this);
         }
 
-        [DataMember]
-        public bool EnableMarketDepth { get; set; } = true;
 
-        [IgnoreDataMember]
-        private ConcurrentDictionary<int, MarketDepthDatum> m_MarketDepth { get; set; }
-
-        public MarketDepthDatum[] MarketDepth()
-        {
-            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
-
-            lock (m_MarketDepth)
-            {
-                return m_MarketDepth.OrderBy(n => n.Key).Select(n => n.Value).ToArray();
-            }
-        }
-
-        public MarketDepthDatum GetMarketDepth(int position)
-        {
-            if (m_MarketDepth is null) m_MarketDepth = new ConcurrentDictionary<int, MarketDepthDatum>();
-
-            lock (m_MarketDepth)
-            {
-                if (!m_MarketDepth.ContainsKey(position))
-                    m_MarketDepth.TryAdd(position, new MarketDepthDatum(position));
-
-                return m_MarketDepth[position];
-            }
-        }
-
-        #region Market Depth
-
-        //public virtual bool Request_MarketDepth() => IB.Client.SendRequest_MarketDepth(Contract);
-
-        /// <summary>
-        /// TODO: Cancel_MarketDepth()
-        /// </summary>
-        //public virtual void Cancel_MarketDepth() { }
-
-        #endregion Market Depth
 
         // Tape
 

@@ -117,25 +117,6 @@ namespace TestClient
             TreeViewAccount.ExpandAll();
         }*/
 
-        public void WatchListUpdateHandler(int status, DateTime time, string msg)
-        {
-            Task.Run(() =>
-            {
-                this?.Invoke(() =>
-                {
-                    CheckedListBoxWatchLists.Items.Clear();
-                    foreach(WatchList wt in WatchListManager.List) 
-                    {
-                        string name = wt.Name;
-                        bool isRunning = wt is DynamicWatchList dwt ? dwt.IsRunning : false;
-
-                        CheckedListBoxWatchLists.Items.Add(name, isRunning);
-                    }
-
-                    CheckedListBoxWatchLists.Invalidate(true);
-                });
-            });
-        }
 
         /*
         public void PositionUpdatedHandler(int status, DateTime time, string msg)

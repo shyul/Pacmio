@@ -26,10 +26,6 @@ namespace Pacmio.IB
             ActiveMarketDataTickerIds.Clear();
         }
 
-        /// <summary>
-        /// Maximum Request: 3
-        /// </summary>
-        public static ConcurrentDictionary<int, Contract> ActiveMarketDepth { get; } = new ConcurrentDictionary<int, Contract>();
 
         private static ConcurrentDictionary<MarketData, MarketDataRequestStatus> MarketDataTickers { get; } = new ConcurrentDictionary<MarketData, MarketDataRequestStatus>();
 

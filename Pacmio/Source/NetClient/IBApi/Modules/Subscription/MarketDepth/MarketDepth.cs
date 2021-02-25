@@ -17,7 +17,10 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-
+        /// <summary>
+        /// Maximum Request: 3
+        /// </summary>
+        public static ConcurrentDictionary<int, MarketDepth> ActiveMarketDepth { get; } = new ConcurrentDictionary<int, MarketDepth>();
 
         /// <summary>
         /// Send MarketDepth: (0)"10"-(1)"5"-(2)"20000001"-(3)"0"-(4)"FB"-(5)"STK"-(6)""-(7)"0"-(8)""-(9)""-(10)"SMART"-(11)"ISLAND"-(12)"USD"-(13)""-(14)""-(15)"20"-(16)"1"
@@ -26,13 +29,18 @@ namespace Pacmio.IB
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        internal static bool SendRequest_MarketDepth(Contract c, int numRows = 20, bool isSmartDepth = true, ICollection<(string, string)> options = null)
+        internal static bool SendRequest_MarketDepth(this MarketDepth mdt)
         {
+            Contract c = mdt.Contract;
+
             if (Connected && c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
 
-                ActiveMarketDepth.TryAdd(requestId, c);
+                mdt.RequestId = requestId;
+                mdt.StartTime = DateTime.Now;
+
+                ActiveMarketDepth.TryAdd(requestId, mdt);
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -63,9 +71,9 @@ namespace Pacmio.IB
                     c.CurrencyCode, // USD / currency,
                     string.Empty, // LocalSymbol
                     string.Empty, // TradingClass
-                    numRows.ParamPos(),
-                    isSmartDepth.Param(),
-                    options.Param()
+                    mdt.NumberOfRows.ParamPos(),
+                    mdt.IsSmartDepth.Param(),
+                    mdt.IbOptions.Param()
                 };
 
                 SendRequest(paramsList);
@@ -74,6 +82,18 @@ namespace Pacmio.IB
             return false;
         }
 
+        public static MarketDepth SendCancel_MarketDepth(int requestId)
+        {
+            if (requestId > 0 && ActiveMarketDepth.ContainsKey(requestId))
+            {
+                RemoveRequest(requestId, true);
+                ActiveMarketDepth.TryRemove(requestId, out MarketDepth mdt);
+                if (mdt is not null) mdt.RequestId = -1;
+                return mdt;
+            }
+            else
+                return null;
+        }
 
         private static void Parse_MarketDepth(string[] fields)
         {
@@ -87,13 +107,12 @@ namespace Pacmio.IB
 
             if (msgVersion == "1" && ActiveMarketDepth.ContainsKey(requestId)) 
             {
-                Contract c = ActiveMarketDepth[requestId];
-                if(c.MarketData is StockData sd) 
+                if (ActiveMarketDepth[requestId] is MarketDepth mdt)
                 {
-                    int position = fields[3].ToInt32(-1);
-                    MarketDepthDatum md = sd.GetMarketDepth(position);
+                    int depth = fields[3].ToInt32(-1);
+                    MarketDepthDatum md = mdt[depth];
 
-                    if(fields[6] == "0") 
+                    if (fields[6] == "0") 
                     {
                         md.AskExchangeCode = fields[4];
                         md.Ask = fields[7].ToDouble();
@@ -111,11 +130,10 @@ namespace Pacmio.IB
                         md.BidIsSmartDepth = fields[9] == "1";
                         md.BidOperation = fields[5].ToInt32();
                     }
-                }
-                MarketDepthManager.UpdateUI(c);
-            }
-        
 
+                    mdt.Updated();
+                }
+            }
             //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
@@ -134,7 +152,7 @@ namespace Pacmio.IB
             {
                 int requestId = fields[2].ToInt32(-1);
                 RemoveRequest(requestId, false);
-                ActiveMarketDepth.TryRemove(requestId, out Contract c);
+                ActiveMarketDepth.TryRemove(requestId, out MarketDepth mdt);
                 Console.WriteLine("Request Market Depth fatal errors: " + fields.ToStringWithIndex());
             }
         }

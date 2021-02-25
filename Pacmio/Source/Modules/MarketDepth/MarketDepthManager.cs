@@ -16,31 +16,59 @@ namespace Pacmio
     {
         public const int MaximumParallelMarketDepthCount = 3;
 
-        public static void Add(Contract c)
+        public static Dictionary<Contract, MarketDepth> ContractMarketDepthLUT { get; } = new Dictionary<Contract, MarketDepth>();
+
+        public static MarketDepth GetOrCreateMarketDepth(this Contract c)
         {
-
-            if (List.Where(n => n.Contract == c).Count() < 1)
+            lock (ContractMarketDepthLUT)
             {
-                IB.Client.SendRequest_MarketDepth(c);
-                var gv = new MarketDepthGridView(c);
-                List.Add(gv);
-                gv.ReadyToShow = true;
-                Root.Form.AddForm(DockStyle.Fill, 0, gv);
-            }
+                if (!ContractMarketDepthLUT.ContainsKey(c))
+                    ContractMarketDepthLUT[c] = new MarketDepth(c);
 
+                return ContractMarketDepthLUT[c];
+            }
         }
 
-
-
-        private static List<MarketDepthGridView> List { get; } = new List<MarketDepthGridView>();
-
-
-        public static void UpdateUI(Contract c)
+        public static MarketDepth StartMarketDepth(this Contract c)
         {
-            Task.Run(() =>
+            while (IB.Client.ActiveMarketDepth.Count > MaximumParallelMarketDepthCount - 1)
             {
-                List.Where(n => n.Contract == c).ToList().ForEach(n => n.UpdateGrid());
-            });
+                MarketDepth mdt_to_cancel = IB.Client.ActiveMarketDepth.Values.OrderBy(n => n.StartTime).FirstOrDefault();
+                Cancel(mdt_to_cancel);
+            }
+
+            var mdt = GetOrCreateMarketDepth(c);
+            Start(mdt);
+            return mdt;
+        }
+
+        public static MarketDepth CancelMarketDepth(this Contract c)
+        {
+            var mdt = GetOrCreateMarketDepth(c);
+            Cancel(mdt);
+            return mdt;
+        }
+
+        private static void Start(MarketDepth mdt) => IB.Client.SendRequest_MarketDepth(mdt);
+
+        private static void Cancel(MarketDepth mdt) => IB.Client.SendCancel_MarketDepth(mdt.RequestId);
+
+        public static MarketDepthGridView EnableMarketDepthGridView(this Contract c) 
+        {
+            MarketDepth mdt = GetOrCreateMarketDepth(c);
+
+            return new MarketDepthGridView(mdt);
+
+            /*
+                if (List.Where(n => n.Contract == c).Count() < 1)
+                {
+                    IB.Client.SendRequest_MarketDepth(c);
+                    var gv = new MarketDepthGridView(c);
+                    List.Add(gv);
+                    gv.ReadyToShow = true;
+                    Root.Form.AddForm(DockStyle.Fill, 0, gv);
+                }
+            */
         }
     }
 }

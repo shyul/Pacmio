@@ -907,7 +907,7 @@ namespace TestClient
 
             if (ContractTest.ActiveContract is Stock s)
             {
-                MarketDepthManager.Add(s);
+                s.EnableMarketDepthGridView();
                 Console.WriteLine("MarketDepth: " + s);
             }
         }

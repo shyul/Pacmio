@@ -124,7 +124,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\Decision\DecisionManager.cs" />
-    <Compile Include="Source\Forms\Grid\MarketDepthGridView.cs" />
+    <Compile Include="Source\Modules\MarketDepth\MarketDepth.cs" />
+    <Compile Include="Source\Modules\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\MarketDepth\MarketDepthManager.cs" />
     <Compile Include="Source\Modules\News\NewsManager.cs" />
     <Compile Include="Source\Modules\Strategy\ExitMethod.cs" />

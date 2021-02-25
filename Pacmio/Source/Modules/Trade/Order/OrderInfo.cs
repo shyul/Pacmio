@@ -19,6 +19,8 @@ namespace Pacmio
     [Serializable, DataContract]
     public class OrderInfo : IDataProvider, IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
+        #region Data Provider
+
         [DataMember]
         public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
 
@@ -41,6 +43,8 @@ namespace Pacmio
             UpdateTime = DateTime.Now;
             DataConsumers?.ForEach(n => n.DataIsUpdated(this));
         }
+
+        #endregion Data Provider
 
         #region Identification Numbers
 
