@@ -14,5 +14,8 @@ namespace Pacmio
 {
     public static class FundamentalDataManager
     {
+        private static Dictionary<Contract, FundamentalDatum> ContractToFundamentalLUT { get; } = new Dictionary<Contract, FundamentalDatum>();
+
+
     }
 }

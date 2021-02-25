@@ -20,7 +20,7 @@ namespace Pacmio
         /// <summary>
         /// Master List of Business Informations.
         /// </summary>
-        private static ConcurrentDictionary<string, BusinessInfo> List { get; } = new ConcurrentDictionary<string, BusinessInfo>();
+        private static ConcurrentDictionary<string, BusinessInfo> ISINToBusinessLUT { get; } = new ConcurrentDictionary<string, BusinessInfo>();
 
         private static string BusinessInfoFile(string isin)
         {
@@ -35,14 +35,14 @@ namespace Pacmio
 
             if (isin.Length < 11)
                 return null;
-            else if (!List.ContainsKey(isin))
+            else if (!ISINToBusinessLUT.ContainsKey(isin))
             {
                 string fileName = BusinessInfoFile(isin);
-                BusinessInfo bi = List[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
+                BusinessInfo bi = ISINToBusinessLUT[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
                 return bi;
             }
             else
-                return List[isin];
+                return ISINToBusinessLUT[isin];
         }
 
         private static string IndustrySectorsFile => Root.ResourcePath + @"IndustrySectors.csv";
@@ -97,9 +97,9 @@ namespace Pacmio
             sb.ToFile(IndustrySectorsFile);
 
             // Save Business Info
-            lock (List)
+            lock (ISINToBusinessLUT)
             {
-                Parallel.ForEach(List.Values, bi =>
+                Parallel.ForEach(ISINToBusinessLUT.Values, bi =>
                 {
                     int pt = 0;
                     if (bi.IsModified) bi.SerializeJsonFile(BusinessInfoFile(bi.ISIN));

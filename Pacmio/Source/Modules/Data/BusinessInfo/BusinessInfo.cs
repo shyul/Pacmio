@@ -16,14 +16,6 @@ using Xu;
 
 namespace Pacmio
 {
-    using FundamentalDataTable =
-        Dictionary<(FundamentalDataType Type, DateTime Time, Frequency Freq),
-        (DataSource Source, string Param, double Value, double AdjValue)>;
-
-    using FundamentalDatum =
-        KeyValuePair<(FundamentalDataType Type, DateTime Time, Frequency Freq),
-        (DataSource Source, string Param, double Value, double AdjValue)>;
-
     [Serializable, DataContract]
     public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>
     {
@@ -120,93 +112,6 @@ namespace Pacmio
         [DataMember, Browsable(false)]
         public Dictionary<(DateTime Time, ContactDataType Type, string Param), string> Contact { get; private set; }
             = new Dictionary<(DateTime Time, ContactDataType Type, string Param), string>();
-
-        #region Fundamental Data
-
-        [DataMember, Browsable(false)]
-        public FundamentalDataTable FundamentalData { get; private set; } = new FundamentalDataTable();
-
-        public FundamentalDatum GetFundamentalDataLatest(FundamentalDataType type, Frequency freq, DataSource source) =>
-            FundamentalData.Where(n => n.Key.Type == type && n.Key.Freq == freq && n.Value.Source == source)
-            .OrderBy(n => n.Key.Time)
-            .Last();
-
-        public FundamentalDatum GetFundamentalDataLatest(FundamentalDataType type, Frequency freq) =>
-            FundamentalData.Where(n => n.Key.Type == type && n.Key.Freq == freq)
-            .OrderBy(n => n.Key.Time)
-            .Last();
-
-        public IOrderedEnumerable<FundamentalDatum> GetFundamentalData() =>
-            FundamentalData
-            .OrderBy(n => n.Key.Time)
-            .ThenBy(n => n.Value.Source);
-
-        public IOrderedEnumerable<FundamentalDatum> GetFundamentalData(FundamentalDataType type) =>
-            FundamentalData
-            .Where(n => n.Key.Type == type)
-            .OrderBy(n => n.Key.Time)
-            .ThenBy(n => n.Value.Source);
-
-        public IOrderedEnumerable<FundamentalDatum> GetFundamentalData(FundamentalDataType type, Frequency freq) =>
-            FundamentalData.Where(n => n.Key.Type == type && n.Key.Freq == freq)
-            .OrderBy(n => n.Key.Time)
-            .ThenBy(n => n.Value.Source);
-
-        public IOrderedEnumerable<FundamentalDatum> GetFundamentalData(FundamentalDataType type, Frequency freq, Period period) =>
-            FundamentalData.Where(n => n.Key.Type == type && n.Key.Freq == freq && period.Contains(n.Key.Time))
-            .OrderBy(n => n.Key.Time)
-            .ThenBy(n => n.Value.Source);
-
-        // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/introduction-to-linq-queries
-        // The actual execution of the query is deferred until you iterate over the query variable in a foreach statement. 
-        // This concept is referred to as deferred execution and is demonstrated in the following example:
-
-        public void ExportFundamentalData(IOrderedEnumerable<FundamentalDatum> res)
-        {
-            Root.SaveFile.Filter = "Comma-separated values file (*.csv) | *.csv";
-
-            if (Root.SaveFile.ShowDialog() == DialogResult.OK)
-            {
-                string fileName = Root.SaveFile.FileName;
-
-                StringBuilder sb = new StringBuilder("Type,Time,Frequency,Source,Param,Value\n");
-
-                lock (FundamentalData)
-                {
-                    foreach (var item in res)
-                    {
-                        string[] items = new string[]
-                        {
-                        item.Key.Type.ToString(),
-                        item.Key.Time.ToString("yyyy-MM-dd"),
-                        item.Key.Freq.ToString(),
-                        item.Value.Source.ToString(),
-                        item.Value.Param,
-                        item.Value.Value.ToString(),
-                        };
-                        sb.AppendLine(string.Join(",", items));
-                    }
-                }
-
-                try
-                {
-                    if (File.Exists(fileName)) File.Delete(fileName);
-                    File.WriteAllText(fileName, sb.ToString());
-                }
-                catch (Exception e) when (e is IOException || e is FormatException)
-                {
-
-                }
-            }
-        }
-
-        [DataMember, Browsable(false)]
-        public HashSet<FinancialStatement> FinancialStatements = new HashSet<FinancialStatement>();
-        /*
-        [DataMember, Browsable(false)]
-        public SortedDictionary<DateTime, FinancialEventType> FinancialEvents { get; private set; } = new SortedDictionary<DateTime, FinancialEventType>();
-        */
-        #endregion Fundamental Data
 
         #region Equality
 

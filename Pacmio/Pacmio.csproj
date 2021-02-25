@@ -301,7 +301,7 @@
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\BusinessInfoManager.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\ReutersXml.cs" />
-    <Compile Include="Source\Modules\DataSource.cs" />
+    <Compile Include="Source\Modules\Data\DataSource.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />

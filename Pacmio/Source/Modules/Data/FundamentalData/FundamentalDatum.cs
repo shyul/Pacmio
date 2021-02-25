@@ -14,7 +14,11 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class FundamentalDatum2
+    [Serializable, DataContract]
+    public class FundamentalDatum
     {
+        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
+
+        //public Contract Contract => ContractManager
     }
 }
