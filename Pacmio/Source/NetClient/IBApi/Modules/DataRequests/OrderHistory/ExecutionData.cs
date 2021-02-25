@@ -158,8 +158,10 @@ namespace Pacmio.IB
             {
                 yieldRedemptionDate = fields[7].ToInt32();
             }
-            Console.WriteLine("\nCommissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
+            
             TradeManager.DataProvider.Updated();
+
+            Console.WriteLine("Commissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
         }
     }
 }

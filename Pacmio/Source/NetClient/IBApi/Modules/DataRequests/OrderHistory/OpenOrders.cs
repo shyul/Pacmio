@@ -85,7 +85,6 @@ namespace Pacmio.IB
                     //throw new Exception("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
                     Console.WriteLine("ConId miss-match in Parse_OpenOrder, od.ConId = " + od.ConId + "; conId = " + conId);
                 }
-                    
 
                 od.ConId = conId;
 
@@ -211,15 +210,11 @@ namespace Pacmio.IB
                     Console.WriteLine("WarningText = " + WarningText);
                 }
 
-                Console.WriteLine("\nParse Open Order | " + od.Status + ": " + fields.ToStringWithIndex());
+                od.Updated();
+                OrderManager.DataProvider.Updated();
 
-                //OrderManager.Update(od);
-                // Emit the signal
-
+                Console.WriteLine("Parse Open Order | " + od.Status + ": " + fields.ToStringWithIndex());
             }
-
-
-
         }
 
         /// <summary>
@@ -233,7 +228,7 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             IsReady_OpenOrders = true;
 
-            Console.WriteLine("\nParse Open Order End: " + fields.ToStringWithIndex());
+            Console.WriteLine("\nParse Open Orders End: " + fields.ToStringWithIndex());
             // TODO: fields[0].ToInt32(-1), "Parse Open Order End: " + msgVersion
             OrderManager.DataProvider.Updated();
         }

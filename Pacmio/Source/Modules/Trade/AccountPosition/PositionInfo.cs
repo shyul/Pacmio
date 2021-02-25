@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio
@@ -15,7 +14,7 @@ namespace Pacmio
     /// <summary>
     /// Only used in live trades, and emulations
     /// </summary>
-    public class PositionInfo : IEquatable<PositionInfo>
+    public class PositionInfo : IDataProvider, IEquatable<PositionInfo>
     {
         public PositionInfo(AccountInfo ac, Contract c)
         {
@@ -48,17 +47,16 @@ namespace Pacmio
             AverageEntryPrice = double.NaN;
             Quantity = 0;
             UpdateTime = DateTime.Now;
-
-            // TODO: Emit delta here?? Or TradeInfo list is good enough?
+            Updated();
         }
 
-        public void Set(double qty, double price) 
+        public void Set(double qty, double price)
         {
             AverageEntryPrice = price;
             Quantity = qty;
             UpdateTime = DateTime.Now;
             Refreshed = true;
-            // TODO: Emit delta here?? Or TradeInfo list is good enough?
+            Updated();
         }
 
         public double Cost => double.IsNaN(AverageEntryPrice) ? 0 : Math.Abs(Quantity) * AverageEntryPrice;
@@ -89,7 +87,25 @@ namespace Pacmio
                 Contract.PlaceOrder(AccountInfo, -Quantity, TradeType.StopLoss, OrderTimeInForce.GoodUntilCanceled, DateTime.Now);
         }
 
-        public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
+        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
+
+        public List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckRemove(idk);
+        }
+
+        public void Updated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers?.ForEach(n => n.DataIsUpdated(this));
+        }
 
         public bool Refreshed { get; set; } = true;
 

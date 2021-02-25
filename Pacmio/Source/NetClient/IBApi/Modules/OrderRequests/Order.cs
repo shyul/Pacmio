@@ -189,6 +189,7 @@ namespace Pacmio.IB
                 });
 
                 od.OrderTime = DateTime.Now;
+                od.Updated();
 
                 SendRequest(paramsList);
             }

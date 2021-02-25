@@ -15,7 +15,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class AccountInfo : IEquatable<AccountInfo>, IEquatable<string>, IDataProvider
+    public sealed class AccountInfo : IDataProvider, IEquatable<AccountInfo>, IEquatable<string>
     {
         public AccountInfo(string accountId)
         {
@@ -47,7 +47,7 @@ namespace Pacmio
             return (DataConsumers is not null) ? DataConsumers.CheckRemove(idk) : false;
         }
 
-        public void DataIsUpdated()
+        public void Updated()
         {
             UpdateTime = DateTime.Now;
             DataConsumers?.ForEach(n => n.DataIsUpdated(this));
@@ -1023,7 +1023,7 @@ namespace Pacmio
                     break;
             }
 
-            DataIsUpdated();
+            Updated();
         }
 
         #region Equality

@@ -41,12 +41,14 @@ namespace Pacmio.IB
                     RemoveRequest(orderId, false);
                 }
 
-                Console.WriteLine("Added Order Status: " + fields.ToStringWithIndex());
+                od.Updated();
                 OrderManager.DataProvider.Updated();
+
+                Console.WriteLine("Order Status: " + fields.ToStringWithIndex());
             }
             else
             {
-                Console.WriteLine("\n"+ fields[2].ToOrderStatus() + " | Parse Order Status: " + fields.ToStringWithIndex());
+                Console.WriteLine("\nUnable to locate this order: " + fields[2].ToOrderStatus() + " | Parse Order Status: " + fields.ToStringWithIndex());
             }
         }
     }

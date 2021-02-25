@@ -8,6 +8,8 @@
 
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Xu;
 using Xu.GridView;
@@ -15,8 +17,31 @@ using Xu.GridView;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class OrderInfo : IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public class OrderInfo : IDataProvider, IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
+        [DataMember]
+        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
+
+        [IgnoreDataMember]
+        public List<IDataConsumer> DataConsumers { get; private set; }
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            if (DataConsumers is null) DataConsumers = new List<IDataConsumer>();
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            return (DataConsumers is not null) ? DataConsumers.CheckRemove(idk) : false;
+        }
+
+        public void Updated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers?.ForEach(n => n.DataIsUpdated(this));
+        }
+
         #region Identification Numbers
 
         /// <summary>

@@ -125,10 +125,13 @@ namespace Pacmio.IB
                         // N = 77; //Console.WriteLine("4) N = " + N);
                 od.Status = fields[N].ToOrderStatus();
 
-                Console.WriteLine("\nCompleted Orders | " + od.Type + " | " + od.Status + ": " + fields.ToStringWithIndex());
+                od.Updated();
+                OrderManager.DataProvider.Updated();
+
+                Console.WriteLine("Completed Order | " + od.Type + " | " + od.Status + ": " + fields.ToStringWithIndex());
             }
             else
-                Console.WriteLine("\nCompleted Orders: " + fields.ToStringWithIndex());
+                Console.WriteLine("Completed Order: " + fields.ToStringWithIndex());
         }
 
         private static void Parse_CompletedOrdersEnd(string[] fields)
