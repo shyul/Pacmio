@@ -57,7 +57,7 @@ namespace Pacmio
         /// <summary>
         /// The Host order identifier.
         /// </summary>
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("PermId"), GridColumnOrder(6), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("PermId"), GridColumnOrder(6), CellRenderer(typeof(NumberCellRenderer), 150)]
         public int PermId { get; set; } = -1;
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Pacmio
 
         #endregion Identification Numbers
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Description"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Description"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100, true)]
         public string Description { get; set; }
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("AccountId"), GridColumnOrder(1), CellRenderer(typeof(TextCellRenderer), 100)]
@@ -116,7 +116,7 @@ namespace Pacmio
         [IgnoreDataMember]
         private AccountInfo m_Account = null;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("ConId"), GridColumnOrder(2), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("ConId"), GridColumnOrder(2), CellRenderer(typeof(NumberCellRenderer), 100)]
         public int ConId { get; set; } = -1;
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
@@ -154,10 +154,10 @@ namespace Pacmio
 
         #region Status
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 300)]
         public DateTime OrderTime { get; set; }
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public OrderStatus Status { get; set; } = OrderStatus.Inactive;
 
         [IgnoreDataMember]
@@ -166,16 +166,16 @@ namespace Pacmio
         [DataMember]
         public double Quantity { get; set; } = double.NaN;
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public double FilledQuantity { get; set; } = 0;
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public double RemainingQuantity { get; set; } = 0;
 
         [DataMember]
         public double LastFillPrice { get; set; } = double.NaN;
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public double AveragePrice { get; set; } = double.NaN;
 
         [DataMember]
@@ -218,7 +218,7 @@ namespace Pacmio
         public double TrailingPercent { get; set; } = double.NaN;
 
 
-        [DataMember]
+        [DataMember, Browsable(true)]
         public OrderType Type { get; set; } = OrderType.MarketLimit;
 
         [DataMember]
@@ -268,7 +268,7 @@ namespace Pacmio
         [DataMember]
         public bool OutsideRegularTradeHours { get; set; } = true;
 
-        [DataMember, Browsable(true)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Mode Code"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 100)]
         public string ModeCode { get; set; } = string.Empty;
 
         #region Equality

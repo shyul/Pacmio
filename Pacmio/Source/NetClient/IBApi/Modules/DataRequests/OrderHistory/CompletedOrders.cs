@@ -122,8 +122,15 @@ namespace Pacmio.IB
                 }
                 // N = 76
                 N += 1; // readSolicited();
+
                         // N = 77; //Console.WriteLine("4) N = " + N);
                 od.Status = fields[N].ToOrderStatus();
+
+                od.FilledQuantity = fields[87].ToDouble();
+                od.Description = fields[90];
+
+                string datetimeformat = "yyyyMMdd-HH:mm:ss";
+                od.OrderTime = DateTime.ParseExact(fields[94].Substring(0, datetimeformat.Length), datetimeformat, CultureInfo.InvariantCulture);
 
                 od.Updated();
                 OrderManager.DataProvider.Updated();
