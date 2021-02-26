@@ -66,7 +66,7 @@ namespace Pacmio
         public FinancialStatementType Type { get; set; }
 
         [DataMember]
-        public DataSource Source { get; set; }
+        public DataSourceType Source { get; set; }
 
         [DataMember] // SourceDate
         public DateTime Date { get; set; }

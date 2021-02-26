@@ -8,9 +8,9 @@ namespace TestClient
 {
     public partial class TestMultiPeriodDataSource : Form
     {
-        public MultiPeriod<DataSource> d = new MultiPeriod<DataSource>();
+        public MultiPeriod<DataSourceType> d = new MultiPeriod<DataSourceType>();
 
-        public DateTime GetDataSourceStartTime(DateTime endTime, DataSource source)
+        public DateTime GetDataSourceStartTime(DateTime endTime, DataSourceType source)
         {
             var res = d.Where(n => n.Value <= source && n.Key.Contains(endTime));
             if (res.Count() > 0) return res.Last().Key.Start;
@@ -21,8 +21,8 @@ namespace TestClient
         {
             InitializeComponent();
             Text = Program.TitleText;
-            ComboBoxDataSource.Items.AddRange(typeof(DataSource).GetEnumNames());
-            ComboBoxDataSource.SelectedIndex = ComboBoxDataSource.FindStringExact(DataSource.Quandl.ToString());
+            ComboBoxDataSource.Items.AddRange(typeof(DataSourceType).GetEnumNames());
+            ComboBoxDataSource.SelectedIndex = ComboBoxDataSource.FindStringExact(DataSourceType.Quandl.ToString());
             GridView.ColumnCount = 3;
             GridView.Columns[0].Name = "Start time";
             GridView.Columns[1].Name = "End time";
@@ -33,7 +33,7 @@ namespace TestClient
 
         private void BtnAdd_Click(object sender, EventArgs e)
         {
-            d.Add(DateTimePickerStart.Value, DateTimePickerEnd.Value, ComboBoxDataSource.Text.ParseEnum<DataSource>());
+            d.Add(DateTimePickerStart.Value, DateTimePickerEnd.Value, ComboBoxDataSource.Text.ParseEnum<DataSourceType>());
             RefreshGrid();
         }
 
@@ -66,7 +66,7 @@ namespace TestClient
 
         private void BtnGetStart_Click(object sender, EventArgs e)
         {
-            DateTimePickerGetStart.Value = GetDataSourceStartTime(DateTimePickerGetStart.Value, ComboBoxDataSource.Text.ParseEnum<DataSource>());
+            DateTimePickerGetStart.Value = GetDataSourceStartTime(DateTimePickerGetStart.Value, ComboBoxDataSource.Text.ParseEnum<DataSourceType>());
         }
     }
 }

@@ -58,11 +58,11 @@ namespace Pacmio
         public DateTime LastUpdateTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
-        public MultiPeriod<DataSource> DataSourceSegments { get; private set; } = new MultiPeriod<DataSource>();
+        public MultiPeriod<DataSourceType> DataSourceSegments { get; private set; } = new MultiPeriod<DataSourceType>();
 
         [DataMember]
-        public Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)> Bars { get; set; }
-            = new Dictionary<DateTime, (DataSource SRC, double O, double H, double L, double C, double V)>();
+        public Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)> Bars { get; set; }
+            = new Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)>();
 
         #region File Operation
 

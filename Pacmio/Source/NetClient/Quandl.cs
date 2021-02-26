@@ -37,7 +37,7 @@ namespace Pacmio
 
             bool success = false;
 
-            if (bt.LastTimeBy(DataSource.Quandl) >= Frequency.Daily.Align(period.Stop)) return true;
+            if (bt.LastTimeBy(DataSourceType.Quandl) >= Frequency.Daily.Align(period.Stop)) return true;
 
             if (bt.Contract is Stock c && Root.Settings.QuandlKey.Length > 0)
             {
@@ -85,7 +85,7 @@ namespace Pacmio
                                             //double dividend_percent = fields[6].ToDouble(0) / close;
                                             //double split = fields[7].ToDouble(1);
 
-                                            bt.Add(DataSource.Quandl, time, ts, open, high, low, close, volume, false);
+                                            bt.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
 
 
                                             //// Add Split and dividend to FundamentalData Table in BusinessInfo
@@ -95,14 +95,14 @@ namespace Pacmio
                                                 if (dividend != 0)
                                                 {
                                                     //Console.WriteLine("Add Dividend: " + dividend);
-                                                    sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
+                                                    sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
                                                 }
 
                                                 double split = fields[7].ToDouble(1);
                                                 if (split != 1)
                                                 {
                                                     //Console.WriteLine("Add Split: " + split);
-                                                    sd.SplitTable[time] = (DataSource.Quandl, split);
+                                                    sd.SplitTable[time] = (DataSourceType.Quandl, split);
                                                 }
                                             }
                                         }
@@ -113,7 +113,7 @@ namespace Pacmio
                         }
 
                     bt.LastDownloadRequestTime = DateTime.Now;
-                    bt.AddDataSourceSegment(period, DataSource.Quandl);
+                    bt.AddDataSourceSegment(period, DataSourceType.Quandl);
                     Console.WriteLine("Quandl download finished");
                     success = true;
                 }
@@ -170,7 +170,7 @@ namespace Pacmio
                                 /// Save File Now
                                 if (btdIsValid)
                                 {
-                                    btd.DataSourceSegments.Add(pd, DataSource.Quandl);
+                                    btd.DataSourceSegments.Add(pd, DataSourceType.Quandl);
 
                                     // !! Please check if the file is locked or now before saving.
                                     btd.SerializeJsonFile(btd.FileName);
@@ -215,7 +215,7 @@ namespace Pacmio
                                 {
                                     DateTime time = DateTime.Parse(fields[1]);
 
-                                    if (!btd.Bars.ContainsKey(time) || btd.Bars[time].SRC > DataSource.Quandl)
+                                    if (!btd.Bars.ContainsKey(time) || btd.Bars[time].SRC > DataSourceType.Quandl)
                                     {
                                         double open = fields[2].ToDouble(0);
                                         double high = fields[3].ToDouble(0);
@@ -224,7 +224,7 @@ namespace Pacmio
 
                                         pd.Insert(time);
 
-                                        btd.Bars[time] = (DataSource.Quandl, open, high, low, close, volume);
+                                        btd.Bars[time] = (DataSourceType.Quandl, open, high, low, close, volume);
                                     }
 
                                     //// Add Split and dividend to FundamentalData Table in BusinessInfo
@@ -235,7 +235,7 @@ namespace Pacmio
                                         {
                                             if (dividend < 0) throw new Exception("Split can't be: " + dividend);
                                             //Console.WriteLine("Add Dividend: " + dividend);
-                                            sd.DividendTable[time] = (DataSource.Quandl, close, dividend);
+                                            sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
                                         }
 
                                         double split = fields[8].ToDouble(1);
@@ -244,7 +244,7 @@ namespace Pacmio
                                             //Console.WriteLine("Add Split: " + split);
 
                                             if (split <= 0) throw new Exception("Split can't be: " + split);
-                                            sd.SplitTable[time] = (DataSource.Quandl, split);
+                                            sd.SplitTable[time] = (DataSourceType.Quandl, split);
                                         }
                                     }
                                 }

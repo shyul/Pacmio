@@ -198,7 +198,7 @@ namespace Pacmio
                 return false;
         }
 
-        public void Add(DataSource Source, DateTime Time, TimeSpan Span, double Open, double High, double Low, double Close, double Volume, bool IsAdjusted)
+        public void Add(DataSourceType Source, DateTime Time, TimeSpan Span, double Open, double High, double Low, double Close, double Volume, bool IsAdjusted)
         {
             if (Span == Frequency.Span)
             {
@@ -233,7 +233,7 @@ namespace Pacmio
 
             if (this[time] is Bar b)
             {
-                if (b.Source >= DataSource.IB)
+                if (b.Source >= DataSourceType.IB)
                 {
                     if (last > b.High) // New High
                     {
@@ -269,7 +269,7 @@ namespace Pacmio
 
                     b.Volume += volume;
                     b.Actual_Volume = b.Volume;
-                    b.Source = DataSource.Realtime;
+                    b.Source = DataSourceType.Realtime;
 
                     Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent + " | " + b.Period);
                 }
@@ -280,8 +280,8 @@ namespace Pacmio
             }
             else
             {
-                if (Count > 0 && this[LastIndex].Source >= DataSource.IB)
-                    this[LastIndex].Source = DataSource.Realtime;
+                if (Count > 0 && this[LastIndex].Source >= DataSourceType.IB)
+                    this[LastIndex].Source = DataSourceType.Realtime;
 
                 isModified = Add(new Bar(this, tickTime, last, volume));
             }
@@ -476,7 +476,7 @@ namespace Pacmio
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public DateTime LastTimeBy(DataSource source)
+        public DateTime LastTimeBy(DataSourceType source)
         {
             var res = Rows.Where(n => n.Source <= source).OrderBy(n => n.Time);
             return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue.AddYears(500);
@@ -1002,7 +1002,7 @@ namespace Pacmio
 
                         //ReferenceTable[download_time_period].AsParallel().ForAll(b => MergeFromSmallerBar(b));
                         referenceTable[download_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                        AddDataSourceSegment(download_time_period, DataSource.Consolidated); // update the period segment
+                        AddDataSourceSegment(download_time_period, DataSourceType.Consolidated); // update the period segment
 
                         referenceTable.Save(); // Blocking the process and save...
 
@@ -1014,7 +1014,7 @@ namespace Pacmio
                     else if (BarFreq > BarFreq.Minute && BarFreq < BarFreq.Daily) // TODO: TEST intraday BarFreq from 1 minute bars
                     {
                         MultiPeriod missing_period_list = new MultiPeriod(period);
-                        foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= DataSource.IB))
+                        foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= DataSourceType.IB))
                         {
                             missing_period_list.Remove(existingPd);
                             Console.WriteLine(MethodBase.GetCurrentMethod().Name + "(BarFreq > BarFreq.Minute || BarFreq < BarFreq.Daily) | Already Existing: " + existingPd);
@@ -1040,7 +1040,7 @@ namespace Pacmio
                                     transfer_reference_time_period = new Period(first_valid_time_in_reference_table, last_valid_time_in_reference_table);
                                     Remove(transfer_reference_time_period); // Remove the updating period from this table, becuase it is obsolete!! Remove the tail end
                                     referenceTable[transfer_reference_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                                    AddDataSourceSegment(transfer_reference_time_period, DataSource.Consolidated);
+                                    AddDataSourceSegment(transfer_reference_time_period, DataSourceType.Consolidated);
                                 }
                             }
                         }
@@ -1080,7 +1080,7 @@ namespace Pacmio
 
             bool success = false;
 
-            DateTime quandlTime = bt.LastTimeBy(DataSource.Quandl); //period.Start;
+            DateTime quandlTime = bt.LastTimeBy(DataSourceType.Quandl); //period.Start;
 
             //if (quandlTime < bt.LastTimeBy(DataSource.Quandl)) quandlTime = bt.LastTimeBy(DataSource.Quandl);
 
@@ -1152,7 +1152,7 @@ namespace Pacmio
 
                     MultiPeriod missing_period_list = new MultiPeriod(period);
 
-                    foreach (Period existingPd in bt.DataSourceSegments.Keys.Where(n => bt.DataSourceSegments[n] <= DataSource.IB))
+                    foreach (Period existingPd in bt.DataSourceSegments.Keys.Where(n => bt.DataSourceSegments[n] <= DataSourceType.IB))
                     {
                         missing_period_list.Remove(existingPd);
                         Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Already Existing: " + existingPd);
@@ -1259,14 +1259,14 @@ namespace Pacmio
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
-        public MultiPeriod<DataSource> DataSourceSegments { get; } = new MultiPeriod<DataSource>(); // => BarTableFileData.DataSourceSegments;
+        public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>(); // => BarTableFileData.DataSourceSegments;
 
-        public void AddDataSourceSegment(Period pd, DataSource source)
+        public void AddDataSourceSegment(Period pd, DataSourceType source)
         {
             DataSourceSegments.Add(pd, source);
         }
 
-        public DateTime GetDataSourceStartTime(DateTime endTime, DataSource source)
+        public DateTime GetDataSourceStartTime(DateTime endTime, DataSourceType source)
         {
             var res = DataSourceSegments.Where(n => n.Value <= source && n.Key.Contains(endTime));
             if (res.Count() > 0) return res.Last().Key.Start;
@@ -1309,7 +1309,7 @@ namespace Pacmio
                 }
                 else
                 {
-                    if (pb.Value.SRC < DataSource.Tick)
+                    if (pb.Value.SRC < DataSourceType.Tick)
                     {
                         Bar b = GetOrAdd(pb.Key);
                         b.Source = pb.Value.SRC;
@@ -1346,7 +1346,7 @@ namespace Pacmio
                 Range<DateTime> Invalid_Period = null;
 
                 lock (Rows)
-                    foreach (var b in Rows.Where(n => n.Source < DataSource.Tick))
+                    foreach (var b in Rows.Where(n => n.Source < DataSourceType.Tick))
                     {
                         if (b.Actual_Open < 0 || b.Actual_High < 0 || b.Actual_Low < 0 || b.Actual_Close < 0 || b.Actual_Volume < 0)
                         {

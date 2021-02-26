@@ -252,13 +252,13 @@ namespace Pacmio.IB
                     double volume = fields[pt + 5].ToDouble(-1) * 100;
 
                     if (open != -1 && high != -1 && low != -1 && close != -1 && volume > 0)
-                        active_HistoricalDataBarTable.Add(DataSource.IB, time, ts, open, high, low, close, volume, true);
+                        active_HistoricalDataBarTable.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
                 if (IsLoggingLastRequestedHistoricalDataPeriod)
-                    active_HistoricalDataBarTable.DataSourceSegments.Add(LastRequestedHistoricalDataPeriod, DataSource.IB);
+                    active_HistoricalDataBarTable.DataSourceSegments.Add(LastRequestedHistoricalDataPeriod, DataSourceType.IB);
                 else if (time > LastRequestedHistoricalDataPeriod.Start)
-                    active_HistoricalDataBarTable.DataSourceSegments.Add(new Period(LastRequestedHistoricalDataPeriod.Start, time), DataSource.IB);
+                    active_HistoricalDataBarTable.DataSourceSegments.Add(new Period(LastRequestedHistoricalDataPeriod.Start, time), DataSourceType.IB);
             }
 
             RemoveRequest(requestId, false); // false means the task is ended with success

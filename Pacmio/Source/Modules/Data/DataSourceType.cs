@@ -14,7 +14,7 @@ namespace Pacmio
     /// Prioritized by number value.
     /// </summary>
     [Serializable, DataContract]
-    public enum DataSource : int
+    public enum DataSourceType : int
     {
         [EnumMember]
         Manual = int.MinValue, // Highest Priority

@@ -5,20 +5,29 @@
 /// ***************************************************************************
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
-using Xu;
-using Xu.GridView;
 
 namespace Pacmio
 {
+    /// <summary>
+    /// Bar data from different source
+    /// Prioritized by number value.
+    /// </summary>
     [Serializable, DataContract]
-    public class FundamentalDatum
+    public enum FundamentalType : int
     {
-        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
+        [EnumMember]
+        Split = 10,
 
-        //public Contract Contract => ContractManager
+        [EnumMember]
+        Dividend = 20,
+
+        [EnumMember]
+        EPS = 30,
+
+        [EnumMember]
+        Revenue = 40,
+
+
     }
 }

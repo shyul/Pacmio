@@ -61,7 +61,7 @@ namespace Pacmio
             Table = bt;
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
-            Source = DataSource.Tick;
+            Source = DataSourceType.Tick;
 
             Open = High = Low = Close = Actual_Open = Actual_High = Actual_Low = Actual_Close = last;
             Volume = Actual_Volume = volume;
@@ -72,7 +72,7 @@ namespace Pacmio
             Table = bt;
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
-            Source = DataSource.Tick;
+            Source = DataSourceType.Tick;
             Open = Actual_Open = open;
             High = Actual_High = high;
             Low = Actual_Low = low;
@@ -155,12 +155,12 @@ namespace Pacmio
 
         #region Original / Actual Values
 
-        public bool IsValid => Source != DataSource.Invalid;
+        public bool IsValid => Source != DataSourceType.Invalid;
 
         /// <summary>
         /// 
         /// </summary>
-        public DataSource Source { get; set; } = DataSource.Invalid;
+        public DataSourceType Source { get; set; } = DataSourceType.Invalid;
 
         public double Actual_Open { get; set; } = -1;
 
