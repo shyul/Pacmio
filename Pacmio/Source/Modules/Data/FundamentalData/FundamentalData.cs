@@ -29,83 +29,107 @@ namespace Pacmio
 
     }
 
-    [Serializable, DataContract]
+    [Serializable, DataContract(Name = "FundamentalDatum")]
+    [KnownType(typeof(ARPDatum))]
     [KnownType(typeof(SplitDatum))]
     [KnownType(typeof(DividendDatum))]
+    [KnownType(typeof(EPSDatum))]
+    [KnownType(typeof(TotalRevenueDatum))]
     public abstract class FundamentalDatum
     {
-        protected FundamentalDatum(int conId, DateTime time)
+        protected FundamentalDatum(DateTime asOfDate, double close)
         {
-            ConId = conId;
-            DateTime = time;
+            Close = close;
+            AsOfDate = asOfDate;
         }
 
         [DataMember]
-        public int ConId { get; }
+        public double Close { get; }
 
         [DataMember]
-        public DateTime DateTime { get; }
+        public DateTime AsOfDate { get; }
     }
 
-    [Serializable, DataContract(Name = "Split")]
+    [Serializable, DataContract(Name = "ARPDatum")]
+    [KnownType(typeof(DividendDatum))]
+    [KnownType(typeof(EPSDatum))]
+    [KnownType(typeof(TotalRevenueDatum))]
+    public abstract class ARPDatum : FundamentalDatum
+    {
+        public ARPDatum(DateTime asOfDate, double close) : base(asOfDate, close) { }
+
+        /// <summary>
+        /// Audited
+        /// </summary>
+        [DataMember]
+        public double Value_A { get; set; } = double.NaN;
+
+        /// <summary>
+        /// Restated
+        /// </summary>
+        [DataMember]
+        public double Value_R { get; set; } = double.NaN;
+
+        /// <summary>
+        /// Preliminary
+        /// </summary>
+        [DataMember]
+        public double Value_P { get; set; } = double.NaN;
+
+        [IgnoreDataMember]
+        public double Value
+        {
+            get
+            {
+                if (!double.IsNaN(Value_A)) return Value_A;
+                else if (!double.IsNaN(Value_R)) return Value_R;
+                else return Value_P;
+            }
+        }
+    }
+
+    [Serializable, DataContract(Name = "SplitDatum")]
     public class SplitDatum : FundamentalDatum
     {
-        public SplitDatum(int conId, DateTime time, double split) : base(conId, time)
+        public SplitDatum(DateTime asOfDate, double close, double split) : base(asOfDate, close)
         {
             Split = split;
         }
 
         [DataMember]
         public double Split { get; }
-
-        /*
-        [DataMember]
-        public double Close { get; }
-
-        [IgnoreDataMember]
-        public double DividentPercent { get; set; }
-        */
     }
 
     [Serializable, DataContract(Name = "Dividend")]
-    public class DividendDatum : FundamentalDatum
+    public class DividendDatum : ARPDatum
     {
-        public DividendDatum(int conId, DateTime time, double dividend, double close) : base(conId, time)
-        {
-            Divident = dividend;
-            Close = close;
-        }
-
-        [DataMember]
-        public double Divident { get; }
-
-        [DataMember]
-        public double Close { get; }
+        public DividendDatum(DateTime asOfDate, double close) : base(asOfDate, close) { }
 
         [IgnoreDataMember]
-        public double DividentPercent => Close > 0 ? Divident / Close : 0;
-    }
+        public double Divident { get => Value; set => Value_P = value; }
 
-    [Serializable, DataContract(Name = "EPS")]
-    public class EPSDatum : FundamentalDatum
-    {
-        public EPSDatum(int conId, DateTime time, double eps, double close) : base(conId, time)
-        {
-            EPS = eps;
-            Close = close;
-        }
-
-        [DataMember]
-        public double EPS { get; }
-
-        [DataMember]
-        public double Close { get; }
-
-        /*
         [IgnoreDataMember]
-        public double DividentPercent { get; set; }
-        */
+        public double Percent => Close > 0 ? Divident / Close : 0;
     }
 
+    [Serializable, DataContract(Name = "EPSDatum")]
+    public class EPSDatum : ARPDatum
+    {
+        public EPSDatum(DateTime asOfDate, double close) : base(asOfDate, close) { }
 
+        [IgnoreDataMember]
+        public double EPS { get => Value; set => Value_P = value; }
+
+        [IgnoreDataMember]
+        public double PE => EPS != 0 ? Close / EPS : double.NaN;
+    }
+
+    [Serializable, DataContract(Name = "TotalRevenueDatum")]
+    public class TotalRevenueDatum : ARPDatum
+    {
+        public TotalRevenueDatum(DateTime asOfDate, double close) : base(asOfDate, close) { }
+
+        [IgnoreDataMember]
+        public double Revenue { get => Value; set => Value_P = value; }
+    }
 }
