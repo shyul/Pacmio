@@ -125,14 +125,14 @@ namespace Pacmio.IB
                 {
                     TcpReader = new BinaryReader(TcpClient.GetStream());
 
-                    DecodeFastMessageTask = new Task(() => DecodeFastMessageWorker(), TaskCancelTs.Token);
+                    DecodeAsyncMessageTask = new Task(() => DecodeAsyncMessageWorker(), TaskCancelTs.Token);
                     DecodeSequentialMessageTask = new Task(() => DecodeSequentialMessageWorker(), TaskCancelTs.Token);
 
                     ReceiveTask = new Task(() => ReceiveWorker(), TaskCancelTs.Token);
                     SendTask = new Task(() => SendWorker(), TaskCancelTs.Token);
                     //DataRequestTask = new Task(() => DataRequestTaskWorker(), TaskCancelTs.Token);
 
-                    DecodeFastMessageTask.Start();
+                    DecodeAsyncMessageTask.Start();
                     DecodeSequentialMessageTask.Start();
 
                     ReceiveTask.Start();
@@ -229,8 +229,8 @@ namespace Pacmio.IB
 
 
             i = Timeout + 100;
-            while ((!(DecodeFastMessageTask is null)) && DecodeFastMessageTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
-            DecodeFastMessageTask?.Dispose();
+            while ((!(DecodeAsyncMessageTask is null)) && DecodeAsyncMessageTask?.Status == TaskStatus.Running && i > 0) { Thread.Sleep(1); i--; }
+            DecodeAsyncMessageTask?.Dispose();
             // One exception error here.
             //OnConnectedHandler?.Invoke(Status = ConnectionStatus.Connecting, DateTime.Now, "DecodeTask?.Dispose();");
 
@@ -255,7 +255,7 @@ namespace Pacmio.IB
             // Flush send data
             FlushSendData();
             // Flush received data
-            FlushFastMessageBuffer();
+            FlushAsyncMessageBuffer();
             FlushSequentialMessageBuffer();
 
             TaskCancelTs = new CancellationTokenSource();

@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public enum MarketTickStatus : int
+    public enum MarketDataStatus : int
     {
         [EnumMember]
         Unknown = 0,

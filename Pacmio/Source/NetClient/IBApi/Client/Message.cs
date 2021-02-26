@@ -104,7 +104,7 @@ namespace Pacmio.IB
                                     break;
 
                                 default:
-                                    FastMessageBuffer.Enqueue(fields);
+                                    AsyncMessageBuffer.Enqueue(fields);
                                     break;
                             }
                         }

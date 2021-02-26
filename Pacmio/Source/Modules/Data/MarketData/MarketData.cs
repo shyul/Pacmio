@@ -26,7 +26,7 @@ namespace Pacmio
         public virtual void Initialize(Contract c)
         {
             Contract = c;
-            Status = MarketTickStatus.Unknown;
+            Status = MarketDataStatus.Unknown;
         }
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
@@ -61,7 +61,7 @@ namespace Pacmio
         //public int TickerId { get; set; } = int.MinValue;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100)]
-        public MarketTickStatus Status { get; set; } = MarketTickStatus.Unknown;
+        public MarketDataStatus Status { get; set; } = MarketDataStatus.Unknown;
 
         [DataMember]
         public double MinimumTick { get; set; } = double.NaN;

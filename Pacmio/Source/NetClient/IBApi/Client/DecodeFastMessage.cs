@@ -16,21 +16,21 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static bool IsFastMessageBufferEmpty => FastMessageBuffer.IsEmpty;
+        private static bool IsAsyncMessageBufferEmpty => AsyncMessageBuffer.IsEmpty;
 
-        private static void FlushFastMessageBuffer() { lock (FastMessageBuffer) while (!IsFastMessageBufferEmpty) FastMessageBuffer.TryDequeue(out _); } //(out string[] fields); }
+        private static void FlushAsyncMessageBuffer() { lock (AsyncMessageBuffer) while (!IsAsyncMessageBufferEmpty) AsyncMessageBuffer.TryDequeue(out _); } //(out string[] fields); }
 
-        private static ConcurrentQueue<string[]> FastMessageBuffer { get; } = new ConcurrentQueue<string[]>();
+        private static ConcurrentQueue<string[]> AsyncMessageBuffer { get; } = new ConcurrentQueue<string[]>();
 
-        private static Task DecodeFastMessageTask { get; set; }
+        private static Task DecodeAsyncMessageTask { get; set; }
 
-        private static void DecodeFastMessageWorker()
+        private static void DecodeAsyncMessageWorker()
         {
             while (!IsCancelled)
             {
-                if (!IsFastMessageBufferEmpty)
+                if (!IsAsyncMessageBufferEmpty)
                 {
-                    FastMessageBuffer.TryDequeue(out string[] fields);
+                    AsyncMessageBuffer.TryDequeue(out string[] fields);
                     int messageType = fields[0].ToInt32(-1);
 
                     Task.Run(() =>

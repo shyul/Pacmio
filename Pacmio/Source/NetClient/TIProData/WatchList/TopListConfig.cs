@@ -79,7 +79,7 @@ namespace Pacmio.TIProData
                         // See if the stk has live data subscription !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! before override the Last and volume
                         if ((!IsSnapshot) && stk.StockData is StockData sd && (!sd.IsTickActive))
                         {
-                            sd.Status = MarketTickStatus.Delayed;
+                            sd.Status = MarketDataStatus.Delayed;
 
                             sd.LastPrice = row.GetAsString("c_Price") is string s && s.Length > 0 ? s.ToDouble() : double.NaN; // c_Price
                             sd.Volume = row.GetAsString("c_TV") is string s1 && s1.Length > 0 ? s1.ToDouble() : double.NaN;

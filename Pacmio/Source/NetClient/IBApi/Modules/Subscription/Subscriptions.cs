@@ -90,7 +90,7 @@ namespace Pacmio.IB
                 {
                     mds.IsActive = false;
                     mds.TickerId = int.MinValue;
-                    mds.MarketData.Status = MarketTickStatus.DelayedFrozen;
+                    mds.MarketData.Status = MarketDataStatus.DelayedFrozen;
 
                     return mds;
                 }
@@ -101,7 +101,7 @@ namespace Pacmio.IB
                         MarketDataTickers.Select(n => n.Value).Where(n => n.TickerId == tickerId).ToList().ForEach(mds => {
                             mds.IsActive = false;
                             mds.TickerId = int.MinValue;
-                            mds.MarketData.Status = MarketTickStatus.DelayedFrozen;
+                            mds.MarketData.Status = MarketDataStatus.DelayedFrozen;
                         });
                     }
 
@@ -122,7 +122,7 @@ namespace Pacmio.IB
 
             mds.IsActive = false;
             mds.TickerId = int.MinValue;
-            mds.MarketData.Status = MarketTickStatus.DelayedFrozen;
+            mds.MarketData.Status = MarketDataStatus.DelayedFrozen;
         }
     }
 

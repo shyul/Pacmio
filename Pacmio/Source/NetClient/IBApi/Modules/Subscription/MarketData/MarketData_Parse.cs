@@ -60,7 +60,7 @@ namespace Pacmio.IB
             if (msgVersion == "1" && GetMarketData(tickerId) is MarketData md && fields.Length == 4)
             {
                 md.Contract.Status = ContractStatus.Alive;
-                md.Status = (MarketTickStatus)(fields[3].ToInt32(0));
+                md.Status = (MarketDataStatus)(fields[3].ToInt32(0));
                 md.Update();
             }
             else
@@ -136,7 +136,7 @@ namespace Pacmio.IB
                 double size = fields[5].ToDouble();
                 //int attrMask = fields[6].ToInt32(-1);
 
-                if (!(price >= 0)) md.Status = MarketTickStatus.Unknown;
+                if (!(price >= 0)) md.Status = MarketDataStatus.Unknown;
 
                 switch (tickType)
                 {
@@ -374,7 +374,7 @@ namespace Pacmio.IB
 
                     case TickType.Halted:
                         //q.ShortStatus = fields[4].ToDouble(-1);
-                        md.Status = MarketTickStatus.Frozen;
+                        md.Status = MarketDataStatus.Frozen;
 
                         // Halted!!!
 

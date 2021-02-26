@@ -199,7 +199,7 @@
     <Compile Include="Source\Modules\Data\MarketData\BidAskData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\StockData.cs" />
-    <Compile Include="Source\Modules\Data\MarketData\MarketTickStatus.cs" />
+    <Compile Include="Source\Modules\Data\MarketData\MarketDataStatus.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridView.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridViewManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
