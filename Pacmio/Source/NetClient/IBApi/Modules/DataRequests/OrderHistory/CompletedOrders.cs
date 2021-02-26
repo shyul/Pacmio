@@ -66,11 +66,11 @@ namespace Pacmio.IB
 
                 if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[27].Length > 5)
                 {
-                    od.EffectiveDateTime = DateTime.ParseExact(fields[27].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                    od.LimitedEffectiveTime = DateTime.ParseExact(fields[27].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
                 else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[33].Length > 5)
                 {
-                    od.EffectiveDateTime = DateTime.ParseExact(fields[33].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                    od.LimitedEffectiveTime = DateTime.ParseExact(fields[33].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
 
                 // fields[18]  // order.OcaGroup = eDecoder.ReadString();
@@ -123,14 +123,14 @@ namespace Pacmio.IB
                 // N = 76
                 N += 1; // readSolicited();
 
-                        // N = 77; //Console.WriteLine("4) N = " + N);
+                // N = 77; //Console.WriteLine("4) N = " + N);
                 od.Status = fields[N].ToOrderStatus();
 
                 od.FilledQuantity = fields[87].ToDouble();
                 od.Description = fields[90];
 
                 string datetimeformat = "yyyyMMdd-HH:mm:ss";
-                od.OrderTime = DateTime.ParseExact(fields[94].Substring(0, datetimeformat.Length), datetimeformat, CultureInfo.InvariantCulture);
+                od.OrderExecuteTime = DateTime.ParseExact(fields[94].Substring(0, datetimeformat.Length), datetimeformat, CultureInfo.InvariantCulture);
 
                 od.Updated();
                 OrderManager.DataProvider.Updated();

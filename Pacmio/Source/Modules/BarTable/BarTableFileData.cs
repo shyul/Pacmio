@@ -17,7 +17,7 @@ namespace Pacmio
     {
         public BarTableFileData(Contract c, BarFreq freq, BarType type)
         {
-            Contract = c.Info;
+            Contract = c.Key;
             BarFreq = freq;
             Type = type;
 
@@ -27,7 +27,7 @@ namespace Pacmio
 
         public BarTableFileData(BarTable bt)
         {
-            Contract = bt.Contract.Info;
+            Contract = bt.Contract.Key;
             BarFreq = bt.BarFreq;
             Type = bt.Type;
 
@@ -84,10 +84,10 @@ namespace Pacmio
         public bool Equals(BarTableFileData other) => (Contract == other.Contract) && (BarFreq == other.BarFreq) && (Type == other.Type);
         public static bool operator ==(BarTableFileData left, BarTableFileData right) => left.Equals(right);
         public static bool operator !=(BarTableFileData left, BarTableFileData right) => !left.Equals(right);
-        public bool Equals(BarTable other) => (Contract, BarFreq, Type) == (other.Contract.Info, other.BarFreq, other.Type);
+        public bool Equals(BarTable other) => (Contract, BarFreq, Type) == (other.Contract.Key, other.BarFreq, other.Type);
         public static bool operator ==(BarTableFileData left, BarTable right) => left is BarTableFileData btd && btd.Equals(right);
         public static bool operator !=(BarTableFileData left, BarTable right) => !(left == right);
-        public bool Equals(Contract other) => other is Contract c && c.Info == Contract;
+        public bool Equals(Contract other) => other is Contract c && c.Key == Contract;
         public static bool operator ==(BarTableFileData left, Contract right) => left is BarTableFileData btd && btd.Equals(right);
         public static bool operator !=(BarTableFileData left, Contract right) => !(left == right);
         public override bool Equals(object other)

@@ -61,7 +61,7 @@ namespace Pacmio
                 };
 
                 if (tif == OrderTimeInForce.GoodUntilDate || tif == OrderTimeInForce.GoodAfterDate)
-                    od.EffectiveDateTime = effectiveDateTime;
+                    od.LimitedEffectiveTime = effectiveDateTime;
 
                 // This method will register this order to OrderIdToOrderLUT
                 IB.Client.PlaceOrder(od, whatIf, modify, useSmart);
@@ -180,7 +180,7 @@ namespace Pacmio
             lock (PermIdToOrderLUT)
                 return PermIdToOrderLUT.Values
                     .Where(n => n.ConId == c.ConId)
-                    .OrderBy(n => n.OrderTime);
+                    .OrderBy(n => n.OrderExecuteTime);
         }
 
         private static Dictionary<int, OrderInfo> PermIdToOrderLUT { get; } = new Dictionary<int, OrderInfo>();

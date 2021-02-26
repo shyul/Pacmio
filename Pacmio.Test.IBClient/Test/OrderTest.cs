@@ -122,7 +122,7 @@ namespace TestClient
             string tif = od.TimeInForce.ToString();
 
             if (od.TimeInForce == OrderTimeInForce.GoodAfterDate || od.TimeInForce == OrderTimeInForce.GoodUntilDate)
-                tif += " " + od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss");
+                tif += " " + od.LimitedEffectiveTime.ToString("yyyyMMdd HH:mm:ss");
 
 
             var rows = Table.AsEnumerable()
@@ -142,14 +142,14 @@ namespace TestClient
                 row["Account"] = od.AccountId;
                 row["Order Id"] = od.OrderId;
                 row["Client Id"] = od.ClientId;
-                row["Exec Time"] = od.OrderTime;
+                row["Exec Time"] = od.OrderExecuteTime;
                 row.EndEdit();
             }
             else
             {
                 Table.Rows.Add(od.PermId, contractName,
                     od.Quantity, orderType, od.Quantity * od.LimitPrice,
-                   tif, od.Status.ToString(), od.ModeCode, od.AccountId, od.OrderId, od.ClientId, od.OrderTime);
+                   tif, od.Status.ToString(), od.ModeCode, od.AccountId, od.OrderId, od.ClientId, od.OrderExecuteTime);
             }
         }
     }

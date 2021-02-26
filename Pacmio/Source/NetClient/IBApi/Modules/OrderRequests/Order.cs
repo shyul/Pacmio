@@ -55,8 +55,8 @@ namespace Pacmio.IB
                     multiplier = opt.Multiplier;
                 }
 
-                string goodAfterDate = (od.TimeInForce == OrderTimeInForce.GoodAfterDate) ? od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
-                string goodTillDate = (od.TimeInForce == OrderTimeInForce.GoodUntilDate) ? od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
+                string goodAfterDate = (od.TimeInForce == OrderTimeInForce.GoodAfterDate) ? od.LimitedEffectiveTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
+                string goodTillDate = (od.TimeInForce == OrderTimeInForce.GoodUntilDate) ? od.LimitedEffectiveTime.ToString("yyyyMMdd HH:mm:ss") : string.Empty;
 
                 //if (od.TimeInForce == OrderTimeInForce.GoodAfterDate) goodAfterDate = od.GoodAfterDate.ToString("yyyyMMdd HH:mm:ss EST");
                 //if (od.TimeInForce == OrderTimeInForce.GoodUntilDate) goodAfterDate = od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss EST");
@@ -188,7 +188,7 @@ namespace Pacmio.IB
                     "0", // order.UsePriceMgmtAlgo.Param() // 109
                 });
 
-                od.OrderTime = DateTime.Now;
+                od.OrderExecuteTime = DateTime.Now;
                 od.Updated();
 
                 SendRequest(paramsList);

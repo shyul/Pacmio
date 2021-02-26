@@ -142,7 +142,7 @@ namespace Pacmio
 
         public override bool Equals(object obj) => base.Equals(obj);
 
-        public override int GetHashCode() => Info.GetHashCode();
+        public override int GetHashCode() => Key.GetHashCode();
 
         #endregion Equality
     }

@@ -16,24 +16,51 @@ namespace Pacmio
     public class FundamentalDataList
     {
         [DataMember]
-        public (string name, Exchange exchange, string typeName) ContractInfo { get; set; }
+        public (string name, Exchange exchange, string typeName) ContractKey { get; set; }
 
-        //[IgnoreDataMember]
-        //public Contract Contract => ContractManager
+        [IgnoreDataMember]
+        public Contract Contract => ContractManager.GetByKey(ContractKey);
 
         [DataMember]
         private Dictionary<(Type, DateTime), FundamentalDatum> DataLUT { get; } = new Dictionary<(Type, DateTime), FundamentalDatum>();
 
-        public IEnumerable<T> GetList<T>() where T : FundamentalDatum => DataLUT.Values.Where(n => n is T).Select(n => n as T);
-
-        public T GetOrCreateDatum<T>(T datum) where T : FundamentalDatum
+        public T[] GetList<T>() where T : FundamentalDatum
         {
-            var key = datum.Key;
-            if (!DataLUT.ContainsKey(key))
+            lock (DataLUT)
+                return DataLUT.Values.Where(n => n is T).Select(n => n as T).ToArray();
+        }
+
+        public T GetOrCreateDatum<T>(T fd) where T : FundamentalDatum
+        {
+            var key = fd.Key;
+            lock (DataLUT)
             {
-                DataLUT[key] = datum;
+                if (!DataLUT.ContainsKey(key))
+                {
+                    DataLUT[key] = fd;
+                }
+                return DataLUT[key] as T;
             }
-            return DataLUT[key] as T;
+        }
+
+        public bool Remove(FundamentalDatum fd)
+        {
+            lock (DataLUT)
+                if (DataLUT.ContainsKey(fd.Key))
+                {
+                    DataLUT.Remove(fd.Key);
+                    return true;
+                }
+            return false;
+        }
+
+        public void Remove<T>() where T : FundamentalDatum
+        {
+            lock (DataLUT)
+            {
+                var listToRemove = DataLUT.Values.Where(n => n is T).Select(n => n.Key).ToList();
+                listToRemove.ForEach(n => DataLUT.Remove(n));
+            }
         }
 
         public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
@@ -42,7 +69,7 @@ namespace Pacmio
 
             var split_list = GetList<SplitDatum>().Select(n => (n.AsOfDate, true, n.Split));
             var dividend_list = GetList<DividendDatum>().Select(n => (n.AsOfDate, false, n.Percent));
-            var split_dividend_list = split_list.Concat(dividend_list).OrderByDescending(n => n.AsOfDate);
+            var split_dividend_list = split_list.Concat(dividend_list).OrderByDescending(n => n.AsOfDate).ToArray();
 
             DateTime latestTime = DateTime.MaxValue;
             double adj_price = 1;

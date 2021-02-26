@@ -193,7 +193,7 @@ namespace Pacmio
 
         public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId) || Contract == other;
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Info == other;
+        public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Key == other;
 
         public static bool operator ==(TradeInfo left, TradeInfo right) => left.ExecId == right.ExecId;
         public static bool operator !=(TradeInfo left, TradeInfo right) => !(left == right);

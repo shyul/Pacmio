@@ -48,6 +48,7 @@ namespace Pacmio
             Quantity = 0;
             UpdateTime = DateTime.Now;
             Updated();
+            DataConsumers.Clear();
         }
 
         public void Set(double qty, double price)

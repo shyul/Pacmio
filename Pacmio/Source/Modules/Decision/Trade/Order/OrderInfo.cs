@@ -152,39 +152,35 @@ namespace Pacmio
         [IgnoreDataMember]
         private Contract m_Contract = null;
 
-        #region Status
-
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 300)]
-        public DateTime OrderTime { get; set; }
-
-        [DataMember, Browsable(true)]
-        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
-
-        [IgnoreDataMember]
-        public bool IsEditable => Status == OrderStatus.Inactive || Status == OrderStatus.ApiPending || Status == OrderStatus.PendingSubmit || Status == OrderStatus.PreSubmitted || Status == OrderStatus.Submitted;
+        #region Control
 
         [DataMember]
-        public double Quantity { get; set; } = double.NaN;
+        public bool Transmit { get; set; } = true;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Mode Code"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 100)]
+        public string ModeCode { get; set; } = string.Empty;
+
+        #endregion Control
+
+        #region Order Setting
 
         [DataMember, Browsable(true)]
-        public double FilledQuantity { get; set; } = 0;
+        public OrderType Type { get; set; } = OrderType.MarketLimit;
 
-        [DataMember, Browsable(true)]
-        public double RemainingQuantity { get; set; } = 0;
-
+        /// <summary>
+        /// Indicates whether or not all the order has to be filled on a single execution.
+        /// </summary>
         [DataMember]
-        public double LastFillPrice { get; set; } = double.NaN;
+        public bool AllOrNone { get; set; } = false;
 
-        [DataMember, Browsable(true)]
-        public double AveragePrice { get; set; } = double.NaN;
-
+        /// <summary>
+        /// If set to true, the order will not be visible when viewing the market depth.
+        /// This option only applies to orders routed to the ISLAND exchange.
+        /// </summary>
         [DataMember]
-        public double MarketCapPrice { get; set; } = double.NaN;
+        public bool Hidden { get; set; } = false;
 
-        [DataMember]
-        public string HeldNotice { get; set; } = string.Empty;
 
-        #endregion
 
         /// <summary>
         /// The LIMIT price.
@@ -217,25 +213,9 @@ namespace Pacmio
         [DataMember]
         public double TrailingPercent { get; set; } = double.NaN;
 
+        #endregion Order Setting
 
-        [DataMember, Browsable(true)]
-        public OrderType Type { get; set; } = OrderType.MarketLimit;
-
-        [DataMember]
-        public bool Transmit { get; set; } = true;
-
-        /// <summary>
-        /// Indicates whether or not all the order has to be filled on a single execution.
-        /// </summary>
-        [DataMember]
-        public bool AllOrNone { get; set; } = false;
-
-        /// <summary>
-        /// If set to true, the order will not be visible when viewing the market depth.
-        /// This option only applies to orders routed to the ISLAND exchange.
-        /// </summary>
-        [DataMember]
-        public bool Hidden { get; set; } = false;
+        #region Timing Setting
 
         /// <summary>
         /// The time in force.
@@ -260,7 +240,7 @@ namespace Pacmio
         public OrderTimeInForce TimeInForce { get; set; } = OrderTimeInForce.Day;
 
         [DataMember]
-        public DateTime EffectiveDateTime { get; set; }
+        public DateTime LimitedEffectiveTime { get; set; }
 
         /// <summary>
         /// If set to true, allows orders to also trigger or fill outside of regular trading hours.
@@ -268,8 +248,41 @@ namespace Pacmio
         [DataMember]
         public bool OutsideRegularTradeHours { get; set; } = true;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Mode Code"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 100)]
-        public string ModeCode { get; set; } = string.Empty;
+        #endregion Timing Setting
+
+        #region Result
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 300)]
+        public DateTime OrderExecuteTime { get; set; } = DateTime.MaxValue;
+
+        [DataMember, Browsable(true)]
+        public OrderStatus Status { get; set; } = OrderStatus.Inactive;
+
+        [IgnoreDataMember]
+        public bool IsEditable => Status == OrderStatus.Inactive || Status == OrderStatus.ApiPending || Status == OrderStatus.PendingSubmit || Status == OrderStatus.PreSubmitted || Status == OrderStatus.Submitted;
+
+        [DataMember]
+        public double Quantity { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true)]
+        public double FilledQuantity { get; set; } = 0;
+
+        [DataMember, Browsable(true)]
+        public double RemainingQuantity { get; set; } = 0;
+
+        [DataMember]
+        public double LastFillPrice { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true)]
+        public double AveragePrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public double MarketCapPrice { get; set; } = double.NaN;
+
+        [DataMember]
+        public string HeldNotice { get; set; } = string.Empty;
+
+        #endregion Result
 
         #region Equality
 
@@ -303,7 +316,7 @@ namespace Pacmio
 
         public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId);
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Info == other;
+        public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Key == other;
 
         public static bool operator ==(OrderInfo left, OrderInfo right) => left.PermId == right.PermId;
         public static bool operator !=(OrderInfo left, OrderInfo right) => !(left == right);

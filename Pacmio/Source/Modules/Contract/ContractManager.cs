@@ -37,12 +37,20 @@ namespace Pacmio
             return successful;
         }
 
+        public static Contract GetByKey((string name, Exchange exchange, string typeName) key)
+        {
+            if (ContractLUT.ContainsKey(key))
+                return ContractLUT[key];
+            else
+                return null;
+        }
+
         public static T GetOrAdd<T>(T c) where T : Contract
         {
-            if (!ContractLUT.ContainsKey(c.Info))
-                ContractLUT.TryAdd(c.Info, c);
+            if (!ContractLUT.ContainsKey(c.Key))
+                ContractLUT.TryAdd(c.Key, c);
 
-            return (T)ContractLUT[c.Info];
+            return (T)ContractLUT[c.Key];
         }
 
         public static IEnumerable<Contract> GetList(int conId)
@@ -76,13 +84,6 @@ namespace Pacmio
 
         public static Contract[] Fetch(string symbol, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractSamples(symbol, cts);
 
-
-
-
-
-
-
-
         public static Contract[] Fetch(string symbol, Exchange exchange, CancellationTokenSource cts = null)
         {
             if (exchange == Exchange.UNKNOWN) return new Contract[] { };
@@ -103,15 +104,6 @@ namespace Pacmio
             return clist.ToArray();
         }
 
-
-
-
-
-
-
-
-
-
         public static void Fetch(Contract c, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(c, cts);
 
         public static Contract Fetch(int conId, CancellationTokenSource cts = null) => IB.Client.Fetch_ContractData(conId, cts);
@@ -130,7 +122,7 @@ namespace Pacmio
                     {
                         Contract[] toRemove = list.ToArray();
                         foreach (Contract c in toRemove)
-                            Remove(c.Info);
+                            Remove(c.Key);
                     }
 
                     return Fetch(conId, cts);
@@ -337,7 +329,7 @@ namespace Pacmio
 
             foreach (Stock s in toDelete)
             {
-                Remove(s.Info);
+                Remove(s.Key);
                 Console.WriteLine("Removing: " + s.Status + " | " + s.ToString());
             }
 

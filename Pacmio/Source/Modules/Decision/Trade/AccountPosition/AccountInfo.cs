@@ -99,8 +99,10 @@ namespace Pacmio
 
             lock (PositionPerEachContractLUT)
             {
-                if (!PositionPerEachContractLUT.ContainsKey(c))
+                if (!PositionPerEachContractLUT.ContainsKey(c)) 
+                {
                     PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
+                }
             }
             return PositionPerEachContractLUT[c];
         }
@@ -131,6 +133,18 @@ namespace Pacmio
 
         [IgnoreDataMember]
         private Dictionary<Contract, PositionInfo> PositionPerEachContractLUT { get; set; }
+
+        public PositionInfo[] Positions
+        {
+            get
+            {
+                if (PositionPerEachContractLUT is not null)
+                    lock (PositionPerEachContractLUT)
+                        return PositionPerEachContractLUT.Values.ToArray();
+                else
+                    return null;
+            }
+        }
 
         #endregion Positions
 

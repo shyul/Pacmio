@@ -19,7 +19,15 @@ namespace Pacmio
     {
         private static Dictionary<string, AccountInfo> AccountLUT { get; } = new Dictionary<string, AccountInfo>();
 
-        public static IEnumerable<AccountInfo> List => AccountLUT.Values;
+        public static AccountInfo[] Accounts
+        {
+            get
+            {
+                lock (AccountLUT) return AccountLUT.Values.ToArray();
+            }
+        }
+
+        public static PositionInfo[] Positions => Accounts.SelectMany(n => n.Positions is PositionInfo[] p ? p : new PositionInfo[] { }).Where(p => p.Quantity > 0).ToArray();
 
         public static int Count => AccountLUT.Count;
 

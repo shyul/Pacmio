@@ -1277,7 +1277,7 @@ namespace Pacmio
         {
             get
             {
-                string fileName = BarTableFileData.GetFileName((Contract.Info, BarFreq, Type));
+                string fileName = BarTableFileData.GetFileName((Contract.Key, BarFreq, Type));
 
                 BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
                 if (btd == this)
@@ -1326,7 +1326,7 @@ namespace Pacmio
             {
                 btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
                 btd.Bars.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Bars.Remove(n.Key));
-                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
             }
 
             DataSourceSegments.Clear();
@@ -1370,7 +1370,7 @@ namespace Pacmio
                 if (btd.LastUpdateTime < LastDownloadRequestTime)
                     btd.LastUpdateTime = LastDownloadRequestTime;
 
-                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
             }
         }
 
@@ -1387,7 +1387,7 @@ namespace Pacmio
             btd.DataSourceSegments.Remove(pd);
             var to_remove_list = btd.Bars.Where(n => pd.Contains(n.Key)).ToList();
             to_remove_list.ForEach(n => btd.Bars.Remove(n.Key));
-            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
             Clear();
 
         }
@@ -1397,7 +1397,7 @@ namespace Pacmio
             using BarTableFileData btd = BarTableFileData;
             btd.DataSourceSegments.Clear();
             btd.Bars.Clear();
-            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Info, BarFreq, Type)));
+            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
             Clear();
         }
 

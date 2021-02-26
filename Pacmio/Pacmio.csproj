@@ -99,6 +99,7 @@
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\TotalRevenueDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
+    <Compile Include="Source\Modules\Decision\Trade\AccountPosition\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
@@ -140,7 +141,7 @@
     <Compile Include="Source\Modules\Decision\Strategy\ExitMethod.cs" />
     <Compile Include="Source\Forms\Grid\ContractCellRenderer.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\News.cs" />
+    <Compile Include="Source\Modules\Data\BusinessInfo\News.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\EntryMethod.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Decision\Trade\AccountPosition\PositionInfo.cs" />

@@ -168,7 +168,7 @@ namespace Pacmio
          *		FUND- mutual fund
          */
         [IgnoreDataMember]
-        public (string name, Exchange exchange, string typeName) Info => (Name, Exchange, TypeName);
+        public (string name, Exchange exchange, string typeName) Key => (Name, Exchange, TypeName);
 
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public abstract string TypeName { get; }
@@ -200,7 +200,7 @@ namespace Pacmio
         public virtual MarketData MarketData { get; }
 
         [IgnoreDataMember]
-        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Info.typeName.ToString() + "\\" + Info.exchange.ToString() + "\\_MarketData\\";
+        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Key.typeName.ToString() + "\\" + Key.exchange.ToString() + "\\_MarketData\\";
 
         [IgnoreDataMember]
         public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
@@ -213,7 +213,7 @@ namespace Pacmio
 
         #region Equality
 
-        public override int GetHashCode() => Info.GetHashCode();
+        public override int GetHashCode() => Key.GetHashCode();
 
         public override bool Equals(object other)
         {
@@ -229,9 +229,9 @@ namespace Pacmio
                 return false;
         }
 
-        public bool Equals(Contract other) => other is Contract c && GetType() == c.GetType() && ((ConId > 0 && ConId == other.ConId) || Info == other.Info);
+        public bool Equals(Contract other) => other is Contract c && GetType() == c.GetType() && ((ConId > 0 && ConId == other.ConId) || Key == other.Key);
 
-        public bool Equals((string name, Exchange exchange, string typeName) other) => Info == other;
+        public bool Equals((string name, Exchange exchange, string typeName) other) => Key == other;
 
         public static bool operator ==(Contract s1, Contract s2) => s1.Equals(s2);
         public static bool operator !=(Contract s1, Contract s2) => !s1.Equals(s2);

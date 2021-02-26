@@ -108,11 +108,11 @@ namespace Pacmio.IB
 
                 if (od.TimeInForce == OrderTimeInForce.GoodAfterDate && fields[29].Length > 5)
                 {
-                    od.EffectiveDateTime = DateTime.ParseExact(fields[29].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                    od.LimitedEffectiveTime = DateTime.ParseExact(fields[29].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
                 else if (od.TimeInForce == OrderTimeInForce.GoodUntilDate && fields[36].Length > 5)
                 {
-                    od.EffectiveDateTime = DateTime.ParseExact(fields[36].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                    od.LimitedEffectiveTime = DateTime.ParseExact(fields[36].Substring(0, 17), "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
 
                 od.AllOrNone = fields[52] == "1";
