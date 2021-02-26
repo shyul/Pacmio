@@ -4,18 +4,20 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Runtime.Serialization;
 using Xu;
 
 namespace Pacmio
 {
-    public static class FundamentalDataManager
+    [Serializable, DataContract(Name = "TotalRevenueDatum")]
+    public class TotalRevenueDatum : ARPDatum
     {
-        private static Dictionary<Contract, FundamentalDataList> ContractToFundamentalLUT { get; } = new Dictionary<Contract, FundamentalDataList>();
+        public TotalRevenueDatum(DateTime asOfDate, double close) : base(asOfDate, close) { }
 
-
+        [IgnoreDataMember]
+        public double Revenue { get => Value; set => Value_P = value; }
     }
 }

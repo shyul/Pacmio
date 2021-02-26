@@ -90,7 +90,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDataList.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\ARPDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\DividendDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\EPSDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\FundamentalDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\SplitDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\TotalRevenueDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderInfoGridView.cs" />
