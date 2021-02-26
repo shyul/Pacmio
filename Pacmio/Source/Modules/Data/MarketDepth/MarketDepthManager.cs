@@ -55,7 +55,8 @@ namespace Pacmio
 
         public static MarketDepthGridView EnableMarketDepthGridView(this Contract c) 
         {
-            MarketDepth mdt = GetOrCreateMarketDepth(c);
+            // if 
+            MarketDepth mdt = c.StartMarketDepth();
 
             return new MarketDepthGridView(mdt);
 

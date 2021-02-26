@@ -102,7 +102,7 @@ namespace Pacmio.IB
 
             ti.ExecuteTime = ti.Contract is Contract c ? Util.ParseTime(fields[15], c.TimeZone) : Util.ParseTime(fields[15], TimeZoneInfo.Local);
 
-            Console.WriteLine("fields[15] = " + fields[15] + " | ti.ExecuteTime = " + ti.ExecuteTime + " | " + (DateTime.Now - ti.ExecuteTime).TotalSeconds + " Second ago... ");
+            Console.WriteLine("\nfields[15] = " + fields[15] + " | ti.ExecuteTime = " + ti.ExecuteTime + " | " + (DateTime.Now - ti.ExecuteTime).TotalSeconds + " Second ago... ");
 
             string evRule = fields[27];
             double evMultiplier = fields[28].ToDouble();
@@ -112,7 +112,7 @@ namespace Pacmio.IB
 
             TradeManager.DataProvider.Updated();
 
-            Console.WriteLine("\nParse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex());
+            Console.WriteLine("Parse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex() + "\n");
         }
 
         private static void Parse_ExecutionDataEnd(string[] fields)

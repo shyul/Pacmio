@@ -33,7 +33,7 @@ namespace Pacmio.IB
         {
             Contract c = mdt.Contract;
 
-            if (Connected && c.Exchange.Param() is string exchangeCode)
+            if (mdt.RequestId == -1 && Connected && c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestMarketDepth);
 
@@ -105,14 +105,14 @@ namespace Pacmio.IB
             string msgVersion = fields[1];
             int requestId = fields[2].ToInt32(-1);
 
-            if (msgVersion == "1" && ActiveMarketDepth.ContainsKey(requestId)) 
+            if (msgVersion == "1" && ActiveMarketDepth.ContainsKey(requestId))
             {
                 if (ActiveMarketDepth[requestId] is MarketDepth mdt)
                 {
                     int depth = fields[3].ToInt32(-1);
                     MarketDepthDatum md = mdt[depth];
 
-                    if (fields[6] == "0") 
+                    if (fields[6] == "0")
                     {
                         md.AskExchangeCode = fields[4];
                         md.Ask = fields[7].ToDouble();
@@ -134,7 +134,7 @@ namespace Pacmio.IB
                     mdt.Updated();
                 }
             }
-            //Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
+            Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": " + fields.ToStringWithIndex());
         }
 
         /// <summary>

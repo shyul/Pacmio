@@ -31,6 +31,14 @@ namespace Pacmio
 
         public MarketDepth MarketDepth { get; }
 
+        public override void DataIsUpdated(IDataProvider provider)
+        {
+            SourceRows = MarketDepth.List;
+
+            Console.WriteLine("SourceRows.Count() = " + SourceRows.Count());
+            base.DataIsUpdated(provider);
+        }
+
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
     }
 }

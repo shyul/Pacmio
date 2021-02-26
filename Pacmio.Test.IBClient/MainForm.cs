@@ -907,7 +907,9 @@ namespace TestClient
 
             if (ContractTest.ActiveContract is Stock s)
             {
-                s.EnableMarketDepthGridView();
+                MarketDepthGridView gv = s.EnableMarketDepthGridView();
+                gv.ReadyToShow = true;
+                Root.Form.AddForm(DockStyle.Fill, 0, gv);
                 Console.WriteLine("MarketDepth: " + s);
             }
         }

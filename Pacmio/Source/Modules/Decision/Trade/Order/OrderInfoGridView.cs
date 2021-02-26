@@ -19,6 +19,7 @@ namespace Pacmio
         {
             SourceRows = OrderManager.List;
             OrderManager.DataProvider.AddDataConsumer(this);
+            ReadyToShow = true;
             DataIsUpdated(null);
         }
 
@@ -28,6 +29,14 @@ namespace Pacmio
             Dispose();
         }
 
-        //public int MaximumRows { get; set; } = int.MaxValue;
+        public override void DataIsUpdated(IDataProvider provider)
+        {
+            //SourceRows = OrderManager.List.ToArray();
+
+            Console.WriteLine("SourceRows.Count() = " + SourceRows.Count());
+            base.DataIsUpdated(provider);
+        }
+
+        public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
     }
 }
