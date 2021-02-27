@@ -13,7 +13,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class BarTableFileData : IEquatable<BarTableFileData>, IEquatable<BarTable>, IDisposable
+    public class BarTableFileData : IDataFile, IEquatable<BarTableFileData>, IEquatable<BarTable>, IDisposable
     {
         public BarTableFileData(Contract c, BarFreq freq, BarType type)
         {
@@ -66,17 +66,31 @@ namespace Pacmio
 
         #region File Operation
 
-        [IgnoreDataMember]
-        public string FileName => GetFileName((Contract, BarFreq, Type));
-
-        public static string GetFileName(((string name, Exchange exchange, string typeName) Contract, BarFreq BarFreq, BarType Type) info)
+        public static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
         {
             string prefix = "$";
-            if (info.Contract.typeName == "INDEX") prefix = "^";
-            string path = Root.ResourcePath + "HistoricalData\\" + info.Contract.typeName.ToString() + "\\" + info.Contract.exchange.ToString() + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
+            if (info.ContractKey.typeName == "INDEX") prefix = "^";
+            //string path = Root.ResourcePath + "HistoricalData\\" + info.Contract.typeName.ToString() + "\\" + info.Contract.exchange.ToString() + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
+            string path = Root.HistoricalDataPath(info.ContractKey) + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path + prefix + info.Contract.name + ".json";
+            return path + prefix + info.ContractKey.name + ".json";
         }
+
+        [IgnoreDataMember]
+        public string DataFileName => GetDataFileName((Contract, BarFreq, Type));
+
+        public void SaveFile()
+        {
+            //lock (Bars)
+                this.SerializeJsonFile(DataFileName);
+        }
+
+        public static BarTableFileData LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
+            => Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(info));
+
+        public static BarTableFileData LoadFile(BarTable bt)
+            => Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(bt.Key));
+
 
         #endregion File Operation
 

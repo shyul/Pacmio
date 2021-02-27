@@ -15,8 +15,14 @@ namespace Pacmio
     [Serializable, DataContract]
     public class FundamentalDataList : IDataFile
     {
+        public FundamentalDataList(Contract c)
+            => ContractKey = c.Key;
+
+        public FundamentalDataList((string name, Exchange exchange, string typeName) key)
+            => ContractKey = key;
+
         [DataMember]
-        public (string name, Exchange exchange, string typeName) ContractKey { get; set; }
+        public (string name, Exchange exchange, string typeName) ContractKey { get; }
 
         [IgnoreDataMember]
         public Contract Contract => ContractManager.GetByKey(ContractKey);
@@ -103,7 +109,26 @@ namespace Pacmio
             return list;
         }
 
+        #region File Operation
+
+        public static string GetDataFileName((string name, Exchange exchange, string typeName) ContractKey)
+            => Root.HistoricalDataPath(ContractKey) + "\\_FundamentalData\\$" + ContractKey.name + ".json";
+
         [IgnoreDataMember]
-        public string DataFileName => Root.HistoricalDataPath(ContractKey) + "\\_FundamentalData\\$" + ContractKey.name + ".json";
+        public string DataFileName => GetDataFileName(ContractKey);
+
+        public void SaveFile()
+        {
+            lock (DataLUT)
+                this.SerializeJsonFile(DataFileName);
+        }
+
+        public static FundamentalDataList LoadFile((string name, Exchange exchange, string typeName) key)
+            => Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(key));
+
+        public static FundamentalDataList LoadFile(Contract c)
+            => Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(c.Key));
+
+        #endregion File Operation
     }
 }

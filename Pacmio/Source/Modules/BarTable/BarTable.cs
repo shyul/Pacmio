@@ -20,8 +20,9 @@ namespace Pacmio
     /// <summary>
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
-    public sealed class BarTable : ITagTable, IEquatable<BarTable>,
-        IEquatable<(Contract c, BarFreq barFreq, BarType type)>, IDataProvider, IDataConsumer
+    public sealed class BarTable : ITagTable, IDataProvider, IDataConsumer, IEquatable<BarTable>,
+        IEquatable<(Contract, BarFreq, BarType)>,
+        IEquatable<((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)>
     {
         #region Ctor
 
@@ -78,7 +79,7 @@ namespace Pacmio
 
         public BarType Type { get; }
 
-        public (Contract c, BarFreq barFreq, BarType type) Info => (Contract, BarFreq, Type);
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (Contract.Key, BarFreq, Type);
 
         #endregion Ctor
 
@@ -1209,7 +1210,7 @@ namespace Pacmio
                 }
             }
 
-            End:
+        End:
             return;
         }
 
@@ -1277,13 +1278,9 @@ namespace Pacmio
         {
             get
             {
-                string fileName = BarTableFileData.GetFileName((Contract.Key, BarFreq, Type));
-
-                BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-                if (btd == this)
-                    return btd;
-
-                return new BarTableFileData(this);
+                //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
+                //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
+                return BarTableFileData.LoadFile(this) is BarTableFileData btd && btd == this ? btd : new BarTableFileData(this);
             }
         }
 
@@ -1326,7 +1323,9 @@ namespace Pacmio
             {
                 btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
                 btd.Bars.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Bars.Remove(n.Key));
-                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
+
+                //btd.SaveFile();
+                btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             }
 
             DataSourceSegments.Clear();
@@ -1370,7 +1369,8 @@ namespace Pacmio
                 if (btd.LastUpdateTime < LastDownloadRequestTime)
                     btd.LastUpdateTime = LastDownloadRequestTime;
 
-                btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
+                //btd.SaveFile();
+                btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             }
         }
 
@@ -1387,7 +1387,10 @@ namespace Pacmio
             btd.DataSourceSegments.Remove(pd);
             var to_remove_list = btd.Bars.Where(n => pd.Contains(n.Key)).ToList();
             to_remove_list.ForEach(n => btd.Bars.Remove(n.Key));
-            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
+
+            btd.SaveFile();
+            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
+
             Clear();
 
         }
@@ -1397,7 +1400,8 @@ namespace Pacmio
             using BarTableFileData btd = BarTableFileData;
             btd.DataSourceSegments.Clear();
             btd.Bars.Clear();
-            btd.SerializeJsonFile(BarTableFileData.GetFileName((Contract.Key, BarFreq, Type)));
+            btd.SaveFile();
+            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             Clear();
         }
 
@@ -1458,8 +1462,9 @@ namespace Pacmio
 
         #region Equality
 
-        public bool Equals(BarTable other) => Info == other.Info;
-        public bool Equals((Contract c, BarFreq barFreq, BarType type) other) => Info == other;
+        public bool Equals(BarTable other) => Key == other.Key;
+        public bool Equals(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) other) => Key == other;
+        public bool Equals((Contract, BarFreq, BarType) other) => (Contract, BarFreq, Type) == other;
 
         public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, BarTable s2) => !s1.Equals(s2);
@@ -1472,13 +1477,15 @@ namespace Pacmio
                 return false;
             else if (other is BarTable bt)
                 return Equals(bt);
-            else if (other.GetType() == typeof((Contract c, BarFreq barFreq, BarType type)))
-                return Equals(((Contract c, BarFreq barFreq, BarType type))other);
+            else if (other.GetType() == typeof((Contract, BarFreq, BarType)))
+                return Equals(((Contract, BarFreq, BarType))other);
+            else if (other.GetType() == typeof(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)))
+                return Equals((((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type))other);
             else
                 return false;
         }
 
-        public override int GetHashCode() => Info.GetHashCode();
+        public override int GetHashCode() => Key.GetHashCode();
 
         #endregion Equality
     }

@@ -173,7 +173,7 @@ namespace Pacmio
                                     btd.DataSourceSegments.Add(pd, DataSourceType.Quandl);
 
                                     // !! Please check if the file is locked or now before saving.
-                                    btd.SerializeJsonFile(btd.FileName);
+                                    btd.SerializeJsonFile(btd.DataFileName);
 
                                     if (currentContract is Stock stk) stk.SaveMarketData();
 
