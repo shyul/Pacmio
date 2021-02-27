@@ -23,6 +23,8 @@ namespace TestClient
         public AccountDataAdapter AccountDataAdapter { get; }
         public OrderInfoGridView OrderInfoGridView { get; } = new OrderInfoGridView();
 
+        public PositionInfoGridView PositionInfoGridView { get; } = new PositionInfoGridView();
+
         public WatchListDataAdapter WatchListDataAdapter { get; }
 
         public Period HistoricalPeriod
@@ -79,6 +81,7 @@ namespace TestClient
             Root.OnNetConnectHandler += NetClientOnConnectHandler;
 
             Root.Form.AddForm(DockStyle.Fill, 0, OrderInfoGridView);
+            Root.Form.AddForm(DockStyle.Fill, 0, PositionInfoGridView);
 
             Progress = new Progress<float>(percent =>
             {

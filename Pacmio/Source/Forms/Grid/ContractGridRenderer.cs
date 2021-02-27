@@ -16,7 +16,7 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class ContractCellRenderer : IDataCellRenderer
+    public class ContractGridRenderer : IGridRenderer
     {
         public Font Font => Main.Theme.Font;
 

@@ -13,7 +13,7 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class FundamentalDataList
+    public class FundamentalDataList : IDataFile
     {
         [DataMember]
         public (string name, Exchange exchange, string typeName) ContractKey { get; set; }
@@ -102,5 +102,8 @@ namespace Pacmio
 
             return list;
         }
+
+        [IgnoreDataMember]
+        public string DataFileName => Root.HistoricalDataPath(ContractKey) + "\\_FundamentalData\\$" + ContractKey.name + ".json";
     }
 }

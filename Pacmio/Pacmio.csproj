@@ -139,7 +139,7 @@
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDataManager.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\ExitMethod.cs" />
-    <Compile Include="Source\Forms\Grid\ContractCellRenderer.cs" />
+    <Compile Include="Source\Forms\Grid\ContractGridRenderer.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthDatum.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\News.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\EntryMethod.cs" />

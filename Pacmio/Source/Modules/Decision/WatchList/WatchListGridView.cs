@@ -69,6 +69,5 @@ namespace Pacmio
         }
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
-
     }
 }

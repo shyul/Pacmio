@@ -29,7 +29,7 @@ namespace Pacmio
             Status = MarketDataStatus.Unknown;
         }
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), GridRenderer(typeof(ContractGridRenderer), 150, true)]
         public Contract Contract { get; private set; }
 
         #region Quote
@@ -60,37 +60,37 @@ namespace Pacmio
         //[DataMember]
         //public int TickerId { get; set; } = int.MinValue;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), GridRenderer(typeof(TextGridRenderer), 100)]
         public MarketDataStatus Status { get; set; } = MarketDataStatus.Unknown;
 
         [DataMember]
         public double MinimumTick { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double PreviousClose { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double Open { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("High"), GridColumnOrder(13), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("High"), GridColumnOrder(13), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double High { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double Low { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), CellRenderer(typeof(NumberCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), GridRenderer(typeof(NumberGridRenderer), 70)]
         public double Volume { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), CellRenderer(typeof(NumberCellRenderer), 60, false)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), GridRenderer(typeof(NumberGridRenderer), 60, false)]
         public double LastPrice { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last Size"), GridColumnOrder(10), CellRenderer(typeof(NumberCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last Size"), GridColumnOrder(10), GridRenderer(typeof(NumberGridRenderer), 70)]
         public double LastSize { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last.Ex"), GridColumnOrder(11), CellRenderer(typeof(TextCellRenderer), 50)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last.Ex"), GridColumnOrder(11), GridRenderer(typeof(TextGridRenderer), 50)]
         public string LastExchange { get; set; } = string.Empty;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Trade Time"), GridColumnOrder(2, 0, 0), CellRenderer(typeof(TextCellRenderer), 120, true)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Trade Time"), GridColumnOrder(2, 0, 0), GridRenderer(typeof(TextGridRenderer), 120, true)]
         public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
 
         #endregion Quote

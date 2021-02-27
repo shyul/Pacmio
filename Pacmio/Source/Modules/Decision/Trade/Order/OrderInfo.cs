@@ -57,7 +57,7 @@ namespace Pacmio
         /// <summary>
         /// The Host order identifier.
         /// </summary>
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("PermId"), GridColumnOrder(6), CellRenderer(typeof(NumberCellRenderer), 150)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("PermId"), GridColumnOrder(6), GridRenderer(typeof(NumberGridRenderer), 150)]
         public int PermId { get; set; } = -1;
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace Pacmio
 
         #endregion Identification Numbers
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Description"), GridColumnOrder(0, 1, 0), CellRenderer(typeof(TextCellRenderer), 100, true)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Description"), GridColumnOrder(0, 1, 0), GridRenderer(typeof(TextGridRenderer), 100, true)]
         public string Description { get; set; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("AccountId"), GridColumnOrder(1), CellRenderer(typeof(TextCellRenderer), 100)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("AccountId"), GridColumnOrder(1), GridRenderer(typeof(TextGridRenderer), 100)]
         public string AccountId { get; set; } = null;
 
         [IgnoreDataMember]
@@ -116,10 +116,10 @@ namespace Pacmio
         [IgnoreDataMember]
         private AccountInfo m_Account = null;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("ConId"), GridColumnOrder(2), CellRenderer(typeof(NumberCellRenderer), 100)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("ConId"), GridColumnOrder(2), GridRenderer(typeof(NumberGridRenderer), 100)]
         public int ConId { get; set; } = -1;
 
-        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), CellRenderer(typeof(ContractCellRenderer), 150, true)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), GridRenderer(typeof(ContractGridRenderer), 150, true)]
         public Contract Contract
         {
             get
@@ -157,7 +157,7 @@ namespace Pacmio
         [DataMember]
         public bool Transmit { get; set; } = true;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Mode Code"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 100)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Mode Code"), GridColumnOrder(3), GridRenderer(typeof(TextGridRenderer), 100)]
         public string ModeCode { get; set; } = string.Empty;
 
         #endregion Control
@@ -252,7 +252,7 @@ namespace Pacmio
 
         #region Result
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 300)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), GridRenderer(typeof(TextGridRenderer), 300)]
         public DateTime OrderExecuteTime { get; set; } = DateTime.MaxValue;
 
         [DataMember, Browsable(true)]

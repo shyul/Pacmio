@@ -85,6 +85,7 @@ namespace Pacmio
 
         public bool RemoveDataConsumer(IDataConsumer idk)
         {
+            if (idk is DockForm df) df.ReadyToShow = false;
             return DataConsumers.CheckRemove(idk);
         }
 

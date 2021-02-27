@@ -25,19 +25,19 @@ namespace Pacmio
         /// Position of the Depth
         /// </summary>
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Position"), GridColumnOrder(1, 10), CellRenderer(typeof(NumberCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Position"), GridColumnOrder(1, 10), GridRenderer(typeof(NumberGridRenderer), 70)]
         public int Depth { get; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask"), GridColumnOrder(5, 10), CellRenderer(typeof(NumberCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask"), GridColumnOrder(5, 10), GridRenderer(typeof(NumberGridRenderer), 70)]
         public double Ask { get; set; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Size"), GridColumnOrder(4, 11), CellRenderer(typeof(NumberCellRenderer), 80)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Size"), GridColumnOrder(4, 11), GridRenderer(typeof(NumberGridRenderer), 80)]
         public double AskSize { get; set; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Exch"), GridColumnOrder(3), CellRenderer(typeof(TextCellRenderer), 90)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Exch"), GridColumnOrder(3), GridRenderer(typeof(TextGridRenderer), 90)]
         public string AskExchangeCode { get; set; } = string.Empty;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Ops"), GridColumnOrder(2), CellRenderer(typeof(TextCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Ops"), GridColumnOrder(2), GridRenderer(typeof(TextGridRenderer), 70)]
         public int AskOperation { get; set; }
 
         [DataMember]
@@ -48,16 +48,16 @@ namespace Pacmio
 
 
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid"), GridColumnOrder(6, 10), CellRenderer(typeof(NumberCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid"), GridColumnOrder(6, 10), GridRenderer(typeof(NumberGridRenderer), 70)]
         public double Bid { get; set; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Size"), GridColumnOrder(7, 11), CellRenderer(typeof(NumberCellRenderer), 80)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Size"), GridColumnOrder(7, 11), GridRenderer(typeof(NumberGridRenderer), 80)]
         public double BidSize { get; set; }
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Exch"), GridColumnOrder(8), CellRenderer(typeof(TextCellRenderer), 90)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Exch"), GridColumnOrder(8), GridRenderer(typeof(TextGridRenderer), 90)]
         public string BidExchangeCode { get; set; } = string.Empty;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Ops"), GridColumnOrder(9), CellRenderer(typeof(TextCellRenderer), 70)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Ops"), GridColumnOrder(9), GridRenderer(typeof(TextGridRenderer), 70)]
         public int BidOperation { get; set; }
 
         [DataMember]

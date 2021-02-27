@@ -173,10 +173,10 @@ namespace Pacmio
         [DataMember]
         public double ShortPercent { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("S.Shares"), GridColumnOrder(18), CellRenderer(typeof(NumberCellRenderer), 80)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("S.Shares"), GridColumnOrder(18), GridRenderer(typeof(NumberGridRenderer), 80)]
         public double ShortableShares { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Short"), GridColumnOrder(17), CellRenderer(typeof(NumberCellRenderer), 60)]
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Short"), GridColumnOrder(17), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double ShortStatus { get; set; } = double.NaN;
 
         [DataMember]

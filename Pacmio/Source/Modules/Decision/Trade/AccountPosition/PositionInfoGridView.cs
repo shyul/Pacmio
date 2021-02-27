@@ -15,9 +15,10 @@ namespace Pacmio
 {
     public class PositionInfoGridView : GridWidget<PositionInfo>
     {
-        public PositionInfoGridView() : base("Positions")
+        public PositionInfoGridView() : base("Positions | All")
         {
             AccountPositionManager.PositionDataProvider.AddDataConsumer(this);
+            DataIsUpdated(null);
         }
 
         ~PositionInfoGridView()
@@ -29,7 +30,11 @@ namespace Pacmio
         public override void DataIsUpdated(IDataProvider provider)
         {
             SourceRows = AccountPositionManager.Positions;
+
             base.DataIsUpdated(provider);
+            Console.WriteLine("PositionInfoGridView | Rows.Count() = " + Rows.Count());
         }
+
+        public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
     }
 }

@@ -35,8 +35,8 @@ namespace Pacmio
         {
             SourceRows = MarketDepth.List;
 
-            Console.WriteLine("SourceRows.Count() = " + SourceRows.Count());
             base.DataIsUpdated(provider);
+            Console.WriteLine("MarketDepthGridView | Rows.Count() = " + Rows.Count());
         }
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);

@@ -30,6 +30,10 @@ namespace Pacmio
 
         public static string ResourcePath => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Pacmio\\";
 
+        public static string HistoricalDataPath((string name, Exchange exchange, string typeName) key) => ResourcePath + "HistoricalData\\" + key.typeName.ToString() + "\\" + key.exchange.ToString();
+
+        public static string TradeDataPath((string name, Exchange exchange, string typeName) key) => ResourcePath + "TradeData\\" + key.typeName.ToString() + "\\" + key.exchange.ToString();
+
         public static string CachePath => (Settings != null) ? Settings.CachePath : Path.GetTempPath() + "Pacmio\\";
 
         public static int DegreeOfParallelism = 24;

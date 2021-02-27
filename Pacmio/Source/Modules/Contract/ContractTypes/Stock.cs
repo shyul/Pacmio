@@ -131,8 +131,6 @@ namespace Pacmio
 
         #endregion Order and Trade Data
 
-
-
         #region Equality
 
         public bool Equals(BusinessInfo other) => ISIN == other.ISIN;
