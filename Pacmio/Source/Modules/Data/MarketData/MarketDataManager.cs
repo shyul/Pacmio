@@ -16,7 +16,18 @@ namespace Pacmio
     {
         private static Dictionary<Contract, MarketData> ContractToMarketDataLUT { get; } = new Dictionary<Contract, MarketData>();
 
+        public static MarketData GetOrCreateMarketData(this Contract c)
+        {
+            lock (ContractToMarketDataLUT)
+            {
+                if (!ContractToMarketDataLUT.ContainsKey(c)) 
+                {
+                    // ContractToMarketDataLUT[c] = new MarketData(c);
+                }
 
+                return ContractToMarketDataLUT[c];
+            }
+        }
 
         #region File system
 

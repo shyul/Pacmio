@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    [Serializable, DataContract]
+    [Serializable, DataContract(Name = "FundamentalData")]
     public class FundamentalDataList : IDataFile
     {
         public FundamentalDataList(Contract c)
@@ -22,30 +22,77 @@ namespace Pacmio
             => ContractKey = key;
 
         [DataMember]
-        public (string name, Exchange exchange, string typeName) ContractKey { get; }
+        public (string name, Exchange exchange, string typeName) ContractKey { get; private set; }
 
         [IgnoreDataMember]
         public Contract Contract => ContractManager.GetByKey(ContractKey);
 
         [DataMember]
-        private Dictionary<(Type, DateTime), FundamentalDatum> DataLUT { get; } = new Dictionary<(Type, DateTime), FundamentalDatum>();
+        public DateTime EarliestTime { get; set; } = DateTime.MinValue;
 
-        public T[] GetList<T>() where T : FundamentalDatum
+        [DataMember]
+        private Dictionary<(FundamentalType, DateTime), FundamentalDatum> DataLUT { get; set; } = new Dictionary<(FundamentalType, DateTime), FundamentalDatum>();
+
+        public FundamentalDatum[] GetList(FundamentalType type)
         {
             lock (DataLUT)
-                return DataLUT.Values.Where(n => n is T).Select(n => n as T).ToArray();
+                return DataLUT.Values.Where(n => n.Type == type).ToArray();
         }
 
-        public T GetOrCreateDatum<T>(T fd) where T : FundamentalDatum
+        public FundamentalDatum GetOrCreateDatum(FundamentalType type, DateTime asOfDate)
+            => GetOrCreateDatum((type, asOfDate));
+
+        public FundamentalDatum GetOrCreateDatum((FundamentalType, DateTime) key)
         {
-            var key = fd.Key;
             lock (DataLUT)
             {
                 if (!DataLUT.ContainsKey(key))
                 {
-                    DataLUT[key] = fd;
+                    DataLUT[key] = new FundamentalDatum(key);
                 }
-                return DataLUT[key] as T;
+                return DataLUT[key];
+            }
+        }
+
+        public void SetSplit(DateTime asOfDate, double close, double split, DataSourceType dataSource)
+        {
+            var key = (FundamentalType.Split, asOfDate);
+
+            lock (DataLUT)
+            {
+                if (split <= 0) throw new Exception("Split can't be negative: " + split);
+
+                if (split != 1)
+                {
+                    FundamentalDatum fdm = GetOrCreateDatum(key);
+                    fdm.Close_Price = close;
+                    fdm.Value = split;
+                    fdm.DataSource = dataSource;
+                }
+                else if (DataLUT.ContainsKey(key))
+                {
+                    DataLUT.Remove(key);
+                }
+            }
+        }
+
+        public void SetDividend(DateTime asOfDate, double close, double dividend, DataSourceType dataSource)
+        {
+            var key = (FundamentalType.Dividend, asOfDate);
+
+            lock (DataLUT)
+            {
+                if (dividend != 0)
+                {
+                    FundamentalDatum fdm = GetOrCreateDatum(key);
+                    fdm.Close_Price = close;
+                    fdm.Value = dividend;
+                    fdm.DataSource = dataSource;
+                }
+                else if (DataLUT.ContainsKey(key))
+                {
+                    DataLUT.Remove(key);
+                }
             }
         }
 
@@ -60,11 +107,11 @@ namespace Pacmio
             return false;
         }
 
-        public void Remove<T>() where T : FundamentalDatum
+        public void Remove(FundamentalType type)
         {
             lock (DataLUT)
             {
-                var listToRemove = DataLUT.Values.Where(n => n is T).Select(n => n.Key).ToList();
+                var listToRemove = DataLUT.Values.Where(n => n.Type == type).Select(n => n.Key).ToList();
                 listToRemove.ForEach(n => DataLUT.Remove(n));
             }
         }
@@ -73,8 +120,8 @@ namespace Pacmio
         {
             MultiPeriod<(double Price, double Volume)> list = new MultiPeriod<(double Price, double Volume)>();
 
-            var split_list = GetList<SplitDatum>().Select(n => (n.AsOfDate, true, n.Split));
-            var dividend_list = GetList<DividendDatum>().Select(n => (n.AsOfDate, false, n.Percent));
+            var split_list = GetList(FundamentalType.Split).Select(n => (n.AsOfDate, true, n.Value));
+            var dividend_list = GetList(FundamentalType.Dividend).Select(n => (n.AsOfDate, false, n.Close_Price > 0 ? n.Value / n.Close_Price : 0));
             var split_dividend_list = split_list.Concat(dividend_list).OrderByDescending(n => n.AsOfDate).ToArray();
 
             DateTime latestTime = DateTime.MaxValue;
@@ -120,14 +167,22 @@ namespace Pacmio
         public void SaveFile()
         {
             lock (DataLUT)
+            {
                 this.SerializeJsonFile(DataFileName);
+            }
         }
 
         public static FundamentalDataList LoadFile((string name, Exchange exchange, string typeName) key)
-            => Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(key));
+        {
+            if (Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(key)) is FundamentalDataList fd)
+            {
+                return fd;
+            }
+            else
+                return new FundamentalDataList(key);
+        }
 
-        public static FundamentalDataList LoadFile(Contract c)
-            => Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(c.Key));
+        public static FundamentalDataList LoadFile(Contract c) => LoadFile(c.Key);
 
         #endregion File Operation
     }

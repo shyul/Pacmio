@@ -16,31 +16,6 @@ namespace Pacmio
     /// 
     /// </summary>
     [Serializable, DataContract]
-    public enum FundamentalDataType : int
-    {
-        [EnumMember, Description("Outstanding Shares")]
-        ShareOut = 10,
-
-        [EnumMember, Description("Floating Shares")]
-        ShareFloat = 20,
-
-        [EnumMember, Description("EPS")]
-        EPS = 100,
-
-        [EnumMember, Description("Total Revenue")]
-        Revenue = 200,
-
-        [EnumMember, Description("Number Employees")]
-        NumberEmployees = 10000,
-
-        [EnumMember, Description("Number Shareholders")]
-        NumberShareholders = 20000,
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [Serializable, DataContract]
     public sealed class PeerInfo
     {
         [DataMember]

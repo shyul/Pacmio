@@ -91,13 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDataList.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\ARPDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\DividendDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\EPSDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\FundamentalDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\SplitDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum\TotalRevenueDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\Decision\Trade\AccountPosition\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderInfoGridView.cs" />
@@ -137,7 +132,7 @@
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepth.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDataManager.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalManager.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\ExitMethod.cs" />
     <Compile Include="Source\Forms\Grid\ContractGridRenderer.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthDatum.cs" />
@@ -314,7 +309,7 @@
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\NetClient\Quandl.cs" />
-    <Compile Include="Source\Modules\Data\BusinessInfo\Fundamental.cs" />
+    <Compile Include="Source\Modules\Data\BusinessInfo\Types.cs" />
     <Compile Include="Source\Modules\Contract\Types\Contract.cs" />
     <Compile Include="Source\Modules\Contract\Types\SymbolHistory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

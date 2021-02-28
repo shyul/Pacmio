@@ -116,10 +116,15 @@ namespace Pacmio.IB
             {
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
 
+                activeBarTable_HistoricalDataHeadTimestamp.FundamentalData.EarliestTime 
+                    = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
+
+                activeBarTable_HistoricalDataHeadTimestamp.FundamentalData.SaveFile();
+                /*
                 if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is StockData sd)
                 {
                     sd.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
-                }
+                }*/
             }
 
             RemoveRequest(requestId, false);

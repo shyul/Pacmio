@@ -32,6 +32,7 @@ namespace Pacmio
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
+            FundamentalData = Contract.GetOrCreateFundamentalData();
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
@@ -80,6 +81,8 @@ namespace Pacmio
         public BarType Type { get; }
 
         public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (Contract.Key, BarFreq, Type);
+
+        public FundamentalDataList FundamentalData { get; }
 
         #endregion Ctor
 
@@ -568,26 +571,26 @@ namespace Pacmio
         private void Adjust(bool forwardAdjust = true)
         {
             //Sort();
-            if (Contract.MarketData is StockData sd)
+            //if (Contract.MarketData is StockData sd)
+            //{
+            MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(AdjustDividend); //sd.BarTableAdjust(AdjustDividend);
+
+            // Please notice b.Time is the start time of the Bar
+            // When the adjust event (split or dividend) happens at d 
+            // The adjust will happen in d-1, which belongs to the
+            // prior adjust segment.
+            //                    S
+            // ---------------------------------------
+            //                   AD
+            // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+            for (int i = 0; i < Count; i++)
             {
-                MultiPeriod<(double Price, double Volume)> barTableAdjust = sd.BarTableAdjust(AdjustDividend);
+                Bar b = this[i];
 
-                // Please notice b.Time is the start time of the Bar
-                // When the adjust event (split or dividend) happens at d 
-                // The adjust will happen in d-1, which belongs to the
-                // prior adjust segment.
-                //                    S
-                // ---------------------------------------
-                //                   AD
-                // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
-                for (int i = 0; i < Count; i++)
-                {
-                    Bar b = this[i];
-
-                    var (adj_price, adj_vol) = barTableAdjust[b.Time];
-                    b.Adjust(adj_price, adj_vol, forwardAdjust);
-                }
+                var (adj_price, adj_vol) = barTableAdjust[b.Time];
+                b.Adjust(adj_price, adj_vol, forwardAdjust);
             }
+            //}
             //ResetCalculationPointer();
         }
 
@@ -1256,7 +1259,9 @@ namespace Pacmio
 
         #region File Operation
 
-        public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
+        //public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
+
+        public DateTime EarliestTime => FundamentalData.EarliestTime;
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
@@ -1274,15 +1279,9 @@ namespace Pacmio
             else return endTime;
         }
 
-        private BarTableFileData BarTableFileData
-        {
-            get
-            {
-                //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
-                //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-                return BarTableFileData.LoadFile(this) is BarTableFileData btd && btd == this ? btd : new BarTableFileData(this);
-            }
-        }
+        //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
+        //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
+        private BarTableFileData BarTableFileData => BarTableFileData.LoadFile(this) is BarTableFileData btd && btd == this ? btd : new BarTableFileData(this);
 
         private void LoadFile(BarTableFileData btd, Period pd)
         {
@@ -1324,8 +1323,8 @@ namespace Pacmio
                 btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
                 btd.Bars.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Bars.Remove(n.Key));
 
-                //btd.SaveFile();
-                btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
+                btd.SaveFile();
+                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             }
 
             DataSourceSegments.Clear();
@@ -1369,8 +1368,8 @@ namespace Pacmio
                 if (btd.LastUpdateTime < LastDownloadRequestTime)
                     btd.LastUpdateTime = LastDownloadRequestTime;
 
-                //btd.SaveFile();
-                btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
+                btd.SaveFile();
+                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             }
         }
 

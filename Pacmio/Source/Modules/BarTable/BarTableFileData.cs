@@ -21,7 +21,10 @@ namespace Pacmio
             BarFreq = freq;
             Type = type;
 
-            EarliestTime = c.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; // c.BarTableEarliestTime;
+            //EarliestTime = c.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; // c.BarTableEarliestTime;
+
+            EarliestTime = c.GetOrCreateFundamentalData().EarliestTime;
+
             //DataSourceSegments = new MultiPeriod<DataSource>();
         }
 
@@ -31,7 +34,9 @@ namespace Pacmio
             BarFreq = bt.BarFreq;
             Type = bt.Type;
 
-            EarliestTime = bt.Contract.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
+            //EarliestTime = bt.Contract.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
+            EarliestTime = bt.Contract.GetOrCreateFundamentalData().EarliestTime;
+
             LastUpdateTime = bt.LastDownloadRequestTime;
             //DataSourceSegments = bt.DataSourceSegments;
         }
@@ -66,7 +71,7 @@ namespace Pacmio
 
         #region File Operation
 
-        public static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
+        private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
         {
             string prefix = "$";
             if (info.ContractKey.typeName == "INDEX") prefix = "^";

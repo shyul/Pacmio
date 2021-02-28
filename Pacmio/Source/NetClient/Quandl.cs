@@ -58,6 +58,8 @@ namespace Pacmio
                     sd0.SplitTable.Clear();
                 }*/
 
+                FundamentalDataList fd = c.GetOrCreateFundamentalData();
+
                 try
                 {
                     lock (Client)
@@ -87,24 +89,34 @@ namespace Pacmio
 
                                             bt.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
 
-
                                             //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                            if (c.MarketData is StockData sd)
+                                            //if (c.MarketData is StockData sd)
+                                            //{
+                                            double dividend = fields[6].ToDouble(0);
+                                            fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
+                                            /*
+                                            if (dividend != 0)
                                             {
-                                                double dividend = fields[6].ToDouble(0);
-                                                if (dividend != 0)
-                                                {
-                                                    //Console.WriteLine("Add Dividend: " + dividend);
-                                                    sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
-                                                }
+                                                DividendDatum div_fdm = fd.GetOrCreateDatum(new DividendDatum(time, close));
+                                                div_fdm.Close_Price = close;
+                                                div_fdm.Divident = dividend;
+                                                div_fdm.DataSource = DataSourceType.Quandl;
 
-                                                double split = fields[7].ToDouble(1);
-                                                if (split != 1)
-                                                {
-                                                    //Console.WriteLine("Add Split: " + split);
-                                                    sd.SplitTable[time] = (DataSourceType.Quandl, split);
-                                                }
-                                            }
+                                                //Console.WriteLine("Add Dividend: " + dividend);
+                                                //sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
+                                            }*/
+
+                                            double split = fields[7].ToDouble(1);
+                                            fd.SetSplit(time, close, split, DataSourceType.Quandl);
+                                            /*
+                                            if (split != 1)
+                                            {
+                                                SplitDatum sp_fdm = fd.GetOrCreateDatum(new SplitDatum(time, close, split));
+
+                                                //Console.WriteLine("Add Split: " + split);
+                                                sd.SplitTable[time] = (DataSourceType.Quandl, split);
+                                            }*/
+                                            //}
                                         }
                                     }
                                     else
@@ -121,6 +133,8 @@ namespace Pacmio
                 {
                     Console.WriteLine("Quandl download failed" + e.ToString());
                 }
+
+                fd.SaveFile();
             }
             return success;
         }
@@ -134,6 +148,7 @@ namespace Pacmio
 
             BarTableFileData btd = null;
             Contract currentContract = null;
+            FundamentalDataList currentFd = null;
             bool btdIsValid = false;
 
             IEnumerable<Contract> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US");// && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
@@ -174,24 +189,29 @@ namespace Pacmio
 
                                     // !! Please check if the file is locked or now before saving.
                                     btd.SerializeJsonFile(btd.DataFileName);
-
-                                    if (currentContract is Stock stk) stk.SaveMarketData();
+                                    currentFd?.SaveFile(); // if (currentContract is Stock stk) stk.SaveMarketData();
 
                                     Console.Write(btd.Contract.name + ". ");
                                     pd.Reset();
                                     currentContract = null;
+                                    currentFd = null;
                                     btd = null;
                                 }
 
                                 if (symbolList.ContainsKey(currentSymbolName))
                                 {
                                     currentContract = symbolList[currentSymbolName];
+                                    currentFd = currentContract.GetOrCreateFundamentalData();
 
+                                    currentFd.Remove(FundamentalType.Split);
+                                    currentFd.Remove(FundamentalType.Dividend);
+
+                                    /*
                                     if (currentContract.MarketData is StockData sd0)
                                     {
                                         sd0.DividendTable.Clear();
                                         sd0.SplitTable.Clear();
-                                    }
+                                    }*/
 
                                     btd = new BarTableFileData(currentContract, BarFreq.Daily, BarType.Trades);
                                     btdIsValid = true;
@@ -231,21 +251,26 @@ namespace Pacmio
                                     if (currentContract.MarketData is StockData sd)
                                     {
                                         double dividend = fields[7].ToDouble(0);
+                                        currentFd?.SetDividend(time, close, dividend, DataSourceType.Quandl);
+
+                                        /*
                                         if (dividend != 0)
                                         {
                                             if (dividend < 0) throw new Exception("Split can't be: " + dividend);
                                             //Console.WriteLine("Add Dividend: " + dividend);
                                             sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
-                                        }
+                                        }*/
 
                                         double split = fields[8].ToDouble(1);
+                                        currentFd?.SetSplit(time, close, split, DataSourceType.Quandl);
+                                        /*
                                         if (split != 1)
                                         {
                                             //Console.WriteLine("Add Split: " + split);
 
                                             if (split <= 0) throw new Exception("Split can't be: " + split);
                                             sd.SplitTable[time] = (DataSourceType.Quandl, split);
-                                        }
+                                        }*/
                                     }
                                 }
                             }
