@@ -109,12 +109,6 @@ namespace Pacmio
         Defunct = 6666,
     }
 
-
-
-
-
-
-
     /// <summary>
     /// "INC" Income, "CAS" Cash, "BAL" Balance - INC, BAL, CAS, RAL
     /// https://www.accountingtools.com/articles/types-of-financial-statements.html
@@ -134,10 +128,6 @@ namespace Pacmio
         [EnumMember]
         ChangesInEquity = 40
     }
-
-
-
-
 
     [Serializable, DataContract]
     public enum OwnerType : int

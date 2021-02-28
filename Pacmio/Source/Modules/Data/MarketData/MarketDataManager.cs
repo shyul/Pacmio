@@ -16,6 +16,8 @@ namespace Pacmio
     {
         private static Dictionary<Contract, MarketData> ContractToMarketDataLUT { get; } = new Dictionary<Contract, MarketData>();
 
+        //public static Dictionary<MarketData, MarketDataRequestStatus> MarketDataTickers { get; } = new Dictionary<MarketData, MarketDataRequestStatus>();
+
         public static MarketData GetOrCreateMarketData(this Contract c)
         {
             lock (ContractToMarketDataLUT)

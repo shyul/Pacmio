@@ -20,7 +20,7 @@ namespace Pacmio
         {
             lock (ContractFundamentalLUT)
             {
-                if (!ContractFundamentalLUT.ContainsKey(c)) 
+                if (!ContractFundamentalLUT.ContainsKey(c))
                 {
                     ContractFundamentalLUT[c] = FundamentalDataList.LoadFile(c);
                 }

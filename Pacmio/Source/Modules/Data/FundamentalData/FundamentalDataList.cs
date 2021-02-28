@@ -96,12 +96,16 @@ namespace Pacmio
             }
         }
 
-        public bool Remove(FundamentalDatum fd)
+        public bool Remove(FundamentalDatum fd) => Remove(fd.Key);
+
+        public bool Remove(FundamentalType type, DateTime asOfDate) => Remove((type, asOfDate));
+
+        public bool Remove((FundamentalType, DateTime) key)
         {
             lock (DataLUT)
-                if (DataLUT.ContainsKey(fd.Key))
+                if (DataLUT.ContainsKey(key))
                 {
-                    DataLUT.Remove(fd.Key);
+                    DataLUT.Remove(key);
                     return true;
                 }
             return false;
