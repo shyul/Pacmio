@@ -200,6 +200,7 @@ namespace TestClient
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
             this.BtnExportFundamental = new System.Windows.Forms.Button();
+            this.BtnExportBarTableData = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -260,6 +261,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
             this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
             this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
             this.tabHistoricalData.Controls.Add(this.label12);
@@ -2004,6 +2006,16 @@ namespace TestClient
             this.BtnExportFundamental.UseVisualStyleBackColor = true;
             this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
             // 
+            // BtnExportBarTableData
+            // 
+            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 260);
+            this.BtnExportBarTableData.Name = "BtnExportBarTableData";
+            this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
+            this.BtnExportBarTableData.TabIndex = 47;
+            this.BtnExportBarTableData.Text = "Export BarTable Data CSV";
+            this.BtnExportBarTableData.UseVisualStyleBackColor = true;
+            this.BtnExportBarTableData.Click += new System.EventHandler(this.BtnExportBarTableData_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2227,5 +2239,6 @@ namespace TestClient
         private System.Windows.Forms.CheckedListBox CheckedListBoxWatchLists;
         private System.Windows.Forms.Button BtnRefreshOrderInfoGrid;
         private System.Windows.Forms.Button BtnExportFundamental;
+        private System.Windows.Forms.Button BtnExportBarTableData;
     }
 }

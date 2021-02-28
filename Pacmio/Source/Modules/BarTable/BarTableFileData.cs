@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using Xu;
@@ -17,7 +19,7 @@ namespace Pacmio
     {
         public BarTableFileData(Contract c, BarFreq freq, BarType type)
         {
-            Contract = c.Key;
+            ContractKey = c.Key;
             BarFreq = freq;
             Type = type;
 
@@ -30,7 +32,7 @@ namespace Pacmio
 
         public BarTableFileData(BarTable bt)
         {
-            Contract = bt.Contract.Key;
+            ContractKey = bt.Contract.Key;
             BarFreq = bt.BarFreq;
             Type = bt.Type;
 
@@ -48,7 +50,7 @@ namespace Pacmio
         }
 
         [DataMember]
-        public (string name, Exchange exchange, string typeName) Contract { get; set; }
+        public (string name, Exchange exchange, string typeName) ContractKey { get; set; }
 
         [DataMember]
         public BarFreq BarFreq { get; set; }
@@ -82,7 +84,7 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public string DataFileName => GetDataFileName((Contract, BarFreq, Type));
+        public string DataFileName => GetDataFileName((ContractKey, BarFreq, Type));
 
         public void SaveFile()
         {
@@ -93,20 +95,68 @@ namespace Pacmio
         public static BarTableFileData LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
             => Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(info));
 
-        public static BarTableFileData LoadFile(BarTable bt)
-            => Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(bt.Key));
-
+        public static BarTableFileData LoadFile(BarTable bt) => LoadFile(bt.Key);
+        //=> Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(bt.Key));
 
         #endregion File Operation
 
+        #region Export CSV
+
+        public void ExportCSV(string fileName)
+        {
+            var list = Bars.OrderByDescending(n => n.Key);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Time,Data Source,Open,High,Low,Close,Volume,Event");
+
+            var fd = ContractKey.GetOrCreateFundamentalData();
+
+            FundamentalDatum[] fdlist = null;
+
+            DateTime date = DateTime.MaxValue.Date;
+            string fd_event = string.Empty;
+
+            foreach (var row in list)
+            {
+                DateTime newDate = row.Key.Date;
+
+                if (date > newDate)
+                {
+                    fdlist = fd.GetList(newDate);
+                    foreach(var fdm in fdlist) 
+                    {
+                        fd_event += fdm.Type + " = " + fdm.Value + " | ";
+                    }
+                    fd_event = fd_event.Trim(new char[] { ' ', '|' }).Trim();
+                    date = newDate;
+                }
+
+                sb.AppendLine(string.Join(",", new string[] {
+                    row.Key.ToString(),
+                    row.Value.SRC.ToString(),
+                    row.Value.O.ToString(),
+                    row.Value.H.ToString(),
+                    row.Value.L.ToString(),
+                    row.Value.C.ToString(),
+                    row.Value.V.ToString(),
+                    fd_event
+                }));
+
+                fd_event = string.Empty;
+            }
+
+            sb.ToFile(fileName);
+        }
+
+        #endregion Export CSV
+
         #region Equality
-        public bool Equals(BarTableFileData other) => (Contract == other.Contract) && (BarFreq == other.BarFreq) && (Type == other.Type);
+        public bool Equals(BarTableFileData other) => (ContractKey == other.ContractKey) && (BarFreq == other.BarFreq) && (Type == other.Type);
         public static bool operator ==(BarTableFileData left, BarTableFileData right) => left.Equals(right);
         public static bool operator !=(BarTableFileData left, BarTableFileData right) => !left.Equals(right);
-        public bool Equals(BarTable other) => (Contract, BarFreq, Type) == (other.Contract.Key, other.BarFreq, other.Type);
+        public bool Equals(BarTable other) => (ContractKey, BarFreq, Type) == (other.Contract.Key, other.BarFreq, other.Type);
         public static bool operator ==(BarTableFileData left, BarTable right) => left is BarTableFileData btd && btd.Equals(right);
         public static bool operator !=(BarTableFileData left, BarTable right) => !(left == right);
-        public bool Equals(Contract other) => other is Contract c && c.Key == Contract;
+        public bool Equals(Contract other) => other is Contract c && c.Key == ContractKey;
         public static bool operator ==(BarTableFileData left, Contract right) => left is BarTableFileData btd && btd.Equals(right);
         public static bool operator !=(BarTableFileData left, Contract right) => !(left == right);
         public override bool Equals(object other)
@@ -121,7 +171,7 @@ namespace Pacmio
                 return false;
         }
 
-        public override int GetHashCode() => Contract.GetHashCode() ^ BarFreq.GetHashCode() ^ Type.GetHashCode();
+        public override int GetHashCode() => ContractKey.GetHashCode() ^ BarFreq.GetHashCode() ^ Type.GetHashCode();
 
         #endregion Equality
     }

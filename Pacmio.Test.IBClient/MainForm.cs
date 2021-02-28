@@ -284,9 +284,8 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                BarFreq freq = BarFreq;
-                BarType type = BarType;
                 Period pd = HistoricalPeriod;
+                Root.SaveFile.FileName = "FD_" + ContractTest.ActiveContract.Name;
                 if (Root.SaveFile.ShowDialog() == DialogResult.OK)
                 {
                     var fd = ContractTest.ActiveContract.GetOrCreateFundamentalData();
@@ -296,7 +295,20 @@ namespace TestClient
 
         }
 
-
+        private void BtnExportBarTableData_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                BarType type = BarType;
+                Root.SaveFile.FileName = "BT_" + ContractTest.ActiveContract.Name;
+                if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+                {
+                    BarTableFileData btd = BarTableFileData.LoadFile((ContractTest.ActiveContract.Key, freq, type));
+                    btd.ExportCSV(Root.SaveFile.FileName);
+                }
+            }
+        }
 
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
         {

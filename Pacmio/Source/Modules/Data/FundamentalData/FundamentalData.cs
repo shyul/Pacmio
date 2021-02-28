@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 using System.Runtime.Serialization;
 using Xu;
 
@@ -45,6 +44,12 @@ namespace Pacmio
         {
             lock (DataLUT)
                 return DataLUT.Values.Where(n => n.Type == type).ToArray();
+        }
+
+        public FundamentalDatum[] GetList(DateTime asOfDate)
+        {
+            lock (DataLUT)
+                return DataLUT.Values.Where(n => n.AsOfDate == asOfDate.Date).ToArray();
         }
 
         public FundamentalDatum GetOrCreateDatum(FundamentalType type, DateTime asOfDate)
@@ -204,7 +209,7 @@ namespace Pacmio
         {
             var list = GetList().OrderByDescending(n => n.AsOfDate).ThenBy(n => n.Type).ThenBy(n => n.DataSource);
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Type,Time,Source,Value,Preliminary,Restated,Audited");
+            sb.AppendLine("Type,Time,Data Source,Close Price,Value,Preliminary,Restated,Audited");
 
             foreach(var row in list) 
             {
@@ -212,6 +217,7 @@ namespace Pacmio
                     row.Type.ToString(),
                     row.AsOfDate.ToString("MM-dd-yyyy"),
                     row.DataSource.ToString(),
+                    row.Close_Price.ToString(),
                     row.Value.ToString(),
                     row.Value_Preliminary.ToString(),
                     row.Value_Restated.ToString(),

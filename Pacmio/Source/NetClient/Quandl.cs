@@ -191,7 +191,7 @@ namespace Pacmio
                                     btd.SerializeJsonFile(btd.DataFileName);
                                     currentFd?.SaveFile(); // if (currentContract is Stock stk) stk.SaveMarketData();
 
-                                    Console.Write(btd.Contract.name + ". ");
+                                    Console.Write(btd.ContractKey.name + ". ");
                                     pd.Reset();
                                     currentContract = null;
                                     currentFd = null;
