@@ -58,7 +58,7 @@ namespace Pacmio
                     sd0.SplitTable.Clear();
                 }*/
 
-                FundamentalDataList fd = c.GetOrCreateFundamentalData();
+                FundamentalData fd = c.GetOrCreateFundamentalData();
 
                 try
                 {
@@ -148,7 +148,7 @@ namespace Pacmio
 
             BarTableFileData btd = null;
             Contract currentContract = null;
-            FundamentalDataList currentFd = null;
+            FundamentalData currentFd = null;
             bool btdIsValid = false;
 
             IEnumerable<Contract> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US");// && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);

@@ -14,15 +14,15 @@ namespace Pacmio
 {
     public static class FundamentalManager
     {
-        private static Dictionary<Contract, FundamentalDataList> ContractFundamentalLUT { get; } = new Dictionary<Contract, FundamentalDataList>();
+        private static Dictionary<Contract, FundamentalData> ContractFundamentalLUT { get; } = new Dictionary<Contract, FundamentalData>();
 
-        public static FundamentalDataList GetOrCreateFundamentalData(this Contract c)
+        public static FundamentalData GetOrCreateFundamentalData(this Contract c)
         {
             lock (ContractFundamentalLUT)
             {
                 if (!ContractFundamentalLUT.ContainsKey(c))
                 {
-                    ContractFundamentalLUT[c] = FundamentalDataList.LoadFile(c);
+                    ContractFundamentalLUT[c] = FundamentalData.LoadFile(c);
                 }
 
                 return ContractFundamentalLUT[c];

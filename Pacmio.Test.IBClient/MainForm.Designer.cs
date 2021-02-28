@@ -129,6 +129,7 @@ namespace TestClient
             this.BtnSubscribePnL = new System.Windows.Forms.Button();
             this.BtnRequestPnL = new System.Windows.Forms.Button();
             this.TreeViewAccount = new System.Windows.Forms.TreeView();
+            this.ListBoxAccount = new System.Windows.Forms.ListBox();
             this.tabFileData = new System.Windows.Forms.TabPage();
             this.BtnApplyDefaultDownloadPeriod = new System.Windows.Forms.Button();
             this.BtnMatchSymbols = new System.Windows.Forms.Button();
@@ -173,7 +174,6 @@ namespace TestClient
             this.SelectHistoricalDataBarType = new System.Windows.Forms.ComboBox();
             this.SelectHistoricalDataBarFreq = new System.Windows.Forms.ComboBox();
             this.DateTimePickerHistoricalDataStart = new System.Windows.Forms.DateTimePicker();
-            this.ListBoxAccount = new System.Windows.Forms.ListBox();
             this.LbStatus = new System.Windows.Forms.Label();
             this.CheckBoxSingleContractUseSmart = new System.Windows.Forms.CheckBox();
             this.SelectBoxSingleContractExchange = new System.Windows.Forms.ComboBox();
@@ -199,6 +199,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnExportFundamental = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -241,8 +242,8 @@ namespace TestClient
             // 
             // MainTab
             // 
-            this.MainTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.MainTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainTab.Controls.Add(this.tabHistoricalData);
             this.MainTab.Controls.Add(this.tabContract);
@@ -259,6 +260,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
             this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
@@ -390,8 +392,8 @@ namespace TestClient
             // 
             // GroupBoxContractInfo
             // 
-            this.GroupBoxContractInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBoxContractInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBoxContractInfo.Controls.Add(this.TextBoxSymbolFullName);
             this.GroupBoxContractInfo.Controls.Add(this.LbSymbolISIN);
@@ -412,7 +414,7 @@ namespace TestClient
             // 
             // TextBoxSymbolFullName
             // 
-            this.TextBoxSymbolFullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxSymbolFullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolFullName.Location = new System.Drawing.Point(57, 21);
             this.TextBoxSymbolFullName.Name = "TextBoxSymbolFullName";
@@ -432,7 +434,7 @@ namespace TestClient
             // TextBoxSymbolIds
             // 
             this.TextBoxSymbolIds.AcceptsReturn = true;
-            this.TextBoxSymbolIds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxSymbolIds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolIds.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolIds.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -474,8 +476,8 @@ namespace TestClient
             // TextBoxSymbolSummaryF
             // 
             this.TextBoxSymbolSummaryF.AcceptsReturn = true;
-            this.TextBoxSymbolSummaryF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxSymbolSummaryF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolSummaryF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolSummaryF.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -510,7 +512,7 @@ namespace TestClient
             // TextBoxSymbolSummaryB
             // 
             this.TextBoxSymbolSummaryB.AcceptsReturn = true;
-            this.TextBoxSymbolSummaryB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxSymbolSummaryB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxSymbolSummaryB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBoxSymbolSummaryB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1238,12 +1240,21 @@ namespace TestClient
             // 
             // TreeViewAccount
             // 
-            this.TreeViewAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.TreeViewAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewAccount.Location = new System.Drawing.Point(6, 35);
             this.TreeViewAccount.Name = "TreeViewAccount";
             this.TreeViewAccount.Size = new System.Drawing.Size(516, 608);
             this.TreeViewAccount.TabIndex = 5;
+            // 
+            // ListBoxAccount
+            // 
+            this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ListBoxAccount.FormattingEnabled = true;
+            this.ListBoxAccount.Location = new System.Drawing.Point(538, 35);
+            this.ListBoxAccount.Name = "ListBoxAccount";
+            this.ListBoxAccount.Size = new System.Drawing.Size(144, 147);
+            this.ListBoxAccount.TabIndex = 4;
             // 
             // tabFileData
             // 
@@ -1262,7 +1273,7 @@ namespace TestClient
             this.tabFileData.Controls.Add(this.BtnImportContracts);
             this.tabFileData.Location = new System.Drawing.Point(4, 22);
             this.tabFileData.Name = "tabFileData";
-            this.tabFileData.Size = new System.Drawing.Size(952, 787);
+            this.tabFileData.Size = new System.Drawing.Size(952, 649);
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
@@ -1614,8 +1625,8 @@ namespace TestClient
             // 
             // TextBoxMultiContracts
             // 
-            this.TextBoxMultiContracts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxMultiContracts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxMultiContracts.Location = new System.Drawing.Point(6, 21);
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
@@ -1708,15 +1719,6 @@ namespace TestClient
             this.DateTimePickerHistoricalDataStart.Size = new System.Drawing.Size(140, 22);
             this.DateTimePickerHistoricalDataStart.TabIndex = 5;
             this.DateTimePickerHistoricalDataStart.Value = new System.DateTime(1999, 1, 22, 12, 0, 0, 0);
-            // 
-            // ListBoxAccount
-            // 
-            this.ListBoxAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ListBoxAccount.FormattingEnabled = true;
-            this.ListBoxAccount.Location = new System.Drawing.Point(538, 35);
-            this.ListBoxAccount.Name = "ListBoxAccount";
-            this.ListBoxAccount.Size = new System.Drawing.Size(144, 147);
-            this.ListBoxAccount.TabIndex = 4;
             // 
             // LbStatus
             // 
@@ -1992,6 +1994,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnExportFundamental
+            // 
+            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 289);
+            this.BtnExportFundamental.Name = "BtnExportFundamental";
+            this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
+            this.BtnExportFundamental.TabIndex = 46;
+            this.BtnExportFundamental.Text = "Export Fundamental CSV";
+            this.BtnExportFundamental.UseVisualStyleBackColor = true;
+            this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2214,5 +2226,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnMarketDataSnapshotMultiContracts;
         private System.Windows.Forms.CheckedListBox CheckedListBoxWatchLists;
         private System.Windows.Forms.Button BtnRefreshOrderInfoGrid;
+        private System.Windows.Forms.Button BtnExportFundamental;
     }
 }

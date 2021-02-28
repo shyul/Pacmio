@@ -90,7 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDataList.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />

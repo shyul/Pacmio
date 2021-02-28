@@ -17,7 +17,7 @@ namespace Pacmio
     {
         public OrderInfoGridView() : base("Order History")
         {
-            SourceRows = OrderManager.List;
+            SourceRows = OrderManager.GetList();
             OrderManager.DataProvider.AddDataConsumer(this);
             ReadyToShow = true;
             DataIsUpdated(null);
@@ -32,7 +32,7 @@ namespace Pacmio
         public override void DataIsUpdated(IDataProvider provider)
         {
             //SourceRows = OrderManager.List.ToArray();
-
+            SourceRows = OrderManager.GetList();
             Console.WriteLine("SourceRows.Count() = " + SourceRows.Count());
             base.DataIsUpdated(provider);
         }

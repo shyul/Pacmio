@@ -82,7 +82,7 @@ namespace Pacmio
 
         public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (Contract.Key, BarFreq, Type);
 
-        public FundamentalDataList FundamentalData { get; }
+        public FundamentalData FundamentalData { get; }
 
         #endregion Ctor
 

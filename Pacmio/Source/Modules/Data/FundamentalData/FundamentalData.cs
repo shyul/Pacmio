@@ -7,18 +7,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.IO;
 using System.Runtime.Serialization;
 using Xu;
 
 namespace Pacmio
 {
-    [Serializable, DataContract(Name = "FundamentalData")]
-    public class FundamentalDataList : IDataFile
+    [Serializable, DataContract]
+    public class FundamentalData : IDataFile
     {
-        public FundamentalDataList(Contract c)
+        public FundamentalData(Contract c)
             => ContractKey = c.Key;
 
-        public FundamentalDataList((string name, Exchange exchange, string typeName) key)
+        public FundamentalData((string name, Exchange exchange, string typeName) key)
             => ContractKey = key;
 
         [DataMember]
@@ -32,6 +34,12 @@ namespace Pacmio
 
         [DataMember]
         private Dictionary<(FundamentalType, DateTime), FundamentalDatum> DataLUT { get; set; } = new Dictionary<(FundamentalType, DateTime), FundamentalDatum>();
+
+        public FundamentalDatum[] GetList()
+        {
+            lock (DataLUT)
+                return DataLUT.Values.ToArray();
+        }
 
         public FundamentalDatum[] GetList(FundamentalType type)
         {
@@ -176,18 +184,44 @@ namespace Pacmio
             }
         }
 
-        public static FundamentalDataList LoadFile((string name, Exchange exchange, string typeName) key)
+        public static FundamentalData LoadFile((string name, Exchange exchange, string typeName) key)
         {
-            if (Serialization.DeserializeJsonFile<FundamentalDataList>(GetDataFileName(key)) is FundamentalDataList fd)
+            if (Serialization.DeserializeJsonFile<FundamentalData>(GetDataFileName(key)) is FundamentalData fd)
             {
                 return fd;
             }
             else
-                return new FundamentalDataList(key);
+                return new FundamentalData(key);
         }
 
-        public static FundamentalDataList LoadFile(Contract c) => LoadFile(c.Key);
+        public static FundamentalData LoadFile(Contract c) => LoadFile(c.Key);
 
         #endregion File Operation
+
+        #region Export CSV
+
+        public void ExportCSV(string fileName) 
+        {
+            var list = GetList().OrderByDescending(n => n.AsOfDate).ThenBy(n => n.Type).ThenBy(n => n.DataSource);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Type,Time,Source,Value,Preliminary,Restated,Audited");
+
+            foreach(var row in list) 
+            {
+                sb.AppendLine(string.Join(",", new string[] { 
+                    row.Type.ToString(),
+                    row.AsOfDate.ToString("MM-dd-yyyy"),
+                    row.DataSource.ToString(),
+                    row.Value.ToString(),
+                    row.Value_Preliminary.ToString(),
+                    row.Value_Restated.ToString(),
+                    row.Value_Audited.ToString()
+                }));
+            }
+
+            sb.ToFile(fileName);
+        }
+
+        #endregion Export CSV
     }
 }

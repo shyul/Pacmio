@@ -185,7 +185,13 @@ namespace Pacmio
 
         private static Dictionary<int, OrderInfo> PermIdToOrderLUT { get; } = new Dictionary<int, OrderInfo>();
 
-        public static IEnumerable<OrderInfo> List => PermIdToOrderLUT.Values;
+        //public static IEnumerable<OrderInfo> List => PermIdToOrderLUT.Values;
+
+        public static OrderInfo[] GetList()
+        {
+            lock (PermIdToOrderLUT)
+                return PermIdToOrderLUT.Values.ToArray();
+        }
 
         #region Updates
 

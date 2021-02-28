@@ -280,6 +280,22 @@ namespace TestClient
 
         #region Bar Chart
 
+        private void BtnExportFundamental_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                BarType type = BarType;
+                Period pd = HistoricalPeriod;
+                if (Root.SaveFile.ShowDialog() == DialogResult.OK)
+                {
+                    var fd = ContractTest.ActiveContract.GetOrCreateFundamentalData();
+                    fd.ExportCSV(Root.SaveFile.FileName);
+                }
+            }
+
+        }
+
 
 
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
@@ -303,6 +319,8 @@ namespace TestClient
                 Root.Form.Show();
             }
         }
+
+
 
         private void BtnLoadMultiHistoricalChart_Click(object sender, EventArgs e)
         {
@@ -1100,13 +1118,15 @@ namespace TestClient
 
         private void BtnRefreshOrderInfoGrid_Click(object sender, EventArgs e)
         {
-            foreach (OrderInfo od in OrderManager.List)
+            foreach (OrderInfo od in OrderManager.GetList())
             {
                 Console.WriteLine("OrderInfo PermId = " + od.PermId + " | " + od.Contract + " | " + od.Status);
             }
 
             //OrderInfoGridView.Update(OrderManager.List);
         }
+
+
     }
     public static class DataGridHelper
     {
