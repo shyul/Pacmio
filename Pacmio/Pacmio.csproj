@@ -90,14 +90,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\FinancialSummary.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\OwnershipDetails.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\ReportFinancialStatements.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\ReportSnapshot.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\WSHData.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\FundamentalDatum.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\FinancialSummary.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\OwnershipDetails.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\ReportFinancialStatements.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\ReportSnapshot.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\WSHData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
     <Compile Include="Source\Modules\Decision\Trade\AccountPosition\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderInfoGridView.cs" />
@@ -156,7 +158,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\DecodeSequentialMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalRequestType.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\FinancialDataRequestType.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\MarketDataRequestStatus.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketDepth\MarketDepth_Parse.cs" />
@@ -305,11 +307,11 @@
     <Compile Include="Source\NetClient\IBApi\Client\Types\RequestType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\TickType.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\XML\REarnEstCons.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\REarnEstCons.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Other\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\BusinessInfoManager.cs" />
-    <Compile Include="Source\Modules\Data\DataSourceType.cs" />
+    <Compile Include="Source\Modules\Data\FinancialData\DataSourceType.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />

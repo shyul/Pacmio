@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -1141,9 +1142,38 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, FundamentalRequestType.CompanyOverview);
+                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, FinancialDataRequestType.CompanyOverview);
 
 
+            }
+        }
+
+        private void BtnTestFundamentalXMLFile_Click(object sender, EventArgs e)
+        {
+            Root.OpenFile.Filter = "XML file (*.xml) | *.xml";
+
+            if (Root.OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = Root.OpenFile.FileName;
+
+                
+                Reuters.CompanyOverview.ReportSnapshot data = Serialization.DeserializeXML<Reuters.CompanyOverview.ReportSnapshot>(File.ReadAllText(fileName));
+                foreach(var officer in data.Officers.Officer) 
+                {
+                    Console.WriteLine(officer.FirstName + " " + officer.LastName);
+                }
+                foreach(var text in data.TextInfo.Text) 
+                {
+                    //DateTime time = DateTime.ParseExact(text.LastModified, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
+                    Console.WriteLine(text.Type + " | " + text.LastModifiedTime + " | " + text.Value);
+                }
+
+                /*
+                Reuters.FinancialSummary.FinancialSummary data = Serialization.DeserializeXML<Reuters.FinancialSummary.FinancialSummary>(File.ReadAllText(fileName));
+                foreach (var eps in data.EPSs.EPS.Where(n =>  n.ReportType == "A" && n.Period == "3M"))
+                { 
+                    Console.WriteLine(eps.AsofDate + " | " + eps.Value);
+                }*/
             }
         }
     }

@@ -38,6 +38,9 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
+            this.BtnExportBarTableData = new System.Windows.Forms.Button();
+            this.BtnExportFundamental = new System.Windows.Forms.Button();
             this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
@@ -199,9 +202,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnExportFundamental = new System.Windows.Forms.Button();
-            this.BtnExportBarTableData = new System.Windows.Forms.Button();
-            this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
+            this.BtnTestFundamentalXMLFile = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -262,6 +263,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnTestFundamentalXMLFile);
             this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
             this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
             this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
@@ -282,6 +284,36 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnRequestFundamentalData
+            // 
+            this.BtnRequestFundamentalData.Location = new System.Drawing.Point(695, 165);
+            this.BtnRequestFundamentalData.Name = "BtnRequestFundamentalData";
+            this.BtnRequestFundamentalData.Size = new System.Drawing.Size(230, 23);
+            this.BtnRequestFundamentalData.TabIndex = 48;
+            this.BtnRequestFundamentalData.Text = "Request Fundamental Data";
+            this.BtnRequestFundamentalData.UseVisualStyleBackColor = true;
+            this.BtnRequestFundamentalData.Click += new System.EventHandler(this.BtnRequestFundamentalData_Click);
+            // 
+            // BtnExportBarTableData
+            // 
+            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 260);
+            this.BtnExportBarTableData.Name = "BtnExportBarTableData";
+            this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
+            this.BtnExportBarTableData.TabIndex = 47;
+            this.BtnExportBarTableData.Text = "Export BarTable Data CSV";
+            this.BtnExportBarTableData.UseVisualStyleBackColor = true;
+            this.BtnExportBarTableData.Click += new System.EventHandler(this.BtnExportBarTableData_Click);
+            // 
+            // BtnExportFundamental
+            // 
+            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 289);
+            this.BtnExportFundamental.Name = "BtnExportFundamental";
+            this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
+            this.BtnExportFundamental.TabIndex = 46;
+            this.BtnExportFundamental.Text = "Export Fundamental CSV";
+            this.BtnExportFundamental.UseVisualStyleBackColor = true;
+            this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
             // 
             // BtnLoadMultiHistoricalChart
             // 
@@ -736,7 +768,7 @@ namespace TestClient
             this.LabelGenericTickList.AutoSize = true;
             this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
             this.LabelGenericTickList.Name = "LabelGenericTickList";
-            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
+            this.LabelGenericTickList.Size = new System.Drawing.Size(91, 13);
             this.LabelGenericTickList.TabIndex = 47;
             this.LabelGenericTickList.Text = "Generic Tick List:";
             // 
@@ -935,7 +967,7 @@ namespace TestClient
             this.LabelOrderSettingType.AutoSize = true;
             this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
             this.LabelOrderSettingType.Name = "LabelOrderSettingType";
-            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(32, 13);
             this.LabelOrderSettingType.TabIndex = 70;
             this.LabelOrderSettingType.Text = "Type:";
             // 
@@ -953,7 +985,7 @@ namespace TestClient
             this.LabelOrderSettingTIF.AutoSize = true;
             this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
             this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
-            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(24, 13);
             this.LabelOrderSettingTIF.TabIndex = 71;
             this.LabelOrderSettingTIF.Text = "TIF:";
             // 
@@ -990,7 +1022,7 @@ namespace TestClient
             this.LabelOrderSettingGTD.AutoSize = true;
             this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
             this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
-            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(31, 13);
             this.LabelOrderSettingGTD.TabIndex = 78;
             this.LabelOrderSettingGTD.Text = "GTD:";
             // 
@@ -1658,7 +1690,7 @@ namespace TestClient
             this.LabelBarFreq.AutoSize = true;
             this.LabelBarFreq.Location = new System.Drawing.Point(7, 117);
             this.LabelBarFreq.Name = "LabelBarFreq";
-            this.LabelBarFreq.Size = new System.Drawing.Size(52, 13);
+            this.LabelBarFreq.Size = new System.Drawing.Size(53, 13);
             this.LabelBarFreq.TabIndex = 27;
             this.LabelBarFreq.Text = "Bar Freq:";
             // 
@@ -1780,7 +1812,7 @@ namespace TestClient
             this.LabelSingleContractType.AutoSize = true;
             this.LabelSingleContractType.Location = new System.Drawing.Point(33, 80);
             this.LabelSingleContractType.Name = "LabelSingleContractType";
-            this.LabelSingleContractType.Size = new System.Drawing.Size(33, 13);
+            this.LabelSingleContractType.Size = new System.Drawing.Size(32, 13);
             this.LabelSingleContractType.TabIndex = 20;
             this.LabelSingleContractType.Text = "Type:";
             // 
@@ -1998,41 +2030,21 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnExportFundamental
+            // BtnTestFundamentalXMLFile
             // 
-            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 289);
-            this.BtnExportFundamental.Name = "BtnExportFundamental";
-            this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
-            this.BtnExportFundamental.TabIndex = 46;
-            this.BtnExportFundamental.Text = "Export Fundamental CSV";
-            this.BtnExportFundamental.UseVisualStyleBackColor = true;
-            this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
-            // 
-            // BtnExportBarTableData
-            // 
-            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 260);
-            this.BtnExportBarTableData.Name = "BtnExportBarTableData";
-            this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
-            this.BtnExportBarTableData.TabIndex = 47;
-            this.BtnExportBarTableData.Text = "Export BarTable Data CSV";
-            this.BtnExportBarTableData.UseVisualStyleBackColor = true;
-            this.BtnExportBarTableData.Click += new System.EventHandler(this.BtnExportBarTableData_Click);
-            // 
-            // BtnRequestFundamentalData
-            // 
-            this.BtnRequestFundamentalData.Location = new System.Drawing.Point(695, 165);
-            this.BtnRequestFundamentalData.Name = "BtnRequestFundamentalData";
-            this.BtnRequestFundamentalData.Size = new System.Drawing.Size(230, 23);
-            this.BtnRequestFundamentalData.TabIndex = 48;
-            this.BtnRequestFundamentalData.Text = "Request Fundamental Data";
-            this.BtnRequestFundamentalData.UseVisualStyleBackColor = true;
-            this.BtnRequestFundamentalData.Click += new System.EventHandler(this.BtnRequestFundamentalData_Click);
+            this.BtnTestFundamentalXMLFile.Location = new System.Drawing.Point(695, 211);
+            this.BtnTestFundamentalXMLFile.Name = "BtnTestFundamentalXMLFile";
+            this.BtnTestFundamentalXMLFile.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestFundamentalXMLFile.TabIndex = 49;
+            this.BtnTestFundamentalXMLFile.Text = "Test Fundamental XML File";
+            this.BtnTestFundamentalXMLFile.UseVisualStyleBackColor = true;
+            this.BtnTestFundamentalXMLFile.Click += new System.EventHandler(this.BtnTestFundamentalXMLFile_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 1096);
+            this.ClientSize = new System.Drawing.Size(984, 1061);
             this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
             this.Controls.Add(this.BtnMarketDataFormShow);
             this.Controls.Add(this.BtnMarketDataFormHide);
@@ -2253,5 +2265,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnExportFundamental;
         private System.Windows.Forms.Button BtnExportBarTableData;
         private System.Windows.Forms.Button BtnRequestFundamentalData;
+        private System.Windows.Forms.Button BtnTestFundamentalXMLFile;
     }
 }

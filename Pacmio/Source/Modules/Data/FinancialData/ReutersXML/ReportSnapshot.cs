@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Reuters.CompanyOverview
@@ -254,6 +255,9 @@ namespace Reuters.CompanyOverview
 
         [XmlAttribute(AttributeName = "lastModified")]
         public string LastModified { get; set; }
+
+        [XmlIgnore]
+        public DateTime LastModifiedTime => DateTime.ParseExact(LastModified, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
 
         [XmlText]
         public string Value { get; set; }

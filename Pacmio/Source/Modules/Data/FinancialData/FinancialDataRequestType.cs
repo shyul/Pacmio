@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public enum FundamentalRequestType : int
+    public enum FinancialDataRequestType : int
     {
         [Description("Company Overview")]
         [IB.ApiCode("ReportSnapshot")]

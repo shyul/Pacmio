@@ -278,13 +278,14 @@ namespace Pacmio.IB
 
         #region Fetch Fundamental Data
 
+        /*
         public static T Fetch_FundamentalData<T>(Contract c)  where T: ReutersXml.IFundamentalResponse 
         {
             //FundamentalRequestType type = T switch { }
 
 
             return default(T);
-        }
+        }*/
 
 
         #endregion Fetch Fundamental Data
