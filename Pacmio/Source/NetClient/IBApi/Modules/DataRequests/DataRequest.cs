@@ -63,7 +63,7 @@ namespace Pacmio.IB
                 {
                     Console.WriteLine("Fetch_ContractSamples: " + symbol);
 
-                StartDownload:
+                    StartDownload:
                     SendRequest_ContractSamples(symbol);
 
                     int time = 0;
@@ -96,7 +96,7 @@ namespace Pacmio.IB
             lock (DataRequestLockObject)
                 if (DataRequestReady)
                 {
-                StartDownload:
+                    StartDownload:
                     SendRequest_ContractData(0, name, exchangeCode, typeCode);
 
                     int time = 0;
@@ -131,7 +131,7 @@ namespace Pacmio.IB
                 if (cts.Continue() && DataRequestReady)
                 {
 
-                StartDownload:
+                    StartDownload:
                     SendRequest_ContractData(conId);
 
                     int time = 0;
@@ -157,7 +157,7 @@ namespace Pacmio.IB
                 }
             }
 
-        End:
+            End:
             return null;
         }
 
@@ -168,7 +168,7 @@ namespace Pacmio.IB
                 if (cts.Continue() && DataRequestReady)
                 {
 
-                StartDownload:
+                    StartDownload:
                     SendRequest_ContractData(c);
 
                     int time = 0;
@@ -229,7 +229,7 @@ namespace Pacmio.IB
                 }
             }
 
-        End:
+            End:
             return bt.EarliestTime;
         }
 
@@ -245,7 +245,6 @@ namespace Pacmio.IB
                 lock (DataRequestLockObject)
                     if (DataRequestReady)
                     {
-
                         if (cts.Cancelled() || IsCancelled) return;
 
                         StartDownload:
@@ -278,15 +277,38 @@ namespace Pacmio.IB
 
         #region Fetch Fundamental Data
 
-        /*
-        public static T Fetch_FundamentalData<T>(Contract c)  where T: ReutersXml.IFundamentalResponse 
+        public static void Fetch_FundamentalData(this Contract c, FinancialDataRequestType type, CancellationTokenSource cts = null)
         {
-            //FundamentalRequestType type = T switch { }
+            lock (DataRequestLockObject)
+            {
+                if (cts.Continue() && DataRequestReady)
+                {
+                    if (cts.Cancelled() || IsCancelled) return;
 
+                    StartDownload:
+                    SendRequest_FundamentalData(c, type);
 
-            return default(T);
-        }*/
+                    int time = 0; // Wait the last transmit is over.
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(50);
 
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_FundamentalData();
+                            Thread.Sleep(2000);
+                            goto StartDownload;
+                        }
+                        else if (cts.Cancelled() || IsCancelled)
+                        {
+                            SendCancel_FundamentalData();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion Fetch Fundamental Data
 

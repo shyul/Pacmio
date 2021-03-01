@@ -1142,7 +1142,7 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, FinancialDataRequestType.CompanyOverview);
+                Pacmio.IB.Client.Fetch_FundamentalData(ContractTest.ActiveContract, FinancialDataRequestType.CompanyOverview, new CancellationTokenSource());
 
 
             }

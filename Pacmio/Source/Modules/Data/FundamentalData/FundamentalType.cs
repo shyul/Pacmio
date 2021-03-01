@@ -18,16 +18,16 @@ namespace Pacmio
     {
         [EnumMember, Description("Unknown")]
         Unknown = 0,
-
+        /*
         [EnumMember, Description("Split")]
         Split = 10,
 
         [EnumMember, Description("Dividend")]
         Dividend = 20,
-
+        */
         [EnumMember, Description("EPS")]
         EPS = 30,
-
+        
         [EnumMember, Description("Total Revenue")]
         Revenue = 40,
 

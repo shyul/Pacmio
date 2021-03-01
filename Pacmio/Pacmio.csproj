@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\SplitDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\FundamentalDatum.cs" />
@@ -311,7 +312,7 @@
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Other\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\BusinessInfoManager.cs" />
-    <Compile Include="Source\Modules\Data\FinancialData\DataSourceType.cs" />
+    <Compile Include="Source\Modules\Data\DataSourceType.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />

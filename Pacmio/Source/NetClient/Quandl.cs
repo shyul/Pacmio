@@ -203,8 +203,9 @@ namespace Pacmio
                                     currentContract = symbolList[currentSymbolName];
                                     currentFd = currentContract.GetOrCreateFundamentalData();
 
-                                    currentFd.Remove(FundamentalType.Split);
-                                    currentFd.Remove(FundamentalType.Dividend);
+                                    currentFd.Remove(DataSourceType.Quandl);
+                                    // .Remove(FundamentalType.Split);
+                                    //currentFd.Remove(FundamentalType.Dividend);
 
                                     /*
                                     if (currentContract.MarketData is StockData sd0)
