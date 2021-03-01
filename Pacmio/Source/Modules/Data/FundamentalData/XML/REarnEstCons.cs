@@ -11,10 +11,8 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace IbXmlAE
+namespace Reuters.AnalystEstimates
 {
-    #region AnalystEstimates
-
     [XmlRoot(ElementName = "Name")]
     public class Name
     {
@@ -510,6 +508,4 @@ namespace IbXmlAE
         [XmlElement(ElementName = "ConsEstimates")]
         public ConsEstimates ConsEstimates { get; set; }
     }
-
-    #endregion
 }

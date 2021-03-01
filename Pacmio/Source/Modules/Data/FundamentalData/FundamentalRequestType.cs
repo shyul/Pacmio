@@ -11,32 +11,32 @@ using System.ComponentModel;
 using System.Reflection;
 using Xu;
 
-namespace Pacmio.IB
+namespace Pacmio
 {
     public enum FundamentalRequestType : int
     {
         [Description("Company Overview")]
-        [ApiCode("ReportSnapshot")]
+        [IB.ApiCode("ReportSnapshot")]
         CompanyOverview,
 
         [Description("Financial Summary")]
-        [ApiCode("ReportsFinSummary")]
+        [IB.ApiCode("ReportsFinSummary")]
         FinancialSummary,
 
         [Description("Financial Statements")]
-        [ApiCode("ReportsFinStatements")]
+        [IB.ApiCode("ReportsFinStatements")]
         FinancialStatements,
 
         [Description("Analyst Estimates")]
-        [ApiCode("RESC")]
+        [IB.ApiCode("RESC")]
         AnalystEstimates,
 
         [Description("Financial Calendar")]
-        [ApiCode("CalendarReport")]
+        [IB.ApiCode("CalendarReport")]
         Calendar,
 
         [Description("Ownership")]
-        [ApiCode("ReportsOwnership")]
+        [IB.ApiCode("ReportsOwnership")]
         Ownership
     }
 }

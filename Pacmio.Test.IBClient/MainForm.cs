@@ -1141,7 +1141,7 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, Pacmio.IB.FundamentalRequestType.CompanyOverview);
+                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, FundamentalRequestType.CompanyOverview);
 
 
             }
