@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<WSHData>
+        <Company>
+                <Name>Apple, Inc.</Name>
+                <Ticker>AAPL</Ticker>
+                <ISIN>US0378331005</ISIN>
+                <Exchange>NSDQ</Exchange>
+                <Country>USA</Country>
+                <conid>13013300</conid>
+                <conid>38708077</conid>
+                <conid>242506861</conid>
+                <conid>265598</conid>
+                <conid>273982664</conid>
+                <EarningsList>
+                        <Earnings>
+                                <Q1>1/27/2021</Q1>
+                                <Q2>4/29/2021</Q2>
+                                <Q3>7/30/2020</Q3>
+                                <Q4>10/29/2020</Q4>
+                                <Period>Q2</Period>
+                                <Time>After Market</Time>
+                                <Etype>Unconfirmed</Etype>
+                                <Date>4/29/2021</Date>
+                                <TimeStamp>2/23/2021 11:15:47 PM</TimeStamp>
+                        </Earnings>
+                </EarningsList>
+                <EarningsCallTranscriptList>
+                        <EarningsCallTranscript>
+                                <Period>Q1 2021</Period>
+                                <URL>https://seekingalpha.com/article/4401478-apple-inc-aapl-ceo-tim-cook-on-q1-2021-results-earnings-call-transcript?utm_source=wallstreethorizon.com&amp;utm_medium=referral</URL>
+                                <TimeStamp>2/23/2021 11:15:47 PM</TimeStamp>
+                        </EarningsCallTranscript>
+                </EarningsCallTranscriptList>
+                <ShareHolderMeetingList>
+                        <ShareHolderMeeting>
+                                <Type>S</Type>
+                                <Date>2/23/2021</Date>
+                                <TimeStamp>2/23/2021 11:15:47 PM</TimeStamp>
+                        </ShareHolderMeeting>
+                </ShareHolderMeetingList>
+                <PresentationList>
+                        <Presentation>
+                                <TimeZone>EST</TimeZone>
+                                <Title>Senior AI/ML Technical Manager</Title>
+                                <Time>9:00 AM</Time>
+                                <EventName>tinyML Summit: Enabling ultra-low Power Machine Learning at the Edge 2021</EventName>
+                                <TimeStamp>1/27/2021 2:52:00 PM</TimeStamp>
+                                <Date>3/25/2021</Date>
+                                <Name>Mohammad Rastegari</Name>
+                        </Presentation>
+                </PresentationList>
+        </Company>
+</WSHData>

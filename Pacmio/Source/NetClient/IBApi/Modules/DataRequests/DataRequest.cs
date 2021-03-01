@@ -31,7 +31,7 @@ namespace Pacmio.IB
 
         private static int DataRequestID { get; set; } = -1;
 
-        private static object RequestLockObject { get; } = new object();
+        private static object DataRequestLockObject { get; } = new object();
 
         #region Account
 
@@ -58,7 +58,7 @@ namespace Pacmio.IB
 
         public static Contract[] Fetch_ContractSamples(string symbol, CancellationTokenSource cts = null)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
                 if (DataRequestReady)
                 {
                     Console.WriteLine("Fetch_ContractSamples: " + symbol);
@@ -93,7 +93,7 @@ namespace Pacmio.IB
 
         public static Contract[] Fetch_ContractData(string name, string exchangeCode, string typeCode = "STK", CancellationTokenSource cts = null)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
                 if (DataRequestReady)
                 {
                 StartDownload:
@@ -126,7 +126,7 @@ namespace Pacmio.IB
 
         public static Contract Fetch_ContractData(int conId, CancellationTokenSource cts = null)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
             {
                 if (cts.Continue() && DataRequestReady)
                 {
@@ -163,7 +163,7 @@ namespace Pacmio.IB
 
         public static void Fetch_ContractData(Contract c, CancellationTokenSource cts = null)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
             {
                 if (cts.Continue() && DataRequestReady)
                 {
@@ -198,7 +198,7 @@ namespace Pacmio.IB
 
         public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
             {
                 if (cts.Continue() && DataRequestReady && HistoricalData_Connected)
                 {
@@ -242,7 +242,7 @@ namespace Pacmio.IB
                 LastRequestedHistoricalDataPeriod = period;
 
                 // RequestLockObject and DataRequestReady must happen in pairs
-                lock (RequestLockObject)
+                lock (DataRequestLockObject)
                     if (DataRequestReady)
                     {
 
@@ -278,7 +278,13 @@ namespace Pacmio.IB
 
         #region Fetch Fundamental Data
 
+        public static T Fetch_FundamentalData<T>(Contract c)  where T: ReutersXml.IFundamentalResponse 
+        {
+            //FundamentalRequestType type = T switch { }
 
+
+            return default(T);
+        }
 
 
         #endregion Fetch Fundamental Data

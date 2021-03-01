@@ -292,7 +292,6 @@ namespace TestClient
                     fd.ExportCSV(Root.SaveFile.FileName);
                 }
             }
-
         }
 
         private void BtnExportBarTableData_Click(object sender, EventArgs e)
@@ -1138,7 +1137,15 @@ namespace TestClient
             //OrderInfoGridView.Update(OrderManager.List);
         }
 
+        private void BtnRequestFundamentalData_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                Pacmio.IB.Client.SendRequest_FundamentalData(ContractTest.ActiveContract, Pacmio.IB.FundamentalRequestType.CompanyOverview);
 
+
+            }
+        }
     }
     public static class DataGridHelper
     {

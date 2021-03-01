@@ -201,6 +201,7 @@ namespace TestClient
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
             this.BtnExportFundamental = new System.Windows.Forms.Button();
             this.BtnExportBarTableData = new System.Windows.Forms.Button();
+            this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -261,6 +262,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
             this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
             this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
             this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
@@ -2016,6 +2018,16 @@ namespace TestClient
             this.BtnExportBarTableData.UseVisualStyleBackColor = true;
             this.BtnExportBarTableData.Click += new System.EventHandler(this.BtnExportBarTableData_Click);
             // 
+            // BtnRequestFundamentalData
+            // 
+            this.BtnRequestFundamentalData.Location = new System.Drawing.Point(695, 165);
+            this.BtnRequestFundamentalData.Name = "BtnRequestFundamentalData";
+            this.BtnRequestFundamentalData.Size = new System.Drawing.Size(230, 23);
+            this.BtnRequestFundamentalData.TabIndex = 48;
+            this.BtnRequestFundamentalData.Text = "Request Fundamental Data";
+            this.BtnRequestFundamentalData.UseVisualStyleBackColor = true;
+            this.BtnRequestFundamentalData.Click += new System.EventHandler(this.BtnRequestFundamentalData_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2240,5 +2252,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnRefreshOrderInfoGrid;
         private System.Windows.Forms.Button BtnExportFundamental;
         private System.Windows.Forms.Button BtnExportBarTableData;
+        private System.Windows.Forms.Button BtnRequestFundamentalData;
     }
 }

@@ -151,6 +151,7 @@
     <Compile Include="Source\NetClient\IBApi\Client\DecodeSequentialMessage.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\ExchangeDescription.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Paramaters\Parameters.cs" />
+    <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\FundamentalRequestType.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\OrderRequests\OrderRequest.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\MarketDataRequestStatus.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketDepth\MarketDepth_Parse.cs" />
@@ -299,11 +300,11 @@
     <Compile Include="Source\NetClient\IBApi\Client\Types\RequestType.cs" />
     <Compile Include="Source\NetClient\IBApi\Client\Types\ServerVersionHistory.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\Subscription\MarketData\TickType.cs" />
-    <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\IbXmlAE.cs" />
+    <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\XML\IbXmlAE.cs" />
     <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Other\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\BusinessInfoManager.cs" />
-    <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\ReutersXml.cs" />
+    <Compile Include="Source\NetClient\IBApi\Modules\DataRequests\Fundamental\XML\ReutersXml.cs" />
     <Compile Include="Source\Modules\Data\DataSourceType.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />

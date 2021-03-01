@@ -19,7 +19,7 @@ namespace Pacmio.IB
     {
         public static void DataRequest_MarketData(MarketData md)
         {
-            lock (RequestLockObject)
+            lock (DataRequestLockObject)
             {
                 SendRequest_MarketData(md, true);
 
