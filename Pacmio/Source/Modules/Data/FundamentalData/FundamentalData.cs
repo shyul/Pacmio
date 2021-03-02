@@ -207,7 +207,6 @@ namespace Pacmio
             return list;
         }
 
-
         #region Data Provider
 
         public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;

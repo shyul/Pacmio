@@ -22,27 +22,22 @@ namespace Pacmio
         /// </summary>
         private static ConcurrentDictionary<string, BusinessInfo> IsinToBusinessLUT { get; } = new ConcurrentDictionary<string, BusinessInfo>();
 
-        private static string BusinessInfoFile(string isin)
-        {
-            string path = Root.ResourcePath + "BusinessData\\" + isin.Substring(0, 2) + "\\";
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path + isin;
-        }
-
         public static BusinessInfo GetOrCreateBusinessInfo(string isin)
         {
             isin = isin.Trim();
 
             if (isin.Length < 11)
                 return null;
-            else if (!IsinToBusinessLUT.ContainsKey(isin))
-            {
-                string fileName = BusinessInfoFile(isin);
-                BusinessInfo bi = IsinToBusinessLUT[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
-                return bi;
-            }
             else
-                return IsinToBusinessLUT[isin];
+                lock (IsinToBusinessLUT)
+                {
+                    if (!IsinToBusinessLUT.ContainsKey(isin))
+                    {
+                        IsinToBusinessLUT[isin] = BusinessInfo.LoadFile(isin);
+                    }
+
+                    return IsinToBusinessLUT[isin];
+                }
         }
 
         private static string IndustrySectorsFile => Root.ResourcePath + @"IndustrySectors.csv";
@@ -52,9 +47,6 @@ namespace Pacmio
         public static void AddIndustrySector(string Type, string Code, string Text) => IndustrySectors[(Type, Code)] = Text;
 
         #region File system
-
-        // S&P 500, Dow Industry, S&P 600 Small Cap, S&P 400 Mid Cap, Dow Transportation, Dow Utility
-        //public static MarketIndexTable Indices = new MarketIndexTable();
 
         public static void Load()
         {
@@ -99,11 +91,9 @@ namespace Pacmio
             // Save Business Info
             lock (IsinToBusinessLUT)
             {
-                Parallel.ForEach(IsinToBusinessLUT.Values, bi =>
+                Parallel.ForEach(IsinToBusinessLUT.Values.Where(n => n.IsModified), bi =>
                 {
-                    int pt = 0;
-                    if (bi.IsModified) bi.SerializeJsonFile(BusinessInfoFile(bi.ISIN));
-                    pt++;
+                    bi.SaveFile();
                 });
             }
         }

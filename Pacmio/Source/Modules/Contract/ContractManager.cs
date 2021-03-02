@@ -417,7 +417,7 @@ namespace Pacmio
             {
                 Contract[] list = Values.ToArray();
                 list.SerializeJsonFile(FileName);
-                Parallel.ForEach(list, c => { c.SaveMarketData(); });
+                //Parallel.ForEach(list, c => { c.MarketData.SaveFile(); });
             }
         }
 

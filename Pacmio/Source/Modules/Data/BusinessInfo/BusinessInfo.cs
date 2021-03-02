@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -144,11 +145,23 @@ namespace Pacmio
 
         #region File Operation
 
+        public static string GetDataFileName(string isin) 
+        {
+            string path = Root.ResourcePath + "BusinessData\\" + isin.Substring(0, 2) + "\\";
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path + isin;
+        }
 
+        [IgnoreDataMember]
+        public string DataFileName => GetDataFileName(ISIN);
 
+        public void SaveFile()
+        {
+            this.SerializeJsonFile(DataFileName);
+        }
 
-
-
+        public static BusinessInfo LoadFile(string isin)
+           => Serialization.DeserializeJsonFile<BusinessInfo>(GetDataFileName(isin)) is BusinessInfo bi ? bi : new BusinessInfo(isin);
 
         #endregion File Operation
 

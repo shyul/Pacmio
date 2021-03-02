@@ -55,8 +55,7 @@ namespace Pacmio
                 }
             }
 
-            if (Contract.MarketData is StockData sd)
-                sd.RemoveDataConsumer(this);
+            Contract.MarketData.RemoveDataConsumer(this);
 
             lock (Rows) Rows.Clear();
             lock (TimeToRows) TimeToRows.Clear();
@@ -794,18 +793,16 @@ namespace Pacmio
             private set
             {
                 m_IsLive = value;
-
-                if (Contract.MarketData is StockData sd)
-                    if (m_IsLive)
-                    {
-                        // Add BarTable to the tick receiver
-                        sd.AddDataConsumer(this);
-                    }
-                    else
-                    {
-                        // Remove BarTable from the tick receiver
-                        sd.RemoveDataConsumer(this);
-                    }
+                if (m_IsLive)
+                {
+                    // Add BarTable to the tick receiver
+                    Contract.MarketData.AddDataConsumer(this);
+                }
+                else
+                {
+                    // Remove BarTable from the tick receiver
+                    Contract.MarketData.RemoveDataConsumer(this);
+                }
             }
         }
 
@@ -1213,7 +1210,7 @@ namespace Pacmio
                 }
             }
 
-        End:
+            End:
             return;
         }
 

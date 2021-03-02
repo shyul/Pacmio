@@ -183,6 +183,7 @@ namespace Pacmio
             IB.Client.Save();
             BusinessInfoManager.Save();
             ContractManager.Save();
+            MarketDataManager.Save();
             //TradeInfoManager.Save();
             //OrderManager.Save();
             AccountPositionManager.Save();

@@ -60,6 +60,14 @@ namespace Pacmio
 
         #region File system
 
+        public static void Save()
+        {
+            lock (ContractToMarketDataLUT)
+            {
+                Parallel.ForEach(ContractToMarketDataLUT.Values, c => { c.SaveFile(); });
+            }
+        }
+
         #endregion File system
     }
 }
