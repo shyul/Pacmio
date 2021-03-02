@@ -12,10 +12,7 @@ namespace Pacmio
     [Serializable, DataContract(Name = "Revenue")]
     public class RevenueDatum : FundamentalDatum
     {
-        public RevenueDatum(DateTime asOfDate)
-        {
-            AsOfDate = asOfDate;
-        }
+        public RevenueDatum(DateTime asOfDate) => AsOfDate = asOfDate;
 
         /// <summary>
         /// Audited

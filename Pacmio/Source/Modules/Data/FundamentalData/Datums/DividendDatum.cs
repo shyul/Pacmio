@@ -12,10 +12,7 @@ namespace Pacmio
     [Serializable, DataContract(Name = "Dividend")]
     public class DividendDatum : FundamentalDatum
     {
-        public DividendDatum(DateTime asOfDate)
-        {
-            AsOfDate = asOfDate;
-        }
+        public DividendDatum(DateTime asOfDate) => AsOfDate = asOfDate;
 
         [IgnoreDataMember]
         public override DateTime AsOfDate { get => ExDate; protected set => ExDate = value; }

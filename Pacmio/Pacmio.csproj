@@ -93,6 +93,8 @@
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\RevenueDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\SharesFloat.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\SharesOutDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\SplitDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />

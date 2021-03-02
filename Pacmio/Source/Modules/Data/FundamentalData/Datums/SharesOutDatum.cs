@@ -10,15 +10,15 @@ using Xu;
 
 namespace Pacmio
 {
-    [Serializable, DataContract(Name = "Split")]
-    public class SplitDatum : FundamentalDatum
+    [Serializable, DataContract(Name = "SharesOut")]
+    public class SharesOutDatum : FundamentalDatum
     {
-        public SplitDatum(DateTime asOfDate) => AsOfDate = asOfDate;
+        public SharesOutDatum(DateTime asOfDate) => AsOfDate = asOfDate;
 
         [IgnoreDataMember]
-        public override double Value { get => Split; set => Split = value; }
+        public override double Value { get => Shares; set => Shares = value; }
 
         [DataMember]
-        public double Split { get; set; } = 1;
+        public double Shares { get; set; } = 1;
     }
 }
