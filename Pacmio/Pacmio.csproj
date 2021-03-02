@@ -92,10 +92,11 @@
   <ItemGroup>
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\RevenueDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\SplitDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalData.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\FundamentalType.cs" />
-    <Compile Include="Source\Modules\Data\FundamentalData\Datums\FundamentalDatum.cs" />
+    <Compile Include="Source\Modules\Data\FundamentalData\Datums\EPSDatum.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\FinancialSummary.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\OwnershipDetails.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\ReportFinancialStatements.cs" />

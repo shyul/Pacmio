@@ -6,25 +6,20 @@
 
 using System;
 using System.Runtime.Serialization;
+using Xu;
 
 namespace Pacmio
 {
-    [Serializable, DataContract]
-    public class SplitDatum
+    [Serializable, DataContract(Name = "Split")]
+    public class SplitDatum : FundamentalDatum
     {
-        public SplitDatum(DateTime asOfDate) 
+        public SplitDatum(DateTime asOfDate)
         {
             AsOfDate = asOfDate;
         }
 
-        [DataMember]
-        public DataSourceType DataSource { get; set; } = DataSourceType.Invalid;
-
-        [DataMember]
-        public DateTime AsOfDate { get; private set; }
-
-        [DataMember]
-        public double Close_Price { get; set; } = double.NaN;
+        [IgnoreDataMember]
+        public override double Value { get => Split; set => Split = value; }
 
         [DataMember]
         public double Split { get; set; } = 1;

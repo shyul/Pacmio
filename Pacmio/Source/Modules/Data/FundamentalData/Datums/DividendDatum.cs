@@ -9,19 +9,22 @@ using System.Runtime.Serialization;
 
 namespace Pacmio
 {
-    [Serializable, DataContract]
-    public class DividendDatum
+    [Serializable, DataContract(Name = "Dividend")]
+    public class DividendDatum : FundamentalDatum
     {
         public DividendDatum(DateTime asOfDate)
         {
             AsOfDate = asOfDate;
         }
 
-        [DataMember]
-        public DataSourceType DataSource { get; set; } = DataSourceType.Invalid;
+        [IgnoreDataMember]
+        public override DateTime AsOfDate { get => ExDate; protected set => ExDate = value; }
+
+        [IgnoreDataMember]
+        public override double Value { get => Dividend; set => Dividend = value; }
 
         [DataMember]
-        public DateTime DeclareDate { get; set; } = DateTime.MinValue;
+        public DateTime DeclarationDate { get; set; } = DateTime.MinValue;
 
         /// <summary>
         /// Once the company sets the record date, the ex-dividend date is set based on stock exchange rules.
@@ -30,7 +33,7 @@ namespace Pacmio
         /// Instead, the seller gets the dividend. If you purchase before the ex-dividend date, you get the dividend.
         /// </summary>
         [DataMember]
-        public DateTime ExDate { get; set; } = DateTime.MinValue;
+        public DateTime ExDate { get; private set; } = DateTime.MinValue;
 
         /// <summary>
         /// When a company declares a dividend, it sets a record date when you must be on the company's books 
@@ -44,15 +47,12 @@ namespace Pacmio
         public DateTime PayDate { get; set; } = DateTime.MinValue;
 
         [DataMember]
-        public DateTime AsOfDate { get => PayDate; private set => PayDate = value; }
-
-        [DataMember]
-        public double Close_Price { get; set; } = double.NaN;
-
-        [DataMember]
         public double Dividend { get; set; } = double.NaN;
 
         [IgnoreDataMember]
-        public double Ratio => Close_Price > 0 ? Dividend / Close_Price : 0;
+        public double Ratio => Close_Price > 0 ? (Value / Close_Price) : 0;
+
+        [IgnoreDataMember]
+        public override string Comment => double.IsNaN(Ratio) && Ratio > 0 ? string.Empty : "Ratio = " + (Ratio * 100).ToString("0.##") + "%";
     }
 }

@@ -38,6 +38,7 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnTestFundamentalXMLFile = new System.Windows.Forms.Button();
             this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
             this.BtnExportBarTableData = new System.Windows.Forms.Button();
             this.BtnExportFundamental = new System.Windows.Forms.Button();
@@ -202,7 +203,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnTestFundamentalXMLFile = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -225,7 +225,7 @@ namespace TestClient
             // btnConnect
             // 
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnConnect.Location = new System.Drawing.Point(16, 1038);
+            this.btnConnect.Location = new System.Drawing.Point(16, 999);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(100, 40);
             this.btnConnect.TabIndex = 0;
@@ -258,7 +258,7 @@ namespace TestClient
             this.MainTab.Location = new System.Drawing.Point(12, 260);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
-            this.MainTab.Size = new System.Drawing.Size(960, 675);
+            this.MainTab.Size = new System.Drawing.Size(960, 648);
             this.MainTab.TabIndex = 3;
             // 
             // tabHistoricalData
@@ -280,10 +280,20 @@ namespace TestClient
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHistoricalData.Size = new System.Drawing.Size(952, 649);
+            this.tabHistoricalData.Size = new System.Drawing.Size(952, 622);
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnTestFundamentalXMLFile
+            // 
+            this.BtnTestFundamentalXMLFile.Location = new System.Drawing.Point(695, 211);
+            this.BtnTestFundamentalXMLFile.Name = "BtnTestFundamentalXMLFile";
+            this.BtnTestFundamentalXMLFile.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestFundamentalXMLFile.TabIndex = 49;
+            this.BtnTestFundamentalXMLFile.Text = "Test Fundamental XML File";
+            this.BtnTestFundamentalXMLFile.UseVisualStyleBackColor = true;
+            this.BtnTestFundamentalXMLFile.Click += new System.EventHandler(this.BtnTestFundamentalXMLFile_Click);
             // 
             // BtnRequestFundamentalData
             // 
@@ -768,7 +778,7 @@ namespace TestClient
             this.LabelGenericTickList.AutoSize = true;
             this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
             this.LabelGenericTickList.Name = "LabelGenericTickList";
-            this.LabelGenericTickList.Size = new System.Drawing.Size(91, 13);
+            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
             this.LabelGenericTickList.TabIndex = 47;
             this.LabelGenericTickList.Text = "Generic Tick List:";
             // 
@@ -967,7 +977,7 @@ namespace TestClient
             this.LabelOrderSettingType.AutoSize = true;
             this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
             this.LabelOrderSettingType.Name = "LabelOrderSettingType";
-            this.LabelOrderSettingType.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
             this.LabelOrderSettingType.TabIndex = 70;
             this.LabelOrderSettingType.Text = "Type:";
             // 
@@ -985,7 +995,7 @@ namespace TestClient
             this.LabelOrderSettingTIF.AutoSize = true;
             this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
             this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
-            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(24, 13);
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
             this.LabelOrderSettingTIF.TabIndex = 71;
             this.LabelOrderSettingTIF.Text = "TIF:";
             // 
@@ -1022,7 +1032,7 @@ namespace TestClient
             this.LabelOrderSettingGTD.AutoSize = true;
             this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
             this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
-            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(31, 13);
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
             this.LabelOrderSettingGTD.TabIndex = 78;
             this.LabelOrderSettingGTD.Text = "GTD:";
             // 
@@ -1621,7 +1631,7 @@ namespace TestClient
             // BtnMarketDataFormHide
             // 
             this.BtnMarketDataFormHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 953);
+            this.BtnMarketDataFormHide.Location = new System.Drawing.Point(125, 914);
             this.BtnMarketDataFormHide.Name = "BtnMarketDataFormHide";
             this.BtnMarketDataFormHide.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormHide.TabIndex = 6;
@@ -1632,7 +1642,7 @@ namespace TestClient
             // BtnMarketDataFormShow
             // 
             this.BtnMarketDataFormShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 953);
+            this.BtnMarketDataFormShow.Location = new System.Drawing.Point(16, 914);
             this.BtnMarketDataFormShow.Name = "BtnMarketDataFormShow";
             this.BtnMarketDataFormShow.Size = new System.Drawing.Size(100, 23);
             this.BtnMarketDataFormShow.TabIndex = 5;
@@ -1654,7 +1664,7 @@ namespace TestClient
             // DownloadBarTableDetialedProgressBar
             // 
             this.DownloadBarTableDetialedProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 992);
+            this.DownloadBarTableDetialedProgressBar.Location = new System.Drawing.Point(125, 953);
             this.DownloadBarTableDetialedProgressBar.Name = "DownloadBarTableDetialedProgressBar";
             this.DownloadBarTableDetialedProgressBar.Size = new System.Drawing.Size(487, 15);
             this.DownloadBarTableDetialedProgressBar.TabIndex = 11;
@@ -1690,7 +1700,7 @@ namespace TestClient
             this.LabelBarFreq.AutoSize = true;
             this.LabelBarFreq.Location = new System.Drawing.Point(7, 117);
             this.LabelBarFreq.Name = "LabelBarFreq";
-            this.LabelBarFreq.Size = new System.Drawing.Size(53, 13);
+            this.LabelBarFreq.Size = new System.Drawing.Size(52, 13);
             this.LabelBarFreq.TabIndex = 27;
             this.LabelBarFreq.Text = "Bar Freq:";
             // 
@@ -1760,7 +1770,7 @@ namespace TestClient
             // 
             this.LbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LbStatus.AutoSize = true;
-            this.LbStatus.Location = new System.Drawing.Point(122, 1040);
+            this.LbStatus.Location = new System.Drawing.Point(122, 1001);
             this.LbStatus.Name = "LbStatus";
             this.LbStatus.Size = new System.Drawing.Size(42, 13);
             this.LbStatus.TabIndex = 11;
@@ -1812,7 +1822,7 @@ namespace TestClient
             this.LabelSingleContractType.AutoSize = true;
             this.LabelSingleContractType.Location = new System.Drawing.Point(33, 80);
             this.LabelSingleContractType.Name = "LabelSingleContractType";
-            this.LabelSingleContractType.Size = new System.Drawing.Size(32, 13);
+            this.LabelSingleContractType.Size = new System.Drawing.Size(33, 13);
             this.LabelSingleContractType.TabIndex = 20;
             this.LabelSingleContractType.Text = "Type:";
             // 
@@ -1837,7 +1847,7 @@ namespace TestClient
             // MainProgBar
             // 
             this.MainProgBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MainProgBar.Location = new System.Drawing.Point(125, 1017);
+            this.MainProgBar.Location = new System.Drawing.Point(125, 978);
             this.MainProgBar.Name = "MainProgBar";
             this.MainProgBar.Size = new System.Drawing.Size(487, 15);
             this.MainProgBar.TabIndex = 25;
@@ -1857,7 +1867,7 @@ namespace TestClient
             this.BtnMasterCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BtnMasterCancel.BackColor = System.Drawing.Color.DarkRed;
             this.BtnMasterCancel.ForeColor = System.Drawing.Color.White;
-            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 992);
+            this.BtnMasterCancel.Location = new System.Drawing.Point(16, 953);
             this.BtnMasterCancel.Name = "BtnMasterCancel";
             this.BtnMasterCancel.Size = new System.Drawing.Size(100, 40);
             this.BtnMasterCancel.TabIndex = 38;
@@ -1868,7 +1878,7 @@ namespace TestClient
             // TextBoxIPAddress
             // 
             this.TextBoxIPAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 1056);
+            this.TextBoxIPAddress.Location = new System.Drawing.Point(125, 1017);
             this.TextBoxIPAddress.Name = "TextBoxIPAddress";
             this.TextBoxIPAddress.Size = new System.Drawing.Size(150, 22);
             this.TextBoxIPAddress.TabIndex = 65;
@@ -2030,21 +2040,11 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnTestFundamentalXMLFile
-            // 
-            this.BtnTestFundamentalXMLFile.Location = new System.Drawing.Point(695, 211);
-            this.BtnTestFundamentalXMLFile.Name = "BtnTestFundamentalXMLFile";
-            this.BtnTestFundamentalXMLFile.Size = new System.Drawing.Size(230, 23);
-            this.BtnTestFundamentalXMLFile.TabIndex = 49;
-            this.BtnTestFundamentalXMLFile.Text = "Test Fundamental XML File";
-            this.BtnTestFundamentalXMLFile.UseVisualStyleBackColor = true;
-            this.BtnTestFundamentalXMLFile.Click += new System.EventHandler(this.BtnTestFundamentalXMLFile_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 1061);
+            this.ClientSize = new System.Drawing.Size(984, 1057);
             this.Controls.Add(this.DownloadBarTableDetialedProgressBar);
             this.Controls.Add(this.BtnMarketDataFormShow);
             this.Controls.Add(this.BtnMarketDataFormHide);

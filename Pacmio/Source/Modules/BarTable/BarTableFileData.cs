@@ -124,7 +124,7 @@ namespace Pacmio
                     fdlist = fd.GetList(newDate);
                     foreach(var fdm in fdlist) 
                     {
-                        fd_event += fdm.Type + " = " + fdm.Value + " | ";
+                        fd_event += fdm.TypeName + " = " + fdm.Value + " | ";
                     }
                     fd_event = fd_event.Trim(new char[] { ' ', '|' }).Trim();
                     date = newDate;

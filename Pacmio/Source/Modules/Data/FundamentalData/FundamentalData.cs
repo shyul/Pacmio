@@ -32,145 +32,117 @@ namespace Pacmio
         public DateTime EarliestTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
-        private Dictionary<DateTime, SplitDatum> SplitLUT { get; set; } = new Dictionary<DateTime, SplitDatum>();
+        private Dictionary<(string, DateTime), FundamentalDatum> DataLUT { get; set; } = new Dictionary<(string, DateTime), FundamentalDatum>();
 
-        private SplitDatum GetOrCreateSplitDatum(DateTime asOfDate)
+        public FundamentalDatum[] GetList()
         {
-            if (!SplitLUT.ContainsKey(asOfDate))
-                SplitLUT[asOfDate] = new SplitDatum(asOfDate);
+            lock (DataLUT)
+                return DataLUT.Values.ToArray();
+        }
 
-            return SplitLUT[asOfDate];
+        public FundamentalDatum[] GetList<T>() where T : FundamentalDatum
+        {
+            lock (DataLUT)
+                return DataLUT.Values.Where(n => n is T).ToArray();
+        }
+
+        public FundamentalDatum[] GetList(DateTime asOfDate)
+        {
+            lock (DataLUT)
+                return DataLUT.Values.Where(n => n.AsOfDate == asOfDate.Date).ToArray();
+        }
+
+        public T GetOrCreateDatum<T>(T data) where T : FundamentalDatum
+        {
+            lock (DataLUT)
+            {
+                if (!DataLUT.ContainsKey(data.Key))
+                {
+                    DataLUT[data.Key] = data;
+                }
+                return DataLUT[data.Key] as T;
+            }
+        }
+
+        public bool Remove(FundamentalDatum fd) => Remove(fd.Key);
+
+        public bool Remove((string type, DateTime asOfDate) key)
+        {
+            lock (DataLUT)
+                if (DataLUT.ContainsKey(key))
+                {
+                    DataLUT.Remove(key);
+                    return true;
+                }
+            return false;
+        }
+
+        public bool Remove<T>(DateTime asOfDate) where T : FundamentalDatum
+        {
+            //var key = (typeof(T).GetAttribute((DataContractAttribute d) => d.Name), asOfDate);
+            lock (DataLUT)
+            {
+                var listToRemove = DataLUT.Values.Where(n => n is T && n.AsOfDate == asOfDate).Select(n => n.Key).ToList();
+                listToRemove.ForEach(n => DataLUT.Remove(n));
+                return listToRemove.Count() > 0;
+            }
+        }
+
+        public bool Remove<T>() where T : FundamentalDatum
+        {
+            lock (DataLUT)
+            {
+                var listToRemove = DataLUT.Values.Where(n => n is T).Select(n => n.Key).ToList();
+                listToRemove.ForEach(n => DataLUT.Remove(n));
+                return listToRemove.Count() > 0;
+            }
+        }
+
+        public void Remove(DataSourceType source)
+        {
+            lock (DataLUT)
+            {
+                FundamentalDatum[] datums = DataLUT.Values.Where(n => n.DataSource == source).ToArray();
+                foreach (var item in datums) DataLUT.Remove(item.Key);
+            }
         }
 
         public void SetSplit(DateTime asOfDate, double close, double split, DataSourceType dataSource)
         {
-            lock (SplitLUT)
+            lock (DataLUT)
             {
                 asOfDate = asOfDate.Date;
                 if (split <= 0) throw new Exception("Split can't be negative: " + split);
 
                 if (split != 1)
                 {
-                    SplitDatum fdm = GetOrCreateSplitDatum(asOfDate);
-
+                    SplitDatum fdm = GetOrCreateDatum(new SplitDatum(asOfDate));
                     fdm.Close_Price = close;
                     fdm.Split = split;
                     fdm.DataSource = dataSource;
                 }
-                else if (SplitLUT.ContainsKey(asOfDate))
+                else
                 {
-                    SplitLUT.Remove(asOfDate);
+                    Remove<SplitDatum>(asOfDate);
                 }
             }
-        }
-
-        [DataMember]
-        private Dictionary<DateTime, DividendDatum> DividendLUT { get; set; } = new Dictionary<DateTime, DividendDatum>();
-
-        private DividendDatum GetOrCreateDividendDatum(DateTime asOfDate)
-        {
-            if (!DividendLUT.ContainsKey(asOfDate))
-                DividendLUT[asOfDate] = new DividendDatum(asOfDate);
-
-            return DividendLUT[asOfDate];
         }
 
         public void SetDividend(DateTime asOfDate, double close, double dividend, DataSourceType dataSource)
         {
-            lock (DividendLUT)
+            lock (DataLUT)
             {
                 if (dividend != 0)
                 {
-                    DividendDatum fdm = GetOrCreateDividendDatum(asOfDate);
+                    DividendDatum fdm = GetOrCreateDatum(new DividendDatum(asOfDate));
                     fdm.Close_Price = close;
                     fdm.Dividend = dividend;
                     fdm.DataSource = dataSource;
                 }
-                else if (DividendLUT.ContainsKey(asOfDate))
+                else
                 {
-                    DividendLUT.Remove(asOfDate);
+                    Remove<DividendDatum>(asOfDate);
                 }
-            }
-        }
-
-        public void Remove(DataSourceType source)
-        {
-            lock (SplitLUT)
-            {
-                SplitDatum[] splits = SplitLUT.Values.Where(n => n.DataSource == source).ToArray();
-                foreach (var item in splits) SplitLUT.Remove(item.AsOfDate);
-            }
-
-            lock (DividendLUT)
-            {
-                DividendDatum[] dividends = DividendLUT.Values.Where(n => n.DataSource == source).ToArray();
-                foreach (var item in dividends) DividendLUT.Remove(item.AsOfDate);
-            }
-
-            lock (OtherDataLUT)
-            {
-                FundamentalDatum[] datums = OtherDataLUT.Values.Where(n => n.DataSource == source).ToArray();
-                foreach (var item in datums) OtherDataLUT.Remove(item.Key);
-            }
-        }
-
-        [DataMember]
-        private Dictionary<(FundamentalType, DateTime), FundamentalDatum> OtherDataLUT { get; set; } = new Dictionary<(FundamentalType, DateTime), FundamentalDatum>();
-
-        public FundamentalDatum[] GetList()
-        {
-            lock (OtherDataLUT)
-                return OtherDataLUT.Values.ToArray();
-        }
-
-        public FundamentalDatum[] GetList(FundamentalType type)
-        {
-            lock (OtherDataLUT)
-                return OtherDataLUT.Values.Where(n => n.Type == type).ToArray();
-        }
-
-        public FundamentalDatum[] GetList(DateTime asOfDate)
-        {
-            lock (OtherDataLUT)
-                return OtherDataLUT.Values.Where(n => n.AsOfDate == asOfDate.Date).ToArray();
-        }
-
-        public FundamentalDatum GetOrCreateDatum(FundamentalType type, DateTime asOfDate)
-            => GetOrCreateDatum((type, asOfDate));
-
-        public FundamentalDatum GetOrCreateDatum((FundamentalType, DateTime) key)
-        {
-            lock (OtherDataLUT)
-            {
-                if (!OtherDataLUT.ContainsKey(key))
-                {
-                    OtherDataLUT[key] = new FundamentalDatum(key);
-                }
-                return OtherDataLUT[key];
-            }
-        }
-
-        public bool Remove(FundamentalDatum fd) => Remove(fd.Key);
-
-        public bool Remove(FundamentalType type, DateTime asOfDate) => Remove((type, asOfDate));
-
-        public bool Remove((FundamentalType, DateTime) key)
-        {
-            lock (OtherDataLUT)
-                if (OtherDataLUT.ContainsKey(key))
-                {
-                    OtherDataLUT.Remove(key);
-                    return true;
-                }
-            return false;
-        }
-
-        public void Remove(FundamentalType type)
-        {
-            lock (OtherDataLUT)
-            {
-                var listToRemove = OtherDataLUT.Values.Where(n => n.Type == type).Select(n => n.Key).ToList();
-                listToRemove.ForEach(n => OtherDataLUT.Remove(n));
             }
         }
 
@@ -180,19 +152,26 @@ namespace Pacmio
 
             List<(DateTime AsOfDate, bool isSplit, double adjust_ratio)> split_dividend_list = new List<(DateTime AsOfDate, bool isSplit, double adjust_ratio)>();
 
-            lock (SplitLUT)
+            lock (DataLUT)
             {
-                // var split_list = SplitLUT.Values.Select(n => (n.AsOfDate, true, n.Split));
-                split_dividend_list = SplitLUT.Values.Select(n => (n.AsOfDate, true, n.Split)).ToList();
-            }
+                split_dividend_list = includeDividend ?
 
-            if (includeDividend)
-                lock (DividendLUT)
-                {
-                    //var dividend_list = DividendLUT.Values.Select(n => (n.PayDate, false, n.Ratio));
-                    var dividend_list = DividendLUT.Values.Select(n => (n.AsOfDate, false, (1 + n.Ratio)));
-                    split_dividend_list = split_dividend_list.Concat(dividend_list).OrderByDescending(n => n.AsOfDate).ToList();
-                }
+                DataLUT.Values.Select(n => {
+                    if (n is SplitDatum sp)
+                        return (sp.AsOfDate, true, sp.Split);
+                    if (n is DividendDatum dv)
+                        return (dv.AsOfDate, false, (1 + dv.Ratio));
+                    else
+                        return (DateTime.MinValue, false, -1);
+                }).Where(n => n.Item3 > 0).OrderByDescending(n => n.AsOfDate).ToList() :
+
+                DataLUT.Values.Select(n => {
+                    if (n is SplitDatum sp)
+                        return (sp.AsOfDate, true, sp.Split);
+                    else
+                        return (DateTime.MinValue, false, -1);
+                }).Where(n => n.Item3 > 0).OrderByDescending(n => n.AsOfDate).ToList();
+            }
 
             DateTime latestTime = DateTime.MaxValue;
             double adj_price = 1;
@@ -237,7 +216,7 @@ namespace Pacmio
 
         public void SaveFile()
         {
-            lock (OtherDataLUT)
+            lock (DataLUT)
             {
                 this.SerializeJsonFile(DataFileName);
             }
@@ -261,16 +240,7 @@ namespace Pacmio
 
         public void ExportCSV(string fileName)
         {
-            IEnumerable<(string type, DateTime date, DataSourceType source, double close, double value, string info)> rows
-                = GetList().Select(n => (n.Type.ToString(), n.AsOfDate, n.DataSource, n.Close_Price, n.Value, "P = " + n.Value_Preliminary + " | R = " + n.Value_Restated + " | A = " + n.Value_Audited));
-
-            lock (SplitLUT)
-                rows = rows.Concat(SplitLUT.Values.Select(n => ("Split", n.AsOfDate, n.DataSource, n.Close_Price, n.Split, string.Empty)));
-
-            lock (DividendLUT)
-                rows = rows.Concat(DividendLUT.Values.Select(n => ("Dividend", n.AsOfDate, n.DataSource, n.Close_Price, n.Dividend, (n.Ratio * 100).ToString("0.###") + "%")));
-
-            rows = rows.OrderByDescending(n => n.date).ThenBy(n => n.type).ThenBy(n => n.source);
+            var rows = GetList().OrderByDescending(n => n.AsOfDate).ThenBy(n => n.TypeName).ThenBy(n => n.DataSource);
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Type,Date Time,Data Source,Close Price,Value,Other Info");
@@ -278,12 +248,12 @@ namespace Pacmio
             foreach (var row in rows)
             {
                 sb.AppendLine(string.Join(",", new string[] {
-                    row.type.ToString(),
-                    row.date.ToString("MM-dd-yyyy"),
-                    row.source.ToString(),
-                    row.close.ToString(),
-                    row.value.ToString(),
-                    row.info
+                    row.TypeName,
+                    row.AsOfDate.ToString("MM-dd-yyyy"),
+                    row.DataSource.ToString(),
+                    row.Close_Price.ToString(),
+                    row.Value.ToString(),
+                    row.Comment
                 }));
             }
 

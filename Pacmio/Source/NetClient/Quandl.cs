@@ -83,40 +83,14 @@ namespace Pacmio
                                             double high = fields[2].ToDouble(0);
                                             double low = fields[3].ToDouble(0);
                                             double volume = fields[5].ToDouble(0);
-
-                                            //double dividend_percent = fields[6].ToDouble(0) / close;
-                                            //double split = fields[7].ToDouble(1);
-
                                             bt.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
 
-                                            //// Add Split and dividend to FundamentalData Table in BusinessInfo
-                                            //if (c.MarketData is StockData sd)
-                                            //{
+                                            //// Add Split and dividend to FundamentalData Table in FD
                                             double dividend = fields[6].ToDouble(0);
                                             fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
-                                            /*
-                                            if (dividend != 0)
-                                            {
-                                                DividendDatum div_fdm = fd.GetOrCreateDatum(new DividendDatum(time, close));
-                                                div_fdm.Close_Price = close;
-                                                div_fdm.Divident = dividend;
-                                                div_fdm.DataSource = DataSourceType.Quandl;
-
-                                                //Console.WriteLine("Add Dividend: " + dividend);
-                                                //sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
-                                            }*/
 
                                             double split = fields[7].ToDouble(1);
                                             fd.SetSplit(time, close, split, DataSourceType.Quandl);
-                                            /*
-                                            if (split != 1)
-                                            {
-                                                SplitDatum sp_fdm = fd.GetOrCreateDatum(new SplitDatum(time, close, split));
-
-                                                //Console.WriteLine("Add Split: " + split);
-                                                sd.SplitTable[time] = (DataSourceType.Quandl, split);
-                                            }*/
-                                            //}
                                         }
                                     }
                                     else
@@ -248,30 +222,14 @@ namespace Pacmio
                                         btd.Bars[time] = (DataSourceType.Quandl, open, high, low, close, volume);
                                     }
 
-                                    //// Add Split and dividend to FundamentalData Table in BusinessInfo
+                                    //// Add Split and dividend to FundamentalData Table in FD
                                     if (currentContract.MarketData is StockData sd)
                                     {
                                         double dividend = fields[7].ToDouble(0);
                                         currentFd?.SetDividend(time, close, dividend, DataSourceType.Quandl);
 
-                                        /*
-                                        if (dividend != 0)
-                                        {
-                                            if (dividend < 0) throw new Exception("Split can't be: " + dividend);
-                                            //Console.WriteLine("Add Dividend: " + dividend);
-                                            sd.DividendTable[time] = (DataSourceType.Quandl, close, dividend);
-                                        }*/
-
                                         double split = fields[8].ToDouble(1);
                                         currentFd?.SetSplit(time, close, split, DataSourceType.Quandl);
-                                        /*
-                                        if (split != 1)
-                                        {
-                                            //Console.WriteLine("Add Split: " + split);
-
-                                            if (split <= 0) throw new Exception("Split can't be: " + split);
-                                            sd.SplitTable[time] = (DataSourceType.Quandl, split);
-                                        }*/
                                     }
                                 }
                             }
