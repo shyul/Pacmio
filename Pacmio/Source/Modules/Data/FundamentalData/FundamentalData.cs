@@ -8,13 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Xu;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class FundamentalData : IDataFile
+    public class FundamentalData : IDataFile, IDataProvider
     {
         public FundamentalData(Contract c)
             => ContractKey = c.Key;
@@ -205,6 +206,40 @@ namespace Pacmio
 
             return list;
         }
+
+
+        #region Data Provider
+
+        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
+
+        public List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            if (idk is DockForm df) df.ReadyToShow = false;
+            return DataConsumers.CheckRemove(idk);
+        }
+
+        public void Updated()
+        {
+            UpdateTime = DateTime.Now;
+
+            IDataConsumer[] dataConsumerList = null;
+
+            lock (DataConsumers)
+            {
+                dataConsumerList = DataConsumers.ToArray();
+            }
+
+            Parallel.ForEach(dataConsumerList, idk => idk.DataIsUpdated(this));
+        }
+
+        #endregion Data Provider
 
         #region File Operation
 

@@ -17,7 +17,7 @@ using Xu.GridView;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class StockData : BidAskData
+    public class StockData : MarketData
     {
         public override void Initialize(Contract c)
         {

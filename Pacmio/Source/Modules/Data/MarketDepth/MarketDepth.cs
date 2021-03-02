@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Threading.Tasks;
 using Xu;
 using Xu.GridView;
 
@@ -92,7 +93,15 @@ namespace Pacmio
         public void Updated()
         {
             UpdateTime = DateTime.Now;
-            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+
+            IDataConsumer[] dataConsumerList = null;
+
+            lock (DataConsumers)
+            {
+                dataConsumerList = DataConsumers.ToArray();
+            }
+
+            Parallel.ForEach(dataConsumerList, idk => idk.DataIsUpdated(this));
         }
 
         #endregion Data Provider

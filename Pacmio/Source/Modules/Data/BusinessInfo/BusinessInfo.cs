@@ -7,17 +7,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class BusinessInfo : IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>
+    public sealed class BusinessInfo : IDataFile, IDataProvider, IEquatable<BusinessInfo>, IEquatable<IBusiness>, IEquatable<string>
     {
         public BusinessInfo(string isin)
         {
@@ -112,6 +110,47 @@ namespace Pacmio
         [DataMember, Browsable(false)]
         public Dictionary<(DateTime Time, ContactDataType Type, string Param), string> Contact { get; private set; }
             = new Dictionary<(DateTime Time, ContactDataType Type, string Param), string>();
+
+        #region Data Provider
+
+        public List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            return DataConsumers.CheckAdd(idk);
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            if (idk is DockForm df) df.ReadyToShow = false;
+            return DataConsumers.CheckRemove(idk);
+        }
+
+        public void Updated()
+        {
+            UpdateTime = DateTime.Now;
+
+            IDataConsumer[] dataConsumerList = null;
+
+            lock (DataConsumers)
+            {
+                dataConsumerList = DataConsumers.ToArray();
+            }
+
+            Parallel.ForEach(dataConsumerList, idk => idk.DataIsUpdated(this));
+        }
+
+        #endregion Data Provider
+
+        #region File Operation
+
+
+
+
+
+
+
+        #endregion File Operation
 
         #region Equality
 

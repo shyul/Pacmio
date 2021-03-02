@@ -140,14 +140,14 @@ namespace Pacmio.IB
 
                 switch (tickType)
                 {
-                    case TickType.BidPrice when md is BidAskData q:
-                        q.Bid = price;
-                        q.BidSize = size * 100;
+                    case TickType.BidPrice:
+                        md.Bid = price;
+                        md.BidSize = size * 100;
                         break;
 
-                    case TickType.AskPrice when md is BidAskData q:
-                        q.Ask = price;
-                        q.AskSize = size * 100;
+                    case TickType.AskPrice:
+                        md.Ask = price;
+                        md.AskSize = size * 100;
                         break;
 
                     case TickType.LastPrice:
@@ -205,16 +205,16 @@ namespace Pacmio.IB
 
                 switch (tickType)
                 {
-                    case TickType.BidSize when md is BidAskData q:
-                        q.BidSize = size * 100;
+                    case TickType.BidSize:
+                        md.BidSize = size * 100;
                         break;
 
-                    case TickType.AskSize when md is BidAskData q:
-                        q.AskSize = size * 100;
+                    case TickType.AskSize:
+                        md.AskSize = size * 100;
                         break;
 
-                    case TickType.LastSize when md is BidAskData q:
-                        q.LastSize = size * 100;
+                    case TickType.LastSize:
+                        md.LastSize = size * 100;
                         break;
 
                     case TickType.Volume:
@@ -273,12 +273,12 @@ namespace Pacmio.IB
 
                 switch (tickType)
                 {
-                    case TickType.AskExchange when md is BidAskData q:
-                        q.AskExchange = fields[4];
+                    case TickType.AskExchange:
+                        md.AskExchange = fields[4];
                         break;
 
-                    case TickType.BidExchange when md is BidAskData q:
-                        q.BidExchange = fields[4];
+                    case TickType.BidExchange: // when md is BidAskData q:
+                        md.BidExchange = fields[4];
                         break;
 
                     case TickType.LastExchange:

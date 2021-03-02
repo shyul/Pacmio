@@ -15,9 +15,8 @@ using Xu.GridView;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    [KnownType(typeof(BidAskData))]
     [KnownType(typeof(StockData))]
-    public class MarketData : IEquatable<MarketData>, IEquatable<Contract>, IDataProvider
+    public class MarketData : IDataFile, IEquatable<MarketData>, IEquatable<Contract>, IDataProvider
     {
         /// <summary>
         /// Run this after loading
@@ -112,10 +111,39 @@ namespace Pacmio
         [DataMember]
         public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
-
         [DataMember]
         public double MarketPrice { get; set; }
 
+        #endregion Trade
+
+        #region Bid Ask
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask"), GridColumnOrder(6, 10), GridRenderer(typeof(NumberGridRenderer), 60)]
+        public double Ask { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Size"), GridColumnOrder(7, 11), GridRenderer(typeof(NumberGridRenderer), 70)]
+        public double AskSize { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Ask Exchange"), GridColumnOrder(8, 12), GridRenderer(typeof(TextGridRenderer), 80, true)]
+        public string AskExchange { get; set; } = string.Empty;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid"), GridColumnOrder(5, 10), GridRenderer(typeof(NumberGridRenderer), 60)]
+        public double Bid { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Size"), GridColumnOrder(4, 11), GridRenderer(typeof(NumberGridRenderer), 70)]
+        public double BidSize { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Bid Exchange"), GridColumnOrder(3, 12), GridRenderer(typeof(TextGridRenderer), 80, true)]
+        public string BidExchange { get; set; } = string.Empty;
+
+        #endregion Bid Ask
+
+
+
+        #region Data Provider
+
+        [DataMember]
+        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
 
         [IgnoreDataMember] // Initialize
         protected List<IDataConsumer> DataConsumers { get; set; }
@@ -125,10 +153,7 @@ namespace Pacmio
             if (DataConsumers is null)
                 DataConsumers = new List<IDataConsumer>();
 
-            lock (DataConsumers)
-            {
-                return DataConsumers.CheckAdd(idk);
-            }
+            return DataConsumers.CheckAdd(idk);
         }
 
         public bool RemoveDataConsumer(IDataConsumer idk)
@@ -136,10 +161,7 @@ namespace Pacmio
             if (DataConsumers is null)
                 return false;
 
-            lock (DataConsumers)
-            {
-                return DataConsumers.CheckRemove(idk);
-            }
+            return DataConsumers.CheckRemove(idk);
         }
 
         public void Update()
@@ -155,17 +177,20 @@ namespace Pacmio
                     dataConsumerList = DataConsumers.ToArray();
                 }
 
-                Parallel.ForEach(dataConsumerList, idk =>
-                {
-                    idk.DataIsUpdated(this);
-                });
+                Parallel.ForEach(dataConsumerList, idk => idk.DataIsUpdated(this));
             }
         }
 
-        [DataMember]
-        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
+        #endregion Data Provider
 
-        #endregion Trade
+        #region File Operation
+
+
+
+
+
+
+        #endregion File Operation
 
         #region Equality 
 

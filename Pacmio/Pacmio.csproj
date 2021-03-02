@@ -203,7 +203,6 @@
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
-    <Compile Include="Source\Modules\Data\MarketData\BidAskData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\StockData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataStatus.cs" />
