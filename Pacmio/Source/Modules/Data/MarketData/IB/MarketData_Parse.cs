@@ -104,14 +104,14 @@ namespace Pacmio.IB
 
             int tickerId = fields[1].ToInt32(-1);
 
-            if (GetMarketDataRequestStatus(tickerId) is MarketDataRequestStatus mds && fields.Length == 5)
+            if (GetMarketData(tickerId) is MarketData md && fields.Length == 5)
             {
-                mds.MarketData.MinimumTick = fields[2].ToDouble(0);
-                mds.BBOExchangeId = fields[3];
-                mds.SnapshotPermissions = fields[4].ToInt32(-1);
+                md.MinimumTick = fields[2].ToDouble(0);
+                md.BBOExchangeId = fields[3];
+                md.SnapshotPermissions = fields[4].ToInt32(-1);
 
                 // WatchListManager.UpdateUI(mds.MarketData);
-                mds.MarketData.Update();
+                md.Update();
             }
             else
                 UnregisterMarketDataRequest(tickerId, true);
@@ -127,7 +127,6 @@ namespace Pacmio.IB
         {
             string msgVersion = fields[1];
             int tickerId = fields[2].ToInt32(-1);
-
 
             if (msgVersion == "6" && GetMarketData(tickerId) is MarketData md && fields.Length == 7)
             {
@@ -183,9 +182,10 @@ namespace Pacmio.IB
                 md.Update();
                 // WatchListManager.UpdateUI(md);
             }
-            else
-                UnregisterMarketDataRequest(tickerId, true);
-
+            else 
+            {
+                RemoveRequest(tickerId, true);
+            }
         }
 
         /// <summary>
@@ -221,8 +221,8 @@ namespace Pacmio.IB
                         md.Volume = size * 100;
                         break;
 
-                    case TickType.ShortableShares when md is StockData q:
-                        q.ShortableShares = size;
+                    case TickType.ShortableShares:// when md is StockData q:
+                        md.ShortableShares = size;
                         break;
 
                     default:
@@ -311,18 +311,18 @@ namespace Pacmio.IB
 
                         https://interactivebrokers.github.io/tws-api/tick_types.html#rt_trd_volume
                     */
-                    case TickType.RTVolumeTimeSales when md is StockData sd:
+                    case TickType.RTVolumeTimeSales:
                         //Console.WriteLine("RTVolumeTimeSales: " + fields.ToStringWithIndex());
-                        RTVolume(fields[4], sd);
+                        RTVolume(fields[4], md);
                         break;
 
                     /*
                         The RT Trade Volume is similar to RT Volume, but designed to avoid relaying back "Unreportable Trades" shown in TWS Time&Sales via the API.
                         RT Trade Volume will not contain average price or derivative trades which are included in RTVolume.
                     */
-                    case TickType.RTTradeVolume when md is StockData sd:
+                    case TickType.RTTradeVolume:
                         //Console.WriteLine("RTVolumeTime: " + fields.ToStringWithIndex());
-                        RTVolume(fields[4], sd);
+                        RTVolume(fields[4], md);
                         break;
 
                     default:
@@ -338,7 +338,7 @@ namespace Pacmio.IB
         }
 
         //  contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
-        private static void RTVolume(string field4, StockData sd)
+        private static void RTVolume(string field4, MarketData md)
         {
             string[] fields = field4.Split(';');
             double last = fields[0].ToDouble();
@@ -346,8 +346,8 @@ namespace Pacmio.IB
             if (vol == 0) vol = 33;
 
             long epochMs = fields[2].ToInt64();
-            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), sd.Contract.TimeZone);
-            sd.InboundLiveTick(time, last, vol);
+            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(TimeTool.Epoch.AddMilliseconds(epochMs), md.Contract.TimeZone);
+            md.InboundLiveTick(time, last, vol);
         }
 
 
@@ -368,8 +368,8 @@ namespace Pacmio.IB
 
                 switch (tickType)
                 {
-                    case TickType.Shortable when md is StockData q:
-                        q.ShortStatus = fields[4].ToDouble(-1);
+                    case TickType.Shortable:
+                        md.ShortStatus = fields[4].ToDouble(-1);
                         break;
 
                     case TickType.Halted:

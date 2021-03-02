@@ -157,7 +157,7 @@ namespace Pacmio.IB
                         UnknownItemList.Industry[ib.Industry][ib.Category].CheckAdd(ib.Subcategory);*/
                     }
 
-                    c.MarketData.TradingPeriods.Clear();
+                    c.MarketData.TradingSchedule.Clear();
                     ApplyTradingPeriods(c.MarketData, fields[28]);
                     ApplyTradingPeriods(c.MarketData, fields[29]);
 
@@ -211,7 +211,7 @@ namespace Pacmio.IB
                 {
                     string[] pd_string_pair = pd_string.Split('-');
                     Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
-                    q.TradingPeriods.Add(pd);
+                    q.TradingSchedule.Add(pd);
                 }
             }
         }

@@ -6,12 +6,12 @@
 /// 
 /// ***************************************************************************
 
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using Xu;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Xu;
 
 namespace Pacmio.IB
 {
@@ -29,6 +29,28 @@ namespace Pacmio.IB
                 }
             }
         }
+
+        private static Dictionary<int, MarketData> ActiveTickerIdMarketDataLUT { get; } = new Dictionary<int, MarketData>();
+
+        private static MarketData GetMarketData(int tickerId)
+        {
+            lock (ActiveTickerIdMarketDataLUT)
+                if (ActiveTickerIdMarketDataLUT.ContainsKey(tickerId))
+                    return ActiveTickerIdMarketDataLUT[tickerId];
+                else
+                    return null;
+        }
+
+        public static MarketData[] ActiveMarketData
+        {
+            get
+            {
+                lock (ActiveTickerIdMarketDataLUT)
+                    return ActiveTickerIdMarketDataLUT.Values.ToArray();
+            }
+        }
+
+
 
         /// <summary>
         /// enericTickList:
@@ -82,52 +104,38 @@ namespace Pacmio.IB
             bool regulatorySnaphsot = false, ICollection<(string, string)> options = null)
         {
             Contract c = md.Contract;
-            string genericTickList = "221,"; // "258,";// string.Empty;
 
-            if (!isSnapshot)
+            lock (ActiveTickerIdMarketDataLUT)
             {
-                if (md is StockData sd)
+                if (ActiveTickerIdMarketDataLUT.Values.Contains(md))
+                    md.SendCancel_MarketData();
+
+                if (Connected && !SubscriptionOverflow && md.TickerId < 0 && md.Contract.Exchange.Param() is string exchangeCode)
                 {
-                    //genericTickList += sd.FilteredTicks ? "375," : "233,";
-                    genericTickList += sd.FilteredTicks ? "233,375," : "233,375,";
-                    if (sd.EnableShortableShares) genericTickList += "236,";
-                    if (sd.EnableNews) genericTickList += "292,";
-                }
+                    var (tickerId, requestType) = RegisterRequest(RequestType.RequestMarketData);
+                    md.TickerId = tickerId;
+                    md.IsSnapshot = isSnapshot;
+                    md.RegulatorySnaphsot = regulatorySnaphsot;
+                    ActiveTickerIdMarketDataLUT[tickerId] = md;
 
-                genericTickList = genericTickList.TrimEnd(',');
-            }
+                    string genericTicks = md.GenericTickList;
 
-         
+                    Console.WriteLine("Add MarketData: " + c + " | " + isSnapshot + " | " + genericTicks + " | " + tickerId);
 
-            if (isSnapshot || genericTickList != GetMarketDataRequestStatus(md).GenericTickList)
-            {
-                if (IsActive(md))
-                    UnregisterMarketDataRequest(md, true);
-            }
+                    string lastTradeDateOrContractMonth = "";
+                    double strike = 0;
+                    string right = "";
+                    string multiplier = "";
 
-            var (tickerId, requestType, exchangeCode, mds) = RegisterMarketDataRequest(md);
+                    if (c is IOption opt)
+                    {
+                        lastTradeDateOrContractMonth = opt.LastTradeDateOrContractMonth;
+                        strike = opt.Strike;
+                        right = opt.Right;
+                        multiplier = opt.Multiplier;
+                    }
 
-            Console.WriteLine("Add MarketData: " + c + " | " + isSnapshot + " | " + genericTickList + " | " + tickerId);
-
-            if (tickerId > 0)
-            {
-                mds.IsSnapshot = isSnapshot;
-                mds.GenericTickList = genericTickList;
-
-                string lastTradeDateOrContractMonth = "";
-                double strike = 0;
-                string right = "";
-                string multiplier = "";
-
-                if (c is IOption opt)
-                {
-                    lastTradeDateOrContractMonth = opt.LastTradeDateOrContractMonth;
-                    strike = opt.Strike;
-                    right = opt.Right;
-                    multiplier = opt.Multiplier;
-                }
-
-                List<string> paramsList = new List<string>() {
+                    List<string> paramsList = new List<string>() {
                     requestType,
                     "11",
                     tickerId.Param(),
@@ -145,57 +153,78 @@ namespace Pacmio.IB
                     string.Empty, // Contract Trading Class
                 };
 
-                if (c is ICombo ic)
-                {
-                    if (ic.ComboLegs is null)
+                    if (c is ICombo ic)
                     {
-                        paramsList.Add("0");
-                    }
-                    else
-                    {
-                        paramsList.Add(ic.ComboLegs.Count.ParamPos());
-                        foreach (ComboLeg leg in ic.ComboLegs)
+                        if (ic.ComboLegs is null)
                         {
-                            paramsList.AddRange(new string[] {
+                            paramsList.Add("0");
+                        }
+                        else
+                        {
+                            paramsList.Add(ic.ComboLegs.Count.ParamPos());
+                            foreach (ComboLeg leg in ic.ComboLegs)
+                            {
+                                paramsList.AddRange(new string[] {
                                 leg.ConId.ParamPos(),
                                 leg.Ratio.Param(),
                                 leg.Action,
                                 leg.Exchange,
                             });
+                            }
                         }
                     }
-                }
 
-                if (c is IDeltaNeutral dnc && !(dnc.DeltaNeutralContract is null))
-                {
-                    DeltaNeutralContract deltaNeutralContract = dnc.DeltaNeutralContract;
-                    paramsList.AddRange(new string[] {
+                    if (c is IDeltaNeutral dnc && !(dnc.DeltaNeutralContract is null))
+                    {
+                        DeltaNeutralContract deltaNeutralContract = dnc.DeltaNeutralContract;
+                        paramsList.AddRange(new string[] {
                         "1",
                         deltaNeutralContract.ConId.ParamPos(),
                         deltaNeutralContract.Delta.Param(),
                         deltaNeutralContract.Price.Param(),
                     });
-                }
-                else
-                {
-                    paramsList.Add("0");
-                }
+                    }
+                    else
+                    {
+                        paramsList.Add("0");
+                    }
 
-                paramsList.AddRange(new string[] {
-                    genericTickList,
+                    paramsList.AddRange(new string[] {
+                    genericTicks,
                     isSnapshot.Param(),
                     regulatorySnaphsot.Param(),
                     options.Param(),
                 });
 
-                SendRequest(paramsList);
-                return true;
+                    SendRequest(paramsList);
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public static void SendCancel_MarketData(MarketData md) => UnregisterMarketDataRequest(md, true);
+        internal static void SendCancel_MarketData(this MarketData md) => SendCancel_MarketData(md, !md.IsSnapshot);
+
+        internal static void SendCancel_MarketData(this MarketData md, bool cancel) // cancel = !md.IsSnapshot
+        {
+            if (md.TickerId > 0)
+            {
+                RemoveRequest(md.TickerId, cancel);
+            }
+
+            lock (ActiveTickerIdMarketDataLUT)
+            {
+                var list = ActiveTickerIdMarketDataLUT.Where(n => n.Value == md).Select(n => n.Key).ToList();
+                list.ForEach(n => {
+                    if (n != md.TickerId) RemoveRequest(n, true);
+                    ActiveTickerIdMarketDataLUT.Remove(n);
+                });
+            }
+
+            md.TickerId = int.MinValue;
+            md.Status = MarketDataStatus.DelayedFrozen;
+        }
 
         /// <summary>
         /// Unknown Message: 57: (0)"57"-(1)"1"-(2)"97" 
@@ -207,8 +236,11 @@ namespace Pacmio.IB
             if (fields[1] == "1")
             {
                 int tickerId = fields[2].ToInt32(-1);
-                if (UnregisterMarketDataRequest(tickerId, false) is MarketDataRequestStatus mds) 
-                    mds.MarketData.Update();
+                if (GetMarketData(tickerId) is MarketData md)
+                {
+                    md.Update();
+                    md.SendCancel_MarketData();
+                }
             }
         }
 
@@ -216,24 +248,21 @@ namespace Pacmio.IB
         {
             int tickerId = fields[2].ToInt32(-1);
 
-            if (UnregisterMarketDataRequest(tickerId) is MarketDataRequestStatus mds && fields[3] == "200")
+            if (GetMarketData(tickerId) is MarketData md)
             {
-                mds.MarketData.Contract.Status = ContractStatus.Error;
-                mds.MarketData.Contract.UpdateTime = DateTime.Now;
+                if (fields[3] == "200")
+                {
+                    md.Contract.Status = ContractStatus.Error;
+                    md.Contract.UpdateTime = DateTime.Now;
+                }
+
+                md.SendCancel_MarketData(false);
             }
-
-            /*
-            RemoveRequest(tickerId, false);
-            ActiveMarketDataTicks.TryRemove(tickerId, out MarketData md);
-
-            if (fields[3] == "200")
-            {
-                md.Contract.Status = ContractStatus.Error;
-                md.Contract.UpdateTime = DateTime.Now;
-            }*/
 
             Console.WriteLine("RequestHistoricalTick errors: " + fields.ToStringWithIndex());
         }
+
+
     }
 
 

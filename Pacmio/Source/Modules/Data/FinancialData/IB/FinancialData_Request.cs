@@ -16,7 +16,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static void SendRequest_FundamentalData(Contract c, FinancialDataRequestType type)
+        private static void SendRequest_FinancialData(Contract c, FinancialDataRequestType type)
         {
             if (Connected && c.Exchange.Param() is string exchangeCode)
             {

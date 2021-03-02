@@ -29,6 +29,8 @@ namespace Pacmio
             }
         }
 
+        #region IB Subscription
+
         public static MarketDepth StartMarketDepth(this Contract c)
         {
             while (IB.Client.ActiveMarketDepth.Count > MaximumParallelMarketDepthCount - 1)
@@ -52,6 +54,8 @@ namespace Pacmio
         private static void Start(MarketDepth mdt) => IB.Client.SendRequest_MarketDepth(mdt);
 
         private static void Cancel(MarketDepth mdt) => IB.Client.SendCancel_MarketDepth(mdt.RequestId);
+
+        #endregion IB Subscription
 
         public static MarketDepthGridView EnableMarketDepthGridView(this Contract c) 
         {

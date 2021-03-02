@@ -14,7 +14,7 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class WatchListGridView : GridWidget<StockData>, IEquatable<WatchListGridView>
+    public class WatchListGridView : GridWidget<MarketData>, IEquatable<WatchListGridView>
     {
         public WatchListGridView(WatchList wt) : base("WatchList: " + wt.Name)
         {
@@ -32,7 +32,7 @@ namespace Pacmio
 
         public override void DataIsUpdated(IDataProvider provider)
         {
-            SourceRows = WatchList.Contracts.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.StockData).ToList();
+            SourceRows = WatchList.Contracts.Where(n => n is Stock).Select(n => n as Stock).Select(n => n.MarketData).ToList();
 
             if (Rows is not null)
                 foreach (var s in Rows.Where(n => !SourceRows.Contains(n)))

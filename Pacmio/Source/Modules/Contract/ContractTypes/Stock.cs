@@ -31,40 +31,6 @@ namespace Pacmio
             //m_StockData = new StockData();
         }
 
-        [IgnoreDataMember]
-        public StockData StockData
-        {
-            get
-            {
-                if (m_StockData is null) LoadMarketData();
-                return m_StockData;
-            }
-        }
-
-        [IgnoreDataMember]
-        private StockData m_StockData = null;
-
-        public override void LoadMarketData()
-        {
-            m_StockData = File.Exists(MarketDataFileName) ? Serialization.DeserializeJsonFile<StockData>(MarketDataFileName) : new StockData();
-            m_StockData.Initialize(this);
-            //if (m_StockData.LiveBarTables is null) m_StockData.LiveBarTables = new List<BarTable>();
-        }
-
-        public override void SaveMarketData()
-        {
-            if (m_StockData is StockData sd)
-            {
-                if (!Directory.Exists(MarketDataFilePath))
-                    Directory.CreateDirectory(MarketDataFilePath);
-
-                sd.SerializeJsonFile(MarketDataFileName);
-            }
-        }
-
-        [IgnoreDataMember]
-        public override MarketData MarketData => StockData;
-
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type")]
         public override string TypeName => "STOCK";
 

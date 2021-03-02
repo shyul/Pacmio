@@ -7,6 +7,7 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Xu;
@@ -15,55 +16,122 @@ using Xu.GridView;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    [KnownType(typeof(StockData))]
-    public class MarketData : IDataFile, IEquatable<MarketData>, IEquatable<Contract>, IDataProvider
+    public sealed class MarketData : IDataFile, IDataProvider, IEquatable<MarketData>, IEquatable<Contract>
     {
-        /// <summary>
-        /// Run this after loading
-        /// </summary>
-        /// <param name="c"></param>
-        public virtual void Initialize(Contract c)
+        public MarketData((string name, Exchange exchange, string typeName) key)
         {
-            Contract = c;
-            Status = MarketDataStatus.Unknown;
+            ContractKey = key;
+            m_Contract = ContractManager.GetByKey(ContractKey);
+            ConId = m_Contract.ConId;
         }
 
+        public MarketData(Contract c) => Contract = c;
+
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), GridRenderer(typeof(ContractGridRenderer), 150, true)]
-        public Contract Contract { get; private set; }
+        public Contract Contract
+        {
+            get
+            {
+                if (m_Contract is null)
+                {
+                    m_Contract = ContractManager.GetByKey(ContractKey);
+                    ConId = m_Contract.ConId;
+                }
+                return m_Contract;
 
-        #region Quote
-
-        [DataMember]
-        public MultiPeriod TradingPeriods { get; private set; } = new MultiPeriod();
-
+            }
+            private set
+            {
+                m_Contract = value;
+                ContractKey = value.Key;
+                ConId = value.ConId;
+            }
+        }
 
         [IgnoreDataMember]
-        public virtual bool IsTickActive => IB.Client.IsActive(this);
+        private Contract m_Contract = null;
 
-        /// <summary>
-        /// https://interactivebrokers.github.io/tws-api/tick_types.html
-        /// string genericTickList = "236,375";  // 292 is news and 233 is RTVolume
-        /// 
-        /// Has to support option change...
-        /// 
-        /// 
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        public virtual bool StartTicks() => IB.Client.SendRequest_MarketData(this);
+        [DataMember]
+        public (string name, Exchange exchange, string typeName) ContractKey { get; private set; }
 
-        public virtual void SnapshotTicks() => IB.Client.SendRequest_MarketData(this, true);
+        [DataMember]
+        public int ConId { get; private set; } = -1;
 
-        public virtual void StopTicks() => IB.Client.SendCancel_MarketData(this);
-
-        //[DataMember]
-        //public int TickerId { get; set; } = int.MinValue;
+        #region Status
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), GridRenderer(typeof(TextGridRenderer), 100)]
         public MarketDataStatus Status { get; set; } = MarketDataStatus.Unknown;
 
         [DataMember]
         public double MinimumTick { get; set; } = double.NaN;
+
+        #endregion Status
+
+        #region IB Subscription Setting / Status
+
+        [IgnoreDataMember]
+        public bool IsLive => TickerId > 0 && !IsSnapshot;
+
+        [IgnoreDataMember]
+        public int TickerId { get; set; } = int.MinValue;
+
+        [DataMember]
+        public string BBOExchangeId { get; set; } = string.Empty;
+
+        [IgnoreDataMember]
+        public int SnapshotPermissions { get; set; }
+
+        [IgnoreDataMember]
+        public bool IsSnapshot { get; set; } = false;
+
+        [IgnoreDataMember]
+        public bool RegulatorySnaphsot { get; set; } = false;
+
+        [DataMember]
+        public bool FilteredTicks { get; set; } = true;
+
+        /// <summary>
+        /// Be aware of toggling changes
+        /// </summary>
+        [DataMember]
+        public bool EnableShortableShares { get; set; } = true;
+
+        [DataMember]
+        public bool EnableNews { get; set; } = true;
+
+        /// <summary>
+        /// genericTickList:
+        ///     100 Option Volume(currently for stocks)
+        ///     101 Option Open Interest(currently for stocks)
+        ///     104 Historical Volatility(currently for stocks)
+        ///     105 Average Option Volume(currently for stocks)
+        ///     106 Option Implied Volatility(currently for stocks)
+        ///     162 Index Future Premium
+        ///     165 Miscellaneous Stats
+        ///     221 Mark Price(used in TWS P&L computations)
+        ///     225 Auction values(volume, price and imbalance)
+        ///     233 RTVolume - contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
+        ///     236 Shortable
+        ///     256 Inventory
+        ///     258 Fundamental Ratios
+        ///     411 Realtime Historical Volatility
+        ///     456 IBDividends
+        ///     375 RT Volume filtered for BarTable
+        /// </summary>
+        [IgnoreDataMember]
+        public string GenericTickList { get {
+                string genericTickList = "221,";
+
+                genericTickList += FilteredTicks ? "233,375," : "233,375,";
+                if (EnableShortableShares) genericTickList += "236,";
+                if (EnableNews) genericTickList += "292,";
+
+                return genericTickList.TrimEnd(',');
+            } }
+
+        #endregion IB Subscription Setting / Status
+
+        #region Basic Information
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double PreviousClose { get; set; } = double.NaN;
@@ -90,31 +158,9 @@ namespace Pacmio
         public string LastExchange { get; set; } = string.Empty;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Trade Time"), GridColumnOrder(2, 0, 0), GridRenderer(typeof(TextGridRenderer), 120, true)]
-        public virtual DateTime LastTradeTime { get; set; } = DateTime.MinValue;
+        public DateTime LastTradeTime { get; set; } = DateTime.MinValue;
 
-        #endregion Quote
-
-        #region Trade
-
-        [DataMember]
-        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
-
-        [DataMember]
-        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
-
-        [DataMember]
-        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
-
-        /// <summary>
-        /// TODO: Change to Rules
-        /// </summary>
-        [DataMember]
-        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
-
-        [DataMember]
-        public double MarketPrice { get; set; }
-
-        #endregion Trade
+        #endregion Basic Information
 
         #region Bid Ask
 
@@ -138,15 +184,136 @@ namespace Pacmio
 
         #endregion Bid Ask
 
+        #region Realtime Ticks
 
+        [DataMember]
+        public bool IsFilteredRTStream { get; set; } = true;
+
+        [IgnoreDataMember]
+        public DateTime RTLastTime { get; private set; } = DateTime.MinValue;
+
+        [IgnoreDataMember]
+        public double RTLastPrice { get; private set; } = -1;
+
+        // TODO: 
+        // Queue the Tape Here
+
+        public void InboundLiveTick(DateTime time, double price, double size)
+        {
+            if (time > RTLastTime)
+            {
+                RTLastTime = time;
+
+                if (double.IsNaN(price))
+                {
+                    price = RTLastPrice;
+
+                    // Even tick
+                }
+                else
+                {
+                    if (price > RTLastPrice)
+                    {
+                        // Is an advancing tick
+                    }
+                    else
+                    {
+                        // Is a declining tick
+                    }
+
+                    RTLastPrice = price;
+                }
+
+                if (price > 0)
+                {
+                    lock (DataConsumers)
+                    {
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable b && b.IsLive).Select(n => n as BarTable), bt =>
+                        {
+                            if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
+                            {
+                                bt.AddPriceTick(time, price, size);
+                            }
+                            else if (bt.BarFreq >= BarFreq.Daily)// && bt.LastTime < time.Date)
+                            {
+                                DateTime date = time.Date;
+                                //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTime.Date + " | time = " + time.Date);
+                                if (bt.LastTime.Date < date)
+                                {
+                                    // Also check the Stock Data time stamp here! Is it current???
+                                    if (bt.Status == TableStatus.Ready && (!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
+                                    {
+                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + date + " | " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
+                                        Bar b = new Bar(bt, date, Open, High, Low, LastPrice, Volume);
+                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + b.DataSourcePeriod.Stop);
+                                        bt.MergeFromSmallerBar(b);
+                                        Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
+                                        Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
+
+                                    }
+                                }
+                                else if (bt.LastTime == date)
+                                {
+                                    bt.AddPriceTick(time, price, size);
+                                }
+
+                                //Console.WriteLine("bt.Status = " + bt.Status);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        [DataMember]
+        public double MarketCap { get; set; } = double.NaN;
+
+        [DataMember]
+        public double FloatShares { get; set; } = double.NaN;
+
+        [DataMember]
+        public double ShortPercent { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("S.Shares"), GridColumnOrder(18), GridRenderer(typeof(NumberGridRenderer), 80)]
+        public double ShortableShares { get; set; } = double.NaN;
+
+        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Short"), GridColumnOrder(17), GridRenderer(typeof(NumberGridRenderer), 60)]
+        public double ShortStatus { get; set; } = double.NaN;
+
+        #endregion Realtime Ticks
+
+        #region Trade Parameters
+
+        [DataMember]
+        public MultiPeriod TradingSchedule { get; private set; } = new MultiPeriod();
+
+        [IgnoreDataMember]
+        public bool NeedUpdate => (DateTime.Now - TradingSchedule.Stop).Days > TradingSchedule.Count;
+
+        [DataMember]
+        public HashSet<string> DerivativeTypes { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> ValidExchanges { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> OrderTypes { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
+
+        [DataMember]
+        public double MarketPrice { get; set; }
+
+        #endregion Trade Parameters
 
         #region Data Provider
 
         [DataMember]
-        public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
+        public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
 
         [IgnoreDataMember] // Initialize
-        protected List<IDataConsumer> DataConsumers { get; set; }
+        private List<IDataConsumer> DataConsumers { get; set; }
 
         public bool AddDataConsumer(IDataConsumer idk)
         {
@@ -185,10 +352,29 @@ namespace Pacmio
 
         #region File Operation
 
+        public static string GetDataFileName((string name, Exchange exchange, string typeName) ContractKey)
+            => Root.HistoricalDataPath(ContractKey) + "\\_MarketData\\$" + ContractKey.name + ".json";
 
+        [IgnoreDataMember]
+        public string DataFileName => GetDataFileName(ContractKey);
 
+        public void SaveFile() => this.SerializeJsonFile(DataFileName);
 
+        public static MarketData LoadFile((string name, Exchange exchange, string typeName) key)
+        {
+            if (Serialization.DeserializeJsonFile<MarketData>(GetDataFileName(key)) is MarketData md)
+            {
+                md.Status = MarketDataStatus.Unknown;
+                md.RTLastTime = DateTime.MinValue;
+                md.RTLastPrice = -1;
+                md.TickerId = int.MinValue;
+                return md;
+            }
+            else
+                return new MarketData(key);
+        }
 
+        public static MarketData LoadFile(Contract c) => LoadFile(c.Key);
 
         #endregion File Operation
 

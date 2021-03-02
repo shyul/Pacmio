@@ -21,28 +21,5 @@ namespace Pacmio
         [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Security Type Full Name")]
         public override string TypeFullName => "Forex";
 
-        public override void LoadMarketData()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SaveMarketData()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void Cancel_MarketDepth()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool Request_MarketDepth()
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

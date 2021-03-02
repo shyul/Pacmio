@@ -286,7 +286,7 @@ namespace Pacmio.IB
                     if (cts.Cancelled() || IsCancelled) return;
 
                     StartDownload:
-                    SendRequest_FundamentalData(c, type);
+                    SendRequest_FinancialData(c, type);
 
                     int time = 0; // Wait the last transmit is over.
                     while (!DataRequestReady)

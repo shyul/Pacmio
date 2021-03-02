@@ -51,14 +51,9 @@ namespace Pacmio
 
                 if (GetAll) period = new Period(period.Stop); // From now and onward
                 TimeSpan ts = bt.Frequency.Span;
-                /*
-                if (c.MarketData is StockData sd0) 
-                {
-                    sd0.DividendTable.Clear();
-                    sd0.SplitTable.Clear();
-                }*/
-
                 FundamentalData fd = c.GetOrCreateFundamentalData();
+
+                if (GetAll) fd.Remove(DataSourceType.Quandl);
 
                 try
                 {
@@ -223,14 +218,11 @@ namespace Pacmio
                                     }
 
                                     //// Add Split and dividend to FundamentalData Table in FD
-                                    if (currentContract.MarketData is StockData sd)
-                                    {
-                                        double dividend = fields[7].ToDouble(0);
-                                        currentFd?.SetDividend(time, close, dividend, DataSourceType.Quandl);
+                                    double dividend = fields[7].ToDouble(0);
+                                    currentFd?.SetDividend(time, close, dividend, DataSourceType.Quandl);
 
-                                        double split = fields[8].ToDouble(1);
-                                        currentFd?.SetSplit(time, close, split, DataSourceType.Quandl);
-                                    }
+                                    double split = fields[8].ToDouble(1);
+                                    currentFd?.SetSplit(time, close, split, DataSourceType.Quandl);
                                 }
                             }
 

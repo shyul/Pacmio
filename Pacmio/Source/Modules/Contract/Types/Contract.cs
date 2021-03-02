@@ -181,7 +181,10 @@ namespace Pacmio
         #region Data Update
 
         [IgnoreDataMember]
-        public virtual bool NeedUpdate => (DateTime.Now - UpdateTime).Days > 2 && ((DateTime.Now - MarketData.TradingPeriods.Stop).Days > MarketData.TradingPeriods.Count || FullName.Length < 2);
+        public MarketData MarketData => this.GetOrCreateMarketData();
+
+        [IgnoreDataMember]
+        public virtual bool NeedUpdate => ((DateTime.Now - UpdateTime).Days > 2 && MarketData.NeedUpdate) || FullName.Length < 2;
 
         [DataMember]
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
@@ -193,23 +196,6 @@ namespace Pacmio
         public ContractStatus Status { get; set; } = ContractStatus.Unknown;
 
         #endregion Data Update
-
-        #region Status and Market Data
-
-        [IgnoreDataMember]
-        public virtual MarketData MarketData { get; }
-
-        [IgnoreDataMember]
-        public virtual string MarketDataFilePath => Root.ResourcePath + "HistoricalData\\" + Key.typeName.ToString() + "\\" + Key.exchange.ToString() + "\\_MarketData\\";
-
-        [IgnoreDataMember]
-        public virtual string MarketDataFileName => MarketDataFilePath + "$" + Name + ".json";
-
-        public abstract void LoadMarketData();
-
-        public abstract void SaveMarketData();
-
-        #endregion Status and Market Data
 
         #region Equality
 
