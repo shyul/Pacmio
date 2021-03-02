@@ -112,7 +112,7 @@ namespace Pacmio
         public string ISIN { get; set; } = string.Empty;
 
         [IgnoreDataMember]
-        public BusinessInfo BusinessInfo => BusinessInfoManager.GetOrAdd(ISIN);
+        public BusinessInfo BusinessInfo => BusinessInfoManager.GetOrCreateBusinessInfo(ISIN);
 
         [DataMember]
         public string Industry { get; set; }

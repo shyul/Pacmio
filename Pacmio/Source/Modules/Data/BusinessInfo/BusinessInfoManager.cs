@@ -20,7 +20,7 @@ namespace Pacmio
         /// <summary>
         /// Master List of Business Informations.
         /// </summary>
-        private static ConcurrentDictionary<string, BusinessInfo> ISINToBusinessLUT { get; } = new ConcurrentDictionary<string, BusinessInfo>();
+        private static ConcurrentDictionary<string, BusinessInfo> IsinToBusinessLUT { get; } = new ConcurrentDictionary<string, BusinessInfo>();
 
         private static string BusinessInfoFile(string isin)
         {
@@ -29,20 +29,20 @@ namespace Pacmio
             return path + isin;
         }
 
-        public static BusinessInfo GetOrAdd(string isin)
+        public static BusinessInfo GetOrCreateBusinessInfo(string isin)
         {
             isin = isin.Trim();
 
             if (isin.Length < 11)
                 return null;
-            else if (!ISINToBusinessLUT.ContainsKey(isin))
+            else if (!IsinToBusinessLUT.ContainsKey(isin))
             {
                 string fileName = BusinessInfoFile(isin);
-                BusinessInfo bi = ISINToBusinessLUT[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
+                BusinessInfo bi = IsinToBusinessLUT[isin] = File.Exists(fileName) ? Serialization.DeserializeJsonFile<BusinessInfo>(fileName) : new BusinessInfo(isin);
                 return bi;
             }
             else
-                return ISINToBusinessLUT[isin];
+                return IsinToBusinessLUT[isin];
         }
 
         private static string IndustrySectorsFile => Root.ResourcePath + @"IndustrySectors.csv";
@@ -97,9 +97,9 @@ namespace Pacmio
             sb.ToFile(IndustrySectorsFile);
 
             // Save Business Info
-            lock (ISINToBusinessLUT)
+            lock (IsinToBusinessLUT)
             {
-                Parallel.ForEach(ISINToBusinessLUT.Values, bi =>
+                Parallel.ForEach(IsinToBusinessLUT.Values, bi =>
                 {
                     int pt = 0;
                     if (bi.IsModified) bi.SerializeJsonFile(BusinessInfoFile(bi.ISIN));
