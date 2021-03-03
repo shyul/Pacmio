@@ -61,7 +61,7 @@ namespace Pacmio.IB
         {
             // int requestId = fields[1].ToInt32();
             string execId = fields[14];
-            TradeInfo ti = TradeManager.GetOrCreateTradeByExecId(execId);
+            TradeInfo ti = TradeInfoManager.GetOrCreateTradeByExecId(execId);
 
             ti.OrderId = fields[2].ToInt32();
             ti.ConId = fields[3].ToInt32();
@@ -110,7 +110,7 @@ namespace Pacmio.IB
             // TODO: Emit trade log is updated so the BarTable / BarChart with bonding strategy / and Contract Position can be updated too
             //TradeLogManager.Update(fields[0].ToInt32(-1), execId);
 
-            TradeManager.DataProvider.Updated();
+            TradeInfoManager.DataProvider.Updated();
 
             Console.WriteLine("Parse Execution Data | " + evRule + " | " + evMultiplier + " : " + fields.ToStringWithIndex() + "\n");
         }
@@ -136,7 +136,7 @@ namespace Pacmio.IB
         private static void Parse_CommissionsReport(string[] fields)
         {
             string execId = fields[2];
-            TradeInfo ti = TradeManager.GetOrCreateTradeByExecId(execId);
+            TradeInfo ti = TradeInfoManager.GetOrCreateTradeByExecId(execId);
 
             ti.Commissions = fields[3].ToDouble();
 
@@ -159,7 +159,7 @@ namespace Pacmio.IB
                 yieldRedemptionDate = fields[7].ToInt32();
             }
             
-            TradeManager.DataProvider.Updated();
+            TradeInfoManager.DataProvider.Updated();
 
             Console.WriteLine("Commissions Report | " + currency + " | " + yield + " | " + yieldRedemptionDate + " : " + fields.ToStringWithIndex());
         }

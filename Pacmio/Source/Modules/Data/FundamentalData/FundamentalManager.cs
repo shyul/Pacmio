@@ -44,7 +44,12 @@ namespace Pacmio
             }
         }
 
-
-        // Save All when exiting...
+        public static void Save()
+        {
+            lock (ContractFundamentalLUT)
+            {
+                Parallel.ForEach(ContractFundamentalLUT.Values.Where(n => n.IsModified), bi => bi.SaveFile());
+            }
+        }
     }
 }

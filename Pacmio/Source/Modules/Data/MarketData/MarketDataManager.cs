@@ -64,7 +64,7 @@ namespace Pacmio
         {
             lock (ContractToMarketDataLUT)
             {
-                Parallel.ForEach(ContractToMarketDataLUT.Values, c => { c.SaveFile(); });
+                Parallel.ForEach(ContractToMarketDataLUT.Values.Where(n => n.IsModified), c => { c.SaveFile(); });
             }
         }
 

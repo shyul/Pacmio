@@ -162,8 +162,8 @@ namespace Pacmio
             ContractManager.Load();
             UnknownContractList.Load();
             AccountPositionManager.Load();
-            //TradeInfoManager.Load();
-            //OrderManager.Load();
+            TradeInfoManager.Load();
+            OrderManager.Load();
 
             StartTask();
 
@@ -183,9 +183,10 @@ namespace Pacmio
             IB.Client.Save();
             BusinessInfoManager.Save();
             ContractManager.Save();
+            FundamentalManager.Save();
             MarketDataManager.Save();
-            //TradeInfoManager.Save();
-            //OrderManager.Save();
+            TradeInfoManager.Save();
+            OrderManager.Save();
             AccountPositionManager.Save();
             UnknownContractList.Save();
         }

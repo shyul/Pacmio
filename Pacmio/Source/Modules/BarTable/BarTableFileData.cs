@@ -86,9 +86,13 @@ namespace Pacmio
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName((ContractKey, BarFreq, Type));
 
+        // TODO: Handle this
+        [IgnoreDataMember]
+        public bool IsModified { get; set; } = false;
+
         public void SaveFile()
         {
-            //lock (Bars)
+            lock (Bars)
                 this.SerializeJsonFile(DataFileName);
         }
 

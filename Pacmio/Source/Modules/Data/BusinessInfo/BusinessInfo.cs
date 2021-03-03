@@ -27,9 +27,6 @@ namespace Pacmio
                 CUSIP = ISIN.Substring(2, 9);
         }
 
-        [IgnoreDataMember]
-        public bool IsModified { get; set; } = false;
-
         [DataMember, Browsable(false)]
         public DateTime UpdateTime { get; set; } = DateTime.MinValue;
 
@@ -155,14 +152,24 @@ namespace Pacmio
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName(ISIN);
 
+        [IgnoreDataMember]
+        public bool IsModified { get; set; } = false;
+
         public void SaveFile()
         {
             this.SerializeJsonFile(DataFileName);
         }
 
         public static BusinessInfo LoadFile(string isin)
-           => Serialization.DeserializeJsonFile<BusinessInfo>(GetDataFileName(isin)) is BusinessInfo bi ? bi : new BusinessInfo(isin);
+        {
+            var b = Serialization.DeserializeJsonFile<BusinessInfo>(GetDataFileName(isin)) is BusinessInfo bi ? 
+                bi : 
+                new BusinessInfo(isin) { IsModified = false };
 
+            b.IsModified = false;
+            return b;
+        }
+   
         #endregion File Operation
 
         #region Equality

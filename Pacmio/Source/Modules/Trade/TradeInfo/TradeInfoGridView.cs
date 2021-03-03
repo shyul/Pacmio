@@ -17,14 +17,14 @@ namespace Pacmio
     {
         public TradeInfoGridView() : base("Order History")
         {
-            SourceRows = TradeManager.List;
-            TradeManager.DataProvider.AddDataConsumer(this);
+            SourceRows = TradeInfoManager.List;
+            TradeInfoManager.DataProvider.AddDataConsumer(this);
             DataIsUpdated(null);
         }
 
         ~TradeInfoGridView()
         {
-            TradeManager.DataProvider.RemoveDataConsumer(this);
+            TradeInfoManager.DataProvider.RemoveDataConsumer(this);
             Dispose();
         }
 

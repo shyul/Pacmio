@@ -205,12 +205,14 @@ namespace Pacmio
 
         public static void Save()
         {
+            /*
             lock (PermIdToOrderLUT)
-                PermIdToOrderLUT.Values.ToList().SerializeJsonFile(FileName);
+                PermIdToOrderLUT.Values.ToList().SerializeJsonFile(FileName);*/
         }
 
         public static void Load()
         {
+            /*
             if (File.Exists(FileName))
             {
                 List<OrderInfo> data = Serialization.DeserializeJsonFile<List<OrderInfo>>(FileName);
@@ -221,7 +223,7 @@ namespace Pacmio
                         PermIdToOrderLUT[od.PermId] = od;
                     });
                 }
-            }
+            }*/
         }
 
         #endregion File system

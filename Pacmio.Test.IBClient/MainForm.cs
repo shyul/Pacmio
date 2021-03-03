@@ -551,7 +551,7 @@ namespace TestClient
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            TradeManager.RequestExecutionData();
+            TradeInfoManager.RequestExecutionData();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
@@ -571,7 +571,7 @@ namespace TestClient
 
             if (Root.SaveFile.ShowDialog() == DialogResult.OK)
             {
-                TradeManager.ExportTradeLog(Root.SaveFile.FileName);
+                TradeInfoManager.ExportTradeLog(Root.SaveFile.FileName);
             }
         }
 

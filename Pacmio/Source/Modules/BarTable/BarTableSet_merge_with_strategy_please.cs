@@ -28,8 +28,6 @@ namespace Pacmio
 
         public HashSet<BarTable> BarTables { get; } = new HashSet<BarTable>();
 
-        private object DataLockObject { get; } = new object();
-
         public void SaveBarTables() => BarTables.AsParallel().ForAll(n => { n.Save(); n.Dispose(); });
 
         public void Clear()
@@ -51,7 +49,7 @@ namespace Pacmio
 
         private BarTable AddContract(Contract c, BarFreq barFreq, BarType barType)
         {
-            lock (DataLockObject)
+            lock (BarTables)
             {
                 var existing_tables = BarTables.Where(n => n == (c, barFreq, barType));
                 if (existing_tables.Count() == 1)
@@ -77,7 +75,7 @@ namespace Pacmio
 
         public BarTable AddContract(Contract c, BarFreq barFreq, BarType barType, ref Period period, CancellationTokenSource cts)
         {
-            lock (DataLockObject)
+            lock (BarTables)
             {
                 BarTable bt = AddContract(c, barFreq, barType);
                 bt.Fetch(period, cts);
@@ -103,7 +101,7 @@ namespace Pacmio
 
         private List<BarTable> AddContract(IEnumerable<Contract> contracts, BarFreq barFreq, BarType barType)
         {
-            lock (DataLockObject)
+            lock (BarTables)
             {
                 var to_delete_tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType && !contracts.Contains(n.Contract)).ToList();
 
@@ -202,7 +200,7 @@ namespace Pacmio
         {
             progress?.Report(0);
             if (cts.Continue())
-                lock (DataLockObject)
+                lock (BarTables)
                 {
                     PeriodSettings[(barFreq, barType)] = period;
                     var tables = BarTables.Where(n => n.BarFreq == barFreq && n.Type == barType);

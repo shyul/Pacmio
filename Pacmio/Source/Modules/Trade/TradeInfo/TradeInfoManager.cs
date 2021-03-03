@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class TradeManager
+    public static class TradeInfoManager
     {
         public static void RequestExecutionData() => IB.Client.SendRequest_ExecutionData();
 
@@ -99,12 +99,15 @@ namespace Pacmio
 
         public static void Save()
         {
+            /*
             lock (ExecIdToTradeLUT)
                 ExecIdToTradeLUT.Values.ToList().SerializeJsonFile(FileName);
+            */
         }
 
         public static void Load()
         {
+            /*
             if (File.Exists(FileName))
             {
                 List<TradeInfo> data = Serialization.DeserializeJsonFile<List<TradeInfo>>(FileName);
@@ -116,7 +119,7 @@ namespace Pacmio
                     });
                 }
                 DataProvider.Updated();
-            }
+            }*/
         }
 
         #endregion File system

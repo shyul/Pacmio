@@ -248,6 +248,9 @@ namespace Pacmio
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName(ContractKey);
 
+        [IgnoreDataMember]
+        public bool IsModified { get; set; } = false;
+
         public void SaveFile()
         {
             lock (DataLUT)
@@ -260,10 +263,11 @@ namespace Pacmio
         {
             if (Serialization.DeserializeJsonFile<FundamentalData>(GetDataFileName(key)) is FundamentalData fd)
             {
+                fd.IsModified = false;
                 return fd;
             }
             else
-                return new FundamentalData(key);
+                return new FundamentalData(key) { IsModified = false };
         }
 
         public static FundamentalData LoadFile(Contract c) => LoadFile(c.Key);

@@ -358,6 +358,9 @@ namespace Pacmio
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName(ContractKey);
 
+        [IgnoreDataMember]
+        public bool IsModified { get; set; } = false;
+
         public void SaveFile() => this.SerializeJsonFile(DataFileName);
 
         public static MarketData LoadFile((string name, Exchange exchange, string typeName) key)
@@ -368,10 +371,11 @@ namespace Pacmio
                 md.RTLastTime = DateTime.MinValue;
                 md.RTLastPrice = -1;
                 md.TickerId = int.MinValue;
+                md.IsModified = false;
                 return md;
             }
             else
-                return new MarketData(key);
+                return new MarketData(key) { IsModified = false };
         }
 
         public static MarketData LoadFile(Contract c) => LoadFile(c.Key);

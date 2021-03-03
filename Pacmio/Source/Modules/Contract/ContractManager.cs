@@ -428,23 +428,6 @@ namespace Pacmio
 
             Parallel.ForEach(list, c =>
             {
-                //c.LoadMarketData();
-
-                //c.MarketData.Status = MarketTickStatus.Unknown;
-                /*
-                c.DerivativeTypes = new HashSet<string>();
-                c.ValidExchanges = new HashSet<string>();
-                c.OrderTypes = new HashSet<string>();
-                c.MarketRules = new HashSet<string>();
-                if (c is ITradable it && it.TradingPeriods is null) 
-                    it.TradingPeriods = new MultiPeriod();
-                */
-                /*
-                if(c is IHistoricalBar ihb) 
-                {
-                    ihb.DividendTable = new Dictionary<DateTime, (DataSource DataSource, double Close, double Dividend)>();
-                    ihb.SplitTable = new Dictionary<DateTime, (DataSource DataSource, double Split)>();
-                }*/
                 GetOrAdd(c);
             });
         }
