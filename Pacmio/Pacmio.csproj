@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\MultiTimeFrameSet.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
@@ -208,7 +209,7 @@
     <Compile Include="Source\Modules\Data\MarketData\MarketDataStatus.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridView.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridViewManager.cs" />
-    <Compile Include="Source\Modules\BarTable\BarTableSet_merge_with_strategy_please.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableSet_merge_with_MultiTimeFrameSet_please.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationResult.cs" />

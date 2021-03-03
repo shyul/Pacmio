@@ -15,22 +15,24 @@ namespace Pacmio
 {
     public static class BarTableManager
     {
-        private static Dictionary<Contract, BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<Contract, BarTable>();
+        private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<(Contract c, BarFreq freq), BarTable>();
 
-        public static BarTable GetOrCreateDailyBarTable(this Contract c)
+        public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq freq)
         {
+            var key = (c, freq);
+
             lock (ContractDailyBarTableLUT)
             {
-                if (!ContractDailyBarTableLUT.ContainsKey(c))
+                if (!ContractDailyBarTableLUT.ContainsKey(key))
                 {
                     //ContractBarTableLUT[c] = MarketData.LoadFile(c.Key);
                 }
 
-                return ContractDailyBarTableLUT[c];
+                return ContractDailyBarTableLUT[key];
             }
         }
 
-        public static BarTable CreateBarTable(this Contract c, BarFreq barFreq, BarType barType, Period period) 
+        public static BarTable CreateBarTable(this Contract c, BarFreq barFreq, BarType barType, Period period)
         {
             return null;
         }
