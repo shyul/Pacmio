@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class MultiTimeFrameSet
+    public class MultiTimeFrameSet : IDisposable
     {
         public MultiTimeFrameSet(Contract c, Period pd)
         {
@@ -25,6 +25,18 @@ namespace Pacmio
         public Period Period { get; }
 
         private Dictionary<(BarFreq freq, BarType type), BarTable> TableLUT { get; } = new Dictionary<(BarFreq freq, BarType type), BarTable>();
+
+        public void Dispose()
+        {
+            lock (TableLUT)
+            {
+                foreach (BarTable bt in TableLUT.Values.Where(n => n.BarFreq < BarFreq.Daily))
+                {
+                    bt.Dispose();
+                }
+                TableLUT.Clear();
+            }
+        }
 
         public BarTable GetOrCreateBarTable(BarFreq freq, BarType type)
         {

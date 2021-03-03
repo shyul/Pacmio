@@ -207,7 +207,7 @@ namespace Pacmio
                                 {
                                     DateTime time = DateTime.Parse(fields[1]);
 
-                                    if (!btd.Bars.ContainsKey(time) || btd.Bars[time].SRC > DataSourceType.Quandl)
+                                    if (!btd.Rows.ContainsKey(time) || btd.Rows[time].SRC > DataSourceType.Quandl)
                                     {
                                         double open = fields[2].ToDouble(0);
                                         double high = fields[3].ToDouble(0);
@@ -216,7 +216,7 @@ namespace Pacmio
 
                                         pd.Insert(time);
 
-                                        btd.Bars[time] = (DataSourceType.Quandl, open, high, low, close, volume);
+                                        btd.Rows[time] = (DataSourceType.Quandl, open, high, low, close, volume);
                                     }
 
                                     //// Add Split and dividend to FundamentalData Table in FD

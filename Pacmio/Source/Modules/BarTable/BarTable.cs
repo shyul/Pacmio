@@ -1279,7 +1279,7 @@ namespace Pacmio
             TimeToRows.Clear();
             Rows.Clear();
 
-            var bars = btd.Bars.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
+            var bars = btd.Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
             Range<DateTime> Invalid_Period = null;
 
             foreach (var pb in bars)
@@ -1311,7 +1311,7 @@ namespace Pacmio
             if (Invalid_Period is Range<DateTime> rgt)
             {
                 btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
-                btd.Bars.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Bars.Remove(n.Key));
+                btd.Rows.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Rows.Remove(n.Key));
 
                 btd.SaveFile();
                 //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
@@ -1345,8 +1345,8 @@ namespace Pacmio
                                 Invalid_Period.Insert(b.Period.Stop);
                             }
                         }
-                        else if (!btd.Bars.ContainsKey(b.Time) || b.Source < btd.Bars[b.Time].SRC)
-                            btd.Bars[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
+                        else if (!btd.Rows.ContainsKey(b.Time) || b.Source < btd.Rows[b.Time].SRC)
+                            btd.Rows[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
                     }
 
                 btd.DataSourceSegments.Merge(DataSourceSegments);
@@ -1374,8 +1374,8 @@ namespace Pacmio
         {
             using BarDataFile btd = BarTableFileData;
             btd.DataSourceSegments.Remove(pd);
-            var to_remove_list = btd.Bars.Where(n => pd.Contains(n.Key)).ToList();
-            to_remove_list.ForEach(n => btd.Bars.Remove(n.Key));
+            var to_remove_list = btd.Rows.Where(n => pd.Contains(n.Key)).ToList();
+            to_remove_list.ForEach(n => btd.Rows.Remove(n.Key));
 
             btd.SaveFile();
             //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
@@ -1388,7 +1388,7 @@ namespace Pacmio
         {
             using BarDataFile btd = BarTableFileData;
             btd.DataSourceSegments.Clear();
-            btd.Bars.Clear();
+            btd.Rows.Clear();
             btd.SaveFile();
             //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
             Clear();
