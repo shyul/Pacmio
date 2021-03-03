@@ -15,32 +15,23 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class BarTableFileData : IDataFile, IEquatable<BarTableFileData>, IEquatable<BarTable>, IDisposable
+    public class BarDataFile : IDataFile, IEquatable<BarDataFile>, IEquatable<BarTable>, IDisposable
     {
-        public BarTableFileData(Contract c, BarFreq freq, BarType type)
+        public BarDataFile(Contract c, BarFreq freq, BarType type)
         {
             ContractKey = c.Key;
             BarFreq = freq;
             Type = type;
-
-            //EarliestTime = c.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; // c.BarTableEarliestTime;
-
             EarliestTime = c.GetOrCreateFundamentalData().EarliestTime;
-
-            //DataSourceSegments = new MultiPeriod<DataSource>();
         }
 
-        public BarTableFileData(BarTable bt)
+        public BarDataFile(BarTable bt)
         {
             ContractKey = bt.Contract.Key;
             BarFreq = bt.BarFreq;
             Type = bt.Type;
-
-            //EarliestTime = bt.Contract.MarketData is StockData sd ? sd.BarTableEarliestTime : DateTime.MinValue; //  bt.Contract.BarTableEarliestTime;
             EarliestTime = bt.Contract.GetOrCreateFundamentalData().EarliestTime;
-
             LastUpdateTime = bt.LastDownloadRequestTime;
-            //DataSourceSegments = bt.DataSourceSegments;
         }
 
         public void Dispose()
@@ -75,12 +66,9 @@ namespace Pacmio
 
         private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
         {
-            string prefix = "$";
-            if (info.ContractKey.typeName == "INDEX") prefix = "^";
-            //string path = Root.ResourcePath + "HistoricalData\\" + info.Contract.typeName.ToString() + "\\" + info.Contract.exchange.ToString() + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
-            string path = Root.HistoricalDataPath(info.ContractKey) + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return path + prefix + info.ContractKey.name + ".json";
+            string dir = Root.HistoricalDataPath(info.ContractKey) + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            return dir + (info.ContractKey.typeName == "INDEX" ? "^" : "$") + info.ContractKey.name + ".json";
         }
 
         [IgnoreDataMember]
@@ -96,11 +84,10 @@ namespace Pacmio
                 this.SerializeJsonFile(DataFileName);
         }
 
-        public static BarTableFileData LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
-            => Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(info));
+        public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
+            => Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
 
-        public static BarTableFileData LoadFile(BarTable bt) => LoadFile(bt.Key);
-        //=> Serialization.DeserializeJsonFile<BarTableFileData>(GetDataFileName(bt.Key));
+        public static BarDataFile LoadFile(BarTable bt) => LoadFile(bt.Key);
 
         #endregion File Operation
 
@@ -126,7 +113,7 @@ namespace Pacmio
                 if (date > newDate)
                 {
                     fdlist = fd.GetList(newDate);
-                    foreach(var fdm in fdlist) 
+                    foreach (var fdm in fdlist)
                     {
                         fd_event += fdm.TypeName + " = " + fdm.Value + " | ";
                     }
@@ -154,23 +141,27 @@ namespace Pacmio
         #endregion Export CSV
 
         #region Equality
-        public bool Equals(BarTableFileData other) => (ContractKey == other.ContractKey) && (BarFreq == other.BarFreq) && (Type == other.Type);
-        public static bool operator ==(BarTableFileData left, BarTableFileData right) => left.Equals(right);
-        public static bool operator !=(BarTableFileData left, BarTableFileData right) => !left.Equals(right);
+
+        public bool Equals(BarDataFile other) => (ContractKey == other.ContractKey) && (BarFreq == other.BarFreq) && (Type == other.Type);
+        public static bool operator ==(BarDataFile left, BarDataFile right) => left.Equals(right);
+        public static bool operator !=(BarDataFile left, BarDataFile right) => !left.Equals(right);
+        
         public bool Equals(BarTable other) => (ContractKey, BarFreq, Type) == (other.Contract.Key, other.BarFreq, other.Type);
-        public static bool operator ==(BarTableFileData left, BarTable right) => left is BarTableFileData btd && btd.Equals(right);
-        public static bool operator !=(BarTableFileData left, BarTable right) => !(left == right);
+        public static bool operator ==(BarDataFile left, BarTable right) => left is BarDataFile btd && btd.Equals(right);
+        public static bool operator !=(BarDataFile left, BarTable right) => !(left == right);
+        
         public bool Equals(Contract other) => other is Contract c && c.Key == ContractKey;
-        public static bool operator ==(BarTableFileData left, Contract right) => left is BarTableFileData btd && btd.Equals(right);
-        public static bool operator !=(BarTableFileData left, Contract right) => !(left == right);
+        public static bool operator ==(BarDataFile left, Contract right) => left is BarDataFile btd && btd.Equals(right);
+        public static bool operator !=(BarDataFile left, Contract right) => !(left == right);
+        
         public override bool Equals(object other)
         {
-            if (other is Contract c)
-                return Equals(c);
-            else if (other is BarTableFileData bi)
-                return Equals(bi);
+            if (other is BarDataFile btd)
+                return Equals(btd);
             else if (other is BarTable bt)
                 return Equals(bt);
+            else if (other is Contract c)
+                return Equals(c);
             else
                 return false;
         }

@@ -156,7 +156,7 @@ namespace Pacmio
             });
         }
 
-        public void Calculate(BarAnalysisSet ias, CancellationTokenSource cts, IProgress<float> progress)
+        public void Calculate(BarAnalysisSet bas, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
             ParallelOptions po = new ParallelOptions()
@@ -169,7 +169,7 @@ namespace Pacmio
             {
                 if (cts.Continue())
                 {
-                    bt.CalculateRefresh(ias);
+                    bt.CalculateRefresh(bas);
                     i++;
                     if (cts.Continue()) progress?.Report(100.0f * i / count);
                 }

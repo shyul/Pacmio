@@ -90,7 +90,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Modules\BarTable\DailyTradeManager.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\RevenueDatum.cs" />
@@ -197,7 +198,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\BarTableFileData.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\BarDataFile.cs" />
     <Compile Include="Source\Forms\Chart\SignalArea.cs" />
     <Compile Include="Source\Forms\Chart\SignalSeries.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
@@ -274,9 +275,9 @@
     <Compile Include="Source\IBApi\Client\Error.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfo\IB\ExecutionData.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\IB\FinancialData_Request.cs" />
-    <Compile Include="Source\Modules\BarTable\IB\HistogramData.cs" />
-    <Compile Include="Source\Modules\BarTable\IB\HistoricalDataHeadTimestamp.cs" />
-    <Compile Include="Source\Modules\BarTable\IB\HistoricalTick.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\IB\HistogramData.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\IB\HistoricalDataHeadTimestamp.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\IB\HistoricalTick.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\IB\MarketDepth_Request.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\IB\MarketDepthExchanges.cs" />
     <Compile Include="Source\Modules\Data\MarketData\IB\MarketData_Parse.cs" />
@@ -288,7 +289,7 @@
     <Compile Include="Source\Modules\Trade\AccountPosition\IB\Position.cs" />
     <Compile Include="Source\Modules\Trade\AccountPosition\IB\PostionMulti.cs" />
     <Compile Include="Source\Modules\Trade\AccountPosition\IB\PnL.cs" />
-    <Compile Include="Source\Modules\BarTable\IB\RealTimeBars.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\IB\RealTimeBars.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\IB\ScannerParameters.cs" />
     <Compile Include="Source\Modules\Contract\IB\ContractData.cs" />
     <Compile Include="Source\Modules\Contract\IB\ContractSamples.cs" />
@@ -303,7 +304,7 @@
     <Compile Include="Source\Modules\Data\MarketData\IB\MarketData_Request.cs" />
     <Compile Include="Source\Modules\Trade\Order\IBOrder\Order.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\IB\ScannerSubscription.cs" />
-    <Compile Include="Source\Modules\BarTable\IB\HistoricalData.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\IB\HistoricalData.cs" />
     <Compile Include="Source\IBApi\Client\Types\ApiCode.cs" />
     <Compile Include="Source\IBApi\Client\Types\IncomingMessage.cs" />
     <Compile Include="Source\IBApi\Client\Types\RequestType.cs" />
@@ -317,7 +318,7 @@
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
-    <Compile Include="Source\Modules\BarTable\Quandl.cs" />
+    <Compile Include="Source\Modules\Data\BarDataFile\Quandl.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\Types\Types.cs" />
     <Compile Include="Source\Modules\Contract\Types\Contract.cs" />
     <Compile Include="Source\Modules\Contract\Types\SymbolHistory.cs" />

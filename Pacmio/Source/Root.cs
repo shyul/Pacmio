@@ -184,6 +184,7 @@ namespace Pacmio
             BusinessInfoManager.Save();
             ContractManager.Save();
             FundamentalManager.Save();
+            BarDataFileManager.Save();
             MarketDataManager.Save();
             TradeInfoManager.Save();
             OrderManager.Save();

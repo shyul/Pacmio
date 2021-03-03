@@ -243,7 +243,10 @@ namespace Pacmio
         #region File Operation
 
         public static string GetDataFileName((string name, Exchange exchange, string typeName) ContractKey)
-            => Root.HistoricalDataPath(ContractKey) + "\\_FundamentalData\\$" + ContractKey.name + ".json";
+            => Root.HistoricalDataPath(ContractKey) +
+            "\\_FundamentalData\\" +
+            (ContractKey.typeName == "INDEX" ? "^" : "$") +
+            ContractKey.name + ".json";
 
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName(ContractKey);

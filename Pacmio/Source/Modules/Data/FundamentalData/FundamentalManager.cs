@@ -18,18 +18,7 @@ namespace Pacmio
         private static Dictionary<(string name, Exchange exchange, string typeName), FundamentalData> ContractFundamentalLUT { get; }
             = new Dictionary<(string name, Exchange exchange, string typeName), FundamentalData>();
 
-        public static FundamentalData GetOrCreateFundamentalData(this Contract c)
-        {
-            lock (ContractFundamentalLUT)
-            {
-                if (!ContractFundamentalLUT.ContainsKey(c.Key))
-                {
-                    ContractFundamentalLUT[c.Key] = FundamentalData.LoadFile(c);
-                }
-
-                return ContractFundamentalLUT[c.Key];
-            }
-        }
+        public static FundamentalData GetOrCreateFundamentalData(this Contract c) => GetOrCreateFundamentalData(c.Key);
 
         public static FundamentalData GetOrCreateFundamentalData(this (string name, Exchange exchange, string typeName) key)
         {

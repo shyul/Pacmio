@@ -14,18 +14,18 @@ namespace Pacmio
 {
     public static class MarketDataManager
     {
-        private static Dictionary<Contract, MarketData> ContractToMarketDataLUT { get; } = new Dictionary<Contract, MarketData>();
+        private static Dictionary<Contract, MarketData> ContractMarketDataLUT { get; } = new Dictionary<Contract, MarketData>();
 
         public static MarketData GetOrCreateMarketData(this Contract c)
         {
-            lock (ContractToMarketDataLUT)
+            lock (ContractMarketDataLUT)
             {
-                if (!ContractToMarketDataLUT.ContainsKey(c))
+                if (!ContractMarketDataLUT.ContainsKey(c))
                 {
-                    ContractToMarketDataLUT[c] = MarketData.LoadFile(c.Key);
+                    ContractMarketDataLUT[c] = MarketData.LoadFile(c.Key);
                 }
 
-                return ContractToMarketDataLUT[c];
+                return ContractMarketDataLUT[c];
             }
         }
 
@@ -62,9 +62,9 @@ namespace Pacmio
 
         public static void Save()
         {
-            lock (ContractToMarketDataLUT)
+            lock (ContractMarketDataLUT)
             {
-                Parallel.ForEach(ContractToMarketDataLUT.Values.Where(n => n.IsModified), c => { c.SaveFile(); });
+                Parallel.ForEach(ContractMarketDataLUT.Values.Where(n => n.IsModified), c => { c.SaveFile(); });
             }
         }
 

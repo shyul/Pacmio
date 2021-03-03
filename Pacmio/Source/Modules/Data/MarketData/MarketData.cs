@@ -119,7 +119,10 @@ namespace Pacmio
         ///     375 RT Volume filtered for BarTable
         /// </summary>
         [IgnoreDataMember]
-        public string GenericTickList { get {
+        public string GenericTickList
+        {
+            get
+            {
                 string genericTickList = "221,";
 
                 genericTickList += FilteredTicks ? "233,375," : "233,375,";
@@ -127,7 +130,8 @@ namespace Pacmio
                 if (EnableNews) genericTickList += "292,";
 
                 return genericTickList.TrimEnd(',');
-            } }
+            }
+        }
 
         #endregion IB Subscription Setting / Status
 
@@ -353,7 +357,10 @@ namespace Pacmio
         #region File Operation
 
         public static string GetDataFileName((string name, Exchange exchange, string typeName) ContractKey)
-            => Root.HistoricalDataPath(ContractKey) + "\\_MarketData\\$" + ContractKey.name + ".json";
+            => Root.HistoricalDataPath(ContractKey) +
+            "\\_MarketData\\" +
+            (ContractKey.typeName == "INDEX" ? "^" : "$") +
+            ContractKey.name + ".json";
 
         [IgnoreDataMember]
         public string DataFileName => GetDataFileName(ContractKey);
@@ -385,7 +392,7 @@ namespace Pacmio
         #region Equality 
 
         // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-        public bool Equals(MarketData other) => GetType() == other.GetType() && other is MarketData md && Contract == md.Contract;
+        public bool Equals(MarketData other) => other is MarketData md && Contract == md.Contract;
         public static bool operator ==(MarketData s1, MarketData s2) => s1.Equals(s2);
         public static bool operator !=(MarketData s1, MarketData s2) => !s1.Equals(s2);
 

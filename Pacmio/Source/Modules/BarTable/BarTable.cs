@@ -81,11 +81,14 @@ namespace Pacmio
 
         public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (Contract.Key, BarFreq, Type);
 
-        public FundamentalData FundamentalData { get; }
-
         #endregion Ctor
 
-        #region Bars Properties and Methods
+        #region Data
+
+        /// <summary>
+        /// For Multi Thread Access
+        /// </summary>
+        public object DataLockObject { get; } = new object();
 
         /// <summary>
         /// The Rows Data Storage
@@ -93,62 +96,30 @@ namespace Pacmio
         /// </summary>
         private List<Bar> Rows { get; } = new List<Bar>();
 
-        /// <summary>
-        /// Lookup Bar by Index. Mostly used in the Chart.
-        /// </summary>
-        /// <param name="i">Index of the Bar in the Rows</param>
-        /// <returns>Bar according to the given index</returns>
-        public Bar this[int i]
-        {
-            get
-            {
-                if (i >= Count || i < 0)
-                    return null;
-                else
-                    return Rows[i];
-            }
-        }
+        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
+
+        public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>();
+
+        public FundamentalData FundamentalData { get; }
+
+        #endregion Data
+
+        #region Bars Properties and Methods
 
         /// <summary>
-        /// Get bars of index i and the past length amount bars
-        /// TODO: Fixed sequence
+        /// Returns the number of the Rows in the BarTable.
         /// </summary>
-        /// <param name="i"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public IEnumerable<Bar> this[int i, int count]
-        {
-            get
-            {
-                //int skip = i - count + 1;
-                //if (skip < 0) skip = 0;
-                int cnt = count - 1;
-                if (i < cnt) cnt = i;
-                return Rows.Skip(i - cnt).Take(cnt + 1); //.Reverse();
-            }
-        }
+        public int Count => Rows.Count;
 
-        public double this[int i, NumericColumn column]
-        {
-            get
-            {
-                if (i >= Count || i < 0)
-                    return double.NaN;
-                else
-                    return Rows[i][column];
-            }
-        }
+        /// <summary>
+        /// Returns if the BarTable is has no Bars.
+        /// </summary>
+        public bool IsEmpty => (Count < 1);
 
-        public TagInfo this[int i, TagColumn column]
-        {
-            get
-            {
-                if (i >= Count || i < 0)
-                    return null;
-                else
-                    return Rows[i][column];
-            }
-        }
+        /// <summary>
+        /// Returns Last Row's Index
+        /// </summary>
+        private int LastIndex => Count - 1;
 
         private void Clear()
         {
@@ -162,19 +133,69 @@ namespace Pacmio
         }
 
         /// <summary>
-        /// Returns if the BarTable is has no Bars.
+        /// Lookup Bar by Index. Mostly used in the Chart.
         /// </summary>
-        public bool IsEmpty => (Count < 1);
+        /// <param name="i">Index of the Bar in the Rows</param>
+        /// <returns>Bar according to the given index</returns>
+        public Bar this[int i]
+        {
+            get
+            {
+                return i >= Count || i < 0 ? null : Rows[i];
+            }
+        }
 
         /// <summary>
-        /// Returns the number of the Rows in the BarTable.
+        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
         /// </summary>
-        public int Count => Rows.Count;
+        /// <param name="time">time of the Bar</param>
+        /// <returns>Bar closest to the given time</returns>
+        public Bar this[DateTime time]
+        {
+            get
+            {
+                if (TimeToRows.ContainsKey(time))
+                    return this[TimeToRows[time]];
+                else
+                    return null;
+            }
+        }
 
         /// <summary>
-        /// Returns Last Row's Index
+        /// Get bars of index i and the past length amount bars
+        /// TODO: Fixed sequence
         /// </summary>
-        private int LastIndex => Count - 1;
+        /// <param name="i"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<Bar> this[int i, int count]
+        {
+            get
+            {
+                lock (DataLockObject) 
+                {
+                    int cnt = count - 1;
+                    if (i < cnt) cnt = i;
+                    return Rows.Skip(i - cnt).Take(cnt + 1).ToList();
+                }
+            }
+        }
+
+        public List<Bar> this[Period pd]
+        {
+            get
+            {
+                return Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time).ToList();
+            }
+        }
+
+        public double this[int i, NumericColumn column] => this[i] is Bar b ? b[column] : double.NaN;
+
+        public TagInfo this[int i, TagColumn column] => this[i] is Bar b ? b[column] : null;
+
+
+
+
 
         /// <summary>
         /// Add single Bar into the BarTable. Will disregard if the Bar with exactly the same time already in the Table. 
@@ -358,10 +379,6 @@ namespace Pacmio
 
         #region Time
 
-        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
-
-        public IEnumerable<Bar> this[Period pd] => Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time);
-
         public bool Remove(Period pd)
         {
             var list = this[pd].ToList();
@@ -378,28 +395,7 @@ namespace Pacmio
             return isMod;
         }
 
-        /// <summary>
-        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
-        /// </summary>
-        /// <param name="time">time of the Bar</param>
-        /// <returns>Bar closest to the given time</returns>
 
-        public Bar this[DateTime time]
-        {
-            get
-            {
-                if (TimeToRows.ContainsKey(time))
-                    return this[TimeToRows[time]];
-                else
-                    return null;
-                /*
-                int i = IndexOf(ref time);
-                if (i < 0)
-                    return null;
-                else
-                    return this[i];*/
-            }
-        }
 
         /// <summary>
         /// Returns if the Rows already has time stamp
@@ -781,10 +777,7 @@ namespace Pacmio
 
         #region Operations
 
-        /// <summary>
-        /// For Multi Thread Access
-        /// </summary>
-        public object DataLockObject { get; } = new object();
+
 
         public bool IsLive
         {
@@ -1262,7 +1255,7 @@ namespace Pacmio
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
-        public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>(); // => BarTableFileData.DataSourceSegments;
+
 
         public void AddDataSourceSegment(Period pd, DataSourceType source)
         {
@@ -1278,9 +1271,9 @@ namespace Pacmio
 
         //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
         //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-        private BarTableFileData BarTableFileData => BarTableFileData.LoadFile(this) is BarTableFileData btd && btd == this ? btd : new BarTableFileData(this);
+        private BarDataFile BarTableFileData => BarDataFile.LoadFile(this) is BarDataFile btd && btd == this ? btd : new BarDataFile(this);
 
-        private void LoadFile(BarTableFileData btd, Period pd)
+        private void LoadFile(BarDataFile btd, Period pd)
         {
             ResetCalculationPointer();
             TimeToRows.Clear();
@@ -1330,11 +1323,11 @@ namespace Pacmio
 
         private void SaveFile()
         {
-            using BarTableFileData btd = BarTableFileData;
+            using BarDataFile btd = BarTableFileData;
             SaveFile(btd);
         }
 
-        private void SaveFile(BarTableFileData btd)
+        private void SaveFile(BarDataFile btd)
         {
             if (Count > 0)
             {
@@ -1372,14 +1365,14 @@ namespace Pacmio
 
         public void SyncFile(Period pd)
         {
-            using BarTableFileData btd = BarTableFileData;
+            using BarDataFile btd = BarTableFileData;
             SaveFile(btd);
             LoadFile(btd, pd);
         }
 
         public void ClearFile(Period pd)
         {
-            using BarTableFileData btd = BarTableFileData;
+            using BarDataFile btd = BarTableFileData;
             btd.DataSourceSegments.Remove(pd);
             var to_remove_list = btd.Bars.Where(n => pd.Contains(n.Key)).ToList();
             to_remove_list.ForEach(n => btd.Bars.Remove(n.Key));
@@ -1393,7 +1386,7 @@ namespace Pacmio
 
         public void ClearFile()
         {
-            using BarTableFileData btd = BarTableFileData;
+            using BarDataFile btd = BarTableFileData;
             btd.DataSourceSegments.Clear();
             btd.Bars.Clear();
             btd.SaveFile();
@@ -1401,60 +1394,7 @@ namespace Pacmio
             Clear();
         }
 
-
-
         #endregion File Operation
-
-        /// <summary>
-        /// Export the table to CSV file
-        /// </summary>
-        /// <param name="fileName"></param>
-        /*
-        public bool ExportCSV(string fileName)
-        {
-            lock (BarAnalysisLock)
-                lock (DataObjectLock)
-                {
-                    Calculate();
-
-                    StringBuilder sb = new StringBuilder("Source,Time,Open,High,Low,Close,Volume,Adj_Open,Adj_High,Adj_Low,Adj_Close,Adj_Volume");
-
-                    var DataColumnList = BarAnalysisPointerList.Where(n => n is NumericAnalysis).Where(n => n.Enabled).OrderBy(n => n.Order);
-
-                    foreach (NumericAnalysis bc in DataColumnList)
-                    {
-                        string p = bc.Name;
-                        if (p.Contains(",")) p = "\"" + p + "\"";
-                        sb.Append("," + p);
-                    }
-                    sb.Append("\n");
-
-                    for (int i = LastIndex; i >= 0; i--)
-                    {
-                        sb.Append(this[i].Source + "," +
-                            this[i].Time.ToString() + "," +
-                            this[i].Actual_Open.ToString() + "," +
-                            this[i].Actual_High.ToString() + "," +
-                            this[i].Actual_Low.ToString() + "," +
-                            this[i].Actual_Close.ToString() + "," +
-                            this[i].Actual_Volume.ToString() + "," +
-                            this[i].Open.ToString() + "," +
-                            this[i].High.ToString() + "," +
-                            this[i].Low.ToString() + "," +
-                            this[i].Close.ToString() + "," +
-                            this[i].Volume.ToString());
-
-                        foreach (NumericAnalysis bc in DataColumnList)
-                        {
-                            sb.Append("," + this[i][bc]);
-                        }
-
-                        sb.Append("\n");
-                    }
-
-                    return sb.ToFile(fileName);
-                }
-        }*/
 
         #region Equality
 
@@ -1469,9 +1409,12 @@ namespace Pacmio
 
         public override bool Equals(object other)
         {
+            /*
             if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
                 return false;
-            else if (other is BarTable bt)
+            else */
+            
+            if (other is BarTable bt)
                 return Equals(bt);
             else if (other.GetType() == typeof((Contract, BarFreq, BarType)))
                 return Equals(((Contract, BarFreq, BarType))other);

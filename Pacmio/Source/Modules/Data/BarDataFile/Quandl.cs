@@ -19,21 +19,23 @@ namespace Pacmio
 {
     public static class Quandl
     {
-        private static string Key => Root.Settings.QuandlKey;
-
-        private static readonly WebClient Client = new WebClient();
+        private const string URL = "https://www.quandl.com";
+        private static string Key => Root.Settings is PacSettings pst ? pst.QuandlKey : null;
+        public static bool Connected => (!string.IsNullOrEmpty(Key)) && HttpClientTools.Connected(URL);
+        private static WebClient Client { get; } = new WebClient();
 
         #region URLs
 
         //private static string EOD_FULL_URL => "https://www.quandl.com/api/v3/databases/EOD/data?api_key=" + Key;
         //private static string EOD_LAST_DAY_URL => "https://www.quandl.com/api/v3/databases/EOD/data?download_type=partial&api_key=" + Key;
-        private static string DailyBarURL(string symbol) => "https://www.quandl.com/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?api_key=" + Key;
-        private static string DailyBarURL(string symbol, Period period) => "https://www.quandl.com/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?start_date=" + period.Start.ToString("yyyy-MM-dd") + "&end_date=" + period.Stop.ToString("yyyy-MM-dd") + "&api_key=" + Key;
+        private static string DailyBarURL(string symbol) => URL + "/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?api_key=" + Key;
+        private static string DailyBarURL(string symbol, Period period) => URL + "/api/v3/datasets/EOD/" + symbol.ToUpper() + ".csv?start_date=" + period.Start.ToString("yyyy-MM-dd") + "&end_date=" + period.Stop.ToString("yyyy-MM-dd") + "&api_key=" + Key;
 
         #endregion URLs
 
         public static bool Download(BarTable bt, Period period, bool GetAll = false)
         {
+            if (!Connected) return false;
 
             bool success = false;
 
@@ -115,7 +117,7 @@ namespace Pacmio
             string currentSymbolName = string.Empty;
             string lastSymbolName = string.Empty;
 
-            BarTableFileData btd = null;
+            BarDataFile btd = null;
             Contract currentContract = null;
             FundamentalData currentFd = null;
             bool btdIsValid = false;
@@ -183,7 +185,7 @@ namespace Pacmio
                                         sd0.SplitTable.Clear();
                                     }*/
 
-                                    btd = new BarTableFileData(currentContract, BarFreq.Daily, BarType.Trades);
+                                    btd = new BarDataFile(currentContract, BarFreq.Daily, BarType.Trades);
                                     btdIsValid = true;
                                 }
                                 else

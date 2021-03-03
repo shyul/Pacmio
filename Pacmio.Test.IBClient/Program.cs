@@ -21,79 +21,11 @@ namespace TestClient
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
-                    /*
-                    AccountPositionManager.OnUpdateHandler += (int status, DateTime time, string msg) =>
-                    {
-                        Console.WriteLine("TestClient [ " + time.ToString("HH:mm:ss") + " - " + status.ToString() + " ]: " + msg);
-                    };*/
-
-                    /*
-                    Account c = new Account("DU");
-                    // foreach(var p in typeof(Account).GetProperties()) 
-                    foreach (PropertyInfo p in c.GetType().GetProperties())
-                    {
-                        string s = p.Name + "\t | \t" + p.PropertyType.Name;
-                        (bool IsValid, DescriptionAttribute Result) = p.GetAttribute<DescriptionAttribute>();
-                        if (IsValid)
-                        {
-                            s += "\t | \t" + Result.Description;
-                        }
-                        Console.WriteLine(s);
-                    }
-                    */
-
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
 
-
                     Root.Load();
-                    /*
-                    var infoList = typeof(Contract).GetProperties();
-
-                    List<PropertyInfo> listOfBrowsable = new List<PropertyInfo>();
-
-                    foreach (PropertyInfo info in infoList)
-                    {
-                        string s = info.Name + " | ";
-
-                        var t = info.GetCustomAttributes(true);
-
-                        foreach (object obj in t)
-                        {
-                            if (obj is Attribute attr)
-                            {
-
-
-                                s += attr.GetType().Name + " | ";
-                            }
-
-                            if (obj is BrowsableAttribute bra && bra.Browsable)
-                            {
-                                listOfBrowsable.Add(info);
-                            }
-                        }
-
-                        Console.WriteLine(s);
-                    }
-
-
-                    foreach (Contract c in ContractList.Values)
-                    {
-                        
-
-                        string s = string.Empty;
-                        foreach (PropertyInfo pi in listOfBrowsable)
-                        {
-                            s += pi.GetValue(c) + " | ";
-                        }
-
-                        Console.WriteLine(s);
-                    }
-
-                    */
-
-
-
+                    Console.WriteLine("Quandl is connected? " + Quandl.Connected);
 
                     Application.Run(new MainForm());
 

@@ -304,7 +304,7 @@ namespace TestClient
                 Root.SaveFile.FileName = "BT_" + ContractTest.ActiveContract.Name;
                 if (Root.SaveFile.ShowDialog() == DialogResult.OK)
                 {
-                    BarTableFileData btd = BarTableFileData.LoadFile((ContractTest.ActiveContract.Key, freq, type));
+                    BarDataFile btd = BarDataFile.LoadFile((ContractTest.ActiveContract.Key, freq, type));
                     btd.ExportCSV(Root.SaveFile.FileName);
                 }
             }
