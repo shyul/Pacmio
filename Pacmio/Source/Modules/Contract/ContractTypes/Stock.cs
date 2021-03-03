@@ -65,12 +65,8 @@ namespace Pacmio
             }
             set
             {
-                if (BusinessInfo is BusinessInfo bi)
-                {
-                    bi.FullName = value;
-                    bi.IsModified = true;
-                }
-                m_fullName = value;
+                m_fullName = BusinessInfo.FullName = value;
+                BusinessInfo.IsModified = true;
             }
         }
 
@@ -78,7 +74,19 @@ namespace Pacmio
         public string ISIN { get; set; } = string.Empty;
 
         [IgnoreDataMember]
-        public BusinessInfo BusinessInfo => BusinessInfoManager.GetOrCreateBusinessInfo(ISIN);
+        public BusinessInfo BusinessInfo
+        {
+            get
+            {
+                if (m_BusinessInfo is null)
+                    m_BusinessInfo = BusinessInfoManager.GetOrCreateBusinessInfo(ISIN);
+
+                return m_BusinessInfo;
+            }
+        }
+
+        [IgnoreDataMember]
+        private BusinessInfo m_BusinessInfo = null;
 
         [DataMember]
         public string Industry { get; set; }

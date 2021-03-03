@@ -538,7 +538,7 @@ namespace TestClient
             string tickList = TextBoxGenericTickList.Text;
             foreach (Contract c in list)
             {
-                c.MarketData.StartTicks();// (tickList);
+                c.MarketData.Start();// (tickList);
             }
 
         }
@@ -851,7 +851,7 @@ namespace TestClient
         {
             foreach (var md in Pacmio.IB.Client.ActiveMarketData)
             {
-                if (md is StockData sd)
+                if (md is MarketData sd)
                 {
                     StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
                     wt.Add(sd.Contract);
@@ -864,10 +864,10 @@ namespace TestClient
         private void BtnMarketDataAddContract_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.MarketData.StartTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
             {
+                s.MarketData.Start(); //Request_MarketTicks(TextBoxGenericTickList.Text);
                 StaticWatchList wt = WatchListManager.Add(new StaticWatchList("Draft"));
                 wt.Add(s);
                 WatchListGridViewManager.Add(new WatchListGridView(wt));
@@ -880,7 +880,7 @@ namespace TestClient
         private void BtnSnapshotContract_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected || !ValidateSymbol()) return;
-            ContractTest.ActiveContract.MarketData.SnapshotTicks(); //Request_MarketTicks(TextBoxGenericTickList.Text);
+            ContractTest.ActiveContract.MarketData.Snapshot(); //Request_MarketTicks(TextBoxGenericTickList.Text);
 
             if (ContractTest.ActiveContract is Stock s)
             {
@@ -906,7 +906,7 @@ namespace TestClient
                 foreach (var s in wt.Contracts.Take(60))
                 {
                     //while (Pacmio.IB.Client.SubscriptionOverflow) { Thread.Sleep(10); }
-                    Console.WriteLine("MarketQuote: " + s.MarketData.StartTicks()); //c.Request_MarketTicks(tickList));
+                    Console.WriteLine("MarketQuote: " + s.MarketData.Start()); //c.Request_MarketTicks(tickList));
                 }
             });
 

@@ -147,7 +147,7 @@
     <Compile Include="Source\Modules\Decision\Strategy\ExitMethod.cs" />
     <Compile Include="Source\Forms\Grid\ContractGridRenderer.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthDatum.cs" />
-    <Compile Include="Source\Modules\Data\BusinessInfo\News.cs" />
+    <Compile Include="Source\Modules\Data\BusinessInfo\Types\News.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\EntryMethod.cs" />
     <Compile Include="Source\Modules\Decision\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Decision\Trade\AccountPosition\PositionInfo.cs" />
@@ -317,7 +317,7 @@
     <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\Modules\BarTable\Quandl.cs" />
-    <Compile Include="Source\Modules\Data\BusinessInfo\Types.cs" />
+    <Compile Include="Source\Modules\Data\BusinessInfo\Types\Types.cs" />
     <Compile Include="Source\Modules\Contract\Types\Contract.cs" />
     <Compile Include="Source\Modules\Contract\Types\SymbolHistory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

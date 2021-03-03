@@ -20,7 +20,7 @@ namespace Pacmio
         {
             lock (ContractToMarketDataLUT)
             {
-                if (!ContractToMarketDataLUT.ContainsKey(c)) 
+                if (!ContractToMarketDataLUT.ContainsKey(c))
                 {
                     ContractToMarketDataLUT[c] = MarketData.LoadFile(c.Key);
                 }
@@ -52,7 +52,7 @@ namespace Pacmio
 
         public static bool Start(this MarketData md) => IB.Client.SendRequest_MarketData(md);
 
-        // Snap shot
+        public static bool Snapshot(this MarketData md) => IB.Client.SendRequest_MarketData(md, true);
 
         public static void Stop(this MarketData md) => IB.Client.SendCancel_MarketData(md);
 

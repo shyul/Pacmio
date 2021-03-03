@@ -181,7 +181,19 @@ namespace Pacmio
         #region Data Update
 
         [IgnoreDataMember]
-        public MarketData MarketData => this.GetOrCreateMarketData();
+        public MarketData MarketData 
+        {
+            get
+            {
+                if(m_MarketData is null) 
+                    m_MarketData = this.GetOrCreateMarketData();
+
+                return m_MarketData;
+            }
+        }
+
+        [IgnoreDataMember]
+        private MarketData m_MarketData = null;
 
         [IgnoreDataMember]
         public virtual bool NeedUpdate => ((DateTime.Now - UpdateTime).Days > 2 && MarketData.NeedUpdate) || FullName.Length < 2;

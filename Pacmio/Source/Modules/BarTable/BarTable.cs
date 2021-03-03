@@ -977,7 +977,7 @@ namespace Pacmio
 
                     IsLive = period.IsCurrent;
                     //if (IsLive) Contract.Request_MarketTicks();
-                    if (IsLive) Contract.MarketData.StartTicks();
+                    if (IsLive) Contract.MarketData.Start();
 
                     ResetCalculationPointer();
                     SyncFile(period);

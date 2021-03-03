@@ -64,8 +64,7 @@ namespace Pacmio.IB
                 md.Update();
             }
             else
-                UnregisterMarketDataRequest(tickerId, true);
-
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
         }
 
         /// <summary>
@@ -114,7 +113,7 @@ namespace Pacmio.IB
                 md.Update();
             }
             else
-                UnregisterMarketDataRequest(tickerId, true);
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
         }
 
         /// <summary>
@@ -184,7 +183,7 @@ namespace Pacmio.IB
             }
             else 
             {
-                RemoveRequest(tickerId, true);
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
             }
         }
 
@@ -235,7 +234,7 @@ namespace Pacmio.IB
                 // WatchListManager.UpdateUI(md);
             }
             else
-                UnregisterMarketDataRequest(tickerId, true);
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
         }
 
         /// <summary>
@@ -334,7 +333,7 @@ namespace Pacmio.IB
                 // WatchListManager.UpdateUI(md);
             }
             else
-                UnregisterMarketDataRequest(tickerId, true);
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
         }
 
         //  contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
@@ -390,7 +389,7 @@ namespace Pacmio.IB
                 // WatchListManager.UpdateUI(md);
             }
             else
-                UnregisterMarketDataRequest(tickerId, true);
+                RemoveRequest(tickerId, RequestType.RequestMarketData);
         }
 
         /// <summary>
