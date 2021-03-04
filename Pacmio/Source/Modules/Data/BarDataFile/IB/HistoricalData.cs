@@ -28,6 +28,87 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
+        #region Fetch Historical Data
+
+        public static DateTime Fetch_HistoricalDataHeadTimestamp(BarTable bt, CancellationTokenSource cts = null)
+        {
+            lock (DataRequestLockObject)
+            {
+                if (cts.Continue() && DataRequestReady && HistoricalData_Connected)
+                {
+                    if (cts.Cancelled() || IsCancelled)
+                        return bt.EarliestTime;
+
+                    StartDownload:
+                    SendRequest_HistoricalDataHeadTimestamp(bt);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (cts.Cancelled() || IsCancelled)
+                        {
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            goto End;
+                        }
+                    }
+                }
+            }
+
+            End:
+            return bt.EarliestTime;
+        }
+
+        public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)
+        {
+            if (cts.Continue() && HistoricalData_Connected && bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && period.Start < DateTime.Now)
+            {
+                // We will download, but won't log the period if the stop may extended to the future.
+                IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
+                LastRequestedHistoricalDataPeriod = period;
+
+                // RequestLockObject and DataRequestReady must happen in pairs
+                lock (DataRequestLockObject)
+                    if (DataRequestReady)
+                    {
+                        if (cts.Cancelled() || IsCancelled) return;
+
+                        StartDownload:
+                        SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
+
+                        int time = 0; // Wait the last transmit is over.
+                        while (!DataRequestReady)
+                        {
+                            time++;
+                            Thread.Sleep(50);
+
+                            if (time > Timeout) // Handle Time out here.
+                            {
+                                SendCancel_HistoricalData();
+                                Thread.Sleep(2000);
+                                goto StartDownload;
+                            }
+                            else if (cts.Cancelled() || IsCancelled)
+                            {
+                                SendCancel_HistoricalData();
+                                return;
+                            }
+                        }
+                    }
+
+            }
+        }
+
+        #endregion Fetch Historical Data
+
         public static DateTime LastDataRequestTime { get; private set; } = DateTime.MinValue;
 
         public static bool HistoricalData_Connected { get; private set; } = true;

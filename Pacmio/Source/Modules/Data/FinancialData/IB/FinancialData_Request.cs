@@ -7,8 +7,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Reflection;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xu;
 
@@ -16,6 +15,44 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
+        #region Fetch Fundamental Data
+
+        public static void Fetch_FundamentalData(this Contract c, FinancialDataRequestType type, CancellationTokenSource cts = null)
+        {
+            lock (DataRequestLockObject)
+            {
+                if (cts.Continue() && DataRequestReady)
+                {
+                    if (cts.Cancelled() || IsCancelled) return;
+
+                    StartDownload:
+                    SendRequest_FinancialData(c, type);
+
+                    int time = 0; // Wait the last transmit is over.
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(50);
+
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_FundamentalData();
+                            Thread.Sleep(2000);
+                            goto StartDownload;
+                        }
+                        else if (cts.Cancelled() || IsCancelled)
+                        {
+                            SendCancel_FundamentalData();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion Fetch Fundamental Data
+
+
         private static void SendRequest_FinancialData(Contract c, FinancialDataRequestType type)
         {
             if (Connected && c.Exchange.Param() is string exchangeCode)

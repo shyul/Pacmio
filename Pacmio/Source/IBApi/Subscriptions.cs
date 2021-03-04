@@ -24,10 +24,5 @@ namespace Pacmio.IB
             ActiveMarketDepth.Clear();
             ActiveTickerIdMarketDataLUT.Clear();
         }
-
-
-
     }
-
-
 }
