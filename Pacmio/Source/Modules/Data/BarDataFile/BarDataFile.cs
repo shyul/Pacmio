@@ -22,7 +22,7 @@ namespace Pacmio
             Contract = c;
             BarFreq = freq;
             Type = type;
-            EarliestTime = c.GetOrCreateFundamentalData().EarliestTime;
+            //EarliestTime = c.GetOrCreateFundamentalData().EarliestTime;
             //Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
@@ -31,7 +31,7 @@ namespace Pacmio
             Contract = bt.Contract;
             BarFreq = bt.BarFreq;
             Type = bt.Type;
-            EarliestTime = bt.Contract.GetOrCreateFundamentalData().EarliestTime;
+            //EarliestTime = bt.Contract.GetOrCreateFundamentalData().EarliestTime;
             LastUpdateTime = bt.LastDownloadRequestTime;
             //Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
@@ -82,10 +82,10 @@ namespace Pacmio
         private Frequency Frequency => BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
         [DataMember]
-        public DateTime EarliestTime { get; set; } = DateTime.MinValue;
+        public DateTime EarliestTime => DataSourceSegments.Start;
 
         [DataMember]
-        public DateTime LastUpdateTime { get; set; } = DateTime.MinValue;
+        public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
 
         [DataMember]
         private MultiPeriod<DataSourceType> DataSourceSegments { get; set; } = new MultiPeriod<DataSourceType>();
@@ -93,6 +93,9 @@ namespace Pacmio
         [DataMember]
         private Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)> Rows { get; set; }
             = new Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)>();
+
+        [IgnoreDataMember]
+        public int Count => Rows.Count;
 
         public DateTime LastTimeBy(DataSourceType source)
         {
@@ -172,6 +175,7 @@ namespace Pacmio
         public void AddRows(
             IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows,
             DataSourceType sourceType,
+            Period segmentPeriod,
             bool counterAdjust = false, 
             bool adjustDividend = false)
         {
@@ -200,7 +204,7 @@ namespace Pacmio
                         }
                     }
 
-                    Period pd = new Period(sortedList.First().time, sortedList.Last().time + Frequency.Span);
+                    Period pd = segmentPeriod is null ? new Period(sortedList.First().time, sortedList.Last().time + Frequency.Span) : segmentPeriod;
 
                     lock (Rows)
                         lock (DataSourceSegments)
@@ -212,6 +216,7 @@ namespace Pacmio
                             }
                         }
 
+                    LastUpdateTime = DateTime.Now;
                     IsModified = true;
                 }
         }

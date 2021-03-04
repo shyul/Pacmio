@@ -83,16 +83,15 @@ namespace Pacmio
 
             List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)> sortedList = null;
 
-
-
-
             return null;
         }
 
-        public static void Download(this BarDataFile bd, Period pd)
+        public static void Download_IB(this BarDataFile bd, Period pd)
         {
 
         }
+
+
 
         #region File Operation
 

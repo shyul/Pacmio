@@ -43,7 +43,7 @@ namespace Pacmio
                 if (startTime > stopTime) 
                     return true;
 
-                bool getAll = startTime < new DateTime(1982, 1, 1);
+                bool getAll = bdf.Count == 0 || startTime < new DateTime(1982, 1, 1);
 
                 Period pd = getAll ?
                     new Period(DateTime.MinValue, DateTime.Now.AddDays(-1)) :
@@ -74,6 +74,7 @@ namespace Pacmio
                     Task.Run(() => {
                         FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
                         if (getAll) fd.Remove(DataSourceType.Quandl);
+                        Period data_pd = new Period();
 
                         var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
                         using (MemoryStream stream = new MemoryStream(result))
@@ -90,13 +91,13 @@ namespace Pacmio
                                         if (close > 0)
                                         {
                                             DateTime time = DateTime.Parse(fields[0]);
-                                            double open = fields[1].ToDouble(0);
-                                            double high = fields[2].ToDouble(0);
-                                            double low = fields[3].ToDouble(0);
-                                            double volume = fields[5].ToDouble(0);
+                                            double open = fields[1].ToDouble();
+                                            double high = fields[2].ToDouble();
+                                            double low = fields[3].ToDouble();
+                                            double volume = fields[5].ToDouble();
 
                                             rows.Add((time, open, high, low, close, volume));
-
+                                            data_pd.Insert(time);
                                             //bdf.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
 
                                             //// Add Split and dividend to FundamentalData Table in FD
@@ -112,111 +113,30 @@ namespace Pacmio
                                 }
                         }
 
-                        bdf.AddRows(rows, DataSourceType.Quandl);
+                        bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
+
+                        bdf.SaveFile();
+                        fd.SaveFile();
                     });
+                    return true;
                 }
-
-
-
-
-
-
-
-
-
-
             }
-            else
-                return false;
-
-            bool success = false;
-
-         
-
-            if (bdf.Contract is Stock c && Root.Settings.QuandlKey.Length > 0)
-            {
-                if (!GetAll)
-                    Console.WriteLine("Quandl: Will only try to get bars up to date from Quandl. Starting: " + period.Start.ToString("yyyy-MM-dd"));
-                else
-                    Console.WriteLine("Quandl: Getting all bars from Quandl. You will have to reset all analysis pointers later! ");
-
-          
-
-                if (GetAll) period = new Period(period.Stop); // From now and onward
-                TimeSpan ts = bdf.Frequency.Span;
-                FundamentalData fd = c.GetOrCreateFundamentalData();
-
-                if (GetAll) fd.Remove(DataSourceType.Quandl);
-
-                try
-                {
-                    lock (Client)
-                        using (MemoryStream stream = new MemoryStream(Client.DownloadData(url)))
-                        using (StreamReader sr = new StreamReader(stream))
-                        {
-                            string[] headers = sr.CsvReadFields();
-                            if (headers.Length == 13)
-                                while (!sr.EndOfStream)
-                                {
-                                    string[] fields = sr.CsvReadFields();
-                                    if (fields.Length == 13)
-                                    {
-                                        double close = fields[4].ToDouble(0);
-                                        if (close > 0)
-                                        {
-                                            DateTime time = DateTime.Parse(fields[0]);
-                                            period.Insert(time);
-
-                                            double open = fields[1].ToDouble(0);
-                                            double high = fields[2].ToDouble(0);
-                                            double low = fields[3].ToDouble(0);
-                                            double volume = fields[5].ToDouble(0);
-                                            bdf.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
-
-                                            //// Add Split and dividend to FundamentalData Table in FD
-                                            double dividend = fields[6].ToDouble(0);
-                                            fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
-
-                                            double split = fields[7].ToDouble(1);
-                                            fd.SetSplit(time, close, split, DataSourceType.Quandl);
-                                        }
-                                    }
-                                    else
-                                        Console.WriteLine(fields);
-                                }
-                        }
-
-                    bdf.LastDownloadRequestTime = DateTime.Now;
-                    bdf.AddDataSourceSegment(period, DataSourceType.Quandl);
-                    Console.WriteLine("Quandl download finished");
-                    success = true;
-                }
-                catch (Exception e) when (e is WebException || e is ArgumentException)
-                {
-                    Console.WriteLine("Quandl download failed" + e.ToString());
-                }
-
-                fd.SaveFile();
-            }
-            return success;
+            return false;
         }
 
         public static void ImportEOD(string fileName, IProgress<float> progress, CancellationTokenSource cts)
         {
-            long byteread = 0;
+            long bytesRead = 0;
 
             string currentSymbolName = string.Empty;
             string lastSymbolName = string.Empty;
-
-            BarDataFile btd = null;
             Contract currentContract = null;
+
             FundamentalData currentFd = null;
-            bool btdIsValid = false;
+            BarDataFile currentBtd = null;
+            var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
 
-            IEnumerable<Contract> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US");// && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
-
-            Dictionary<string, Contract> symbolList = cList.ToDictionary(n => n.Name, n => n);
-
+            Dictionary<string, Contract> symbolLUT = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").ToDictionary(n => n.Name, n => n);
             HashSet<string> Unknown = new HashSet<string>();
 
             if (File.Exists(fileName))
@@ -227,14 +147,14 @@ namespace Pacmio
                 using StreamReader sr = new StreamReader(fs);
                 string line = sr.ReadLine();
                 string[] headers = line.CsvReadFields();
-                Period pd = new Period();
+                Period data_pd = new Period();
 
                 if (headers.Length == 14)
                     while (!sr.EndOfStream && !cts.IsCancellationRequested)
                     {
                         line = sr.ReadLine();
-                        byteread += line.Length + 1;
-                        float percent = byteread * 100.0f / totalSize;
+                        bytesRead += line.Length + 1;
+                        float percent = bytesRead * 100.0f / totalSize;
 
                         string[] fields = line.CsvReadFields();
                         if (fields.Length == 14)
@@ -245,77 +165,54 @@ namespace Pacmio
                             if (lastSymbolName != currentSymbolName)
                             {
                                 /// Save File Now
-                                if (btdIsValid)
+                                if (currentBtd is BarDataFile bdf_save)
                                 {
-                                    btd.DataSourceSegments.Add(pd, DataSourceType.Quandl);
+                                    bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
+                                    bdf_save.SaveFile(); 
+                                    currentFd.SaveFile();
 
-                                    // !! Please check if the file is locked or now before saving.
-                                    btd.SerializeJsonFile(btd.DataFileName);
-                                    currentFd?.SaveFile(); // if (currentContract is Stock stk) stk.SaveMarketData();
-
-                                    Console.Write(btd.ContractKey.name + ". ");
-                                    pd.Reset();
+                                    rows.Clear();
+                                    data_pd.Reset();
                                     currentContract = null;
                                     currentFd = null;
-                                    btd = null;
+                                    currentBtd = null;
                                 }
 
-                                if (symbolList.ContainsKey(currentSymbolName))
+                                if (symbolLUT.ContainsKey(currentSymbolName))
                                 {
-                                    currentContract = symbolList[currentSymbolName];
+                                    currentContract = symbolLUT[currentSymbolName];
                                     currentFd = currentContract.GetOrCreateFundamentalData();
 
                                     currentFd.Remove(DataSourceType.Quandl);
-                                    // .Remove(FundamentalType.Split);
-                                    //currentFd.Remove(FundamentalType.Dividend);
-
-                                    /*
-                                    if (currentContract.MarketData is StockData sd0)
-                                    {
-                                        sd0.DividendTable.Clear();
-                                        sd0.SplitTable.Clear();
-                                    }*/
-
-                                    btd = new BarDataFile(currentContract, BarFreq.Daily, BarType.Trades);
-                                    btdIsValid = true;
+                                    currentBtd = BarDataFile.LoadFile((currentContract.Key, BarFreq.Daily, BarType.Trades));
                                 }
                                 else
                                 {
                                     UnknownContractList.CheckIn(currentSymbolName);
-                                    /*
-                                    if (!UnknownItemList.Contains(currentSymbolName))
-                                    {
-                                        UnknownItemList.CheckIn(DateTime.Now, currentSymbolName, "STK");
-                                    }*/
-                                    btdIsValid = false;
+                                    currentBtd = null;
                                 }
                             }
 
-                            if (btdIsValid)
+                            if (currentBtd is BarDataFile bdf0)
                             {
                                 double close = fields[5].ToDouble(0);
                                 if (close > 0)
                                 {
                                     DateTime time = DateTime.Parse(fields[1]);
+                                    double open = fields[2].ToDouble(0);
+                                    double high = fields[3].ToDouble(0);
+                                    double low = fields[4].ToDouble(0);
+                                    double volume = fields[6].ToDouble(0);
 
-                                    if (!btd.Rows.ContainsKey(time) || btd.Rows[time].SRC > DataSourceType.Quandl)
-                                    {
-                                        double open = fields[2].ToDouble(0);
-                                        double high = fields[3].ToDouble(0);
-                                        double low = fields[4].ToDouble(0);
-                                        double volume = fields[6].ToDouble(0);
-
-                                        pd.Insert(time);
-
-                                        btd.Rows[time] = (DataSourceType.Quandl, open, high, low, close, volume);
-                                    }
+                                    rows.Add((time, open, high, low, close, volume));
+                                    data_pd.Insert(time);
 
                                     //// Add Split and dividend to FundamentalData Table in FD
                                     double dividend = fields[7].ToDouble(0);
-                                    currentFd?.SetDividend(time, close, dividend, DataSourceType.Quandl);
+                                    currentFd.SetDividend(time, close, dividend, DataSourceType.Quandl);
 
                                     double split = fields[8].ToDouble(1);
-                                    currentFd?.SetSplit(time, close, split, DataSourceType.Quandl);
+                                    currentFd.SetSplit(time, close, split, DataSourceType.Quandl);
                                 }
                             }
 
