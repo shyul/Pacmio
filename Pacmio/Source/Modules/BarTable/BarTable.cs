@@ -32,7 +32,7 @@ namespace Pacmio
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
-            FundamentalData = Contract.GetOrCreateFundamentalData();
+            //FundamentalData = Contract.GetOrCreateFundamentalData();
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
@@ -58,7 +58,7 @@ namespace Pacmio
             Contract.MarketData.RemoveDataConsumer(this);
 
             lock (Rows) Rows.Clear();
-            lock (TimeToRows) TimeToRows.Clear();
+            //lock (TimeToRows) TimeToRows.Clear();
             GC.Collect();
         }
 
@@ -94,13 +94,13 @@ namespace Pacmio
         /// The Rows Data Storage
         /// The Storage is not directly accessible outside of the class.
         /// </summary>
-        private List<Bar> Rows { get; } = new List<Bar>();
+        //private List<Bar> Rows { get; } = new List<Bar>();
 
-        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
+        private Dictionary<DateTime, Bar> Rows { get; } = new Dictionary<DateTime, Bar>();
 
-        public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>();
+        //public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>();
 
-        public FundamentalData FundamentalData { get; }
+        //public FundamentalData FundamentalData { get; }
 
         #endregion Data
 
@@ -125,10 +125,10 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
-                TimeToRows.Clear();
+                //TimeToRows.Clear();
                 Rows.Clear();
                 ResetCalculationPointer();
-                DataSourceSegments.Clear();
+                //DataSourceSegments.Clear();
             }
         }
 
@@ -141,7 +141,10 @@ namespace Pacmio
         {
             get
             {
-                return i >= Count || i < 0 ? null : Rows[i];
+                lock (DataLockObject)
+                {
+                    return i >= Count || i < 0 ? null : Rows.Values.ElementAt(i);
+                }
             }
         }
 
@@ -154,10 +157,13 @@ namespace Pacmio
         {
             get
             {
-                if (TimeToRows.ContainsKey(time))
-                    return this[TimeToRows[time]];
-                else
-                    return null;
+                lock (DataLockObject)
+                {
+                    if (Rows.ContainsKey(time))
+                        return Rows[time];
+                    else
+                        return null;
+                }
             }
         }
 
@@ -176,7 +182,7 @@ namespace Pacmio
                 {
                     int cnt = count - 1;
                     if (i < cnt) cnt = i;
-                    return Rows.Skip(i - cnt).Take(cnt + 1).ToList();
+                    return Rows.Values.Skip(i - cnt).Take(cnt + 1).ToList();
                 }
             }
         }
@@ -185,17 +191,16 @@ namespace Pacmio
         {
             get
             {
-                return Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time).ToList();
+                lock (DataLockObject)
+                {
+                    return Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key).Select(n => n.Value).ToList();
+                }
             }
         }
 
         public double this[int i, NumericColumn column] => this[i] is Bar b ? b[column] : double.NaN;
 
         public TagInfo this[int i, TagColumn column] => this[i] is Bar b ? b[column] : null;
-
-
-
-
 
         /// <summary>
         /// Add single Bar into the BarTable. Will disregard if the Bar with exactly the same time already in the Table. 
@@ -222,34 +227,6 @@ namespace Pacmio
                 return false;
         }
 
-        public void Add(DataSourceType Source, DateTime Time, TimeSpan Span, double Open, double High, double Low, double Close, double Volume, bool IsAdjusted)
-        {
-            if (Span == Frequency.Span)
-            {
-                Bar b = GetOrAdd(Time);
-                if (b.Source >= Source)
-                {
-                    b.Source = Source;
-                    if (IsAdjusted)
-                    {
-                        b.Open = Open;
-                        b.High = High;
-                        b.Low = Low;
-                        b.Close = Close;
-                        b.Volume = Volume;
-                    }
-                    else
-                    {
-                        b.Actual_Open = Open;
-                        b.Actual_High = High;
-                        b.Actual_Low = Low;
-                        b.Actual_Close = Close;
-                        b.Actual_Volume = Volume;
-                    }
-                }
-            }
-        }
-
         private bool Add(DateTime tickTime, double last, double volume)
         {
             bool isModified = false;
@@ -261,26 +238,30 @@ namespace Pacmio
                 {
                     if (last > b.High) // New High
                     {
-                        b.Actual_High = b.High = last; // Also update 
+                        //b.Actual_High = 
+                        b.High = last; // Also update 
                         isModified = true;
                     }
 
                     if (last < b.Low) // New Low
                     {
-                        b.Actual_Low = b.Low = last;
+                        //b.Actual_Low = 
+                        b.Low = last;
                         isModified = true;
                     }
 
                     if (tickTime <= b.DataSourcePeriod.Start && tickTime > b.Period.Start) // Eariler Open
                     {
-                        b.Actual_Open = b.Open = last;
+                        //b.Actual_Open = 
+                        b.Open = last;
                         b.DataSourcePeriod.Insert(tickTime);
                         isModified = true;
                     }
 
                     if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
                     {
-                        b.Actual_Close = b.Close = last;
+                        //b.Actual_Close = 
+                        b.Close = last;
                         b.DataSourcePeriod.Insert(tickTime);
                         isModified = true;
 
@@ -292,7 +273,7 @@ namespace Pacmio
                     }
 
                     b.Volume += volume;
-                    b.Actual_Volume = b.Volume;
+                    //b.Actual_Volume = b.Volume;
                     b.Source = DataSourceType.Realtime;
 
                     Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent + " | " + b.Period);
@@ -558,52 +539,7 @@ namespace Pacmio
 
         #endregion Time
 
-        #region Sort / Intrinsic Data Prepare before Technical Analysis
 
-        /// Always refresh gain
-        /// Always clear all Analysis Pointers.
-        /// Triggering conditions --> Split != 1, Dividend !=0 && adj_div == true
-        private void Adjust(bool forwardAdjust = true)
-        {
-            //Sort();
-            //if (Contract.MarketData is StockData sd)
-            //{
-            MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(AdjustDividend); //sd.BarTableAdjust(AdjustDividend);
-
-            // Please notice b.Time is the start time of the Bar
-            // When the adjust event (split or dividend) happens at d 
-            // The adjust will happen in d-1, which belongs to the
-            // prior adjust segment.
-            //                    S
-            // ---------------------------------------
-            //                   AD
-            // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
-            for (int i = 0; i < Count; i++)
-            {
-                Bar b = this[i];
-
-                var (adj_price, adj_vol) = barTableAdjust[b.Time];
-                b.Adjust(adj_price, adj_vol, forwardAdjust);
-            }
-            //}
-            //ResetCalculationPointer();
-        }
-
-        private void Sort()
-        {
-            TimeToRows.Clear();
-            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
-            for (int i = 0; i < Count; i++)
-            {
-                Bar b = Rows[i];
-                TimeToRows[b.Time] = i;
-                b.Index = i;
-            }
-            //ResetCalculationPointer();
-            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
-        }
-
-        #endregion Sort / Intrinsic Data Prepare before Technical Analysis
 
         #region Basic Data
 
@@ -828,7 +764,7 @@ namespace Pacmio
 
         private TableStatus m_Status = TableStatus.Default;
 
-        public void Load() => Load(Period.Full);
+        //public void Load() => Load(Period.Full);
 
         public void Load(Period period)
         {
@@ -855,7 +791,7 @@ namespace Pacmio
                     Calculate(bas);
                 }
         }
-
+        /*
         public void CalculateFinish(BarAnalysisSet bas)
         {
             if (Enabled && Count > 0 && bas is BarAnalysisSet)
@@ -870,7 +806,7 @@ namespace Pacmio
                         m_Status = TableStatus.Ready;
                     }
                 }
-        }
+        }*/
 
         public void CalculateRefresh(BarAnalysisSet bas)
         {
@@ -1255,7 +1191,11 @@ namespace Pacmio
 
         public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
 
+        #region Sort / Intrinsic Data Prepare before Technical Analysis
 
+
+
+        #endregion Sort / Intrinsic Data Prepare before Technical Analysis
 
         public void AddDataSourceSegment(Period pd, DataSourceType source)
         {
@@ -1271,7 +1211,34 @@ namespace Pacmio
 
         //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
         //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-        private BarDataFile BarTableFileData => BarDataFile.LoadFile(this) is BarDataFile btd && btd == this ? btd : new BarDataFile(this);
+        //private BarDataFile BarTableFileData => BarDataFile.LoadFile(this) is BarDataFile btd && btd == this ? btd : new BarDataFile(this);
+
+        public void LoadFile() => LoadFile(Period.Full);
+
+        public void LoadFile(Period pd, bool adjustDividend = false) 
+        {
+            BarDataFile bdf = this.GetOrCreateBarDataFile();
+            var sortedList = bdf.GetRows(pd, adjustDividend);
+
+
+
+        }
+
+        
+
+        private void Sort()
+        {
+            TimeToRows.Clear();
+            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
+            for (int i = 0; i < Count; i++)
+            {
+                Bar b = Rows[i];
+                TimeToRows[b.Time] = i;
+                b.Index = i;
+            }
+            //ResetCalculationPointer();
+            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
+        }
 
         private void LoadFile(BarDataFile btd, Period pd)
         {

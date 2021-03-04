@@ -111,26 +111,102 @@ namespace Pacmio
             //return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue.AddYears(500);
         }
 
-        public void AddRows(IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows, DataSourceType sourceType, bool counteradjust)
+        /*
+        private void Adjust(bool forwardAdjust = true, bool adjustdividend = false)
+        {
+            //Sort();
+            //if (Contract.MarketData is StockData sd)
+            //{
+            MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjustdividend); //sd.BarTableAdjust(AdjustDividend);
+
+            // Please notice b.Time is the start time of the Bar
+            // When the adjust event (split or dividend) happens at d 
+            // The adjust will happen in d-1, which belongs to the
+            // prior adjust segment.
+            //                    S
+            // ---------------------------------------
+            //                   AD
+            // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+            for (int i = 0; i < Count; i++)
+            {
+                Bar b = this[i];
+
+                var (adj_price, adj_vol) = barTableAdjust[b.Time];
+                b.Adjust(adj_price, adj_vol, forwardAdjust);
+            }
+            //}
+            //ResetCalculationPointer();
+        }
+
+        #region Adjusted Calculation
+
+        public void Adjust(double adj_price, double adj_vol, bool forwardAdjust = true)
+        {
+            if (forwardAdjust) // Adjust Part
+            {
+                if (Actual_Open > 0 && Actual_High > 0 && Actual_Low > 0 && Actual_Close > 0 && Actual_Volume >= 0)
+                {
+                    Open = Actual_Open * adj_price;
+                    High = Actual_High * adj_price;
+                    Low = Actual_Low * adj_price;
+                    Close = Actual_Close * adj_price;
+                    Volume = Actual_Volume / adj_vol;
+                }
+            }
+            else // CounterAdjust Part
+            {
+                if (Open > 0 && High > 0 && Low > 0 && Close > 0 && Volume >= 0)
+                {
+                    Actual_Open = Open / adj_price;
+                    Actual_High = High / adj_price;
+                    Actual_Low = Low / adj_price;
+                    Actual_Close = Close / adj_price;
+                    Actual_Volume = Volume * adj_vol;
+                }
+            }
+        }
+
+        #endregion Adjusted Calculation
+        */
+
+        public void AddRows(
+            IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows,
+            DataSourceType sourceType,
+            bool counterAdjust = false, 
+            bool adjustDividend = false)
         {
             lock (rows)
                 if (rows.Count() > 0)
                 {
-                    if (counteradjust) 
+                    var sortedList = rows.OrderBy(n => n.time).ToList();
+
+                    if (counterAdjust)
                     {
-                        // load counter adjust table...
+                        MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjustDividend);
+
+                        // Please notice b.Time is the start time of the Bar
+                        // When the adjust event (split or dividend) happens at d 
+                        // The adjust will happen in d-1, which belongs to the
+                        // prior adjust segment.
+                        //                    S
+                        // ---------------------------------------
+                        //                   AD
+                        // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+                        for (int i = 0; i < sortedList.Count; i++)
+                        {
+                            var row = sortedList[i];
+                            var (adj_price, adj_vol) = barTableAdjust[row.time];
+                            sortedList[i] = (row.time, row.O / adj_price, row.H / adj_price, row.L / adj_price, row.C / adj_price, row.V * adj_vol);
+                        }
                     }
 
-                    var sortedRows = rows.OrderBy(n => n.time);
-
-
-                    Period pd = new Period(sortedRows.First().time, sortedRows.Last().time + Frequency.Span);
+                    Period pd = new Period(sortedList.First().time, sortedList.Last().time + Frequency.Span);
 
                     lock (Rows)
                         lock (DataSourceSegments)
                         {
                             DataSourceSegments.Add(pd, sourceType);
-                            foreach (var row in sortedRows)
+                            foreach (var row in sortedList)
                             {
                                 Rows[row.time] = (sourceType, row.O, row.H, row.L, row.C, row.V);
                             }
@@ -140,16 +216,37 @@ namespace Pacmio
                 }
         }
 
-        public List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)> GetRows(Period pd, bool adjust_dividend)
+        public List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)>
+            GetRows(Period pd, bool adjustDividend = false)
         {
+            List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)> sortedList = null;
+
             lock (Rows)
                 lock (DataSourceSegments)
                 {
-                    // adjust by
-                    MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjust_dividend); //sd.BarTableAdjust(AdjustDividend);
-
-                    return Rows.Where(n => pd.Contains(n.Key)).Select(n => (n.Key, n.Value.SRC, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V)).ToList();
+                    sortedList = Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key).Select(n => (n.Key, n.Value.SRC, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V)).ToList();
                 }
+
+            if (sortedList is not null && sortedList.Count > 0)
+            {
+                MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjustDividend);
+                // Please notice b.Time is the start time of the Bar
+                // When the adjust event (split or dividend) happens at d 
+                // The adjust will happen in d-1, which belongs to the
+                // prior adjust segment.
+                //                    S
+                // ---------------------------------------
+                //                   AD
+                // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
+                for (int i = 0; i < sortedList.Count; i++)
+                {
+                    var row = sortedList[i];
+                    var (adj_price, adj_vol) = barTableAdjust[row.time];
+                    sortedList[i] = (row.time, row.SRC, row.O * adj_price, row.H * adj_price, row.L * adj_price, row.C * adj_price, row.V / adj_vol);
+                }
+            }
+
+            return sortedList;
         }
 
         public void RemoveRows(Period pd)
@@ -163,7 +260,7 @@ namespace Pacmio
                         var listToRemove = Rows.Select(n => n.Key).Where(n => pd.Contains(n)).ToList();
                         listToRemove.ForEach(n => Rows.Remove(n));
 
-                        if (listToRemove.Count() > 0) 
+                        if (listToRemove.Count() > 0)
                             IsModified = true;
                     }
             }
@@ -175,7 +272,7 @@ namespace Pacmio
                 lock (DataSourceSegments)
                 {
                     IsModified = !(DataSourceSegments.Count == 0 && Rows.Count == 0);
-                    
+
                     DataSourceSegments.Clear();
                     Rows.Clear();
                 }
@@ -207,7 +304,7 @@ namespace Pacmio
         public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
             => Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
 
-        public static BarDataFile LoadFile(BarTable bt) => LoadFile(bt.Key);
+        //public static BarDataFile LoadFile(BarTable bt) => LoadFile(bt.Key);
 
         #endregion File Operation
 

@@ -39,13 +39,13 @@ namespace Pacmio
                 Period = Frequency.AlignPeriod(small_b.Time);
                 DataSourcePeriod = new Period(small_b.Period);
                 Source = small_b.Source;
-
+                /*
                 Actual_Open = small_b.Actual_Open;
                 Actual_High = small_b.Actual_High;
                 Actual_Low = small_b.Actual_Low;
                 Actual_Close = small_b.Actual_Close;
                 Actual_Volume = small_b.Actual_Volume;
-
+                */
                 Open = small_b.Open;
                 High = small_b.High;
                 Low = small_b.Low;
@@ -62,9 +62,12 @@ namespace Pacmio
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
             Source = DataSourceType.Tick;
-
+            /*
             Open = High = Low = Close = Actual_Open = Actual_High = Actual_Low = Actual_Close = last;
             Volume = Actual_Volume = volume;
+            */
+            Open = High = Low = Close = last;
+            Volume = volume;
         }
 
         public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume)
@@ -73,11 +76,18 @@ namespace Pacmio
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
             Source = DataSourceType.Tick;
+
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            Volume = volume;
+            /*
             Open = Actual_Open = open;
             High = Actual_High = high;
             Low = Actual_Low = low;
             Close = Actual_Close = close;
-            Volume = Actual_Volume = volume;
+            Volume = Actual_Volume = volume;*/
         }
 
 
@@ -153,7 +163,7 @@ namespace Pacmio
 
         #endregion
 
-        #region Original / Actual Values
+        #region Original
 
         public bool IsValid => Source != DataSourceType.Invalid;
 
@@ -162,6 +172,7 @@ namespace Pacmio
         /// </summary>
         public DataSourceType Source { get; set; } = DataSourceType.Invalid;
 
+        /*
         public double Actual_Open { get; set; } = -1;
 
         public double Actual_High { get; set; } = -1;
@@ -171,10 +182,11 @@ namespace Pacmio
         public double Actual_Close { get; set; } = -1;
 
         public double Actual_Volume { get; set; } = -1;
-
+       
         #endregion
 
         #region Adjusted Values
+         */
 
         public double Open { get; set; } = -1;
 
@@ -186,37 +198,7 @@ namespace Pacmio
 
         public double Volume { get; set; } = -1;
 
-        #region Adjusted Calculation
-
-        public void Adjust(double adj_price, double adj_vol, bool forwardAdjust = true)
-        {
-            if (forwardAdjust) // Adjust Part
-            {
-                if (Actual_Open > 0 && Actual_High > 0 && Actual_Low > 0 && Actual_Close > 0 && Actual_Volume >= 0)
-                {
-                    Open = Actual_Open * adj_price;
-                    High = Actual_High * adj_price;
-                    Low = Actual_Low * adj_price;
-                    Close = Actual_Close * adj_price;
-                    Volume = Actual_Volume / adj_vol;
-                }
-            }
-            else // CounterAdjust Part
-            {
-                if (Open > 0 && High > 0 && Low > 0 && Close > 0 && Volume >= 0)
-                {
-                    Actual_Open = Open / adj_price;
-                    Actual_High = High / adj_price;
-                    Actual_Low = Low / adj_price;
-                    Actual_Close = Close / adj_price;
-                    Actual_Volume = Volume * adj_vol;
-                }
-            }
-        }
-
-        #endregion Adjusted Calculation
-
-        #endregion Adjusted Values
+        #endregion Original
 
         #region Intrinsic Indicators
 

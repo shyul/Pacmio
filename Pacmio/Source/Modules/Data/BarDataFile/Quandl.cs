@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio
@@ -33,26 +34,116 @@ namespace Pacmio
 
         #endregion URLs
 
-        public static bool Download(BarTable bt, Period period, bool GetAll = false)
+        public static bool Download(BarDataFile bdf)
         {
-            if (!Connected) return false;
+            if (Connected && bdf.BarFreq == BarFreq.Daily && bdf.Type == BarType.Trades)
+            {
+                DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
+                DateTime stopTime = DateTime.Now.Date;
+                if (startTime > stopTime) 
+                    return true;
+
+                bool getAll = startTime < new DateTime(1982, 1, 1);
+
+                Period pd = getAll ?
+                    new Period(DateTime.MinValue, DateTime.Now.AddDays(-1)) :
+                    new Period(startTime.AddDays(-5), stopTime);
+
+                string url = getAll ?
+                    DailyBarURL(ConvertToQuandlName(bdf.Contract.Name)) :
+                    DailyBarURL(ConvertToQuandlName(bdf.Contract.Name), new Period(startTime.AddDays(-5), stopTime));
+
+                byte[] result = null;
+
+                try
+                {
+                    Console.WriteLine("Quandl Requesting: " + url);
+                    lock (Client) 
+                    {
+                        result = Client.DownloadData(url);
+                    }
+                }
+                catch (Exception e) when (e is WebException || e is ArgumentException)
+                {
+                    Console.WriteLine("Quandl download failed" + e.ToString());
+                    return false;
+                }
+
+                if (result is not null)
+                {
+                    Task.Run(() => {
+                        FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
+                        if (getAll) fd.Remove(DataSourceType.Quandl);
+
+                        var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
+                        using (MemoryStream stream = new MemoryStream(result))
+                        using (StreamReader sr = new StreamReader(stream))
+                        {
+                            string[] headers = sr.CsvReadFields();
+                            if (headers.Length == 13)
+                                while (!sr.EndOfStream)
+                                {
+                                    string[] fields = sr.CsvReadFields();
+                                    if (fields.Length == 13)
+                                    {
+                                        double close = fields[4].ToDouble(0);
+                                        if (close > 0)
+                                        {
+                                            DateTime time = DateTime.Parse(fields[0]);
+                                            double open = fields[1].ToDouble(0);
+                                            double high = fields[2].ToDouble(0);
+                                            double low = fields[3].ToDouble(0);
+                                            double volume = fields[5].ToDouble(0);
+
+                                            rows.Add((time, open, high, low, close, volume));
+
+                                            //bdf.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
+
+                                            //// Add Split and dividend to FundamentalData Table in FD
+                                            double dividend = fields[6].ToDouble(0);
+                                            fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
+
+                                            double split = fields[7].ToDouble(1);
+                                            fd.SetSplit(time, close, split, DataSourceType.Quandl);
+                                        }
+                                    }
+                                    else
+                                        Console.WriteLine(fields);
+                                }
+                        }
+
+                        bdf.AddRows(rows, DataSourceType.Quandl);
+                    });
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+            else
+                return false;
 
             bool success = false;
 
-            if (bt.LastTimeBy(DataSourceType.Quandl) >= Frequency.Daily.Align(period.Stop)) return true;
+         
 
-            if (bt.Contract is Stock c && Root.Settings.QuandlKey.Length > 0)
+            if (bdf.Contract is Stock c && Root.Settings.QuandlKey.Length > 0)
             {
                 if (!GetAll)
                     Console.WriteLine("Quandl: Will only try to get bars up to date from Quandl. Starting: " + period.Start.ToString("yyyy-MM-dd"));
                 else
                     Console.WriteLine("Quandl: Getting all bars from Quandl. You will have to reset all analysis pointers later! ");
 
-                string url = (!GetAll) ? DailyBarURL(ConvertToQuandlName(bt.Contract.Name), period) : DailyBarURL(ConvertToQuandlName(bt.Contract.Name));
-                Console.WriteLine("Quandl Requesting: " + url);
+          
 
                 if (GetAll) period = new Period(period.Stop); // From now and onward
-                TimeSpan ts = bt.Frequency.Span;
+                TimeSpan ts = bdf.Frequency.Span;
                 FundamentalData fd = c.GetOrCreateFundamentalData();
 
                 if (GetAll) fd.Remove(DataSourceType.Quandl);
@@ -80,7 +171,7 @@ namespace Pacmio
                                             double high = fields[2].ToDouble(0);
                                             double low = fields[3].ToDouble(0);
                                             double volume = fields[5].ToDouble(0);
-                                            bt.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
+                                            bdf.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
 
                                             //// Add Split and dividend to FundamentalData Table in FD
                                             double dividend = fields[6].ToDouble(0);
@@ -95,8 +186,8 @@ namespace Pacmio
                                 }
                         }
 
-                    bt.LastDownloadRequestTime = DateTime.Now;
-                    bt.AddDataSourceSegment(period, DataSourceType.Quandl);
+                    bdf.LastDownloadRequestTime = DateTime.Now;
+                    bdf.AddDataSourceSegment(period, DataSourceType.Quandl);
                     Console.WriteLine("Quandl download finished");
                     success = true;
                 }
