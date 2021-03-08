@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using Xu;
@@ -43,55 +44,67 @@ namespace Pacmio
             }
         }
 
-        public static List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)>
-            GetRows(this Contract c, Period pd, BarFreq barFreq, BarType type = BarType.Trades, bool adjustDividend = false)
-        {
-            if (barFreq == BarFreq.Daily)
-            {
-                if (type == BarType.Trades)
-                {
-                    // Download from Quandl
-                }
-                else
-                {
+        public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetOrCreateBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
 
-                }
-            }
-            else if (barFreq > BarFreq.Daily)
+        #region Smaller Bars
+
+        public static BarTable GetBarTable(this Contract c, Period pd, BarFreq barFreq, BarType type = BarType.Trades)
+        {
+
+
+            BarTable bt = new BarTable(c, barFreq, type);
+
+            if (barFreq > BarFreq.Daily)
             {
-                // always merge from Daily...
+                BarDataFile bdf_daily = GetOrCreateBarDataFile(c, BarFreq.Daily, type);
+
+
             }
             else
             {
-                /*
-                var freqList = ReflectionTool.ToArray<BarFreq>().Where(n => n <= barFreq && ((int)barFreq / (int)n) % 1 == 0).OrderByDescending(n => n);
-                foreach (var freq in freqList)
-                {
-                    // load the bar file,
-                    BarDataFile bdf = c.GetOrCreateBarDataFile(freq, type);
-                    // load the list within the period range
-                    var smaller_list = bdf.GetRows(pd);
-                    // apply the list, verify a full list of each bar, and disregard if it is not full,  apply the DataSourceSegment 
-                    // save the file for future use
-                }
-                */
-
-                // Download the still missing part...
+                bt.LoadBars(pd);
             }
 
-
-
-            List<(DateTime time, DataSourceType SRC, double O, double H, double L, double C, double V)> sortedList = null;
-
-            return null;
+            // TODO: BarTable status Ready??
+            return bt;
         }
 
-        public static void Download_IB(this BarDataFile bd, Period pd)
+        #endregion Smaller Bars
+
+        #region Download
+
+        /// <summary>
+        /// Only support download daily and smaller bars data file.
+        /// </summary>
+        /// <param name="bdf"></param>
+        /// <param name="pd"></param>
+        /// <param name="cts"></param>
+        /// <returns></returns>
+        private static bool Download(this BarDataFile bdf, Period pd, CancellationTokenSource cts)
         {
+            if (bdf.BarFreq > BarFreq.Daily) throw new Exception("Only support download daily and smaller bars data file.");
 
+            bool is_successful = false;
+
+            if (bdf.HistoricalHeadTime == DateTime.MinValue)
+            {
+                IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
+            }
+
+            if (bdf.Contract.Status != ContractStatus.Error)
+            {
+                is_successful = Quandl.Download(bdf);
+
+                if (!is_successful)
+                {
+
+                }
+            }
+
+            return is_successful;
         }
 
-
+        #endregion Download
 
         #region File Operation
 

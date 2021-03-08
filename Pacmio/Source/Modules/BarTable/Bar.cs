@@ -25,7 +25,6 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time)
         {
             Table = bt;
-            //DataSourcePeriod = Period = Frequency.AlignPeriod(time); // TODO: Can't be ticks here!!!
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
         }
@@ -39,13 +38,6 @@ namespace Pacmio
                 Period = Frequency.AlignPeriod(small_b.Time);
                 DataSourcePeriod = new Period(small_b.Period);
                 Source = small_b.Source;
-                /*
-                Actual_Open = small_b.Actual_Open;
-                Actual_High = small_b.Actual_High;
-                Actual_Low = small_b.Actual_Low;
-                Actual_Close = small_b.Actual_Close;
-                Actual_Volume = small_b.Actual_Volume;
-                */
                 Open = small_b.Open;
                 High = small_b.High;
                 Low = small_b.Low;
@@ -62,62 +54,23 @@ namespace Pacmio
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
             Source = DataSourceType.Tick;
-            /*
-            Open = High = Low = Close = Actual_Open = Actual_High = Actual_Low = Actual_Close = last;
-            Volume = Actual_Volume = volume;
-            */
             Open = High = Low = Close = last;
             Volume = volume;
         }
 
-        public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume)
+        public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume, DataSourceType source = DataSourceType.Tick)
         {
             Table = bt;
             Period = Frequency.AlignPeriod(time);
             DataSourcePeriod = new Period(time);
-            Source = DataSourceType.Tick;
+            Source = source;
 
             Open = open;
             High = high;
             Low = low;
             Close = close;
             Volume = volume;
-            /*
-            Open = Actual_Open = open;
-            High = Actual_High = high;
-            Low = Actual_Low = low;
-            Close = Actual_Close = close;
-            Volume = Actual_Volume = volume;*/
         }
-
-
-        /*
-        public Bar(BarTable bt, DateTime time, DataSource source,
-            double actual_open, double actual_high, double actual_low, double actual_close, double actual_volume,
-            double open, double high, double low, double close, double volume)
-        {
-            Table = bt;
-            Period = Frequency.AlignPeriod(time);
-            Source = source;
-
-            if (actual_open > 0 && actual_high > 0 && actual_low > 0 && actual_close > 0 && actual_volume >= 0)
-            {
-                Actual_Open = actual_open;
-                Actual_High = actual_high;
-                Actual_Low = actual_low;
-                Actual_Close = actual_close;
-                Actual_Volume = actual_volume;
-            }
-
-            if (open > 0 && high > 0 && low > 0 && close > 0 && volume >= 0)
-            {
-                Open = open;
-                High = high;
-                Low = low;
-                Close = close;
-                Volume = volume;
-            }
-        }*/
 
         /// <summary>
         /// BarTable this Bar belongs to. And unable to change through the entire life cycle of the Bar.
@@ -134,13 +87,9 @@ namespace Pacmio
         /// </summary>
         public Frequency Frequency => Table.Frequency; //BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
 
-
-
         #endregion Ctor
 
         #region Time and Period Info
-
-
 
         public int Index { get; set; } = 0;
 
@@ -199,6 +148,109 @@ namespace Pacmio
         public double Volume { get; set; } = -1;
 
         #endregion Original
+
+        #region Smaller Bars
+
+        public bool MergeFromSmallerBar(Bar b)
+        {
+            if (b.BarFreq <= BarFreq)
+            {
+                if (b.High > High) // New High
+                {
+                    High = b.High;
+                }
+
+                if (b.Low < Low) // New Low
+                {
+                    Low = b.Low;
+                }
+
+                if (b.Period.Stop <= DataSourcePeriod.Start) // Eariler Open
+                {
+                    Open = b.Open;
+                    Volume += b.Volume;
+                    DataSourcePeriod.Insert(b.Period.Start);
+                }
+
+                if (b.Period.Start >= DataSourcePeriod.Stop) // Later Close
+                {
+                    Close = b.Close;
+                    Volume += b.Volume;
+                    DataSourcePeriod.Insert(b.Period.Stop);
+                }
+
+                if (Source < b.Source) Source = b.Source; // Worse Source
+            }
+            else
+            {
+                throw new Exception("Can't merge from larger Bar!!");
+            }
+
+
+
+
+            bool isModified = false;
+
+            if (b.BarFreq < BarFreq)
+            {
+                if (this[Frequency.Align(b.Time)] is Bar nb)
+                {
+                    if (b.High > nb.High) // New High
+                    {
+                        nb.High = b.High;
+                        isModified = true;
+                    }
+
+                    if (b.Low < nb.Low) // New Low
+                    {
+                        nb.Low = b.Low;
+                        isModified = true;
+                    }
+
+                    if (b.Period.Stop <= nb.DataSourcePeriod.Start) // Eariler Open
+                    {
+                        nb.Open = b.Open;
+                        nb.Volume += b.Volume;
+                        nb.DataSourcePeriod.Insert(b.Period.Start);
+                        isModified = true;
+                    }
+
+                    if (b.Period.Start >= nb.DataSourcePeriod.Stop) // Later Close
+                    {
+                        nb.Close = b.Close;
+                        nb.Volume += b.Volume;
+                        nb.DataSourcePeriod.Insert(b.Period.Stop);
+                        isModified = true;
+                    }
+
+                    if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
+                }
+                else
+                {
+                    return Add(new Bar(this, b));
+                }
+            }
+            else if (b.BarFreq == BarFreq && b.Table == this && !Contains(b.Time))
+            {
+                Rows.Add(b);
+
+                if (Count > 0)
+                {
+                    if (b.Time < LastTime) // If bars are added to the head or in the middle of the table
+                        Sort(); // Sort without adjust -- you never know if it needs reverse adjust or forward adjust here.
+                    else           //else // If bars are add to the tail of the table, then we just append
+                        TimeToRows.CheckAdd(b.Time, Count - 1);
+                }
+                else
+                    TimeToRows.CheckAdd(b.Time, 0);
+
+                return true;
+            }
+            return isModified;
+        }
+
+
+        #endregion Smaller Bars
 
         #region Intrinsic Indicators
 

@@ -8,13 +8,52 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Xu;
 
 namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static BarTable activeBarTable_HistoricalDataHeadTimestamp;
+        private static BarDataFile ActiveBarDataFile_HistoricalDataHeadTimestamp;
+
+        public static DateTime Fetch_HistoricalDataHeadTimestamp(BarDataFile bdf, CancellationTokenSource cts = null, bool includeExpired = false, int formatDate = 1)
+        {
+            lock (DataRequestLockObject)
+            {
+                if (cts.IsContinue() && DataRequestReady && HistoricalData_Connected)
+                {
+                    if (cts.Cancelled() || IsCancelled)
+                        goto End;
+
+                    StartDownload:
+                    SendRequest_HistoricalDataHeadTimestamp(bdf, includeExpired, formatDate);
+
+                    int time = 0;
+                    while (!DataRequestReady)
+                    {
+                        time++;
+                        Thread.Sleep(10);
+
+                        if (time > Timeout) // Handle Time out here.
+                        {
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            Thread.Sleep(100);
+                            goto StartDownload;
+                        }
+                        else if (cts.Cancelled() || IsCancelled)
+                        {
+                            SendCancel_HistoricalHeadDataTimestamp();
+                            goto End;
+                        }
+                    }
+                }
+            }
+
+            End:
+            return bdf.HistoricalHeadTime;
+        }
+
 
         /// <summary>
         /// Sample Request: (0)87-(1)858750582-(2)0-(3)AAPL-(4)STK-(5)-(6)0-(7)-(8)-(9)SMART-(10)-(11)USD-(12)-(13)-(14)0-(15)1-(16)TRADES-(17)1-(18)
@@ -23,17 +62,17 @@ namespace Pacmio.IB
         /// <param name="useRTH"></param>
         /// <param name="type"></param>
         /// <param name="formatDate"></param>
-        private static void SendRequest_HistoricalDataHeadTimestamp(BarTable bt, bool includeExpired = false, int formatDate = 1)
+        private static void SendRequest_HistoricalDataHeadTimestamp(BarDataFile bdf, bool includeExpired = false, int formatDate = 1)
         {
-            Contract c = bt.Contract;
+            Contract c = bdf.Contract;
 
-            if (bt.Type.Param() is string barTypeCode && 
+            if (bdf.Type.Param() is string barTypeCode && 
                 c.Exchange.Param() is string exchangeCode && 
                 DataRequestReady) // Also please check the RHD is already active?
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHeadTimestamp);
                 DataRequestID = requestId;
-                activeBarTable_HistoricalDataHeadTimestamp = bt;
+                ActiveBarDataFile_HistoricalDataHeadTimestamp = bdf;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -65,7 +104,7 @@ namespace Pacmio.IB
                     "", // c.LocalSymbol, // 12
                     "", // c.TradingClass, // 13
                     includeExpired.Param(),
-                    (bt.BarFreq >= BarFreq.Daily).Param(), // bt.IsRegularTradeHoursOnly.Param(), // useRTH
+                    (bdf.BarFreq >= BarFreq.Daily).Param(), // bt.IsRegularTradeHoursOnly.Param(), // useRTH
                     barTypeCode, // whatToShow
                     formatDate.Param(), // "1"
                 };
@@ -79,6 +118,7 @@ namespace Pacmio.IB
             if (Connected)
             {
                 RemoveRequest(DataRequestID, RequestType.RequestHeadTimestamp);
+                ActiveBarDataFile_HistoricalDataHeadTimestamp = null;
                 DataRequestID = -1; // Emit update cancelled.
             }
         }
@@ -87,21 +127,17 @@ namespace Pacmio.IB
         {
             int requestId = fields[2].ToInt32(-1);
             RemoveRequest(requestId, false);
-            Contract c = activeBarTable_HistoricalDataHeadTimestamp.Contract;
+            Contract c = ActiveBarDataFile_HistoricalDataHeadTimestamp.Contract;
 
             if (fields[3] == "200") 
             {
                 c.Status = ContractStatus.Error;
                 c.UpdateTime = DateTime.Now;
             }
-            
-            /*
-            if (c.MarketData is HistoricalData sd)
-            {
-                sd.BarTableEarliestTime = DateTime.MaxValue;
-            }*/
 
-            Console.WriteLine("Requesting HeadTimestamp errors: " + activeBarTable_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
+            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = DateTime.MaxValue;
+
+            Console.WriteLine("Requesting HeadTimestamp errors: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
             DataRequestID = -1;
         }
 
@@ -116,15 +152,10 @@ namespace Pacmio.IB
             {
                 Console.WriteLine("HistoricalDataEarliestTime = " + fields[2]);
 
-                activeBarTable_HistoricalDataHeadTimestamp.FundamentalData.EarliestTime 
-                    = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
+                ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime
+                    = Util.ParseTime(fields[2], ActiveBarDataFile_HistoricalDataHeadTimestamp.Contract.TimeZone);
 
-                activeBarTable_HistoricalDataHeadTimestamp.FundamentalData.SaveFile();
-                /*
-                if (activeBarTable_HistoricalDataHeadTimestamp.Contract.MarketData is StockData sd)
-                {
-                    sd.BarTableEarliestTime = Util.ParseTime(fields[2], activeBarTable_HistoricalDataHeadTimestamp.Contract.TimeZone);
-                }*/
+                ActiveBarDataFile_HistoricalDataHeadTimestamp.SaveFile();
             }
 
             RemoveRequest(requestId, false);

@@ -88,28 +88,29 @@ namespace Pacmio
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
-        public object DataLockObject { get; } = new object();
+        private object DataLockObject { get; } = new object();
 
         /// <summary>
         /// The Rows Data Storage
         /// The Storage is not directly accessible outside of the class.
         /// </summary>
-        //private List<Bar> Rows { get; } = new List<Bar>();
+        private List<Bar> Rows { get; } = new List<Bar>();
 
-        private Dictionary<DateTime, Bar> Rows { get; } = new Dictionary<DateTime, Bar>();
-
-        //public MultiPeriod<DataSourceType> DataSourceSegments { get; } = new MultiPeriod<DataSourceType>();
-
-        //public FundamentalData FundamentalData { get; }
-
-        #endregion Data
-
-        #region Bars Properties and Methods
+        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
 
         /// <summary>
         /// Returns the number of the Rows in the BarTable.
         /// </summary>
-        public int Count => Rows.Count;
+        public int Count
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return Rows.Count;
+                }
+            }
+        }
 
         /// <summary>
         /// Returns if the BarTable is has no Bars.
@@ -121,269 +122,14 @@ namespace Pacmio
         /// </summary>
         private int LastIndex => Count - 1;
 
-        private void Clear()
-        {
-            lock (DataLockObject)
-            {
-                //TimeToRows.Clear();
-                Rows.Clear();
-                ResetCalculationPointer();
-                //DataSourceSegments.Clear();
-            }
-        }
-
-        /// <summary>
-        /// Lookup Bar by Index. Mostly used in the Chart.
-        /// </summary>
-        /// <param name="i">Index of the Bar in the Rows</param>
-        /// <returns>Bar according to the given index</returns>
-        public Bar this[int i]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    return i >= Count || i < 0 ? null : Rows.Values.ElementAt(i);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
-        /// </summary>
-        /// <param name="time">time of the Bar</param>
-        /// <returns>Bar closest to the given time</returns>
-        public Bar this[DateTime time]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    if (Rows.ContainsKey(time))
-                        return Rows[time];
-                    else
-                        return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get bars of index i and the past length amount bars
-        /// TODO: Fixed sequence
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public List<Bar> this[int i, int count]
-        {
-            get
-            {
-                lock (DataLockObject) 
-                {
-                    int cnt = count - 1;
-                    if (i < cnt) cnt = i;
-                    return Rows.Values.Skip(i - cnt).Take(cnt + 1).ToList();
-                }
-            }
-        }
-
-        public List<Bar> this[Period pd]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    return Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key).Select(n => n.Value).ToList();
-                }
-            }
-        }
-
-        public double this[int i, NumericColumn column] => this[i] is Bar b ? b[column] : double.NaN;
-
-        public TagInfo this[int i, TagColumn column] => this[i] is Bar b ? b[column] : null;
-
-        /// <summary>
-        /// Add single Bar into the BarTable. Will disregard if the Bar with exactly the same time already in the Table. 
-        /// </summary>
-        /// <param name="b"></param>
-        private bool Add(Bar b)
-        {
-            if (b.Table == this && !Contains(b.Time)) // Shall we also rectify the time according to the BarSize property?
-            {
-                Rows.Add(b);
-                if (Count > 0)
-                {
-                    if (b.Time < LastTime) // If bars are added to the head or in the middle of the table
-                        Sort(); // Sort without adjust -- you never know if it needs reverse adjust or forward adjust here.
-                    else           //else // If bars are add to the tail of the table, then we just append
-                        TimeToRows.CheckAdd(b.Time, Count - 1);
-                }
-                else
-                    TimeToRows.CheckAdd(b.Time, 0);
-
-                return true;
-            }
-            else
-                return false;
-        }
-
-        private bool Add(DateTime tickTime, double last, double volume)
-        {
-            bool isModified = false;
-            DateTime time = Frequency.Align(tickTime);
-
-            if (this[time] is Bar b)
-            {
-                if (b.Source >= DataSourceType.IB)
-                {
-                    if (last > b.High) // New High
-                    {
-                        //b.Actual_High = 
-                        b.High = last; // Also update 
-                        isModified = true;
-                    }
-
-                    if (last < b.Low) // New Low
-                    {
-                        //b.Actual_Low = 
-                        b.Low = last;
-                        isModified = true;
-                    }
-
-                    if (tickTime <= b.DataSourcePeriod.Start && tickTime > b.Period.Start) // Eariler Open
-                    {
-                        //b.Actual_Open = 
-                        b.Open = last;
-                        b.DataSourcePeriod.Insert(tickTime);
-                        isModified = true;
-                    }
-
-                    if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
-                    {
-                        //b.Actual_Close = 
-                        b.Close = last;
-                        b.DataSourcePeriod.Insert(tickTime);
-                        isModified = true;
-
-                        Console.WriteLine("]]]]]]]]]]]]]]]]]]]] " + b.DataSourcePeriod + " | " + b.Period);
-                    }
-                    else
-                    {
-                        Console.WriteLine("********** Inbound Tick Time Overflow ***********");
-                    }
-
-                    b.Volume += volume;
-                    //b.Actual_Volume = b.Volume;
-                    b.Source = DataSourceType.Realtime;
-
-                    Console.WriteLine("###### Inbound Tick Here ###### " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent + " | " + b.Period);
-                }
-                else
-                {
-                    Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
-                }
-            }
-            else
-            {
-                if (Count > 0 && this[LastIndex].Source >= DataSourceType.IB)
-                    this[LastIndex].Source = DataSourceType.Realtime;
-
-                isModified = Add(new Bar(this, tickTime, last, volume));
-            }
-
-            return isModified;
-        }
-
-        public bool MergeFromSmallerBar(Bar b)
-        {
-            bool isModified = false;
-
-            if (b.BarFreq < BarFreq)
-            {
-                if (this[Frequency.Align(b.Time)] is Bar nb)
-                {
-                    if (b.High > nb.High) // New High
-                    {
-                        nb.High = b.High;
-                        isModified = true;
-                    }
-
-                    if (b.Low < nb.Low) // New Low
-                    {
-                        nb.Low = b.Low;
-                        isModified = true;
-                    }
-
-                    if (b.Period.Stop <= nb.DataSourcePeriod.Start) // Eariler Open
-                    {
-                        nb.Open = b.Open;
-                        nb.Volume += b.Volume;
-                        nb.DataSourcePeriod.Insert(b.Period.Start);
-                        isModified = true;
-                    }
-
-                    if (b.Period.Start >= nb.DataSourcePeriod.Stop) // Later Close
-                    {
-                        nb.Close = b.Close;
-                        nb.Volume += b.Volume;
-                        nb.DataSourcePeriod.Insert(b.Period.Stop);
-                        isModified = true;
-                    }
-
-                    if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
-                }
-                else
-                {
-                    return Add(new Bar(this, b));
-                }
-            }
-            else if (b.BarFreq == BarFreq && b.Table == this && !Contains(b.Time))
-            {
-                Rows.Add(b);
-
-                if (Count > 0)
-                {
-                    if (b.Time < LastTime) // If bars are added to the head or in the middle of the table
-                        Sort(); // Sort without adjust -- you never know if it needs reverse adjust or forward adjust here.
-                    else           //else // If bars are add to the tail of the table, then we just append
-                        TimeToRows.CheckAdd(b.Time, Count - 1);
-                }
-                else
-                    TimeToRows.CheckAdd(b.Time, 0);
-
-                return true;
-            }
-            return isModified;
-        }
-
-        #endregion Bars Properties and Methods
-
         #region Time
-
-        public bool Remove(Period pd)
-        {
-            var list = this[pd].ToList();
-            bool isMod = list.Count > 0;
-
-            if (isMod)
-            {
-                foreach (Bar b in list)
-                    Rows.Remove(b);
-
-                Sort();
-            }
-
-            return isMod;
-        }
-
-
 
         /// <summary>
         /// Returns if the Rows already has time stamp
         /// </summary>
         public bool Contains(DateTime time) //=> Rows.Where(n => n.Time == time).Count() > 0;
         {
-            lock (TimeToRows)
+            lock (DataLockObject)
             {
                 return TimeToRows.ContainsKey(time);
             }
@@ -397,7 +143,7 @@ namespace Pacmio
             get
             {
                 if (Count > 0)
-                    return Rows[0].Time;
+                    return this[0].Time;
                 else
                     return DateTime.Now;
             }
@@ -411,7 +157,7 @@ namespace Pacmio
             get
             {
                 if (Count > 0)
-                    return Rows[LastIndex].Time;
+                    return TimeToRows.Last().Key;
                 else
                     return DateTime.MinValue.AddYears(500);
             }
@@ -436,7 +182,6 @@ namespace Pacmio
             }
         }
 
-
         /// <summary>
         /// Last Most time including the Bar Period
         /// </summary>
@@ -445,7 +190,7 @@ namespace Pacmio
             get
             {
                 if (Count > 0)
-                    return Rows[LastIndex].Period.Stop; //// Shall we use 
+                    return Rows.Last().Period.Stop; //// Shall we use 
                 else
                     return DateTime.MinValue.AddYears(500);
             }
@@ -459,7 +204,7 @@ namespace Pacmio
         public DateTime LastTimeBy(DataSourceType source)
         {
             var res = Rows.Where(n => n.Source <= source).OrderBy(n => n.Time);
-            return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue.AddYears(500);
+            return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue;
         }
 
         public DateTime IndexToTime(int i)
@@ -485,63 +230,240 @@ namespace Pacmio
         /// <returns>Index of the nearest time</returns>
         public int IndexOf(ref DateTime time)
         {
-            if (Count == 0)
+            if (Count > 0)
             {
-                return -1;
-            }
+                DateTime t = time;
 
-            DateTime t = time;
-
-            if (TimeToRows.ContainsKey(t))
-            {
-                return TimeToRows[t];
-            }
-            else if (time <= FirstTime)
-            {
-                time = FirstTime;
-                return 0;
-            }
-            else if (time >= LastTime)
-            {
-                time = LastTime;
-                return LastIndex;
-            }
-            else
-            {
-                int pt = 0;
-                for (int i = 0; i < Count; i++)
+                if (TimeToRows.ContainsKey(t))
                 {
-                    if (time <= Rows[i].Time)
-                    {
-                        pt = i;
-                        break;
-                    }
+                    return TimeToRows[t];
                 }
-
-                if (pt < 0) pt = 0;
-                else if (pt >= Count) pt = LastIndex;
-
-                time = Rows[pt].Time;
-
-                return pt;
+                else if (time <= FirstTime)
+                {
+                    time = FirstTime;
+                    return 0;
+                }
+                else if (time >= LastTime)
+                {
+                    time = LastTime;
+                    return LastIndex;
+                }
+                else if (Rows.Where(n => n.Period.Contains(t)).FirstOrDefault() is Bar b)
+                {
+                    time = b.Time;
+                    return b.Index;
+                }
             }
-        }
 
-        public Bar GetOrAdd(DateTime time)
-        {
-            time = Frequency.Align(time, 0); // Align time
-
-            if (!Contains(time))
-                Add(new Bar(this, time));
-
-            return this[time];
+            return -1;
         }
 
         #endregion Time
 
+        #endregion Data
 
+        #region Load Bars
 
-        #region Basic Data
+        public void Clear()
+        {
+            Status = TableStatus.Default;
+
+            lock (DataLockObject)
+            {
+                TimeToRows.Clear();
+                Rows.Clear();
+                ResetCalculationPointer();
+            }
+        }
+
+        public void LoadBars(List<Bar> bars)
+        {
+            if (this != bars.FirstOrDefault().Table)
+                throw new Exception("bar's table has to match with this table!");
+
+            Status = TableStatus.Default;
+
+            lock (DataLockObject)
+            {
+                TimeToRows.Clear();
+                Rows.Clear();
+                ResetCalculationPointer();
+
+                for (int i = 0; i < bars.Count; i++)
+                {
+                    Bar b = bars[i];
+                    b.Index = i;
+                    Rows.Add(b);
+                    TimeToRows.Add(b.Time, i);
+                }
+            }
+        }
+
+        public void LoadBars(Period pd)
+        {
+            this.GetOrCreateBarDataFile().LoadBars(this, pd);
+        }
+
+        public void LoadBars()
+        {
+            this.GetOrCreateBarDataFile().LoadBars(this);
+        }
+
+        #endregion Load Bars
+
+        #region Access Bars
+
+        /// <summary>
+        /// Lookup Bar by Index. Mostly used in the Chart.
+        /// </summary>
+        /// <param name="i">Index of the Bar in the Rows</param>
+        /// <returns>Bar according to the given index</returns>
+        public Bar this[int i]
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return i >= Count || i < 0 ? null : Rows[i];
+                }
+            }
+        }
+
+        /// <summary>
+        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
+        /// </summary>
+        /// <param name="time">time of the Bar</param>
+        /// <returns>Bar closest to the given time</returns>
+        public Bar this[DateTime time]
+        {
+            get
+            {
+                time = Frequency.Align(time);
+                lock (DataLockObject)
+                {
+                    if (TimeToRows.ContainsKey(time))
+                        return Rows[TimeToRows[time]];
+                    else
+                        return null; // Rows.Where(n => n.Period.Contains(time)).FirstOrDefault();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start">Start and included index</param>
+        /// <param name="stop">End and not included index</param>
+        /// <returns></returns>
+        public List<Bar> this[int start, int stop]
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    if (stop > Count) stop = Count;
+                    int cnt = stop - start;
+
+                    if (cnt > 0)
+                    {
+                        return Rows.Skip(start).Take(cnt).ToList();
+                    }
+                    return
+                        null;
+                }
+            }
+        }
+
+        public List<Bar> this[Period pd]
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time).ToList();
+                }
+            }
+        }
+
+        public double this[int i, NumericColumn column] => this[i] is Bar b ? b[column] : double.NaN;
+
+        public TagInfo this[int i, TagColumn column] => this[i] is Bar b ? b[column] : null;
+
+        #endregion Access Bars
+
+        #region Add Ticks
+
+        public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
+        {
+            DateTime time = Frequency.Align(tickTime);
+
+            lock (DataLockObject)
+            {
+                if (this[time] is Bar b)
+                {
+                    if (b.Source >= minimumSource)
+                    {
+                        if (last > b.High) // New High
+                        {
+                            b.High = last; // Also update 
+                        }
+
+                        if (last < b.Low) // New Low
+                        {
+                            b.Low = last;
+                        }
+
+                        if (tickTime <= b.DataSourcePeriod.Start && tickTime >= b.Period.Start) // Eariler Open
+                        {
+                            b.Open = last;
+                            b.DataSourcePeriod.Insert(tickTime);
+                        }
+
+                        if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
+                        {
+                            b.Close = last;
+                            b.DataSourcePeriod.Insert(tickTime);
+                            Console.WriteLine("Added inbound tick[ " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + ", IsCurrent = " + b.DataSourcePeriod.IsCurrent + " | " + b.Period + "] to existing bar: " + b.DataSourcePeriod + " | " + b.Period);
+                        }
+                        else
+                        {
+                            Console.WriteLine("********** Inbound Tick Time Overflow ***********");
+                        }
+
+                        b.Volume += volume;
+                        b.Source = DataSourceType.Realtime;
+                    }
+                    else
+                    {
+                        Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
+                    }
+                }
+                else
+                {
+                    if (Count > 0 && this[LastIndex] is Bar lb && lb.Source >= DataSourceType.IB)
+                    {
+                        lb.Source = DataSourceType.Realtime;
+                    }
+                    Bar nb = new Bar(this, tickTime, last, volume);
+                    nb.Index = Count;
+                    Rows.Add(nb);
+                    TimeToRows.Add(nb.Time, nb.Index);
+                }
+            }
+
+            if (Status == TableStatus.Ready)
+            {
+                Status = TableStatus.Ticking;
+                SetCalculationPointer(LastCalculateIndex - 1);
+                CalculateTickRequested = true;
+            }
+        }
+
+        #endregion Add Ticks
+
+        #region Data/Bar Analysis (TA) Calculation
+
+        #region Basic Analysis
 
         public static GainAnalysis GainAnalysis { get; } = new GainAnalysis(); // { ChartEnabled = false };
 
@@ -551,41 +473,9 @@ namespace Pacmio
 
         public static PivotPointAnalysis PivotPointAnalysis { get; } = new PivotPointAnalysis(); // { ChartEnabled = false };
 
-        //public static PivotRanges CalculatePivotRange { get; } = new PivotRanges();
-
-        #endregion Basic Data
-
-        #region Data/Bar Analysis (TA) Calculation
+        #endregion Basic Analysis
 
         private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new Dictionary<BarAnalysis, BarAnalysisPointer>();
-
-        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
-        {
-            if (!BarAnalysisPointerList.ContainsKey(ba))
-                BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
-
-            return BarAnalysisPointerList[ba];
-        }
-
-        private void ResetCalculationPointer() => SetCalculationPointer(0);
-
-        private void SetCalculationPointer(int pt)
-        {
-            if (pt < 0)
-                pt = 0;
-
-            foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
-                if (bap.StartPt > pt)
-                    bap.StartPt = pt;
-        }
-
-        /*
-        public void SetCalculationPointer(ref DateTime time)
-        {
-            int pt = IndexOf(ref time) - 1;
-            if (pt < 0) pt = 0;
-            SetCalculationPointer(pt);
-        }*/
 
         public int LastCalculateIndex { get; private set; } = -1;
 
@@ -597,26 +487,46 @@ namespace Pacmio
         /// <summary>
         /// Returns the Last Bar in the Table. Null is the BarTable is empty.
         /// </summary>
-        public Bar LastBar
+        public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
+
+        public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
+
+        private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
-            get
+            lock (BarAnalysisPointerList)
             {
-                if (LastCalculateIndex < 0)
-                    return null;
-                else
-                    return this[LastCalculateIndex];
+                if (!BarAnalysisPointerList.ContainsKey(ba))
+                    BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
+
+                return BarAnalysisPointerList[ba];
             }
         }
 
-        public Bar LastBar_1
+        private void ResetCalculationPointer()
         {
-            get
+            lock (BarAnalysisPointerList)
             {
-                if (LastCalculateIndex < 1)
-                    return null;
-                else
-                    return this[LastCalculateIndex - 1];
+                BarAnalysisPointerList.Clear();
             }
+        }
+
+        private void SetCalculationPointer(int pt)
+        {
+            if (pt < 0)
+                pt = 0;
+
+            lock (BarAnalysisPointerList)
+            {
+                foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
+                    if (bap.StartPt > pt)
+                        bap.StartPt = pt;
+            }
+        }
+
+        public void SetCalculationPointer(ref DateTime time)
+        {
+            int pt = IndexOf(ref time) - 1;
+            SetCalculationPointer(pt);
         }
 
         private BarAnalysisPointer Calculate(BarAnalysis ba)
@@ -675,20 +585,69 @@ namespace Pacmio
             }
         }
 
+        private Task CalculateTickTask { get; }
+
+        private CancellationTokenSource CalculateTickCancelTs { get; }
+
+        private bool CalculateTickRequested { get; set; } = false;
+
+        private void CalculateTickWorker()
+        {
+            while (CalculateTickCancelTs is CancellationTokenSource cts && !cts.IsCancellationRequested)
+            {
+                if (CalculateTickRequested)
+                {
+                    CalculateTickRequested = false;
+
+                    lock (DataLockObject)
+                    {
+                        Calculate(BarAnalysisPointerList.Keys);
+                        Status = TableStatus.TickingFinished;
+                    }
+
+                    Status = TableStatus.Ready;
+                }
+                else
+                    Thread.Sleep(1);
+            }
+        }
+
+        public void ResetCalculateData()
+        {
+            CalculateTickRequested = false;
+
+            lock (DataLockObject)
+            {
+                while (Status != TableStatus.Ready && Status != TableStatus.LoadFinished) ;
+
+                TableStatus last_status = Status;
+                Status = TableStatus.Maintaining;
+                ResetCalculationPointer();
+                Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
+                Status = last_status;
+            }
+        }
+
+        public void CalculateRefresh(BarAnalysisSet bas)
+        {
+            if (Enabled && Count > 0 && bas is BarAnalysisSet)
+                lock (DataLockObject)
+                {
+                    Status = TableStatus.Calculating;
+                    Calculate(bas);
+                    lock (DataConsumers)
+                    {
+                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
+                    }
+                    m_Status = TableStatus.Ready;
+                }
+        }
+
+
+
         #endregion Data/Bar Analysis (TA) Calculation
 
-        #region Pattern
-
-        /// <summary>
-        /// Intermediate Storage for Patterns
-        /// Yes, all has to be gone when the Bars Are sorted....
-        /// TODO: This part can go back to the Bars!!! By linq
-        /// </summary>
-        //public Dictionary<int, PatternDatum> Patterns { get; } = new Dictionary<int, PatternDatum>();
-
-        #endregion Pattern
-
-        #region BarChart / DataView
+        #region Data Consumers
 
         private List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
 
@@ -708,12 +667,6 @@ namespace Pacmio
         {
             UpdateTime = DateTime.Now;
         }
-
-        #endregion BarChart / DataView
-
-        #region Operations
-
-
 
         public bool IsLive
         {
@@ -764,604 +717,7 @@ namespace Pacmio
 
         private TableStatus m_Status = TableStatus.Default;
 
-        //public void Load() => Load(Period.Full);
-
-        public void Load(Period period)
-        {
-            if (Enabled)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Loading;
-                    IsLive = period.IsCurrent;
-                    SyncFile(period);
-                    Sort();
-                    Adjust(); // Forward Adjust
-
-                    Status = TableStatus.LoadFinished;
-                    // lead it to calculation... here
-                }
-        }
-
-        public void CalculateOnly(BarAnalysisSet bas)
-        {
-            if (Enabled && Count > 0 && bas is BarAnalysisSet)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Calculating;
-                    Calculate(bas);
-                }
-        }
-        /*
-        public void CalculateFinish(BarAnalysisSet bas)
-        {
-            if (Enabled && Count > 0 && bas is BarAnalysisSet)
-                lock (DataLockObject)
-                {
-                    if (Status == TableStatus.Calculating)
-                    {
-                        lock (DataConsumers)
-                        {
-                            DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
-                        }
-                        m_Status = TableStatus.Ready;
-                    }
-                }
-        }*/
-
-        public void CalculateRefresh(BarAnalysisSet bas)
-        {
-            if (Enabled && Count > 0 && bas is BarAnalysisSet)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Calculating;
-                    Calculate(bas);
-                    lock (DataConsumers)
-                    {
-                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
-                    }
-                    m_Status = TableStatus.Ready;
-                }
-        }
-
-        private bool CalculateTickRequested { get; set; } = false;
-
-        public void AddPriceTick(DateTime tickTime, double last, double volume)
-        {
-            if (Enabled && IsLive)
-            {
-
-                //lock (DataLockObject) 
-                Add(tickTime, last, volume);
-
-                if (Status == TableStatus.Ready)
-                {
-                    Status = TableStatus.Ticking;
-                    SetCalculationPointer(LastCalculateIndex - 1);
-                    CalculateTickRequested = true;
-                }
-            }
-        }
-
-        private Task CalculateTickTask { get; }
-
-        private CancellationTokenSource CalculateTickCancelTs { get; }
-
-        private void CalculateTickWorker()
-        {
-            while (CalculateTickCancelTs is CancellationTokenSource cts && !cts.IsCancellationRequested)
-            {
-                if (CalculateTickRequested)
-                {
-                    CalculateTickRequested = false;
-
-                    lock (DataLockObject)
-                    {
-                        Calculate(BarAnalysisPointerList.Keys);
-                        Status = TableStatus.TickingFinished;
-                    }
-
-                    Status = TableStatus.Ready;
-                }
-                else
-                    Thread.Sleep(1);
-            }
-        }
-
-        public void ResetCalculateData()
-        {
-            lock (DataLockObject)
-            {
-                while (Status != TableStatus.Ready && Status != TableStatus.LoadFinished) ;
-
-                TableStatus last_status = Status;
-                Status = TableStatus.Maintaining;
-                //ResetCalculationPointer();
-                // Remove any non-existing analysis
-                //var non_existing_list = BarAnalysisPointerList.Keys.Where(n => !analyses.Contains(n)).ToList();
-                //non_existing_list.ForEach(n => BarAnalysisPointerList.Remove(n));
-
-                BarAnalysisPointerList.Clear();
-                Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
-                Status = last_status;
-            }
-        }
-
-        public void Save()
-        {
-            lock (DataLockObject)
-            {
-                TableStatus last_status = Status;
-                Status = TableStatus.Saving;
-                SaveFile();
-                Status = last_status;
-            }
-        }
-
-        public void Fetch(Period period, CancellationTokenSource cts)
-        {
-            if (cts.Continue() && Enabled)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Downloading;
-
-                    IsLive = period.IsCurrent;
-                    //if (IsLive) Contract.Request_MarketTicks();
-                    if (IsLive) Contract.MarketData.Start();
-
-                    ResetCalculationPointer();
-                    SyncFile(period);
-                    Sort();
-                    Adjust();
-
-                    if (BarFreq == BarFreq.Daily)
-                    {
-                        Fetch_Daily(this, period, cts);
-                        SaveFile();
-                    }
-                    else if (BarFreq > BarFreq.Daily)
-                    {
-                        Period download_time_period = new Period(Frequency.Align(period.Start, -1), Frequency.Align(period.Stop, 1));
-
-                        using BarTable referenceTable = new BarTable(Contract, BarFreq.Daily, Type);
-                        referenceTable.Load(download_time_period); // Then add the Bar to the Data Object
-                        Fetch_Daily(referenceTable, download_time_period, cts); // sorted, adjusted, and saved as well // Forward Adjust, Getting the adjusted OHLC from Actual OHLC
-                                                                                // Fetch_Daily will sort the reference table
-
-                        download_time_period = new Period(Frequency.Align(LastTime, -1), Frequency.Align(referenceTable.LastTimeBound, 1));
-                        Remove(download_time_period); // Remove the updating period from this table, becuase it is obsolete!! Remove the tail end
-
-                        //ReferenceTable[download_time_period].AsParallel().ForAll(b => MergeFromSmallerBar(b));
-                        referenceTable[download_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                        AddDataSourceSegment(download_time_period, DataSourceType.Consolidated); // update the period segment
-
-                        referenceTable.Save(); // Blocking the process and save...
-
-                        Sort();
-                        Adjust(false);
-
-                        SaveFile();
-                    }
-                    else if (BarFreq > BarFreq.Minute && BarFreq < BarFreq.Daily) // TODO: TEST intraday BarFreq from 1 minute bars
-                    {
-                        MultiPeriod missing_period_list = new MultiPeriod(period);
-                        foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= DataSourceType.IB))
-                        {
-                            missing_period_list.Remove(existingPd);
-                            Console.WriteLine(MethodBase.GetCurrentMethod().Name + "(BarFreq > BarFreq.Minute || BarFreq < BarFreq.Daily) | Already Existing: " + existingPd);
-                        }
-
-                        // Now get the missing periods from reference table
-                        foreach (Period missing_period in missing_period_list)
-                        {
-                            Period transfer_reference_time_period = new Period(Frequency.Align(missing_period.Start, -1), Frequency.Align(missing_period.Stop, 1));
-
-                            using BarTable referenceTable = new BarTable(Contract, BarFreq.Minute, Type);
-                            referenceTable.Load(transfer_reference_time_period); // Then add the Bar to the Data Object
-                            referenceTable.Sort();
-
-                            if (referenceTable.Count > 0)
-                            {
-                                // Remove bar yielding partial result!!
-                                DateTime first_valid_time_in_reference_table = Frequency.Align(referenceTable.FirstTime, 1);
-                                DateTime last_valid_time_in_reference_table = Frequency.Align(referenceTable.LastTime, -1);
-
-                                if (last_valid_time_in_reference_table > first_valid_time_in_reference_table)
-                                {
-                                    transfer_reference_time_period = new Period(first_valid_time_in_reference_table, last_valid_time_in_reference_table);
-                                    Remove(transfer_reference_time_period); // Remove the updating period from this table, becuase it is obsolete!! Remove the tail end
-                                    referenceTable[transfer_reference_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                                    AddDataSourceSegment(transfer_reference_time_period, DataSourceType.Consolidated);
-                                }
-                            }
-                        }
-
-                        if (missing_period_list.Count() > 0)
-                        {
-                            Sort();
-                            Adjust(false);
-                        }
-
-                        // Use IB to download the rest
-                        Fetch_IB(this, period, cts);
-                        Sort();
-                        Adjust(false);
-                        SaveFile();
-                    }
-                    else if (BarFreq <= BarFreq.Minute)
-                    {
-                        Fetch_IB(this, period, cts);
-                        Sort();
-                        Adjust(false);
-                        SaveFile();
-                    }
-
-                    Status = TableStatus.LoadFinished;
-                }
-        }
-
-        #endregion Operations
-
-        #region Download / Fetch Operation
-
-        private static bool Fetch_Daily(BarTable bt, Period period, CancellationTokenSource cts)
-        {
-            // The table is loaded but not sorted, with only Actual Values
-            // Do not sort the table, becasuse it is going to be refreshed by quandl with only actual values later.
-
-            bool success = false;
-
-            DateTime quandlTime = bt.LastTimeBy(DataSourceType.Quandl); //period.Start;
-
-            //if (quandlTime < bt.LastTimeBy(DataSource.Quandl)) quandlTime = bt.LastTimeBy(DataSource.Quandl);
-
-            if (period.Stop > quandlTime) // The requested time is later than the Quandl time
-            {
-                bool quandl_is_available = bt.Contract.Country == "US" && bt.BarFreq == BarFreq.Daily && bt.Type == BarType.Trades && bt.Contract is Stock;
-
-                DateTime now = DateTime.Now.Date;
-                while (!bt.Contract.WorkHours.IsWorkDate(now)) now = now.AddDays(-1);
-                Period download_time_period = new Period(quandlTime, now); // Get the missing part
-
-                if (quandl_is_available && (now - quandlTime).TotalHours >= 24) // After 4:00 PM the next day.
-                {
-                    // If Quandl fails, please still try IB
-                    success = quandl_is_available = Quandl.Download(bt, download_time_period);
-                }
-                else
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl: We already have the latest data, no need to download.");
-
-                if (success)
-                {
-                    bt.Save();
-                }
-
-                if (period.Start > quandlTime)
-                    bt.Remove(new Period(DateTime.MinValue, period.Start.AddDays(-1))); // Trim away extra downloaded bars
-
-                bt.Sort();
-                bt.Adjust(); // With all the quandl bars loaded (or not... we still have bars loaded from the file system), we can do Sort and Forward Adjust now.
-
-                // Load IB Daily if Quandle fails
-                if (!quandl_is_available && IB.Client.Connected)
-                {
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl is not available, try getting the Daily Bars from IB!");
-                    Fetch_IB(bt, period, cts);
-                    bt.Sort();
-                    bt.Adjust(false);
-                }
-            }
-            else
-            {
-                bt.Sort();
-                bt.Adjust();
-            }
-
-            return success;
-
-            // The table is downloaded with new candles, sorted and adjusted, but not calculated
-            // The problem of calculate is because of the candle stick takes a long time!
-        }
-
-        /// <summary>
-        /// If a request requires more than several minutes to return data, it would be best to cancel the request using the IBApi.EClient.cancelHistoricalData function.
-        /// </summary>
-        /// <param name="bt"></param>
-        /// <param name="period"></param>
-        /// <returns></returns>
-        private static void Fetch_IB(BarTable bt, Period period, CancellationTokenSource cts)
-        {
-            if (bt.Contract.Status != ContractStatus.Error)
-            {
-                if (bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && IB.Client.Connected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
-                {
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request: " + period);
-
-                    DateTime upToDate = bt.Contract.CurrentTime.AddMinutes(30);
-                    //if (period.IsCurrent) period = new Period(period.Start, DateTime.Now.AddDays(1));
-                    if (period.IsCurrent) period = new Period(period.Start, upToDate);
-
-                    MultiPeriod missing_period_list = new MultiPeriod(period);
-
-                    foreach (Period existingPd in bt.DataSourceSegments.Keys.Where(n => bt.DataSourceSegments[n] <= DataSourceType.IB))
-                    {
-                        missing_period_list.Remove(existingPd);
-                        Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Already Existing: " + existingPd);
-                    }
-
-                    //If EarliestTime is unset, then request it here.
-                    if (bt.EarliestTime == DateTime.MaxValue)
-                    {
-                        if (cts.Cancelled()) goto End;
-
-                        IB.Client.Fetch_HistoricalDataHeadTimestamp(bt, cts);
-                    }
-
-                    // https://interactivebrokers.github.io/tws-api/historical_limitations.html
-                    DateTime earliestTime = (bt.BarFreq < BarFreq.Minute) ? DateTime.Now.AddMonths(-6) : bt.EarliestTime;
-
-                    if (bt.Contract.Status != ContractStatus.Error && earliestTime < DateTime.Now)
-                    {
-                        List<Period> api_request_pd_list = new List<Period>();
-
-                        foreach (Period missing_period in missing_period_list)
-                        {
-                            if (cts.Cancelled()) goto End;
-
-                            Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
-
-                            DateTime endTimeBound = DateTime.Now.AddDays(1);
-
-                            if (missing_period.Start < earliestTime)
-                                if (missing_period.Stop > earliestTime)
-                                    missing_period.SetStart(earliestTime); // Get Head time please, and reduce the period to limit
-                                else
-                                    continue;
-                            else if (missing_period.Stop > endTimeBound)
-                                if (missing_period.Start < endTimeBound)
-                                    missing_period.SetStop(endTimeBound);
-                                else
-                                    continue;
-
-                            api_request_pd_list.AddRange(missing_period.Split(bfi.Duration));
-                        }
-
-                        foreach (Period api_request_pd in api_request_pd_list.OrderBy(n => n.Start))
-                        {
-                            if (cts.Cancelled())
-                                goto End;
-                            else
-                                Thread.Sleep(2000);
-
-                            Console.WriteLine("\n" + MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_pd);
-                            IB.Client.Fetch_HistoricalData(bt, api_request_pd, cts);
-                        }
-                    }
-                }
-            }
-
-            End:
-            return;
-        }
-
-        public static void Download(IEnumerable<Contract> contracts, IEnumerable<(BarFreq freq, BarType type, Period period)> settings, CancellationTokenSource cts, IProgress<float> progress)
-        {
-            List<(BarFreq freq, BarType type, Period period)> settings_list = new List<(BarFreq freq, BarType type, Period period)>() { (BarFreq.Daily, BarType.Trades, new Period(new DateTime(1000, 1, 1), DateTime.Now)) };
-
-            var priority_settings = settings.Where(n => n.type == BarType.Trades && (n.freq == BarFreq.Hourly || n.freq == BarFreq.Minute)).OrderByDescending(n => n.freq);
-            settings_list.AddRange(priority_settings);
-
-            var remaining_settings = settings.Where(n => !priority_settings.Contains(n) && !(n.freq == BarFreq.Daily && n.type == BarType.Trades)).OrderByDescending(n => n.freq);
-            settings_list.AddRange(remaining_settings);
-
-            ParallelOptions po = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = Math.Ceiling(Root.DegreeOfParallelism / 3D).ToInt32(1)
-            };
-
-            int i = 0, count = contracts.Count() * settings_list.Count();
-            Parallel.ForEach(contracts, po, c =>
-            {
-                if (cts.Continue())
-                {
-                    foreach (var (freq, type, period) in settings_list)
-                    {
-                        if (cts.Continue())
-                        {
-                            BarTable bt = new BarTable(c, freq, type);
-                            bt.Fetch(period, cts);
-                            i++;
-                            if (cts.Continue()) progress?.Report(100.0f * i / count);
-                        }
-                        else
-                            return;
-                    }
-                }
-                else
-                    return;
-            });
-        }
-
-        #endregion Download / Fetch Operation
-
-        #region File Operation
-
-        //public DateTime EarliestTime => (Contract.MarketData is StockData sd) ? sd.BarTableEarliestTime : DateTime.MinValue;
-
-        public DateTime EarliestTime => FundamentalData.EarliestTime;
-
-        public DateTime LastDownloadRequestTime { get; set; } = DateTime.MinValue;
-
-        #region Sort / Intrinsic Data Prepare before Technical Analysis
-
-
-
-        #endregion Sort / Intrinsic Data Prepare before Technical Analysis
-
-        public void AddDataSourceSegment(Period pd, DataSourceType source)
-        {
-            DataSourceSegments.Add(pd, source);
-        }
-
-        public DateTime GetDataSourceStartTime(DateTime endTime, DataSourceType source)
-        {
-            var res = DataSourceSegments.Where(n => n.Value <= source && n.Key.Contains(endTime));
-            if (res.Count() > 0) return res.Last().Key.Start;
-            else return endTime;
-        }
-
-        //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
-        //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-        //private BarDataFile BarTableFileData => BarDataFile.LoadFile(this) is BarDataFile btd && btd == this ? btd : new BarDataFile(this);
-
-        public void LoadFile() => LoadFile(Period.Full);
-
-        public void LoadFile(Period pd, bool adjustDividend = false) 
-        {
-            BarDataFile bdf = this.GetOrCreateBarDataFile();
-            var sortedList = bdf.GetRows(pd, adjustDividend);
-
-
-
-        }
-
-        
-
-        private void Sort()
-        {
-            TimeToRows.Clear();
-            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
-            for (int i = 0; i < Count; i++)
-            {
-                Bar b = Rows[i];
-                TimeToRows[b.Time] = i;
-                b.Index = i;
-            }
-            //ResetCalculationPointer();
-            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
-        }
-
-        private void LoadFile(BarDataFile btd, Period pd)
-        {
-            ResetCalculationPointer();
-            TimeToRows.Clear();
-            Rows.Clear();
-
-            var bars = btd.Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
-            Range<DateTime> Invalid_Period = null;
-
-            foreach (var pb in bars)
-            {
-                if (pb.Value.O < 0 || pb.Value.H < 0 || pb.Value.L < 0 || pb.Value.C < 0 || pb.Value.V < 0)
-                {
-                    if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(pb.Key, Frequency.Align(pb.Key, 0));
-                    else
-                    {
-                        Invalid_Period.Insert(pb.Key);
-                        Invalid_Period.Insert(Frequency.Align(pb.Key, 0));
-                    }
-                }
-                else
-                {
-                    if (pb.Value.SRC < DataSourceType.Tick)
-                    {
-                        Bar b = GetOrAdd(pb.Key);
-                        b.Source = pb.Value.SRC;
-                        b.Actual_Open = pb.Value.O;
-                        b.Actual_High = pb.Value.H;
-                        b.Actual_Low = pb.Value.L;
-                        b.Actual_Close = pb.Value.C;
-                        b.Actual_Volume = pb.Value.V;
-                    }
-                }
-            }
-
-            if (Invalid_Period is Range<DateTime> rgt)
-            {
-                btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
-                btd.Rows.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Rows.Remove(n.Key));
-
-                btd.SaveFile();
-                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            }
-
-            DataSourceSegments.Clear();
-            DataSourceSegments.Merge(btd.DataSourceSegments);
-        }
-
-        private void SaveFile()
-        {
-            using BarDataFile btd = BarTableFileData;
-            SaveFile(btd);
-        }
-
-        private void SaveFile(BarDataFile btd)
-        {
-            if (Count > 0)
-            {
-                Range<DateTime> Invalid_Period = null;
-
-                lock (Rows)
-                    foreach (var b in Rows.Where(n => n.Source < DataSourceType.Tick))
-                    {
-                        if (b.Actual_Open < 0 || b.Actual_High < 0 || b.Actual_Low < 0 || b.Actual_Close < 0 || b.Actual_Volume < 0)
-                        {
-                            if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(b.Period.Start, b.Period.Stop);
-                            else
-                            {
-                                Invalid_Period.Insert(b.Period.Start);
-                                Invalid_Period.Insert(b.Period.Stop);
-                            }
-                        }
-                        else if (!btd.Rows.ContainsKey(b.Time) || b.Source < btd.Rows[b.Time].SRC)
-                            btd.Rows[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
-                    }
-
-                btd.DataSourceSegments.Merge(DataSourceSegments);
-                if (Invalid_Period is Range<DateTime> rgt) btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
-
-                if (btd.EarliestTime < EarliestTime)
-                    btd.EarliestTime = EarliestTime;
-
-                if (btd.LastUpdateTime < LastDownloadRequestTime)
-                    btd.LastUpdateTime = LastDownloadRequestTime;
-
-                btd.SaveFile();
-                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            }
-        }
-
-        public void SyncFile(Period pd)
-        {
-            using BarDataFile btd = BarTableFileData;
-            SaveFile(btd);
-            LoadFile(btd, pd);
-        }
-
-        public void ClearFile(Period pd)
-        {
-            using BarDataFile btd = BarTableFileData;
-            btd.DataSourceSegments.Remove(pd);
-            var to_remove_list = btd.Rows.Where(n => pd.Contains(n.Key)).ToList();
-            to_remove_list.ForEach(n => btd.Rows.Remove(n.Key));
-
-            btd.SaveFile();
-            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-
-            Clear();
-
-        }
-
-        public void ClearFile()
-        {
-            using BarDataFile btd = BarTableFileData;
-            btd.DataSourceSegments.Clear();
-            btd.Rows.Clear();
-            btd.SaveFile();
-            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            Clear();
-        }
-
-        #endregion File Operation
+        #endregion Data Consumers
 
         #region Equality
 
@@ -1374,13 +730,13 @@ namespace Pacmio
         public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
 
+        /// <summary>
+        /// https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public override bool Equals(object other)
         {
-            /*
-            if (this is null || other is null) // https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
-                return false;
-            else */
-            
             if (other is BarTable bt)
                 return Equals(bt);
             else if (other.GetType() == typeof((Contract, BarFreq, BarType)))

@@ -21,7 +21,7 @@ namespace Pacmio.IB
         {
             lock (DataRequestLockObject)
             {
-                if (cts.Continue() && DataRequestReady)
+                if (cts.IsContinue() && DataRequestReady)
                 {
                     if (cts.Cancelled() || IsCancelled) return;
 

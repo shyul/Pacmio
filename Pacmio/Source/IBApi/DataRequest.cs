@@ -128,7 +128,7 @@ namespace Pacmio.IB
         {
             lock (DataRequestLockObject)
             {
-                if (cts.Continue() && DataRequestReady)
+                if (cts.IsContinue() && DataRequestReady)
                 {
 
                     StartDownload:
@@ -165,7 +165,7 @@ namespace Pacmio.IB
         {
             lock (DataRequestLockObject)
             {
-                if (cts.Continue() && DataRequestReady)
+                if (cts.IsContinue() && DataRequestReady)
                 {
 
                     StartDownload:

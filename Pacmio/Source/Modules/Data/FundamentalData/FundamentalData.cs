@@ -29,8 +29,8 @@ namespace Pacmio
         [IgnoreDataMember]
         public Contract Contract => ContractManager.GetByKey(ContractKey);
 
-        [DataMember]
-        public DateTime EarliestTime { get; set; } = DateTime.MinValue;
+        //[DataMember]
+        //public DateTime HistoricalStartTime { get; set; } = DateTime.MinValue;
 
         [DataMember]
         private Dictionary<(string, DateTime), FundamentalDatum> DataLUT { get; set; } = new Dictionary<(string, DateTime), FundamentalDatum>();

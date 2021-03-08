@@ -88,7 +88,7 @@ namespace Pacmio
         {
             BarTable bt = AddContract(c, barFreq, barType);
             AddChart(bt, ias);
-            if (cts.Continue())
+            if (cts.IsContinue())
             {
                 if (bt.Status == TableStatus.Default || bt.Count == 0 || period != bt.Period)
                 {
@@ -123,7 +123,7 @@ namespace Pacmio
 
         public List<BarTable> AddContract(IEnumerable<Contract> contracts, BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
-            if (cts.Continue())
+            if (cts.IsContinue())
             {
                 List<BarTable> add_tables = AddContract(contracts, barFreq, barType);
                 UpdatePeriod(barFreq, barType, period, cts, progress);
@@ -146,12 +146,12 @@ namespace Pacmio
             int i = 0, count = contracts.Count();
             Parallel.ForEach(contracts, po, n =>
             {
-                if (cts.Continue())
+                if (cts.IsContinue())
                 {
                     var (c, ias) = n;
                     AddChart(c, ias, barFreq, barType, ref period, cts);
                     i++;
-                    if (cts.Continue()) progress?.Report(100.0f * i / count);
+                    if (cts.IsContinue()) progress?.Report(100.0f * i / count);
                 }
             });
         }
@@ -167,11 +167,11 @@ namespace Pacmio
             int i = 0, count = BarTables.Count();
             Parallel.ForEach(BarTables, po, bt =>
             {
-                if (cts.Continue())
+                if (cts.IsContinue())
                 {
                     bt.CalculateRefresh(bas);
                     i++;
-                    if (cts.Continue()) progress?.Report(100.0f * i / count);
+                    if (cts.IsContinue()) progress?.Report(100.0f * i / count);
                 }
             });
         }
@@ -199,7 +199,7 @@ namespace Pacmio
         public void UpdatePeriod(BarFreq barFreq, BarType barType, Period period, CancellationTokenSource cts, IProgress<float> progress)
         {
             progress?.Report(0);
-            if (cts.Continue())
+            if (cts.IsContinue())
                 lock (BarTables)
                 {
                     PeriodSettings[(barFreq, barType)] = period;
@@ -214,11 +214,11 @@ namespace Pacmio
                     int i = 0, count = tables.Count();
                     Parallel.ForEach(tables, po, n =>
                     {
-                        if (cts.Continue())
+                        if (cts.IsContinue())
                         {
                             n.Fetch(period, cts);
                             i++;
-                            if (cts.Continue()) progress?.Report(100.0f * i / count);
+                            if (cts.IsContinue()) progress?.Report(100.0f * i / count);
                         }
                         else
                             return;

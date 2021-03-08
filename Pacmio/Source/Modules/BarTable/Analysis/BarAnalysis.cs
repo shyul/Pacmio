@@ -140,7 +140,6 @@ namespace Pacmio
 
         public virtual ICollection<IDependable> Parents { get; } = new HashSet<IDependable>();
 
-
         #endregion Priority and Dependency
 
         #region Equality

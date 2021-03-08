@@ -36,7 +36,9 @@ namespace Pacmio
 
         public static bool Download(BarDataFile bdf)
         {
-            if (Connected && bdf.BarFreq == BarFreq.Daily && bdf.Type == BarType.Trades)
+            bool use_quandl = bdf.Contract is Stock && bdf.Contract.Country == "US" && bdf.BarFreq == BarFreq.Daily && bdf.Type == BarType.Trades;
+
+            if (Connected && use_quandl)
             {
                 DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
                 DateTime stopTime = DateTime.Now.Date;
