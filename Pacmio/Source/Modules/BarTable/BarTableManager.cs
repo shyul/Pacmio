@@ -17,7 +17,7 @@ namespace Pacmio
     {
         private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<(Contract c, BarFreq freq), BarTable>();
 
-        public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq freq)
+        public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq freq = BarFreq.Daily)
         {
             var key = (c, freq);
 
@@ -25,18 +25,57 @@ namespace Pacmio
             {
                 if (!ContractDailyBarTableLUT.ContainsKey(key))
                 {
-                    //ContractBarTableLUT[c] = MarketData.LoadFile(c.Key);
+                    BarTable bt = c.LoadBarTable(freq, BarType.Trades, false);
+                    ContractDailyBarTableLUT[key] = bt;
                 }
-
                 return ContractDailyBarTableLUT[key];
             }
         }
 
-        public static BarTable CreateBarTable(this Contract c, BarFreq barFreq, BarType barType, Period period)
+        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, BarType barType, bool adjustDividend)
         {
-            return null;
+            // Request Download??
+
+            if (barFreq > BarFreq.Daily)
+            {
+                BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
+                BarTable bt_daily = bdf_daily.GetBarTable();
+                var sorted_daily_list = bdf_daily.LoadBars(bt_daily, adjustDividend);
+                BarTable bt = new BarTable(c, barFreq, barType);
+                bt.LoadFromSmallerBar(sorted_daily_list);
+                return bt;
+            }
+            else
+            {
+                BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, barType);
+                BarTable bt = bdf.GetBarTable();
+                var sorted_list = bdf.LoadBars(bt, adjustDividend);
+                bt.LoadFromSmallerBar(sorted_list);
+                return bt;
+            }
         }
 
+        public static BarTable LoadBarTable(this Contract c, Period period, BarFreq barFreq, BarType barType, bool adjustDividend)
+        {
+            // Request Download??
 
+            if (barFreq > BarFreq.Daily)
+            {
+                BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
+                BarTable bt_daily = bdf_daily.GetBarTable();
+                var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
+                BarTable bt = new BarTable(c, barFreq, barType);
+                bt.LoadFromSmallerBar(sorted_daily_list);
+                return bt;
+            }
+            else
+            {
+                BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, barType);
+                BarTable bt = bdf.GetBarTable();
+                var sorted_list = bdf.LoadBars(bt, period, adjustDividend);
+                bt.LoadFromSmallerBar(sorted_list);
+                return bt;
+            }
+        }
     }
 }

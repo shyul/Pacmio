@@ -142,10 +142,10 @@ namespace Pacmio
         {
             get
             {
-                if (Count > 0)
-                    return this[0].Time;
-                else
-                    return DateTime.Now;
+                lock (DataLockObject)
+                {
+                    return Count > 0 ? this[0].Time : DateTime.Now;
+                }
             }
         }
 
@@ -156,10 +156,24 @@ namespace Pacmio
         {
             get
             {
-                if (Count > 0)
-                    return TimeToRows.Last().Key;
-                else
-                    return DateTime.MinValue.AddYears(500);
+                lock (DataLockObject)
+                {
+                    return Count > 0 ? TimeToRows.Last().Key : DateTime.MinValue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Last Most time including the Bar Period
+        /// </summary>
+        public DateTime LastTimeBound
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return Count > 0 ? Rows.Last().DataSourcePeriod.Stop : DateTime.MinValue;
+                }
             }
         }
 
@@ -183,43 +197,35 @@ namespace Pacmio
         }
 
         /// <summary>
-        /// Last Most time including the Bar Period
-        /// </summary>
-        public DateTime LastTimeBound
-        {
-            get
-            {
-                if (Count > 0)
-                    return Rows.Last().Period.Stop; //// Shall we use 
-                else
-                    return DateTime.MinValue.AddYears(500);
-            }
-        }
-
-        /// <summary>
         /// Last Time by specific data source
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
         public DateTime LastTimeBy(DataSourceType source)
         {
-            var res = Rows.Where(n => n.Source <= source).OrderBy(n => n.Time);
-            return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue;
+            lock (DataLockObject)
+            {
+                var res = Rows.Where(n => n.Source <= source).OrderBy(n => n.Time);
+                return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue;
+            }
         }
 
         public DateTime IndexToTime(int i)
         {
-            if (i < 0)
+            lock (DataLockObject)
             {
-                return FirstTime - Frequency * (-i);
-            }
-            else if (i >= Count)
-            {
-                return LastTime + Frequency * (i - Count + 1);
-            }
-            else
-            {
-                return this[i].Time;
+                if (i < 0)
+                {
+                    return FirstTime - Frequency * (-i);
+                }
+                else if (i >= Count)
+                {
+                    return LastTime + Frequency * (i - Count + 1);
+                }
+                else
+                {
+                    return this[i].Time;
+                }
             }
         }
 
@@ -230,28 +236,31 @@ namespace Pacmio
         /// <returns>Index of the nearest time</returns>
         public int IndexOf(ref DateTime time)
         {
-            if (Count > 0)
+            lock (DataLockObject)
             {
-                DateTime t = time;
+                if (Count > 0)
+                {
+                    DateTime t = time;
 
-                if (TimeToRows.ContainsKey(t))
-                {
-                    return TimeToRows[t];
-                }
-                else if (time <= FirstTime)
-                {
-                    time = FirstTime;
-                    return 0;
-                }
-                else if (time >= LastTime)
-                {
-                    time = LastTime;
-                    return LastIndex;
-                }
-                else if (Rows.Where(n => n.Period.Contains(t)).FirstOrDefault() is Bar b)
-                {
-                    time = b.Time;
-                    return b.Index;
+                    if (TimeToRows.ContainsKey(t))
+                    {
+                        return TimeToRows[t];
+                    }
+                    else if (time <= FirstTime)
+                    {
+                        time = FirstTime;
+                        return 0;
+                    }
+                    else if (time >= LastTime)
+                    {
+                        time = LastTime;
+                        return LastIndex;
+                    }
+                    else if (Rows.Where(n => n.Period.Contains(t)).FirstOrDefault() is Bar b)
+                    {
+                        time = b.Time;
+                        return b.Index;
+                    }
                 }
             }
 
@@ -276,9 +285,9 @@ namespace Pacmio
             }
         }
 
-        public void LoadBars(List<Bar> bars)
+        public void LoadBars(List<Bar> sorted_bars)
         {
-            if (this != bars.FirstOrDefault().Table)
+            if (this != sorted_bars.FirstOrDefault().Table)
                 throw new Exception("bar's table has to match with this table!");
 
             Status = TableStatus.Default;
@@ -289,9 +298,9 @@ namespace Pacmio
                 Rows.Clear();
                 ResetCalculationPointer();
 
-                for (int i = 0; i < bars.Count; i++)
+                for (int i = 0; i < sorted_bars.Count; i++)
                 {
-                    Bar b = bars[i];
+                    Bar b = sorted_bars[i];
                     b.Index = i;
                     Rows.Add(b);
                     TimeToRows.Add(b.Time, i);
@@ -299,14 +308,38 @@ namespace Pacmio
             }
         }
 
-        public void LoadBars(Period pd)
+        public void LoadFromSmallerBar(List<Bar> sorted_bars)
         {
-            this.GetOrCreateBarDataFile().LoadBars(this, pd);
-        }
+            if (this != sorted_bars.FirstOrDefault().Table)
+                throw new Exception("bar's table has to match with this table!");
 
-        public void LoadBars()
-        {
-            this.GetOrCreateBarDataFile().LoadBars(this);
+            Status = TableStatus.Default;
+
+            lock (DataLockObject)
+            {
+                TimeToRows.Clear();
+                Rows.Clear();
+                ResetCalculationPointer();
+
+                int j = 0;
+                for (int i = 0; i < sorted_bars.Count; i++)
+                {
+                    Bar sb = sorted_bars[i];
+
+                    if (this[sb.Time] is Bar b)
+                    {
+                        b.MergeFromSmallerBar(sb);
+                    }
+                    else
+                    {
+                        Bar nb = new Bar(this, sb);
+                        nb.Index = j;
+                        Rows.Add(nb);
+                        TimeToRows.Add(nb.Time, j);
+                        j++;
+                    }
+                }
+            }
         }
 
         #endregion Load Bars

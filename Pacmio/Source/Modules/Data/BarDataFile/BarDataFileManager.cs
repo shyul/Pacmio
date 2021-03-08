@@ -31,6 +31,8 @@ namespace Pacmio
 
         public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq, BarType type = BarType.Trades)
         {
+            if (barFreq > BarFreq.Daily) throw new Exception("We don't support storging BarFreq greater than daily as file");
+
             var key = (c, barFreq, type);
 
             lock (DataLUT)
@@ -45,31 +47,6 @@ namespace Pacmio
         }
 
         public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetOrCreateBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
-
-        #region Smaller Bars
-
-        public static BarTable GetBarTable(this Contract c, Period pd, BarFreq barFreq, BarType type = BarType.Trades)
-        {
-
-
-            BarTable bt = new BarTable(c, barFreq, type);
-
-            if (barFreq > BarFreq.Daily)
-            {
-                BarDataFile bdf_daily = GetOrCreateBarDataFile(c, BarFreq.Daily, type);
-
-
-            }
-            else
-            {
-                bt.LoadBars(pd);
-            }
-
-            // TODO: BarTable status Ready??
-            return bt;
-        }
-
-        #endregion Smaller Bars
 
         #region Download
 

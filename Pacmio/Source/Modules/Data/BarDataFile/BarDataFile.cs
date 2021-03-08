@@ -85,6 +85,9 @@ namespace Pacmio
         public BarType Type { get; set; }
 
         [IgnoreDataMember]
+        public BarTable GetBarTable() => new BarTable(Contract, BarFreq, Type);
+
+        [IgnoreDataMember]
         private Frequency Frequency { get; set; } //=> BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
         [IgnoreDataMember]
@@ -232,7 +235,7 @@ namespace Pacmio
                 }
         }
 
-        public void LoadBars(BarTable bt, Period pd, bool adjustDividend = false)
+        public List<Bar> LoadBars(BarTable bt, Period pd, bool adjustDividend = false)
         {
             if (this != bt) throw new Exception("BarTable must match!");
 
@@ -246,10 +249,10 @@ namespace Pacmio
                     Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
-            AddBars(bt, sortedList, adjustDividend);
+            return AdjustBars(bt, sortedList, adjustDividend);
         }
 
-        public void LoadBars(BarTable bt, bool adjustDividend = false)
+        public List<Bar> LoadBars(BarTable bt, bool adjustDividend = false)
         {
             if (this != bt) throw new Exception("BarTable must match!");
 
@@ -262,10 +265,10 @@ namespace Pacmio
                     Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
-            AddBars(bt, sortedList, adjustDividend);
+            return AdjustBars(bt, sortedList, adjustDividend);
         }
 
-        private void AddBars(BarTable bt, List<Bar> sortedList, bool adjustDividend)
+        private List<Bar> AdjustBars(BarTable bt, List<Bar> sortedList, bool adjustDividend)
         {
             if (sortedList is not null && sortedList.Count > 0)
             {
@@ -290,7 +293,9 @@ namespace Pacmio
                 }
             }
 
-            bt.LoadBars(sortedList);
+            return sortedList;
+
+            //bt.LoadBars(sortedList);
         }
 
         public void Clear(Period pd)
