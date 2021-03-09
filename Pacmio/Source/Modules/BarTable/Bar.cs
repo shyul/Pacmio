@@ -153,16 +153,20 @@ namespace Pacmio
 
         public bool MergeFromSmallerBar(Bar b)
         {
+            bool isModified = false;
+
             if (b.BarFreq <= BarFreq)
             {
                 if (b.High > High) // New High
                 {
                     High = b.High;
+                    isModified = true;
                 }
 
                 if (b.Low < Low) // New Low
                 {
                     Low = b.Low;
+                    isModified = true;
                 }
 
                 if (b.Period.Stop <= DataSourcePeriod.Start) // Eariler Open
@@ -170,6 +174,7 @@ namespace Pacmio
                     Open = b.Open;
                     Volume += b.Volume;
                     DataSourcePeriod.Insert(b.Period.Start);
+                    isModified = true;
                 }
 
                 if (b.Period.Start >= DataSourcePeriod.Stop) // Later Close
@@ -177,6 +182,7 @@ namespace Pacmio
                     Close = b.Close;
                     Volume += b.Volume;
                     DataSourcePeriod.Insert(b.Period.Stop);
+                    isModified = true;
                 }
 
                 if (Source < b.Source) Source = b.Source; // Worse Source
@@ -186,69 +192,8 @@ namespace Pacmio
                 throw new Exception("Can't merge from larger Bar!!");
             }
 
-
-
-
-            bool isModified = false;
-
-            if (b.BarFreq < BarFreq)
-            {
-                if (this[Frequency.Align(b.Time)] is Bar nb)
-                {
-                    if (b.High > nb.High) // New High
-                    {
-                        nb.High = b.High;
-                        isModified = true;
-                    }
-
-                    if (b.Low < nb.Low) // New Low
-                    {
-                        nb.Low = b.Low;
-                        isModified = true;
-                    }
-
-                    if (b.Period.Stop <= nb.DataSourcePeriod.Start) // Eariler Open
-                    {
-                        nb.Open = b.Open;
-                        nb.Volume += b.Volume;
-                        nb.DataSourcePeriod.Insert(b.Period.Start);
-                        isModified = true;
-                    }
-
-                    if (b.Period.Start >= nb.DataSourcePeriod.Stop) // Later Close
-                    {
-                        nb.Close = b.Close;
-                        nb.Volume += b.Volume;
-                        nb.DataSourcePeriod.Insert(b.Period.Stop);
-                        isModified = true;
-                    }
-
-                    if (nb.Source < b.Source) nb.Source = b.Source; // Worse Source
-                }
-                else
-                {
-                    return Add(new Bar(this, b));
-                }
-            }
-            else if (b.BarFreq == BarFreq && b.Table == this && !Contains(b.Time))
-            {
-                Rows.Add(b);
-
-                if (Count > 0)
-                {
-                    if (b.Time < LastTime) // If bars are added to the head or in the middle of the table
-                        Sort(); // Sort without adjust -- you never know if it needs reverse adjust or forward adjust here.
-                    else           //else // If bars are add to the tail of the table, then we just append
-                        TimeToRows.CheckAdd(b.Time, Count - 1);
-                }
-                else
-                    TimeToRows.CheckAdd(b.Time, 0);
-
-                return true;
-            }
             return isModified;
         }
-
 
         #endregion Smaller Bars
 

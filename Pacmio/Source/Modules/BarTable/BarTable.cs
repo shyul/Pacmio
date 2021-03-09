@@ -88,7 +88,7 @@ namespace Pacmio
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
-        private object DataLockObject { get; } = new object();
+        public object DataLockObject { get; } = new object();
 
         /// <summary>
         /// The Rows Data Storage
@@ -355,10 +355,10 @@ namespace Pacmio
         {
             get
             {
-                lock (DataLockObject)
-                {
-                    return i >= Count || i < 0 ? null : Rows[i];
-                }
+                //lock (DataLockObject)
+                //{
+                return i >= Count || i < 0 ? null : Rows[i];
+                //}
             }
         }
 
@@ -675,8 +675,6 @@ namespace Pacmio
                     m_Status = TableStatus.Ready;
                 }
         }
-
-
 
         #endregion Data/Bar Analysis (TA) Calculation
 

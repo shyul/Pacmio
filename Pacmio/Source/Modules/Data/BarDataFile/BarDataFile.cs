@@ -101,58 +101,21 @@ namespace Pacmio
         [DataMember]
         private DateTime m_HistoricalHeadTime = DateTime.MaxValue;
 
-        public Period ValidatePeriod(Period period)
-        {
-            DateTime stoplimit = DateTime.Now.AddDays(1).Date;
-
-            DateTime start = period.Start < HistoricalHeadTime ? HistoricalHeadTime : period.Start;
-            DateTime stop = period.IsCurrent || period.Stop > stoplimit ? stoplimit : period.Stop;
-
-            return start < stop ? new Period(start, stop) : Period.Empty;
-        }
-
         [DataMember]
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
 
-        [DataMember]
-        private MultiPeriod<DataSourceType> DataSourceSegments { get; set; } = new MultiPeriod<DataSourceType>();
-
-        /// <summary>
-        /// Similar to BarTable add ticks.
-        /// </summary>
-        /// <param name="pd"></param>
-        /// <param name="minimumSource"></param>
-        /// <returns></returns>
-        public MultiPeriod GetMissingPeriod(ref Period period, DataSourceType minimumSource = DataSourceType.IB)
-        {
-            period = ValidatePeriod(period);
-
-            if (!period.IsEmpty)
-            {
-                MultiPeriod missing_period_list = new MultiPeriod(period);
-
-                foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
-                {
-                    missing_period_list.Remove(existingPd);
-                    Console.WriteLine("BarDataFile Already Existing: " + existingPd);
-                }
-
-                return missing_period_list;
-            }
-            else
-                return null;
-
-        }
+        [IgnoreDataMember]
+        private object DataLockObject { get; set; } = new object();
 
         [DataMember]
         private Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)> Rows { get; set; }
             = new Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)>();
 
         [IgnoreDataMember]
-        private object DataLockObject { get; set; } = new object();
-
-        [IgnoreDataMember]
         public int Count => Rows.Count;
+
+        [DataMember]
+        private MultiPeriod<DataSourceType> DataSourceSegments { get; set; } = new MultiPeriod<DataSourceType>();
 
         public DateTime LastTimeBy(DataSourceType source)
         {
@@ -171,63 +134,61 @@ namespace Pacmio
             //return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue.AddYears(500);
         }
 
-        /*
-        private void Adjust(bool forwardAdjust = true, bool adjustdividend = false)
+        /// <summary>
+        /// Similar to BarTable add ticks.
+        /// </summary>
+        /// <param name="pd"></param>
+        /// <param name="minimumSource"></param>
+        /// <returns></returns>
+        public MultiPeriod GetMissingPeriods(Period period, DataSourceType minimumSource = DataSourceType.IB)
         {
-            //Sort();
-            //if (Contract.MarketData is StockData sd)
-            //{
-            MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjustdividend); //sd.BarTableAdjust(AdjustDividend);
+            DateTime stoplimit = DateTime.Now.AddDays(1).Date;
+            DateTime stop = period.Stop.Date.AddDays(1);
 
-            // Please notice b.Time is the start time of the Bar
-            // When the adjust event (split or dividend) happens at d 
-            // The adjust will happen in d-1, which belongs to the
-            // prior adjust segment.
-            //                    S
-            // ---------------------------------------
-            //                   AD
-            // aaaaaaaaaaaaaaaaaaadddddddddddddddddddd
-            for (int i = 0; i < Count; i++)
+            DateTime start = period.Start < HistoricalHeadTime ? HistoricalHeadTime : period.Start.Date; // new DateTime(period.Start.Year, period.Start.Month, period.Start.Day);
+            stop = period.IsCurrent || stop > stoplimit ? stoplimit : stop;
+
+            if (start < stop)
             {
-                Bar b = this[i];
+                WorkHours wh = Contract.WorkHoursExtended;
+                MultiPeriod missing_period_list = new MultiPeriod(new Period(start, stop));
 
-                var (adj_price, adj_vol) = barTableAdjust[b.Time];
-                b.Adjust(adj_price, adj_vol, forwardAdjust);
-            }
-            //}
-            //ResetCalculationPointer();
-        }
+                DateTime check = start, rm_start = start;
+                bool start_chk_pd = true;
 
-        #region Adjusted Calculation
-
-        public void Adjust(double adj_price, double adj_vol, bool forwardAdjust = true)
-        {
-            if (forwardAdjust) // Adjust Part
-            {
-                if (Actual_Open > 0 && Actual_High > 0 && Actual_Low > 0 && Actual_Close > 0 && Actual_Volume >= 0)
+                while (check < stop)
                 {
-                    Open = Actual_Open * adj_price;
-                    High = Actual_High * adj_price;
-                    Low = Actual_Low * adj_price;
-                    Close = Actual_Close * adj_price;
-                    Volume = Actual_Volume / adj_vol;
-                }
-            }
-            else // CounterAdjust Part
-            {
-                if (Open > 0 && High > 0 && Low > 0 && Close > 0 && Volume >= 0)
-                {
-                    Actual_Open = Open / adj_price;
-                    Actual_High = High / adj_price;
-                    Actual_Low = Low / adj_price;
-                    Actual_Close = Close / adj_price;
-                    Actual_Volume = Volume * adj_vol;
-                }
-            }
-        }
+                    if (!wh.IsWorkTime(check))
+                    {
+                        if (start_chk_pd)
+                        {
+                            start_chk_pd = false;
+                            rm_start = check;
+                        }
+                    }
+                    else
+                    {
+                        if (!start_chk_pd)
+                        {
+                            start_chk_pd = true;
+                            missing_period_list.Remove(new Period(rm_start, check));
+                        }
+                    }
 
-        #endregion Adjusted Calculation
-        */
+                    check.AddMinutes(10);
+                }
+
+                foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
+                {
+                    missing_period_list.Remove(existingPd);
+                    Console.WriteLine("BarDataFile Already Existing: " + existingPd);
+                }
+
+                return missing_period_list;
+            }
+
+            return null;
+        }
 
         public void AddRows(
             IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows,
@@ -361,7 +322,7 @@ namespace Pacmio
             lock (DataLockObject)
             {
                 IsModified = !(DataSourceSegments.Count == 0 && Rows.Count == 0);
-
+                LastUpdateTime = DateTime.MinValue;
                 DataSourceSegments.Clear();
                 Rows.Clear();
             }
@@ -369,186 +330,7 @@ namespace Pacmio
 
 
         #region Download / Fetch Operation
-
-        public void Fetch(Period period, CancellationTokenSource cts)
-        {
-            if (cts.IsContinue() && Enabled)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Downloading;
-
-                    IsLive = period.IsCurrent;
-                    //if (IsLive) Contract.Request_MarketTicks();
-                    if (IsLive) Contract.MarketData.Start();
-
-                    ResetCalculationPointer();
-                    SyncFile(period);
-                    Sort();
-                    Adjust();
-
-                    if (BarFreq == BarFreq.Daily)
-                    {
-                        Fetch_Daily(this, period, cts);
-                        SaveFile();
-                    }
-                    else if (BarFreq > BarFreq.Daily)
-                    {
-                        Period download_time_period = new Period(Frequency.Align(period.Start, -1), Frequency.Align(period.Stop, 1));
-
-                        using BarTable referenceTable = new BarTable(Contract, BarFreq.Daily, Type);
-                        referenceTable.Load(download_time_period); // Then add the Bar to the Data Object
-                        Fetch_Daily(referenceTable, download_time_period, cts); // sorted, adjusted, and saved as well // Forward Adjust, Getting the adjusted OHLC from Actual OHLC
-                                                                                // Fetch_Daily will sort the reference table
-
-                        download_time_period = new Period(Frequency.Align(LastTime, -1), Frequency.Align(referenceTable.LastTimeBound, 1));
-                        Remove(download_time_period); // Remove the updating period from this table, becuase it is obsolete!! Remove the tail end
-
-                        //ReferenceTable[download_time_period].AsParallel().ForAll(b => MergeFromSmallerBar(b));
-                        referenceTable[download_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                        AddDataSourceSegment(download_time_period, DataSourceType.Consolidated); // update the period segment
-
-                        referenceTable.Save(); // Blocking the process and save...
-
-                        Sort();
-                        Adjust(false);
-
-                        SaveFile();
-                    }
-                    else if (BarFreq > BarFreq.Minute && BarFreq < BarFreq.Daily) // TODO: TEST intraday BarFreq from 1 minute bars
-                    {
-                        MultiPeriod missing_period_list = new MultiPeriod(period);
-                        foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= DataSourceType.IB))
-                        {
-                            missing_period_list.Remove(existingPd);
-                            Console.WriteLine(MethodBase.GetCurrentMethod().Name + "(BarFreq > BarFreq.Minute || BarFreq < BarFreq.Daily) | Already Existing: " + existingPd);
-                        }
-
-                        // Now get the missing periods from reference table
-                        foreach (Period missing_period in missing_period_list)
-                        {
-                            Period transfer_reference_time_period = new Period(Frequency.Align(missing_period.Start, -1), Frequency.Align(missing_period.Stop, 1));
-
-                            using BarTable referenceTable = new BarTable(Contract, BarFreq.Minute, Type);
-                            referenceTable.Load(transfer_reference_time_period); // Then add the Bar to the Data Object
-                            referenceTable.Sort();
-
-                            if (referenceTable.Count > 0)
-                            {
-                                // Remove bar yielding partial result!!
-                                DateTime first_valid_time_in_reference_table = Frequency.Align(referenceTable.FirstTime, 1);
-                                DateTime last_valid_time_in_reference_table = Frequency.Align(referenceTable.LastTime, -1);
-
-                                if (last_valid_time_in_reference_table > first_valid_time_in_reference_table)
-                                {
-                                    transfer_reference_time_period = new Period(first_valid_time_in_reference_table, last_valid_time_in_reference_table);
-                                    Remove(transfer_reference_time_period); // Remove the updating period from this table, becuase it is obsolete!! Remove the tail end
-                                    referenceTable[transfer_reference_time_period].ToList().ForEach(b => MergeFromSmallerBar(b));
-                                    AddDataSourceSegment(transfer_reference_time_period, DataSourceType.Consolidated);
-                                }
-                            }
-                        }
-
-                        if (missing_period_list.Count() > 0)
-                        {
-                            Sort();
-                            Adjust(false);
-                        }
-
-                        // Use IB to download the rest
-                        Fetch_IB(this, period, cts);
-                        Sort();
-                        Adjust(false);
-                        SaveFile();
-                    }
-                    else if (BarFreq <= BarFreq.Minute)
-                    {
-                        Fetch_IB(this, period, cts);
-                        Sort();
-                        Adjust(false);
-                        SaveFile();
-                    }
-
-                    Status = TableStatus.LoadFinished;
-                }
-        }
-
-        public bool Remove(Period pd)
-        {
-            var list = this[pd].ToList();
-            bool isMod = list.Count > 0;
-
-            if (isMod)
-            {
-                foreach (Bar b in list)
-                    Rows.Remove(b);
-
-                Sort();
-            }
-
-            return isMod;
-        }
-
-        private static bool Fetch_Daily(BarTable bt, Period period, CancellationTokenSource cts)
-        {
-            // The table is loaded but not sorted, with only Actual Values
-            // Do not sort the table, becasuse it is going to be refreshed by quandl with only actual values later.
-
-            bool success = false;
-
-            DateTime quandlTime = bt.LastTimeBy(DataSourceType.Quandl); //period.Start;
-
-            //if (quandlTime < bt.LastTimeBy(DataSource.Quandl)) quandlTime = bt.LastTimeBy(DataSource.Quandl);
-
-            if (period.Stop > quandlTime) // The requested time is later than the Quandl time
-            {
-                bool quandl_is_available = bt.Contract.Country == "US" && bt.BarFreq == BarFreq.Daily && bt.Type == BarType.Trades && bt.Contract is Stock;
-
-                DateTime now = DateTime.Now.Date;
-                while (!bt.Contract.WorkHours.IsWorkDate(now)) now = now.AddDays(-1);
-                Period download_time_period = new Period(quandlTime, now); // Get the missing part
-
-                if (quandl_is_available && (now - quandlTime).TotalHours >= 24) // After 4:00 PM the next day.
-                {
-                    // If Quandl fails, please still try IB
-                    success = quandl_is_available = Quandl.Download(bt, download_time_period);
-                }
-                else
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl: We already have the latest data, no need to download.");
-
-                if (success)
-                {
-                    bt.Save();
-                }
-
-                if (period.Start > quandlTime)
-                    bt.Remove(new Period(DateTime.MinValue, period.Start.AddDays(-1))); // Trim away extra downloaded bars
-
-                bt.Sort();
-                bt.Adjust(); // With all the quandl bars loaded (or not... we still have bars loaded from the file system), we can do Sort and Forward Adjust now.
-
-                // Load IB Daily if Quandle fails
-                if (!quandl_is_available && IB.Client.Connected)
-                {
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + "Quandl is not available, try getting the Daily Bars from IB!");
-                    Fetch_IB(bt, period, cts);
-                    bt.Sort();
-                    bt.Adjust(false);
-                }
-            }
-            else
-            {
-                bt.Sort();
-                bt.Adjust();
-            }
-
-            return success;
-
-            // The table is downloaded with new candles, sorted and adjusted, but not calculated
-            // The problem of calculate is because of the candle stick takes a long time!
-        }
-
-
-
+        /*
         public static void Download(IEnumerable<Contract> contracts, IEnumerable<(BarFreq freq, BarType type, Period period)> settings, CancellationTokenSource cts, IProgress<float> progress)
         {
             List<(BarFreq freq, BarType type, Period period)> settings_list = new List<(BarFreq freq, BarType type, Period period)>() { (BarFreq.Daily, BarType.Trades, new Period(new DateTime(1000, 1, 1), DateTime.Now)) };
@@ -585,193 +367,9 @@ namespace Pacmio
                 else
                     return;
             });
-        }
+        }*/
 
         #endregion Download / Fetch Operation
-
-
-        #region File Operation
-
-
-
-
-        public void AddDataSourceSegment(Period pd, DataSourceType source)
-        {
-            DataSourceSegments.Add(pd, source);
-        }
-
-        public DateTime GetDataSourceStartTime(DateTime endTime, DataSourceType source)
-        {
-            var res = DataSourceSegments.Where(n => n.Value <= source && n.Key.Contains(endTime));
-            if (res.Count() > 0) return res.Last().Key.Start;
-            else return endTime;
-        }
-
-        //string fileName = BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type));
-        //BarTableFileData btd = Serialization.DeserializeJsonFile<BarTableFileData>(fileName);
-        //private BarDataFile BarTableFileData => BarDataFile.LoadFile(this) is BarDataFile btd && btd == this ? btd : new BarDataFile(this);
-
-        public void LoadFile() => LoadFile(Period.Full);
-
-        public void LoadFile(Period pd, bool adjustDividend = false)
-        {
-            BarDataFile bdf = this.GetOrCreateBarDataFile();
-            var sortedList = bdf.GetRows(pd, adjustDividend);
-
-
-
-        }
-
-
-
-        private void Sort()
-        {
-            TimeToRows.Clear();
-            Rows.Sort((t1, t2) => t1.Time.CompareTo(t2.Time));
-            for (int i = 0; i < Count; i++)
-            {
-                Bar b = Rows[i];
-                TimeToRows[b.Time] = i;
-                b.Index = i;
-            }
-            //ResetCalculationPointer();
-            //Console.WriteLine("Sorted Table " + ToString() + " | Count: " + Count + " | Period: " + Period.ToString());
-        }
-
-        private void LoadFile(BarDataFile btd, Period pd)
-        {
-            ResetCalculationPointer();
-            TimeToRows.Clear();
-            Rows.Clear();
-
-            var bars = btd.Rows.Where(n => pd.Contains(n.Key)).OrderBy(n => n.Key);
-            Range<DateTime> Invalid_Period = null;
-
-            foreach (var pb in bars)
-            {
-                if (pb.Value.O < 0 || pb.Value.H < 0 || pb.Value.L < 0 || pb.Value.C < 0 || pb.Value.V < 0)
-                {
-                    if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(pb.Key, Frequency.Align(pb.Key, 0));
-                    else
-                    {
-                        Invalid_Period.Insert(pb.Key);
-                        Invalid_Period.Insert(Frequency.Align(pb.Key, 0));
-                    }
-                }
-                else
-                {
-                    if (pb.Value.SRC < DataSourceType.Tick)
-                    {
-                        Bar b = GetOrAdd(pb.Key);
-                        b.Source = pb.Value.SRC;
-                        b.Actual_Open = pb.Value.O;
-                        b.Actual_High = pb.Value.H;
-                        b.Actual_Low = pb.Value.L;
-                        b.Actual_Close = pb.Value.C;
-                        b.Actual_Volume = pb.Value.V;
-                    }
-                }
-            }
-
-            if (Invalid_Period is Range<DateTime> rgt)
-            {
-                btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
-                btd.Rows.Where(n => rgt.Contains(n.Key)).ToList().ForEach(n => btd.Rows.Remove(n.Key));
-
-                btd.SaveFile();
-                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            }
-
-            DataSourceSegments.Clear();
-            DataSourceSegments.Merge(btd.DataSourceSegments);
-        }
-
-        public void Save()
-        {
-            lock (DataLockObject)
-            {
-                TableStatus last_status = Status;
-                Status = TableStatus.Saving;
-                SaveFile();
-                Status = last_status;
-            }
-        }
-
-        private void SaveFile()
-        {
-            using BarDataFile btd = BarTableFileData;
-            SaveFile(btd);
-        }
-
-        private void SaveFile(BarDataFile btd)
-        {
-            if (Count > 0)
-            {
-                Range<DateTime> Invalid_Period = null;
-
-                lock (Rows)
-                    foreach (var b in Rows.Where(n => n.Source < DataSourceType.Tick))
-                    {
-                        if (b.Actual_Open < 0 || b.Actual_High < 0 || b.Actual_Low < 0 || b.Actual_Close < 0 || b.Actual_Volume < 0)
-                        {
-                            if (Invalid_Period is null) Invalid_Period = new Range<DateTime>(b.Period.Start, b.Period.Stop);
-                            else
-                            {
-                                Invalid_Period.Insert(b.Period.Start);
-                                Invalid_Period.Insert(b.Period.Stop);
-                            }
-                        }
-                        else if (!btd.Rows.ContainsKey(b.Time) || b.Source < btd.Rows[b.Time].SRC)
-                            btd.Rows[b.Time] = (b.Source, b.Actual_Open, b.Actual_High, b.Actual_Low, b.Actual_Close, b.Actual_Volume);
-                    }
-
-                btd.DataSourceSegments.Merge(DataSourceSegments);
-                if (Invalid_Period is Range<DateTime> rgt) btd.DataSourceSegments.Remove(new Period(rgt.Minimum, rgt.Maximum));
-
-                if (btd.EarliestTime < EarliestTime)
-                    btd.EarliestTime = EarliestTime;
-
-                if (btd.LastUpdateTime < LastDownloadRequestTime)
-                    btd.LastUpdateTime = LastDownloadRequestTime;
-
-                btd.SaveFile();
-                //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            }
-        }
-
-        public void SyncFile(Period pd)
-        {
-            using BarDataFile btd = BarTableFileData;
-            SaveFile(btd);
-            LoadFile(btd, pd);
-        }
-
-        public void ClearFile(Period pd)
-        {
-            using BarDataFile btd = BarTableFileData;
-            btd.DataSourceSegments.Remove(pd);
-            var to_remove_list = btd.Rows.Where(n => pd.Contains(n.Key)).ToList();
-            to_remove_list.ForEach(n => btd.Rows.Remove(n.Key));
-
-            btd.SaveFile();
-            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-
-            Clear();
-
-        }
-
-        public void ClearFile()
-        {
-            using BarDataFile btd = BarTableFileData;
-            btd.DataSourceSegments.Clear();
-            btd.Rows.Clear();
-            btd.SaveFile();
-            //btd.SerializeJsonFile(BarTableFileData.GetDataFileName((Contract.Key, BarFreq, Type)));
-            Clear();
-        }
-
-        #endregion File Operation
-
 
         #region File Operation
 

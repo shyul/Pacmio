@@ -29,9 +29,6 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        //private static Period ActivePeriod_HistoricalData { get; set; }  // Start Time and Stop Time
-        //private static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
-
         private static BarDataFile ActiveBarDataFile_HistoricalData = null;
         private static TimeZoneInfo ActiveTimeZone_HistoricalData => ActiveBarDataFile_HistoricalData.Contract.TimeZone;
 
@@ -59,7 +56,7 @@ namespace Pacmio.IB
                     Fetch_HistoricalDataHeadTimestamp(bdf, cts);
                 }
 
-                if (bdf.GetMissingPeriod(ref period) is MultiPeriod missing_period_list)
+                if (bdf.GetMissingPeriods(period) is MultiPeriod missing_period_list && !missing_period_list.IsEmpty)
                 {
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Rectified Period: " + period);
 
@@ -107,7 +104,7 @@ namespace Pacmio.IB
                                 }
                             }
                     }
-
+                    /*
                     Period DataSegmentPeriod = period;
 
                     if (period.Stop.Date >= DateTime.Now.Date)
@@ -123,7 +120,7 @@ namespace Pacmio.IB
                         {
                             DataSegmentPeriod = Period.Empty;
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -332,32 +329,37 @@ namespace Pacmio.IB
             int num = fields[4].ToInt32();
 
             Console.WriteLine(ActiveTimeZone_HistoricalData.DisplayName);
+            Console.WriteLine("Start Parsing Historical Data... " + ActiveBarDataFile_HistoricalData.Contract + ", num: " + num);
 
             if (fields.Length == 5 + num * 8 && requestId == DataRequestID)
             {
-                Console.WriteLine("Start Parsing Historical Data... " + ActivePeriod_HistoricalData + ", num: " + num);
-
-                TimeSpan ts = ActiveBarDataFile_HistoricalData.Frequency.Span;
-                DateTime time = DateTime.MinValue;
+                var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
+                Period data_pd = new Period();
 
                 for (int i = 0; i < num; i++)
                 {
                     int pt = (i * 8) + 5;
 
-                    time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData);
+                    DateTime time = Util.ParseTime(fields[pt], ActiveTimeZone_HistoricalData);
                     double open = fields[pt + 1].ToDouble(-1);
                     double high = fields[pt + 2].ToDouble(-1);
                     double low = fields[pt + 3].ToDouble(-1);
                     double close = fields[pt + 4].ToDouble(-1);
                     double volume = fields[pt + 5].ToDouble(-1) * 100;
 
-                    if (open != -1 && high != -1 && low != -1 && close != -1 && volume > 0)
-                        active_HistoricalDataBarTable.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
+                    rows.Add((time, open, high, low, close, volume));
+                    data_pd.Insert(time);
+
+                    //if (open != -1 && high != -1 && low != -1 && close != -1 && volume > 0)
+                        //ActiveBarDataFile_HistoricalData.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
-
+                data_pd.Insert(data_pd.Stop + ActiveBarDataFile_HistoricalData.Frequency.Span);
+                ActiveBarDataFile_HistoricalData.AddRows(rows, DataSourceType.IB, data_pd);
+                ActiveBarDataFile_HistoricalData.SaveFile();
             }
 
+            ActiveBarDataFile_HistoricalData = null;
             RemoveRequest(requestId, false); // false means the task is ended with success
             DataRequestID = -1;
         }

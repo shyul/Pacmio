@@ -144,6 +144,18 @@ namespace Pacmio
             }
         }
 
+        [IgnoreDataMember]
+        public virtual WorkHours WorkHoursExtended
+        {
+            get
+            {
+                if (Exchange.GetAttribute<ExchangeInfo>() is ExchangeInfo exi)
+                    return exi.WorkHoursExtended;
+                else
+                    return ExchangeInfo.WorkHoursAll;
+            }
+        }
+
         public virtual DateTime CurrentTime => DateTime.Now.ToDestination(TimeZone);
 
         public bool IsWorkHour => WorkHours.IsWorkTime(CurrentTime);

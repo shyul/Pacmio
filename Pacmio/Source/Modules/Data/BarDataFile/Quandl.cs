@@ -34,7 +34,7 @@ namespace Pacmio
 
         #endregion URLs
 
-        public static bool Download(BarDataFile bdf)
+        public static bool Fetch(BarDataFile bdf)
         {
             bool use_quandl = bdf.Contract is Stock && bdf.Contract.Country == "US" && bdf.BarFreq == BarFreq.Daily && bdf.Type == BarType.Trades;
 
@@ -42,14 +42,14 @@ namespace Pacmio
             {
                 DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
                 DateTime stopTime = DateTime.Now.Date;
-                if (startTime > stopTime) 
+                if (startTime >= stopTime) 
                     return true;
 
                 bool getAll = bdf.Count == 0 || startTime < new DateTime(1982, 1, 1);
 
-                Period pd = getAll ?
-                    new Period(DateTime.MinValue, DateTime.Now.AddDays(-1)) :
-                    new Period(startTime.AddDays(-5), stopTime);
+                //Period pd = getAll ?
+                //    new Period(DateTime.MinValue, DateTime.Now.AddDays(-1)) :
+                //    new Period(startTime.AddDays(-5), stopTime);
 
                 string url = getAll ?
                     DailyBarURL(ConvertToQuandlName(bdf.Contract.Name)) :
@@ -73,53 +73,54 @@ namespace Pacmio
 
                 if (result is not null)
                 {
-                    Task.Run(() => {
-                        FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
-                        if (getAll) fd.Remove(DataSourceType.Quandl);
-                        Period data_pd = new Period();
+                    //Task.Run(() => {
+                    FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
+                    if (getAll) fd.Remove(DataSourceType.Quandl);
+                    Period data_pd = new Period();
 
-                        var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
-                        using (MemoryStream stream = new MemoryStream(result))
-                        using (StreamReader sr = new StreamReader(stream))
-                        {
-                            string[] headers = sr.CsvReadFields();
-                            if (headers.Length == 13)
-                                while (!sr.EndOfStream)
+                    var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
+                    using (MemoryStream stream = new MemoryStream(result))
+                    using (StreamReader sr = new StreamReader(stream))
+                    {
+                        string[] headers = sr.CsvReadFields();
+                        if (headers.Length == 13)
+                            while (!sr.EndOfStream)
+                            {
+                                string[] fields = sr.CsvReadFields();
+                                if (fields.Length == 13)
                                 {
-                                    string[] fields = sr.CsvReadFields();
-                                    if (fields.Length == 13)
+                                    double close = fields[4].ToDouble(0);
+                                    if (close > 0)
                                     {
-                                        double close = fields[4].ToDouble(0);
-                                        if (close > 0)
-                                        {
-                                            DateTime time = DateTime.Parse(fields[0]);
-                                            double open = fields[1].ToDouble();
-                                            double high = fields[2].ToDouble();
-                                            double low = fields[3].ToDouble();
-                                            double volume = fields[5].ToDouble();
+                                        DateTime time = DateTime.Parse(fields[0]);
+                                        double open = fields[1].ToDouble();
+                                        double high = fields[2].ToDouble();
+                                        double low = fields[3].ToDouble();
+                                        double volume = fields[5].ToDouble();
 
-                                            rows.Add((time, open, high, low, close, volume));
-                                            data_pd.Insert(time);
-                                            //bdf.Add(DataSourceType.Quandl, time, ts, open, high, low, close, volume, false);
+                                        rows.Add((time, open, high, low, close, volume));
+                                        data_pd.Insert(time);
 
-                                            //// Add Split and dividend to FundamentalData Table in FD
-                                            double dividend = fields[6].ToDouble(0);
-                                            fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
+                                        //// Add Split and dividend to FundamentalData Table in FD
+                                        double dividend = fields[6].ToDouble(0);
+                                        fd.SetDividend(time, close, dividend, DataSourceType.Quandl);
 
-                                            double split = fields[7].ToDouble(1);
-                                            fd.SetSplit(time, close, split, DataSourceType.Quandl);
-                                        }
+                                        double split = fields[7].ToDouble(1);
+                                        fd.SetSplit(time, close, split, DataSourceType.Quandl);
                                     }
-                                    else
-                                        Console.WriteLine(fields);
                                 }
-                        }
+                                else
+                                    Console.WriteLine(fields);
+                            }
+                    }
 
-                        bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
+                    data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
 
-                        bdf.SaveFile();
-                        fd.SaveFile();
-                    });
+                    bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
+
+                    bdf.SaveFile();
+                    fd.SaveFile();
+                    //});
                     return true;
                 }
             }

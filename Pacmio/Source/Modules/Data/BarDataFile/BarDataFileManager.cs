@@ -57,11 +57,9 @@ namespace Pacmio
         /// <param name="pd"></param>
         /// <param name="cts"></param>
         /// <returns></returns>
-        private static bool Download(this BarDataFile bdf, Period pd, CancellationTokenSource cts)
+        private static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts)
         {
             if (bdf.BarFreq > BarFreq.Daily) throw new Exception("Only support download daily and smaller bars data file.");
-
-            bool is_successful = false;
 
             if (bdf.HistoricalHeadTime == DateTime.MaxValue)
             {
@@ -70,15 +68,15 @@ namespace Pacmio
 
             if (bdf.Contract.Status != ContractStatus.Error)
             {
-                is_successful = Quandl.Download(bdf);
-
-                if (!is_successful)
+                if (!Quandl.Fetch(bdf))
                 {
-
+                    IB.Client.Fetch_HistoricalData(bdf, pd, cts);
                 }
+                else
+                    return true;
             }
 
-            return is_successful;
+            return false ;
         }
 
         #endregion Download
