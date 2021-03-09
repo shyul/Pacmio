@@ -28,7 +28,7 @@ namespace Pacmio
         /// </summary>
         public static List<Contract> ContractList { get; } = new List<Contract>();
 
-        public static BarTableSet BarTableSet { get; } = new BarTableSet();
+        //public static BarTableSet BarTableSet { get; } = new BarTableSet();
 
         public static void Simulate(Period pd, CancellationTokenSource cts)
         {

@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
 using Xu.WindowsNativeMethods;
@@ -181,8 +182,8 @@ namespace Pacmio
             Settings.SerializeJsonFile(SettingFile);
 
             IB.Client.Save();
+            Task a = Task.Run(() => ContractManager.Save());
             BusinessInfoManager.Save();
-            ContractManager.Save();
             FundamentalManager.Save();
             BarDataFileManager.Save();
             MarketDataManager.Save();
@@ -190,6 +191,8 @@ namespace Pacmio
             OrderManager.Save();
             AccountPositionManager.Save();
             UnknownContractList.Save();
+
+            while (a?.Status == TaskStatus.Running) { Console.Write("."); Thread.Sleep(500); }
         }
 
         #endregion File Storage Utilities

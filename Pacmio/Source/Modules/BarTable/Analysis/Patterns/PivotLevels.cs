@@ -11,8 +11,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
+    /*
     public class PivotLevels : BarAnalysis
     {
+        
         public PivotLevels(BarTableSet barTableSet, BarFreq barFreq = BarFreq.Daily)
         {
             BarTableSet = barTableSet;
@@ -72,5 +74,6 @@ namespace Pacmio.Analysis
 
             }
         }
-    }
+        
+    }*/
 }

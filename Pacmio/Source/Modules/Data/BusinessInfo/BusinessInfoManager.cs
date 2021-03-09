@@ -91,7 +91,8 @@ namespace Pacmio
             // Save Business Info
             lock (IsinToBusinessLUT)
             {
-                Parallel.ForEach(IsinToBusinessLUT.Values.Where(n => n.IsModified), bi => bi.SaveFile());
+                IsinToBusinessLUT.Values.Where(n => n.IsModified).ToList().ForEach(bi => bi.SaveFile());
+                //Parallel.ForEach(IsinToBusinessLUT.Values.Where(n => n.IsModified), bi => bi.SaveFile());
             }
         }
 

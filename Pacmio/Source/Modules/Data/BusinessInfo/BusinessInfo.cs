@@ -157,11 +157,20 @@ namespace Pacmio
 
         public void SaveFile()
         {
-            this.SerializeJsonFile(DataFileName);
+            try
+            {
+                this.SerializeJsonFile(DataFileName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }
         }
 
         public static BusinessInfo LoadFile(string isin)
         {
+
+
             var b = Serialization.DeserializeJsonFile<BusinessInfo>(GetDataFileName(isin)) is BusinessInfo bi ? 
                 bi : 
                 new BusinessInfo(isin) { IsModified = false };

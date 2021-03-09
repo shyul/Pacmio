@@ -65,8 +65,14 @@ namespace Pacmio
             }
             set
             {
-                m_fullName = BusinessInfo.FullName = value;
-                BusinessInfo.IsModified = true;
+
+                m_fullName = value;
+
+                if (BusinessInfo is BusinessInfo bi) 
+                {
+                    BusinessInfo.FullName = m_fullName;
+                    BusinessInfo.IsModified = true;
+                }
             }
         }
 

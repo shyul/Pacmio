@@ -8,7 +8,7 @@ namespace TestClient
 {
     public static class BarTableTest
     {
-        public static BarTableSet BarTableSet { get; } = new BarTableSet();
+        //public static BarTableSet BarTableSet { get; } = new BarTableSet();
 
         public static BarAnalysisSet TestBarAnalysisSet
         {

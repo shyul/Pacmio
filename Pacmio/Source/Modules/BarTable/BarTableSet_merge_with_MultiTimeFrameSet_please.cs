@@ -21,11 +21,11 @@ using Xu;
 using Xu.Chart;
 
 namespace Pacmio
-{
+{/*
     public class BarTableSet : IDisposable
     {
         #region Download / Fetch Operation
-        /*
+        
         public static void Download(IEnumerable<Contract> contracts, IEnumerable<(BarFreq freq, BarType type, Period period)> settings, CancellationTokenSource cts, IProgress<float> progress)
         {
             List<(BarFreq freq, BarType type, Period period)> settings_list = new List<(BarFreq freq, BarType type, Period period)>() { (BarFreq.Daily, BarType.Trades, new Period(new DateTime(1000, 1, 1), DateTime.Now)) };
@@ -62,11 +62,11 @@ namespace Pacmio
                 else
                     return;
             });
-        }*/
+        
 
-        #endregion Download / Fetch Operation
+#endregion Download / Fetch Operation
 
-        public Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings { get; } = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
+    public Dictionary<(BarFreq barFreq, BarType barType), Period> PeriodSettings { get; } = new Dictionary<(BarFreq barFreq, BarType barType), Period>();
 
         public HashSet<BarTable> BarTables { get; } = new HashSet<BarTable>();
 
@@ -267,5 +267,5 @@ namespace Pacmio
                     });
                 }
         }
-    }
+    }*/
 }
