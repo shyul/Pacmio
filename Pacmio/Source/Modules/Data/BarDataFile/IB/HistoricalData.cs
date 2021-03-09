@@ -19,6 +19,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -28,48 +29,106 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
+        //private static Period ActivePeriod_HistoricalData { get; set; }  // Start Time and Stop Time
+        //private static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
+
+        private static BarDataFile ActiveBarDataFile_HistoricalData = null;
+        private static TimeZoneInfo ActiveTimeZone_HistoricalData => ActiveBarDataFile_HistoricalData.Contract.TimeZone;
+
         #region Fetch Historical Data
 
-
-
-        public static void Fetch_HistoricalData(BarTable bt, Period period, CancellationTokenSource cts = null)
+        /// <summary>
+        /// If a request requires more than several minutes to return data, it would be best to cancel the request using the IBApi.EClient.cancelHistoricalData function.
+        /// https://interactivebrokers.github.io/tws-api/historical_limitations.html
+        /// </summary>
+        /// <param name="bt"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static void Fetch_HistoricalData(BarDataFile bdf, Period period, CancellationTokenSource cts)
         {
-            if (cts.IsContinue() && HistoricalData_Connected && bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && period.Start < DateTime.Now)
+            if (bdf.Contract.Status != ContractStatus.Error &&
+                Connected &&
+                HistoricalData_Connected &&
+                bdf.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi) // && HistoricalData_Connected)
             {
-                // We will download, but won't log the period if the stop may extended to the future.
-                IsLoggingLastRequestedHistoricalDataPeriod = period.Stop < DateTime.Now.AddDays(-1);
-                LastRequestedHistoricalDataPeriod = period;
+                Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request Period: " + period);
 
-                // RequestLockObject and DataRequestReady must happen in pairs
-                lock (DataRequestLockObject)
-                    if (DataRequestReady)
+                if (bdf.HistoricalHeadTime == DateTime.MaxValue) // If EarliestTime is unset, then request it here.
+                {
+                    if (cts.Cancelled()) goto End;
+                    Fetch_HistoricalDataHeadTimestamp(bdf, cts);
+                }
+
+                if (bdf.GetMissingPeriod(ref period) is MultiPeriod missing_period_list)
+                {
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Rectified Period: " + period);
+
+                    List<DateTime> api_request_endTime_list = new List<DateTime>();
+
+                    foreach (Period missing_period in missing_period_list)
                     {
-                        if (cts.Cancelled() || IsCancelled) return;
-
-                        StartDownload:
-                        SendRequest_HistoricalData(bt, bfi.DurationString, period.Stop);
-
-                        int time = 0; // Wait the last transmit is over.
-                        while (!DataRequestReady)
-                        {
-                            time++;
-                            Thread.Sleep(50);
-
-                            if (time > Timeout) // Handle Time out here.
-                            {
-                                SendCancel_HistoricalData();
-                                Thread.Sleep(2000);
-                                goto StartDownload;
-                            }
-                            else if (cts.Cancelled() || IsCancelled)
-                            {
-                                SendCancel_HistoricalData();
-                                return;
-                            }
-                        }
+                        Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
+                        api_request_endTime_list.AddRange(missing_period.Split(bfi.Duration).Select(n => n.Stop));
                     }
 
+                    foreach (DateTime api_request_endTime in api_request_endTime_list.OrderBy(n => n))
+                    {
+                        if (cts.Cancelled() || IsCancelled)
+                            goto End;
+                        else
+                            Thread.Sleep(2000);
+
+                        lock (DataRequestLockObject)
+                            if (DataRequestReady)
+                            {
+                                StartDownload:
+                                Console.WriteLine("\n" + MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_endTime);
+                                SendRequest_HistoricalData(bdf, bfi.DurationString, api_request_endTime);
+
+                                int time = 0; // Wait the last transmit is over.
+                                while (!DataRequestReady)
+                                {
+                                    time++;
+                                    Thread.Sleep(50);
+
+                                    if (time > Timeout) // Handle Time out here.
+                                    {
+                                        SendCancel_HistoricalData();
+                                        Thread.Sleep(2000);
+                                        goto StartDownload;
+                                    }
+                                    else if (cts.Cancelled() || IsCancelled)
+                                    {
+                                        SendCancel_HistoricalData();
+
+                                        // OR goto Segment or so......
+                                        goto End;
+                                    }
+                                }
+                            }
+                    }
+
+                    Period DataSegmentPeriod = period;
+
+                    if (period.Stop.Date >= DateTime.Now.Date)
+                    {
+                        DateTime start = period.Start;
+                        DateTime stop = DateTime.Now.Date.AddDays(-1); // or the latest day during the download...
+
+                        if (stop > start)
+                        {
+                            DataSegmentPeriod = new Period(start, stop);
+                        }
+                        else
+                        {
+                            DataSegmentPeriod = Period.Empty;
+                        }
+                    }
+                }
             }
+
+        End:
+            return;
         }
 
         #endregion Fetch Historical Data
@@ -126,12 +185,6 @@ namespace Pacmio.IB
 
         #region Historical Data
 
-        private static Period LastRequestedHistoricalDataPeriod { get; set; }  // Start Time and Stop Time
-        private static bool IsLoggingLastRequestedHistoricalDataPeriod { get; set; } = false;
-
-        private static BarTable active_HistoricalDataBarTable;
-        private static TimeZoneInfo ActiveTimeZone_HistoricalData => active_HistoricalDataBarTable.Contract.TimeZone;
-
         /// <summary>
         /// At this time Historical Data Limitations for barSize = "1 mins" and greater have been lifted. 
         /// However, please use caution when requesting large amounts of historical data or sending historical data requests too frequently. 
@@ -147,22 +200,23 @@ namespace Pacmio.IB
         /// <param name="formatDate"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        private static void SendRequest_HistoricalData(BarTable bt, string durationString, DateTime endTime,
+        private static void SendRequest_HistoricalData(BarDataFile bdf, string durationString, DateTime endTime,
             bool keepUpToDate = false, bool includeExpired = false, int formatDate = 1,
             ICollection<(string, string)> options = null)
         {
-            Contract c = bt.Contract;
+            Contract c = bdf.Contract;
 
+            //TODO: Test this one...
             endTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(endTime, c.TimeZone), TimeZoneInfo.Local);
 
-            if (bt.BarFreq.Param() is string barFreqCode &&
-                bt.Type.Param() is string barTypeCode &&
+            if (bdf.BarFreq.Param() is string barFreqCode &&
+                bdf.Type.Param() is string barTypeCode &&
                 c.Exchange.Param() is string exchangeCode &&
                 DataRequestReady)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalData);
                 DataRequestID = requestId;
-                active_HistoricalDataBarTable = bt;
+                ActiveBarDataFile_HistoricalData = bdf;
 
                 string lastTradeDateOrContractMonth = "";
                 double strike = 0;
@@ -196,7 +250,7 @@ namespace Pacmio.IB
                     keepUpToDate ? "" : endTime.ToString("yyyyMMdd HH:mm:ss"), // endDateTime, // "20180720 17:00:00", 
                     barFreqCode,
                     durationString,
-                    (bt.BarFreq >= BarFreq.Daily).Param(), // bt.IsRegularTradeHoursOnly.Param(), // useRTH
+                    (bdf.BarFreq >= BarFreq.Daily).Param(), // bt.IsRegularTradeHoursOnly.Param(), // useRTH
                     barTypeCode, // whatToShow,
                     formatDate.Param() // "1"
                 };
@@ -236,6 +290,7 @@ namespace Pacmio.IB
             if (Connected)
             {
                 RemoveRequest(DataRequestID, RequestType.RequestHistoricalData);
+                ActiveBarDataFile_HistoricalData = null;
                 DataRequestID = -1; // Emit update cancelled.
             }
         }
@@ -258,13 +313,16 @@ namespace Pacmio.IB
                 //ActiveBarTable_HistoricalData = null;
                 if (fields[3] == "200")
                 {
-                    active_HistoricalDataBarTable.Contract.Status = ContractStatus.Error;
-                    active_HistoricalDataBarTable.Contract.UpdateTime = DateTime.Now;
+                    ActiveBarDataFile_HistoricalData.Contract.Status = ContractStatus.Error;
+                    ActiveBarDataFile_HistoricalData.Contract.UpdateTime = DateTime.Now;
+
                 }
                 else if (fields[3] == "366")
                 {
                     // Unable to find the table for the contract
                 }
+
+                ActiveBarDataFile_HistoricalData = null;
             }
         }
 
@@ -277,13 +335,9 @@ namespace Pacmio.IB
 
             if (fields.Length == 5 + num * 8 && requestId == DataRequestID)
             {
-                /*
-                LastHistoricalDataPeriod = new Period(Util.ParseTime(fields[2], ActiveTimeZone_HistoricalData), 
-                                                        Util.ParseTime(fields[3], ActiveTimeZone_HistoricalData)); */
+                Console.WriteLine("Start Parsing Historical Data... " + ActivePeriod_HistoricalData + ", num: " + num);
 
-                Console.WriteLine("Start Parsing Historical Data... " + LastRequestedHistoricalDataPeriod + ", num: " + num);
-
-                TimeSpan ts = active_HistoricalDataBarTable.Frequency.Span;
+                TimeSpan ts = ActiveBarDataFile_HistoricalData.Frequency.Span;
                 DateTime time = DateTime.MinValue;
 
                 for (int i = 0; i < num; i++)
@@ -301,10 +355,7 @@ namespace Pacmio.IB
                         active_HistoricalDataBarTable.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
-                if (IsLoggingLastRequestedHistoricalDataPeriod)
-                    active_HistoricalDataBarTable.DataSourceSegments.Add(LastRequestedHistoricalDataPeriod, DataSourceType.IB);
-                else if (time > LastRequestedHistoricalDataPeriod.Start)
-                    active_HistoricalDataBarTable.DataSourceSegments.Add(new Period(LastRequestedHistoricalDataPeriod.Start, time), DataSourceType.IB);
+
             }
 
             RemoveRequest(requestId, false); // false means the task is ended with success

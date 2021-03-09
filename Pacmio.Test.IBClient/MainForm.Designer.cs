@@ -203,6 +203,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnTimeZoneTest = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -263,6 +264,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnTimeZoneTest);
             this.tabHistoricalData.Controls.Add(this.BtnTestFundamentalXMLFile);
             this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
             this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
@@ -431,7 +433,7 @@ namespace TestClient
             this.tabContract.Controls.Add(this.BtnSearchSymbol);
             this.tabContract.Location = new System.Drawing.Point(4, 22);
             this.tabContract.Name = "tabContract";
-            this.tabContract.Size = new System.Drawing.Size(952, 649);
+            this.tabContract.Size = new System.Drawing.Size(952, 622);
             this.tabContract.TabIndex = 2;
             this.tabContract.Text = "Contract";
             this.tabContract.UseVisualStyleBackColor = true;
@@ -623,7 +625,7 @@ namespace TestClient
             this.tabMarketData.Controls.Add(this.BtnMarketDataAddContract);
             this.tabMarketData.Location = new System.Drawing.Point(4, 22);
             this.tabMarketData.Name = "tabMarketData";
-            this.tabMarketData.Size = new System.Drawing.Size(952, 649);
+            this.tabMarketData.Size = new System.Drawing.Size(952, 622);
             this.tabMarketData.TabIndex = 3;
             this.tabMarketData.Text = "Market Data";
             this.tabMarketData.UseVisualStyleBackColor = true;
@@ -841,7 +843,7 @@ namespace TestClient
             this.tabOrder.Controls.Add(this.BtnGetOpenOrders);
             this.tabOrder.Location = new System.Drawing.Point(4, 22);
             this.tabOrder.Name = "tabOrder";
-            this.tabOrder.Size = new System.Drawing.Size(952, 649);
+            this.tabOrder.Size = new System.Drawing.Size(952, 622);
             this.tabOrder.TabIndex = 8;
             this.tabOrder.Text = "Order";
             this.tabOrder.UseVisualStyleBackColor = true;
@@ -1197,7 +1199,7 @@ namespace TestClient
             this.tabSimulation.Controls.Add(this.BtnArmLiveTrade);
             this.tabSimulation.Location = new System.Drawing.Point(4, 22);
             this.tabSimulation.Name = "tabSimulation";
-            this.tabSimulation.Size = new System.Drawing.Size(952, 649);
+            this.tabSimulation.Size = new System.Drawing.Size(952, 622);
             this.tabSimulation.TabIndex = 9;
             this.tabSimulation.Text = "Simulation";
             this.tabSimulation.UseVisualStyleBackColor = true;
@@ -1259,7 +1261,7 @@ namespace TestClient
             this.tabAccount.Location = new System.Drawing.Point(4, 22);
             this.tabAccount.Name = "tabAccount";
             this.tabAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAccount.Size = new System.Drawing.Size(952, 649);
+            this.tabAccount.Size = new System.Drawing.Size(952, 622);
             this.tabAccount.TabIndex = 0;
             this.tabAccount.Text = "Account";
             this.tabAccount.UseVisualStyleBackColor = true;
@@ -1319,7 +1321,7 @@ namespace TestClient
             this.tabFileData.Controls.Add(this.BtnImportContracts);
             this.tabFileData.Location = new System.Drawing.Point(4, 22);
             this.tabFileData.Name = "tabFileData";
-            this.tabFileData.Size = new System.Drawing.Size(952, 649);
+            this.tabFileData.Size = new System.Drawing.Size(952, 622);
             this.tabFileData.TabIndex = 6;
             this.tabFileData.Text = "File / Data";
             this.tabFileData.UseVisualStyleBackColor = true;
@@ -2040,6 +2042,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnTimeZoneTest
+            // 
+            this.BtnTimeZoneTest.Location = new System.Drawing.Point(348, 305);
+            this.BtnTimeZoneTest.Name = "BtnTimeZoneTest";
+            this.BtnTimeZoneTest.Size = new System.Drawing.Size(230, 26);
+            this.BtnTimeZoneTest.TabIndex = 50;
+            this.BtnTimeZoneTest.Text = "Time Zone Test";
+            this.BtnTimeZoneTest.UseVisualStyleBackColor = true;
+            this.BtnTimeZoneTest.Click += new System.EventHandler(this.BtnTimeZoneTest_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2266,5 +2278,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnExportBarTableData;
         private System.Windows.Forms.Button BtnRequestFundamentalData;
         private System.Windows.Forms.Button BtnTestFundamentalXMLFile;
+        private System.Windows.Forms.Button BtnTimeZoneTest;
     }
 }

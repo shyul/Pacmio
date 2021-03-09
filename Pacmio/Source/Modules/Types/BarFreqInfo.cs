@@ -28,33 +28,32 @@ namespace Pacmio
 
             if (unit == TimeUnit.Minutes && length == 1)
             {
-                Duration = new Frequency(TimeUnit.Days, 2);// new TimeSpan(days, 0, 0, 0);
+                Duration = new Frequency(TimeUnit.Days, 2);
                 DurationString = "2 D";
             }
             else if (unit == TimeUnit.Seconds && length == 30)
             {
-                Duration = new Frequency(TimeUnit.Days, 3);// new TimeSpan(days, 0, 0, 0);
+                Duration = new Frequency(TimeUnit.Days, 3);
                 DurationString = "3 D";
             }
             else if (proposedDuration.TotalDays >= 1 && proposedDuration.TotalDays <= 360)
             {
                 int days = Math.Floor(proposedDuration.TotalDays).ToInt32();
-                Duration = new Frequency(TimeUnit.Days, days);// new TimeSpan(days, 0, 0, 0);
+                Duration = new Frequency(TimeUnit.Days, days);
                 DurationString = days + " D";
             }
             else if (proposedDuration.TotalDays > 360)
             {
                 int years = Math.Ceiling(proposedDuration.TotalDays / 360).ToInt32(1);
-                Duration = new Frequency(TimeUnit.Years, years);// new TimeSpan(days, 0, 0, 0);
+                Duration = new Frequency(TimeUnit.Years, years);
                 DurationString = years + " Y";
             }
             else
             {
                 int seconds = Math.Floor(proposedDuration.TotalSeconds).ToInt32();
-                Duration = new Frequency(TimeUnit.Seconds, seconds); //new TimeSpan(0, 0, 0, seconds);
+                Duration = new Frequency(TimeUnit.Seconds, seconds);
                 DurationString = seconds + " S";
             }
-
         }
 
         public string Name => Frequency.ToString();

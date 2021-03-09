@@ -24,7 +24,6 @@ namespace Pacmio
             Contract = c;
             BarFreq = freq;
             Type = type;
-            //EarliestTime = c.GetOrCreateFundamentalData().EarliestTime;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
@@ -84,23 +83,66 @@ namespace Pacmio
         [DataMember]
         public BarType Type { get; set; }
 
-        [IgnoreDataMember]
         public BarTable GetBarTable() => new BarTable(Contract, BarFreq, Type);
 
         [IgnoreDataMember]
-        private Frequency Frequency { get; set; } //=> BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+        public Frequency Frequency { get; private set; } //=> BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
         [IgnoreDataMember]
         public DateTime EarliestDataTime => DataSourceSegments.Start;
 
         [IgnoreDataMember]
-        public DateTime HistoricalHeadTime { get; set; } = DateTime.MinValue;
+        public DateTime HistoricalHeadTime
+        {
+            get => (m_HistoricalHeadTime != DateTime.MaxValue && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ? DateTime.Now.Date.AddMonths(-6) : m_HistoricalHeadTime;
+            set => m_HistoricalHeadTime = value;
+        }
+
+        [DataMember]
+        private DateTime m_HistoricalHeadTime = DateTime.MaxValue;
+
+        public Period ValidatePeriod(Period period)
+        {
+            DateTime stoplimit = DateTime.Now.AddDays(1).Date;
+
+            DateTime start = period.Start < HistoricalHeadTime ? HistoricalHeadTime : period.Start;
+            DateTime stop = period.IsCurrent || period.Stop > stoplimit ? stoplimit : period.Stop;
+
+            return start < stop ? new Period(start, stop) : Period.Empty;
+        }
 
         [DataMember]
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
 
         [DataMember]
         private MultiPeriod<DataSourceType> DataSourceSegments { get; set; } = new MultiPeriod<DataSourceType>();
+
+        /// <summary>
+        /// Similar to BarTable add ticks.
+        /// </summary>
+        /// <param name="pd"></param>
+        /// <param name="minimumSource"></param>
+        /// <returns></returns>
+        public MultiPeriod GetMissingPeriod(ref Period period, DataSourceType minimumSource = DataSourceType.IB)
+        {
+            period = ValidatePeriod(period);
+
+            if (!period.IsEmpty)
+            {
+                MultiPeriod missing_period_list = new MultiPeriod(period);
+
+                foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
+                {
+                    missing_period_list.Remove(existingPd);
+                    Console.WriteLine("BarDataFile Already Existing: " + existingPd);
+                }
+
+                return missing_period_list;
+            }
+            else
+                return null;
+
+        }
 
         [DataMember]
         private Dictionary<DateTime, (DataSourceType SRC, double O, double H, double L, double C, double V)> Rows { get; set; }
@@ -505,86 +547,7 @@ namespace Pacmio
             // The problem of calculate is because of the candle stick takes a long time!
         }
 
-        /// <summary>
-        /// If a request requires more than several minutes to return data, it would be best to cancel the request using the IBApi.EClient.cancelHistoricalData function.
-        /// </summary>
-        /// <param name="bt"></param>
-        /// <param name="period"></param>
-        /// <returns></returns>
-        private static void Fetch_IB(BarTable bt, Period period, CancellationTokenSource cts)
-        {
-            if (bt.Contract.Status != ContractStatus.Error)
-            {
-                if (bt.BarFreq.GetAttribute<BarFreqInfo>() is BarFreqInfo bfi && IB.Client.Connected && IB.Client.HistoricalData_Connected) // && HistoricalData_Connected)
-                {
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request: " + period);
 
-                    DateTime upToDate = bt.Contract.CurrentTime.AddMinutes(30);
-                    //if (period.IsCurrent) period = new Period(period.Start, DateTime.Now.AddDays(1));
-                    if (period.IsCurrent) period = new Period(period.Start, upToDate);
-
-                    MultiPeriod missing_period_list = new MultiPeriod(period);
-
-                    foreach (Period existingPd in bt.DataSourceSegments.Keys.Where(n => bt.DataSourceSegments[n] <= DataSourceType.IB))
-                    {
-                        missing_period_list.Remove(existingPd);
-                        Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Already Existing: " + existingPd);
-                    }
-
-                    //If EarliestTime is unset, then request it here.
-                    if (bt.EarliestTime == DateTime.MaxValue)
-                    {
-                        if (cts.Cancelled()) goto End;
-
-                        IB.Client.Fetch_HistoricalDataHeadTimestamp(bt, cts);
-                    }
-
-                    // https://interactivebrokers.github.io/tws-api/historical_limitations.html
-                    DateTime earliestTime = (bt.BarFreq < BarFreq.Minute) ? DateTime.Now.AddMonths(-6) : bt.EarliestTime;
-
-                    if (bt.Contract.Status != ContractStatus.Error && earliestTime < DateTime.Now)
-                    {
-                        List<Period> api_request_pd_list = new List<Period>();
-
-                        foreach (Period missing_period in missing_period_list)
-                        {
-                            if (cts.Cancelled()) goto End;
-
-                            Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
-
-                            DateTime endTimeBound = DateTime.Now.AddDays(1);
-
-                            if (missing_period.Start < earliestTime)
-                                if (missing_period.Stop > earliestTime)
-                                    missing_period.SetStart(earliestTime); // Get Head time please, and reduce the period to limit
-                                else
-                                    continue;
-                            else if (missing_period.Stop > endTimeBound)
-                                if (missing_period.Start < endTimeBound)
-                                    missing_period.SetStop(endTimeBound);
-                                else
-                                    continue;
-
-                            api_request_pd_list.AddRange(missing_period.Split(bfi.Duration));
-                        }
-
-                        foreach (Period api_request_pd in api_request_pd_list.OrderBy(n => n.Start))
-                        {
-                            if (cts.Cancelled())
-                                goto End;
-                            else
-                                Thread.Sleep(2000);
-
-                            Console.WriteLine("\n" + MethodBase.GetCurrentMethod().Name + " | Sending Api Request: " + api_request_pd);
-                            IB.Client.Fetch_HistoricalData(bt, api_request_pd, cts);
-                        }
-                    }
-                }
-            }
-
-            End:
-            return;
-        }
 
         public static void Download(IEnumerable<Contract> contracts, IEnumerable<(BarFreq freq, BarType type, Period period)> settings, CancellationTokenSource cts, IProgress<float> progress)
         {

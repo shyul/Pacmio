@@ -1176,6 +1176,12 @@ namespace TestClient
                 }*/
             }
         }
+
+        private void BtnTimeZoneTest_Click(object sender, EventArgs e)
+        {
+            DateTime endTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(DateTime.Now, ContractTest.ActiveContract.TimeZone), TimeZoneInfo.Local);
+            Console.WriteLine(endTime);
+        }
     }
     public static class DataGridHelper
     {

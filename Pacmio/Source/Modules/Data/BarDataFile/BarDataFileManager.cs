@@ -63,7 +63,7 @@ namespace Pacmio
 
             bool is_successful = false;
 
-            if (bdf.HistoricalHeadTime == DateTime.MinValue)
+            if (bdf.HistoricalHeadTime == DateTime.MaxValue)
             {
                 IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
             }

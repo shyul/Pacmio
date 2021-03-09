@@ -178,8 +178,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\Divergence.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Types\DualData.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\TIProData\Signal\IAlert.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\CandleStickType.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\ICandleStick.cs" />
+    <Compile Include="Source\Modules\Types\CandleStickType.cs" />
+    <Compile Include="Source\Modules\Types\ICandleStick.cs" />
     <Compile Include="Source\Forms\Chart\BarChartArea.cs" />
     <Compile Include="Source\Forms\Chart\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Forms\Chart\Types\IBarChartArea.cs" />
@@ -219,8 +219,8 @@
     <Compile Include="Source\Modules\Decision\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfo\LiquidityType.cs" />
     <Compile Include="Source\Modules\BarTable\Position\TradeActionType.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarFreqInfo.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarType.cs" />
+    <Compile Include="Source\Modules\Types\BarFreqInfo.cs" />
+    <Compile Include="Source\Modules\Types\BarType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ADX.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageGain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Bollinger.cs" />
@@ -315,9 +315,9 @@
     <Compile Include="Source\Modules\Decision\WatchList\IB\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\BusinessInfoManager.cs" />
-    <Compile Include="Source\Modules\Data\DataSourceType.cs" />
+    <Compile Include="Source\Modules\Types\DataSourceType.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\Exchange.cs" />
-    <Compile Include="Source\Modules\BarTable\Types\BarFreq.cs" />
+    <Compile Include="Source\Modules\Types\BarFreq.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\RSI.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\Quandl.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\Types\Types.cs" />
