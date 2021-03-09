@@ -104,27 +104,10 @@ namespace Pacmio.IB
                                 }
                             }
                     }
-                    /*
-                    Period DataSegmentPeriod = period;
-
-                    if (period.Stop.Date >= DateTime.Now.Date)
-                    {
-                        DateTime start = period.Start;
-                        DateTime stop = DateTime.Now.Date.AddDays(-1); // or the latest day during the download...
-
-                        if (stop > start)
-                        {
-                            DataSegmentPeriod = new Period(start, stop);
-                        }
-                        else
-                        {
-                            DataSegmentPeriod = Period.Empty;
-                        }
-                    }*/
                 }
             }
 
-        End:
+            End:
             return;
         }
 
@@ -292,37 +275,6 @@ namespace Pacmio.IB
             }
         }
 
-        private static void ParseError_HistoricalData(string[] fields)
-        {
-            int requestId = fields[2].ToInt32(-1);
-            string message = fields[4];
-
-            Console.WriteLine("Historical Data Error !!!!!!!!!!!!! " + fields[2] + ": " + message);
-
-            if (requestId > -1)
-            {
-                RemoveRequest(requestId, RequestType.RequestHistoricalData);
-                if (DataRequestID == requestId)
-                {
-                    DataRequestID = -1;
-                }
-
-                //ActiveBarTable_HistoricalData = null;
-                if (fields[3] == "200")
-                {
-                    ActiveBarDataFile_HistoricalData.Contract.Status = ContractStatus.Error;
-                    ActiveBarDataFile_HistoricalData.Contract.UpdateTime = DateTime.Now;
-
-                }
-                else if (fields[3] == "366")
-                {
-                    // Unable to find the table for the contract
-                }
-
-                ActiveBarDataFile_HistoricalData = null;
-            }
-        }
-
         private static void Parse_HistoricalData(string[] fields)
         {
             int requestId = fields[1].ToInt32(-1);
@@ -351,7 +303,7 @@ namespace Pacmio.IB
                     data_pd.Insert(time);
 
                     //if (open != -1 && high != -1 && low != -1 && close != -1 && volume > 0)
-                        //ActiveBarDataFile_HistoricalData.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
+                    //ActiveBarDataFile_HistoricalData.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
                 data_pd.Insert(data_pd.Stop + ActiveBarDataFile_HistoricalData.Frequency.Span);
@@ -399,6 +351,38 @@ namespace Pacmio.IB
 
              */
         }
+
+        private static void ParseError_HistoricalData(string[] fields)
+        {
+            int requestId = fields[2].ToInt32(-1);
+            string message = fields[4];
+
+            Console.WriteLine("Historical Data Error !!!!!!!!!!!!! " + fields[2] + ": " + message);
+
+            if (requestId > -1)
+            {
+                RemoveRequest(requestId, RequestType.RequestHistoricalData);
+                if (DataRequestID == requestId)
+                {
+                    DataRequestID = -1;
+                }
+
+                //ActiveBarTable_HistoricalData = null;
+                if (fields[3] == "200")
+                {
+                    ActiveBarDataFile_HistoricalData.Contract.Status = ContractStatus.Error;
+                    ActiveBarDataFile_HistoricalData.Contract.UpdateTime = DateTime.Now;
+
+                }
+                else if (fields[3] == "366")
+                {
+                    // Unable to find the table for the contract
+                }
+
+                ActiveBarDataFile_HistoricalData = null;
+            }
+        }
+
 
         #endregion Historical Data
     }

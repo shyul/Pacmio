@@ -19,7 +19,17 @@ namespace Pacmio
 {
     public sealed class BarChart : ChartWidget
     {
-        public static List<BarChart> List { get; } = new List<BarChart>();
+        private static List<BarChart> List { get; } = new List<BarChart>();
+
+        public static BarChart GetChart(BarTable bt, BarAnalysisSet bas)
+        {
+            BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
+            bc.Config(bt, bas);
+
+            Root.Form.AddForm(DockStyle.Fill, 0, bc);
+
+            return bc;
+        }
 
         public static void RemoveAll()
         {

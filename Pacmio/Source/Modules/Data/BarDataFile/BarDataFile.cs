@@ -328,49 +328,6 @@ namespace Pacmio
             }
         }
 
-
-        #region Download / Fetch Operation
-        /*
-        public static void Download(IEnumerable<Contract> contracts, IEnumerable<(BarFreq freq, BarType type, Period period)> settings, CancellationTokenSource cts, IProgress<float> progress)
-        {
-            List<(BarFreq freq, BarType type, Period period)> settings_list = new List<(BarFreq freq, BarType type, Period period)>() { (BarFreq.Daily, BarType.Trades, new Period(new DateTime(1000, 1, 1), DateTime.Now)) };
-
-            var priority_settings = settings.Where(n => n.type == BarType.Trades && (n.freq == BarFreq.Hourly || n.freq == BarFreq.Minute)).OrderByDescending(n => n.freq);
-            settings_list.AddRange(priority_settings);
-
-            var remaining_settings = settings.Where(n => !priority_settings.Contains(n) && !(n.freq == BarFreq.Daily && n.type == BarType.Trades)).OrderByDescending(n => n.freq);
-            settings_list.AddRange(remaining_settings);
-
-            ParallelOptions po = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = Math.Ceiling(Root.DegreeOfParallelism / 3D).ToInt32(1)
-            };
-
-            int i = 0, count = contracts.Count() * settings_list.Count();
-            Parallel.ForEach(contracts, po, c =>
-            {
-                if (cts.IsContinue())
-                {
-                    foreach (var (freq, type, period) in settings_list)
-                    {
-                        if (cts.IsContinue())
-                        {
-                            BarTable bt = new BarTable(c, freq, type);
-                            bt.Fetch(period, cts);
-                            i++;
-                            if (cts.IsContinue()) progress?.Report(100.0f * i / count);
-                        }
-                        else
-                            return;
-                    }
-                }
-                else
-                    return;
-            });
-        }*/
-
-        #endregion Download / Fetch Operation
-
         #region File Operation
 
         private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
@@ -389,8 +346,11 @@ namespace Pacmio
 
         public void SaveFile()
         {
-            lock (DataLockObject)
+            lock (DataLockObject) 
+            {
                 this.SerializeJsonFile(DataFileName);
+                IsModified = false;
+            }
         }
 
         public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
@@ -398,6 +358,7 @@ namespace Pacmio
             var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
             bdf.DataLockObject = new object();
             bdf.Frequency = bdf.BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+            bdf.IsModified = false;
             return bdf;
         }
 

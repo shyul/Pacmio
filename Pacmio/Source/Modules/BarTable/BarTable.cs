@@ -306,6 +306,8 @@ namespace Pacmio
                     TimeToRows.Add(b.Time, i);
                 }
             }
+
+            Status = TableStatus.Ready;
         }
 
         public void LoadFromSmallerBar(List<Bar> sorted_bars)
@@ -335,22 +337,42 @@ namespace Pacmio
                         Bar nb = new Bar(this, sb);
                         nb.Index = j;
                         Rows.Add(nb);
-                        TimeToRows.Add(nb.Time, j);
+                        TimeToRows.Add(nb.Time, nb.Index);
                         j++;
                     }
+                }
+            }
+
+            Status = TableStatus.Ready;
+        }
+
+        public void MergeFromSmallerBar(Bar sb)
+        {
+            lock (DataLockObject)
+            {
+                if (this[sb.Time] is Bar b)
+                {
+                    b.MergeFromSmallerBar(sb);
+                }
+                else
+                {
+                    Bar nb = new Bar(this, sb);
+                    nb.Index = Count;
+                    Rows.Add(nb);
+                    TimeToRows.Add(nb.Time, nb.Index);
                 }
             }
         }
 
         #endregion Load Bars
 
-        #region Access Bars
+            #region Access Bars
 
-        /// <summary>
-        /// Lookup Bar by Index. Mostly used in the Chart.
-        /// </summary>
-        /// <param name="i">Index of the Bar in the Rows</param>
-        /// <returns>Bar according to the given index</returns>
+            /// <summary>
+            /// Lookup Bar by Index. Mostly used in the Chart.
+            /// </summary>
+            /// <param name="i">Index of the Bar in the Rows</param>
+            /// <returns>Bar according to the given index</returns>
         public Bar this[int i]
         {
             get

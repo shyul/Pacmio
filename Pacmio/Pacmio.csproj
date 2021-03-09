@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\MultiTimeFrameSet.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />

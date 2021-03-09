@@ -57,9 +57,10 @@ namespace Pacmio
         /// <param name="pd"></param>
         /// <param name="cts"></param>
         /// <returns></returns>
-        private static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts)
+        public static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts = null)
         {
-            if (bdf.BarFreq > BarFreq.Daily) throw new Exception("Only support download daily and smaller bars data file.");
+            if (bdf.BarFreq > BarFreq.Daily)
+                throw new Exception("Only support download daily and smaller bars data file.");
 
             if (bdf.HistoricalHeadTime == DateTime.MaxValue)
             {

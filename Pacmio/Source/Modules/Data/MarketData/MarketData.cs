@@ -232,7 +232,7 @@ namespace Pacmio
                 {
                     lock (DataConsumers)
                     {
-                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable bt0 && bt0.IsLive).Select(n => n as BarTable), bt =>
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable bts && bts.IsLive).Select(n => n as BarTable), bt =>
                         {
                             if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
                             {
