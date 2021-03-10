@@ -19,28 +19,6 @@ namespace Pacmio
 {
     public sealed class BarChart : ChartWidget
     {
-        private static List<BarChart> List { get; } = new List<BarChart>();
-
-        public static BarChart GetChart(BarTable bt, BarAnalysisSet bas)
-        {
-            BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
-            bc.Config(bt, bas);
-
-            Root.Form.AddForm(DockStyle.Fill, 0, bc);
-
-            return bc;
-        }
-
-        public static void RemoveAll()
-        {
-            lock (List) List.ForEach(n => n.Close());
-        }
-
-        public static void PointerToEndAll()
-        {
-            lock (List) List.ForEach(bc => { bc.PointerToEnd(); });
-        }
-
         public BarChart(string name, OhlcType type) : base(name)
         {
             Icon = Pacmio.Properties.Resources.Icon_Chart;
@@ -64,33 +42,30 @@ namespace Pacmio
             AddArea(MainArea = new MainBarChartArea(this, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
-            lock (List) List.CheckAdd(this);
             ResumeLayout(false);
             PerformLayout();
+
+            BarChartManager.Add(this);
         }
 
         protected override void Dispose(bool disposing)
         {
-            BarTable.RemoveDataConsumer(this);
             Close();
             GC.Collect();
         }
 
         public override void Close()
         {
-            Console.WriteLine(TabName + ": The BarChart is closing");
+            BarChartManager.Remove(this);
 
-            lock (List) List.CheckRemove(this);
             if (m_BarTable is BarTable bt)
             {
                 bt.RemoveDataConsumer(this);
             }
+
+            Console.WriteLine(TabName + ": The BarChart is closing");
             AsyncUpdateUITask_Cts.Cancel();
             HostContainer?.Remove(this);
-
-            /*
-            Dispose();
-            while (Disposing) ;*/
         }
 
         public string Title { get => MainArea.PriceSeries.Legend.Label; set => MainArea.PriceSeries.Legend.Label = value; }

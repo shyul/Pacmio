@@ -102,12 +102,12 @@ namespace Pacmio
         [IgnoreDataMember]
         public DateTime HistoricalHeadTime
         {
-            get => (m_HistoricalHeadTime != DateTime.MaxValue && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ? DateTime.Now.Date.AddMonths(-6) : m_HistoricalHeadTime;
+            get => (m_HistoricalHeadTime != TimeTool.MaxInvalid && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ? DateTime.Now.Date.AddMonths(-6) : m_HistoricalHeadTime;
             set => m_HistoricalHeadTime = value;
         }
 
         [DataMember]
-        private DateTime m_HistoricalHeadTime = DateTime.MaxValue.AddDays(-10);
+        private DateTime m_HistoricalHeadTime = TimeTool.MaxInvalid;
 
         [DataMember]
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
@@ -127,10 +127,13 @@ namespace Pacmio
 
         public DateTime LastTimeBy(DataSourceType source)
         {
+            PrintDataSourceSegments();
+
             lock (DataLockObject)
             {
                 if (DataSourceSegments.Where(n => n.Value == source).OrderBy(n => n.Key).Select(n => n.Key).LastOrDefault() is Period pd)
                 {
+                    Console.WriteLine("\n Last time is " + pd.Stop + " | Source: " + source.ToString());
                     return pd.Stop;
                 }
                 else
@@ -140,6 +143,23 @@ namespace Pacmio
             }
             //var res = Bars.Where(n => n.Source <= source).OrderBy(n => n.Time);
             //return (res.Count() > 0) ? res.Last().Time : DateTime.MinValue.AddYears(500);
+        }
+
+        public void PrintDataSourceSegments()
+        {
+            lock (DataLockObject)
+            {
+                if (DataSourceSegments.Count > 0)
+                {
+                    Console.WriteLine("\n####### Existing Data Segments #######");
+                    foreach (var item in DataSourceSegments)
+                    {
+                        Console.WriteLine("Period: " + item.Key + " | Source: " + item.Value.ToString());
+                    }
+                }
+                else
+                    Console.WriteLine("\n####### No Data Segments #######");
+            }
         }
 
         /// <summary>
@@ -234,7 +254,9 @@ namespace Pacmio
 
                     lock (DataLockObject)
                     {
+                        Console.WriteLine("Adding Data Source Segment: " + pd.ToString() + " | " + sourceType.ToString());
                         DataSourceSegments.Add(pd, sourceType);
+
                         foreach (var row in sortedList)
                         {
                             Rows[row.time] = (sourceType, row.O, row.H, row.L, row.C, row.V);
@@ -392,7 +414,7 @@ namespace Pacmio
 
                 FundamentalDatum[] fdlist = null;
 
-                DateTime date = DateTime.MaxValue.Date;
+                DateTime date = TimeTool.MaxInvalid;
                 string fd_event = string.Empty;
 
                 foreach (var row in list)

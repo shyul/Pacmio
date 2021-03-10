@@ -253,7 +253,7 @@ namespace Pacmio
         #region Result
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Order Time"), GridColumnOrder(3), GridRenderer(typeof(TextGridRenderer), 300)]
-        public DateTime OrderExecuteTime { get; set; } = DateTime.MaxValue;
+        public DateTime OrderExecuteTime { get; set; } = TimeTool.MaxInvalid;
 
         [DataMember, Browsable(true)]
         public OrderStatus Status { get; set; } = OrderStatus.Inactive;

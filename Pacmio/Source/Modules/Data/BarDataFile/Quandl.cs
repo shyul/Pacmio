@@ -40,20 +40,24 @@ namespace Pacmio
 
             if (Connected && use_quandl)
             {
+                Contract c = bdf.Contract;
+
                 DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
-                DateTime stopTime = DateTime.Now.Date;
+                DateTime stopTime = c.LatestClosingDate;
+
+                Console.WriteLine("startTime = " + startTime + " | stopTime = " + stopTime);
+
                 if (startTime >= stopTime) 
+                {
+                    Console.WriteLine("There is no new data from Quandl yet.");
                     return true;
-
+                }
+               
                 bool getAll = bdf.Count == 0 || startTime < new DateTime(1982, 1, 1);
-
-                //Period pd = getAll ?
-                //    new Period(DateTime.MinValue, DateTime.Now.AddDays(-1)) :
-                //    new Period(startTime.AddDays(-5), stopTime);
 
                 string url = getAll ?
                     DailyBarURL(ConvertToQuandlName(bdf.Contract.Name)) :
-                    DailyBarURL(ConvertToQuandlName(bdf.Contract.Name), new Period(startTime.AddDays(-5), stopTime));
+                    DailyBarURL(ConvertToQuandlName(bdf.Contract.Name), new Period(startTime.AddDays(-7), stopTime));
 
                 byte[] result = null;
 
@@ -114,9 +118,11 @@ namespace Pacmio
                             }
                     }
 
-                    data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
-
+                    Console.WriteLine("The data segment has: " + data_pd);
                     bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
+
+                    if (getAll) 
+                        bdf.HistoricalHeadTime = data_pd.Start;
 
                     bdf.SaveFile();
                     fd.SaveFile();

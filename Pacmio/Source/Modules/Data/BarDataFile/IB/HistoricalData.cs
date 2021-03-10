@@ -50,7 +50,7 @@ namespace Pacmio.IB
             {
                 Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Initial Request Period: " + period);
 
-                if (bdf.HistoricalHeadTime == DateTime.MaxValue) // If EarliestTime is unset, then request it here.
+                if (bdf.HistoricalHeadTime.IsInvalid()) // If EarliestTime is unset, then request it here.
                 {
                     if (cts.Cancelled()) goto End;
                     Fetch_HistoricalDataHeadTimestamp(bdf, cts);
@@ -306,7 +306,7 @@ namespace Pacmio.IB
                     //ActiveBarDataFile_HistoricalData.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
-                data_pd.Insert(data_pd.Stop + ActiveBarDataFile_HistoricalData.Frequency.Span);
+                //data_pd.Insert(data_pd.Stop);// + ActiveBarDataFile_HistoricalData.Frequency.Span);
                 ActiveBarDataFile_HistoricalData.AddRows(rows, DataSourceType.IB, data_pd);
                 ActiveBarDataFile_HistoricalData.SaveFile();
             }

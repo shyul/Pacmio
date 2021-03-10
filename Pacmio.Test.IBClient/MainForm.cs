@@ -314,6 +314,8 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
+                Console.WriteLine("Last Closing Date:" + ContractTest.ActiveContract.LatestClosingDate);
+
                 BarFreq freq = BarFreq;
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
@@ -323,9 +325,10 @@ namespace TestClient
                 Task.Run(() =>
                 {
                     BarTable bt = BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq, Cts);
+                    bt.GetChart(BarTableTest.TestBarAnalysisSet);
 
                     //BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
-                    HistoricalPeriod = pd;
+                    HistoricalPeriod = bt.Period;// pd;
                 }, Cts.Token);
 
                 Root.Form.Show();
@@ -351,7 +354,7 @@ namespace TestClient
             Root.Form.Show();
         }
 
-        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChart.PointerToEndAll();
+        private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartManager.PointerToEndAll();
 
         private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
         {
@@ -363,7 +366,7 @@ namespace TestClient
             {
                 //BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
                 //BarTableTest.BarTableSet.Calculate(BarTableTest.TestBarAnalysisSet, Cts, Progress);
-                BarChart.PointerToEndAll();
+                BarChartManager.PointerToEndAll();
             }, Cts.Token);
         }
 

@@ -135,7 +135,7 @@ namespace Pacmio.IB
                 c.UpdateTime = DateTime.Now;
             }
 
-            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = DateTime.MaxValue;
+            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = TimeTool.MaxInvalid;
 
             Console.WriteLine("Requesting HeadTimestamp errors: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
             DataRequestID = -1;

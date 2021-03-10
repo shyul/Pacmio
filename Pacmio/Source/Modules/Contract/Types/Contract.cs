@@ -156,8 +156,26 @@ namespace Pacmio
             }
         }
 
-        public virtual DateTime CurrentTime => DateTime.Now.ToDestination(TimeZone);
+        [IgnoreDataMember]
+        public virtual DateTime CurrentTime => WorkHoursExtended.CurrentTime;
 
+        [IgnoreDataMember]
+        public virtual DateTime LatestClosingDate
+        {
+            get
+            {
+                DateTime dt = CurrentTime;
+
+                while (!WorkHoursExtended.IsWorkDate(dt) || WorkHoursExtended[dt].TimePeriod >= dt)
+                {
+                    dt = dt.AddHours(-1);
+                }
+
+                return dt.Date;
+            }
+        }
+
+        [IgnoreDataMember]
         public bool IsWorkHour => WorkHours.IsWorkTime(CurrentTime);
 
         #endregion Exchange Information
@@ -193,11 +211,11 @@ namespace Pacmio
         #region Data Update
 
         [IgnoreDataMember]
-        public MarketData MarketData 
+        public MarketData MarketData
         {
             get
             {
-                if(m_MarketData is null) 
+                if (m_MarketData is null)
                     m_MarketData = this.GetOrCreateMarketData();
 
                 return m_MarketData;

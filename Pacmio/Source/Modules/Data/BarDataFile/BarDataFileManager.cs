@@ -62,7 +62,7 @@ namespace Pacmio
             if (bdf.BarFreq > BarFreq.Daily)
                 throw new Exception("Only support download daily and smaller bars data file.");
 
-            if (bdf.HistoricalHeadTime == DateTime.MaxValue)
+            if (bdf.HistoricalHeadTime.IsInvalid())
             {
                 IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
             }
