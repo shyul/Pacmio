@@ -318,12 +318,12 @@ namespace TestClient
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
 
-                //Strategy tr = new TestStrategy(freq);
-
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
+                    BarTable bt = BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq, Cts);
+
                     //BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
                     HistoricalPeriod = pd;
                 }, Cts.Token);

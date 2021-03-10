@@ -27,6 +27,14 @@ namespace Pacmio
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
+        public BarDataFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
+        {
+            ContractKey = info.ContractKey;
+            BarFreq = info.BarFreq;
+            Type = info.Type;
+            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+        }
+
         public void Dispose()
         {
             Rows.Clear();
@@ -65,7 +73,7 @@ namespace Pacmio
         {
             get
             {
-                if (m_Contract is null || FundamentalData is null)
+                if (m_Contract is null || m_FundamentalData is null)
                 {
                     m_Contract = ContractManager.GetByKey(ContractKey);
                     m_FundamentalData = m_Contract.GetOrCreateFundamentalData();
@@ -99,7 +107,7 @@ namespace Pacmio
         }
 
         [DataMember]
-        private DateTime m_HistoricalHeadTime = DateTime.MaxValue;
+        private DateTime m_HistoricalHeadTime = DateTime.MaxValue.AddDays(-10);
 
         [DataMember]
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
@@ -355,11 +363,17 @@ namespace Pacmio
 
         public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) info)
         {
-            var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
-            bdf.DataLockObject = new object();
-            bdf.Frequency = bdf.BarFreq.GetAttribute<BarFreqInfo>().Frequency;
-            bdf.IsModified = false;
-            return bdf;
+            //var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
+
+            if (Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info)) is BarDataFile bdf)
+            {
+                bdf.DataLockObject = new object();
+                bdf.Frequency = bdf.BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+                bdf.IsModified = false;
+                return bdf;
+            }
+            else
+                return new BarDataFile(info);
         }
 
         #endregion File Operation

@@ -182,8 +182,8 @@ namespace Pacmio
             Settings.SerializeJsonFile(SettingFile);
 
             IB.Client.Save();
-            Task a = Task.Run(() => ContractManager.Save());
-            BusinessInfoManager.Save();
+            Task saveContract = Task.Run(() => ContractManager.Save());
+            Task saveBusinessInfo = Task.Run(() => BusinessInfoManager.Save());
             FundamentalManager.Save();
             BarDataFileManager.Save();
             MarketDataManager.Save();
@@ -192,7 +192,8 @@ namespace Pacmio
             AccountPositionManager.Save();
             UnknownContractList.Save();
 
-            while (a?.Status == TaskStatus.Running) { Console.Write("."); Thread.Sleep(500); }
+            while (saveContract?.Status == TaskStatus.Running) { Console.Write("."); Thread.Sleep(500); }
+            while (saveBusinessInfo?.Status == TaskStatus.Running) { Console.Write(","); Thread.Sleep(500); }
         }
 
         #endregion File Storage Utilities
