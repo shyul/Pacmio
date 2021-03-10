@@ -324,7 +324,7 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq, Cts);
+                    BarTable bt = BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq);
                     bt.GetChart(BarTableTest.TestBarAnalysisSet);
 
                     //BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
@@ -383,7 +383,7 @@ namespace TestClient
                 {
                     //BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, BarFreq.Daily, type, ref pd, Cts);
                     pd = HistoricalPeriod;
-                   // BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, freq, type, ref pd, Cts);
+                    // BarTableTest.BarTableSet.AddContract(ContractTest.ActiveContract, freq, type, ref pd, Cts);
                     HistoricalPeriod = pd;
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + ": Finished!");
                 }, Cts.Token);
@@ -1157,13 +1157,13 @@ namespace TestClient
             {
                 string fileName = Root.OpenFile.FileName;
 
-                
+
                 Reuters.CompanyOverview.ReportSnapshot data = Serialization.DeserializeXML<Reuters.CompanyOverview.ReportSnapshot>(File.ReadAllText(fileName));
-                foreach(var officer in data.Officers.Officer) 
+                foreach (var officer in data.Officers.Officer)
                 {
                     Console.WriteLine(officer.FirstName + " " + officer.LastName);
                 }
-                foreach(var text in data.TextInfo.Text) 
+                foreach (var text in data.TextInfo.Text)
                 {
                     //DateTime time = DateTime.ParseExact(text.LastModified, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
                     Console.WriteLine(text.Type + " | " + text.LastModifiedTime + " | " + text.Value);

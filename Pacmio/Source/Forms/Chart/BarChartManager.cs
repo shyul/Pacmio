@@ -26,21 +26,21 @@ namespace Pacmio
             return bc;
         }
 
-        public static void Add(BarChart bc) 
+        public static void Add(BarChart bc)
         {
             lock (List)
                 List.CheckAdd(bc);
         }
 
-        public static void Remove(BarChart bc) 
+        public static void Remove(BarChart bc)
         {
-            lock (List) 
+            lock (List)
                 List.CheckRemove(bc);
         }
 
         public static void RemoveAll()
         {
-            lock (List) 
+            lock (List)
                 List.ForEach(n => n.Close());
         }
 

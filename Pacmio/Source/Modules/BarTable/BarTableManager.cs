@@ -16,7 +16,7 @@ namespace Pacmio
     {
         private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<(Contract c, BarFreq freq), BarTable>();
 
-        public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq barFreq = BarFreq.Daily, CancellationTokenSource cts = null)
+        public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq barFreq = BarFreq.Daily)
         {
             if (barFreq >= BarFreq.Daily)
             {
@@ -36,7 +36,7 @@ namespace Pacmio
                 throw new Exception("This function does not support intra-day bars.");
         }
 
-        public static void Clear() 
+        public static void Clear()
         {
             lock (ContractDailyBarTableLUT)
             {
@@ -94,6 +94,18 @@ namespace Pacmio
                 bt.LoadBars(sorted_list);
                 return bt;
             }
+        }
+
+        public static BarTable GetEmptyTable() 
+        {
+            return null;
+        }
+
+        public static void LoadBarTable(this BarTable bt, Period pd)
+        {
+
+
+            BarDataFile bdf = bt.GetOrCreateBarDataFile();
         }
     }
 }

@@ -13,40 +13,28 @@ namespace Pacmio
 {
     public static class SimulationManager
     {
-        public static double InitialFund { get; set; } = 50000;
+        public static Dictionary<Contract, IntraDayBarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, IntraDayBarTableSet>();
 
-        
-
-        public static readonly List<SimulationSet> List = new List<SimulationSet>();
-
-        // Per Contract and Per TradeRule 
-
-        public static int MaxDegreeOfParallelism => Root.DegreeOfParallelism;
-
-        /// <summary>
-        /// List of all available Contracts
-        /// </summary>
-        public static List<Contract> ContractList { get; } = new List<Contract>();
-
-        //public static BarTableSet BarTableSet { get; } = new BarTableSet();
-
-        public static void Simulate(Period pd, CancellationTokenSource cts)
+        public static void Run(Strategy s, Period period)
         {
+            for (DateTime t = period.Start.Date; t < period.Stop; t = t.AddDays(1))
+            {
+                // Get list of contracts at the particular date
+                List<Contract> list = new List<Contract>();
 
+                Period pd = new Period(t, t.AddDays(2)); // Length...
+
+                foreach (Contract c in list)
+                {
+                    // Create Intraday Bar Table Set
+
+                    // Run
+
+                    // Trade, with assumptions.
+
+                    // Keep (yield) the Trade log...
+                }
+            }
         }
-
-        public static void Train(Contract c)
-        {
-
-
-        }
-
-        public static void Simulate()
-        {
-
-
-        }
-
-        public static TimeSpan Range { get; set; }
     }
 }

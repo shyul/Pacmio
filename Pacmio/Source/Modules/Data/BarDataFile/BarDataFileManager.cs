@@ -66,6 +66,10 @@ namespace Pacmio
             {
                 IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
             }
+            else
+            {
+                Console.WriteLine("HistoricalHeadTime = " + bdf.HistoricalHeadTime);
+            }
 
             if (bdf.Contract.Status != ContractStatus.Error)
             {
@@ -77,7 +81,7 @@ namespace Pacmio
                     return true;
             }
 
-            return false ;
+            return false;
         }
 
         #endregion Download

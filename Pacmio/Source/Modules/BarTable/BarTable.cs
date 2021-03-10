@@ -43,22 +43,22 @@ namespace Pacmio
 
         public void Dispose()
         {
-            IsLive = false;
-            CalculateTickCancelTs.Cancel();
-
             lock (DataConsumers)
             {
                 foreach (IDataRenderer idr in DataConsumers)
                 {
                     RemoveDataConsumer(idr);
-                    //idr.RemoveDataSource();
+                    if (idr is BarChart bc)
+                        bc.Close();
+                    else
+                        RemoveDataConsumer(idr);
                 }
             }
 
+            IsLive = false;
             Contract.MarketData.RemoveDataConsumer(this);
-
-            lock (Rows) Rows.Clear();
-            //lock (TimeToRows) TimeToRows.Clear();
+            CalculateTickCancelTs.Cancel();
+            Clear();
             GC.Collect();
         }
 
@@ -366,13 +366,13 @@ namespace Pacmio
 
         #endregion Load Bars
 
-            #region Access Bars
+        #region Access Bars
 
-            /// <summary>
-            /// Lookup Bar by Index. Mostly used in the Chart.
-            /// </summary>
-            /// <param name="i">Index of the Bar in the Rows</param>
-            /// <returns>Bar according to the given index</returns>
+        /// <summary>
+        /// Lookup Bar by Index. Mostly used in the Chart.
+        /// </summary>
+        /// <param name="i">Index of the Bar in the Rows</param>
+        /// <returns>Bar according to the given index</returns>
         public Bar this[int i]
         {
             get
@@ -640,6 +640,21 @@ namespace Pacmio
             }
         }
 
+        public void CalculateRefresh(BarAnalysisSet bas)
+        {
+            if (Enabled && Count > 0 && bas is BarAnalysisSet)
+                lock (DataLockObject)
+                {
+                    Status = TableStatus.Calculating;
+                    Calculate(bas);
+                    lock (DataConsumers)
+                    {
+                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
+                    }
+                    m_Status = TableStatus.Ready;
+                }
+        }
+
         private Task CalculateTickTask { get; }
 
         private CancellationTokenSource CalculateTickCancelTs { get; }
@@ -681,21 +696,6 @@ namespace Pacmio
                 Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
                 Status = last_status;
             }
-        }
-
-        public void CalculateRefresh(BarAnalysisSet bas)
-        {
-            if (Enabled && Count > 0 && bas is BarAnalysisSet)
-                lock (DataLockObject)
-                {
-                    Status = TableStatus.Calculating;
-                    Calculate(bas);
-                    lock (DataConsumers)
-                    {
-                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
-                    }
-                    m_Status = TableStatus.Ready;
-                }
         }
 
         #endregion Data/Bar Analysis (TA) Calculation

@@ -15,6 +15,7 @@ namespace Pacmio
 {
     public static class DecisionManager
     {
+        public static Dictionary<Contract, IntraDayBarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, IntraDayBarTableSet>();
 
     }
 }

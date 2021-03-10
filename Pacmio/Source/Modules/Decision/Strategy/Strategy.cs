@@ -46,25 +46,25 @@ namespace Pacmio
         /// <summary>
         /// Bar Analysis vs Multi Time Frame
         /// </summary>
-        protected Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> BarAnalysisSets { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
+        public Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> BarAnalysisLUT { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
 
-        public virtual void ClearBarAnalysisSet() => BarAnalysisSets.Clear();
+        public virtual void ClearBarAnalysisSet() => BarAnalysisLUT.Clear();
 
         public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
         {
             get
             {
-                if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
-                    return BarAnalysisSets[(BarFreq, BarType)];
+                if (BarAnalysisLUT.ContainsKey((BarFreq, BarType)))
+                    return BarAnalysisLUT[(BarFreq, BarType)];
                 else
                     return null;
             }
             set
             {
                 if (value is BarAnalysisSet bas)
-                    BarAnalysisSets[(BarFreq, BarType)] = new BarAnalysisSet(bas);
-                else if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
-                    BarAnalysisSets.Remove((BarFreq, BarType));
+                    BarAnalysisLUT[(BarFreq, BarType)] = new BarAnalysisSet(bas);
+                else if (BarAnalysisLUT.ContainsKey((BarFreq, BarType)))
+                    BarAnalysisLUT.Remove((BarFreq, BarType));
             }
         }
 
@@ -93,7 +93,5 @@ namespace Pacmio
         public virtual int TradingLength { get; set; } = 1;
 
         #endregion Training Settings
-
-
     }
 }
