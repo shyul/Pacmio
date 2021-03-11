@@ -266,6 +266,7 @@ namespace Pacmio
                                     bt.AddPriceTick(time, price, size);
                                 }
 
+                                bt.DataIsUpdated(this);
                                 //Console.WriteLine("bt.Status = " + bt.Status);
                             }
                         });

@@ -20,7 +20,8 @@ namespace Pacmio
     /// <summary>
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
-    public sealed class BarTable : ITagTable, IDataProvider, IDataConsumer, IEquatable<BarTable>,
+    public sealed class BarTable : ITagTable, IDataProvider, IDataConsumer,
+        IEquatable<BarTable>,
         IEquatable<(Contract, BarFreq, BarType)>,
         IEquatable<((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)>
     {
@@ -685,6 +686,8 @@ namespace Pacmio
 
         private List<IDataConsumer> DataConsumers { get; } = new();
 
+        private IEnumerable<IDataRenderer> DataRenderers => DataConsumers.Where(n => n is IDataRenderer).Select(n => n as IDataRenderer);
+
         public bool AddDataConsumer(IDataConsumer idk)
         {
             return DataConsumers.CheckAdd(idk);
@@ -695,11 +698,12 @@ namespace Pacmio
             return DataConsumers.CheckRemove(idk);
         }
 
-        public DateTime UpdateTime { get; private set; }
+        public DateTime UpdateTime { get; private set; } = TimeTool.MinInvalid;
 
         public void DataIsUpdated(IDataProvider provider)
         {
             UpdateTime = DateTime.Now;
+            //Status = m_Status;
         }
 
         public bool ReadyToShow => Count > 0 && Status >= TableStatus.DataReady;
@@ -718,15 +722,18 @@ namespace Pacmio
                     {
                         if (m_Status == TableStatus.CalculateFinished)
                         {
-                            DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
+                            foreach (var idr in DataRenderers) idr.PointerToEnd();
+                            //DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
                         }
                         else if (m_Status == TableStatus.TickingFinished)
                         {
-                            DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
+                            foreach (var idr in DataRenderers) idr.PointerToNextTick();
+                            //DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
                         }
                     }
 
-                    DataConsumers.ForEach(n => { n.DataIsUpdated(this); });
+                    // DataConsumers.ForEach(n => { if (n is not IDataRenderer) n.DataIsUpdated(this); });
+                    DataConsumers.ForEach(n => n.DataIsUpdated(this));
                 }
             }
         }
