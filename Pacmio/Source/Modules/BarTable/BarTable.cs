@@ -88,15 +88,15 @@ namespace Pacmio
         /// <summary>
         /// For Multi Thread Access
         /// </summary>
-        public object DataLockObject { get; } = new object();
+        public object DataLockObject { get; } = new();
 
         /// <summary>
         /// The Rows Data Storage
         /// The Storage is not directly accessible outside of the class.
         /// </summary>
-        private List<Bar> Rows { get; } = new List<Bar>();
+        private List<Bar> Rows { get; } = new();
 
-        private Dictionary<DateTime, int> TimeToRows { get; } = new Dictionary<DateTime, int>();
+        private Dictionary<DateTime, int> TimeToRows { get; } = new();
 
         /// <summary>
         /// Returns the number of the Rows in the BarTable.
@@ -187,9 +187,9 @@ namespace Pacmio
                 if (Count > 0)
                 {
                     if (IsLive)
-                        return new Period(FirstTime, true);
+                        return new(FirstTime, true);
                     else
-                        return new Period(FirstTime, LastTimeBound);
+                        return new(FirstTime, LastTimeBound);
                 }
                 else
                     return Period.Empty;
@@ -290,7 +290,7 @@ namespace Pacmio
             if (sorted_bars.Count > 0)
             {
                 if (this != sorted_bars.FirstOrDefault().Table)
-                    throw new Exception("bar's table has to match with this table!");
+                    throw new("bar's table has to match with this table!");
 
                 Status = TableStatus.Default;
 
@@ -319,7 +319,7 @@ namespace Pacmio
             {
                 BarTable bt = sorted_bars.FirstOrDefault().Table;
                 if (Contract != bt.Contract || Type != bt.Type)
-                    throw new Exception("bar's table has to match with this table!");
+                    throw new("bar's table has to match with this table!");
 
                 Status = TableStatus.Default;
 
@@ -340,7 +340,7 @@ namespace Pacmio
                         }
                         else
                         {
-                            Bar nb = new Bar(this, sb);
+                            Bar nb = new(this, sb);
                             nb.Index = j;
                             Rows.Add(nb);
                             TimeToRows.Add(nb.Time, nb.Index);
@@ -363,7 +363,7 @@ namespace Pacmio
                 }
                 else
                 {
-                    Bar nb = new Bar(this, sb);
+                    Bar nb = new(this, sb);
                     nb.Index = Count;
                     Rows.Add(nb);
                     TimeToRows.Add(nb.Time, nb.Index);
@@ -506,7 +506,7 @@ namespace Pacmio
                     {
                         lb.Source = DataSourceType.Realtime;
                     }
-                    Bar nb = new Bar(this, tickTime, last, volume);
+                    Bar nb = new(this, tickTime, last, volume);
                     nb.Index = Count;
                     Rows.Add(nb);
                     TimeToRows.Add(nb.Time, nb.Index);
@@ -527,17 +527,17 @@ namespace Pacmio
 
         #region Basic Analysis
 
-        public static GainAnalysis GainAnalysis { get; } = new GainAnalysis(); // { ChartEnabled = false };
+        public static GainAnalysis GainAnalysis { get; } = new(); // { ChartEnabled = false };
 
-        public static TrueRange TrueRangeAnalysis { get; } = new TrueRange(); // { ChartEnabled = false };
+        public static TrueRange TrueRangeAnalysis { get; } = new(); // { ChartEnabled = false };
 
-        public static TrendStrength TrendStrengthAnalysis { get; } = new TrendStrength(); // { ChartEnabled = false };
+        public static TrendStrength TrendStrengthAnalysis { get; } = new(); // { ChartEnabled = false };
 
-        public static PivotPointAnalysis PivotPointAnalysis { get; } = new PivotPointAnalysis(); // { ChartEnabled = false };
+        public static PivotPointAnalysis PivotPointAnalysis { get; } = new(); // { ChartEnabled = false };
 
         #endregion Basic Analysis
 
-        private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new Dictionary<BarAnalysis, BarAnalysisPointer>();
+        private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new();
 
         public int LastCalculateIndex { get; private set; } = -1;
 
@@ -709,7 +709,7 @@ namespace Pacmio
 
         #region Data Consumers
 
-        private List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();
+        private List<IDataConsumer> DataConsumers { get; } = new();
 
         public bool AddDataConsumer(IDataConsumer idk)
         {

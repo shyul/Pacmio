@@ -16,11 +16,11 @@ namespace Pacmio
 {
     public static class BarChartManager
     {
-        private static List<BarChart> List { get; } = new List<BarChart>();
+        private static List<BarChart> List { get; } = new();
 
         public static BarChart GetChart(this BarTable bt, BarAnalysisSet bas)
         {
-            BarChart bc = new BarChart("BarChart", OhlcType.Candlestick);
+            BarChart bc = new("BarChart", OhlcType.Candlestick);
             bc.Config(bt, bas);
             Root.Form.AddForm(DockStyle.Fill, 0, bc);
             return bc;

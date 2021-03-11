@@ -14,7 +14,7 @@ namespace Pacmio
 {
     public static class BarTableManager
     {
-        private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<(Contract c, BarFreq freq), BarTable>();
+        private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new();
 
         public static void Clear()
         {
@@ -42,13 +42,13 @@ namespace Pacmio
                 }
             }
             else
-                throw new Exception("This function does not support intra-day bars.");
+                throw new("This function does not support intra-day bars.");
         }
 
         private static BarTable LoadDailyBarTable(this Contract c, BarFreq barFreq, bool adjustDividend = false, CancellationTokenSource cts = null)
         {
             if (barFreq < BarFreq.Daily)
-                throw new Exception("This function does not support intra-day bars.");
+                throw new("This function does not support intra-day bars.");
 
             BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, BarType.Trades);
             bdf_daily.Fetch(Period.Full, cts);
@@ -58,7 +58,7 @@ namespace Pacmio
 
             if (barFreq > BarFreq.Daily)
             {
-                BarTable bt = new BarTable(c, barFreq, BarType.Trades);
+                BarTable bt = new(c, barFreq, BarType.Trades);
                 bt.LoadFromSmallerBar(sorted_daily_list);
                 return bt;
             }
@@ -75,13 +75,26 @@ namespace Pacmio
         {
             Console.WriteLine("LoadBarTable Period = " + period);
 
-            if (barFreq > BarFreq.Daily)
+            BarDataFile bdf_daily_base = c.GetOrCreateBarDataFile(BarFreq.Daily);
+            bdf_daily_base.Fetch(Period.Full, cts);
+
+            if (barFreq == BarFreq.Daily && barType == BarType.Trades)
             {
-                BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
-                bdf_daily.Fetch(Period.Full, cts);
+                BarTable bt = bdf_daily_base.GetBarTable();
+                var sorted_list = bdf_daily_base.LoadBars(bt, period, adjustDividend);
+                bt.LoadBars(sorted_list);
+                return bt;
+            }
+            else if (barFreq > BarFreq.Daily)
+            {
+                BarDataFile bdf_daily = barType == BarType.Trades ? bdf_daily_base : c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
+
+                if (barType != BarType.Trades)
+                    bdf_daily.Fetch(Period.Full, cts);
+
                 BarTable bt_daily = bdf_daily.GetBarTable();
                 var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
-                BarTable bt = new BarTable(c, barFreq, barType);
+                BarTable bt = new(c, barFreq, barType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
                 return bt;
             }
@@ -96,7 +109,7 @@ namespace Pacmio
             }
         }
 
-        public static BarTable GetEmptyTable() 
+        public static BarTable GetEmptyTable()
         {
             return null;
         }

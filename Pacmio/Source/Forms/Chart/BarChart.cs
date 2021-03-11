@@ -301,7 +301,7 @@ namespace Pacmio
 
         public OhlcType OhlcType { get => MainArea.PriceSeries.Type; set => MainArea.PriceSeries.Type = value; }
 
-        public Period Period => new Period(m_BarTable.IndexToTime(StartPt), m_BarTable.IndexToTime(StopPt));
+        public Period Period => new(m_BarTable.IndexToTime(StartPt), m_BarTable.IndexToTime(StopPt));
 
         public BarFreq BarFreq => m_BarTable.BarFreq;
 
@@ -501,7 +501,7 @@ namespace Pacmio
 
                             case (TimeUnit.None):
                             default:
-                                throw new Exception("Invalid TimeInterval Type!");
+                                throw new("Invalid TimeInterval Type!");
                         }
 
                         if (ChartBounds.Width > RightBlankAreaWidth)
