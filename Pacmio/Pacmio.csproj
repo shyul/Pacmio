@@ -181,8 +181,8 @@
     <Compile Include="Source\Modules\Decision\WatchList\TIProData\Signal\IAlert.cs" />
     <Compile Include="Source\Modules\Types\CandleStickType.cs" />
     <Compile Include="Source\Modules\Types\ICandleStick.cs" />
-    <Compile Include="Source\Forms\Chart\BarChartArea.cs" />
-    <Compile Include="Source\Forms\Chart\BarChartOscillatorArea.cs" />
+    <Compile Include="Source\Forms\Chart\Area\BarChartArea.cs" />
+    <Compile Include="Source\Forms\Chart\Area\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Forms\Chart\Types\IBarChartArea.cs" />
     <Compile Include="Source\Forms\Chart\Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\IDualData.cs" />
@@ -191,9 +191,9 @@
     <Compile Include="Source\Forms\Chart\Types\IChartPattern.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\Types\MovingAverageType.cs" />
-    <Compile Include="Source\Forms\Chart\PositionArea.cs" />
+    <Compile Include="Source\Forms\Chart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
-    <Compile Include="Source\Forms\Chart\PositionSeries.cs" />
+    <Compile Include="Source\Forms\Chart\Series\PositionSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Position\BarPositionData.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
@@ -201,8 +201,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFile.cs" />
-    <Compile Include="Source\Forms\Chart\SignalArea.cs" />
-    <Compile Include="Source\Forms\Chart\SignalSeries.cs" />
+    <Compile Include="Source\Forms\Chart\Area\SignalArea.cs" />
+    <Compile Include="Source\Forms\Chart\Series\SignalSeries.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
@@ -237,7 +237,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\ATR.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\TSI.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\MovingAverage\WMA.cs" />
-    <Compile Include="Source\Forms\Chart\MainBarChartArea.cs" />
+    <Compile Include="Source\Forms\Chart\Area\MainBarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Bar.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\WaveTrend.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\ExchangeInfo.cs" />
