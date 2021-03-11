@@ -287,63 +287,70 @@ namespace Pacmio
 
         public void LoadBars(List<Bar> sorted_bars)
         {
-            if (this != sorted_bars.FirstOrDefault().Table)
-                throw new Exception("bar's table has to match with this table!");
-
-            Status = TableStatus.Default;
-
-            lock (DataLockObject)
+            if (sorted_bars.Count > 0)
             {
-                TimeToRows.Clear();
-                Rows.Clear();
-                ResetCalculationPointer();
+                if (this != sorted_bars.FirstOrDefault().Table)
+                    throw new Exception("bar's table has to match with this table!");
 
-                for (int i = 0; i < sorted_bars.Count; i++)
+                Status = TableStatus.Default;
+
+                lock (DataLockObject)
                 {
-                    Bar b = sorted_bars[i];
-                    b.Index = i;
-                    Rows.Add(b);
-                    TimeToRows.Add(b.Time, i);
-                }
-            }
+                    TimeToRows.Clear();
+                    Rows.Clear();
+                    ResetCalculationPointer();
 
-            Status = TableStatus.Ready;
+                    for (int i = 0; i < sorted_bars.Count; i++)
+                    {
+                        Bar b = sorted_bars[i];
+                        b.Index = i;
+                        Rows.Add(b);
+                        TimeToRows.Add(b.Time, i);
+                    }
+                }
+
+                Status = TableStatus.Ready;
+            }
         }
 
         public void LoadFromSmallerBar(List<Bar> sorted_bars)
         {
-            if (this != sorted_bars.FirstOrDefault().Table)
-                throw new Exception("bar's table has to match with this table!");
-
-            Status = TableStatus.Default;
-
-            lock (DataLockObject)
+            if (sorted_bars.Count > 0)
             {
-                TimeToRows.Clear();
-                Rows.Clear();
-                ResetCalculationPointer();
+                BarTable bt = sorted_bars.FirstOrDefault().Table;
+                if (Contract != bt.Contract || Type != bt.Type)
+                    throw new Exception("bar's table has to match with this table!");
 
-                int j = 0;
-                for (int i = 0; i < sorted_bars.Count; i++)
+                Status = TableStatus.Default;
+
+                lock (DataLockObject)
                 {
-                    Bar sb = sorted_bars[i];
+                    TimeToRows.Clear();
+                    Rows.Clear();
+                    ResetCalculationPointer();
 
-                    if (this[sb.Time] is Bar b)
+                    int j = 0;
+                    for (int i = 0; i < sorted_bars.Count; i++)
                     {
-                        b.MergeFromSmallerBar(sb);
-                    }
-                    else
-                    {
-                        Bar nb = new Bar(this, sb);
-                        nb.Index = j;
-                        Rows.Add(nb);
-                        TimeToRows.Add(nb.Time, nb.Index);
-                        j++;
+                        Bar sb = sorted_bars[i];
+
+                        if (this[sb.Time] is Bar b)
+                        {
+                            b.MergeFromSmallerBar(sb);
+                        }
+                        else
+                        {
+                            Bar nb = new Bar(this, sb);
+                            nb.Index = j;
+                            Rows.Add(nb);
+                            TimeToRows.Add(nb.Time, nb.Index);
+                            j++;
+                        }
                     }
                 }
-            }
 
-            Status = TableStatus.Ready;
+                Status = TableStatus.Ready;
+            }
         }
 
         public void MergeFromSmallerBar(Bar sb)

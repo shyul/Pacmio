@@ -314,8 +314,6 @@ namespace TestClient
         {
             if (ValidateSymbol())
             {
-                Console.WriteLine("Last Closing Date:" + ContractTest.ActiveContract.LatestClosingDate);
-
                 BarFreq freq = BarFreq;
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
@@ -324,10 +322,10 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq);
+                    BarTable bt = freq < BarFreq.Daily ? 
+                    ContractTest.ActiveContract.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq);
                     bt.GetChart(BarTableTest.TestBarAnalysisSet);
-
-                    //BarTableTest.BarTableSet.AddChart(ContractTest.ActiveContract, BarTableTest.TestBarAnalysisSet, freq, type, ref pd, Cts);
                     HistoricalPeriod = bt.Period;// pd;
                 }, Cts.Token);
 

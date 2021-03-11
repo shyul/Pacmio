@@ -29,7 +29,14 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static BarDataFile ActiveBarDataFile_HistoricalData = null;
+        public static DateTime LastDataRequestTime { get; private set; } = DateTime.MinValue;
+
+        public static bool HistoricalData_Connected { get; private set; } = true;
+
+        public static List<string> HistoricalData_Servers { get; } = new List<string>();
+
+        private static BarDataFile ActiveBarDataFile_HistoricalData { get; set; } = null;
+
         private static TimeZoneInfo ActiveTimeZone_HistoricalData => ActiveBarDataFile_HistoricalData.Contract.TimeZone;
 
         #region Fetch Historical Data
@@ -53,6 +60,9 @@ namespace Pacmio.IB
                 if (bdf.HistoricalHeadTime.IsInvalid()) // If EarliestTime is unset, then request it here.
                 {
                     if (cts.Cancelled()) goto End;
+
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Historical Head Time Is Invalid, need to check with IB.");
+
                     Fetch_HistoricalDataHeadTimestamp(bdf, cts);
                 }
 
@@ -60,15 +70,18 @@ namespace Pacmio.IB
                 {
                     Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Rectified Period: " + period);
 
+                    /*
                     List<DateTime> api_request_endTime_list = new List<DateTime>();
-
-                    foreach (Period missing_period in missing_period_list)
+                    DateTime next_stop = DateTime.MaxValue;
+                    foreach (Period missing_period in missing_period_list.OrderByDescending(n => n.Stop))
                     {
                         Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
                         api_request_endTime_list.AddRange(missing_period.Split(bfi.Duration).Select(n => n.Stop));
-                    }
+                    }*/
 
-                    foreach (DateTime api_request_endTime in api_request_endTime_list.OrderBy(n => n))
+                    var api_request_endTime_list = missing_period_list.Split(bfi.Duration).OrderBy(n => n.Stop).Select(n => n.Stop);
+
+                    foreach (DateTime api_request_endTime in api_request_endTime_list)
                     {
                         if (cts.Cancelled() || IsCancelled)
                             goto End;
@@ -112,12 +125,6 @@ namespace Pacmio.IB
         }
 
         #endregion Fetch Historical Data
-
-        public static DateTime LastDataRequestTime { get; private set; } = DateTime.MinValue;
-
-        public static bool HistoricalData_Connected { get; private set; } = true;
-
-        public static readonly List<string> HistoricalData_Servers = new List<string>();
 
         /**
          * @brief Requests contracts' historical data.
@@ -306,7 +313,7 @@ namespace Pacmio.IB
                     //ActiveBarDataFile_HistoricalData.Add(DataSourceType.IB, time, ts, open, high, low, close, volume, true);
                 }
 
-                //data_pd.Insert(data_pd.Stop);// + ActiveBarDataFile_HistoricalData.Frequency.Span);
+                data_pd.Insert(data_pd.Stop + ActiveBarDataFile_HistoricalData.Frequency.Span);
                 ActiveBarDataFile_HistoricalData.AddRows(rows, DataSourceType.IB, data_pd);
                 ActiveBarDataFile_HistoricalData.SaveFile();
             }

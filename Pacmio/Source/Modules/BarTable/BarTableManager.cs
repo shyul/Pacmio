@@ -16,6 +16,15 @@ namespace Pacmio
     {
         private static Dictionary<(Contract c, BarFreq freq), BarTable> ContractDailyBarTableLUT { get; } = new Dictionary<(Contract c, BarFreq freq), BarTable>();
 
+        public static void Clear()
+        {
+            lock (ContractDailyBarTableLUT)
+            {
+                ContractDailyBarTableLUT.Values.ToList().ForEach(n => n.Dispose());
+                ContractDailyBarTableLUT.Clear();
+            }
+        }
+
         public static BarTable GetOrCreateDailyBarTable(this Contract c, BarFreq barFreq = BarFreq.Daily)
         {
             if (barFreq >= BarFreq.Daily)
@@ -34,15 +43,6 @@ namespace Pacmio
             }
             else
                 throw new Exception("This function does not support intra-day bars.");
-        }
-
-        public static void Clear()
-        {
-            lock (ContractDailyBarTableLUT)
-            {
-                ContractDailyBarTableLUT.Values.ToList().ForEach(n => n.Dispose());
-                ContractDailyBarTableLUT.Clear();
-            }
         }
 
         private static BarTable LoadDailyBarTable(this Contract c, BarFreq barFreq, bool adjustDividend = false, CancellationTokenSource cts = null)
@@ -73,11 +73,12 @@ namespace Pacmio
 
         public static BarTable LoadBarTable(this Contract c, Period period, BarFreq barFreq, BarType barType, bool adjustDividend, CancellationTokenSource cts = null)
         {
+            Console.WriteLine("LoadBarTable Period = " + period);
+
             if (barFreq > BarFreq.Daily)
             {
                 BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
                 bdf_daily.Fetch(Period.Full, cts);
-
                 BarTable bt_daily = bdf_daily.GetBarTable();
                 var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
                 BarTable bt = new BarTable(c, barFreq, barType);
@@ -88,7 +89,6 @@ namespace Pacmio
             {
                 BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, barType);
                 bdf.Fetch(period, cts);
-
                 BarTable bt = bdf.GetBarTable();
                 var sorted_list = bdf.LoadBars(bt, period, adjustDividend);
                 bt.LoadBars(sorted_list);

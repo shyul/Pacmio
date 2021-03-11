@@ -119,6 +119,7 @@ namespace Pacmio
                     }
 
                     Console.WriteLine("The data segment has: " + data_pd);
+                    data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
                     bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
 
                     if (getAll) 
@@ -176,6 +177,7 @@ namespace Pacmio
                                 /// Save File Now
                                 if (currentBtd is BarDataFile bdf_save)
                                 {
+                                    data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
                                     bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
                                     bdf_save.SaveFile(); 
                                     currentFd.SaveFile();

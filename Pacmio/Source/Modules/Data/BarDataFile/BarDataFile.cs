@@ -102,7 +102,10 @@ namespace Pacmio
         [IgnoreDataMember]
         public DateTime HistoricalHeadTime
         {
-            get => (m_HistoricalHeadTime != TimeTool.MaxInvalid && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ? DateTime.Now.Date.AddMonths(-6) : m_HistoricalHeadTime;
+            get => (m_HistoricalHeadTime != TimeTool.MaxInvalid && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
+                DateTime.Now.Date.AddMonths(-6) :
+                m_HistoricalHeadTime;
+
             set => m_HistoricalHeadTime = value;
         }
 
@@ -176,22 +179,26 @@ namespace Pacmio
             DateTime start = period.Start < HistoricalHeadTime ? HistoricalHeadTime : period.Start.Date; // new DateTime(period.Start.Year, period.Start.Month, period.Start.Day);
             stop = period.IsCurrent || stop > stoplimit ? stoplimit : stop;
 
+            Console.WriteLine("GetMissingPeriods | start = " + start + " | stop = " + stop);
+
             if (start < stop)
             {
                 WorkHours wh = Contract.WorkHoursExtended;
                 MultiPeriod missing_period_list = new MultiPeriod(new Period(start, stop));
 
-                DateTime check = start, rm_start = start;
+                DateTime rm_check = start, rm_start = start;
                 bool start_chk_pd = true;
 
-                while (check < stop)
+                Console.WriteLine("check = " + rm_check);
+
+                while (rm_check < stop)
                 {
-                    if (!wh.IsWorkTime(check))
+                    if (!wh.IsWorkTime(rm_check))
                     {
                         if (start_chk_pd)
                         {
                             start_chk_pd = false;
-                            rm_start = check;
+                            rm_start = rm_check;
                         }
                     }
                     else
@@ -199,11 +206,21 @@ namespace Pacmio
                         if (!start_chk_pd)
                         {
                             start_chk_pd = true;
-                            missing_period_list.Remove(new Period(rm_start, check));
+
+                            Console.WriteLine("Chop off| start = " + rm_start + " | stop = " + rm_check);
+                            missing_period_list.Remove(new Period(rm_start, rm_check));
                         }
                     }
 
-                    check.AddMinutes(10);
+                    rm_check = rm_check.AddMinutes(10);
+                    //Console.WriteLine(rm_check);
+                    //Console.Write(".");
+                }
+
+                if (!start_chk_pd)
+                {
+                    Console.WriteLine("Chop off| start = " + rm_start + " | stop = " + rm_check);
+                    missing_period_list.Remove(new Period(rm_start, rm_check));
                 }
 
                 foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
@@ -376,7 +393,7 @@ namespace Pacmio
 
         public void SaveFile()
         {
-            lock (DataLockObject) 
+            lock (DataLockObject)
             {
                 this.SerializeJsonFile(DataFileName);
                 IsModified = false;
