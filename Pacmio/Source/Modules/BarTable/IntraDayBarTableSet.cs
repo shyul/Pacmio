@@ -36,9 +36,29 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public Period Period { get; private set; }
+        public Period Period
+        {
+            get => m_Period; 
+            
+            set
+            {
+                if(m_Period != value) 
+                {
+                    m_Period = value;
+                
 
-        public bool IsLive => Period.IsCurrent;
+
+                }
+            }
+        }
+
+        private Period m_Period = Period.Empty;
+
+        public DateTime Stop => Period.Stop;
+
+        public DateTime Start => Period.Start;
+
+        public bool IsCurrent => Period.IsCurrent;
 
         private Dictionary<(BarFreq BarFreq, BarType BarType), BarTable> BarTableLUT { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarTable>();
 

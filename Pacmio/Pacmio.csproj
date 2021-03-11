@@ -210,7 +210,6 @@
     <Compile Include="Source\Modules\Data\MarketData\MarketDataStatus.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridView.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\WatchListGridViewManager.cs" />
-    <Compile Include="Source\Modules\BarTable\BarTableSet_merge_with_MultiTimeFrameSet_please.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationResult.cs" />
