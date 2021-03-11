@@ -66,18 +66,9 @@ namespace Pacmio.IB
                     Fetch_HistoricalDataHeadTimestamp(bdf, cts);
                 }
 
-                if (bdf.GetMissingPeriods(period) is MultiPeriod missing_period_list && !missing_period_list.IsEmpty)
+                if (bdf.GetMissingPeriods(period, DataSourceType.IB) is MultiPeriod missing_period_list && !missing_period_list.IsEmpty)
                 {
-                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Rectified Period: " + period);
-
-                    /*
-                    List<DateTime> api_request_endTime_list = new List<DateTime>();
-                    DateTime next_stop = DateTime.MaxValue;
-                    foreach (Period missing_period in missing_period_list.OrderByDescending(n => n.Stop))
-                    {
-                        Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | This is what we miss: " + missing_period);
-                        api_request_endTime_list.AddRange(missing_period.Split(bfi.Duration).Select(n => n.Stop));
-                    }*/
+                    Console.WriteLine(MethodBase.GetCurrentMethod().Name + " | Rectified Period: \n" + missing_period_list.ToString());
 
                     var api_request_endTime_list = missing_period_list.Split(bfi.Duration).OrderBy(n => n.Stop).Select(n => n.Stop);
 

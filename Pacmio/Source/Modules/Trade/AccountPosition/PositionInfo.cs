@@ -29,6 +29,7 @@ namespace Pacmio
 
         public AccountInfo AccountInfo { get; }
 
+        [Browsable(true), ReadOnly(true), DisplayName("Account ID"), GridColumnOrder(1, 0, 0), GridRenderer(typeof(TextGridRenderer), 150, true)]
         public string AccountId => AccountInfo.AccountId;
 
         [Browsable(true), ReadOnly(true), DisplayName("Contract"), GridColumnOrder(1, 0, 0), GridRenderer(typeof(ContractGridRenderer), 150, true)]
@@ -36,16 +37,16 @@ namespace Pacmio
 
         public MarketData MarketData => Contract.MarketData;
 
-        [Browsable(true), ReadOnly(true), DisplayName("MarketPrice"), GridColumnOrder(2), GridRenderer(typeof(NumberGridRenderer), 100)]
+        [Browsable(true), ReadOnly(true), DisplayName("Market Price"), GridColumnOrder(2), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double MarketPrice => MarketData.MarketPrice;
 
-        [Browsable(true), ReadOnly(true), DisplayName("AverageEntryPrice"), GridColumnOrder(3), GridRenderer(typeof(NumberGridRenderer), 100)]
+        [Browsable(true), ReadOnly(true), DisplayName("Average Entry Price"), GridColumnOrder(3), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double AverageEntryPrice { get; private set; } = double.NaN;
 
         /// <summary>
         /// Get information from Execution data...
         /// </summary>
-        [Browsable(true), ReadOnly(true), DisplayName("AverageCommissionPerUnit"), GridColumnOrder(4), GridRenderer(typeof(NumberGridRenderer), 100)]
+        [Browsable(true), ReadOnly(true), DisplayName("Average Commission/Unit"), GridColumnOrder(4), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double AverageCommissionPerUnit { get; set; } = double.NaN;
 
         [Browsable(true), ReadOnly(true), DisplayName("Quantity"), GridColumnOrder(5), GridRenderer(typeof(NumberGridRenderer), 100)]
@@ -72,7 +73,7 @@ namespace Pacmio
         [Browsable(true), ReadOnly(true), DisplayName("Cost"), GridColumnOrder(6), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double Cost => double.IsNaN(AverageEntryPrice) ? 0 : Math.Abs(Quantity) * AverageEntryPrice;
 
-        [Browsable(true), ReadOnly(true), DisplayName("UnrealizedPnL"), GridColumnOrder(7), GridRenderer(typeof(NumberGridRenderer), 100)]
+        [Browsable(true), ReadOnly(true), DisplayName("Unrealized PnL"), GridColumnOrder(7), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double UnrealizedPnL => double.IsNaN(AverageEntryPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
 
         [Browsable(true), ReadOnly(true), DisplayName("Value"), GridColumnOrder(8), GridRenderer(typeof(NumberGridRenderer), 100)]

@@ -206,9 +206,9 @@ namespace Pacmio
                         if (!start_chk_pd)
                         {
                             start_chk_pd = true;
-
-                            Console.WriteLine("Chop off| start = " + rm_start + " | stop = " + rm_check);
-                            missing_period_list.Remove(new Period(rm_start, rm_check));
+                            Period off_market_pd = new Period(rm_start, rm_check);
+                            Console.WriteLine("Chop off Non-Market: " + off_market_pd);
+                            missing_period_list.Remove(off_market_pd);
                         }
                     }
 
@@ -219,14 +219,15 @@ namespace Pacmio
 
                 if (!start_chk_pd)
                 {
-                    Console.WriteLine("Chop off| start = " + rm_start + " | stop = " + rm_check);
-                    missing_period_list.Remove(new Period(rm_start, rm_check));
+                    Period off_market_pd = new Period(rm_start, rm_check);
+                    Console.WriteLine("Chop off Non-Market: " + off_market_pd);
+                    missing_period_list.Remove(off_market_pd);
                 }
 
                 foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
                 {
+                    Console.WriteLine("Chop off Existing: " + existingPd);
                     missing_period_list.Remove(existingPd);
-                    Console.WriteLine("BarDataFile Already Existing: " + existingPd);
                 }
 
                 return missing_period_list;
