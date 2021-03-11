@@ -32,7 +32,8 @@ namespace Pacmio
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
-            IsLive = true;
+            Contract.MarketData.AddDataConsumer(this);
+            //IsLive = true;
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
@@ -55,7 +56,6 @@ namespace Pacmio
                 }
             }
 
-            IsLive = false;
             Contract.MarketData.RemoveDataConsumer(this);
             CalculateTickCancelTs.Cancel();
             Clear();
@@ -101,16 +101,7 @@ namespace Pacmio
         /// <summary>
         /// Returns the number of the Rows in the BarTable.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    return Rows.Count;
-                }
-            }
-        }
+        public int Count => Rows.Count;
 
         /// <summary>
         /// Returns if the BarTable is has no Bars.
@@ -144,7 +135,7 @@ namespace Pacmio
             {
                 lock (DataLockObject)
                 {
-                    return Count > 0 ? this[0].Time : DateTime.Now;
+                    return Count > 0 ? this[0].Time : DateTime.MinValue;
                 }
             }
         }
@@ -180,21 +171,7 @@ namespace Pacmio
         /// <summary>
         /// Returns current BarTable's maximum time span
         /// </summary>
-        public Period Period
-        {
-            get
-            {
-                if (Count > 0)
-                {
-                    if (IsLive)
-                        return new(FirstTime, true);
-                    else
-                        return new(FirstTime, LastTimeBound);
-                }
-                else
-                    return Period.Empty;
-            }
-        }
+        public Period Period => new(FirstTime, LastTimeBound);
 
         /// <summary>
         /// Last Time by specific data source
@@ -292,7 +269,7 @@ namespace Pacmio
                 if (this != sorted_bars.FirstOrDefault().Table)
                     throw new("bar's table has to match with this table!");
 
-                Status = TableStatus.Default;
+                Status = TableStatus.Loading;
 
                 lock (DataLockObject)
                 {
@@ -321,7 +298,7 @@ namespace Pacmio
                 if (Contract != bt.Contract || Type != bt.Type)
                     throw new("bar's table has to match with this table!");
 
-                Status = TableStatus.Default;
+                Status = TableStatus.Loading;
 
                 lock (DataLockObject)
                 {
@@ -380,16 +357,8 @@ namespace Pacmio
         /// </summary>
         /// <param name="i">Index of the Bar in the Rows</param>
         /// <returns>Bar according to the given index</returns>
-        public Bar this[int i]
-        {
-            get
-            {
-                //lock (DataLockObject)
-                //{
-                return i >= Count || i < 0 ? null : Rows[i];
-                //}
-            }
-        }
+        //public Bar this[int i] => i >= Count || i < 0 ? null : Rows[i];
+        public Bar this[int i] => Rows[i];
 
         /// <summary>
         /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
@@ -603,6 +572,8 @@ namespace Pacmio
         /// </summary>
         private void Calculate(IEnumerable<BarAnalysis> analyses, bool debugInfo = true)
         {
+            Status = TableStatus.Calculating;
+
             if (debugInfo)
             {
                 Console.WriteLine("\n==================");
@@ -652,13 +623,15 @@ namespace Pacmio
             if (Enabled && Count > 0 && bas is BarAnalysisSet)
                 lock (DataLockObject)
                 {
-                    Status = TableStatus.Calculating;
                     Calculate(bas);
+
+                    Status = TableStatus.CalculateFinished;
+                    Status = TableStatus.Ready;
+
                     lock (DataConsumers)
                     {
                         DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
                     }
-                    m_Status = TableStatus.Ready;
                 }
         }
 
@@ -674,6 +647,7 @@ namespace Pacmio
             {
                 if (CalculateTickRequested)
                 {
+                    Status = TableStatus.Ticking;
                     CalculateTickRequested = false;
 
                     lock (DataLockObject)
@@ -695,10 +669,10 @@ namespace Pacmio
 
             lock (DataLockObject)
             {
-                while (Status != TableStatus.Ready && Status != TableStatus.LoadFinished) ;
+                while (Status != TableStatus.Ready && Status != TableStatus.DataReady) ;
 
                 TableStatus last_status = Status;
-                Status = TableStatus.Maintaining;
+                Status = TableStatus.DataReady;
                 ResetCalculationPointer();
                 Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
                 Status = last_status;
@@ -728,29 +702,7 @@ namespace Pacmio
             UpdateTime = DateTime.Now;
         }
 
-        public bool IsLive
-        {
-            get => m_IsLive;
-
-            private set
-            {
-                m_IsLive = value;
-                if (m_IsLive)
-                {
-                    // Add BarTable to the tick receiver
-                    Contract.MarketData.AddDataConsumer(this);
-                }
-                else
-                {
-                    // Remove BarTable from the tick receiver
-                    Contract.MarketData.RemoveDataConsumer(this);
-                }
-            }
-        }
-
-        private bool m_IsLive = false;
-
-        public bool ReadyToShow => Count > 0 && Status != TableStatus.Default && Status != TableStatus.Loading && Status != TableStatus.Downloading && Status != TableStatus.Maintaining;// (Status == TableStatus.Ready || Status == TableStatus.CalculateFinished || Status == TableStatus.TickingFinished);
+        public bool ReadyToShow => Count > 0 && Status >= TableStatus.DataReady;
 
         public TableStatus Status
         {
@@ -760,17 +712,21 @@ namespace Pacmio
             {
                 m_Status = value;
 
-                if (m_Status == TableStatus.CalculateFinished)
+                lock (DataConsumers)
                 {
-                    lock (DataConsumers) DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
-                }
-                else if (m_Status == TableStatus.TickingFinished)
-                {
-                    lock (DataConsumers) DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
-                }
-                else if (!ReadyToShow)
-                {
-                    lock (DataConsumers) DataConsumers.ForEach(n => { n.DataIsUpdated(this); });
+                    if (ReadyToShow)
+                    {
+                        if (m_Status == TableStatus.CalculateFinished)
+                        {
+                            DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
+                        }
+                        else if (m_Status == TableStatus.TickingFinished)
+                        {
+                            DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
+                        }
+                    }
+
+                    DataConsumers.ForEach(n => { n.DataIsUpdated(this); });
                 }
             }
         }

@@ -57,6 +57,12 @@ namespace Pacmio
         [DataMember]
         public int ConId { get; private set; } = -1;
 
+        /// <summary>
+        /// For Multi Thread Access
+        /// </summary>
+        [IgnoreDataMember]
+        public object DataLockObject { get; private set; } = new();
+
         #region Status
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Status"), GridColumnOrder(0, 1, 0), GridRenderer(typeof(TextGridRenderer), 100)]
@@ -140,16 +146,16 @@ namespace Pacmio
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("P.Close"), GridColumnOrder(15), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double PreviousClose { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), GridRenderer(typeof(NumberGridRenderer), 60)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Open"), GridColumnOrder(12), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double Open { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("High"), GridColumnOrder(13), GridRenderer(typeof(NumberGridRenderer), 60)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("High"), GridColumnOrder(13), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double High { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), GridRenderer(typeof(NumberGridRenderer), 60)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Low"), GridColumnOrder(14), GridRenderer(typeof(NumberGridRenderer), 60)]
         public double Low { get; set; } = double.NaN;
 
-        [DataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), GridRenderer(typeof(NumberGridRenderer), 70)]
+        [IgnoreDataMember, Browsable(true), ReadOnly(true), DisplayName("Volume"), GridColumnOrder(16), GridRenderer(typeof(NumberGridRenderer), 70)]
         public double Volume { get; set; } = double.NaN;
 
         [DataMember, Browsable(true), ReadOnly(true), DisplayName("Last"), GridColumnOrder(9, 5), GridRenderer(typeof(NumberGridRenderer), 60, false)]
@@ -230,12 +236,9 @@ namespace Pacmio
 
                 if (price > 0)
                 {
-                    if (DataConsumers is null)
-                        DataConsumers = new List<IDataConsumer>();
-
-                    lock (DataConsumers)
+                    lock (DataLockObject)
                     {
-                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable bts && bts.IsLive).Select(n => n as BarTable), bt =>
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable).Select(n => n as BarTable), bt =>
                         {
                             if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
                             {
@@ -256,7 +259,6 @@ namespace Pacmio
                                         bt.MergeFromSmallerBar(b);
                                         Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
                                         Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
-
                                     }
                                 }
                                 else if (bt.LastTime == date)
@@ -320,38 +322,40 @@ namespace Pacmio
         public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
 
         [IgnoreDataMember] // Initialize
-        private List<IDataConsumer> DataConsumers { get; set; }
+        private List<IDataConsumer> DataConsumers { get; set; } = new List<IDataConsumer>();
 
         public bool AddDataConsumer(IDataConsumer idk)
         {
-            if (DataConsumers is null)
-                DataConsumers = new List<IDataConsumer>();
-
-            return DataConsumers.CheckAdd(idk);
+            lock (DataLockObject)
+            {
+                if (!DataConsumers.Contains(idk))
+                {
+                    DataConsumers.Add(idk);
+                    return true;
+                }
+                return false;
+            }
         }
 
         public bool RemoveDataConsumer(IDataConsumer idk)
         {
-            if (DataConsumers is null)
+            lock (DataLockObject)
+            {
+                if (DataConsumers.Contains(idk))
+                {
+                    DataConsumers.RemoveAll(n => n == idk);
+                    return true;
+                }
                 return false;
-
-            return DataConsumers.CheckRemove(idk);
+            }
         }
 
         public void Update()
         {
-            UpdateTime = DateTime.Now;
-
-            if (DataConsumers is not null)
+            lock (DataLockObject)
             {
-                IDataConsumer[] dataConsumerList = null;
-
-                lock (DataConsumers)
-                {
-                    dataConsumerList = DataConsumers.ToArray();
-                }
-
-                Parallel.ForEach(dataConsumerList, idk => idk.DataIsUpdated(this));
+                UpdateTime = DateTime.Now;
+                Parallel.ForEach(DataConsumers, idk => idk.DataIsUpdated(this));
             }
         }
 
@@ -382,6 +386,8 @@ namespace Pacmio
                 md.RTLastPrice = -1;
                 md.TickerId = int.MinValue;
                 md.IsModified = false;
+                md.DataLockObject = new();
+                md.DataConsumers = new List<IDataConsumer>();
                 return md;
             }
             else
