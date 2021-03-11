@@ -325,6 +325,7 @@ namespace TestClient
                     BarTable bt = freq < BarFreq.Daily ? 
                     ContractTest.ActiveContract.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq);
+
                     bt.GetChart(BarTableTest.TestBarAnalysisSet);
                     HistoricalPeriod = bt.Period;// pd;
                 }, Cts.Token);

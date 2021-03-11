@@ -381,6 +381,18 @@ namespace Pacmio.IB
             }
         }
 
+        /*
+         
+        Send RequestHeadTimestamp: (0)"87"-(1)"3"-(2)"72539702"-(3)"TQQQ"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"0"-(16)"TRADES"-(17)"1"
+        Removing [RequestHeadTimestamp] Request only from the ActiveRequestIds list >> 08:00:09 | requestId = 3
+        Requesting HeadTimestamp errors: Pacmio.BarDataFile | (0)"4"-(1)"2"-(2)"3"-(3)"162"-(4)"Historical Market Data Service error message:Trading TWS session is connected from a different IP address"
+        Fetch_HistoricalData | Initial Request Period: 02-28-2021 00:00:00|03-11-2021 08:00:09
+        Fetch_HistoricalData | Historical Head Time Is Invalid, need to check with IB.
+        Send RequestHeadTimestamp: (0)"87"-(1)"4"-(2)"72539702"-(3)"TQQQ"-(4)"STK"-(5)""-(6)"0"-(7)""-(8)""-(9)"SMART"-(10)"ISLAND"-(11)"USD"-(12)""-(13)""-(14)"0"-(15)"0"-(16)"TRADES"-(17)"1"
+        Removing [RequestHeadTimestamp] Request only from the ActiveRequestIds list >> 08:00:09 | requestId = 4
+        Requesting HeadTimestamp errors: Pacmio.BarDataFile | (0)"4"-(1)"2"-(2)"4"-(3)"162"-(4)"Historical Market Data Service error message:Trading TWS session is connected from a different IP address"
+         
+         */
 
         #endregion Historical Data
     }

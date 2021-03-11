@@ -196,8 +196,10 @@ namespace Pacmio
                     foreach (var ic in bas.ChartSeries)
                     {
                         ic.ConfigChart(this);
-                        if (m_BarTable is BarTable bt) bt.CalculateRefresh(bas);
                     }
+
+                    if (m_BarTable is BarTable bt) 
+                        bt.CalculateRefresh(bas);
                 }
             }
         }

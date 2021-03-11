@@ -104,11 +104,11 @@ namespace Pacmio.IB
                             requestId.Param(),
                         });
 
-                        Console.WriteLine(" Removing [" + type + " | " + cancelRequest + "] Request >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId/orderId = " + requestId);
+                        Console.WriteLine("Removing [" + type + " | " + cancelRequest + "] Request >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId/orderId = " + requestId);
                     }
                     else
                     {
-                        Console.WriteLine(" Removing [" + type + "] Request only from the ActiveRequestIds list >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId = " + requestId);
+                        Console.WriteLine("Removing [" + type + "] Request only from the ActiveRequestIds list >> " + DateTime.Now.ToString("HH:mm:ss") + " | requestId = " + requestId);
                     }
 
                     ActiveRequestIds.TryRemove(requestId, out _);
