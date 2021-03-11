@@ -15,7 +15,11 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class BarDataFile : IDataFile, IEquatable<BarDataFile>, IEquatable<BarTable>, IDisposable
+    public class BarDataFile :
+        IDataFile,
+        IEquatable<BarDataFile>,
+        IEquatable<BarTable>,
+        IDisposable
     {
         public BarDataFile(BarTable bt) : this(bt.Contract, bt.BarFreq, bt.Type) { }
 
@@ -42,7 +46,16 @@ namespace Pacmio
         }
 
         [DataMember]
+        public BarFreq BarFreq { get; set; }
+
+        [DataMember]
+        public BarType Type { get; set; }
+
+        [DataMember]
         public (string name, Exchange exchange, string typeName) ContractKey { get; private set; }
+
+        [IgnoreDataMember]
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (ContractKey, BarFreq, Type);
 
         [IgnoreDataMember]
         public Contract Contract
@@ -85,13 +98,7 @@ namespace Pacmio
         [IgnoreDataMember]
         private FundamentalData m_FundamentalData = null;
 
-        [DataMember]
-        public BarFreq BarFreq { get; set; }
-
-        [DataMember]
-        public BarType Type { get; set; }
-
-        public BarTable GetBarTable() => new BarTable(Contract, BarFreq, Type);
+        //public BarTable GetBarTable() => new BarTable(Contract, BarFreq, Type);
 
         [IgnoreDataMember]
         public Frequency Frequency { get; private set; } //=> BarFreq.GetAttribute<BarFreqInfo>().Frequency;
@@ -472,11 +479,11 @@ namespace Pacmio
 
         #region Equality
 
-        public bool Equals(BarDataFile other) => (ContractKey == other.ContractKey) && (BarFreq == other.BarFreq) && (Type == other.Type);
+        public bool Equals(BarDataFile other) => other is BarDataFile bdf && (ContractKey == bdf.ContractKey) && (BarFreq == bdf.BarFreq) && (Type == bdf.Type);
         public static bool operator ==(BarDataFile left, BarDataFile right) => left.Equals(right);
         public static bool operator !=(BarDataFile left, BarDataFile right) => !left.Equals(right);
 
-        public bool Equals(BarTable other) => (ContractKey, BarFreq, Type) == (other.Contract.Key, other.BarFreq, other.Type);
+        public bool Equals(BarTable other) => other is BarTable bt && Key == bt.Key;
         public static bool operator ==(BarDataFile left, BarTable right) => left is BarDataFile btd && btd.Equals(right);
         public static bool operator !=(BarDataFile left, BarTable right) => !(left == right);
 

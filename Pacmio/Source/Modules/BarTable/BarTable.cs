@@ -20,8 +20,12 @@ namespace Pacmio
     /// <summary>
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
-    public sealed class BarTable : ITagTable, IDataProvider, IDataConsumer,
+    public sealed class BarTable :
+        ITagTable,
+        IDataProvider,
+        IDataConsumer,
         IEquatable<BarTable>,
+        IEquatable<BarDataFile>,
         IEquatable<(Contract, BarFreq, BarType)>,
         IEquatable<((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)>
     {
@@ -39,6 +43,15 @@ namespace Pacmio
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
             CalculateTickTask.Start();
+        }
+
+        public BarTable(BarDataFile bdf, Period period = null, bool adjustDividend = false) : this(bdf.Contract, bdf.BarFreq, bdf.Type)
+        {
+            if (period is not null && !period.IsEmpty)
+            {
+                var sorted_list = bdf.LoadBars(this, period, adjustDividend);
+                LoadBars(sorted_list);
+            }
         }
 
         ~BarTable() => Dispose();
@@ -287,7 +300,7 @@ namespace Pacmio
                     }
                 }
 
-                Status = TableStatus.Ready;
+                Status = TableStatus.DataReady;
             }
         }
 
@@ -327,7 +340,7 @@ namespace Pacmio
                     }
                 }
 
-                Status = TableStatus.Ready;
+                Status = TableStatus.DataReady;
             }
         }
 
@@ -649,14 +662,12 @@ namespace Pacmio
                 if (CalculateTickRequested)
                 {
                     Status = TableStatus.Ticking;
-                    CalculateTickRequested = false;
-
                     lock (DataLockObject)
                     {
+                        CalculateTickRequested = false;
                         Calculate(BarAnalysisPointerList.Keys);
-                        Status = TableStatus.TickingFinished;
                     }
-
+                    Status = TableStatus.TickingFinished;
                     Status = TableStatus.Ready;
                 }
                 else
@@ -667,17 +678,13 @@ namespace Pacmio
         public void ResetCalculateData()
         {
             CalculateTickRequested = false;
-
+            Status = TableStatus.Default;
             lock (DataLockObject)
             {
-                while (Status != TableStatus.Ready && Status != TableStatus.DataReady) ;
-
-                TableStatus last_status = Status;
-                Status = TableStatus.DataReady;
                 ResetCalculationPointer();
                 Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
-                Status = last_status;
             }
+            Status = TableStatus.DataReady;
         }
 
         #endregion Data/Bar Analysis (TA) Calculation
@@ -688,23 +695,13 @@ namespace Pacmio
 
         private IEnumerable<IDataRenderer> DataRenderers => DataConsumers.Where(n => n is IDataRenderer).Select(n => n as IDataRenderer);
 
-        public bool AddDataConsumer(IDataConsumer idk)
-        {
-            return DataConsumers.CheckAdd(idk);
-        }
+        public bool AddDataConsumer(IDataConsumer idk) => DataConsumers.CheckAdd(idk);
 
-        public bool RemoveDataConsumer(IDataConsumer idk)
-        {
-            return DataConsumers.CheckRemove(idk);
-        }
+        public bool RemoveDataConsumer(IDataConsumer idk) => DataConsumers.CheckRemove(idk);
 
         public DateTime UpdateTime { get; private set; } = TimeTool.MinInvalid;
 
-        public void DataIsUpdated(IDataProvider provider)
-        {
-            UpdateTime = DateTime.Now;
-            //Status = m_Status;
-        }
+        public void DataIsUpdated(IDataProvider provider) => UpdateTime = DateTime.Now;
 
         public bool ReadyToShow => Count > 0 && Status >= TableStatus.DataReady;
 
@@ -723,16 +720,13 @@ namespace Pacmio
                         if (m_Status == TableStatus.CalculateFinished)
                         {
                             foreach (var idr in DataRenderers) idr.PointerToEnd();
-                            //DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToEnd(); });
                         }
                         else if (m_Status == TableStatus.TickingFinished)
                         {
                             foreach (var idr in DataRenderers) idr.PointerToNextTick();
-                            //DataConsumers.ForEach(n => { if (n is IDataRenderer idr) idr.PointerToNextTick(); });
                         }
                     }
 
-                    // DataConsumers.ForEach(n => { if (n is not IDataRenderer) n.DataIsUpdated(this); });
                     DataConsumers.ForEach(n => n.DataIsUpdated(this));
                 }
             }
@@ -747,9 +741,12 @@ namespace Pacmio
         public bool Equals(BarTable other) => Key == other.Key;
         public bool Equals(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) other) => Key == other;
         public bool Equals((Contract, BarFreq, BarType) other) => (Contract, BarFreq, Type) == other;
+        public bool Equals(BarDataFile other) => Key == other.Key;
 
         public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, BarTable s2) => !s1.Equals(s2);
+        public static bool operator ==(BarTable s1, BarDataFile s2) => s1.Equals(s2);
+        public static bool operator !=(BarTable s1, BarDataFile s2) => !s1.Equals(s2);
         public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
 
@@ -762,6 +759,8 @@ namespace Pacmio
         {
             if (other is BarTable bt)
                 return Equals(bt);
+            else if (other is BarDataFile bdf)
+                return Equals(bdf);
             else if (other.GetType() == typeof((Contract, BarFreq, BarType)))
                 return Equals(((Contract, BarFreq, BarType))other);
             else if (other.GetType() == typeof(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)))

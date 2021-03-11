@@ -53,7 +53,9 @@ namespace Pacmio
             BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, BarType.Trades);
             bdf_daily.Fetch(Period.Full, cts);
 
-            BarTable bt_daily = bdf_daily.GetBarTable();
+            //BarTable bt_daily = bdf_daily.GetBarTable();
+            BarTable bt_daily = new(bdf_daily);//.GetBarTable();
+
             var sorted_daily_list = bdf_daily.LoadBars(bt_daily, adjustDividend);
 
             if (barFreq > BarFreq.Daily)
@@ -80,9 +82,11 @@ namespace Pacmio
 
             if (barFreq == BarFreq.Daily && barType == BarType.Trades)
             {
+                BarTable bt = new(bdf_daily_base, period, adjustDividend);
+                /*
                 BarTable bt = bdf_daily_base.GetBarTable();
                 var sorted_list = bdf_daily_base.LoadBars(bt, period, adjustDividend);
-                bt.LoadBars(sorted_list);
+                bt.LoadBars(sorted_list);*/
                 return bt;
             }
             else if (barFreq > BarFreq.Daily)
@@ -92,7 +96,8 @@ namespace Pacmio
                 if (barType != BarType.Trades)
                     bdf_daily.Fetch(Period.Full, cts);
 
-                BarTable bt_daily = bdf_daily.GetBarTable();
+                BarTable bt_daily = new(bdf_daily);//, period, adjustDividend);
+                //BarTable bt_daily = bdf_daily.GetBarTable();
                 var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
                 BarTable bt = new(c, barFreq, barType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
@@ -102,9 +107,10 @@ namespace Pacmio
             {
                 BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, barType);
                 bdf.Fetch(period, cts);
-                BarTable bt = bdf.GetBarTable();
-                var sorted_list = bdf.LoadBars(bt, period, adjustDividend);
-                bt.LoadBars(sorted_list);
+                BarTable bt = new(bdf, period, adjustDividend);
+                //BarTable bt = bdf.GetBarTable();
+                //var sorted_list = bdf.LoadBars(bt, period, adjustDividend);
+                //bt.LoadBars(sorted_list);
                 return bt;
             }
         }

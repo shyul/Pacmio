@@ -325,7 +325,7 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = freq < BarFreq.Daily ? 
+                    BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
