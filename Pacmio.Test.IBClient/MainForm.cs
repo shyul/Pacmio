@@ -317,14 +317,17 @@ namespace TestClient
                 BarFreq freq = BarFreq;
                 BarType type = BarType;
                 Period pd = HistoricalPeriod;
+                Contract c = ContractTest.ActiveContract;
+
+                if (pd.IsCurrent) c.MarketData.Start();
 
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
                     BarTable bt = freq < BarFreq.Daily ? 
-                    ContractTest.ActiveContract.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(ContractTest.ActiveContract, freq);
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
                     bt.GetChart(BarTableTest.TestBarAnalysisSet);
                     HistoricalPeriod = bt.Period;// pd;

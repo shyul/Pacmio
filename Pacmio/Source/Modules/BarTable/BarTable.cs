@@ -32,7 +32,7 @@ namespace Pacmio
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
-            //FundamentalData = Contract.GetOrCreateFundamentalData();
+            IsLive = true;
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
