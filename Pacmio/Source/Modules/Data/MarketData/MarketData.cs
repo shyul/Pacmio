@@ -230,6 +230,9 @@ namespace Pacmio
 
                 if (price > 0)
                 {
+                    if (DataConsumers is null)
+                        DataConsumers = new List<IDataConsumer>();
+
                     lock (DataConsumers)
                     {
                         Parallel.ForEach(DataConsumers.Where(n => n is BarTable bts && bts.IsLive).Select(n => n as BarTable), bt =>
