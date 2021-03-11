@@ -35,6 +35,8 @@ namespace Pacmio
 
         public WatchList Scanner { get; set; }
 
+        public BarDecision BarDecision { get; set; }
+
         public EntryMethod EntryMethod { get; set; }
 
         public ExitMethod ExitMethod { get; set; }
@@ -43,35 +45,7 @@ namespace Pacmio
 
         // Step 2: Define Signal Group
 
-        /// <summary>
-        /// Bar Analysis vs Multi Time Frame
-        /// </summary>
-        public Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> BarAnalysisLUT { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
 
-        public virtual void ClearBarAnalysisSet() => BarAnalysisLUT.Clear();
-
-        public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
-        {
-            get
-            {
-                if (BarAnalysisLUT.ContainsKey((BarFreq, BarType)))
-                    return BarAnalysisLUT[(BarFreq, BarType)];
-                else
-                    return null;
-            }
-            set
-            {
-                if (value is BarAnalysisSet bas)
-                    BarAnalysisLUT[(BarFreq, BarType)] = new BarAnalysisSet(bas);
-                else if (BarAnalysisLUT.ContainsKey((BarFreq, BarType)))
-                    BarAnalysisLUT.Remove((BarFreq, BarType));
-            }
-        }
-
-        // Getting the tradabe score, and priority
-        // The example values are showing using the trailing 5 days value to yield risk / reward ratio, win rate, and standard deviation of the returns.
-        // The above result will yield the score for sorting the strategy
-        // The the score will be valid for 1 day trading.
 
         #region Training Settings
 

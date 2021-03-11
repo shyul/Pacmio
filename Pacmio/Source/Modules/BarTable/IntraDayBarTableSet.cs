@@ -36,33 +36,10 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public Period Period
-        {
-            get => m_Period; 
-            
-            set
-            {
-                if(m_Period != value) 
-                {
-                    m_Period = value;
-                
+        private Dictionary<(BarFreq BarFreq, BarType BarType), BarTable> BarTableLUT { get; } 
+            = new Dictionary<(BarFreq BarFreq, BarType BarType), BarTable>();
 
-
-                }
-            }
-        }
-
-        private Period m_Period = Period.Empty;
-
-        public DateTime Stop => Period.Stop;
-
-        public DateTime Start => Period.Start;
-
-        public bool IsCurrent => Period.IsCurrent;
-
-        private Dictionary<(BarFreq BarFreq, BarType BarType), BarTable> BarTableLUT { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarTable>();
-
-        public BarTable GetOrCreateBarTable(BarFreq freq, BarType type, bool adjustDividend = false, CancellationTokenSource cts = null)
+        public BarTable GetOrCreateBarTable(Period pd, BarFreq freq, BarType type, bool adjustDividend, CancellationTokenSource cts = null)
         {
             var key = (freq, type);
 
@@ -73,20 +50,24 @@ namespace Pacmio
                     if (type == BarType.Trades && freq >= BarFreq.Daily)
                         BarTableLUT[key] = Contract.GetOrCreateDailyBarTable(freq);
                     else
-                        BarTableLUT[key] = Contract.LoadBarTable(Period, freq, type, adjustDividend, cts);
+                    {
+                        DateTime newStart = pd.Start.AddSeconds(-1000 * freq.GetAttribute<BarFreqInfo>().Frequency.Span.TotalSeconds);
+                        pd.Insert(newStart); // Always have enough bars to buffer for good TA averages.
+                        BarTableLUT[key] = Contract.LoadBarTable(pd, freq, type, adjustDividend, cts);
+                    }
                 }
 
                 return BarTableLUT[key];
             }
         }
-
+        /*
         public void Calculate(Strategy s, Period pd, CancellationTokenSource cts = null)
         {
             Period = pd;
             foreach (var ba in s.BarAnalysisLUT)
             {
                 if (!cts.IsContinue()) return;
-                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, false, cts);
+                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, cts);
                 bt.CalculateRefresh(ba.Value);
             }
         }
@@ -96,9 +77,9 @@ namespace Pacmio
             foreach (var ba in s.BarAnalysisLUT)
             {
                 if (!cts.IsContinue()) return;
-                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, false, cts);
+                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, cts);
                 bt.CalculateRefresh(ba.Value);
             }
-        }
+        }*/
     }
 }

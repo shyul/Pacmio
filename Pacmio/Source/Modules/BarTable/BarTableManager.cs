@@ -115,16 +115,13 @@ namespace Pacmio
             }
         }
 
-        public static BarTable GetEmptyTable()
+        public static void SetPeriod(this BarTable bt, Period pd, bool adjustDividend, CancellationTokenSource cts)
         {
-            return null;
-        }
-
-        public static void LoadBarTable(this BarTable bt, Period pd)
-        {
-
-
-            BarDataFile bdf = bt.GetOrCreateBarDataFile();
+            bt.Clear();
+            var bdf = bt.GetOrCreateBarDataFile();
+            bdf.Fetch(pd, cts);
+            var sorted_list = bdf.LoadBars(bt, pd, adjustDividend);
+            bt.LoadBars(sorted_list);
         }
     }
 }

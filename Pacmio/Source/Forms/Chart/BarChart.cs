@@ -177,7 +177,7 @@ namespace Pacmio
             private set
             {
                 m_Strategy = value;
-                BarAnalysisSet = m_Strategy is Strategy s && m_BarTable is BarTable bt ? s[bt.BarFreq, bt.Type] : null;
+                BarAnalysisSet = m_Strategy is Strategy s && m_BarTable is BarTable bt ? s.BarDecision[bt.BarFreq, bt.Type] : null;
             }
         }
 
@@ -225,7 +225,7 @@ namespace Pacmio
 
                     if (m_Strategy is Strategy s)
                     {
-                        BarAnalysisSet = s[bt.BarFreq, bt.Type];
+                        BarAnalysisSet = s.BarDecision[bt.BarFreq, bt.Type];
                     }
 
                     TabName = Name = m_BarTable.Name;
