@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Xu;
 
 namespace Pacmio
@@ -23,7 +22,7 @@ namespace Pacmio
             LevelRange.Insert(max);
         }
 
-        public void Add(IPivot p) 
+        public void Add(IPivot p)
         {
             Pivots.Add(p);
             WeightRange.Insert(p.Weight);

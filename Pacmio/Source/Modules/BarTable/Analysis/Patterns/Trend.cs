@@ -16,17 +16,15 @@ namespace Pacmio.Analysis
 {
     public class Trend : BarAnalysis, IChartPattern
     {
-        public Trend(BarAnalysis ba, NumericColumn column_MaximumRange, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public Trend(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            //Column_MaximumRange = column_MaximumRange;
-
             TrailingPivotPointAnalysis = new TrailingPivots(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Column_Result = new PatternColumn(this);
+            Column_Result = new PatternColumn(this, test_interval);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
             this.AddChild(CalculatePivotRange);
@@ -43,7 +41,7 @@ namespace Pacmio.Analysis
             TrailingPivotPointAnalysis = new TrailingPivots(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Column_Result = new PatternColumn(this);
+            Column_Result = new PatternColumn(this, test_interval);
             AreaName = MainBarChartArea.DefaultName;
 
             this.AddChild(CalculatePivotRange);

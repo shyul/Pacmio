@@ -16,7 +16,8 @@ namespace Pacmio.Analysis
 {
     public class PivotRanges : BarAnalysis
     {
-        public PivotRanges() => Name = GetType().Name;
+        public PivotRanges() 
+            => Name = GetType().Name;
         
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
