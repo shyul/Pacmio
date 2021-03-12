@@ -21,7 +21,7 @@ namespace Pacmio
     /// BarTable: the ultimate data holder for technical analysis with fundamental awareness
     /// </summary>
     public sealed class BarTable :
-        ITagTable,
+        IDatumTable,
         IDataProvider,
         IDataConsumer,
         IEquatable<BarTable>,
@@ -432,7 +432,7 @@ namespace Pacmio
 
         public double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column]; //   this[i] is Bar b ? b[column] : double.NaN;
 
-        public TagInfo this[int i, TagColumn column] => i >= Count || i < 0 ? null : Rows[i][column]; // this[i] is Bar b ? b[column] : null;
+        public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column]; // this[i] is Bar b ? b[column] : null;
 
         #endregion Access Bars
 

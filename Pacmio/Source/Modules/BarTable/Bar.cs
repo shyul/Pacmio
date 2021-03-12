@@ -208,7 +208,7 @@ namespace Pacmio
                 return column switch
                 {
                     NumericColumn nc => this[nc],
-                    TagColumn tc => this[tc],
+                    DatumColumn tc => this[tc],
                     TrailingPivotsColumn tpc => this[tpc],
                     PatternColumn pc => this[pc],
                     SignalColumn sc => this[sc],
@@ -225,7 +225,7 @@ namespace Pacmio
         /// BarAnalysis Data Line
         /// </summary>
         // set is not allowed// One column only has one data
-        private Dictionary<NumericColumn, double> NumericDatums { get; } = new Dictionary<NumericColumn, double>();
+        private Dictionary<NumericColumn, double> NumericColumnsLUT { get; } = new Dictionary<NumericColumn, double>();
 
         public double this[NumericColumn column]
         {
@@ -239,15 +239,15 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Close => Close,
                     NumericColumn dc when dc == Column_Volume => Volume,
 
-                    NumericColumn ic when NumericDatums.ContainsKey(ic) => NumericDatums[ic],
+                    NumericColumn ic when NumericColumnsLUT.ContainsKey(ic) => NumericColumnsLUT[ic],
 
                     _ => double.NaN,
                 };
             }
             set
             {
-                if (double.IsNaN(value) && NumericDatums.ContainsKey(column))
-                    NumericDatums.Remove(column);
+                if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
+                    NumericColumnsLUT.Remove(column);
                 else
                     switch (column)
                     {
@@ -258,10 +258,10 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_Volume: Volume = value; break;
 
                         default:
-                            if (!NumericDatums.ContainsKey(column))
-                                NumericDatums.Add(column, value);
+                            if (!NumericColumnsLUT.ContainsKey(column))
+                                NumericColumnsLUT.Add(column, value);
                             else
-                                NumericDatums[column] = value;
+                                NumericColumnsLUT[column] = value;
                             break;
                     }
             }
@@ -275,27 +275,32 @@ namespace Pacmio
 
         #endregion Numeric Column
 
-        #region Tag / String Column
+        #region Datum Column
 
-        private Dictionary<TagColumn, TagInfo> TagDatums { get; } = new Dictionary<TagColumn, TagInfo>();
+        private Dictionary<DatumColumn, IDatum> DatumColumnsLUT { get; } = new Dictionary<DatumColumn, IDatum>();
 
-        public TagInfo this[TagColumn column]
+        public IDatum this[DatumColumn dc]
         {
-            get => TagDatums.ContainsKey(column) ? TagDatums[column] : null;
+            get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] : null;
 
-            set
+            set 
             {
-                if (value is TagInfo tag)
-                    if (!TagDatums.ContainsKey(column))
-                        TagDatums.Add(column, tag);
-                    else
-                        TagDatums[column] = tag;
-                else if (value is null && TagDatums.ContainsKey(column))
-                    TagDatums.Remove(column);
+                if (value is IDatum dat && value.GetType() == dc.DatumType)
+                {
+                    DatumColumnsLUT[dc] = dat;
+                }
+                else if (value is null && DatumColumnsLUT.ContainsKey(dc))
+                {
+                    DatumColumnsLUT.Remove(dc);
+                }
+                else
+                {
+                    throw new("Invalid data type assigned");
+                }
             }
         }
 
-        #endregion Tag / String Column
+        #endregion Datum Column
 
         #region Trailing Pivot Points
 
@@ -468,8 +473,8 @@ namespace Pacmio
 
         public void ClearAllCalculationData()
         {
-            NumericDatums.Clear();
-            TagDatums.Clear();
+            NumericColumnsLUT.Clear();
+            DatumColumnsLUT.Clear();
             TrailingPivotPoints.Clear();
             PivotRangeDatums.Clear();
             Patterns.Clear();

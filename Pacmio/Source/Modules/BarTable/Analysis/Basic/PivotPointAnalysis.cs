@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
+            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -52,7 +52,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
+            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -90,7 +90,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
+            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -118,7 +118,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
+            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -153,7 +153,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new TagColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT");
+            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -181,7 +181,7 @@ namespace Pacmio.Analysis
 
         public NumericColumn Column_Result { get; }
 
-        public TagColumn Column_PeakTags { get; }
+        public DatumColumn Column_PeakTags { get; }
 
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
