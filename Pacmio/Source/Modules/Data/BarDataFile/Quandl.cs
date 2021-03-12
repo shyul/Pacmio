@@ -47,12 +47,12 @@ namespace Pacmio
 
                 Console.WriteLine("startTime = " + startTime + " | stopTime = " + stopTime);
 
-                if (startTime >= stopTime) 
+                if (startTime >= stopTime)
                 {
                     Console.WriteLine("There is no new data from Quandl yet.");
                     return true;
                 }
-               
+
                 bool getAll = bdf.Count == 0 || startTime < new DateTime(1982, 1, 1);
 
                 string url = getAll ?
@@ -64,7 +64,7 @@ namespace Pacmio
                 try
                 {
                     Console.WriteLine("Quandl Requesting: " + url);
-                    lock (Client) 
+                    lock (Client)
                     {
                         result = Client.DownloadData(url);
                     }
@@ -77,7 +77,6 @@ namespace Pacmio
 
                 if (result is not null)
                 {
-                    //Task.Run(() => {
                     FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
                     if (getAll) fd.Remove(DataSourceType.Quandl);
                     Period data_pd = new Period();
@@ -122,12 +121,12 @@ namespace Pacmio
                     data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
                     bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
 
-                    if (getAll) 
+                    if (getAll)
                         bdf.HistoricalHeadTime = data_pd.Start;
 
                     bdf.SaveFile();
                     fd.SaveFile();
-                    //});
+
                     return true;
                 }
             }
@@ -179,7 +178,7 @@ namespace Pacmio
                                 {
                                     data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
                                     bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
-                                    bdf_save.SaveFile(); 
+                                    bdf_save.SaveFile();
                                     currentFd.SaveFile();
 
                                     rows.Clear();

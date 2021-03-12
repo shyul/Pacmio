@@ -50,7 +50,7 @@ namespace Pacmio.IB
                 }
             }
 
-            End:
+        End:
             return bdf.HistoricalHeadTime;
         }
 
@@ -66,8 +66,8 @@ namespace Pacmio.IB
         {
             Contract c = bdf.Contract;
 
-            if (bdf.Type.Param() is string barTypeCode && 
-                c.Exchange.Param() is string exchangeCode && 
+            if (bdf.Type.Param() is string barTypeCode &&
+                c.Exchange.Param() is string exchangeCode &&
                 DataRequestReady) // Also please check the RHD is already active?
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHeadTimestamp);
@@ -129,15 +129,16 @@ namespace Pacmio.IB
             RemoveRequest(requestId, false);
             Contract c = ActiveBarDataFile_HistoricalDataHeadTimestamp.Contract;
 
-            if (fields[3] == "200") 
+            if (fields[3] == "200")
             {
                 c.Status = ContractStatus.Error;
                 c.UpdateTime = DateTime.Now;
             }
 
-            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = TimeTool.MaxInvalid;
+            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = c.GetOrCreateBarDataFile().HistoricalHeadTime; // TimeTool.MinInvalid;
 
             Console.WriteLine("Requesting HeadTimestamp errors: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
+            Console.WriteLine("Using daily BDF's HeadTimestamp: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime);
             DataRequestID = -1;
         }
 

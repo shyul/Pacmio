@@ -38,6 +38,7 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnTimeZoneTest = new System.Windows.Forms.Button();
             this.BtnTestFundamentalXMLFile = new System.Windows.Forms.Button();
             this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
             this.BtnExportBarTableData = new System.Windows.Forms.Button();
@@ -203,7 +204,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnTimeZoneTest = new System.Windows.Forms.Button();
+            this.BtnUpdateContract = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -286,6 +287,16 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnTimeZoneTest
+            // 
+            this.BtnTimeZoneTest.Location = new System.Drawing.Point(348, 305);
+            this.BtnTimeZoneTest.Name = "BtnTimeZoneTest";
+            this.BtnTimeZoneTest.Size = new System.Drawing.Size(230, 26);
+            this.BtnTimeZoneTest.TabIndex = 50;
+            this.BtnTimeZoneTest.Text = "Time Zone Test";
+            this.BtnTimeZoneTest.UseVisualStyleBackColor = true;
+            this.BtnTimeZoneTest.Click += new System.EventHandler(this.BtnTimeZoneTest_Click);
             // 
             // BtnTestFundamentalXMLFile
             // 
@@ -1888,6 +1899,7 @@ namespace TestClient
             // 
             // GroupBoxSingleContract
             // 
+            this.GroupBoxSingleContract.Controls.Add(this.BtnUpdateContract);
             this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet8);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxValidCountryCode);
             this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet7);
@@ -2042,15 +2054,15 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnTimeZoneTest
+            // BtnUpdateContract
             // 
-            this.BtnTimeZoneTest.Location = new System.Drawing.Point(348, 305);
-            this.BtnTimeZoneTest.Name = "BtnTimeZoneTest";
-            this.BtnTimeZoneTest.Size = new System.Drawing.Size(230, 26);
-            this.BtnTimeZoneTest.TabIndex = 50;
-            this.BtnTimeZoneTest.Text = "Time Zone Test";
-            this.BtnTimeZoneTest.UseVisualStyleBackColor = true;
-            this.BtnTimeZoneTest.Click += new System.EventHandler(this.BtnTimeZoneTest_Click);
+            this.BtnUpdateContract.Location = new System.Drawing.Point(191, 76);
+            this.BtnUpdateContract.Name = "BtnUpdateContract";
+            this.BtnUpdateContract.Size = new System.Drawing.Size(79, 22);
+            this.BtnUpdateContract.TabIndex = 65;
+            this.BtnUpdateContract.Text = "Update";
+            this.BtnUpdateContract.UseVisualStyleBackColor = true;
+            this.BtnUpdateContract.Click += new System.EventHandler(this.BtnUpdateContract_Click);
             // 
             // MainForm
             // 
@@ -2279,5 +2291,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnRequestFundamentalData;
         private System.Windows.Forms.Button BtnTestFundamentalXMLFile;
         private System.Windows.Forms.Button BtnTimeZoneTest;
+        private System.Windows.Forms.Button BtnUpdateContract;
     }
 }

@@ -29,7 +29,7 @@ namespace Pacmio
             GC.Collect();
         }
 
-        public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq, BarType type = BarType.Trades)
+        public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, BarType type = BarType.Trades)
         {
             if (barFreq > BarFreq.Daily) throw new Exception("We don't support storging BarFreq greater than daily as file");
 

@@ -109,7 +109,7 @@ namespace Pacmio
         [IgnoreDataMember]
         public DateTime HistoricalHeadTime
         {
-            get => (m_HistoricalHeadTime != TimeTool.MaxInvalid && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
+            get => (!m_HistoricalHeadTime.IsInvalid() && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
                 DateTime.Now.Date.AddMonths(-6) :
                 m_HistoricalHeadTime;
 
@@ -117,7 +117,7 @@ namespace Pacmio
         }
 
         [DataMember]
-        private DateTime m_HistoricalHeadTime = TimeTool.MaxInvalid;
+        private DateTime m_HistoricalHeadTime = TimeTool.MinInvalid;
 
         [DataMember]
         public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
