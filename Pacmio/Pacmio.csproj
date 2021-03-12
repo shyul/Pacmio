@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceDirection.cs" />
     <Compile Include="Source\Modules\BarTable\IntraDayBarTableSet.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />
