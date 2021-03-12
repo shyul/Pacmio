@@ -10,7 +10,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class TrailingPivotsDatum
+    public class TrailingPivotsDatum : IDatum
     {
         public Range<double> LevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 

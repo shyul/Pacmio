@@ -132,7 +132,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotLevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\PivotRangeDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotsColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Types\TrailingPivotsDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\TrailingPivots.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend.cs" />

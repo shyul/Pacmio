@@ -15,7 +15,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class PatternDatum : IEnumerable<IPivot>
+    public class PatternDatum : IDatum, IEnumerable<IPivot>
     {
         public PatternDatum(double min, double max)
         {

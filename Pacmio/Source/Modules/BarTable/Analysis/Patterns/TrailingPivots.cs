@@ -33,7 +33,7 @@ namespace Pacmio.Analysis
             string label = "(" + ba.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new TrailingPivotsColumn(Name) { Label = label };
+            Result_Column = new DatumColumn(Name, label, typeof(TrailingPivotsDatum));
         }
 
         public TrailingPivots(int test_interval = 250)
@@ -45,7 +45,7 @@ namespace Pacmio.Analysis
             string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new TrailingPivotsColumn(Name) { Label = label };
+            Result_Column = new DatumColumn(Name, label, typeof(TrailingPivotsDatum));
         }
 
         #region Parameters
@@ -64,7 +64,7 @@ namespace Pacmio.Analysis
 
         public TrendStrength TrendStrengthAnalysis { get; }
 
-        public TrailingPivotsColumn Result_Column { get; }
+        public DatumColumn Result_Column { get; }
 
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {

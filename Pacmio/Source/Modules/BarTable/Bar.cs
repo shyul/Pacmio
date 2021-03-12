@@ -209,8 +209,6 @@ namespace Pacmio
                 {
                     NumericColumn nc => this[nc],
                     DatumColumn tc => this[tc],
-                    TrailingPivotsColumn tpc => this[tpc],
-                    PatternColumn pc => this[pc],
                     SignalColumn sc => this[sc],
                     _ => null,
                 };
@@ -302,50 +300,9 @@ namespace Pacmio
 
         #endregion Datum Column
 
-        #region Trailing Pivot Points
-
-        private Dictionary<TrailingPivotsColumn, TrailingPivotsDatum> TrailingPivotPoints { get; } = new Dictionary<TrailingPivotsColumn, TrailingPivotsDatum>();
-
-        public TrailingPivotsDatum this[TrailingPivotsColumn column]
-        {
-            get => TrailingPivotPoints.ContainsKey(column) ? TrailingPivotPoints[column] : null;
-
-            set
-            {
-                if (value is TrailingPivotsDatum gpd)
-                    if (!TrailingPivotPoints.ContainsKey(column))
-                        TrailingPivotPoints.Add(column, gpd);
-                    else
-                        TrailingPivotPoints[column] = gpd;
-                else if (value is null && TrailingPivotPoints.ContainsKey(column))
-                    TrailingPivotPoints.Remove(column);
-            }
-        }
-
-        #endregion Trailing Pivot Points
-
-        #region Patterns
-
-        public Dictionary<PatternColumn, PatternDatum> Patterns { get; } = new Dictionary<PatternColumn, PatternDatum>();
-
-        public IEnumerable<IPivot> Pivots => Patterns.Values.SelectMany(n => n); //.Pivots);
-
-        public PatternDatum this[PatternColumn column]
-        {
-            get => Patterns.ContainsKey(column) ? Patterns[column] : null;
-
-            set
-            {
-                if (value is PatternDatum pd)
-                    Patterns[column] = pd;
-                else if (value is null && Patterns.ContainsKey(column))
-                    Patterns.Remove(column);
-            }
-        }
-
-        #endregion Patterns
-
         #region PivotRangeSet
+
+        public IEnumerable<IPivot> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
 
         private Dictionary<string, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<string, PivotRangeDatum>();
 
@@ -475,9 +432,9 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            TrailingPivotPoints.Clear();
+            //TrailingPivotPoints.Clear();
             PivotRangeDatums.Clear();
-            Patterns.Clear();
+            //Patterns.Clear();
             PositionDatums.Clear();
             SignalDatums.Clear();
         }
