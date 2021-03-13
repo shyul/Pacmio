@@ -40,7 +40,7 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b) b.CalculatePivotRangeDatums();
+                if (bt[i] is Bar b) b.CalculateBoxRangeDatums();
             }
         }
     }

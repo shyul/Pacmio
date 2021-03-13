@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PivotRange
+    public class BoxRange
     {
         public void Insert(IPivot p)
         {
@@ -23,17 +23,17 @@ namespace Pacmio
             else
                 WeightList.Add(p.Source, p.Weight);
 
-            Range.Insert(p.Level);
+            Box.Insert(p.Level);
         }
 
         public double Offset(double level)
         {
-            double offset = level - Range.Min;
+            double offset = level - Box.Min;
 
             if (offset >= 0)
                 return offset;
 
-            offset = Range.Max - level;
+            offset = Box.Max - level;
 
             if (offset >= 0)
                 return offset;
@@ -52,8 +52,8 @@ namespace Pacmio
 
         public Dictionary<IChartPattern, double> WeightList { get; } = new Dictionary<IChartPattern, double>();
 
-        public Range<double> Range { get; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> Box { get; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public double Level => (Range.Max + Range.Min) / 2;
+        public double Level => (Box.Max + Box.Min) / 2;
     }
 }

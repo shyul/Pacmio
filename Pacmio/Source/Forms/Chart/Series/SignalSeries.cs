@@ -90,7 +90,7 @@ namespace Pacmio
 
             foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
             {
-                SignalDatum sd = Table[pt][sc];
+                SignalDatum sd = Table[pt][sc] as SignalDatum;
 
                 if (sd.Score > 0)
                     labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
@@ -122,7 +122,7 @@ namespace Pacmio
 
                         foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
                         {
-                            SignalDatum sd = Table[i][sc];
+                            SignalDatum sd = Table[i][sc] as SignalDatum;
 
                             string desc = sd.Description;
                             double score = sd.Score;

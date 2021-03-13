@@ -85,13 +85,13 @@ namespace Pacmio
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                SignalDatum sd = bt[i][SignalColumn];
+                SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
 
                 var (points, description) = DualDataSignal(bt, i, Fast_Column, Slow_Column, TypeToScore);
 
                 if (i > 0)
                 {
-                    SignalDatum sd_1 = bt[i - 1][SignalColumn];
+                    SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
                     sd.Set(points, description, sd_1);
                 }
                 else

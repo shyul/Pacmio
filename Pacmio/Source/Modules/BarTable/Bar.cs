@@ -265,9 +265,23 @@ namespace Pacmio
 
         public IDatum this[DatumColumn dc]
         {
-            get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] : null;
+            get
+            {
+                if (dc is SignalColumn sc && !DatumColumnsLUT.ContainsKey(sc))
+                {
+                    var sd = new SignalDatum();
+                    DatumColumnsLUT.Add(sc, sd);
+                    return sd;
+                }
+                else if (DatumColumnsLUT.ContainsKey(dc))
+                {
+                    return DatumColumnsLUT[dc];
+                }
 
-            set 
+                return null;
+            }
+
+            set
             {
                 if (value is IDatum dat && value.GetType() == dc.DatumType)
                 {
@@ -286,86 +300,7 @@ namespace Pacmio
 
         #endregion Datum Column
 
-        #region PivotRangeSet
-
-        public IEnumerable<IPivot> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
-
-        private Dictionary<string, PivotRangeDatum> PivotRangeDatums { get; } = new Dictionary<string, PivotRangeDatum>();
-
-        public void CalculatePivotRangeDatums()
-        {
-            PivotRangeDatums.Clear();
-            foreach (var p in Pivots)
-            {
-                string areaName = p.Source.AreaName;
-                if (!PivotRangeDatums.ContainsKey(areaName))
-                    PivotRangeDatums[areaName] = new PivotRangeDatum();
-
-                PivotRangeDatum prd = PivotRangeDatums[areaName];// = new PivotRangeDatum();
-                prd.Insert(p);
-            }
-        }
-
-        public PivotRangeDatum GetPivotRangeDatum() => GetPivotRangeDatum(MainBarChartArea.DefaultName);
-
-        public PivotRangeDatum GetPivotRangeDatum(string areaName)
-        {
-            if (PivotRangeDatums.ContainsKey(areaName))
-                return PivotRangeDatums[areaName];
-            else
-                return null;
-        }
-
-        public PivotRangeDatum this[IBarChartArea column]
-        {
-            get
-            {
-                if (PivotRangeDatums.ContainsKey(column.Name))
-                    return PivotRangeDatums[column.Name];
-                else
-                    return null;
-            }
-        }
-
-        public PivotRangeDatum this[IChartPattern column]
-        {
-            get
-            {
-                if (PivotRangeDatums.ContainsKey(column.AreaName))
-                    return PivotRangeDatums[column.AreaName];
-                else
-                    return null;
-            }
-        }
-
-        #endregion PivotRangeSet
-
-        #region Signal Information
-
-        public Dictionary<SignalColumn, SignalDatum> SignalDatums { get; } = new Dictionary<SignalColumn, SignalDatum>();
-
-        public SignalDatum this[SignalColumn column]
-        {
-            get
-            {
-                if (!SignalDatums.ContainsKey(column))
-                    SignalDatums.Add(column, new SignalDatum());
-
-                return SignalDatums[column];
-            }
-            set
-            {
-                if (!SignalDatums.ContainsKey(column))
-                    SignalDatums.Add(column, value);
-                else
-                {
-                    if (value is null)
-                        SignalDatums.Remove(column);
-                    else
-                        SignalDatums[column] = value;
-                }
-            }
-        }
+        #region Signal Information Tools
 
         public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {
@@ -384,7 +319,61 @@ namespace Pacmio
 
         public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
 
-        #endregion Signal Information
+        #endregion Signal Information Tools
+
+        #region Box Range Tools
+
+        public IEnumerable<IPivot> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
+
+        private Dictionary<string, BoxRangeDatum> BoxRangeDatums { get; } = new Dictionary<string, BoxRangeDatum>();
+
+        public void CalculateBoxRangeDatums()
+        {
+            BoxRangeDatums.Clear();
+            foreach (var p in Pivots)
+            {
+                string areaName = p.Source.AreaName;
+                if (!BoxRangeDatums.ContainsKey(areaName))
+                    BoxRangeDatums[areaName] = new BoxRangeDatum();
+
+                BoxRangeDatum prd = BoxRangeDatums[areaName];// = new PivotRangeDatum();
+                prd.Insert(p);
+            }
+        }
+
+        public BoxRangeDatum GetBoxRangeDatum() => GetBoxRangeDatum(MainBarChartArea.DefaultName);
+
+        public BoxRangeDatum GetBoxRangeDatum(string areaName)
+        {
+            if (BoxRangeDatums.ContainsKey(areaName))
+                return BoxRangeDatums[areaName];
+            else
+                return null;
+        }
+
+        public BoxRangeDatum this[IBarChartArea column]
+        {
+            get
+            {
+                if (BoxRangeDatums.ContainsKey(column.Name))
+                    return BoxRangeDatums[column.Name];
+                else
+                    return null;
+            }
+        }
+
+        public BoxRangeDatum this[IChartPattern column]
+        {
+            get
+            {
+                if (BoxRangeDatums.ContainsKey(column.AreaName))
+                    return BoxRangeDatums[column.AreaName];
+                else
+                    return null;
+            }
+        }
+
+        #endregion Box Range Tools
 
         #region Position / Simulation Information
 
@@ -418,11 +407,8 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            //TrailingPivotPoints.Clear();
-            PivotRangeDatums.Clear();
-            //Patterns.Clear();
+            BoxRangeDatums.Clear();
             PositionDatums.Clear();
-            SignalDatums.Clear();
         }
 
         public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();

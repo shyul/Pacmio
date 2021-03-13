@@ -57,7 +57,7 @@ namespace Pacmio
 
                 // Console.WriteLine("full_width = " + full_width);
                 //Console.WriteLine("IBarChartArea a = " + a.Name);
-                if (a.BarChart.LastBar_1 is Bar b && b[a] is PivotRangeDatum prd)
+                if (a.BarChart.LastBar_1 is Bar b && b[a] is BoxRangeDatum prd)
                 {
                     var rangeList = prd.RangeList.OrderByDescending(n => n.Weight);
 
@@ -67,8 +67,8 @@ namespace Pacmio
 
                         foreach (var pr in rangeList)
                         {
-                            int y1 = a.AxisY(AlignType.Right).ValueToPixel(pr.Range.Max);
-                            int y2 = a.AxisY(AlignType.Right).ValueToPixel(pr.Range.Min);
+                            int y1 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Max);
+                            int y2 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Min);
                             int height = y2 - y1;
 
                             double weight = pr.Weight;

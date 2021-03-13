@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PivotRangeDatum
+    public class BoxRangeDatum
     {
-        public List<PivotRange> RangeList { get; } = new List<PivotRange>();
+        public List<BoxRange> RangeList { get; } = new List<BoxRange>();
 
         public void Reset() => RangeList.Clear();
 
@@ -30,7 +30,7 @@ namespace Pacmio
             }
             else
             {
-                PivotRange pr = new PivotRange();
+                BoxRange pr = new BoxRange();
                 RangeList.Add(pr);
                 pr.Insert(p);
             }
@@ -41,7 +41,7 @@ namespace Pacmio
             Range<double> r = new Range<double>(min);
             r.Insert(max);
 
-            double w = RangeList.Where(n => n.Range.Intersects(r)).Select(n => n.Weight).Sum();
+            double w = RangeList.Where(n => n.Box.Intersects(r)).Select(n => n.Weight).Sum();
 
             if (min < max) return w;
             else if (min > max) return -w;

@@ -73,7 +73,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
-                    if (SourceAnalysis is null && b.GetPivotRangeDatum() is PivotRangeDatum prd)
+                    if (SourceAnalysis is null && b.GetBoxRangeDatum() is BoxRangeDatum prd)
                     {
                         double open = b.Open;
                         double close = b.Close;
