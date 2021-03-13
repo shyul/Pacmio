@@ -102,6 +102,7 @@ namespace Pacmio
                 if (!PositionPerEachContractLUT.ContainsKey(c)) 
                 {
                     PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
+                    c.MarketData.Start();
                 }
             }
             return PositionPerEachContractLUT[c];
