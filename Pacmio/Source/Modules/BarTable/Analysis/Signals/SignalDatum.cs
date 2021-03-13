@@ -1,13 +1,15 @@
-﻿
-using System.Collections.Generic;
-/// ***************************************************************************
+﻿/// ***************************************************************************
 /// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
+
+using System.Collections.Generic;
+using Xu;
+
 namespace Pacmio
 {
-    public class SignalDatum
+    public class SignalDatum : IDatum
     {
         public void Set(double[] points, string description = "", SignalDatum sd_1 = null)
         {

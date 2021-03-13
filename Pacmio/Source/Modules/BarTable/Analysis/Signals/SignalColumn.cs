@@ -66,8 +66,6 @@ namespace Pacmio
 
         public ColorTheme BearishTheme { get; } = new ColorTheme();
 
-
-
         #endregion Graphics Properties
     }
 

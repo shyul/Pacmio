@@ -102,7 +102,6 @@ namespace Pacmio
                 if (!PositionPerEachContractLUT.ContainsKey(c)) 
                 {
                     PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
-                    c.MarketData.Start();
                 }
             }
             return PositionPerEachContractLUT[c];
@@ -1064,11 +1063,5 @@ namespace Pacmio
         public override int GetHashCode() => AccountId.GetHashCode();
 
         #endregion Equality
-
-        #region Grid View
-
-        public static readonly StringColumn Column_Account = new StringColumn("ACCOUNT");
-
-        #endregion Grid View
     }
 }

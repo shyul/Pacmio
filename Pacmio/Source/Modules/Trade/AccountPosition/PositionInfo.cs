@@ -65,6 +65,10 @@ namespace Pacmio
         {
             AverageEntryPrice = price;
             Quantity = qty;
+
+            if(qty != 0)
+                Contract.MarketData.Start();
+
             UpdateTime = DateTime.Now;
             Refreshed = true;
             Updated();

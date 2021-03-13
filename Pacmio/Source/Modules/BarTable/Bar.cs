@@ -18,7 +18,7 @@ namespace Pacmio
     /// <summary>
     /// One Single Bar is not as simple as it sounds.
     /// </summary>
-    public class Bar : IRow, ICandleStick
+    public class Bar : ICandleStick
     {
         #region Ctor
 
@@ -200,20 +200,6 @@ namespace Pacmio
         #region Intrinsic Indicators
 
         public List<CandleStickType> CandleStickTypes { get; } = new List<CandleStickType>();
-
-        public object this[Column column]
-        {
-            get
-            {
-                return column switch
-                {
-                    NumericColumn nc => this[nc],
-                    DatumColumn tc => this[tc],
-                    SignalColumn sc => this[sc],
-                    _ => null,
-                };
-            }
-        }
 
         #endregion Intrinsic Indicators
 
