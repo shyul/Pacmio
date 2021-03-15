@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class BoxRange
+    public class PivotBox
     {
-        public void Insert(IPivot p)
+        public void Insert(IPatternObject p)
         {
             if (WeightList.ContainsKey(p.Source))
                 WeightList[p.Source] += p.Weight;

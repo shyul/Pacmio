@@ -55,9 +55,9 @@ namespace Pacmio
         public TIProData.TopListHandler TopWatchList { get; }
 
         // Output: name/source of the value, and value itself
-        public (bool pushToLowerTimeFrame, List<PivotLevel> importantLevels) Calculate(Contract c, List<PivotLevel> Levels) 
+        public (bool pushToLowerTimeFrame, List<HorizontalLine> importantLevels) Calculate(Contract c, List<HorizontalLine> Levels) 
         {
-            return (false, new List<PivotLevel>());
+            return (false, new List<HorizontalLine>());
         }
 
 

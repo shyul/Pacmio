@@ -8,7 +8,7 @@ using System;
 
 namespace Pacmio
 {
-    public interface IPivot
+    public interface IPatternObject
     {
         IChartPattern Source { get; }
 

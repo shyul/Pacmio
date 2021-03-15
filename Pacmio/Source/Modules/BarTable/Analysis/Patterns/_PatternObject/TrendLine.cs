@@ -14,9 +14,9 @@ namespace Pacmio
     /// 2. Distance between Points
     /// 3. Tolerance
     /// </summary>
-    public class PivotLine : PivotLevel
+    public class TrendLine : HorizontalLine
     {
-        public PivotLine(IChartPattern source, Pivot pt1, Pivot pt2, int x3, double tolerance) : base(source, pt1, tolerance)
+        public TrendLine(IChartPattern source, Pivot pt1, Pivot pt2, int x3, double tolerance) : base(source, pt1, tolerance)
         {
             P2 = pt2;
             DeltaX = Math.Abs(X2 - X1);

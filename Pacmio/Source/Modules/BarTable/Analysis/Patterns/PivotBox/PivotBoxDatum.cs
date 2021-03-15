@@ -14,24 +14,24 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class BoxRangeDatum
+    public class PivotBoxDatum
     {
-        public List<BoxRange> RangeList { get; } = new List<BoxRange>();
+        public List<PivotBox> BoxList { get; } = new List<PivotBox>();
 
-        public void Reset() => RangeList.Clear();
+        public void Reset() => BoxList.Clear();
 
-        public void Insert(IPivot p)
+        public void Insert(IPatternObject p)
         {
             double level = p.Level;
-            var list = RangeList.Where(n => n.Offset(level) <= p.Tolerance).ToArray();
+            var list = BoxList.Where(n => n.Offset(level) <= p.Tolerance).ToArray();
             if (list.Count() > 0)
             {
                 list.OrderBy(n => n.Offset(level)).First().Insert(p);
             }
             else
             {
-                BoxRange pr = new BoxRange();
-                RangeList.Add(pr);
+                PivotBox pr = new PivotBox();
+                BoxList.Add(pr);
                 pr.Insert(p);
             }
         }
@@ -41,7 +41,7 @@ namespace Pacmio
             Range<double> r = new Range<double>(min);
             r.Insert(max);
 
-            double w = RangeList.Where(n => n.Box.Intersects(r)).Select(n => n.Weight).Sum();
+            double w = BoxList.Where(n => n.Box.Intersects(r)).Select(n => n.Weight).Sum();
 
             if (min < max) return w;
             else if (min > max) return -w;

@@ -62,8 +62,8 @@ namespace TestClient
                     volumeEma,
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
-                    new Trend(260),
-                    new Reversal(),
+                    new TrendAnalysis(260),
+                    new ReversalAnalysis(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
@@ -146,7 +146,7 @@ namespace TestClient
                     //new CandleStick(),
 
                     //new GainPointAnalysis(200, 3, 1),
-                    new Trend(260),
+                    new TrendAnalysis(260),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

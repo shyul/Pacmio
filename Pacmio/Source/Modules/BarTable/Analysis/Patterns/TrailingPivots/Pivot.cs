@@ -28,6 +28,5 @@ namespace Pacmio
         public double Prominece { get; }
 
         public double TrendStrength { get; }
-
     }
 }

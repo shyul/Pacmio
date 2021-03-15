@@ -14,23 +14,23 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class Trend : BarAnalysis, IChartPattern
+    public class TrendAnalysis : BarAnalysis, IChartPattern
     {
-        public Trend(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public TrendAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            TrailingPivotPointAnalysis = new TrailingPivots(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
+            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
-            this.AddChild(CalculatePivotRange);
+            this.AddChild(PivotBoxAnalysis);
         }
 
-        public Trend(int test_interval)
+        public TrendAnalysis(int test_interval)
         {
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
@@ -38,23 +38,22 @@ namespace Pacmio.Analysis
             ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
-            TrailingPivotPointAnalysis = new TrailingPivots(test_interval);
+            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
             AreaName = MainBarChartArea.DefaultName;
 
-            this.AddChild(CalculatePivotRange);
+            this.AddChild(PivotBoxAnalysis);
         }
-
 
         #region Calculation
 
         public ATR ATR { get; }
 
-        public PivotRanges CalculatePivotRange { get; } = new PivotRanges(); // => BarTable.CalculatePivotRange;
+        public PivotBoxAnalysis PivotBoxAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
 
-        public TrailingPivots TrailingPivotPointAnalysis { get; }
+        public TrailingPivotAnalysis TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Column_Result { get; }
 
@@ -101,7 +100,7 @@ namespace Pacmio.Analysis
                         {
                             // consider the distant to date as a factor for fading
                             double w = 2 * ((p1 * p1) + t1);
-                            PivotLevel level = new PivotLevel(this, pt1.Value, tolerance)
+                            HorizontalLine level = new(this, pt1.Value, tolerance)
                             {
                                 Weight = w
                             };
@@ -114,7 +113,7 @@ namespace Pacmio.Analysis
                             double p2 = Math.Abs(pt2.Value.Prominece);
                             double t2 = Math.Abs(pt2.Value.TrendStrength);
 
-                            PivotLine line = new PivotLine(this, pt1.Value, pt2.Value, i + 1, tolerance);
+                            TrendLine line = new(this, pt1.Value, pt2.Value, i + 1, tolerance);
 
                             if (pd.LevelRange.Contains(line.Level))
                             {
@@ -149,9 +148,9 @@ namespace Pacmio.Analysis
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
                 double maxWeight = pd.WeightRange.Max;
-                foreach (IPivot ip in pd)//.Pivots)
+                foreach (IPatternObject ip in pd)//.Pivots)
                 {
-                    if (ip is PivotLine line)
+                    if (ip is TrendLine line)
                     {
                         int x1 = line.X1 - StartPt;
                         if (x1 >= 0)
@@ -176,7 +175,7 @@ namespace Pacmio.Analysis
                                 g.DrawLine(new Pen(Color.FromArgb(intensity, 32, 32, 32)), pt1, pt3);
                         }
                     }
-                    else if (ip is PivotLevel level)
+                    else if (ip is HorizontalLine level)
                     {
                         int x1 = level.X1 - StartPt;
                         if (x1 >= 0)

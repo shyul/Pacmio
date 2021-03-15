@@ -321,59 +321,59 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        #region Box Range Tools
+        #region Pivot Box Tools
 
-        public IEnumerable<IPivot> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
+        public IEnumerable<IPatternObject> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
 
-        private Dictionary<string, BoxRangeDatum> BoxRangeDatums { get; } = new Dictionary<string, BoxRangeDatum>();
+        private Dictionary<string, PivotBoxDatum> PivotBoxDatums { get; } = new Dictionary<string, PivotBoxDatum>();
 
-        public void CalculateBoxRangeDatums()
+        public void CalculatePivotBoxDatums()
         {
-            BoxRangeDatums.Clear();
+            PivotBoxDatums.Clear();
             foreach (var p in Pivots)
             {
                 string areaName = p.Source.AreaName;
-                if (!BoxRangeDatums.ContainsKey(areaName))
-                    BoxRangeDatums[areaName] = new BoxRangeDatum();
+                if (!PivotBoxDatums.ContainsKey(areaName))
+                    PivotBoxDatums[areaName] = new PivotBoxDatum();
 
-                BoxRangeDatum prd = BoxRangeDatums[areaName];// = new PivotRangeDatum();
+                PivotBoxDatum prd = PivotBoxDatums[areaName];// = new PivotRangeDatum();
                 prd.Insert(p);
             }
         }
 
-        public BoxRangeDatum GetBoxRangeDatum() => GetBoxRangeDatum(MainBarChartArea.DefaultName);
+        public PivotBoxDatum GetPivotBoxDatum() => GetPivotBoxDatum(MainBarChartArea.DefaultName);
 
-        public BoxRangeDatum GetBoxRangeDatum(string areaName)
+        public PivotBoxDatum GetPivotBoxDatum(string areaName)
         {
-            if (BoxRangeDatums.ContainsKey(areaName))
-                return BoxRangeDatums[areaName];
+            if (PivotBoxDatums.ContainsKey(areaName))
+                return PivotBoxDatums[areaName];
             else
                 return null;
         }
 
-        public BoxRangeDatum this[IBarChartArea column]
+        public PivotBoxDatum this[IBarChartArea column]
         {
             get
             {
-                if (BoxRangeDatums.ContainsKey(column.Name))
-                    return BoxRangeDatums[column.Name];
+                if (PivotBoxDatums.ContainsKey(column.Name))
+                    return PivotBoxDatums[column.Name];
                 else
                     return null;
             }
         }
 
-        public BoxRangeDatum this[IChartPattern column]
+        public PivotBoxDatum this[IChartPattern column]
         {
             get
             {
-                if (BoxRangeDatums.ContainsKey(column.AreaName))
-                    return BoxRangeDatums[column.AreaName];
+                if (PivotBoxDatums.ContainsKey(column.AreaName))
+                    return PivotBoxDatums[column.AreaName];
                 else
                     return null;
             }
         }
 
-        #endregion Box Range Tools
+        #endregion Pivot Box Tools
 
         #region Position / Simulation Information
 
@@ -407,7 +407,7 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            BoxRangeDatums.Clear();
+            PivotBoxDatums.Clear();
             PositionDatums.Clear();
         }
 

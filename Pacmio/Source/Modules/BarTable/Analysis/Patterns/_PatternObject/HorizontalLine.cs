@@ -8,9 +8,9 @@ using System;
 
 namespace Pacmio
 {
-    public class PivotLevel : IPivot
+    public class HorizontalLine : IPatternObject
     {
-        public PivotLevel(IChartPattern source, Pivot pt1, double tolerance)
+        public HorizontalLine(IChartPattern source, Pivot pt1, double tolerance)
         {
             Source = source;
             P1 = pt1;

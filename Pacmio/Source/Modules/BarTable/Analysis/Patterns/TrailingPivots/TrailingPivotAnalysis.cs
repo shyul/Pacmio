@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivots : BarAnalysis
+    public class TrailingPivotAnalysis : BarAnalysis
     {
-        public TrailingPivots(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        public TrailingPivotAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             TestLength = test_interval;
 
@@ -36,7 +36,7 @@ namespace Pacmio.Analysis
             Result_Column = new DatumColumn(Name, label, typeof(TrailingPivotsDatum));
         }
 
-        public TrailingPivots(int test_interval = 250)
+        public TrailingPivotAnalysis(int test_interval = 250)
         {
             PivotPointAnalysis = BarTable.PivotPointAnalysis;
             TestLength = test_interval;

@@ -14,7 +14,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class PatternDatum : IDatum, IEnumerable<IPivot>
+    public class PatternDatum : IDatum, IEnumerable<IPatternObject>
     {
         public PatternDatum(double min, double max)
         {
@@ -22,9 +22,9 @@ namespace Pacmio
             LevelRange.Insert(max);
         }
 
-        public void Add(IPivot p)
+        public void Add(IPatternObject p)
         {
-            Pivots.Add(p);
+            PatternObjects.Add(p);
             WeightRange.Insert(p.Weight);
         }
 
@@ -32,10 +32,10 @@ namespace Pacmio
 
         public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        private List<IPivot> Pivots { get; } = new List<IPivot>();
+        private List<IPatternObject> PatternObjects { get; } = new List<IPatternObject>();
 
-        public IEnumerator<IPivot> GetEnumerator() => Pivots.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => Pivots.GetEnumerator();
+        public IEnumerator<IPatternObject> GetEnumerator() => PatternObjects.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => PatternObjects.GetEnumerator();
 
         /// <summary>
         /// Acompany with the MaximumTrailingIndex, this time limits the perticular datum's effective time boundary

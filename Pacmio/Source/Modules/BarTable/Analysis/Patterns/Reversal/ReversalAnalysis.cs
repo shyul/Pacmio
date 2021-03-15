@@ -2,6 +2,10 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
+/// I think this analysis should upgrade into strategy instead of being a mere
+/// analysis. and trend line should have threshold and give pronounced trend line
+/// instead of massive lines.
+/// 
 /// ***************************************************************************
 
 using System;
@@ -11,18 +15,18 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class Reversal : BarAnalysis, IChartSeries
+    public class ReversalAnalysis : BarAnalysis, IChartSeries
     {
-        public Reversal()
+        public ReversalAnalysis()
         {
             GroupName = Name = GetType().Name;
             Description = Name;
             AreaName = Name;
 
-            Column_Weight = new NumericColumn(Name + "_Weight") { Label = "Weight" };
-            Column_TotalWeight = new NumericColumn(Name + "_TotalWeight") { Label = "TotalWeight" };
+            Column_Weight = new(Name + "_Weight") { Label = "Weight" };
+            Column_TotalWeight = new(Name + "_TotalWeight") { Label = "TotalWeight" };
 
-            ColumnSeries_Weight = new AdColumnSeries(Column_Weight, Column_Weight, 50, 0, 0)
+            ColumnSeries_Weight = new(Column_Weight, Column_Weight, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Weight",
@@ -32,7 +36,7 @@ namespace Pacmio.Analysis
                 IsAntialiasing = false
             };
 
-            ColumnSeries_TotalWeight = new AdColumnSeries(Column_TotalWeight, Column_TotalWeight, 50, 0, 0)
+            ColumnSeries_TotalWeight = new(Column_TotalWeight, Column_TotalWeight, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "TotalWeight",
@@ -48,7 +52,7 @@ namespace Pacmio.Analysis
             CalculatePivotRange.AddChild(this);
         }
 
-        public PivotRanges CalculatePivotRange { get; } = new PivotRanges(); // => BarTable.CalculatePivotRange;
+        public PivotBoxAnalysis CalculatePivotRange { get; } = new PivotBoxAnalysis(); // => BarTable.CalculatePivotRange;
 
         public ISingleData SourceAnalysis { get; protected set; }
 
@@ -73,7 +77,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
-                    if (SourceAnalysis is null && b.GetBoxRangeDatum() is BoxRangeDatum prd)
+                    if (SourceAnalysis is null && b.GetPivotBoxDatum() is PivotBoxDatum prd)
                     {
                         double open = b.Open;
                         double close = b.Close;
