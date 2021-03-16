@@ -32,8 +32,22 @@ namespace Pacmio
             SourceRows = AccountPositionManager.Positions;
 
             base.DataIsUpdated(provider);
-            Console.WriteLine("PositionInfoGridView | Rows.Count() = " + Rows.Count());
+            //Console.WriteLine("PositionInfoGridView | Rows.Count() = " + Rows.Count());
+
+    
+
+
+            double unrealizedPnL = SourceRows.Select(n => n.UnrealizedPnL).Sum();
+
+            if (Math.Abs(unrealizedPnL - UnrealizedPnL) > 0.005)
+            {
+                Console.WriteLine("Total PnL = " + unrealizedPnL.ToString("0.###"));
+            }
+
+            UnrealizedPnL = unrealizedPnL;
         }
+
+        public double UnrealizedPnL { get; set; }
 
         public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
     }

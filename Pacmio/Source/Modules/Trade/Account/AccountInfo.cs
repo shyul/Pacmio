@@ -15,11 +15,17 @@ using Xu;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public sealed class AccountInfo : IDataProvider, IEquatable<AccountInfo>, IEquatable<string>
+    public sealed class AccountInfo : IDataProvider, IDataConsumer, IEquatable<AccountInfo>, IEquatable<string>
     {
         public AccountInfo(string accountId)
         {
             AccountId = accountId;
+        }
+
+        public void Dispose()
+        {
+            foreach (var ps in Positions) ps.RemoveDataConsumer(this);
+            DataConsumers.Clear(); //Reset();
         }
 
         public override string ToString() => AccountId;
@@ -47,8 +53,14 @@ namespace Pacmio
             return (DataConsumers is not null) ? DataConsumers.CheckRemove(idk) : false;
         }
 
-        public void Updated()
+        public void DataIsUpdated(IDataProvider provider)
         {
+            if (provider is PositionInfo)
+            {
+                if (Positions is PositionInfo[] ps)
+                    UnrealizedPnL = ps.Select(n => n.UnrealizedPnL).Sum();
+            }
+
             UpdateTime = DateTime.Now;
             DataConsumers?.ForEach(n => n.DataIsUpdated(this));
         }
@@ -1037,7 +1049,7 @@ namespace Pacmio
                     break;
             }
 
-            Updated();
+            DataIsUpdated(this);
         }
 
         #region Equality

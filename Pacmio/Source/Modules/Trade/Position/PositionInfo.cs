@@ -18,13 +18,19 @@ namespace Pacmio
     /// Only used in live trades, and emulations
     /// </summary>
     [Serializable, DataContract]
-    public class PositionInfo : IDataProvider, IEquatable<PositionInfo>
+    public class PositionInfo : IDataProvider, IDataConsumer, IEquatable<PositionInfo>
     {
         public PositionInfo(AccountInfo ac, Contract c)
         {
             AccountInfo = ac;
             Contract = c;
             Refreshed = true;
+        }
+
+        public void Dispose()
+        {
+            Contract.MarketData.RemoveDataConsumer(this);
+            DataConsumers.Clear(); //Reset();
         }
 
         public AccountInfo AccountInfo { get; }
@@ -57,8 +63,9 @@ namespace Pacmio
             AverageEntryPrice = double.NaN;
             Quantity = 0;
             UpdateTime = DateTime.Now;
-            Updated();
-            DataConsumers.Clear();
+            DataIsUpdated(this);
+            Contract.MarketData.RemoveDataConsumer(this);
+            //DataConsumers.Clear();
         }
 
         public void Set(double qty, double price)
@@ -67,11 +74,14 @@ namespace Pacmio
             Quantity = qty;
 
             if(qty != 0)
+            {
                 Contract.MarketData.Start();
+                Contract.MarketData.AddDataConsumer(this);
+            }
 
             UpdateTime = DateTime.Now;
             Refreshed = true;
-            Updated();
+            DataIsUpdated(this);
         }
 
         [Browsable(true), ReadOnly(true), DisplayName("Cost"), GridColumnOrder(6), GridRenderer(typeof(NumberGridRenderer), 100)]
@@ -120,10 +130,13 @@ namespace Pacmio
             return DataConsumers.CheckRemove(idk);
         }
 
-        public void Updated()
+        public void DataIsUpdated(IDataProvider provider)
         {
             UpdateTime = DateTime.Now;
-            DataConsumers?.ForEach(n => n.DataIsUpdated(this));
+            DataConsumers.ForEach(n => n.DataIsUpdated(provider));
+            AccountPositionManager.PositionDataProvider.Updated();
+            //Console.WriteLine("Position " + Contract.ToString() + " | Price: " + MarketPrice + ", is updated.");
+            //Console.WriteLine("Account " + AccountId + " | UnrealizedPnL = " + AccountInfo.UnrealizedPnL2 + ", is updated.");
         }
 
         public bool Refreshed { get; set; } = true;
