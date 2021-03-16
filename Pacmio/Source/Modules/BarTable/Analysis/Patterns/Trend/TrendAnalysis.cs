@@ -27,7 +27,7 @@ namespace Pacmio.Analysis
             Column_Result = new PatternColumn(this, test_interval);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
-            this.AddChild(PivotBoxAnalysis);
+            this.AddChild(RangeBoundAnalysis);
         }
 
         public TrendAnalysis(int test_interval)
@@ -44,14 +44,14 @@ namespace Pacmio.Analysis
             Column_Result = new PatternColumn(this, test_interval);
             AreaName = MainBarChartArea.DefaultName;
 
-            this.AddChild(PivotBoxAnalysis);
+            this.AddChild(RangeBoundAnalysis);
         }
 
         #region Calculation
 
         public ATR ATR { get; }
 
-        public PivotBoxAnalysis PivotBoxAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
+        public RangeBoundAnalysis RangeBoundAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
 
         public TrailingPivotAnalysis TrailingPivotPointAnalysis { get; }
 

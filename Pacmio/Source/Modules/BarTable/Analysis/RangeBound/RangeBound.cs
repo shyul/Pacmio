@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PivotBox
+    public class RangeBound
     {
         public void Insert(IPatternObject p)
         {
@@ -50,9 +50,9 @@ namespace Pacmio
             }
         }
 
-        public Dictionary<IChartPattern, double> WeightList { get; } = new Dictionary<IChartPattern, double>();
+        public Dictionary<IChartPattern, double> WeightList { get; } = new();
 
-        public Range<double> Box { get; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> Box { get; } = new(double.MaxValue, double.MinValue);
 
         public double Level => (Box.Max + Box.Min) / 2;
     }

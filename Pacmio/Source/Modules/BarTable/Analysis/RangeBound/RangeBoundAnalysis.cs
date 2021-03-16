@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PivotBoxAnalysis : BarAnalysis
+    public class RangeBoundAnalysis : BarAnalysis
     {
-        public PivotBoxAnalysis() 
+        public RangeBoundAnalysis() 
             => Name = GetType().Name;
         
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
@@ -40,7 +40,7 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b) b.CalculatePivotBoxDatums();
+                if (bt[i] is Bar b) b.CalculateRangeBoundDatums();
             }
         }
     }

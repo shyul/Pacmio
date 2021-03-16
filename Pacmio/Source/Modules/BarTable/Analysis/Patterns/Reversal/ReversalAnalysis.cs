@@ -52,7 +52,7 @@ namespace Pacmio.Analysis
             CalculatePivotRange.AddChild(this);
         }
 
-        public PivotBoxAnalysis CalculatePivotRange { get; } = new PivotBoxAnalysis(); // => BarTable.CalculatePivotRange;
+        public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis(); // => BarTable.CalculatePivotRange;
 
         public ISingleData SourceAnalysis { get; protected set; }
 
@@ -77,7 +77,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
-                    if (SourceAnalysis is null && b.GetPivotBoxDatum() is PivotBoxDatum prd)
+                    if (SourceAnalysis is null && b.GetRangeBoundDatum() is RangeBoundDatum prd)
                     {
                         double open = b.Open;
                         double close = b.Close;

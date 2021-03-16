@@ -23,10 +23,10 @@ namespace Pacmio.Analysis
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
-            Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
+            Column_Result = new(Name) { Label = label };
+            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
-            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = GroupName + ": ",
@@ -51,10 +51,10 @@ namespace Pacmio.Analysis
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
-            Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
+            Column_Result = new(Name) { Label = label };
+            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
-            ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
+            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Pivot Point " + label,
@@ -89,8 +89,8 @@ namespace Pacmio.Analysis
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
-            Column_Result = new NumericColumn(Name) { Label = label };
-            Column_PeakTags = new DatumColumn(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
+            Column_Result = new(Name) { Label = label };
+            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             ColumnSeries = new AdColumnSeries(Column_Result, Column_Result, 50, 0, 0)
             {
@@ -209,7 +209,7 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if(bt[i] is Bar b) 
+                if (bt[i] is Bar b)
                 {
                     double high = b[Column_High];
                     double low = b[Column_Low];

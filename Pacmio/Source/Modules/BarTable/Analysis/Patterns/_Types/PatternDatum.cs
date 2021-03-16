@@ -30,9 +30,9 @@ namespace Pacmio
 
         public Range<double> LevelRange { get; }
 
-        public Range<double> WeightRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> WeightRange { get; } = new(double.MaxValue, double.MinValue);
 
-        private List<IPatternObject> PatternObjects { get; } = new List<IPatternObject>();
+        private List<IPatternObject> PatternObjects { get; } = new();
 
         public IEnumerator<IPatternObject> GetEnumerator() => PatternObjects.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => PatternObjects.GetEnumerator();

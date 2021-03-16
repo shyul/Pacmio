@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PivotBoxDatum
+    public class RangeBoundDatum
     {
-        public List<PivotBox> BoxList { get; } = new List<PivotBox>();
+        public List<RangeBound> BoxList { get; } = new List<RangeBound>();
 
         public void Reset() => BoxList.Clear();
 
@@ -30,7 +30,7 @@ namespace Pacmio
             }
             else
             {
-                PivotBox pr = new PivotBox();
+                RangeBound pr = new RangeBound();
                 BoxList.Add(pr);
                 pr.Insert(p);
             }

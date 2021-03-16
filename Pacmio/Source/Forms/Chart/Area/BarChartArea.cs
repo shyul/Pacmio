@@ -57,7 +57,7 @@ namespace Pacmio
 
                 // Console.WriteLine("full_width = " + full_width);
                 //Console.WriteLine("IBarChartArea a = " + a.Name);
-                if (a.BarChart.LastBar_1 is Bar b && b[a] is PivotBoxDatum prd)
+                if (a.BarChart.LastBar_1 is Bar b && b[a] is RangeBoundDatum prd)
                 {
                     var rangeList = prd.BoxList.OrderByDescending(n => n.Weight);
 

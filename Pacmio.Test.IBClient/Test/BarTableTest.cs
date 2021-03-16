@@ -35,6 +35,8 @@ namespace TestClient
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
+                    new PivotLevelAnalysis(),
+
                     //new GainAnalysis(),
                     //new TrueRange(),
                     //new TrendStrength(),
@@ -71,6 +73,7 @@ namespace TestClient
                 return bas;
             }
         }
+
         public static BarAnalysisSet TestBarAnalysisSet2
         {
             get

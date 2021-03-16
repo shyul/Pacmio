@@ -321,59 +321,59 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        #region Pivot Box Tools
+        #region Range Bound Tools
 
         public IEnumerable<IPatternObject> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
 
-        private Dictionary<string, PivotBoxDatum> PivotBoxDatums { get; } = new Dictionary<string, PivotBoxDatum>();
+        private Dictionary<string, RangeBoundDatum> RangeBoundDatums { get; } = new Dictionary<string, RangeBoundDatum>();
 
-        public void CalculatePivotBoxDatums()
+        public void CalculateRangeBoundDatums()
         {
-            PivotBoxDatums.Clear();
+            RangeBoundDatums.Clear();
             foreach (var p in Pivots)
             {
                 string areaName = p.Source.AreaName;
-                if (!PivotBoxDatums.ContainsKey(areaName))
-                    PivotBoxDatums[areaName] = new PivotBoxDatum();
+                if (!RangeBoundDatums.ContainsKey(areaName))
+                    RangeBoundDatums[areaName] = new RangeBoundDatum();
 
-                PivotBoxDatum prd = PivotBoxDatums[areaName];// = new PivotRangeDatum();
+                RangeBoundDatum prd = RangeBoundDatums[areaName];// = new PivotRangeDatum();
                 prd.Insert(p);
             }
         }
 
-        public PivotBoxDatum GetPivotBoxDatum() => GetPivotBoxDatum(MainBarChartArea.DefaultName);
+        public RangeBoundDatum GetRangeBoundDatum() => GetRangeBoundDatum(MainBarChartArea.DefaultName);
 
-        public PivotBoxDatum GetPivotBoxDatum(string areaName)
+        public RangeBoundDatum GetRangeBoundDatum(string areaName)
         {
-            if (PivotBoxDatums.ContainsKey(areaName))
-                return PivotBoxDatums[areaName];
+            if (RangeBoundDatums.ContainsKey(areaName))
+                return RangeBoundDatums[areaName];
             else
                 return null;
         }
 
-        public PivotBoxDatum this[IBarChartArea column]
+        public RangeBoundDatum this[IBarChartArea column]
         {
             get
             {
-                if (PivotBoxDatums.ContainsKey(column.Name))
-                    return PivotBoxDatums[column.Name];
+                if (RangeBoundDatums.ContainsKey(column.Name))
+                    return RangeBoundDatums[column.Name];
                 else
                     return null;
             }
         }
 
-        public PivotBoxDatum this[IChartPattern column]
+        public RangeBoundDatum this[IChartPattern column]
         {
             get
             {
-                if (PivotBoxDatums.ContainsKey(column.AreaName))
-                    return PivotBoxDatums[column.AreaName];
+                if (RangeBoundDatums.ContainsKey(column.AreaName))
+                    return RangeBoundDatums[column.AreaName];
                 else
                     return null;
             }
         }
 
-        #endregion Pivot Box Tools
+        #endregion Range Bound Tools
 
         #region Position / Simulation Information
 
@@ -407,7 +407,7 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            PivotBoxDatums.Clear();
+            RangeBoundDatums.Clear();
             PositionDatums.Clear();
         }
 
