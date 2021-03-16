@@ -66,7 +66,7 @@ namespace TestClient
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
                     new TrendAnalysis(260),
-                    new ReversalAnalysis(),
+                    new ReversalIndicator(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
@@ -144,7 +144,7 @@ namespace TestClient
                     //new CCI(20, 0.015),
                     //new ADX(14) { Order = 100, HasXAxisBar = true },
                  
-                    new SingleDataIndicator(rsi),
+                    new SingleColumnAnalysis(rsi),
                     rsi,
                     ma_cross,
                     //new CandleStick(),

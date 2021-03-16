@@ -16,19 +16,20 @@ namespace Pacmio.Analysis
 {
     public class TrendAnalysis : BarAnalysis, IChartPattern
     {
+        /*
         public TrendAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
+            TrailingPivotPointAnalysis = new TrailingPivotPointsAnalysis(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
             AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
 
             this.AddChild(RangeBoundAnalysis);
-        }
+        }*/
 
         public TrendAnalysis(int test_interval)
         {
@@ -38,7 +39,7 @@ namespace Pacmio.Analysis
             ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
-            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(test_interval);
+            TrailingPivotPointAnalysis = new TrailingPivotPointsAnalysis(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
@@ -53,7 +54,7 @@ namespace Pacmio.Analysis
 
         public RangeBoundAnalysis RangeBoundAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
 
-        public TrailingPivotAnalysis TrailingPivotPointAnalysis { get; }
+        public TrailingPivotPointsAnalysis TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Column_Result { get; }
 
@@ -78,7 +79,7 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotsDatum gpd)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointsDatum gpd)
                 {
                     double range_delta = (gpd.LevelRange.Max - gpd.LevelRange.Min) / 2;
                     //double tolerance = range_delta / 25;

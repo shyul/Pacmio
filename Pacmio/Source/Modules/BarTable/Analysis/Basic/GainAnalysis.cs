@@ -23,6 +23,7 @@ namespace Pacmio.Analysis
 
             Column_Gain = new NumericColumn(Name + "_Gain");
             Column_Percent = new NumericColumn(Name + "_Percent") { Label = "" };
+            //Column_Gap = new NumericColumn(Name + "_Gap") { Label = "" };
 
             Description = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
@@ -53,6 +54,8 @@ namespace Pacmio.Analysis
         public NumericColumn Column_Percent { get; }
 
         public NumericColumn Column_Result => Column_Percent;
+
+        //public NumericColumn Column_Gap { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

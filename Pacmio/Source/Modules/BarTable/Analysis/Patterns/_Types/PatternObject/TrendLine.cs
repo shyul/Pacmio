@@ -16,7 +16,7 @@ namespace Pacmio
     /// </summary>
     public class TrendLine : HorizontalLine
     {
-        public TrendLine(IChartPattern source, Pivot pt1, Pivot pt2, int x3, double tolerance) : base(source, pt1, tolerance)
+        public TrendLine(IChartPattern source, PivotPointDatum pt1, PivotPointDatum pt2, int x3, double tolerance) : base(source, pt1, tolerance)
         {
             P2 = pt2;
             DeltaX = Math.Abs(X2 - X1);
@@ -24,7 +24,7 @@ namespace Pacmio
             Level = Y1 + (TrendRate * (x3 - X1));
         }
 
-        public Pivot P2 { get; }
+        public PivotPointDatum P2 { get; }
 
         public int X2 => P2.Index;
 

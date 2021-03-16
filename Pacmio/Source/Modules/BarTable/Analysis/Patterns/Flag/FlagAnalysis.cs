@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacmio
+namespace Pacmio.Source.Modules.BarTable.Analysis.Patterns.Flag
 {
-
-
-
+    class FlagAnalysis
+    {
+    }
 }

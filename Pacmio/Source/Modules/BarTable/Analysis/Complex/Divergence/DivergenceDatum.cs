@@ -1,6 +1,8 @@
 ﻿/// ***************************************************************************
-/// Shared Libraries and Utilities
+/// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// BarTable Data Types
 /// 
 /// ***************************************************************************
 
@@ -8,19 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface ICandleStick
+    public class DivergenceDatum : IDatum
     {
-        double Open { get; }
-
-        double High { get; }
-
-        double Low { get; }
-
-        double Close { get; }
-
-        List<CandleStickType> CandleStickList { get; }
+        public DivergenceType Type { get; set; }
     }
 }

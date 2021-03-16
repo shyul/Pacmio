@@ -11,41 +11,42 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotAnalysis : BarAnalysis
+    public class TrailingPivotPointsAnalysis : BarAnalysis
     {
-        public TrailingPivotAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
+        /*
+        public TrailingPivotPointsAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
         {
             TestLength = test_interval;
 
             if (ba is ISingleData isd)
             {
-                PivotPointAnalysis = new PivotPointAnalysis(isd, maximumPeakProminence, minimumPeakProminence);
+                PivotPointAnalysis = new(isd, maximumPeakProminence, minimumPeakProminence);
                 PivotPointAnalysis.AddChild(this);
             }
             else if (ba is IDualData idd)
             {
-                PivotPointAnalysis = new PivotPointAnalysis(idd, maximumPeakProminence, minimumPeakProminence);
+                PivotPointAnalysis = new(idd, maximumPeakProminence, minimumPeakProminence);
                 PivotPointAnalysis.AddChild(this);
             }
             else
-                throw new ArgumentException("BarAnalysis has to be ISingleData or IDualData");
+                throw new("BarAnalysis has to be ISingleData or IDualData");
 
             string label = "(" + ba.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new DatumColumn(Name, label, typeof(TrailingPivotsDatum));
-        }
+            Result_Column = new(Name, label, typeof(TrailingPivotPointsDatum));
+        }*/
 
-        public TrailingPivotAnalysis(int test_interval = 250)
+        public TrailingPivotPointsAnalysis(int test_length = 250)
         {
             PivotPointAnalysis = BarTable.PivotPointAnalysis;
-            TestLength = test_interval;
-            TrendStrengthAnalysis = new TrendStrength();
+            TestLength = test_length;
+            TrendStrengthAnalysis = new();
 
             string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
 
-            Result_Column = new DatumColumn(Name, label, typeof(TrailingPivotsDatum));
+            Result_Column = new(Name, label, typeof(TrailingPivotPointsDatum));
         }
 
         #region Parameters
@@ -89,7 +90,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b0)
                 {
-                    TrailingPivotsDatum gpd = new TrailingPivotsDatum();
+                    TrailingPivotPointsDatum gpd = new();
 
                     for (int j = MinimumPeakProminenceForAnalysis; j < TestLength; j++)
                     {
@@ -107,13 +108,13 @@ namespace Pacmio.Analysis
                             if (prominence > MinimumPeakProminenceForAnalysis)// || trendStrength > MinimumTrendStrength)
                             {
                                 double high = b[PivotPointAnalysis.Column_High];
-                                gpd.PositiveList[i_test] = new Pivot(i_test, b.Time, high, prominence, trendStrength);
+                                gpd.PositiveList[i_test] = new(i_test, b.Time, high, prominence, trendStrength);
                                 gpd.LevelRange.Insert(high);
                             }
                             else if (prominence < -MinimumPeakProminenceForAnalysis)// || trendStrength < -MinimumTrendStrength)
                             {
                                 double low = b[PivotPointAnalysis.Column_Low];
-                                gpd.NegativeList[i_test] = new Pivot(i_test, b.Time, low, prominence, trendStrength);
+                                gpd.NegativeList[i_test] = new(i_test, b.Time, low, prominence, trendStrength);
                                 gpd.LevelRange.Insert(low);
                             }
                         }

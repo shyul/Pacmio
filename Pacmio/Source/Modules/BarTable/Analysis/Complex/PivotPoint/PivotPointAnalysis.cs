@@ -11,43 +11,15 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class PivotPointAnalysis : BarAnalysis, ISingleData, IChartSeries
+    public sealed class PivotPointAnalysis : PeakAnalysis, ISingleData, IChartSeries
     {
-        public PivotPointAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
-        {
-            MaximumPeakProminence = maximumPeakProminence;
-            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
-            Column_High = Column_Low = column;
-
-            string label = "(" + Column_High.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
-            Name = AreaName = GroupName = GetType().Name + label;
-            Description = Name + " " + label;
-
-            Column_Result = new(Name) { Label = label };
-            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
-
-            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
-            {
-                Name = Name,
-                LegendName = GroupName + ": ",
-                Label = "Pivot Point ",
-                Importance = Importance.Major,
-                Side = AlignType.Right,
-                IsAntialiasing = false,
-                Order = 200
-            };
-
-            UpperColor = Color.Green;
-            LowerColor = Color.Red;
-        }
-
         public PivotPointAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
-            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
+            MinimumPeakProminence = minimumPeakProminenceForAnalysis;
             Column_High = Column_Low = isd.Column_Result;
 
-            string label = "(" + Column_High.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Column_High.Name + "," + maximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -81,11 +53,11 @@ namespace Pacmio.Analysis
         public PivotPointAnalysis(NumericColumn column_high, NumericColumn column_low, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
-            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
+            MinimumPeakProminence = minimumPeakProminenceForAnalysis;
             Column_High = column_high;
             Column_Low = column_low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -109,11 +81,11 @@ namespace Pacmio.Analysis
         public PivotPointAnalysis(IDualData idd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
-            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
+            MinimumPeakProminence = minimumPeakProminenceForAnalysis;
             Column_High = idd.Column_High;
             Column_Low = idd.Column_Low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + maximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -144,11 +116,11 @@ namespace Pacmio.Analysis
         public PivotPointAnalysis(int maximumPeakProminence = 100, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
-            MinimumPeakProminenceForAnalysis = minimumPeakProminenceForAnalysis;
+            MinimumPeakProminence = minimumPeakProminenceForAnalysis;
             Column_High = Bar.Column_High;
             Column_Low = Bar.Column_Low;
 
-            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Column_High.Name + "," + Column_Low.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = AreaName = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
@@ -169,39 +141,13 @@ namespace Pacmio.Analysis
             LowerColor = Color.Red;
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminenceForAnalysis;
-
-        public int MaximumPeakProminence { get; }
-
-        public int MinimumPeakProminenceForAnalysis { get; } = 5;
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;
 
         public NumericColumn Column_High { get; }
 
         public NumericColumn Column_Low { get; }
 
         public NumericColumn Column_Result { get; }
-
-        public DatumColumn Column_PeakTags { get; }
-
-        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
-        {
-            int count = bap.Count;
-            if (!bap.IsUpToDate && count > 0)
-            {
-                bap.StopPt = count - 1;  // bap.StopPt = count - MinimumPeakProminenceForAnalysis + 1;
-                int min_peak_start = count - MaximumPeakProminence * 2 - 1;
-
-                if (bap.StartPt > min_peak_start)
-                    bap.StartPt = min_peak_start;
-
-                if (bap.StartPt < 0)
-                    bap.StartPt = 0;
-
-                Calculate(bap);
-                bap.StartPt = bap.StopPt; //bap.StartPt = bap.StopPt = count;
-                bap.StopPt++;
-            }
-        }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -271,67 +217,15 @@ namespace Pacmio.Analysis
                     double low = b[Column_Low];
                     double peak_result = b[Column_Result];
 
-                    if (peak_result > MinimumPeakProminenceForAnalysis)
+                    if (peak_result > MinimumPeakProminence)
                     {
                         b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
                     }
-                    else if (peak_result < -MinimumPeakProminenceForAnalysis)
+                    else if (peak_result < -MinimumPeakProminence)
                     {
                         b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
                     }
                 }
-            }
-        }
-
-        public Color Color { get => UpperColor; set => UpperColor = value; }
-
-        public Color UpperColor
-        {
-            get => ColumnSeries.Color;
-
-            set
-            {
-                Color c = value;
-                ColumnSeries.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries.EdgeColor = ColumnSeries.TextTheme.ForeColor = c;
-            }
-        }
-
-        public Color LowerColor
-        {
-            get => ColumnSeries.LowerColor;
-
-            set
-            {
-                Color c = value;
-                ColumnSeries.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries.LowerEdgeColor = ColumnSeries.LowerTextTheme.ForeColor = c;
-            }
-        }
-
-        public Series MainSeries => ColumnSeries;
-
-        public AdColumnSeries ColumnSeries { get; }
-
-        public bool ChartEnabled { get => Enabled && ColumnSeries.Enabled; set => ColumnSeries.Enabled = value; }
-
-        public int SeriesOrder { get => ColumnSeries.Order; set => ColumnSeries.Order = value; }
-
-        public bool HasXAxisBar { get; set; } = false;
-
-        public string AreaName { get; }
-
-        public float AreaRatio { get; set; } = 8;
-
-        public void ConfigChart(BarChart bc)
-        {
-            if (ChartEnabled)
-            {
-                BarChartArea a_gain = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
-                {
-                    HasXAxisBar = HasXAxisBar,
-                });
-                a_gain.AddSeries(ColumnSeries);
             }
         }
     }

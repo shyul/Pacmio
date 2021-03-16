@@ -199,7 +199,7 @@ namespace Pacmio
 
         #region Intrinsic Indicators
 
-        public List<CandleStickType> CandleStickTypes { get; } = new List<CandleStickType>();
+        public List<CandleStickType> CandleStickList { get; } = new List<CandleStickType>();
 
         #endregion Intrinsic Indicators
 

@@ -11,16 +11,22 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface ICandleStick
+    public class DivergenceAnalysis : BarAnalysis
     {
-        double Open { get; }
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
 
-        double High { get; }
+        }
 
-        double Low { get; }
+        #region Divergence Tools
 
-        double Close { get; }
+        public static void Divergence(BarTable bt, int i, int minimumPeakMargin)
+        {
 
-        List<CandleStickType> CandleStickList { get; }
+        }
+
+        #endregion Divergence Tools
     }
+
+
 }

@@ -10,7 +10,7 @@ namespace Pacmio
 {
     public class HorizontalLine : IPatternObject
     {
-        public HorizontalLine(IChartPattern source, Pivot pt1, double tolerance)
+        public HorizontalLine(IChartPattern source, PivotPointDatum pt1, double tolerance)
         {
             Source = source;
             P1 = pt1;
@@ -18,7 +18,7 @@ namespace Pacmio
             Tolerance = tolerance;
         }
 
-        public Pivot P1 { get; }
+        public PivotPointDatum P1 { get; }
 
         public int X1 => P1.Index;
 

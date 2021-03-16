@@ -8,9 +8,9 @@ using System;
 
 namespace Pacmio
 {
-    public class Pivot
+    public class PivotPointDatum
     {
-        public Pivot(int index, DateTime time, double level, double prominence, double trendStrength)
+        public PivotPointDatum(int index, DateTime time, double level, double prominence, double trendStrength)
         {
             Index = index;
             Time = time;

@@ -11,8 +11,16 @@ using Xu;
 
 namespace Pacmio
 {
-    public class CandleStickIndicator : Indicator
+    public class CandleStickAnalysis : BarAnalysis
     {
+        public CandleStickAnalysis()
+        {
+            Name = GetType().Name;
+            Column_Result = new(Name, typeof(CandleStickDatum));
+        }
+
+        public DatumColumn Column_Result { get; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
 
@@ -36,26 +44,26 @@ namespace Pacmio
 
                 if (body_shadow_ratio > marubozu_ratio) // Marubozu
                 {
-                    b.CandleStickTypes.Add(CandleStickType.Marubozu);
+                    b.CandleStickList.Add(CandleStickType.Marubozu);
                 }
                 else if (body_shadow_ratio < doji_ratio)
                 {
-                    b.CandleStickTypes.Add(CandleStickType.Doji);
+                    b.CandleStickList.Add(CandleStickType.Doji);
 
                     double avg_oc = (open + close) / 2;
                     double oc_position_ratio = (high - avg_oc) / hl_Length;
 
                     if (oc_position_ratio > 0.88)
-                        b.CandleStickTypes.Add(CandleStickType.GravestoneDoji);
+                        b.CandleStickList.Add(CandleStickType.GravestoneDoji);
                     else if (oc_position_ratio < 0.12)
-                        b.CandleStickTypes.Add(CandleStickType.DragonflyDoji);
+                        b.CandleStickList.Add(CandleStickType.DragonflyDoji);
                     else if (oc_position_ratio > 0.45 && oc_position_ratio < 0.55)
-                        b.CandleStickTypes.Add(CandleStickType.LongLeggedDoji);
+                        b.CandleStickList.Add(CandleStickType.LongLeggedDoji);
                 }
             }
             else
             {
-                b.CandleStickTypes.Add(CandleStickType.Doji);
+                b.CandleStickList.Add(CandleStickType.Doji);
             }
         }
 
@@ -88,16 +96,16 @@ namespace Pacmio
                         double shadow_ratio = top_shadow / buttom_shadow;
                         if (shadow_ratio > 0.9 && shadow_ratio < 1.1)
                         {
-                            b.CandleStickTypes.Add(CandleStickType.SpinningTop);
+                            b.CandleStickList.Add(CandleStickType.SpinningTop);
                         }
                         else if (shadow_ratio < 0.2 && oc_Length / buttom_shadow < 0.3)
                         {
-                            b.CandleStickTypes.Add(CandleStickType.LongButtomShadows);
+                            b.CandleStickList.Add(CandleStickType.LongButtomShadows);
 
                             if (trend_1 > 2)
-                                b.CandleStickTypes.Add(CandleStickType.HangingMan);
+                                b.CandleStickList.Add(CandleStickType.HangingMan);
                             else if (trend_1 < -2)
-                                b.CandleStickTypes.Add(CandleStickType.Hammer);
+                                b.CandleStickList.Add(CandleStickType.Hammer);
                         }
                     }
 
@@ -106,11 +114,11 @@ namespace Pacmio
                         double shadow_ratio = buttom_shadow / top_shadow;
                         if (shadow_ratio < 0.2 && oc_Length / top_shadow < 0.3)
                         {
-                            b.CandleStickTypes.Add(CandleStickType.LongTopShadows);
+                            b.CandleStickList.Add(CandleStickType.LongTopShadows);
                             if (trend_1 > 2)
-                                b.CandleStickTypes.Add(CandleStickType.ShootingStar);
+                                b.CandleStickList.Add(CandleStickType.ShootingStar);
                             else if (trend_1 < -2)
-                                b.CandleStickTypes.Add(CandleStickType.InvertedHammer);
+                                b.CandleStickList.Add(CandleStickType.InvertedHammer);
                         }
                     }
                 }

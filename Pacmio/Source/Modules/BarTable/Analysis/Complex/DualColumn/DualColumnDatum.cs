@@ -1,6 +1,8 @@
 ﻿/// ***************************************************************************
-/// Shared Libraries and Utilities
+/// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -11,16 +13,8 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface ICandleStick
+    public class DualColumnDatum : IDatum
     {
-        double Open { get; }
-
-        double High { get; }
-
-        double Low { get; }
-
-        double Close { get; }
-
-        List<CandleStickType> CandleStickList { get; }
+        public List<DualColumnType> List { get; } = new List<DualColumnType>();
     }
 }

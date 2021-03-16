@@ -1,6 +1,8 @@
 ﻿/// ***************************************************************************
-/// Shared Libraries and Utilities
+/// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -11,16 +13,22 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface ICandleStick
+    public enum DualColumnType : int
     {
-        double Open { get; }
+        Above,
 
-        double High { get; }
+        Below,
 
-        double Low { get; }
+        Expansion,
 
-        double Close { get; }
+        Contraction,
 
-        List<CandleStickType> CandleStickList { get; }
+        CrossUp,
+
+        CrossDown,
+
+        TrendUp,
+
+        TrendDown,
     }
 }

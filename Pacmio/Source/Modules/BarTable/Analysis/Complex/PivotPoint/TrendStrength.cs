@@ -16,6 +16,7 @@ namespace Pacmio.Analysis
     {
         public TrendStrength()
         {
+            Column_Open = Bar.Column_Open;
             Column_High = Bar.Column_High;
             Column_Low = Bar.Column_Low;
             Column_Close = Bar.Column_Close;
@@ -28,7 +29,7 @@ namespace Pacmio.Analysis
             Column_TrendStrength = new NumericColumn(Name) { Label = label };
             Column_GapPercent = new NumericColumn("GapPercent" + label) { Label = label };
 
-            ColumnSeries_TrendStrength = new AdColumnSeries(Column_TrendStrength, Column_TrendStrength, 50, 0, 0)
+            ColumnSeries_TrendStrength = new AdColumnSeries(Column_TrendStrength, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Trend " + label,
@@ -38,7 +39,7 @@ namespace Pacmio.Analysis
                 IsAntialiasing = false
             };
 
-            ColumnSeries_GapPercent = new AdColumnSeries(Column_GapPercent, Column_GapPercent, 50, 0, 0)
+            ColumnSeries_GapPercent = new AdColumnSeries(Column_GapPercent, 50, 0, 0)
             {
                 Name = Name,
                 LegendName = "Gap " + label + " %",
@@ -55,6 +56,8 @@ namespace Pacmio.Analysis
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ Column_Close.GetHashCode();
 
         #region Calculation
+
+        public NumericColumn Column_Open { get; }
 
         public NumericColumn Column_High { get; }
 
@@ -95,17 +98,18 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
                 double high = b[Column_High];
                 double low = b[Column_Low];
+                double open = b[Column_Open];
                 double close = b[Column_Close];
 
                 if (i > 0)
                 {
-                    if (low > high_1)
+                    if (open > high_1)
                     {
-                        b[Column_GapPercent] = 100 * (low - high_1) / high_1;
+                        b[Column_GapPercent] = 100 * (open - high_1) / high_1;
                     }
-                    else if (high < low_1)
+                    else if (open < low_1)
                     {
-                        b[Column_GapPercent] = 100 * (high - low_1) / low_1;
+                        b[Column_GapPercent] = 100 * (open - low_1) / low_1;
                     }
                     else
                         b[Column_GapPercent] = 0;

@@ -15,9 +15,15 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalAnalysis : BarAnalysis, IChartSeries
+    // 1. RSI, or oscillator extremes
+    // 2. Bollinger Band, penetration
+    // 3. Consecutive Bars
+    // 4. Adjacent Support, resistance to set stop and profit target.
+
+
+    public class ReversalIndicator : BarAnalysis, IChartSeries
     {
-        public ReversalAnalysis()
+        public ReversalIndicator()
         {
             GroupName = Name = GetType().Name;
             Description = Name;
