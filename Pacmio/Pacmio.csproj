@@ -119,7 +119,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotPoint\PivotPointAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarketVolume.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\RelativeRatio.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrendStrength.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />

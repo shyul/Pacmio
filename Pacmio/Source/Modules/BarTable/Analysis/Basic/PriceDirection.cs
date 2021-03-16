@@ -1,12 +1,21 @@
-﻿using System;
+﻿/// ***************************************************************************
+/// Pacmio Research Enivironment
+/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// For example, calculate relative volume
+/// 
+/// ***************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using Xu;
+using Xu.Chart;
 
-namespace Pacmio.Source.Modules.BarTable.Analysis.Basic
+namespace Pacmio.Analysis
 {
-    class PriceDirection
+    public sealed class PriceDirection
     {
     }
 }
