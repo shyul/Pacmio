@@ -14,6 +14,10 @@ namespace Pacmio.Analysis
     public class PeakDualColumn : PeakAnalysis, IDualData, IChartSeries
     {
 
+
+
+
+
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;
 
         public NumericColumn Column_High { get; }

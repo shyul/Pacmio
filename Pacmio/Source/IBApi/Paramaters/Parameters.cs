@@ -48,8 +48,6 @@ namespace Pacmio.IB
     {
         public static Parameters Parameters { get; private set; } 
 
-
-
         public static void Save()
         {
             lock (Parameters)

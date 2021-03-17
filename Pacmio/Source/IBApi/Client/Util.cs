@@ -100,6 +100,23 @@ namespace Pacmio.IB
             }
         }
 
+        /*
+        private static readonly Dictionary<string, Type> ApiToSecType = new Dictionary<string, Type>()
+        {
+            { "STK",    typeof(Stock) },
+            { "FUND",   typeof(MutualFund) },
+            { "CASH",   typeof(Forex) },
+            { "IND",    typeof(Index) },
+            //{ "CMDTY",  ContractType.COMMODITY },
+            //{ "BOND",   ContractType.BOND },
+            { "FUT",    typeof(Future) },
+            { "OPT",    typeof(Option) },
+            //{ "FOP",    ContractType.FUTURE_OPTION },
+            //{ "CFD",    ContractType.CFD },
+            //{ "WAR",    ContractType.WAR },
+            //{ "IOPT",   ContractType.IOPT },
+        };*/
+
         public static string TypeCode(this Contract c)
         {
             return c switch

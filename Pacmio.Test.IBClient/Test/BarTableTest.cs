@@ -38,6 +38,10 @@ namespace TestClient
                     new PivotLevelAnalysis(),
                     //new RelativeAnalysis(),
                     new NarrowRange(),
+
+                    new CandleStickDojiMarubozuAnalysis(),
+                    new CandleStickShadowStarAnalysis(),
+
                     //new GainAnalysis(),
                     //new TrueRange(),
                     //new TrendStrength(),

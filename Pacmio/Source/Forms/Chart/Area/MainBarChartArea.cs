@@ -25,7 +25,11 @@ namespace Pacmio
 
             // Configure Price series by assigning the chart type
             // ===================================================
-            AddSeries(PriceSeries = new OhlcSeries(Bar.Column_Open, Bar.Column_High, Bar.Column_Low, Bar.Column_Close,
+            AddSeries(PriceSeries = new OhlcSeries(
+                Bar.Column_Open,
+                Bar.Column_High,
+                Bar.Column_Low,
+                Bar.Column_Close,
                 BarTable.GainAnalysis.Column_Percent)
             {
                 Order = int.MaxValue,

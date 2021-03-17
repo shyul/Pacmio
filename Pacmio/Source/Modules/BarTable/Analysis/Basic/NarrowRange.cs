@@ -80,7 +80,6 @@ namespace Pacmio.Analysis
             }
         }
 
-
         public Color Color { get => UpperColor; set => UpperColor = value; }
 
         public Color UpperColor
