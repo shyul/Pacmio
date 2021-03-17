@@ -313,7 +313,7 @@ namespace Pacmio
         public HashSet<string> MarketRules { get; private set; } = new HashSet<string>();
 
         [DataMember]
-        public double MarketPrice { get; set; }
+        public double MarketPrice { get; set; } = double.NaN;
 
         #endregion Trade Parameters
 

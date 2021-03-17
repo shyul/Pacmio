@@ -34,14 +34,11 @@ namespace Pacmio
             base.DataIsUpdated(provider);
             //Console.WriteLine("PositionInfoGridView | Rows.Count() = " + Rows.Count());
 
-    
-
-
-            double unrealizedPnL = SourceRows.Select(n => n.UnrealizedPnL).Sum();
+            double unrealizedPnL = AccountPositionManager.UnrealizedPnL;
 
             if (Math.Abs(unrealizedPnL - UnrealizedPnL) > 0.005)
             {
-                Console.WriteLine("Total PnL = " + unrealizedPnL.ToString("0.###"));
+                Console.WriteLine("Total Unrealized PnL = " + unrealizedPnL.ToString("0.###"));
             }
 
             UnrealizedPnL = unrealizedPnL;

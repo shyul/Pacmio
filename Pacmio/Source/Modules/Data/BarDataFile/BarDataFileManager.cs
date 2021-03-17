@@ -62,7 +62,7 @@ namespace Pacmio
             if (bdf.BarFreq > BarFreq.Daily)
                 throw new Exception("Only support download daily and smaller bars data file.");
             else //if (bdf.BarFreq == BarFreq.Daily)
-                Console.WriteLine("Last Closing Date: " + bdf.Contract.LatestClosingDate.ToString("MMM-dd-yyyy"));
+                Console.WriteLine("Last Closing Date: " + bdf.Contract.LatestExtendedClosingDateTime.ToString("MMM-dd-yyyy"));
 
             if (bdf.HistoricalHeadTime.IsInvalid())
             {

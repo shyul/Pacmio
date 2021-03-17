@@ -129,7 +129,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\NarrowRange.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Complex\NarrowRange\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotPoint\PivotPointAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarket\PreMarketAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />

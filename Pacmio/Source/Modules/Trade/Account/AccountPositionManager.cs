@@ -27,7 +27,9 @@ namespace Pacmio
             }
         }
 
-        public static PositionInfo[] Positions => Accounts.SelectMany(n => n.Positions is PositionInfo[] p ? p : new PositionInfo[] { }).Where(p => p.Quantity > 0).ToArray();
+        public static PositionInfo[] Positions => Accounts.SelectMany(n => n.Positions is PositionInfo[] p ? p : new PositionInfo[] { }).Where(p => p.Quantity != 0).ToArray();
+
+        public static double UnrealizedPnL => Positions.Select(n => n.UnrealizedPnL).Sum();
 
         public static int Count => AccountLUT.Count;
 

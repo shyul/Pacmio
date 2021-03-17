@@ -111,7 +111,7 @@ namespace Pacmio
 
             lock (PositionPerEachContractLUT)
             {
-                if (!PositionPerEachContractLUT.ContainsKey(c)) 
+                if (!PositionPerEachContractLUT.ContainsKey(c))
                 {
                     PositionPerEachContractLUT.Add(c, new PositionInfo(this, c));
                 }
@@ -157,6 +157,18 @@ namespace Pacmio
                     return null;
             }
         }
+
+        [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Daily Profit & Loss")]
+        [Description("")]
+        public double DailyPnL { get; private set; } = double.NaN; // "295"
+
+        [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Unrealized Profit & Loss")]
+        [Description("")]
+        public double UnrealizedPnL { get; private set; } = double.NaN; // "295"
+
+        [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Realized Profit & Loss")]
+        [Description("")]
+        public double RealizedPnL { get; private set; } = double.NaN; // "603"
 
         #endregion Positions
 
@@ -226,14 +238,6 @@ namespace Pacmio
         [DataMember, Browsable(false), ReadOnly(true)]
         [Description("WhatIfPMEnabled: To check projected margin requirements under Portfolio Margin model.")]
         public bool WhatIfPMEnabled { get; private set; } // "true"
-
-        [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Unrealized Profit & Loss")]
-        [Description("")]
-        public double UnrealizedPnL { get; private set; } = double.NaN; // "295"
-
-        [DataMember, Browsable(true), ReadOnly(true), Category("1: Basic"), DisplayName("Realized Profit & Loss")]
-        [Description("")]
-        public double RealizedPnL { get; private set; } = double.NaN; // "603"
 
         [DataMember]
         [Description("Excess liquidity as a percentage of net liquidation value")]

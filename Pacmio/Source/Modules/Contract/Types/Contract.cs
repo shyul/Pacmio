@@ -130,9 +130,6 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public virtual TimeZoneInfo TimeZone => WorkHours.TimeZoneInfo;
-
-        [IgnoreDataMember]
         public virtual WorkHours WorkHours
         {
             get
@@ -157,10 +154,29 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public virtual DateTime CurrentTime => WorkHoursExtended.CurrentTime;
+        public virtual TimeZoneInfo TimeZone => WorkHours.TimeZoneInfo;
 
         [IgnoreDataMember]
-        public virtual DateTime LatestClosingDate
+        public virtual DateTime CurrentTime => WorkHours.CurrentTime;
+
+        [IgnoreDataMember]
+        public virtual DateTime LatestClosingDateTime
+        {
+            get
+            {
+                DateTime dt = CurrentTime;
+
+                while (!WorkHours.IsWorkDate(dt) || WorkHours[dt].TimePeriod >= dt)
+                {
+                    dt = dt.AddHours(-1);
+                }
+
+                return dt.Date.AddSeconds(WorkHours[dt.Date].Stop.TotalSeconds);
+            }
+        }
+
+        [IgnoreDataMember]
+        public virtual DateTime LatestExtendedClosingDateTime
         {
             get
             {
@@ -171,7 +187,7 @@ namespace Pacmio
                     dt = dt.AddHours(-1);
                 }
 
-                return dt.Date;
+                return dt.Date.AddSeconds(WorkHoursExtended[dt.Date].Stop.TotalSeconds);
             }
         }
 

@@ -43,11 +43,11 @@ namespace Pacmio
                 Contract c = bdf.Contract;
 
                 DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
-                DateTime stopTime = c.LatestClosingDate;
+                DateTime stopTime = c.LatestClosingDateTime;
 
                 Console.WriteLine("startTime = " + startTime + " | stopTime = " + stopTime);
 
-                if (startTime >= stopTime)
+                if (startTime > stopTime)
                 {
                     Console.WriteLine("There is no new data from Quandl yet.");
                     return true;

@@ -88,7 +88,7 @@ namespace Pacmio
         public double Cost => double.IsNaN(AverageEntryPrice) ? 0 : Math.Abs(Quantity) * AverageEntryPrice;
 
         [Browsable(true), ReadOnly(true), DisplayName("Unrealized PnL"), GridColumnOrder(7), GridRenderer(typeof(NumberGridRenderer), 100)]
-        public double UnrealizedPnL => double.IsNaN(AverageEntryPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
+        public double UnrealizedPnL => double.IsNaN(AverageEntryPrice) || double.IsNaN(MarketPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
 
         [Browsable(true), ReadOnly(true), DisplayName("Value"), GridColumnOrder(8), GridRenderer(typeof(NumberGridRenderer), 100)]
         public double Value => Cost + UnrealizedPnL; // - possible commission...
