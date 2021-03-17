@@ -48,5 +48,18 @@ namespace Pacmio
         {
             lock (List) List.ForEach(bc => { bc.PointerToEnd(); });
         }
+
+        public static void AddColumnSeries(this BarChart bc, NumericColumn data)
+        {
+
+
+        }
+
+        public static void AddLineSeries(this BarChart bc, NumericColumn data)
+        {
+
+
+        }
+
     }
 }

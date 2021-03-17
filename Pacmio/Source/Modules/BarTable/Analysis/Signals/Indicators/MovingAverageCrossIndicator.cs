@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,9 +18,84 @@ namespace Pacmio.Analysis
 {
     public class MovingAverageCrossIndicator : Indicator
     {
+        public MovingAverageCrossIndicator(ISingleData fast_MA, ISingleData slow_MA)
+        {
+            FastMovingAverage = fast_MA;
+            SlowMovingAverage = slow_MA;
+
+            DualColumnAnalysis = new DualColumnAnalysis(FastMovingAverage, SlowMovingAverage);
+            DualColumnAnalysis.AddChild(this);
+
+            string label = "(" + FastMovingAverage.Name + "," + SlowMovingAverage.Name + ")";
+            GroupName = Name = GetType().Name + label;
+
+            if(fast_MA is IChartSeries fast_ics && slow_MA is IChartSeries slow_ics) 
+            {
+                SignalColumn = new SignalColumn(Name, label)
+                {
+                    BullishColor = fast_ics.Color,
+                    BearishColor = slow_ics.Color
+                };
+            }
+            else
+            {
+                SignalColumn = new SignalColumn(Name, label)
+                {
+                    BullishColor = Color.Green,
+                    BearishColor = Color.Red
+                };
+            }
+
+            SignalColumns = new SignalColumn[] { SignalColumn };
+        }
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ FastMovingAverage.GetHashCode() ^ SlowMovingAverage.GetHashCode();
+
+        public ISingleData FastMovingAverage { get; }
+
+        public ISingleData SlowMovingAverage { get; }
+
+        public DualColumnAnalysis DualColumnAnalysis { get; }
+
+        public virtual Dictionary<DualColumnType, double[]> TypeToScore { get; } = new Dictionary<DualColumnType, double[]>
+        {
+            { DualColumnType.Above, new double[] { 0.5 } },
+            { DualColumnType.Below, new double[] { -0.5 } },
+            { DualColumnType.Expansion, new double[] { 1 } },
+            { DualColumnType.Contraction, new double[] { 1 } },
+            { DualColumnType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
+            { DualColumnType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
+            { DualColumnType.TrendUp, new double[] { 0.5 } },
+            { DualColumnType.TrendDown, new double[] { -0.5 } },
+        };
+
+        public SignalColumn SignalColumn { get; protected set; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                SignalDatum sd = b[SignalColumn] as SignalDatum;
 
+                var list = (b[DualColumnAnalysis.Column_Result] as DualColumnDatum).List;
+
+                List<double> point_list = new List<double>();
+
+                foreach(var type in list) 
+                {
+                    SignalDatum.MergePoints(point_list, TypeToScore[DualColumnType.Above]);
+                }
+
+                if (i > 0)
+                {
+                    SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
+                    sd.Set(point_list.ToArray(), list.ToString(","), sd_1);
+                }
+                else
+                    sd.Set(point_list.ToArray(), list.ToString(","));
+            }
         }
 
         /*
@@ -116,20 +192,6 @@ namespace Pacmio.Analysis
 
         */
         /*
-        public SignalColumn SignalColumn { get; protected set; }
-
-        public virtual Dictionary<DualColumnType, double[]> TypeToScore { get; } = new Dictionary<DualColumnType, double[]>
-        {
-        { DualColumnType.Above, new double[] { 0.5 } },
-        { DualColumnType.Below, new double[] { -0.5 } },
-        { DualColumnType.Expansion, new double[] { 1 } },
-        { DualColumnType.Contraction, new double[] { 1 } },
-        { DualColumnType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
-        { DualColumnType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
-        { DualColumnType.TrendUp, new double[] { 0.5 } },
-        { DualColumnType.TrendDown, new double[] { -0.5 } },
-        };*/
-        /*
         for (int i = bap.StartPt; i < bap.StopPt; i++)
         {
             SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
@@ -146,7 +208,7 @@ namespace Pacmio.Analysis
 
             //Console.WriteLine("Score: " + sd.Score);
         }*/
-
+        /*
         public static List<DualColumnType> DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column)
         {
             double value_fast = bt[i, fast_Column];
@@ -285,8 +347,7 @@ namespace Pacmio.Analysis
 
             return (point_list.ToArray(), dualDataTypes.ToString(","));
         }
-
-
+        */
     }
 }
 
