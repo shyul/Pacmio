@@ -103,6 +103,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\NativeGainAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\PeakAnalysis.cs" />
@@ -131,11 +133,11 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotPoint\PivotPointAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\PivotPoint\PivotPointAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarket\PreMarketAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotPoint\TrendStrength.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrueRange.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\PivotPoint\TrendStrength.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />
@@ -147,8 +149,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\TrailingPivotPoints\TrailingPivotPointsDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\TrailingPivotPoints\TrailingPivotPointsAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\TrailingPivotPointsDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\TrailingPivotPointsAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />

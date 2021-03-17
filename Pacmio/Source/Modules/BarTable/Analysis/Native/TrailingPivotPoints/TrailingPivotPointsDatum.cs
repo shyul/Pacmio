@@ -12,10 +12,10 @@ namespace Pacmio
 {
     public class TrailingPivotPointsDatum : IDatum
     {
-        public Range<double> LevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> PatternLevelLevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public Dictionary<int, PatternPoint> PositiveList { get; } = new Dictionary<int, PatternPoint>();
+        public Dictionary<int, PatternPoint> PositivePatternPointList { get; } = new Dictionary<int, PatternPoint>();
 
-        public Dictionary<int, PatternPoint> NegativeList { get; } = new Dictionary<int, PatternPoint>();
+        public Dictionary<int, PatternPoint> NegativePatternPointList { get; } = new Dictionary<int, PatternPoint>();
     }
 }

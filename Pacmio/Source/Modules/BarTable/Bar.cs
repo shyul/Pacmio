@@ -121,22 +121,6 @@ namespace Pacmio
         /// </summary>
         public DataSourceType Source { get; set; } = DataSourceType.Invalid;
 
-        /*
-        public double Actual_Open { get; set; } = -1;
-
-        public double Actual_High { get; set; } = -1;
-
-        public double Actual_Low { get; set; } = -1;
-
-        public double Actual_Close { get; set; } = -1;
-
-        public double Actual_Volume { get; set; } = -1;
-       
-        #endregion
-
-        #region Adjusted Values
-         */
-
         public double Open { get; set; } = -1;
 
         public double High { get; set; } = -1;
@@ -146,6 +130,12 @@ namespace Pacmio
         public double Close { get; set; } = -1;
 
         public double Volume { get; set; } = -1;
+
+        public static NumericColumn Column_Open { get; } = new NumericColumn("OPEN", "O");
+        public static NumericColumn Column_High { get; } = new NumericColumn("HIGH", "H");
+        public static NumericColumn Column_Low { get; } = new NumericColumn("LOW", "L");
+        public static NumericColumn Column_Close { get; } = new NumericColumn("CLOSE", "CLOSE");
+        public static NumericColumn Column_Volume { get; } = new NumericColumn("VOLUME", string.Empty);
 
         #endregion Original
 
@@ -201,6 +191,31 @@ namespace Pacmio
 
         public List<CandleStickType> CandleStickList { get; } = new();
 
+        public double Gain { get; set; } = 0;
+
+        public double GainPercent { get; set; } = 0;
+
+        public double Gap { get; set; } = 0;
+
+        public double GapPercent { get; set; } = 0;
+
+        public double Typical { get; set; }
+
+        public double TrueRange { get; set; }
+
+        public int TrendStrength { get; set; }
+
+        public int Pivot { get; set; }
+
+        public static NumericColumn Column_Gain { get; } = new NumericColumn("GAIN", "GAIN");
+        public static NumericColumn Column_GainPercent { get; } = new NumericColumn("GAINPERCENT", "G%");
+        public static NumericColumn Column_Gap { get; } = new NumericColumn("GAP", "GAP");
+        public static NumericColumn Column_GapPercent { get; } = new NumericColumn("GAPPERCENT", "GAP%");
+        public static NumericColumn Column_Typical { get; } = new NumericColumn("TYPICAL", "TYPICAL");
+        public static NumericColumn Column_TrueRange { get; } = new NumericColumn("TRUERANGE", "TR");
+        public static NumericColumn Column_TrendStrength { get; } = new NumericColumn("TrendStrength", "TS");
+        public static NumericColumn Column_Pivot { get; } = new NumericColumn("PIVOT", "PVT");
+
         #endregion Intrinsic Indicators
 
         #region Numeric Column
@@ -223,6 +238,16 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_Close => Close,
                     NumericColumn dc when dc == Column_Volume => Volume,
 
+                    NumericColumn dc when dc == Column_Gain => Gain,
+                    NumericColumn dc when dc == Column_GainPercent => GainPercent,
+                    NumericColumn dc when dc == Column_Gap => Gap,
+                    NumericColumn dc when dc == Column_GapPercent => GapPercent,
+
+                    NumericColumn dc when dc == Column_Typical => Typical,
+                    NumericColumn dc when dc == Column_TrueRange => TrueRange,
+                    NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
+                    NumericColumn dc when dc == Column_Pivot => Pivot,
+
                     NumericColumn ic when NumericColumnsLUT.ContainsKey(ic) => NumericColumnsLUT[ic],
 
                     _ => double.NaN,
@@ -241,6 +266,16 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_Close: Close = value; break;
                         case NumericColumn dc when dc == Column_Volume: Volume = value; break;
 
+                        case NumericColumn dc when dc == Column_Gain: Gain = value; break;
+                        case NumericColumn dc when dc == Column_GainPercent: GainPercent = value; break;
+                        case NumericColumn dc when dc == Column_Gap: Gap = value; break;
+                        case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
+
+                        case NumericColumn dc when dc == Column_Typical: Typical = value; break;
+                        case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
+                        case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value.ToInt32(); break;
+                        case NumericColumn dc when dc == Column_Pivot: Pivot = value.ToInt32(); break;
+
                         default:
                             if (!NumericColumnsLUT.ContainsKey(column))
                                 NumericColumnsLUT.Add(column, value);
@@ -251,11 +286,7 @@ namespace Pacmio
             }
         }
 
-        public static NumericColumn Column_Open { get; } = new NumericColumn("OPEN", "O");
-        public static NumericColumn Column_High { get; } = new NumericColumn("HIGH", "H");
-        public static NumericColumn Column_Low { get; } = new NumericColumn("LOW", "L");
-        public static NumericColumn Column_Close { get; } = new NumericColumn("CLOSE", "CLOSE");
-        public static NumericColumn Column_Volume { get; } = new NumericColumn("VOLUME", string.Empty);
+
 
         #endregion Numeric Column
 
@@ -300,30 +331,23 @@ namespace Pacmio
 
         #endregion Datum Column
 
-        #region Signal Information Tools
+        #region Trailing Pattern Point
 
-        public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
-        {
-            double bull = 0, bear = 0;
-            foreach (SignalColumn sc in scs)
-            {
-                if (this[sc] is SignalDatum sd)
-                {
-                    double score = sd.Score;
-                    if (score > 0) bull += score;
-                    else if (score < 0) bear += score;
-                }
-            }
-            return (bull, bear);
-        }
+        public Range<double> PatternLevelLevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
+        public Dictionary<int, PatternPoint> PositivePatternPointList { get; } = new Dictionary<int, PatternPoint>();
 
-        #endregion Signal Information Tools
+        public Dictionary<int, PatternPoint> NegativePatternPointList { get; } = new Dictionary<int, PatternPoint>();
 
-        #region Range Bound Tools
+        #endregion Trailing Pattern Point
+
+        #region Pattern
 
         public IEnumerable<IPatternObject> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
+
+        #endregion Pattern
+
+        #region Range Bound
 
         private Dictionary<string, RangeBoundDatum> RangeBoundDatums { get; } = new Dictionary<string, RangeBoundDatum>();
 
@@ -373,7 +397,30 @@ namespace Pacmio
             }
         }
 
-        #endregion Range Bound Tools
+        #endregion Range Bound
+
+        #region Signal Information Tools
+
+        public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
+        {
+            double bull = 0, bear = 0;
+            foreach (SignalColumn sc in scs)
+            {
+                if (this[sc] is SignalDatum sd)
+                {
+                    double score = sd.Score;
+                    if (score > 0) bull += score;
+                    else if (score < 0) bear += score;
+                }
+            }
+            return (bull, bear);
+        }
+
+        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
+
+        #endregion Signal Information Tools
+
+
 
         #region Position / Simulation Information
 
@@ -407,6 +454,8 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
+            PositivePatternPointList.Clear();
+            NegativePatternPointList.Clear();
             RangeBoundDatums.Clear();
             PositionDatums.Clear();
         }

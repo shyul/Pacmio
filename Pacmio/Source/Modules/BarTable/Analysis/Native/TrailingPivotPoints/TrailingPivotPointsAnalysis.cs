@@ -108,14 +108,14 @@ namespace Pacmio.Analysis
                             if (prominence > MinimumPeakProminenceForAnalysis)// || trendStrength > MinimumTrendStrength)
                             {
                                 double high = b[PivotPointAnalysis.Column_High];
-                                gpd.PositiveList[i_test] = new(i_test, b.Time, high, prominence, trendStrength);
-                                gpd.LevelRange.Insert(high);
+                                gpd.PositivePatternPointList[i_test] = new(i_test, b.Time, high, prominence, trendStrength);
+                                gpd.PatternLevelLevelRange.Insert(high);
                             }
                             else if (prominence < -MinimumPeakProminenceForAnalysis)// || trendStrength < -MinimumTrendStrength)
                             {
                                 double low = b[PivotPointAnalysis.Column_Low];
-                                gpd.NegativeList[i_test] = new(i_test, b.Time, low, prominence, trendStrength);
-                                gpd.LevelRange.Insert(low);
+                                gpd.NegativePatternPointList[i_test] = new(i_test, b.Time, low, prominence, trendStrength);
+                                gpd.PatternLevelLevelRange.Insert(low);
                             }
                         }
                     }
