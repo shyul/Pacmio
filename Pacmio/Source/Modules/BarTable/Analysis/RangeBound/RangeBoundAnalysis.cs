@@ -18,7 +18,9 @@ namespace Pacmio.Analysis
     {
         public RangeBoundAnalysis() 
             => Name = GetType().Name;
-        
+
+        public override int GetHashCode() => GetType().GetHashCode();
+
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {
             if (!bap.IsUpToDate && bap.Count > 0)

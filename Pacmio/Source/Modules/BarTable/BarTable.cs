@@ -127,6 +127,78 @@ namespace Pacmio
         /// </summary>
         private int LastIndex => Count - 1;
 
+        #region Access Bars
+
+        /// <summary>
+        /// Lookup Bar by Index. Mostly used in the Chart.
+        /// </summary>
+        /// <param name="i">Index of the Bar in the Rows</param>
+        /// <returns>Bar according to the given index</returns>
+        //public Bar this[int i] => i >= Count || i < 0 ? null : Rows[i];
+        public Bar this[int i] => Rows[i];
+
+        /// <summary>
+        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
+        /// </summary>
+        /// <param name="time">time of the Bar</param>
+        /// <returns>Bar closest to the given time</returns>
+        public Bar this[DateTime time]
+        {
+            get
+            {
+                time = Frequency.Align(time);
+                lock (DataLockObject)
+                {
+                    if (TimeToRows.ContainsKey(time))
+                        return Rows[TimeToRows[time]];
+                    else
+                        return null; // Rows.Where(n => n.Period.Contains(time)).FirstOrDefault();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start">Start and included index</param>
+        /// <param name="stop">End and not included index</param>
+        /// <returns></returns>
+        public List<Bar> this[int start, int stop]
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    if (stop > Count) stop = Count;
+                    int cnt = stop - start;
+
+                    if (cnt > 0)
+                    {
+                        return Rows.Skip(start).Take(cnt).ToList();
+                    }
+                    return
+                        null;
+                }
+            }
+        }
+
+        public List<Bar> this[Period pd]
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time).ToList();
+                }
+            }
+        }
+
+        public double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column]; //   this[i] is Bar b ? b[column] : double.NaN;
+
+        public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column]; // this[i] is Bar b ? b[column] : null;
+
+        #endregion Access Bars
+
         #region Time
 
         /// <summary>
@@ -363,78 +435,6 @@ namespace Pacmio
         }
 
         #endregion Load Bars
-
-        #region Access Bars
-
-        /// <summary>
-        /// Lookup Bar by Index. Mostly used in the Chart.
-        /// </summary>
-        /// <param name="i">Index of the Bar in the Rows</param>
-        /// <returns>Bar according to the given index</returns>
-        //public Bar this[int i] => i >= Count || i < 0 ? null : Rows[i];
-        public Bar this[int i] => Rows[i];
-
-        /// <summary>
-        /// Lookup Bar by Time. Time is rounded to the closest next time in the Rows.
-        /// </summary>
-        /// <param name="time">time of the Bar</param>
-        /// <returns>Bar closest to the given time</returns>
-        public Bar this[DateTime time]
-        {
-            get
-            {
-                time = Frequency.Align(time);
-                lock (DataLockObject)
-                {
-                    if (TimeToRows.ContainsKey(time))
-                        return Rows[TimeToRows[time]];
-                    else
-                        return null; // Rows.Where(n => n.Period.Contains(time)).FirstOrDefault();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start">Start and included index</param>
-        /// <param name="stop">End and not included index</param>
-        /// <returns></returns>
-        public List<Bar> this[int start, int stop]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    if (stop > Count) stop = Count;
-                    int cnt = stop - start;
-
-                    if (cnt > 0)
-                    {
-                        return Rows.Skip(start).Take(cnt).ToList();
-                    }
-                    return
-                        null;
-                }
-            }
-        }
-
-        public List<Bar> this[Period pd]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    return Rows.Where(n => pd.Contains(n.Time)).OrderBy(n => n.Time).ToList();
-                }
-            }
-        }
-
-        public double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column]; //   this[i] is Bar b ? b[column] : double.NaN;
-
-        public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column]; // this[i] is Bar b ? b[column] : null;
-
-        #endregion Access Bars
 
         #region Add Ticks
 

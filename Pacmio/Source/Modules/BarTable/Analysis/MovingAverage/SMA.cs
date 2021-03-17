@@ -35,7 +35,7 @@ namespace Pacmio.Analysis
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
             Description = "Simple Moving Average " + label;
 
-            Column_Result = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name, label);
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,

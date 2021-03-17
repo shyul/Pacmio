@@ -78,6 +78,8 @@ namespace Pacmio.Analysis
             }
         }
 
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;
+
         public NumericColumn Column { get; }
 
         public NumericColumn Column_Result { get; }

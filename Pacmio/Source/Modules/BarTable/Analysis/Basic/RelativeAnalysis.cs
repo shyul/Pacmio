@@ -43,6 +43,8 @@ namespace Pacmio.Analysis
             ChartEnabled = true;
         }
 
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode();
+
         public NumericColumn Column { get; private set; }
 
         public NumericColumn Column_Result { get; }
