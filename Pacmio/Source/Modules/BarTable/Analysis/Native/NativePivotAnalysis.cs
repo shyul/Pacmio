@@ -7,7 +7,7 @@
 /// ***************************************************************************
 
 using System;
-using System.Linq;
+using System.Drawing;
 using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
@@ -16,6 +16,31 @@ namespace Pacmio.Analysis
 {
     public sealed class NativePivotAnalysis : PeakAnalysis
     {
+        public NativePivotAnalysis(int maximumPeakProminence = 50, int minimumPeakProminence = 5)
+        {
+            MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminence = minimumPeakProminence;
+
+            string label = "(" + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
+            Name = AreaName = GroupName = GetType().Name + label;
+            Description = Name + " " + label;
+
+            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
+
+            ColumnSeries = new(Bar.Column_Pivot, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = "Pivot Point " + label,
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false
+            };
+
+            UpperColor = Color.Green;
+            LowerColor = Color.Red;
+        }
+
         public override int GetHashCode() => GetType().GetHashCode();
 
         protected override void Calculate(BarAnalysisPointer bap)
@@ -27,23 +52,21 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
 
                 double high = b.High;
-                double low = b.High;
+                double low = b.Low;
 
                 // Get Peak and Troughs
                 int peak_result = 0;
                 int j = 1;
                 bool test_high = true, test_low = true;
 
-                while (j < MaximumPeakProminence)
+                while (j < MaximumPeakProminence && (test_high || test_low))
                 {
-                    if ((!test_high) && (!test_low)) break;
-
                     int right_index = i + j;
                     if (right_index >= bap.StopPt) break;
 
                     int left_index = i - j;
                     if (left_index < 0) break;
-
+                    
                     if (test_high)
                     {
                         double left_high = bt[left_index].High;
@@ -72,9 +95,14 @@ namespace Pacmio.Analysis
                             test_low = false;
                     }
                     j++;
-
-                    b.Pivot = peak_result;
                 }
+
+                b.Pivot = peak_result;
+                /*
+                if (b.Pivot < 0)
+                {
+                    Console.WriteLine(b.Time + " | " + peak_result);
+                }*/
             }
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)

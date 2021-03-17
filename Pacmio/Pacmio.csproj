@@ -146,8 +146,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\TrailingPivotPointsDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\TrailingPivotPointsAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPointsAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />

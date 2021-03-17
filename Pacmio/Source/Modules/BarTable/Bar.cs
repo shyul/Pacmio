@@ -343,11 +343,31 @@ namespace Pacmio
 
         #region Trailing Pattern Point
 
-        public Range<double> PatternLevelLevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
+        public void ResetPatternPointList() 
+        {
+            PatternPointsRange.Reset(double.MaxValue, double.MinValue);
+            PositivePatternPointList.Clear();
+            NegativePatternPointList.Clear();
+        }
+
+        public object PatternPointLockObject = new object();
+
+        public Range<double> PatternPointsRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
         public Dictionary<int, PatternPoint> PositivePatternPointList { get; } = new Dictionary<int, PatternPoint>();
 
         public Dictionary<int, PatternPoint> NegativePatternPointList { get; } = new Dictionary<int, PatternPoint>();
+
+        public KeyValuePair<int, PatternPoint>[] PatternPoints
+        {
+            get
+            {
+                lock (PatternPointLockObject)
+                {
+                    return PositivePatternPointList.Concat(NegativePatternPointList).OrderBy(n => n.Key).ToArray();
+                }
+            }
+        }
 
         #endregion Trailing Pattern Point
 

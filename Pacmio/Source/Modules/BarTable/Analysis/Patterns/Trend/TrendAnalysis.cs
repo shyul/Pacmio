@@ -79,9 +79,9 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointsDatum gpd)
+                if (bt[i] is Bar b && b[Column_Result] is null)// && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointsDatum gpd)
                 {
-                    double range_delta = (gpd.PatternLevelLevelRange.Max - gpd.PatternLevelLevelRange.Min) / 2;
+                    double range_delta = (b.PatternPointsRange.Max - b.PatternPointsRange.Min) / 2;
                     //double tolerance = range_delta / 25;
 
                     double tolerance = b[ATR.Column_Result] / 4;
@@ -89,7 +89,7 @@ namespace Pacmio.Analysis
 
                     PatternDatum pd = new PatternDatum(center - range_delta, center + range_delta);
 
-                    var all_points = gpd.PositivePatternPointList.Concat(gpd.NegativePatternPointList).OrderBy(n => n.Key).ToArray();
+                    var all_points = b.PatternPoints;
 
                     for (int j = 0; j < all_points.Length; j++)
                     {
@@ -126,6 +126,7 @@ namespace Pacmio.Analysis
                     }
 
                     b[Column_Result] = pd;
+
                 }
             }
         }
