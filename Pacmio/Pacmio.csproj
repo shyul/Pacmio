@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
+    <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakDualColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakSingleColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceDirection.cs" />
