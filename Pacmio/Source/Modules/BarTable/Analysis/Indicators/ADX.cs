@@ -108,7 +108,7 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
                 Bar b_1 = bt[i - 1];
 
-                double tr = b[TR];
+                double tr = b.TrueRange;
                 double tr_ma;
 
                 if (i < Interval)
@@ -118,7 +118,7 @@ namespace Pacmio.Analysis
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        tr_ma_sum += bt[k][TR];
+                        tr_ma_sum += bt[k].TrueRange;
                     }
                     tr_ma = b[TR_MA] = tr_ma_sum;
                 }

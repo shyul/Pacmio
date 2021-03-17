@@ -21,7 +21,7 @@ namespace Pacmio
                 Bar.Column_High,
                 Bar.Column_Low,
                 Bar.Column_Close,
-                BarTable.GainAnalysis.Column_Percent)
+                Bar.Column_GainPercent)
         {
             Order = int.MaxValue;
             Importance = Importance.Huge;

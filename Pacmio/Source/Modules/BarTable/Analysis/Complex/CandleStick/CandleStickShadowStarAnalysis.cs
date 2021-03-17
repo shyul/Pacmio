@@ -18,8 +18,6 @@ namespace Pacmio
             Name = GetType().Name;
         }
 
-        NumericColumn Column_Trend { get; } = BarTable.TrueRangeAnalysis.Column_Typical;
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -41,7 +39,7 @@ namespace Pacmio
 
                     if (body_shadow_ratio < 0.33)
                     {
-                        double trend_1 = (i > 0) ? bt[i - 1][Column_Trend] : 0;
+                        double trend_1 = (i > 0) ? bt[i - 1].TrendStrength : 0;
 
                         double top_shadow = Math.Abs(high - Math.Max(open, close));
                         double buttom_shadow = Math.Abs(Math.Min(open, close) - low);

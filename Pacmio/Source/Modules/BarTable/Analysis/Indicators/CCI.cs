@@ -21,15 +21,15 @@ namespace Pacmio.Analysis
         {
             Interval = interval;
             Constant = constant;
-            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
+            Column_Typical = Bar.Column_Typical;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
             AreaName = GroupName = GetType().Name;
             Description = "Commodity Channel Index " + label;
 
-            SMA_TP = new SMA(BarTable.TrueRangeAnalysis.Column_Typical, interval);
-            MDEV_TP = new MDEV(BarTable.TrueRangeAnalysis.Column_Typical, SMA_TP);
+            SMA_TP = new SMA(Bar.Column_Typical, interval);
+            MDEV_TP = new MDEV(Bar.Column_Typical, SMA_TP);
 
             SMA_TP.AddChild(MDEV_TP);
             MDEV_TP.AddChild(this);

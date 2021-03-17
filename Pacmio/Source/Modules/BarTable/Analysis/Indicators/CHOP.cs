@@ -60,7 +60,7 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public NumericColumn TR => BarTable.TrueRangeAnalysis.Column_TrueRange;
+        //public NumericColumn TR => BarTable.TrueRangeAnalysis.Column_TrueRange;
 
         public PriceChannel PriceChannel { get; }
 
@@ -82,7 +82,7 @@ namespace Pacmio.Analysis
                     int k = i - j;
                     if (k < 0) k = 0;
                     if (bt[k] is Bar b_tr)
-                        tr_sum += b_tr[TR];
+                        tr_sum += b_tr.TrueRange;
                 }
 
                 if (bt[i] is Bar b)

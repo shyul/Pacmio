@@ -20,7 +20,7 @@ namespace Pacmio.Analysis
         public VWAP(Frequency frequency)
         {
             Frequency = frequency;
-            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
+            //Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Frequency.ToString() + ")";
             Name = GetType().Name + label;
@@ -53,7 +53,7 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public NumericColumn Column_Typical { get; }
+        //public NumericColumn Column_Typical { get; }
 
         public NumericColumn Column_Volume { get; }
 
@@ -92,7 +92,7 @@ namespace Pacmio.Analysis
 
                     double volumn = b.Volume;
                     b[Column_Volume] = cumulative_vol += volumn;
-                    b[Column_Volume_Price] = cumulative_price_vol += volumn * b[Column_Typical];
+                    b[Column_Volume_Price] = cumulative_price_vol += volumn * b.Typical;
                     b[Column_Result] = cumulative_price_vol / cumulative_vol;
                     base_time = time;
                 }

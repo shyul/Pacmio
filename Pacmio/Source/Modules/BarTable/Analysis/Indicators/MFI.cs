@@ -27,7 +27,7 @@ namespace Pacmio.Analysis
         public MFI(int interval)
         {
             Interval = interval;
-            Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
+            //Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
@@ -59,7 +59,7 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = 20;
 
-        public NumericColumn Column_Typical { get; }
+        //public NumericColumn Column_Typical { get; }
 
         public NumericColumn PMF_Column { get; }
 
@@ -70,13 +70,13 @@ namespace Pacmio.Analysis
             BarTable bt = bap.Table;
             int startPt = bap.StartPt;
 
-            double last_typical = (bap.StartPt > 0) ? bt[startPt - 1][Column_Typical] : bt[startPt][Column_Typical];
+            double last_typical = (bap.StartPt > 0) ? bt[startPt - 1].Typical : bt[startPt].Typical;
 
             for (int i = startPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
 
-                double current_typical = b[Column_Typical];
+                double current_typical = b.Typical;
                 double val = b.Volume * current_typical;
 
                 if (current_typical < last_typical)

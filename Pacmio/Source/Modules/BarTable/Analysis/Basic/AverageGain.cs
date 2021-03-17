@@ -10,27 +10,21 @@ namespace Pacmio.Analysis
 {
     public class AverageGain : ATR
     {
-        public AverageGain(int interval) : base(interval)
-        {
-            GainAnalysis = BarTable.GainAnalysis;
-        }
-
-        public GainAnalysis GainAnalysis { get; }
+        public AverageGain(int interval) : base(interval) { }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            NumericColumn column = GainAnalysis.Column_Gain;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                double g = bt[i][column];
-                g = (g > 0) ? g : 0;
+                double gain = bt[i].Gain;
+                gain = (gain > 0) ? gain : 0;
 
                 if (i > 0)
-                    bt[i][Column_Result] = (bt[i - 1][Column_Result] * (Interval - 1) + g) / Interval;
+                    bt[i][Column_Result] = (bt[i - 1][Column_Result] * (Interval - 1) + gain) / Interval;
                 else
-                    bt[0][Column_Result] = g;
+                    bt[0][Column_Result] = gain;
             }
         }
     }

@@ -39,9 +39,11 @@ namespace Pacmio.Analysis
 
         public TrailingPivotPointsAnalysis(int test_length = 250)
         {
-            PivotPointAnalysis = BarTable.PivotPointAnalysis;
+            //PivotPointAnalysis = BarTable.PivotAnalysis;
             TestLength = test_length;
-            TrendStrengthAnalysis = new();
+            //TrendStrengthAnalysis = new();
+
+            //BarTable.GainAnalysis
 
             string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
@@ -60,10 +62,6 @@ namespace Pacmio.Analysis
         #endregion Parameters
 
         #region Calculation
-
-        public PivotPointAnalysis PivotPointAnalysis { get; }
-
-        public TrendStrength TrendStrengthAnalysis { get; }
 
         public DatumColumn Result_Column { get; }
 
@@ -99,21 +97,21 @@ namespace Pacmio.Analysis
 
                         if (bt[i_test] is Bar b)
                         {
-                            double prominence = b[PivotPointAnalysis.Column_Result];
-                            double trendStrength = b[TrendStrengthAnalysis.Column_TrendStrength];
+                            double prominence = b.Pivot; //[PivotPointAnalysis.Column_Result];
+                            double trendStrength = b.TrendStrength;//[TrendStrengthAnalysis.Column_TrendStrength];
 
                             // For simulation accuracy, the prominence can't be greater than the back testing offset.
                             if (prominence > j) prominence = j;
 
                             if (prominence > MinimumPeakProminenceForAnalysis)// || trendStrength > MinimumTrendStrength)
                             {
-                                double high = b[PivotPointAnalysis.Column_High];
+                                double high = b.High;
                                 gpd.PositivePatternPointList[i_test] = new(i_test, b.Time, high, prominence, trendStrength);
                                 gpd.PatternLevelLevelRange.Insert(high);
                             }
                             else if (prominence < -MinimumPeakProminenceForAnalysis)// || trendStrength < -MinimumTrendStrength)
                             {
-                                double low = b[PivotPointAnalysis.Column_Low];
+                                double low = b.Low;
                                 gpd.NegativePatternPointList[i_test] = new(i_test, b.Time, low, prominence, trendStrength);
                                 gpd.PatternLevelLevelRange.Insert(low);
                             }

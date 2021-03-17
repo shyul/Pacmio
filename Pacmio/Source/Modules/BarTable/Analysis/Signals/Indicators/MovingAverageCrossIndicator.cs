@@ -17,6 +17,12 @@ namespace Pacmio.Analysis
 {
     public class MovingAverageCrossIndicator : Indicator
     {
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
+
+        /*
         public MovingAverageCrossIndicator(SMA fast_MA, SMA slow_MA)
         {
             Fast_MA = fast_MA;
@@ -108,9 +114,7 @@ namespace Pacmio.Analysis
             return (MA_Fast, MA_Slow);
         }
 
-
-        #region Dual Data Tools
-
+        */
         /*
         public SignalColumn SignalColumn { get; protected set; }
 
@@ -282,7 +286,7 @@ namespace Pacmio.Analysis
             return (point_list.ToArray(), dualDataTypes.ToString(","));
         }
 
-        #endregion Dual Data Tools
+
     }
 }
 

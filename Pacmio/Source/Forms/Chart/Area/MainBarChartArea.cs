@@ -28,11 +28,11 @@ namespace Pacmio
             AddSeries(PriceSeries = new CandleStickSeries());
 
             //PriceSeries.TagColumns.Add(Bar.Column_PeakTags);
-            PriceSeries.TagColumns.Add(BarTable.PivotPointAnalysis.Column_PeakTags);
+            PriceSeries.TagColumns.Add(BarTable.PivotAnalysis.Column_PeakTags);
 
             // Configure volume series
             // ===================================================
-            AddSeries(VolumeSeries = new AdColumnSeries(Bar.Column_Volume, BarTable.GainAnalysis.Column_Percent, 50)
+            AddSeries(VolumeSeries = new AdColumnSeries(Bar.Column_Volume, Bar.Column_GainPercent, 50)
             {
                 Order = int.MinValue,
                 Side = AlignType.Left,

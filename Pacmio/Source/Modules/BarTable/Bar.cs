@@ -201,9 +201,13 @@ namespace Pacmio
 
         public double Typical { get; set; }
 
+        public double Range { get; set; } = 0;
+
         public double TrueRange { get; set; }
 
-        public int TrendStrength { get; set; }
+        public int NarrowRange { get; set; } = 0;
+
+        public int TrendStrength { get; set; } = 0;
 
         public int Pivot { get; set; }
 
@@ -212,7 +216,9 @@ namespace Pacmio
         public static NumericColumn Column_Gap { get; } = new NumericColumn("GAP", "GAP");
         public static NumericColumn Column_GapPercent { get; } = new NumericColumn("GAPPERCENT", "GAP%");
         public static NumericColumn Column_Typical { get; } = new NumericColumn("TYPICAL", "TYPICAL");
+        public static NumericColumn Column_Range { get; } = new NumericColumn("RANGE", "RANGE");
         public static NumericColumn Column_TrueRange { get; } = new NumericColumn("TRUERANGE", "TR");
+        public static NumericColumn Column_NarrowRange { get; } = new NumericColumn("NARROWRANGE", "NR");
         public static NumericColumn Column_TrendStrength { get; } = new NumericColumn("TrendStrength", "TS");
         public static NumericColumn Column_Pivot { get; } = new NumericColumn("PIVOT", "PVT");
 
@@ -244,7 +250,9 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_GapPercent => GapPercent,
 
                     NumericColumn dc when dc == Column_Typical => Typical,
+                    NumericColumn dc when dc == Column_Range => Range,
                     NumericColumn dc when dc == Column_TrueRange => TrueRange,
+                    NumericColumn dc when dc == Column_NarrowRange => NarrowRange,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
                     NumericColumn dc when dc == Column_Pivot => Pivot,
 
@@ -272,7 +280,9 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
 
                         case NumericColumn dc when dc == Column_Typical: Typical = value; break;
+                        case NumericColumn dc when dc == Column_Range: Range = value; break;
                         case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
+                        case NumericColumn dc when dc == Column_NarrowRange: NarrowRange = value.ToInt32(); break;
                         case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value.ToInt32(); break;
                         case NumericColumn dc when dc == Column_Pivot: Pivot = value.ToInt32(); break;
 

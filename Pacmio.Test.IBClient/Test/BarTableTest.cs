@@ -101,8 +101,7 @@ namespace TestClient
                 //SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
                 SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
-
+                //var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
@@ -150,7 +149,7 @@ namespace TestClient
                  
                     //new SingleColumnAnalysis(rsi),
                     rsi,
-                    ma_cross,
+                    //ma_cross,
                     //new CandleStick(),
 
                     //new GainPointAnalysis(200, 3, 1),

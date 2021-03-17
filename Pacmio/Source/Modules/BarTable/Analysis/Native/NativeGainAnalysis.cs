@@ -26,6 +26,9 @@ namespace Pacmio.Analysis
             double high_1 = b.High;
             double low_1 = b.Low;
             double close_1 = b.Close;
+            int trend_1 = b.TrendStrength;
+            double range_1 = b.Range;
+            int nr_1 = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
@@ -35,10 +38,22 @@ namespace Pacmio.Analysis
                 double low = b.Low;
                 double close = b.Close;
 
-                b.Gain = close - close_1;
-                b.GainPercent = (close_1 == 0) ? 0 : (100 * b.Gain / close_1);
+                double gain = b.Gain = close - close_1;
+                b.GainPercent = (close_1 == 0) ? 0 : (100 * gain / close_1);
+                double range = b.Range = high - low;
 
-                double[] list = new double[] { high - low, Math.Abs(high - close_1), Math.Abs(low - close_1) };
+                if (range < range_1)
+                {
+                    nr_1++;
+                }
+                else if (range > range_1)
+                {
+                    nr_1 = 0;
+                }
+
+                b.NarrowRange = nr_1;
+
+                double[] list = new double[] { range, Math.Abs(high - close_1), Math.Abs(low - close_1) };
                 b.TrueRange = list.Max();
                 b.Typical = (high + low + close) / 3.0;
 
@@ -54,7 +69,7 @@ namespace Pacmio.Analysis
                         b.Gap = open - low_1;
                         b.GapPercent = 100 * b.Gap / low_1;
                     }
-                    else 
+                    else
                     {
                         b.Gap = b.GapPercent = 0;
                     }
@@ -64,9 +79,22 @@ namespace Pacmio.Analysis
                     b.Gap = b.GapPercent = 0;
                 }
 
+                int trend = 0;
+                if (close > close_1 || (high > high_1 && low > low_1))
+                {
+                    trend = (trend_1 > 0) ? trend_1 + 1 : 1;
+                }
+                else if (close < close_1 || (high < high_1 && low < low_1))
+                {
+                    trend = (trend_1 < 0) ? trend_1 - 1 : -1;
+                }
+                b.TrendStrength = trend;
+
                 high_1 = high;
                 low_1 = low;
                 close_1 = close;
+                trend_1 = trend;
+                range_1 = range;
             }
         }
     }

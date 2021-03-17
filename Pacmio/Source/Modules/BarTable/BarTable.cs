@@ -510,13 +510,9 @@ namespace Pacmio
 
         #region Basic Analysis
 
-        public static GainAnalysis GainAnalysis { get; } = new(); // { ChartEnabled = false };
+        public static NativeGainAnalysis GainAnalysis { get; } = new();
 
-        public static TrueRange TrueRangeAnalysis { get; } = new(); // { ChartEnabled = false };
-
-        public static TrendStrength TrendStrengthAnalysis { get; } = new(); // { ChartEnabled = false };
-
-        public static PivotPointAnalysis PivotPointAnalysis { get; } = new(); // { ChartEnabled = false };
+        public static NativePivotAnalysis PivotAnalysis { get; } = new();
 
         #endregion Basic Analysis
 
@@ -601,9 +597,7 @@ namespace Pacmio
             if (Count > 0)
             {
                 startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
-                startPt = Math.Min(startPt, Calculate(TrueRangeAnalysis).StartPt);
-                startPt = Math.Min(startPt, Calculate(TrendStrengthAnalysis).StartPt);
-                startPt = Math.Min(startPt, Calculate(PivotPointAnalysis).StartPt);
+                startPt = Math.Min(startPt, Calculate(PivotAnalysis).StartPt);
 
                 foreach (BarAnalysis ba in analyses)
                 {

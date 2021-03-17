@@ -133,11 +133,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\PivotPoint\PivotPointAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarket\PreMarketAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPoints\PivotPoint\TrendStrength.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrueRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />
