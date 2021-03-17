@@ -15,6 +15,8 @@ namespace Pacmio
 {
     public class SingleColumnDatum : IDatum
     {
-        public List<SingleColumnType> List { get; } = new List<SingleColumnType>();
+        public SingleColumnType Type { get; set; } = SingleColumnType.None;
+
+        //public List<SingleColumnType> List { get; } = new List<SingleColumnType>();
     }
 }

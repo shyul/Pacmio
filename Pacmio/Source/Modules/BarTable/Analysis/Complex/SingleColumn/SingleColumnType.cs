@@ -17,26 +17,22 @@ namespace Pacmio
     {
         None = 0,
 
-        Above,
+        Within = 1,
 
-        Below,
+        EnterFromBelow = 1,
 
-        Within,
+        EnterFromAbove = -1,
 
-        //Expansion,
+        Above = 3,
 
-        //Contraction,
+        Below = -3,
 
-        CrossUp,
+        ExitAbove = 5,
 
-        CrossDown,
+        ExitBelow = -5,
 
-        ExitBelow,
+        CrossUp = 6,
 
-        EnterFromBelow,
-
-        ExitAbove,
-
-        EnterFromAbove,
+        CrossDown = -6
     }
 }

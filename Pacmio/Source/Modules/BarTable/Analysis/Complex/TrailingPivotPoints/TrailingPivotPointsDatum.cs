@@ -14,8 +14,8 @@ namespace Pacmio
     {
         public Range<double> LevelRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public Dictionary<int, PivotPointDatum> PositiveList { get; } = new Dictionary<int, PivotPointDatum>();
+        public Dictionary<int, PatternPoint> PositiveList { get; } = new Dictionary<int, PatternPoint>();
 
-        public Dictionary<int, PivotPointDatum> NegativeList { get; } = new Dictionary<int, PivotPointDatum>();
+        public Dictionary<int, PatternPoint> NegativeList { get; } = new Dictionary<int, PatternPoint>();
     }
 }

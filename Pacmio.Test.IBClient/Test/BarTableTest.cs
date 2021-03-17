@@ -148,7 +148,7 @@ namespace TestClient
                     //new CCI(20, 0.015),
                     //new ADX(14) { Order = 100, HasXAxisBar = true },
                  
-                    new SingleColumnAnalysis(rsi),
+                    //new SingleColumnAnalysis(rsi),
                     rsi,
                     ma_cross,
                     //new CandleStick(),

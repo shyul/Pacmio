@@ -27,22 +27,20 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b)
-                {
-                    double high = b.High;
-                    double low = b.Low;
-                    double close = b.Close;
-                    double p = (high + low + close) / 3;
+                Bar b = bt[i];
+                double high = b.High;
+                double low = b.Low;
+                double close = b.Close;
+                double p = (high + low + close) / 3;
 
-                    b[Column_Result] = new PivotLevelDatum()
-                    {
-                        P = p,
-                        S1 = (2 * p) - high,
-                        S2 = p - (high - low),
-                        R1 = (2 * p) - low,
-                        R2 = p + (high - low),
-                    };
-                }
+                b[Column_Result] = new PivotLevelDatum()
+                {
+                    P = p,
+                    S1 = (2 * p) - high,
+                    S2 = p - (high - low),
+                    R1 = (2 * p) - low,
+                    R2 = p + (high - low),
+                };
             }
         }
     }

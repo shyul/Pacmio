@@ -23,7 +23,4 @@ namespace Pacmio
     {
         public SignalColumn[] SignalColumns { get; protected set; }
     }
-
-
-
 }

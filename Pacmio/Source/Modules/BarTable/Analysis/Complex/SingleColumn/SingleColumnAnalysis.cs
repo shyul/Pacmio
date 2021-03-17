@@ -13,50 +13,134 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SingleColumnAnalysis : Indicator
+    public sealed class SingleColumnAnalysis : BarAnalysis
     {
-        protected SingleColumnAnalysis() { }
-
-        public SingleColumnAnalysis(IOscillator iosc, double range_percent = 0.05)
+        // new SingleColumnAnalysis(rsi),
+        public SingleColumnAnalysis(IOscillator analysis, double range_percent = 0.05)
         {
-            Column = iosc.Column_Result;
-            double range = iosc.Reference * range_percent;
-            Range = new Range<double>(iosc.Reference - range, iosc.Reference + range);
+            Column = analysis.Column_Result;
+            analysis.AddChild(this);
 
+            double range = analysis.Reference * range_percent;
+            Range = new Range<double>(analysis.Reference - range, analysis.Reference + range);
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-
-            SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
-            SignalColumns = new SignalColumn[] { SignalColumn };
-
+            //SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
+            //SignalColumns = new SignalColumn[] { SignalColumn };
+            Column_Result = new(Name, typeof(SingleColumnDatum));
             //Order = iosc.Order + 1;
-            iosc.AddChild(this);
+        }
+
+        public SingleColumnAnalysis(ISingleData analysis, Range<double> range)
+        {
+            Column = analysis.Column_Result;
+            analysis.AddChild(this);
+
+            Range = range;
+            string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
+            GroupName = Name = GetType().Name + label;
+            Column_Result = new(Name, typeof(SingleColumnDatum));
         }
 
         public SingleColumnAnalysis(NumericColumn column, Range<double> range)
         {
             Column = column;
-            Range = range;
 
+            Range = range;
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-
-            SignalColumn = new SignalColumn(Name, label);
-            SignalColumns = new SignalColumn[] { SignalColumn };
+            Column_Result = new(Name, typeof(SingleColumnDatum));
         }
 
         #region Parameters
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ Range.GetHashCode();
 
-        public NumericColumn Column { get; protected set; }
+        public Range<double> Range { get; set; }
 
-        public Range<double> Range { get; protected set; }
+        public NumericColumn Column { get; set; }
+
+        public DatumColumn Column_Result { get; }
 
         #endregion Parameters
 
         #region Calculation
 
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+            BarTable bt = bap.Table;
+
+            if (bap.StartPt < 1)
+            {
+                bap.StartPt = 1;
+            }
+
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                double value = b[Column];
+                double last_value = bt[i - 1][Column];
+
+                SingleColumnDatum d = new();
+                b[Column_Result] = d;
+
+                if (!double.IsNaN(value) && !double.IsNaN(last_value))
+                {
+                    if (last_value > Range)
+                    {
+                        if (value > Range)
+                        {
+                            d.Type = SingleColumnType.Above;
+                        }
+                        else if (value < Range)
+                        {
+                            d.Type = SingleColumnType.CrossDown;
+                        }
+                        else if (value == Range)
+                        {
+                            d.Type = SingleColumnType.EnterFromAbove;
+                        }
+                    }
+                    else if (last_value == Range)
+                    {
+                        if (value > Range)
+                        {
+                            d.Type = SingleColumnType.ExitAbove;
+                        }
+                        else if (value < Range)
+                        {
+                            d.Type = SingleColumnType.ExitBelow;
+                        }
+                        else if (value == Range)
+                        {
+                            d.Type = SingleColumnType.Within;
+                        }
+                    }
+                    else if (last_value < Range)
+                    {
+                        if (value > Range)
+                        {
+                            d.Type = SingleColumnType.CrossUp;
+                        }
+                        else if (value < Range)
+                        {
+                            d.Type = SingleColumnType.Below;
+                        }
+                        else if (value == Range)
+                        {
+                            d.Type = SingleColumnType.EnterFromBelow;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        #endregion Calculation
+
+        #region Constant Data Tools
+
+        /*
         public SignalColumn SignalColumn { get; protected set; }
 
         public Dictionary<SingleColumnType, double[]> TypeToScore { get; } = new Dictionary<SingleColumnType, double[]>
@@ -70,36 +154,20 @@ namespace Pacmio
             { SingleColumnType.CrossUp, new double[] { 4, 3.5, 3, 2 } },
             { SingleColumnType.Below, new double[] { -2 } },
             { SingleColumnType.EnterFromBelow, new double[] { 1 } },
-        };
+        };*/
 
-        protected override void Calculate(BarAnalysisPointer bap)
+        /*
+        SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
+
+        var (points, description) = ConstantDataSignal(bt, i, Column, Range, TypeToScore);
+
+        if (i > 0)
         {
-            BarTable bt = bap.Table;
-
-            if (bap.StartPt < 1)
-            {
-                bap.StartPt = 1;
-            }
-
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
-
-                var (points, description) = ConstantDataSignal(bt, i, Column, Range, TypeToScore);
-
-                if (i > 0)
-                {
-                    SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
-                    sd.Set(points, description, sd_1);
-                }
-                else
-                    sd.Set(points, description);
-            }
+            SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
+            sd.Set(points, description, sd_1);
         }
-
-        #endregion Calculation
-
-        #region Constant Data Tools
+        else
+        sd.Set(points, description);*/
 
         public static (double[] points, string description) ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range, Dictionary<SingleColumnType, double[]> typeToScore)
         {

@@ -143,7 +143,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\ReversalIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\IPatternObject.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\TrailingPivotPoints\PivotPointDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\PatternPoint.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
