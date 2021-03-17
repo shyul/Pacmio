@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class NarrowRange : BarAnalysis
+    public sealed class NarrowRange : BarAnalysis, ISingleData, IChartSeries
     {
         public NarrowRange(int max_interval = 9)
         {
@@ -27,6 +27,18 @@ namespace Pacmio.Analysis
             Description = "Narrow Range " + label;
 
             Column_Result = new NumericColumn(Name, label);
+
+            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
+            {
+                Name = Name,
+                LegendName = "NarrowRange",
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false
+            };
+
+            ChartEnabled = true;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ MaximumInterval;
@@ -65,6 +77,70 @@ namespace Pacmio.Analysis
                 }
 
                 b[Column_Result] = j;
+            }
+        }
+
+
+        public Color Color { get => UpperColor; set => UpperColor = value; }
+
+        public Color UpperColor
+        {
+            get => ColumnSeries.Color;
+
+            set
+            {
+                Color c = value;
+                ColumnSeries.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.EdgeColor = ColumnSeries.TextTheme.ForeColor = c;
+            }
+        }
+
+        public Color LowerColor
+        {
+            get => ColumnSeries.LowerColor;
+
+            set
+            {
+                Color c = value;
+                ColumnSeries.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                ColumnSeries.LowerEdgeColor = ColumnSeries.LowerTextTheme.ForeColor = c;
+            }
+        }
+
+        public Series MainSeries => ColumnSeries;
+
+        public AdColumnSeries ColumnSeries { get; }
+
+        public bool ChartEnabled
+        {
+            get => Enabled && ColumnSeries.Enabled;
+            set => ColumnSeries.Enabled = value;
+        }
+
+        public int SeriesOrder
+        {
+            get => ColumnSeries.Order;
+            set => ColumnSeries.Order = value;
+        }
+
+        public bool HasXAxisBar { get; set; } = false;
+
+        public string AreaName { get; }
+
+        public float AreaRatio { get; set; } = 8;
+
+        public void ConfigChart(BarChart bc)
+        {
+            if (ChartEnabled)
+            {
+                BarChartOscillatorArea area_weight = bc["NarrowRange_" + AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, "NarrowRange_" + AreaName, AreaRatio)
+                    {
+                        Reference = 0,
+                        HasXAxisBar = false,
+                    });
+
+                area_weight.AddSeries(ColumnSeries);
             }
         }
     }

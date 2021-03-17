@@ -36,8 +36,8 @@ namespace TestClient
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     new PivotLevelAnalysis(),
-                    new RelativeAnalysis(),
-
+                    //new RelativeAnalysis(),
+                    new NarrowRange(),
                     //new GainAnalysis(),
                     //new TrueRange(),
                     //new TrendStrength(),

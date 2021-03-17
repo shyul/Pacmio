@@ -26,14 +26,14 @@ namespace Pacmio.Analysis
             string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Volume) ? "(Volume)" : "(" + Column.Name + ")");
             Name = GetType().Name + label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
-            Description = "Simple Moving Average " + label;
+            Description = "Relative " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
 
             ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Weight",
+                LegendName = "Relative",
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,
@@ -121,8 +121,8 @@ namespace Pacmio.Analysis
         {
             if (ChartEnabled)
             {
-                BarChartOscillatorArea area_weight = bc["Weight_" + AreaName] is BarChartOscillatorArea oa ? oa :
-                    bc.AddArea(new BarChartOscillatorArea(bc, "Weight_" + AreaName, AreaRatio)
+                BarChartOscillatorArea area_weight = bc["Relative_" + AreaName] is BarChartOscillatorArea oa ? oa :
+                    bc.AddArea(new BarChartOscillatorArea(bc, "Relative_" + AreaName, AreaRatio)
                     {
                         Reference = 0,
                         HasXAxisBar = false,
