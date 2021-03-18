@@ -22,20 +22,10 @@ namespace Pacmio.Analysis
             MinimumPeakProminence = minimumPeakProminence;
 
             string label = "(" + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
-            Name = AreaName = GroupName = GetType().Name + label;
+            Name = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
             Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
-
-            ColumnSeries = new(Bar.Column_Pivot, 50, 0, 0)
-            {
-                Name = Name,
-                LegendName = "Pivot Point " + label,
-                Label = "",
-                Importance = Importance.Major,
-                Side = AlignType.Right,
-                IsAntialiasing = false
-            };
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -115,14 +105,19 @@ namespace Pacmio.Analysis
 
                     if (peak_result > MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, UpperTagTheme);
                     }
                     else if (peak_result < -MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, LowerTagTheme);
                     }
                 }
             }
+        }
+
+        public override void ConfigChart(BarChart bc) 
+        {
+            bc.MainArea.PriceSeries.TagColumns.Add(Column_PeakTags);
         }
     }
 }

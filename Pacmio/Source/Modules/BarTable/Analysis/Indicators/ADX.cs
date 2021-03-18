@@ -106,7 +106,7 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                Bar b_1 = bt[i - 1];
+                Bar b_1 = i == 0 ? b : bt[i - 1];
 
                 double tr = b.TrueRange;
                 double tr_ma;

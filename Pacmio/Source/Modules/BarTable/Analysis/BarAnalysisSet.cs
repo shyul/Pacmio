@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -50,8 +51,6 @@ namespace Pacmio
 
         public bool Contains(BarAnalysis ba) => m_List.Contains(ba);
 
-        public void Add(BarAnalysis ba) => m_List.CheckAdd(ba);
-
         public void AddRange(IEnumerable<BarAnalysis> list)
         {
             // The purpose of ordering by the children and parents first is
@@ -62,6 +61,9 @@ namespace Pacmio
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);
+
+                if (n is NativePivotAnalysis np) NativePivotAnalysis = np;
+
                 SetBarAnalysisChildren(n);
             });
 
@@ -94,10 +96,15 @@ namespace Pacmio
             });
         }
 
+        public NativePivotAnalysis NativePivotAnalysis { get; private set; } = null;
+
         /// <summary>
         /// List all BarAnalysis which also present as ChartSeries
         /// </summary>
-        public IEnumerable<IChartSeries> ChartSeries => m_List.Where(n => n is IChartSeries ics).Select(n => (IChartSeries)n).OrderBy(n => n.SeriesOrder);
+        //public IEnumerable<IChartSeries> ChartSeries => m_List.Where(n => n is IChartSeries ics).Select(n => n as IChartSeries).OrderBy(n => n.SeriesOrder);
+        public IEnumerable<IChartSeries> ChartSeries => m_List.GetBySubType<IChartSeries, BarAnalysis>().OrderBy(n => n.SeriesOrder);
+
+        public IEnumerable<ITagAnalysis> TagSeries => m_List.GetBySubType<ITagAnalysis, BarAnalysis>();
 
         /// <summary>
         /// List all indicator types, and aggreagte all signal columns here...

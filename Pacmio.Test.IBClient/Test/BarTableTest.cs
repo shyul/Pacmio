@@ -161,7 +161,7 @@ namespace TestClient
                     //new TSI(25,13,7),
 
                     ///new PSAR(0.02, 0.2),
-                    new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
+                    new VWAP(BarFreq.Daily) { Color = Color.Plum, LineWidth = 2  },
                     //new Pivot(BarFreq.Daily),
                     //ema5_smma5_cross,
                     //divergence

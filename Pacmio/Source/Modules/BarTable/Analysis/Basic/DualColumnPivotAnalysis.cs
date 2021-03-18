@@ -11,17 +11,32 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class DualColumnPivotAnalysis : PivotAnalysis, IDualData, IChartSeries
+    public class DualColumnPivotAnalysis : PivotAnalysis
     {
+        public DualColumnPivotAnalysis(IDualData idd, int maximumPeakProminence = 50, int minimumPeakProminence = 5)
+        {
+            MaximumPeakProminence = maximumPeakProminence;
+            MinimumPeakProminence = minimumPeakProminence;
+            DualDataAnalysis = idd;
 
+            string label = "(" + DualDataAnalysis.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
+            Name = GroupName = GetType().Name + label;
+            Description = Name + " " + label;
 
+            Column_Result = new(Name, label);
+            Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
+            UpperColor = idd.UpperColor;// Color.Green;
+            LowerColor = idd.LowerColor; // Color.Red;
+        }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;
 
-        public NumericColumn Column_High { get; }
+        public IDualData DualDataAnalysis { get; }
 
-        public NumericColumn Column_Low { get; }
+        public NumericColumn Column_High => DualDataAnalysis.Column_High;
+
+        public NumericColumn Column_Low => DualDataAnalysis.Column_Low;
 
         public NumericColumn Column_Result { get; }
 
@@ -95,13 +110,21 @@ namespace Pacmio.Analysis
 
                     if (peak_result > MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, high.ToString("G5"), DockStyle.Top, UpperTagTheme);
                     }
                     else if (peak_result < -MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, low.ToString("G5"), DockStyle.Bottom, LowerTagTheme);
                     }
                 }
+            }
+        }
+
+        public override void ConfigChart(BarChart bc) 
+        {
+            if (DualDataAnalysis is IChartSeries ics && ics.MainSeries is ITagSeries ts)
+            {
+                ts.TagColumns.Add(Column_PeakTags);
             }
         }
     }

@@ -328,9 +328,10 @@ namespace TestClient
                     BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
-
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
-                    //bc.AddColumnSeries(Bar.Column_NarrowRange);
+                    
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
+                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
+                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestIndicators.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
     <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
+    <Compile Include="Source\Forms\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\SingleColumnPivotAnalysis.cs" />
@@ -112,6 +113,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestIndicators.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestMovingAverageCross.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\PivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MomentumIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
@@ -154,7 +158,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotPointsAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Native\TrailingPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />

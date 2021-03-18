@@ -11,23 +11,33 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotPointsAnalysis : BarAnalysis
+    public class TrailingPivotAnalysis : BarAnalysis
     {
-        public TrailingPivotPointsAnalysis(int test_length = 250)
+        public TrailingPivotAnalysis(NativePivotAnalysis ans)
         {
-            //PivotPointAnalysis = BarTable.PivotAnalysis;
-            TestLength = test_length;
-            //TrendStrengthAnalysis = new();
-
-            //BarTable.GainAnalysis
-
+            TestLength = ans.MaximumPeakProminence;
             string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
             Name = GetType().Name + label;
+
+            NativePivotAnalysis = ans;
+            NativePivotAnalysis.AddChild(this);
+        }
+
+        public TrailingPivotAnalysis(int test_length = 250)
+        {
+            TestLength = test_length;
+            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
+            Name = GetType().Name + label;
+
+            NativePivotAnalysis = new NativePivotAnalysis(test_length);
+            NativePivotAnalysis.AddChild(this);
         }
 
         #region Parameters
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
+
+        public NativePivotAnalysis NativePivotAnalysis { get; }
 
         public virtual int TestLength { get; }
 

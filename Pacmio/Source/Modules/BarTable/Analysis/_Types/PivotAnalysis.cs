@@ -11,7 +11,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public abstract class PivotAnalysis : BarAnalysis
+    public abstract class PivotAnalysis : BarAnalysis, ITagAnalysis
     {
         public int MaximumPeakProminence { get; protected set; }
 
@@ -42,56 +42,34 @@ namespace Pacmio.Analysis
             }
         }
 
-        public Color Color { get => UpperColor; set => UpperColor = value; }
-
         public Color UpperColor
         {
-            get => ColumnSeries.Color;
+            get => UpperTagTheme.ForeColor;
 
             set
             {
                 Color c = value;
-                ColumnSeries.Color = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries.EdgeColor = ColumnSeries.TextTheme.ForeColor = c;
+                UpperTagTheme.FillColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                UpperTagTheme.EdgeColor = UpperTagTheme.ForeColor = c;
             }
         }
 
         public Color LowerColor
         {
-            get => ColumnSeries.LowerColor;
+            get => LowerTagTheme.ForeColor;
 
             set
             {
                 Color c = value;
-                ColumnSeries.LowerColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
-                ColumnSeries.LowerEdgeColor = ColumnSeries.LowerTextTheme.ForeColor = c;
+                LowerTagTheme.FillColor = c.GetBrightness() < 0.6 ? c.Brightness(0.85f) : c.Brightness(-0.85f);
+                LowerTagTheme.EdgeColor = LowerTagTheme.ForeColor = c;
             }
         }
 
-        public Series MainSeries => ColumnSeries;
+        public ColorTheme UpperTagTheme { get; } = new ColorTheme();
 
-        public AdColumnSeries ColumnSeries { get; protected set; }
+        public ColorTheme LowerTagTheme { get; } = new ColorTheme();
 
-        public bool ChartEnabled { get => Enabled && ColumnSeries.Enabled; set => ColumnSeries.Enabled = value; }
-
-        public int SeriesOrder { get => ColumnSeries.Order; set => ColumnSeries.Order = value; }
-
-        public bool HasXAxisBar { get; set; } = false;
-
-        public string AreaName { get; protected set; }
-
-        public float AreaRatio { get; set; } = 8;
-
-        public void ConfigChart(BarChart bc)
-        {
-            if (ChartEnabled)
-            {
-                BarChartArea a_gain = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
-                {
-                    HasXAxisBar = HasXAxisBar,
-                });
-                a_gain.AddSeries(ColumnSeries);
-            }
-        }
+        public abstract void ConfigChart(BarChart bc);
     }
 }

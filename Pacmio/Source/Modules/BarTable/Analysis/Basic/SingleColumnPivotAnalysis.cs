@@ -11,7 +11,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class SingleColumnPivotAnalysis : PivotAnalysis, ISingleData, IChartSeries
+    public class SingleColumnPivotAnalysis : PivotAnalysis, ISingleData
     {
         public SingleColumnPivotAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
@@ -20,22 +20,11 @@ namespace Pacmio.Analysis
             Column = column;
 
             string label = "(" + Column.Name + "," + maximumPeakProminence + "," + MinimumPeakProminence + ")";
-            Name = AreaName = GroupName = GetType().Name + label;
+            Name = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
-            Column_Result = new(Name) { Label = label };
+            Column_Result = new(Name, label);
             Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
-
-            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
-            {
-                Name = Name,
-                LegendName = GroupName + ": ",
-                Label = "Pivot Point ",
-                Importance = Importance.Major,
-                Side = AlignType.Right,
-                IsAntialiasing = false,
-                Order = 200
-            };
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
@@ -48,26 +37,15 @@ namespace Pacmio.Analysis
             Column = isd.Column_Result;
 
             string label = "(" + Column.Name + "," + maximumPeakProminence + "," + MinimumPeakProminence + ")";
-            Name = AreaName = GroupName = GetType().Name + label;
+            Name = GroupName = GetType().Name + label;
             Description = Name + " " + label;
 
             Column_Result = new(Name) { Label = label };
             Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
-            ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
-            {
-                Name = Name,
-                LegendName = "Pivot Point " + label,
-                Label = "",
-                Importance = Importance.Major,
-                Side = AlignType.Right,
-                IsAntialiasing = false
-            };
 
-            if (isd is IChartSeries ics && ics.MainSeries is ITagSeries ts)
-            {
-                ts.TagColumns.Add(Column_PeakTags);
-            }
+
+
 
             isd.AddChild(this);
 
@@ -151,14 +129,25 @@ namespace Pacmio.Analysis
 
                     if (peak_result > MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, b[Column].ToString("G5"), DockStyle.Top, ColumnSeries.TextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, b[Column].ToString("G5"), DockStyle.Top, UpperTagTheme);
                     }
                     else if (peak_result < -MinimumPeakProminence)
                     {
-                        b[Column_PeakTags] = new TagInfo(i, b[Column].ToString("G5"), DockStyle.Bottom, ColumnSeries.LowerTextTheme);
+                        b[Column_PeakTags] = new TagInfo(i, b[Column].ToString("G5"), DockStyle.Bottom, LowerTagTheme);
                     }
                 }
             }
+        }
+
+        public override void ConfigChart(BarChart bc) {
+            /*
+
+                         if (isd is IChartSeries ics && ics.MainSeries is ITagSeries ts)
+                {
+                    ts.TagColumns.Add(Column_PeakTags);
+                }
+             */
+
         }
     }
 }

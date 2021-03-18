@@ -28,7 +28,7 @@ namespace Pacmio
             AddSeries(PriceSeries = new CandleStickSeries());
 
             //PriceSeries.TagColumns.Add(Bar.Column_PeakTags);
-            PriceSeries.TagColumns.Add(BarTable.PivotAnalysis.Column_PeakTags);
+            //PriceSeries.TagColumns.Add(BarTable.PivotAnalysis.Column_PeakTags);
 
             // Configure volume series
             // ===================================================

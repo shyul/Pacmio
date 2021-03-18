@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -97,7 +98,7 @@ namespace Pacmio
                 BarAnalysisSet = bas;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex + 1;
             }
             m_AsyncUpdateUI = true;
         }
@@ -139,10 +140,18 @@ namespace Pacmio
                         ic.ConfigChart(this);
                     }
 
-                    //this.AddColumnSeries(Bar.Column_NarrowRange);
-                    //this.AddColumnSeries(Bar.Column_Range);
+                    foreach (var tg in bas.TagSeries)
+                    {
+                        tg.ConfigChart(this);
+                    }
 
-                    if (m_BarTable is BarTable bt) 
+                    /*
+                    if (bas.NativePivotAnalysis is NativePivotAnalysis np)
+                    {
+                        MainArea.PriceSeries.TagColumns.Add(np.Column_PeakTags);
+                    }
+                    */
+                    if (m_BarTable is BarTable bt)
                         bt.CalculateRefresh(bas);
                 }
             }

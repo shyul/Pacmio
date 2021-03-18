@@ -39,7 +39,7 @@ namespace Pacmio.Analysis
             ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
-            TrailingPivotPointAnalysis = new TrailingPivotPointsAnalysis(test_interval);
+            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
@@ -54,7 +54,7 @@ namespace Pacmio.Analysis
 
         public RangeBoundAnalysis RangeBoundAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
 
-        public TrailingPivotPointsAnalysis TrailingPivotPointAnalysis { get; }
+        public TrailingPivotAnalysis TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Column_Result { get; }
 

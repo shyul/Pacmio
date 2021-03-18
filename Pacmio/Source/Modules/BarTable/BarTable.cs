@@ -499,7 +499,7 @@ namespace Pacmio
             if (Status == TableStatus.Ready)
             {
                 Status = TableStatus.Ticking;
-                SetCalculationPointer(LastCalculateIndex - 1);
+                SetCalculationPointer(LastCalculateIndex);
                 CalculateTickRequested = true;
             }
         }
@@ -507,14 +507,6 @@ namespace Pacmio
         #endregion Add Ticks
 
         #region Data/Bar Analysis (TA) Calculation
-
-        #region Basic Analysis
-
-        public static NativeGainAnalysis GainAnalysis { get; } = new();
-
-        public static NativePivotAnalysis PivotAnalysis { get; } = new();
-
-        #endregion Basic Analysis
 
         private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new();
 
@@ -577,6 +569,16 @@ namespace Pacmio
             return bap;
         }
 
+        #region Basic Analysis
+
+        public static NativeGainAnalysis GainAnalysis { get; } = new();
+
+        //public static NativePivotAnalysis PivotAnalysis { get; } = new();
+
+        //public static TrailingPivotAnalysis TrailingPivotAnalysis { get; } = new();
+
+        #endregion Basic Analysis
+
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
@@ -597,7 +599,7 @@ namespace Pacmio
             if (Count > 0)
             {
                 startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
-                startPt = Math.Min(startPt, Calculate(PivotAnalysis).StartPt);
+                //startPt = Math.Min(startPt, Calculate(PivotAnalysis).StartPt);
 
                 foreach (BarAnalysis ba in analyses)
                 {
@@ -615,7 +617,7 @@ namespace Pacmio
                     }
                 }
             }
-            LastCalculateIndex = startPt;
+            LastCalculateIndex = startPt - 1;
 
             if (debugInfo)
             {

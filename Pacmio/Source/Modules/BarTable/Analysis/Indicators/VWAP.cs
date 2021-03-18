@@ -17,11 +17,11 @@ namespace Pacmio.Analysis
 {
     public sealed class VWAP : BarAnalysis, ISingleData, IChartSeries
     {
-        public VWAP(Frequency frequency)
+        public VWAP(BarFreq barFreq = BarFreq.Daily)
         {
-            Frequency = frequency;
+            Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
 
-            string label = "(" + Frequency.ToString() + ")";
+            string label = "(" + barFreq.ToString() + ")";
             Name = GetType().Name + label;
             GroupName = GetType().Name;
             Description = "Volume Weighted Average Price " + label;
