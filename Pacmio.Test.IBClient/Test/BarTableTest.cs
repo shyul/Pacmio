@@ -37,12 +37,12 @@ namespace TestClient
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
 
-                ColumnSeriesDebug csd_range = new ColumnSeriesDebug(Bar.Column_Range);
-                ColumnSeriesDebug csd_nr = new ColumnSeriesDebug(Bar.Column_NarrowRange);
-                ColumnSeriesOscDebug csd_gp = new ColumnSeriesOscDebug(Bar.Column_GapPercent);
-                ColumnSeriesDebug csd_typ = new ColumnSeriesDebug(Bar.Column_Typical);
-                ColumnSeriesOscDebug csd_pivot = new ColumnSeriesOscDebug(Bar.Column_Pivot);
-                ColumnSeriesOscDebug csd_trend = new ColumnSeriesOscDebug(Bar.Column_TrendStrength);
+                DebugColumnSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
+                DebugColumnSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);
+                DebugColumnSeriesOsc csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
+                DebugColumnSeries csd_typ = new DebugColumnSeries(Bar.Column_Typical);
+                DebugColumnSeriesOsc csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
+                DebugColumnSeriesOsc csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
