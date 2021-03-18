@@ -6,6 +6,7 @@
 /// 2. Typical Price
 /// 3. True Range
 /// 4. Gap
+/// 5. Narrow Range: https://school.stockcharts.com/doku.php?id=trading_strategies:narrow_range_day_nr7
 /// 
 /// ***************************************************************************
 
@@ -97,5 +98,40 @@ namespace Pacmio.Analysis
                 range_1 = range;
             }
         }
+
+        /*
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+            BarTable bt = bap.Table;
+
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                double range = b.High - b.Low;
+
+                int j = 1;
+                for (; j <= MaximumInterval; j++)
+                {
+                    int k = i - j;
+
+                    if (k < 0)
+                    {
+                        k--;
+                        break;
+                    }
+                    else
+                    {
+                        Bar b_1 = bt[k];
+                        double range_1 = b_1.High - b_1.Low;
+
+                        if (range >= range_1)
+                            break;
+                    }
+                }
+
+                b[Column_Result] = j;
+            }
+        }
+        */
     }
 }

@@ -65,7 +65,6 @@ namespace Pacmio
             UpdateTime = DateTime.Now;
             DataIsUpdated(this);
             Contract.MarketData.RemoveDataConsumer(this);
-            //DataConsumers.Clear();
         }
 
         public void Set(double qty, double price)
@@ -91,7 +90,8 @@ namespace Pacmio
         public double UnrealizedPnL => double.IsNaN(AverageEntryPrice) || double.IsNaN(MarketPrice) ? 0 : (MarketPrice - AverageEntryPrice) * Quantity;
 
         [Browsable(true), ReadOnly(true), DisplayName("Value"), GridColumnOrder(8), GridRenderer(typeof(NumberGridRenderer), 100)]
-        public double Value => Cost + UnrealizedPnL; // - possible commission...
+        //public double Value => Cost + UnrealizedPnL; // - possible commission...
+        public double Value => Quantity * MarketPrice;
 
         /*
         /// <summary>

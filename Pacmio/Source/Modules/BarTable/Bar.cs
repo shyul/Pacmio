@@ -450,8 +450,6 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-
-
         #region Position / Simulation Information
 
         /// <summary>

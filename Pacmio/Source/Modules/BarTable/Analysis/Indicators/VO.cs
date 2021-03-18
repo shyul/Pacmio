@@ -20,7 +20,7 @@ namespace Pacmio.Analysis
 {
     public class VO : BarAnalysis, IOscillator
     {
-        public VO(int interval_fast = 14, int interval_slow = 28) 
+        public VO(int interval_fast = 14, int interval_slow = 28)
         {
             Fast_MA = new EMA(Bar.Column_Volume, interval_fast) { ChartEnabled = false };
             Slow_MA = new EMA(Bar.Column_Volume, interval_slow) { ChartEnabled = false };

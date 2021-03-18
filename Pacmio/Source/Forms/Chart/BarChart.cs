@@ -87,51 +87,6 @@ namespace Pacmio
             }
         }
 
-        public void Config(BarTable bt)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-
-                BarTable = bt;
-                if (m_BarTable is BarTable) m_BarTable.CalculateRefresh(BarAnalysisSet);
-
-                ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
-        public void Config(BarAnalysisSet bas)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-                RemoveAllChartSeries();
-
-                BarAnalysisSet = bas;
-
-                ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
-        public void Config(Strategy s)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-                RemoveAllChartSeries();
-
-                Strategy = s;
-
-                ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
         public void Config(BarTable bt, BarAnalysisSet bas)
         {
             lock (GraphicsLockObject)
@@ -140,21 +95,6 @@ namespace Pacmio
 
                 BarTable = bt;
                 BarAnalysisSet = bas;
-
-                ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
-        public void Config(BarTable bt, Strategy s)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-
-                BarTable = bt;
-                Strategy = s;
 
                 ReadyToShow = m_BarTable is BarTable;
                 if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
@@ -191,12 +131,16 @@ namespace Pacmio
             {
                 RemoveAllChartSeries();
                 m_BarAnalysisSet = value;
+
                 if (m_BarAnalysisSet is BarAnalysisSet bas)
                 {
                     foreach (var ic in bas.ChartSeries)
                     {
                         ic.ConfigChart(this);
                     }
+
+                    //this.AddColumnSeries(Bar.Column_NarrowRange);
+                    //this.AddColumnSeries(Bar.Column_Range);
 
                     if (m_BarTable is BarTable bt) 
                         bt.CalculateRefresh(bas);

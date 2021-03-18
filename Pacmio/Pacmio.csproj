@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
     <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakDualColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakSingleColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceDirection.cs" />
@@ -103,6 +104,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Debug\ColumnSeriesDebug.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Debug\ColumnSeriesOscDebug.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativeGainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
@@ -132,7 +135,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarket\PreMarketAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />

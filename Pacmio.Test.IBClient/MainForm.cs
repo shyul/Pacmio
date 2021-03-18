@@ -329,8 +329,10 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
-                    bt.GetChart(BarTableTest.TestBarAnalysisSet);
-                    HistoricalPeriod = bt.Period;// pd;
+                    BarChart bc = bt.GetChart(BarTableTest.TestBarAnalysisSet);
+                    //bc.AddColumnSeries(Bar.Column_NarrowRange);
+
+                    HistoricalPeriod = bt.Period;
                 }, Cts.Token);
 
                 Root.Form.Show();

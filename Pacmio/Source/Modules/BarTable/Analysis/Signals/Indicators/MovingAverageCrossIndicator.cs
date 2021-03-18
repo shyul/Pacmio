@@ -29,9 +29,9 @@ namespace Pacmio.Analysis
             string label = "(" + FastMovingAverage.Name + "," + SlowMovingAverage.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            if(fast_MA is IChartSeries fast_ics && slow_MA is IChartSeries slow_ics) 
+            if (fast_MA is IChartSeries fast_ics && slow_MA is IChartSeries slow_ics)
             {
-                SignalColumn = new SignalColumn(Name, label)
+                CrossSignalColumn = new SignalColumn(Name, label)
                 {
                     BullishColor = fast_ics.Color,
                     BearishColor = slow_ics.Color
@@ -39,14 +39,14 @@ namespace Pacmio.Analysis
             }
             else
             {
-                SignalColumn = new SignalColumn(Name, label)
+                CrossSignalColumn = new SignalColumn(Name, label)
                 {
                     BullishColor = Color.Green,
                     BearishColor = Color.Red
                 };
             }
 
-            SignalColumns = new SignalColumn[] { SignalColumn };
+            SignalColumns = new SignalColumn[] { CrossSignalColumn };
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ FastMovingAverage.GetHashCode() ^ SlowMovingAverage.GetHashCode();
@@ -69,7 +69,9 @@ namespace Pacmio.Analysis
             { DualColumnType.TrendDown, new double[] { -0.5 } },
         };
 
-        public SignalColumn SignalColumn { get; protected set; }
+        public SignalColumn CrossSignalColumn { get; protected set; }
+
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -77,24 +79,27 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                SignalDatum sd = b[SignalColumn] as SignalDatum;
 
-                var list = (b[DualColumnAnalysis.Column_Result] as DualColumnDatum).List;
+                SignalDatum sd = b[CrossSignalColumn] as SignalDatum;
 
-                List<double> point_list = new List<double>();
-
-                foreach(var type in list) 
+                if (b[DualColumnAnalysis.Column_Result] is DualColumnDatum d)
                 {
-                    SignalDatum.MergePoints(point_list, TypeToScore[DualColumnType.Above]);
-                }
+                    var list = d.List;
+                    List<double> point_list = new List<double>();
 
-                if (i > 0)
-                {
-                    SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
-                    sd.Set(point_list.ToArray(), list.ToString(","), sd_1);
+                    foreach (var type in list)
+                    {
+                        SignalDatum.MergePoints(point_list, TypeToScore[type]);
+                    }
+
+                    if (i > 0)
+                    {
+                        SignalDatum sd_1 = bt[i - 1][CrossSignalColumn] as SignalDatum;
+                        sd.Set(point_list.ToArray(), list.ToString(","), sd_1);
+                    }
+                    else
+                        sd.Set(point_list.ToArray(), list.ToString(","));
                 }
-                else
-                    sd.Set(point_list.ToArray(), list.ToString(","));
             }
         }
 

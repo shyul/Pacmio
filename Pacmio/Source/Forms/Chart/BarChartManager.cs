@@ -48,11 +48,36 @@ namespace Pacmio
         {
             lock (List) List.ForEach(bc => { bc.PointerToEnd(); });
         }
-
+        /*
         public static void AddColumnSeries(this BarChart bc, NumericColumn data)
         {
+            AdColumnSeries ColumnSeries = new(data, data, 50, 0, 0)
+            {
+                Name = data.Name,
+                LegendName = "Legend_" + data.Name,
+                Label = "",
+                Importance = Importance.Major,
+                Side = AlignType.Right,
+                IsAntialiasing = false,
+                Enabled = true,
+            };
 
+            string AreaName = data.Name + "_Area";
+            float AreaRatio = 10;
 
+            lock (bc.GraphicsLockObject)
+            {
+                BarChartArea area =
+                    bc[AreaName] is BarChartArea oa ?
+                    oa :
+                    bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
+                    {
+                        //Reference = 0,
+                        HasXAxisBar = false,
+                    });
+
+                area.AddSeries(ColumnSeries);
+            }
         }
 
         public static void AddLineSeries(this BarChart bc, NumericColumn data)
@@ -60,6 +85,6 @@ namespace Pacmio
 
 
         }
-
+        */
     }
 }

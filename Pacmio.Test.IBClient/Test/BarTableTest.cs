@@ -33,11 +33,22 @@ namespace TestClient
                 var aroon = new Aroon() { HasXAxisBar = true, Order = int.MaxValue };
                 //aroon.LineSeries.Enabled = false;
 
+                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+
+                ColumnSeriesDebug csd_range = new ColumnSeriesDebug(Bar.Column_Range);
+                ColumnSeriesDebug csd_nr = new ColumnSeriesDebug(Bar.Column_NarrowRange);
+                ColumnSeriesOscDebug csd_gp = new ColumnSeriesOscDebug(Bar.Column_GapPercent);
+                ColumnSeriesDebug csd_typ = new ColumnSeriesDebug(Bar.Column_Typical);
+                ColumnSeriesOscDebug csd_pivot = new ColumnSeriesOscDebug(Bar.Column_Pivot);
+                ColumnSeriesOscDebug csd_trend = new ColumnSeriesOscDebug(Bar.Column_TrendStrength);
+
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     new PivotLevelAnalysis(),
                     //new RelativeAnalysis(),
-                    new NarrowRange(),
+                    //new NarrowRange(),
 
                     new CandleStickDojiMarubozuAnalysis(),
                     new CandleStickShadowStarAnalysis(),
@@ -50,7 +61,10 @@ namespace TestClient
 
                     //new ADX(14),
                     //new ULTO(),
+
                     //aroon,
+                    //ma_cross,
+
                     //new CHOP(),
                     
                     //new RSI(14),
@@ -58,13 +72,23 @@ namespace TestClient
                     //new MFI(14),
                     //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
                     //new MACD(12, 26, 9),
-                    new STO(8, 3, 3) { Order = int.MaxValue - 1 },
-                    new VO() { HasXAxisBar = true, Order = int.MaxValue },
+
+
+                    //new STO(8, 3, 3) { Order = int.MaxValue - 1 },
+                    //new VO() { HasXAxisBar = true, Order = int.MaxValue },
+
+
                     //rsi,
                     //new PivotPointAnalysis(rsi, 100),
 
                     //new TSI(25,13,7),
                     //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },
+                    //csd_range,
+                    //csd_nr,
+                    //csd_gp,
+                    csd_typ,
+                    csd_pivot,
+                    csd_trend,
 
                     volumeEma,
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },

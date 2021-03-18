@@ -21,6 +21,6 @@ namespace Pacmio
     /// </summary>
     public abstract class Indicator : BarAnalysis
     {
-        public SignalColumn[] SignalColumns { get; protected set; }
+        public abstract IEnumerable<SignalColumn> SignalColumns { get; }
     }
 }
