@@ -11,9 +11,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PeakSingleColumn : PeakAnalysis, ISingleData, IChartSeries
+    public class SingleColumnPivotAnalysis : PivotAnalysis, ISingleData, IChartSeries
     {
-        public PeakSingleColumn(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public SingleColumnPivotAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminence = minimumPeakProminenceForAnalysis;
@@ -41,7 +41,7 @@ namespace Pacmio.Analysis
             LowerColor = Color.Red;
         }
 
-        public PeakSingleColumn(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public SingleColumnPivotAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminence = minimumPeakProminenceForAnalysis;

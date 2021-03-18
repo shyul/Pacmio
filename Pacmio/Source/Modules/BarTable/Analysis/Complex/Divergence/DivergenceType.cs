@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public enum DivergenceType : int
     {

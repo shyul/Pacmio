@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {

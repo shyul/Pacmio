@@ -4,7 +4,7 @@
 /// 
 /// ***************************************************************************
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public enum CandleStickType : int
     {

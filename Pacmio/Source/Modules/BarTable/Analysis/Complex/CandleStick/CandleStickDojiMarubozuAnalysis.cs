@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class CandleStickDojiMarubozuAnalysis : BarAnalysis
     {
@@ -17,14 +17,10 @@ namespace Pacmio
         {
             Doji_Ratio = doji_ratio;
             Marubozu_Ratio = marubozu_ratio;
-
-
-
-            Name = GetType().Name;
-
+            Name = GetType().Name + Doji_Ratio + Marubozu_Ratio;
         }
 
-        public override int GetHashCode() => GetType().GetHashCode();
+        public override int GetHashCode() => GetType().GetHashCode() ^ Doji_Ratio.GetHashCode() ^ Marubozu_Ratio.GetHashCode();
 
         double Doji_Ratio { get; } = 0.12;
 

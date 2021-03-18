@@ -30,8 +30,7 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
                 double high = b.High;
                 double low = b.Low;
-                double close = b.Close;
-                double p = (high + low + close) / 3;
+                double p = b.Typical;
 
                 b[Column_Result] = new PivotLevelDatum()
                 {

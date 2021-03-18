@@ -11,7 +11,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PeakDualColumn : PeakAnalysis, IDualData, IChartSeries
+    public class DualColumnPivotAnalysis : PivotAnalysis, IDualData, IChartSeries
     {
 
 

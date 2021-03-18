@@ -11,7 +11,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public abstract class PeakAnalysis : BarAnalysis
+    public abstract class PivotAnalysis : BarAnalysis
     {
         public int MaximumPeakProminence { get; protected set; }
 

@@ -93,8 +93,8 @@
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
     <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakDualColumn.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\PeakSingleColumn.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\SingleColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceDirection.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickShadowStarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\Divergence\DivergenceDatum.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\PeakAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Types\PivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MomentumIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />

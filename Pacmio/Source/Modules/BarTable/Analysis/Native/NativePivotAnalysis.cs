@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class NativePivotAnalysis : PeakAnalysis
+    public sealed class NativePivotAnalysis : PivotAnalysis
     {
         public NativePivotAnalysis(int maximumPeakProminence = 50, int minimumPeakProminence = 5)
         {

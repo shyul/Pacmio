@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {

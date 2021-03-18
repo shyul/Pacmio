@@ -1,12 +1,18 @@
-﻿using System;
+﻿/// ***************************************************************************
+/// Shared Libraries and Utilities
+/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// ***************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xu;
 
-namespace Pacmio.Source.Modules.BarTable.Analysis.Patterns.Flag
+namespace Pacmio.Analysis
 {
-    class FlagDatum
+    public class FlagDatum //: PatternDatum
     {
+
     }
 }

@@ -7,7 +7,7 @@
 using System.Drawing;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public interface IOscillator : ISingleData, IChartSeries, IDependable
     {
