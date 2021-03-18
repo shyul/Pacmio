@@ -104,14 +104,18 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicators\PositionOfTimeframe.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativeGainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\PeakAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Types\PeakAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MomentumIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestNative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestGapGo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestReversal.cs" />
@@ -138,7 +142,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\PreMarket\PreMarketAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
@@ -156,7 +159,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\TrendLine.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPrice.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\Decision\DecisionManager.cs" />

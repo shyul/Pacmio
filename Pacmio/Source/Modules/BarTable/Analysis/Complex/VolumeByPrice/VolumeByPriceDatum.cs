@@ -15,11 +15,10 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class VolumeByPrice : BarAnalysis
+    public class VolumeByPriceDatum : IDatum
     {
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
+        public Range<double> IntervalRange { get; set; }
 
-        }
+        public Dictionary<Range<double>, double> PriceRangeToVolumeLUT { get; } = new Dictionary<Range<double>, double>();
     }
 }

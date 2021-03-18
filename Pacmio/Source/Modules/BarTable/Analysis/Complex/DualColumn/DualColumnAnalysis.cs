@@ -83,7 +83,16 @@ namespace Pacmio
 
                 if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
                 {
-                    double delta = value_fast - value_slow;
+                    double delta = d.Difference = value_fast - value_slow;
+
+                    if (delta == value_slow) d.DifferenceRatio = 1;
+                    else if (value_slow == 0) d.DifferenceRatio = 0;
+                    else d.DifferenceRatio = delta / value_slow;
+
+                    if (value_fast == value_slow) d.Ratio = 1;
+                    else if (value_slow == 0) d.Ratio = 0;
+                    else d.Ratio = value_fast / value_slow;
+
                     double delta_abs = Math.Abs(delta);
 
                     if (delta > 0)
@@ -95,8 +104,10 @@ namespace Pacmio
                         dualDataTypes.Add(DualColumnType.Below);
                     }
 
-                    double last_value_fast = bt[i - 1, Fast_Column];
-                    double last_value_slow = bt[i - 1, Slow_Column];
+                    Bar b_1 = bt[i - 1];
+
+                    double last_value_fast = b_1[Fast_Column];
+                    double last_value_slow = b_1[Slow_Column];
 
                     if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
                     {

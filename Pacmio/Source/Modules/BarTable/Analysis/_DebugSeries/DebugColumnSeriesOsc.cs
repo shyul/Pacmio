@@ -20,7 +20,6 @@ namespace Pacmio.Analysis
         {
             if (ChartEnabled)
             {
-
                 BarChartOscillatorArea area =
                     bc[AreaName] is BarChartOscillatorArea oa ?
                     oa :

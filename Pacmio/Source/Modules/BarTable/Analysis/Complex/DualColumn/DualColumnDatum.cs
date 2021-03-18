@@ -16,5 +16,11 @@ namespace Pacmio
     public class DualColumnDatum : IDatum
     {
         public List<DualColumnType> List { get; } = new List<DualColumnType>();
+
+        public double Ratio { get; set; }
+
+        public double Difference { get; set; }
+
+        public double DifferenceRatio { get; set; }
     }
 }

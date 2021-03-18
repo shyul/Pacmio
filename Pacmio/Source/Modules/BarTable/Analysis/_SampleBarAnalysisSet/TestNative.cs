@@ -41,12 +41,15 @@ namespace Pacmio.Analysis
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
 
-                DebugColumnSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
-                DebugColumnSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);
-                DebugColumnSeriesOsc csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
-                DebugColumnSeries csd_typ = new DebugColumnSeries(Bar.Column_Typical);
-                DebugColumnSeriesOsc csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
-                DebugColumnSeriesOsc csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
+                DebugSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
+                DebugSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);
+                DebugSeries csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
+                DebugSeries csd_typ = new DebugLineSeries(Bar.Column_Typical);
+                DebugSeries csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
+                DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
+
+                PositionOfTimeframe potf = new PositionOfTimeframe(BarFreq.Annually);
+                DebugSeries csd_potf= new DebugLineSeries(potf);
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
@@ -68,7 +71,7 @@ namespace Pacmio.Analysis
 
                     //aroon,
                     //ma_cross,
-
+                    csd_potf,
                     //new CHOP(),
                     
                     //new RSI(14),

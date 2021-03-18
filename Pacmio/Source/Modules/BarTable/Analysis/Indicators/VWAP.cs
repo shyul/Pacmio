@@ -20,7 +20,6 @@ namespace Pacmio.Analysis
         public VWAP(Frequency frequency)
         {
             Frequency = frequency;
-            //Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
             string label = "(" + Frequency.ToString() + ")";
             Name = GetType().Name + label;
@@ -29,7 +28,7 @@ namespace Pacmio.Analysis
 
             Column_Volume = new NumericColumn(Name + "_CUMUL_V");
             Column_Volume_Price = new NumericColumn(Name + "_CUMUL_VP");
-            Column_Result = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name, label);
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
@@ -52,8 +51,6 @@ namespace Pacmio.Analysis
         #endregion Parameters
 
         #region Calculation
-
-        //public NumericColumn Column_Typical { get; }
 
         public NumericColumn Column_Volume { get; }
 
@@ -127,11 +124,20 @@ namespace Pacmio.Analysis
         {
             if (ChartEnabled)
             {
+                /*
                 BarChartArea a = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
                 {
                     HasXAxisBar = HasXAxisBar,
                 });
-                a.AddSeries(LineSeries);
+                a.AddSeries(LineSeries);*/
+
+                BarChartArea area =
+                    bc[AreaName] is BarChartArea a ?
+                    a :
+                    bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
+                    { HasXAxisBar = false });
+
+                area.AddSeries(MainSeries);
             }
         }
 
