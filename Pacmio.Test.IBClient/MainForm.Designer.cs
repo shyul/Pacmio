@@ -38,6 +38,8 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnTestNativeAnalysis = new System.Windows.Forms.Button();
+            this.BtnTestIndicators = new System.Windows.Forms.Button();
             this.BtnTimeZoneTest = new System.Windows.Forms.Button();
             this.BtnTestFundamentalXMLFile = new System.Windows.Forms.Button();
             this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
@@ -192,6 +194,7 @@ namespace TestClient
             this.BtnMasterCancel = new System.Windows.Forms.Button();
             this.TextBoxIPAddress = new System.Windows.Forms.TextBox();
             this.GroupBoxSingleContract = new System.Windows.Forms.GroupBox();
+            this.BtnUpdateContract = new System.Windows.Forms.Button();
             this.TextBoxValidCountryCode = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -204,7 +207,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnUpdateContract = new System.Windows.Forms.Button();
+            this.BtnTestPatternAnalysis = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -265,6 +268,9 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnTestPatternAnalysis);
+            this.tabHistoricalData.Controls.Add(this.BtnTestNativeAnalysis);
+            this.tabHistoricalData.Controls.Add(this.BtnTestIndicators);
             this.tabHistoricalData.Controls.Add(this.BtnTimeZoneTest);
             this.tabHistoricalData.Controls.Add(this.BtnTestFundamentalXMLFile);
             this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
@@ -287,6 +293,28 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnTestNativeAnalysis
+            // 
+            this.BtnTestNativeAnalysis.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnTestNativeAnalysis.Location = new System.Drawing.Point(7, 64);
+            this.BtnTestNativeAnalysis.Name = "BtnTestNativeAnalysis";
+            this.BtnTestNativeAnalysis.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestNativeAnalysis.TabIndex = 52;
+            this.BtnTestNativeAnalysis.Text = "Test Native Analysis";
+            this.BtnTestNativeAnalysis.UseVisualStyleBackColor = false;
+            this.BtnTestNativeAnalysis.Click += new System.EventHandler(this.BtnTestNativeAnalysis_Click);
+            // 
+            // BtnTestIndicators
+            // 
+            this.BtnTestIndicators.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnTestIndicators.Location = new System.Drawing.Point(7, 35);
+            this.BtnTestIndicators.Name = "BtnTestIndicators";
+            this.BtnTestIndicators.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestIndicators.TabIndex = 51;
+            this.BtnTestIndicators.Text = "Test Indicators";
+            this.BtnTestIndicators.UseVisualStyleBackColor = false;
+            this.BtnTestIndicators.Click += new System.EventHandler(this.BtnTestIndicators_Click);
             // 
             // BtnTimeZoneTest
             // 
@@ -320,7 +348,7 @@ namespace TestClient
             // 
             // BtnExportBarTableData
             // 
-            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 260);
+            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 353);
             this.BtnExportBarTableData.Name = "BtnExportBarTableData";
             this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
             this.BtnExportBarTableData.TabIndex = 47;
@@ -330,7 +358,7 @@ namespace TestClient
             // 
             // BtnExportFundamental
             // 
-            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 289);
+            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 382);
             this.BtnExportFundamental.Name = "BtnExportFundamental";
             this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
             this.BtnExportFundamental.TabIndex = 46;
@@ -340,7 +368,7 @@ namespace TestClient
             // 
             // BtnLoadMultiHistoricalChart
             // 
-            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 35);
+            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 181);
             this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
             this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadMultiHistoricalChart.TabIndex = 45;
@@ -369,7 +397,7 @@ namespace TestClient
             // 
             // BtnCloseChart
             // 
-            this.BtnCloseChart.Location = new System.Drawing.Point(7, 93);
+            this.BtnCloseChart.Location = new System.Drawing.Point(7, 212);
             this.BtnCloseChart.Name = "BtnCloseChart";
             this.BtnCloseChart.Size = new System.Drawing.Size(230, 23);
             this.BtnCloseChart.TabIndex = 37;
@@ -387,7 +415,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 177);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 270);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -417,7 +445,7 @@ namespace TestClient
             // 
             // BtnChartsUpdateAll
             // 
-            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 148);
+            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 241);
             this.BtnChartsUpdateAll.Name = "BtnChartsUpdateAll";
             this.BtnChartsUpdateAll.Size = new System.Drawing.Size(230, 23);
             this.BtnChartsUpdateAll.TabIndex = 2;
@@ -1932,6 +1960,16 @@ namespace TestClient
             this.GroupBoxSingleContract.TabStop = false;
             this.GroupBoxSingleContract.Text = "Single Contract";
             // 
+            // BtnUpdateContract
+            // 
+            this.BtnUpdateContract.Location = new System.Drawing.Point(191, 76);
+            this.BtnUpdateContract.Name = "BtnUpdateContract";
+            this.BtnUpdateContract.Size = new System.Drawing.Size(79, 22);
+            this.BtnUpdateContract.TabIndex = 65;
+            this.BtnUpdateContract.Text = "Update";
+            this.BtnUpdateContract.UseVisualStyleBackColor = true;
+            this.BtnUpdateContract.Click += new System.EventHandler(this.BtnUpdateContract_Click);
+            // 
             // TextBoxValidCountryCode
             // 
             this.TextBoxValidCountryCode.Location = new System.Drawing.Point(244, 21);
@@ -2054,15 +2092,16 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnUpdateContract
+            // BtnTestPatternAnalysis
             // 
-            this.BtnUpdateContract.Location = new System.Drawing.Point(191, 76);
-            this.BtnUpdateContract.Name = "BtnUpdateContract";
-            this.BtnUpdateContract.Size = new System.Drawing.Size(79, 22);
-            this.BtnUpdateContract.TabIndex = 65;
-            this.BtnUpdateContract.Text = "Update";
-            this.BtnUpdateContract.UseVisualStyleBackColor = true;
-            this.BtnUpdateContract.Click += new System.EventHandler(this.BtnUpdateContract_Click);
+            this.BtnTestPatternAnalysis.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 93);
+            this.BtnTestPatternAnalysis.Name = "BtnTestPatternAnalysis";
+            this.BtnTestPatternAnalysis.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestPatternAnalysis.TabIndex = 53;
+            this.BtnTestPatternAnalysis.Text = "Test Pattern Analysis";
+            this.BtnTestPatternAnalysis.UseVisualStyleBackColor = false;
+            this.BtnTestPatternAnalysis.Click += new System.EventHandler(this.BtnTestPatternAnalysis_Click);
             // 
             // MainForm
             // 
@@ -2292,5 +2331,8 @@ namespace TestClient
         private System.Windows.Forms.Button BtnTestFundamentalXMLFile;
         private System.Windows.Forms.Button BtnTimeZoneTest;
         private System.Windows.Forms.Button BtnUpdateContract;
+        private System.Windows.Forms.Button BtnTestNativeAnalysis;
+        private System.Windows.Forms.Button BtnTestIndicators;
+        private System.Windows.Forms.Button BtnTestPatternAnalysis;
     }
 }
