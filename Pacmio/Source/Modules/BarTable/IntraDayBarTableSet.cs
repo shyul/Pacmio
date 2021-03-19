@@ -60,26 +60,5 @@ namespace Pacmio
                 return BarTableLUT[key];
             }
         }
-        /*
-        public void Calculate(Strategy s, Period pd, CancellationTokenSource cts = null)
-        {
-            Period = pd;
-            foreach (var ba in s.BarAnalysisLUT)
-            {
-                if (!cts.IsContinue()) return;
-                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, cts);
-                bt.CalculateRefresh(ba.Value);
-            }
-        }
-
-        public void Calculate(Strategy s, CancellationTokenSource cts = null)
-        {
-            foreach (var ba in s.BarAnalysisLUT)
-            {
-                if (!cts.IsContinue()) return;
-                BarTable bt = GetOrCreateBarTable(ba.Key.BarFreq, ba.Key.BarType, cts);
-                bt.CalculateRefresh(ba.Value);
-            }
-        }*/
     }
 }

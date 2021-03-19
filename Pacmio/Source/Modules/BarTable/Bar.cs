@@ -451,11 +451,13 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        #region Position / Simulation Information
+        //#region Position / Simulation Information
 
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
+        
+        /*
         private Dictionary<Strategy, BarPositionData> PositionDatums { get; } = new Dictionary<Strategy, BarPositionData>();
 
         public BarPositionData this[Strategy s]
@@ -475,9 +477,9 @@ namespace Pacmio
             {
                 PositionDatums.Remove(s);
             }
-        }
+        }*/
 
-        #endregion Position / Simulation Information
+        //#endregion Position / Simulation Information
 
         public void ClearAllCalculationData()
         {
@@ -486,7 +488,7 @@ namespace Pacmio
             PositivePatternPointList.Clear();
             NegativePatternPointList.Clear();
             RangeBoundDatums.Clear();
-            PositionDatums.Clear();
+            //PositionDatums.Clear();
         }
 
         public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();

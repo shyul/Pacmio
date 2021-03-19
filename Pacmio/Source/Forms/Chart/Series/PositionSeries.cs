@@ -80,6 +80,7 @@ namespace Pacmio
                     break;
                 else if (i >= 0)
                 {
+                    /*
                     double data = Table[i][BarChart.Strategy].PnL;
                     if (!double.IsNaN(data))
                     {
@@ -89,7 +90,7 @@ namespace Pacmio
                         points.Add((i, new Point(x, data_pix)));
                         if (data_pix < max_y) max_y = data_pix;
                         if (data_pix > min_y) min_y = data_pix;
-                    }
+                    }*/
                 }
                 pt++;
             }

@@ -31,6 +31,7 @@ namespace Pacmio
 
         public void Snapshot()
         {
+            /*
             if (Bar.Table.LastBar_1 is Bar b_1 && b_1[Strategy] is BarPositionData bp_1)
             {
                 Quantity = bp_1.Quantity;
@@ -44,7 +45,7 @@ namespace Pacmio
                     ActionType = TradeActionType.ShortHold;
             }
             else
-                Reset();
+                Reset();*/
         }
 
         public void Snapshot(PositionInfo ps)

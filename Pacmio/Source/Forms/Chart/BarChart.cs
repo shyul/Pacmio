@@ -110,7 +110,7 @@ namespace Pacmio
             List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
-
+        /*
         public Strategy Strategy
         {
             get => m_Strategy;
@@ -123,7 +123,7 @@ namespace Pacmio
         }
 
         private Strategy m_Strategy = null;
-
+        */
         public BarAnalysisSet BarAnalysisSet
         {
             get => m_BarAnalysisSet;
@@ -145,12 +145,6 @@ namespace Pacmio
                         tg.ConfigChart(this);
                     }
 
-                    /*
-                    if (bas.NativePivotAnalysis is NativePivotAnalysis np)
-                    {
-                        MainArea.PriceSeries.TagColumns.Add(np.Column_PeakTags);
-                    }
-                    */
                     if (m_BarTable is BarTable bt)
                         bt.CalculateRefresh(bas);
                 }
@@ -175,12 +169,6 @@ namespace Pacmio
                 if (m_BarTable is BarTable bt)
                 {
                     bt.AddDataConsumer(this);
-
-                    if (m_Strategy is Strategy s)
-                    {
-                        BarAnalysisSet = s.BarDecision[bt.BarFreq, bt.Type];
-                    }
-
                     TabName = Name = m_BarTable.Name;
                 }
                 else
@@ -275,8 +263,6 @@ namespace Pacmio
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
 
         public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
-
-        public bool HasPositionColumn => Strategy is Strategy;
 
         public override void CoordinateOverlay() { }
 

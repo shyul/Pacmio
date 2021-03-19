@@ -25,21 +25,9 @@ namespace Pacmio
 
         public override int GetHashCode() => Name.GetHashCode();
 
-        public virtual int Order { get; set; } = 0;
-
         public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
-
-        public string Account { get; set; }
-
-        public WatchList Scanner { get; set; }
-
-        public BarDecision BarDecision { get; set; }
-
-        public EntryMethod EntryMethod { get; set; }
-
-        public ExitMethod ExitMethod { get; set; }
 
         // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
 
@@ -47,7 +35,7 @@ namespace Pacmio
 
 
 
-        #region Training Settings
+        #region Training / Simulation Settings
 
         /// <summary>
         /// The unit for training time frames
@@ -66,6 +54,6 @@ namespace Pacmio
         /// </summary>
         public virtual int TradingLength { get; set; } = 1;
 
-        #endregion Training Settings
+        #endregion Training / Simulation Settings
     }
 }

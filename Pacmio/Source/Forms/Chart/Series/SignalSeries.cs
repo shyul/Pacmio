@@ -19,9 +19,6 @@ namespace Pacmio
         {
             BarChart = chart;
 
-            if (BarChart.Strategy is Strategy s)
-                Strategy = s;
-
             Name = "Signal";
             LegendName = "SIGNAL: ";
             LegendLabelFormat = "0.##";
@@ -37,8 +34,6 @@ namespace Pacmio
         public BarTable Table => BarChart.BarTable;
 
         public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
-
-        public Strategy Strategy { get; }
 
         public override void RefreshAxis(IIndexArea area, ITable table)
         {

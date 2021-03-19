@@ -15,7 +15,6 @@ namespace Pacmio.Analysis
         public ATR(int interval = 14)
         {
             Interval = interval;
-            //TrueRangeAnalysis = BarTable.TrueRangeAnalysis;
 
             string label = "(" + Interval.ToString() + ")";
             Name = GetType().Name + label;
