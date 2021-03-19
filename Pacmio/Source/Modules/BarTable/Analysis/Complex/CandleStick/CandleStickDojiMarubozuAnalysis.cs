@@ -34,8 +34,7 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 double high = b.High;
-                double low = b.Low;
-                double hl_Range = Math.Abs(high - low);
+                double hl_Range = b.Range;
 
                 if (hl_Range > 0)
                 {

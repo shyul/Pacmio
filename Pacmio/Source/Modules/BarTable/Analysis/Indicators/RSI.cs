@@ -26,7 +26,7 @@ namespace Pacmio.Analysis
 {
     public sealed class RSI : ATR, IOscillator
     {
-        public RSI(int interval, double lowerLimit = 30, double upperLimit = 70)
+        public RSI(int interval, double lowerLimit = 20, double upperLimit = 80)
         {
             Interval = interval;
             LowerLimit = lowerLimit;
@@ -61,9 +61,9 @@ namespace Pacmio.Analysis
 
         public double Reference { get; set; } = 50;
 
-        public double UpperLimit { get; set; } = 70;
+        public double UpperLimit { get; set; } = 80;
 
-        public double LowerLimit { get; set; } = 30;
+        public double LowerLimit { get; set; } = 20;
 
         #endregion Parameters
 

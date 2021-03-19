@@ -15,25 +15,25 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class RelativeAnalysis : BarAnalysis, ISingleData, IChartSeries
+    public sealed class GainRatio : BarAnalysis, ISingleData, IChartSeries
     {
-        public RelativeAnalysis() : this(Bar.Column_Volume) { }
+        public GainRatio() : this(Bar.Column_Volume) { }
 
-        public RelativeAnalysis(NumericColumn column)
+        public GainRatio(NumericColumn column)
         {
             Column = column;
 
             string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Volume) ? "(Volume)" : "(" + Column.Name + ")");
             Name = GetType().Name + label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
-            Description = "Relative " + label;
+            Description = "GainRatio " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
 
             ColumnSeries = new(Column_Result, Column_Result, 50, 0, 0)
             {
                 Name = Name,
-                LegendName = "Relative",
+                LegendName = "GainRatio",
                 Label = "",
                 Importance = Importance.Major,
                 Side = AlignType.Right,

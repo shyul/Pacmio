@@ -10,11 +10,11 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class GainAnalysis : BarAnalysis, ISingleData, IChartSeries
+    public sealed class Gain : BarAnalysis, ISingleData, IChartSeries
     {
-        public GainAnalysis() : this(Bar.Column_Close) { }
+        public Gain() : this(Bar.Column_Close) { }
 
-        public GainAnalysis(NumericColumn column)
+        public Gain(NumericColumn column)
         {
             Column = column;
 

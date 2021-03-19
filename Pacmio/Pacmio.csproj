@@ -95,6 +95,7 @@
     <Compile Include="Source\Forms\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\Relative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\SingleColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceDirection.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickShadowStarAnalysis.cs" />
@@ -144,9 +145,9 @@
     <Compile Include="Source\Modules\Trade\Position\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\Gain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MDEV.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Basic\RelativeAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Basic\GainRatio.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\Aroon.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\ULTO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicators\VO.cs" />

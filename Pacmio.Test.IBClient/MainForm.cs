@@ -328,8 +328,9 @@ namespace TestClient
                     BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
+
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisSet);
+                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
                     //BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
                     //BarChart bc = bt.GetChart(Pacmio.Analysis.TestIndicators.BarAnalysisSet);
 
