@@ -16,8 +16,8 @@ namespace Pacmio
 {
     public static class BarDataFileManager
     {
-        private static Dictionary<(Contract c, BarFreq barFreq, BarType type), BarDataFile> DataLUT { get; }
-            = new Dictionary<(Contract c, BarFreq barFreq, BarType type), BarDataFile>();
+        private static Dictionary<(Contract c, BarFreq barFreq, DataType type), BarDataFile> DataLUT { get; }
+            = new Dictionary<(Contract c, BarFreq barFreq, DataType type), BarDataFile>();
 
         public static void Clear()
         {
@@ -29,7 +29,7 @@ namespace Pacmio
             GC.Collect();
         }
 
-        public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, BarType type = BarType.Trades)
+        public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
         {
             if (barFreq > BarFreq.Daily) throw new Exception("We don't support storging BarFreq greater than daily as file");
 

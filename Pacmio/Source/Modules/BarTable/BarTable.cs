@@ -26,12 +26,12 @@ namespace Pacmio
         IDataConsumer,
         IEquatable<BarTable>,
         IEquatable<BarDataFile>,
-        IEquatable<(Contract, BarFreq, BarType)>,
-        IEquatable<((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)>
+        IEquatable<(Contract, BarFreq, DataType)>,
+        IEquatable<((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type)>
     {
         #region Ctor
 
-        public BarTable(Contract c, BarFreq barFreq, BarType type)
+        public BarTable(Contract c, BarFreq barFreq, DataType type)
         {
             Contract = c;
             BarFreq = barFreq;
@@ -91,9 +91,9 @@ namespace Pacmio
 
         public Frequency Frequency { get; }
 
-        public BarType Type { get; }
+        public DataType Type { get; }
 
-        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, BarType type) Key => (Contract.Key, BarFreq, Type);
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, DataType type) Key => (Contract.Key, BarFreq, Type);
 
         #endregion Ctor
 
@@ -174,7 +174,7 @@ namespace Pacmio
 
                     if (cnt > 0)
                     {
-                        return Rows.Skip(start).Take(cnt).ToList();
+                        return Rows.Skip(start).Take(cnt).OrderBy(n => n.Index).ToList();
                     }
                     return
                         null;
@@ -735,16 +735,16 @@ namespace Pacmio
         #region Equality
 
         public bool Equals(BarTable other) => Key == other.Key;
-        public bool Equals(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type) other) => Key == other;
-        public bool Equals((Contract, BarFreq, BarType) other) => (Contract, BarFreq, Type) == other;
+        public bool Equals(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) other) => Key == other;
+        public bool Equals((Contract, BarFreq, DataType) other) => (Contract, BarFreq, Type) == other;
         public bool Equals(BarDataFile other) => Key == other.Key;
 
         public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, BarTable s2) => !s1.Equals(s2);
         public static bool operator ==(BarTable s1, BarDataFile s2) => s1.Equals(s2);
         public static bool operator !=(BarTable s1, BarDataFile s2) => !s1.Equals(s2);
-        public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => s1.Equals(s2);
-        public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, BarType type) s2) => !s1.Equals(s2);
+        public static bool operator ==(BarTable s1, (Contract c, BarFreq barFreq, DataType type) s2) => s1.Equals(s2);
+        public static bool operator !=(BarTable s1, (Contract c, BarFreq barFreq, DataType type) s2) => !s1.Equals(s2);
 
         /// <summary>
         /// https://stackoverflow.com/questions/4219261/overriding-operator-how-to-compare-to-null
@@ -757,10 +757,10 @@ namespace Pacmio
                 return Equals(bt);
             else if (other is BarDataFile bdf)
                 return Equals(bdf);
-            else if (other.GetType() == typeof((Contract, BarFreq, BarType)))
-                return Equals(((Contract, BarFreq, BarType))other);
-            else if (other.GetType() == typeof(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type)))
-                return Equals((((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, BarType Type))other);
+            else if (other.GetType() == typeof((Contract, BarFreq, DataType)))
+                return Equals(((Contract, BarFreq, DataType))other);
+            else if (other.GetType() == typeof(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type)))
+                return Equals((((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type))other);
             else
                 return false;
         }

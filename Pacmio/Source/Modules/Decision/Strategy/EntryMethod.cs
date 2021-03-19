@@ -33,25 +33,25 @@ namespace Pacmio
         /// <summary>
         /// Bar Analysis vs Multi Time Frame
         /// </summary>
-        protected Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet> BarAnalysisSets { get; } = new Dictionary<(BarFreq BarFreq, BarType BarType), BarAnalysisSet>();
+        protected Dictionary<(BarFreq BarFreq, DataType DataType), BarAnalysisSet> BarAnalysisSets { get; } = new Dictionary<(BarFreq BarFreq, DataType DataType), BarAnalysisSet>();
 
         public virtual void ClearBarAnalysisSet() => BarAnalysisSets.Clear();
 
-        public virtual BarAnalysisSet this[BarFreq BarFreq, BarType BarType = BarType.Trades]
+        public virtual BarAnalysisSet this[BarFreq BarFreq, DataType DataType = DataType.Trades]
         {
             get
             {
-                if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
-                    return BarAnalysisSets[(BarFreq, BarType)];
+                if (BarAnalysisSets.ContainsKey((BarFreq, DataType)))
+                    return BarAnalysisSets[(BarFreq, DataType)];
                 else
                     return null;
             }
             set
             {
                 if (value is BarAnalysisSet bas)
-                    BarAnalysisSets[(BarFreq, BarType)] = new BarAnalysisSet(bas);
-                else if (BarAnalysisSets.ContainsKey((BarFreq, BarType)))
-                    BarAnalysisSets.Remove((BarFreq, BarType));
+                    BarAnalysisSets[(BarFreq, DataType)] = new BarAnalysisSet(bas);
+                else if (BarAnalysisSets.ContainsKey((BarFreq, DataType)))
+                    BarAnalysisSets.Remove((BarFreq, DataType));
             }
         }
 

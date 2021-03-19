@@ -16,6 +16,15 @@ using Pacmio.Analysis;
 
 namespace Pacmio
 {
+    public enum BarType : int
+    {
+        White = 2,
+        Black = 1,
+        None = 0,
+        Red = -2,
+        HollowRed = -1
+    }
+
     /// <summary>
     /// One Single Bar is not as simple as it sounds.
     /// </summary>
@@ -190,6 +199,8 @@ namespace Pacmio
 
         #region Intrinsic Indicators
 
+        public BarType BarType { get; set; } = BarType.None;
+
         public List<CandleStickType> CandleStickList { get; } = new();
 
         public double Gain { get; set; } = 0;
@@ -338,7 +349,7 @@ namespace Pacmio
 
         #region Trailing Pattern Point
 
-        public void ResetPatternPointList() 
+        public void ResetPatternPointList()
         {
             PatternPointsRange.Reset(double.MaxValue, double.MinValue);
             PositivePatternPointList.Clear();
@@ -439,7 +450,7 @@ namespace Pacmio
             }
         }
 
-        public void SetSignal(SignalColumn column, double[] score, string message) 
+        public void SetSignal(SignalColumn column, double[] score, string message)
         {
             SignalDatum sd = this[column];
             if (Index > 0)
@@ -477,7 +488,7 @@ namespace Pacmio
         /// <summary>
         /// Data sets for simulation analysis, virtualization
         /// </summary>
-        
+
         /*
         private Dictionary<Strategy, BarPositionData> PositionDatums { get; } = new Dictionary<Strategy, BarPositionData>();
 

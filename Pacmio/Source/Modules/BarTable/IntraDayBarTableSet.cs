@@ -26,7 +26,7 @@ namespace Pacmio
         {
             lock (BarTableLUT)
             {
-                foreach (BarTable bt in BarTableLUT.Values.Where(n => n.Type != BarType.Trades || n.BarFreq < BarFreq.Daily))
+                foreach (BarTable bt in BarTableLUT.Values.Where(n => n.Type != DataType.Trades || n.BarFreq < BarFreq.Daily))
                 {
                     bt.Dispose();
                 }
@@ -36,10 +36,10 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        private Dictionary<(BarFreq BarFreq, BarType BarType), BarTable> BarTableLUT { get; } 
-            = new Dictionary<(BarFreq BarFreq, BarType BarType), BarTable>();
+        private Dictionary<(BarFreq BarFreq, DataType BarType), BarTable> BarTableLUT { get; } 
+            = new Dictionary<(BarFreq BarFreq, DataType BarType), BarTable>();
 
-        public BarTable GetOrCreateBarTable(Period pd, BarFreq freq, BarType type, bool adjustDividend, CancellationTokenSource cts = null)
+        public BarTable GetOrCreateBarTable(Period pd, BarFreq freq, DataType type, bool adjustDividend, CancellationTokenSource cts = null)
         {
             var key = (freq, type);
 
@@ -47,7 +47,7 @@ namespace Pacmio
             {
                 if (!BarTableLUT.ContainsKey(key))
                 {
-                    if (type == BarType.Trades && freq >= BarFreq.Daily)
+                    if (type == DataType.Trades && freq >= BarFreq.Daily)
                         BarTableLUT[key] = Contract.GetOrCreateDailyBarTable(freq);
                     else
                     {

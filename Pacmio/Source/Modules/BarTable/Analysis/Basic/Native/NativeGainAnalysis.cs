@@ -43,6 +43,31 @@ namespace Pacmio.Analysis
                 b.GainPercent = (close_1 == 0) ? 0 : (100 * gain / close_1);
                 double range = b.Range = high - low;
 
+                b.BarType = BarType.None;
+
+                if (gain > 0)
+                {
+                    if (close > open)
+                    {
+                        b.BarType = BarType.White;
+                    }
+                    else if (open < close)
+                    {
+                        b.BarType = BarType.Black;
+                    }
+                }
+                else if (gain < 0)
+                {
+                    if (close > open)
+                    {
+                        b.BarType = BarType.HollowRed;
+                    }
+                    else if (open < close)
+                    {
+                        b.BarType = BarType.Red;
+                    }
+                }
+
                 if (range < range_1)
                 {
                     nr_1++;
@@ -98,40 +123,5 @@ namespace Pacmio.Analysis
                 range_1 = range;
             }
         }
-
-        /*
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-            BarTable bt = bap.Table;
-
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                Bar b = bt[i];
-                double range = b.High - b.Low;
-
-                int j = 1;
-                for (; j <= MaximumInterval; j++)
-                {
-                    int k = i - j;
-
-                    if (k < 0)
-                    {
-                        k--;
-                        break;
-                    }
-                    else
-                    {
-                        Bar b_1 = bt[k];
-                        double range_1 = b_1.High - b_1.Low;
-
-                        if (range >= range_1)
-                            break;
-                    }
-                }
-
-                b[Column_Result] = j;
-            }
-        }
-        */
     }
 }

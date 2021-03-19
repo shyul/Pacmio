@@ -19,7 +19,7 @@ namespace TestClient
     {
         public BarFreq BarFreq => SelectHistoricalDataBarFreq.Text.ParseEnum<BarFreq>();
 
-        public BarType BarType => SelectHistoricalDataBarType.Text.ParseEnum<BarType>();
+        public DataType DataType => SelectHistoricalDataBarType.Text.ParseEnum<DataType>();
 
         public AccountDataAdapter AccountDataAdapter { get; }
         public OrderInfoGridView OrderInfoGridView { get; } = new OrderInfoGridView();
@@ -106,7 +106,7 @@ namespace TestClient
             SelectBoxSingleContractExchange.Items.Add<Exchange>();
             //SelectSecurityType.Items.Add<ContractType>();
             SelectHistoricalDataBarFreq.Items.Add<BarFreq>();
-            SelectHistoricalDataBarType.Items.Add<BarType>();
+            SelectHistoricalDataBarType.Items.Add<DataType>();
 
             ComboxBoxOrderSettingType.Items.Add<OrderType>();
             ComboBoxOrderSettingTIF.Items.Add<OrderTimeInForce>();
@@ -300,7 +300,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Root.SaveFile.FileName = "BT_" + ContractTest.ActiveContract.Name;
                 if (Root.SaveFile.ShowDialog() == DialogResult.OK)
                 {
@@ -315,7 +315,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
@@ -344,7 +344,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
@@ -372,7 +372,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
@@ -400,7 +400,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
@@ -428,7 +428,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
@@ -455,7 +455,7 @@ namespace TestClient
         {
             string symbolText = TextBoxMultiContracts.Text;
             BarFreq freq = BarFreq;
-            BarType type = BarType;
+            DataType type = DataType;
             //IAnalysisSetting tr = new TestStrategy(freq);
 
             var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
@@ -475,7 +475,7 @@ namespace TestClient
         private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
         {
             BarFreq freq = BarFreq;
-            BarType type = BarType;
+            DataType type = DataType;
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>
@@ -491,7 +491,7 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
-                BarType type = BarType;
+                DataType type = DataType;
                 if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
                 Period pd = new Period(new DateTime(1000, 1, 1), DateTime.Now);
 
@@ -516,7 +516,7 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
 
             BarFreq freq = BarFreq;
-            BarType type = BarType;
+            DataType type = DataType;
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>

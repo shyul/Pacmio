@@ -36,7 +36,7 @@ namespace Pacmio
 
         public static bool Fetch(BarDataFile bdf)
         {
-            bool use_quandl = bdf.Contract is Stock && bdf.Contract.Country == "US" && bdf.BarFreq == BarFreq.Daily && bdf.Type == BarType.Trades;
+            bool use_quandl = bdf.Contract is Stock && bdf.Contract.Country == "US" && bdf.BarFreq == BarFreq.Daily && bdf.Type == DataType.Trades;
 
             if (Connected && use_quandl)
             {
@@ -194,7 +194,7 @@ namespace Pacmio
                                     currentFd = currentContract.GetOrCreateFundamentalData();
 
                                     currentFd.Remove(DataSourceType.Quandl);
-                                    currentBtd = BarDataFile.LoadFile((currentContract.Key, BarFreq.Daily, BarType.Trades));
+                                    currentBtd = BarDataFile.LoadFile((currentContract.Key, BarFreq.Daily, DataType.Trades));
                                 }
                                 else
                                 {

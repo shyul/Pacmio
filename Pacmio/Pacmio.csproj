@@ -243,7 +243,7 @@
     <Compile Include="Source\Modules\Trade\TradeInfo\LiquidityType.cs" />
     <Compile Include="Source\Modules\BarTable\Position\TradeActionType.cs" />
     <Compile Include="Source\Modules\_Types\BarFreqInfo.cs" />
-    <Compile Include="Source\Modules\_Types\BarType.cs" />
+    <Compile Include="Source\Modules\_Types\DataType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\ADX.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageGain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\Bollinger.cs" />

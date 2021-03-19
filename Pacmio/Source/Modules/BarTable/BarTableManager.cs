@@ -50,7 +50,7 @@ namespace Pacmio
             if (barFreq < BarFreq.Daily)
                 throw new("This function does not support intra-day bars.");
 
-            BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, BarType.Trades);
+            BarDataFile bdf_daily = c.GetOrCreateBarDataFile(BarFreq.Daily, DataType.Trades);
             bdf_daily.Fetch(Period.Full, cts);
 
             //BarTable bt_daily = bdf_daily.GetBarTable();
@@ -60,7 +60,7 @@ namespace Pacmio
 
             if (barFreq > BarFreq.Daily)
             {
-                BarTable bt = new(c, barFreq, BarType.Trades);
+                BarTable bt = new(c, barFreq, DataType.Trades);
                 bt.LoadFromSmallerBar(sorted_daily_list);
                 return bt;
             }
@@ -73,14 +73,14 @@ namespace Pacmio
                 return null;
         }
 
-        public static BarTable LoadBarTable(this Contract c, Period period, BarFreq barFreq, BarType barType, bool adjustDividend, CancellationTokenSource cts = null)
+        public static BarTable LoadBarTable(this Contract c, Period period, BarFreq barFreq, DataType dataType, bool adjustDividend, CancellationTokenSource cts = null)
         {
             Console.WriteLine("LoadBarTable Period = " + period);
 
             BarDataFile bdf_daily_base = c.GetOrCreateBarDataFile(BarFreq.Daily);
             bdf_daily_base.Fetch(Period.Full, cts);
 
-            if (barFreq == BarFreq.Daily && barType == BarType.Trades)
+            if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
             {
                 BarTable bt = new(bdf_daily_base, period, adjustDividend);
                 /*
@@ -91,21 +91,21 @@ namespace Pacmio
             }
             else if (barFreq > BarFreq.Daily)
             {
-                BarDataFile bdf_daily = barType == BarType.Trades ? bdf_daily_base : c.GetOrCreateBarDataFile(BarFreq.Daily, barType);
+                BarDataFile bdf_daily = dataType == DataType.Trades ? bdf_daily_base : c.GetOrCreateBarDataFile(BarFreq.Daily, dataType);
 
-                if (barType != BarType.Trades)
+                if (dataType != DataType.Trades)
                     bdf_daily.Fetch(Period.Full, cts);
 
                 BarTable bt_daily = new(bdf_daily);//, period, adjustDividend);
                 //BarTable bt_daily = bdf_daily.GetBarTable();
                 var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
-                BarTable bt = new(c, barFreq, barType);
+                BarTable bt = new(c, barFreq, dataType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
                 return bt;
             }
             else
             {
-                BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, barType);
+                BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, dataType);
                 bdf.Fetch(period, cts);
                 BarTable bt = new(bdf, period, adjustDividend);
                 //BarTable bt = bdf.GetBarTable();

@@ -14,7 +14,7 @@ namespace Pacmio
     /// Bar data types
     /// </summary>
     [Serializable, DataContract]
-    public enum BarType : int
+    public enum DataType : int
     {
         [EnumMember, ApiCode("TRADES")]
         Trades = 0,
