@@ -48,7 +48,7 @@ namespace Pacmio.Analysis
                     //csd_trend,
 
                     new TrendAnalysis(260),
-                    new ReversalIndicator(),
+                    new GetReversalIndexFromRangeBoundAnalysis(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

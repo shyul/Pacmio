@@ -358,7 +358,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestIndicators.BarAnalysisSet);
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
@@ -415,6 +415,34 @@ namespace TestClient
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        private void BtnTestSignal_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                BarType type = BarType;
+                Period pd = HistoricalPeriod;
+                Contract c = ContractTest.ActiveContract;
+
+                if (pd.IsCurrent) c.MarketData.Start();
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestSignals.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
@@ -1276,6 +1304,8 @@ namespace TestClient
         {
             ContractManager.Fetch(ContractTest.ActiveContract);
         }
+
+
     }
     public static class DataGridHelper
     {

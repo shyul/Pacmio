@@ -9,15 +9,18 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SignalColumn : DatumColumn, IOrdered
+    public class SignalColumn : Column, IOrdered
     {
-        public SignalColumn(string name, SignalColumnType type = SignalColumnType.Filter) : base(name, typeof(SignalDatum))
+        public SignalColumn(string name, SignalColumnType type = SignalColumnType.Filter)
         {
+            Name = Label = name;
             Type = type;
         }
 
-        public SignalColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter) : base(name, label, typeof(SignalDatum))
+        public SignalColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter)
         {
+            Name = name;
+            Label = label;
             Type = type;
         }
 

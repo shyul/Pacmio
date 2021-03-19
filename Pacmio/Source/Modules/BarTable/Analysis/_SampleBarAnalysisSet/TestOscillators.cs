@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public static class TestIndicators
+    public static class TestOscillators
     {
         public static BarAnalysisSet BarAnalysisSet
         {

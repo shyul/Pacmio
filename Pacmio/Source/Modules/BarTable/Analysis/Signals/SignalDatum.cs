@@ -9,7 +9,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SignalDatum : IDatum
+    public class SignalDatum
     {
         public void Set(double[] points, string description = "", SignalDatum sd_1 = null)
         {

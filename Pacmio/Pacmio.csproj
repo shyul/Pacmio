@@ -114,11 +114,11 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Native\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestIndicators.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestMovingAverageCross.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestOscillators.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestSignals.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\PivotAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MomentumIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\TwrcReversalndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestNative.cs" />
@@ -153,7 +153,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\VO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\ReversalIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\GetReversalIndexFromRangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\IPatternObject.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\PatternPoint.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />

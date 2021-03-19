@@ -21,9 +21,9 @@ namespace Pacmio.Analysis
     // 4. Adjacent Support, resistance to set stop and profit target.
 
 
-    public class ReversalIndicator : BarAnalysis, IChartSeries
+    public class GetReversalIndexFromRangeBoundAnalysis : BarAnalysis, IChartSeries
     {
-        public ReversalIndicator()
+        public GetReversalIndexFromRangeBoundAnalysis()
         {
             GroupName = Name = GetType().Name;
             Description = Name;
@@ -58,7 +58,7 @@ namespace Pacmio.Analysis
             CalculatePivotRange.AddChild(this);
         }
 
-        public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis(); // => BarTable.CalculatePivotRange;
+        public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis();
 
         public ISingleData SourceAnalysis { get; protected set; }
 

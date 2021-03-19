@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public static class TestMovingAverageCross
+    public static class TestSignals
     {
         public static BarAnalysisSet BarAnalysisSet
         {
@@ -24,13 +24,15 @@ namespace Pacmio.Analysis
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+                //SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                //SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                //var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+
+                var twrc = new TwrcReversalndicator();
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
-                    ma_cross,
+                    twrc,
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

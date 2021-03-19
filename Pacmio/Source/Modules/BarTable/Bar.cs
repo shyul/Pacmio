@@ -309,13 +309,7 @@ namespace Pacmio
         {
             get
             {
-                if (dc is SignalColumn sc && !DatumColumnsLUT.ContainsKey(sc))
-                {
-                    var sd = new SignalDatum();
-                    DatumColumnsLUT.Add(sc, sd);
-                    return sd;
-                }
-                else if (DatumColumnsLUT.ContainsKey(dc))
+                if (DatumColumnsLUT.ContainsKey(dc))
                 {
                     return DatumColumnsLUT[dc];
                 }
@@ -431,6 +425,33 @@ namespace Pacmio
         #endregion Range Bound
 
         #region Signal Information Tools
+
+        private Dictionary<SignalColumn, SignalDatum> SignalLUT { get; } = new Dictionary<SignalColumn, SignalDatum>();
+
+        public SignalDatum this[SignalColumn column]
+        {
+            get
+            {
+                if (!SignalLUT.ContainsKey(column))
+                    SignalLUT[column] = new SignalDatum();
+
+                return SignalLUT[column];
+            }
+        }
+
+        public void SetSignal(SignalColumn column, double[] score, string message) 
+        {
+            SignalDatum sd = this[column];
+            if (Index > 0)
+            {
+                SignalDatum sd_1 = Table[Index - 1][column];
+                sd.Set(score, message, sd_1);
+            }
+            else
+            {
+                sd.Set(score, message);
+            }
+        }
 
         public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {

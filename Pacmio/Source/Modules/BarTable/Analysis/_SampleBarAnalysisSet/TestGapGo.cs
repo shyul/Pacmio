@@ -101,7 +101,7 @@ namespace Pacmio.Analysis
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
                     new TrendAnalysis(260),
-                    new ReversalIndicator(),
+                    new GetReversalIndexFromRangeBoundAnalysis(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);
