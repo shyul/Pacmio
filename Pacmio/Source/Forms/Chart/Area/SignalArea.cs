@@ -25,7 +25,7 @@ namespace Pacmio
             UpperColor = Color.GreenYellow;
             LowerColor = Color.Pink;
             Reference = 0;
-            FixedTickStep_Right = 2;
+            //FixedTickStep_Right = 2;
 
             AddSeries(SignalSeries = new SignalSeries(chart));
         }
