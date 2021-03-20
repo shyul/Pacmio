@@ -239,7 +239,7 @@ namespace Pacmio.Analysis
 
         public bool ChartEnabled { get => Enabled && DotSeries.Enabled; set => DotSeries.Enabled = value; }
 
-        public int SeriesOrder { get => DotSeries.Order; set => DotSeries.Order = value; }
+        public int DrawOrder { get => DotSeries.Order; set => DotSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 

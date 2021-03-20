@@ -4,18 +4,12 @@
 /// 
 /// ***************************************************************************
 
-using System;
+using System.Drawing;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
-    public interface IPatternObject
+    public interface IChartOverlay : IChartAnalysis
     {
-        PatternAnalysis Source { get; }
-
-        double Weight { get; }
-
-        double Level { get; }
-
-        double Tolerance { get; }
+        void DrawOverlay(Graphics g, BarChart bc);
     }
 }

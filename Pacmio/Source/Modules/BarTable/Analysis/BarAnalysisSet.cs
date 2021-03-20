@@ -61,9 +61,6 @@ namespace Pacmio
             {
                 SetBarAnalysisParents(n);
                 m_List.CheckAdd(n);
-
-                if (n is NativePivotAnalysis np) NativePivotAnalysis = np;
-
                 SetBarAnalysisChildren(n);
             });
 
@@ -96,15 +93,13 @@ namespace Pacmio
             });
         }
 
-        public NativePivotAnalysis NativePivotAnalysis { get; private set; } = null;
+        public IEnumerable<IChartBackground> ChartBackgrounds => m_List.SelectType<IChartBackground, BarAnalysis>(); //m_List.Where(n => n is IChartBackground).Select(n => n as IChartBackground);
 
-        /// <summary>
-        /// List all BarAnalysis which also present as ChartSeries
-        /// </summary>
-        //public IEnumerable<IChartSeries> ChartSeries => m_List.Where(n => n is IChartSeries ics).Select(n => n as IChartSeries).OrderBy(n => n.SeriesOrder);
-        public IEnumerable<IChartSeries> ChartSeries => m_List.GetBySubType<IChartSeries, BarAnalysis>().OrderBy(n => n.SeriesOrder);
+        public IEnumerable<IChartSeries> ChartSeries => m_List.SelectType<IChartSeries, BarAnalysis>().OrderBy(n => n.DrawOrder);
 
-        public IEnumerable<ITagAnalysis> TagSeries => m_List.GetBySubType<ITagAnalysis, BarAnalysis>();
+        public IEnumerable<IChartOverlay> ChartOverlays => m_List.SelectType<IChartOverlay, BarAnalysis>(); //m_List.Where(n => n is IChartOverlay).Select(n => n as IChartOverlay);
+
+        public IEnumerable<ITagAnalysis> TagSeries => m_List.SelectType<ITagAnalysis, BarAnalysis>();
 
         /// <summary>
         /// List all indicator types, and aggreagte all signal columns here...

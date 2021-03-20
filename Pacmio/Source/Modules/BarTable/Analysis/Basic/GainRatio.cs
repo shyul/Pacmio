@@ -105,7 +105,7 @@ namespace Pacmio.Analysis
             set => ColumnSeries.Enabled = value;
         }
 
-        public int SeriesOrder
+        public int DrawOrder
         {
             get => ColumnSeries.Order;
             set => ColumnSeries.Order = value;

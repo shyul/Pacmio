@@ -160,7 +160,7 @@ namespace Pacmio.Analysis
 
         public virtual bool ChartEnabled { get => Enabled && CloudSeries.Enabled; set => CloudSeries.Enabled = value; }
 
-        public int SeriesOrder { get => CloudSeries.Order; set => CloudSeries.Order = value; }
+        public int DrawOrder { get => CloudSeries.Order; set => CloudSeries.Order = value; }
 
         public virtual bool HasXAxisBar { get; set; } = false;
 

@@ -180,7 +180,7 @@ namespace Pacmio.Analysis
 
         public bool ChartEnabled { get => Enabled && EMA_TCI.ChartEnabled; set => EMA_TCI.ChartEnabled = ColumnSeries.Enabled = DotSeries.Enabled = value; }
 
-        public int SeriesOrder { get => EMA_TCI.LineSeries.Order; set => EMA_TCI.LineSeries.Order = value; }
+        public int DrawOrder { get => EMA_TCI.LineSeries.Order; set => EMA_TCI.LineSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 

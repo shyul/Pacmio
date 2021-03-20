@@ -111,7 +111,7 @@ namespace Pacmio.Analysis
 
         public bool ChartEnabled { get => Enabled && BandSeries.Enabled; set => BandSeries.Enabled = value; }
 
-        public int SeriesOrder { get => BandSeries.Order; set => BandSeries.Order = value; }
+        public int DrawOrder { get => BandSeries.Order; set => BandSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 

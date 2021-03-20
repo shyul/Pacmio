@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class TrendAnalysis : PatternAnalysis, IChartOverlay
+    public class TrendAnalysis : PatternAnalysis, IChartBackground
     {
         public TrendAnalysis(int test_interval)
         {
@@ -81,13 +81,9 @@ namespace Pacmio.Analysis
                         var pt1 = all_points[j];
                         var pt1_strength = pt1.Value.Strength;
 
-                        //double p1 = Math.Abs(pt1.Value.Prominece);
-                        //double t1 = Math.Abs(pt1.Value.TrendStrength);
-
                         if (pt1_strength > 8 && pd.LevelRange.Contains(pt1.Value.Level))
                         {
                             // consider the distant to date as a factor for fading
-                            //double w = 2 * ((p1 * p1) + t1);
                             HorizontalLine level = new(this, pt1.Value, tolerance)
                             {
                                 Weight = pt1_strength * 2
@@ -99,15 +95,11 @@ namespace Pacmio.Analysis
                         {
                             var pt2 = all_points[k];
                             var pt2_strength = pt2.Value.Strength;
-                            //double p2 = Math.Abs(pt2.Value.Prominece);
-                            //double t2 = Math.Abs(pt2.Value.TrendStrength);
-
                             TrendLine line = new(this, pt1.Value, pt2.Value, i + 1, tolerance);
 
                             if (pd.LevelRange.Contains(line.Level))
                             {
                                 // consider the distant to date as a factor for fading
-                                //line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
                                 line.Weight = 1 * line.DeltaX * (pt1_strength + pt2_strength);
                                 pd.Add(line);
                             }
@@ -123,10 +115,6 @@ namespace Pacmio.Analysis
         #endregion Calculation
 
         #region Chart Graphics
-
-        public bool ChartEnabled { get; set; } = true;
-
-        public string AreaName { get; }
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
@@ -187,21 +175,6 @@ namespace Pacmio.Analysis
                         }
                     }
                 }
-            }
-            g.SmoothingMode = SmoothingMode.Default;
-            g.ResetClip();
-        }
-
-        public void DrawOverlay(Graphics g, BarChart bc)
-        {
-            if (ChartEnabled && AreaName is string areaName && bc[areaName] is Area a && bc.LastBar is Bar b && b[Column_Result] is PatternDatum pd)
-            {
-                g.SetClip(a.Bounds);
-                g.SmoothingMode = SmoothingMode.HighQuality;
-
-
-
-
             }
             g.SmoothingMode = SmoothingMode.Default;
             g.ResetClip();

@@ -8,16 +8,12 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public interface IChartOverlay
+    public interface IChartAnalysis
     {
-        string Name { get; }
-
         string AreaName { get; }
 
         bool ChartEnabled { get; set; }
 
-        void DrawOverlay(Graphics g, BarChart bc);
-
-        void DrawBackground(Graphics g, BarChart bc);
+        int DrawOrder { get; set; }
     }
 }

@@ -79,7 +79,7 @@ namespace Pacmio
         public SignalArea SignalArea { get; }
         public PositionArea PositionArea { get; }
 
-        public override void RemoveDataSource() 
+        public override void RemoveDataSource()
         {
             lock (GraphicsLockObject)
             {
@@ -110,20 +110,7 @@ namespace Pacmio
             List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
-        /*
-        public Strategy Strategy
-        {
-            get => m_Strategy;
 
-            private set
-            {
-                m_Strategy = value;
-                BarAnalysisSet = m_Strategy is Strategy s && m_BarTable is BarTable bt ? s.BarDecision[bt.BarFreq, bt.Type] : null;
-            }
-        }
-
-        private Strategy m_Strategy = null;
-        */
         public BarAnalysisSet BarAnalysisSet
         {
             get => m_BarAnalysisSet;
@@ -196,10 +183,7 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-        public IEnumerable<IChartOverlay> ChartPatterns
-            => BarAnalysisSet
-            .Where(n => n is IChartOverlay)
-            .Select(n => (IChartOverlay)n);
+
 
         public override string this[int i]
         {
@@ -524,7 +508,7 @@ namespace Pacmio
                                 g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
                                     Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
-                                foreach (var ic in ChartPatterns)
+                                foreach (var ic in BarAnalysisSet.ChartBackgrounds)
                                 {
                                     ic.DrawBackground(g, this);
                                 }
@@ -553,7 +537,7 @@ namespace Pacmio
                                     }
                                 }
 
-                                foreach (var ic in ChartPatterns)
+                                foreach (var ic in BarAnalysisSet.ChartOverlays)
                                 {
                                     ic.DrawOverlay(g, this);
                                 }

@@ -90,10 +90,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
-    <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\IChartBackground.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\ITagAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Relative.cs" />
@@ -208,19 +209,19 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\DualColumn\DualColumnAnalysis.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\TIProData\Signal\IAlert.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickType.cs" />
-    <Compile Include="Source\Forms\Chart\Area\BarChartArea.cs" />
-    <Compile Include="Source\Forms\Chart\Area\BarChartOscillatorArea.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\IBarChartArea.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\IChartSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartOscillatorArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IBarChartArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IOscillator.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\IChartOverlay.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\_Types\MovingAverageType.cs" />
-    <Compile Include="Source\Forms\Chart\Area\PositionArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
-    <Compile Include="Source\Forms\Chart\Series\PositionSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Series\PositionSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Position\BarPositionData.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
@@ -228,8 +229,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\VWAP.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysis.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFile.cs" />
-    <Compile Include="Source\Forms\Chart\Area\SignalArea.cs" />
-    <Compile Include="Source\Forms\Chart\Series\SignalSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Area\SignalArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Series\SignalSeries.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Forex.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Future.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Index.cs" />
@@ -263,7 +264,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\ATR.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\TSI.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\WMA.cs" />
-    <Compile Include="Source\Forms\Chart\Area\MainBarChartArea.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\Area\MainBarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Bar.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\WaveTrend.cs" />
     <Compile Include="Source\Modules\Contract\Exchange\ExchangeInfo.cs" />
@@ -356,7 +357,7 @@
     </Compile>
     <Compile Include="Source\Modules\BarTable\BarTable.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\SMA.cs" />
-    <Compile Include="Source\Forms\Chart\BarChart.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\BarChart.cs" />
     <Compile Include="Source\Root.cs" />
     <Compile Include="Source\Modules\Contract\ContractManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,14 +8,8 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public interface IChartBackground
+    public interface IChartBackground : IChartAnalysis
     {
-        string Name { get; }
-
-        string AreaName { get; }
-
-        bool ChartEnabled { get; set; }
-
         void DrawBackground(Graphics g, BarChart bc);
     }
 }

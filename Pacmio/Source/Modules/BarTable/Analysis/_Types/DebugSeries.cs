@@ -20,7 +20,7 @@ namespace Pacmio.Analysis
             set => MainSeries.Enabled = value;
         }
 
-        public int SeriesOrder
+        public int DrawOrder
         {
             get => MainSeries.Order;
             set => MainSeries.Order = value;

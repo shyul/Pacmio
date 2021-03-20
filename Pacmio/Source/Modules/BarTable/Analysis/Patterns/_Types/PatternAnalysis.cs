@@ -10,9 +10,9 @@ using System.Drawing;
 using System.Linq;
 using Xu;
 
-namespace Pacmio.Analysis 
+namespace Pacmio.Analysis
 {
-    public abstract class PatternAnalysis : BarAnalysis, IChartOverlay
+    public abstract class PatternAnalysis : BarAnalysis
     {
         public virtual PatternColumn Column_Result { get; protected set; }
 
@@ -20,16 +20,8 @@ namespace Pacmio.Analysis
 
         public string AreaName { get; set; } = "None";
 
-        public bool ChartEnabled { get; set; }
+        public bool ChartEnabled { get; set; } = true;
 
-        public void DrawBackground(Graphics g, BarChart bc)
-        {
-
-        }
-
-        public void DrawOverlay(Graphics g, BarChart bc)
-        {
-
-        }
+        public int DrawOrder { get; set; } = 0;
     }
 }

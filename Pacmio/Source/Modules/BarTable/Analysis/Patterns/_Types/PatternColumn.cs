@@ -11,11 +11,11 @@ using System.Text;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class PatternColumn : DatumColumn //, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
-        public PatternColumn(IChartOverlay source, int maximumTrailingIndex = int.MaxValue)
+        public PatternColumn(PatternAnalysis source, int maximumTrailingIndex = int.MaxValue)
             : base(source.Name, typeof(PatternDatum))
         {
             Source = source;
@@ -23,7 +23,7 @@ namespace Pacmio
             MaximumTrailingIndex = maximumTrailingIndex;
         }
 
-        public IChartOverlay Source { get; }
+        public PatternAnalysis Source { get; }
 
         public string AreaName => Source.AreaName;
 

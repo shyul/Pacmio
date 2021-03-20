@@ -12,7 +12,7 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class RangeBound
     {
@@ -50,7 +50,7 @@ namespace Pacmio
             }
         }
 
-        public Dictionary<IChartOverlay, double> WeightList { get; } = new();
+        public Dictionary<PatternAnalysis, double> WeightList { get; } = new();
 
         public Range<double> Box { get; } = new(double.MaxValue, double.MinValue);
 

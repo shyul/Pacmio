@@ -9,21 +9,15 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface IChartSeries
+    public interface IChartSeries : IChartAnalysis
     {
         /*
-        bool ChartEnabled { get; set; }
-
         bool HasXAxisBar { get; set; }
-
-        string AreaName { get; }
 
         float AreaRatio { get; set; }
         */
 
         Color Color { get; }
-
-        int SeriesOrder { get; set; }
 
         Series MainSeries { get; }
 

@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Linq;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -55,8 +56,6 @@ namespace Pacmio
 
                 int full_width = x2 - x1;
 
-                // Console.WriteLine("full_width = " + full_width);
-                //Console.WriteLine("IBarChartArea a = " + a.Name);
                 if (a.BarChart.LastBar_1 is Bar b && b[a] is RangeBoundDatum prd)
                 {
                     var rangeList = prd.BoxList.OrderByDescending(n => n.Weight);

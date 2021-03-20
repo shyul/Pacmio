@@ -164,7 +164,7 @@ namespace Pacmio.Analysis
             set => ColumnSeries_Weight.Enabled = ColumnSeries_TotalWeight.Enabled = value;
         }
 
-        public int SeriesOrder
+        public int DrawOrder
         {
             get => ColumnSeries_Weight.Order;
 
