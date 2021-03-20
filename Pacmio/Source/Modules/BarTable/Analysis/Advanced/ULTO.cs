@@ -78,12 +78,13 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b)
-                {
-                    (double high, double low) = bt[i - 1] is Bar b_1 ? (Math.Max(b_1.Close, b.High), Math.Min(b_1.Close, b.Low)) : (b.High, b.Low);
-                    b[Column_BP] = b.Close - low;
-                    b[Column_TR] = high - low;
-                }
+                Bar b = bt[i];
+                Bar b_1 = i > 0 ? bt[i - 1] : b;
+
+                (double high, double low) = (Math.Max(b_1.Close, b.High), Math.Min(b_1.Close, b.Low));
+
+                b[Column_BP] = b.Close - low;
+                b[Column_TR] = high - low;
             }
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
@@ -97,24 +98,23 @@ namespace Pacmio.Analysis
                     {
                         int k = i - j;
                         if (k < 0) k = 0;
-                        if (bt[k] is Bar b_sum)
+                        Bar b_sum = bt[k];
+
+                        double bp = b_sum[Column_BP];
+                        double tr = b_sum[Column_TR];
+                        bp_sum_slow += bp;
+                        tr_sum_slow += tr;
+
+                        if (j < Interval_Middle)
                         {
-                            double bp = b_sum[Column_BP];
-                            double tr = b_sum[Column_TR];
-                            bp_sum_slow += bp;
-                            tr_sum_slow += tr;
+                            bp_sum_middle += bp;
+                            tr_sum_middle += tr;
+                        }
 
-                            if (j < Interval_Middle)
-                            {
-                                bp_sum_middle += bp;
-                                tr_sum_middle += tr;
-                            }
-
-                            if (j < Interval_Fast)
-                            {
-                                bp_sum_fast += bp;
-                                tr_sum_fast += tr;
-                            }
+                        if (j < Interval_Fast)
+                        {
+                            bp_sum_fast += bp;
+                            tr_sum_fast += tr;
                         }
                     }
 

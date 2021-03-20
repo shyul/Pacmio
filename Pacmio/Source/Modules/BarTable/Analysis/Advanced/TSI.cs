@@ -98,7 +98,7 @@ namespace Pacmio.Analysis
             MA_SL.LineSeries.IsAntialiasing = true;
             MA_SL.LineSeries.Order = 100;
 
-            ColumnSeries = new ColumnSeries(HIST_Column, Color.FromArgb(88, 168, 208), Color.FromArgb(32, 104, 136), 50)
+            ColumnSeries = new ColumnSeries(HIST_Column, Color.SlateGray, Color.DarkSlateBlue, 50)
             {
                 Name = Name + "_HIST",
                 LegendName = GroupName,
