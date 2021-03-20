@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     /// <summary>
     /// Weight:

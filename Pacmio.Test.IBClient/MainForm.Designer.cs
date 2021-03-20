@@ -196,6 +196,8 @@ namespace TestClient
             this.BtnMasterCancel = new System.Windows.Forms.Button();
             this.TextBoxIPAddress = new System.Windows.Forms.TextBox();
             this.GroupBoxSingleContract = new System.Windows.Forms.GroupBox();
+            this.BtnHistoricalDataContractSet10 = new System.Windows.Forms.Button();
+            this.BtnHistoricalDataContractSet9 = new System.Windows.Forms.Button();
             this.BtnUpdateContract = new System.Windows.Forms.Button();
             this.TextBoxValidCountryCode = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -843,7 +845,7 @@ namespace TestClient
             this.LabelGenericTickList.AutoSize = true;
             this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
             this.LabelGenericTickList.Name = "LabelGenericTickList";
-            this.LabelGenericTickList.Size = new System.Drawing.Size(91, 13);
+            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
             this.LabelGenericTickList.TabIndex = 47;
             this.LabelGenericTickList.Text = "Generic Tick List:";
             // 
@@ -1042,7 +1044,7 @@ namespace TestClient
             this.LabelOrderSettingType.AutoSize = true;
             this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
             this.LabelOrderSettingType.Name = "LabelOrderSettingType";
-            this.LabelOrderSettingType.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
             this.LabelOrderSettingType.TabIndex = 70;
             this.LabelOrderSettingType.Text = "Type:";
             // 
@@ -1060,7 +1062,7 @@ namespace TestClient
             this.LabelOrderSettingTIF.AutoSize = true;
             this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
             this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
-            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(24, 13);
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
             this.LabelOrderSettingTIF.TabIndex = 71;
             this.LabelOrderSettingTIF.Text = "TIF:";
             // 
@@ -1097,7 +1099,7 @@ namespace TestClient
             this.LabelOrderSettingGTD.AutoSize = true;
             this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
             this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
-            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(31, 13);
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
             this.LabelOrderSettingGTD.TabIndex = 78;
             this.LabelOrderSettingGTD.Text = "GTD:";
             // 
@@ -1589,7 +1591,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
             this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet8.TabIndex = 56;
-            this.BtnHistoricalDataContractSet8.Text = "FB";
+            this.BtnHistoricalDataContractSet8.Text = "VUZI";
             this.BtnHistoricalDataContractSet8.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet8.Click += new System.EventHandler(this.BtnHistoricalDataContractSet8_Click);
             // 
@@ -1599,7 +1601,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
             this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet7.TabIndex = 55;
-            this.BtnHistoricalDataContractSet7.Text = "AAPL";
+            this.BtnHistoricalDataContractSet7.Text = "SLGG";
             this.BtnHistoricalDataContractSet7.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet7.Click += new System.EventHandler(this.BtnHistoricalDataContractSet7_Click);
             // 
@@ -1619,7 +1621,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
             this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet5.TabIndex = 53;
-            this.BtnHistoricalDataContractSet5.Text = "GLD";
+            this.BtnHistoricalDataContractSet5.Text = "PLUG";
             this.BtnHistoricalDataContractSet5.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet5.Click += new System.EventHandler(this.BtnHistoricalDataContractSet5_Click);
             // 
@@ -1629,7 +1631,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
             this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet4.TabIndex = 51;
-            this.BtnHistoricalDataContractSet4.Text = "IWM";
+            this.BtnHistoricalDataContractSet4.Text = "CPNG";
             this.BtnHistoricalDataContractSet4.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet4.Click += new System.EventHandler(this.BtnHistoricalDataContractSet4_Click);
             // 
@@ -1639,7 +1641,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
             this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet3.TabIndex = 50;
-            this.BtnHistoricalDataContractSet3.Text = "VXX";
+            this.BtnHistoricalDataContractSet3.Text = "LAZR";
             this.BtnHistoricalDataContractSet3.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet3.Click += new System.EventHandler(this.BtnHistoricalDataContractSet3_Click);
             // 
@@ -1649,17 +1651,18 @@ namespace TestClient
             this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
             this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet2.TabIndex = 49;
-            this.BtnHistoricalDataContractSet2.Text = "SPY";
+            this.BtnHistoricalDataContractSet2.Text = "RIOT";
             this.BtnHistoricalDataContractSet2.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet2.Click += new System.EventHandler(this.BtnHistoricalDataContractSet2_Click);
             // 
             // BtnHistoricalDataContractSet1
             // 
+            this.BtnHistoricalDataContractSet1.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(16, 176);
             this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
             this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet1.TabIndex = 48;
-            this.BtnHistoricalDataContractSet1.Text = "QQQ";
+            this.BtnHistoricalDataContractSet1.Text = "MARA";
             this.BtnHistoricalDataContractSet1.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet1.Click += new System.EventHandler(this.BtnHistoricalDataContractSet1_Click);
             // 
@@ -1765,7 +1768,7 @@ namespace TestClient
             this.LabelBarFreq.AutoSize = true;
             this.LabelBarFreq.Location = new System.Drawing.Point(7, 117);
             this.LabelBarFreq.Name = "LabelBarFreq";
-            this.LabelBarFreq.Size = new System.Drawing.Size(53, 13);
+            this.LabelBarFreq.Size = new System.Drawing.Size(52, 13);
             this.LabelBarFreq.TabIndex = 27;
             this.LabelBarFreq.Text = "Bar Freq:";
             // 
@@ -1887,7 +1890,7 @@ namespace TestClient
             this.LabelSingleContractType.AutoSize = true;
             this.LabelSingleContractType.Location = new System.Drawing.Point(33, 80);
             this.LabelSingleContractType.Name = "LabelSingleContractType";
-            this.LabelSingleContractType.Size = new System.Drawing.Size(32, 13);
+            this.LabelSingleContractType.Size = new System.Drawing.Size(33, 13);
             this.LabelSingleContractType.TabIndex = 20;
             this.LabelSingleContractType.Text = "Type:";
             // 
@@ -1951,6 +1954,8 @@ namespace TestClient
             // 
             // GroupBoxSingleContract
             // 
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet10);
+            this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet9);
             this.GroupBoxSingleContract.Controls.Add(this.BtnUpdateContract);
             this.GroupBoxSingleContract.Controls.Add(this.BtnHistoricalDataContractSet8);
             this.GroupBoxSingleContract.Controls.Add(this.TextBoxValidCountryCode);
@@ -1983,6 +1988,26 @@ namespace TestClient
             this.GroupBoxSingleContract.TabIndex = 66;
             this.GroupBoxSingleContract.TabStop = false;
             this.GroupBoxSingleContract.Text = "Single Contract";
+            // 
+            // BtnHistoricalDataContractSet10
+            // 
+            this.BtnHistoricalDataContractSet10.Location = new System.Drawing.Point(220, 205);
+            this.BtnHistoricalDataContractSet10.Name = "BtnHistoricalDataContractSet10";
+            this.BtnHistoricalDataContractSet10.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet10.TabIndex = 67;
+            this.BtnHistoricalDataContractSet10.Text = "YVR";
+            this.BtnHistoricalDataContractSet10.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet10.Click += new System.EventHandler(this.BtnHistoricalDataContractSet10_Click);
+            // 
+            // BtnHistoricalDataContractSet9
+            // 
+            this.BtnHistoricalDataContractSet9.Location = new System.Drawing.Point(169, 205);
+            this.BtnHistoricalDataContractSet9.Name = "BtnHistoricalDataContractSet9";
+            this.BtnHistoricalDataContractSet9.Size = new System.Drawing.Size(45, 23);
+            this.BtnHistoricalDataContractSet9.TabIndex = 66;
+            this.BtnHistoricalDataContractSet9.Text = "TKAT";
+            this.BtnHistoricalDataContractSet9.UseVisualStyleBackColor = true;
+            this.BtnHistoricalDataContractSet9.Click += new System.EventHandler(this.BtnHistoricalDataContractSet9_Click);
             // 
             // BtnUpdateContract
             // 
@@ -2348,5 +2373,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnTestOscillators;
         private System.Windows.Forms.Button BtnTestPatternAnalysis;
         private System.Windows.Forms.Button BtnTestSignal;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet10;
+        private System.Windows.Forms.Button BtnHistoricalDataContractSet9;
     }
 }

@@ -203,6 +203,18 @@ namespace TestClient
             ValidateSymbol();
         }
 
+        private void BtnHistoricalDataContractSet9_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet9.Text;
+            ValidateSymbol();
+        }
+
+        private void BtnHistoricalDataContractSet10_Click(object sender, EventArgs e)
+        {
+            TextBoxSingleContractName.Text = BtnHistoricalDataContractSet10.Text;
+            ValidateSymbol();
+        }
+
         private void BtnMasterCancel_Click(object sender, EventArgs e)
         {
             if (!(Cts is null))

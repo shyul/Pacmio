@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio.Analysis
@@ -55,6 +54,8 @@ namespace Pacmio.Analysis
                 BullishColor = Color.BlueViolet,
                 BearishColor = Color.DarkOrange
             };
+
+            SignalColumns = new SignalColumn[] { RSISignalColumn, BollingerBandSignalColumn, CandleStickSignalColumn };
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
@@ -87,7 +88,7 @@ namespace Pacmio.Analysis
 
         public SignalColumn CandleStickSignalColumn { get; protected set; }
 
-        public override IEnumerable<SignalColumn> SignalColumns => new SignalColumn[] { RSISignalColumn, BollingerBandSignalColumn, CandleStickSignalColumn };
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

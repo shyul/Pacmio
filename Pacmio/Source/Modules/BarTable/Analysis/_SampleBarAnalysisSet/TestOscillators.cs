@@ -49,14 +49,14 @@ namespace Pacmio.Analysis
                     //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },
                     
                     new ADX(14),
-                    //new CCI(20, 0.015),
-                    //new CHOP(),
-                    //new MFI(14),
-                    //rsi, //new RSI(14),
-                    //new TSI(25,13,7),
-                    //new VWAP(BarFreq.Annually) { Color = Color.Plum, LineWidth = 2  },
-                    //new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
-                    //volumeEma,
+                    new CCI(20, 0.015),
+                    new CHOP(),
+                    new MFI(14),
+                    rsi, //new RSI(14),
+                    new TSI(25,13,7),
+                    new VWAP(BarFreq.Annually) { Color = Color.Plum, LineWidth = 2  },
+                    new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
+                    volumeEma,
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

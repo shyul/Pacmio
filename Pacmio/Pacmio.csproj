@@ -110,6 +110,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\PositionOfTimeframe.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Flag\FlagType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\TwrcGapGo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\Native\NativeGainAnalysis.cs" />
@@ -156,16 +157,16 @@
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\PivotLevel\PivotLevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\GetReversalIndexFromRangeBoundAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\IPatternObject.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\IPatternObject.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrailingPivot\PivotPt.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\HorizontalLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_PatternObject\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrailingPivot\TrailingPivotPtAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternObject\TrendLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_PatternObject\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
