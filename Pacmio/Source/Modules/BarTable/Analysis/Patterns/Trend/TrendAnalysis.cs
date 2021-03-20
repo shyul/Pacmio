@@ -16,21 +16,6 @@ namespace Pacmio.Analysis
 {
     public class TrendAnalysis : BarAnalysis, IChartPattern
     {
-        /*
-        public TrendAnalysis(BarAnalysis ba, int test_interval = 250, int maximumPeakProminence = 100, int minimumPeakProminence = 5)
-        {
-            string label = "(" + ba.Name + "," + test_interval + "," + maximumPeakProminence + "," + minimumPeakProminence + ")";
-            Name = GetType().Name + label;
-
-            TrailingPivotPointAnalysis = new TrailingPivotPointsAnalysis(ba, test_interval, maximumPeakProminence, minimumPeakProminence);
-            TrailingPivotPointAnalysis.AddChild(this);
-
-            Column_Result = new PatternColumn(this, test_interval);
-            AreaName = (ba is IChartSeries ics) ? ics.AreaName : null;
-
-            this.AddChild(RangeBoundAnalysis);
-        }*/
-
         public TrendAnalysis(int test_interval)
         {
             string label = "(" + test_interval + ")";
@@ -39,7 +24,7 @@ namespace Pacmio.Analysis
             ATR = new ATR(14) { ChartEnabled = false };
             ATR.AddChild(this);
 
-            TrailingPivotPointAnalysis = new TrailingPivotAnalysis(test_interval);
+            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(test_interval);
             TrailingPivotPointAnalysis.AddChild(this);
 
             Column_Result = new PatternColumn(this, test_interval);
@@ -54,7 +39,7 @@ namespace Pacmio.Analysis
 
         public RangeBoundAnalysis RangeBoundAnalysis { get; } = new(); // => BarTable.CalculatePivotRange;
 
-        public TrailingPivotAnalysis TrailingPivotPointAnalysis { get; }
+        public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
 
         public PatternColumn Column_Result { get; }
 
@@ -79,31 +64,31 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null)// && b[TrailingPivotPointAnalysis.Result_Column] is TrailingPivotPointsDatum gpd)
+                if (bt[i] is Bar b && b[Column_Result] is null)
                 {
-                    double range_delta = (b.PatternPointsRange.Max - b.PatternPointsRange.Min) / 2;
-                    //double tolerance = range_delta / 25;
-
+                    double range_delta = (b.PivotRange.Max - b.PivotRange.Min) / 2;
                     double tolerance = b[ATR.Column_Result] / 4;
                     double center = b.Close;
 
                     PatternDatum pd = new PatternDatum(center - range_delta, center + range_delta);
 
-                    var all_points = b.PatternPoints;
+                    var all_points = b.PivotPts;
 
                     for (int j = 0; j < all_points.Length; j++)
                     {
                         var pt1 = all_points[j];
-                        double p1 = Math.Abs(pt1.Value.Prominece);
-                        double t1 = Math.Abs(pt1.Value.TrendStrength);
+                        var pt1_strength = pt1.Value.Strength;
 
-                        if (pt1.Value.Prominece > 8 && pd.LevelRange.Contains(pt1.Value.Level))
+                        //double p1 = Math.Abs(pt1.Value.Prominece);
+                        //double t1 = Math.Abs(pt1.Value.TrendStrength);
+
+                        if (pt1_strength > 8 && pd.LevelRange.Contains(pt1.Value.Level))
                         {
                             // consider the distant to date as a factor for fading
-                            double w = 2 * ((p1 * p1) + t1);
+                            //double w = 2 * ((p1 * p1) + t1);
                             HorizontalLine level = new(this, pt1.Value, tolerance)
                             {
-                                Weight = w
+                                Weight = pt1_strength * 2
                             };
                             pd.Add(level);
                         }
@@ -111,15 +96,17 @@ namespace Pacmio.Analysis
                         for (int k = j + 1; k < all_points.Length; k++)
                         {
                             var pt2 = all_points[k];
-                            double p2 = Math.Abs(pt2.Value.Prominece);
-                            double t2 = Math.Abs(pt2.Value.TrendStrength);
+                            var pt2_strength = pt2.Value.Strength;
+                            //double p2 = Math.Abs(pt2.Value.Prominece);
+                            //double t2 = Math.Abs(pt2.Value.TrendStrength);
 
                             TrendLine line = new(this, pt1.Value, pt2.Value, i + 1, tolerance);
 
                             if (pd.LevelRange.Contains(line.Level))
                             {
                                 // consider the distant to date as a factor for fading
-                                line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
+                                //line.Weight = 1 * line.DeltaX * (p1 + p2 + t1 + t2);
+                                line.Weight = 1 * line.DeltaX * (pt1_strength + pt2_strength);
                                 pd.Add(line);
                             }
                         }

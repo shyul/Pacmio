@@ -13,7 +13,7 @@ namespace Pacmio.Analysis
 {
     public class FlagDatum //: PatternDatum
     {
-        public FlagDatum(FlagType type) 
+        public FlagDatum(FlagType type)
         {
             Type = type;
         }
@@ -24,10 +24,19 @@ namespace Pacmio.Analysis
 
         public Range<double> PullBackRange { get; set; }
 
-        public Range<double> TotalRange { get; set; }
-
         public double PullBackRatio { get; set; }
 
         public double BreakOutLevel { get; set; }
+
+
+
+
+
+        public Range<double> TotalRange { get; set; }
+
+        public List<IPatternObject> PatternObjects { get; } = new();
+
+        //public Dictionary<double, double> KeyLevels { get; } = new();
+        public List<TrendLine> TrendLines { get; } = new();
     }
 }

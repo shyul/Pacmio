@@ -197,11 +197,11 @@ namespace Pacmio
 
         #endregion Smaller Bars
 
-        #region Intrinsic Indicators
+        public List<CandleStickType> CandleStickList { get; } = new();
+
+        #region Intrinsic Indicators | NativeGainAnalysis
 
         public BarType BarType { get; set; } = BarType.None;
-
-        public List<CandleStickType> CandleStickList { get; } = new();
 
         public double Gain { get; set; } = 0;
 
@@ -221,8 +221,6 @@ namespace Pacmio
 
         public int TrendStrength { get; set; } = 0;
 
-        public int Pivot { get; set; }
-
         public static NumericColumn Column_Gain { get; } = new NumericColumn("GAIN", "GAIN");
         public static NumericColumn Column_GainPercent { get; } = new NumericColumn("GAINPERCENT", "G%");
         public static NumericColumn Column_Gap { get; } = new NumericColumn("GAP", "GAP");
@@ -232,9 +230,19 @@ namespace Pacmio
         public static NumericColumn Column_TrueRange { get; } = new NumericColumn("TRUERANGE", "TR");
         public static NumericColumn Column_NarrowRange { get; } = new NumericColumn("NARROWRANGE", "NR");
         public static NumericColumn Column_TrendStrength { get; } = new NumericColumn("TrendStrength", "TS");
-        public static NumericColumn Column_Pivot { get; } = new NumericColumn("PIVOT", "PVT");
 
-        #endregion Intrinsic Indicators
+        #endregion Intrinsic Indicators | NativeGainAnalysis
+
+        #region Intrinsic Indicators | NativePivotAnalysis
+
+        public int Pivot { get; set; }
+
+        public int PivotStrength { get; set; }
+
+        public static NumericColumn Column_Pivot { get; } = new NumericColumn("PIVOT", "PVT");
+        public static NumericColumn Column_PivotStrength { get; } = new NumericColumn("PivotStrength", "PVTS");
+
+        #endregion Intrinsic Indicators | NativePivotAnalysis
 
         #region Numeric Column
 
@@ -266,7 +274,9 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_TrueRange => TrueRange,
                     NumericColumn dc when dc == Column_NarrowRange => NarrowRange,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
+
                     NumericColumn dc when dc == Column_Pivot => Pivot,
+                    NumericColumn dc when dc == Column_PivotStrength => PivotStrength,
 
                     NumericColumn ic when NumericColumnsLUT.ContainsKey(ic) => NumericColumnsLUT[ic],
 
@@ -296,7 +306,9 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
                         case NumericColumn dc when dc == Column_NarrowRange: NarrowRange = value.ToInt32(); break;
                         case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value.ToInt32(); break;
+
                         case NumericColumn dc when dc == Column_Pivot: Pivot = value.ToInt32(); break;
+                        case NumericColumn dc when dc == Column_PivotStrength: PivotStrength = value.ToInt32(); break;
 
                         default:
                             if (!NumericColumnsLUT.ContainsKey(column))
@@ -308,8 +320,6 @@ namespace Pacmio
             }
         }
 
-
-
         #endregion Numeric Column
 
         #region Datum Column
@@ -318,15 +328,7 @@ namespace Pacmio
 
         public IDatum this[DatumColumn dc]
         {
-            get
-            {
-                if (DatumColumnsLUT.ContainsKey(dc))
-                {
-                    return DatumColumnsLUT[dc];
-                }
-
-                return null;
-            }
+            get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] : null;
 
             set
             {
@@ -347,35 +349,35 @@ namespace Pacmio
 
         #endregion Datum Column
 
-        #region Trailing Pattern Point
+        #region Trailing PivotPt
 
-        public void ResetPatternPointList()
+        public void ResetPivotPtList()
         {
-            PatternPointsRange.Reset(double.MaxValue, double.MinValue);
-            PositivePatternPointList.Clear();
-            NegativePatternPointList.Clear();
+            PivotRange.Reset(double.MaxValue, double.MinValue);
+            PositivePivotPtList.Clear();
+            NegativePivotPtList.Clear();
         }
 
-        public object PatternPointLockObject = new object();
+        public object PivotPtLockObject { get; } = new object();
 
-        public Range<double> PatternPointsRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> PivotRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
 
-        public Dictionary<int, PatternPoint> PositivePatternPointList { get; } = new Dictionary<int, PatternPoint>();
+        public Dictionary<int, PivotPt> PositivePivotPtList { get; } = new Dictionary<int, PivotPt>();
 
-        public Dictionary<int, PatternPoint> NegativePatternPointList { get; } = new Dictionary<int, PatternPoint>();
+        public Dictionary<int, PivotPt> NegativePivotPtList { get; } = new Dictionary<int, PivotPt>();
 
-        public KeyValuePair<int, PatternPoint>[] PatternPoints
+        public KeyValuePair<int, PivotPt>[] PivotPts
         {
             get
             {
-                lock (PatternPointLockObject)
+                lock (PivotPtLockObject)
                 {
-                    return PositivePatternPointList.Concat(NegativePatternPointList).OrderBy(n => n.Key).ToArray();
+                    return PositivePivotPtList.Concat(NegativePivotPtList).OrderBy(n => n.Key).ToArray();
                 }
             }
         }
 
-        #endregion Trailing Pattern Point
+        #endregion Trailing PivotPt
 
         #region Pattern
 
@@ -517,8 +519,8 @@ namespace Pacmio
         {
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            PositivePatternPointList.Clear();
-            NegativePatternPointList.Clear();
+            PositivePivotPtList.Clear();
+            NegativePivotPtList.Clear();
             RangeBoundDatums.Clear();
             //PositionDatums.Clear();
         }

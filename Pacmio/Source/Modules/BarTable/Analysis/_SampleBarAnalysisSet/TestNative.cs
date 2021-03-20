@@ -23,22 +23,25 @@ namespace Pacmio.Analysis
                 DebugSeries csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
                 DebugSeries csd_typ = new DebugLineSeries(Bar.Column_Typical);
                 DebugSeries csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
+                DebugSeries csd_pivotstr = new DebugColumnSeriesOsc(Bar.Column_PivotStrength);
+
                 DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
                 PositionOfTimeframe potf = new PositionOfTimeframe(BarFreq.Annually);
-                DebugSeries csd_potf= new DebugLineSeries(potf);
+                DebugSeries csd_potf = new DebugLineSeries(potf);
 
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     new NativePivotAnalysis(),
                     //new CandleStickDojiMarubozuAnalysis(),
                     //new CandleStickShadowStarAnalysis(),
-                    csd_potf,
+                    //csd_potf,
                     //csd_range,
                     //csd_nr,
                     //csd_gp,
-                    csd_typ,
+                    //csd_typ,
                     csd_pivot,
+                    csd_pivotstr,
                     csd_trend,
                 };
 

@@ -29,7 +29,7 @@ namespace Pacmio.Analysis
             double close_1 = b.Close;
             int trend_1 = b.TrendStrength;
             double range_1 = b.Range;
-            int nr_1 = 0;
+            int nr = 0;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
@@ -70,14 +70,14 @@ namespace Pacmio.Analysis
 
                 if (range < range_1)
                 {
-                    nr_1++;
+                    nr++;
                 }
                 else if (range > range_1)
                 {
-                    nr_1 = 0;
+                    nr = 0;
                 }
 
-                b.NarrowRange = nr_1;
+                b.NarrowRange = nr;
 
                 double[] list = new double[] { range, Math.Abs(high - close_1), Math.Abs(low - close_1) };
                 b.TrueRange = list.Max();

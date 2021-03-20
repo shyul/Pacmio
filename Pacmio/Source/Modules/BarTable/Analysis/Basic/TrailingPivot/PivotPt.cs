@@ -5,18 +5,18 @@
 /// ***************************************************************************
 
 using System;
+using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class PatternPoint
+    public class PivotPt : IEquatable<PivotPt>
     {
-        public PatternPoint(int index, DateTime time, double level, double prominence, double trendStrength)
+        public PivotPt(int index, DateTime time, double level, double strength) // double prominence, double trendStrength)
         {
             Index = index;
             Time = time;
             Level = level;
-            Prominece = prominence;
-            TrendStrength = trendStrength;
+            Strength = strength;
         }
 
         // X
@@ -28,10 +28,10 @@ namespace Pacmio
         // Y
         public double Level { get; }
 
-        // Potency 1
-        public double Prominece { get; }
+        // Z
+        public double Strength { get; }
 
-        // Potency 2
-        public double TrendStrength { get; }
+
+        public bool Equals(PivotPt other) => Index == other.Index && Level == other.Level;
     }
 }

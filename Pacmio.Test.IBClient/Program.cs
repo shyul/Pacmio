@@ -24,6 +24,10 @@ namespace TestClient
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
 
+                    //List<int> source = new() { 1, 2, 3, 3 };
+                    //var result = source.GetPair();
+                    //Console.WriteLine(result.ToString(", "));
+
                     Root.Load();
                     Console.WriteLine("Quandl is connected? " + Quandl.Connected);
 
@@ -45,8 +49,6 @@ namespace TestClient
                 User32.PostMessage(HWND.BROADCAST, SHOW_PACMIO, IntPtr.Zero, IntPtr.Zero);
             }
         }
-
-
 
         internal static readonly string GUID = ((Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true))[0] as GuidAttribute).Value;
         internal static readonly Mutex InstanceMutex = new Mutex(true, GUID);

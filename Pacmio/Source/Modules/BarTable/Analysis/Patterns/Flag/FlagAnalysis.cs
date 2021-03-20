@@ -11,20 +11,6 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum FlagType
-    {
-        None = 0,
-        Bull = 1,
-        Bear = -1,
-    }
-
-    public abstract class PatternAnalysis : BarAnalysis
-    {
-        public virtual PatternColumn Column_Result { get; protected set; }
-
-        public virtual int MaximumInterval { get; }
-    }
-
     public class FlagAnalysis : PatternAnalysis
     {
         public int MinRunUpInterval { get; } = 3;

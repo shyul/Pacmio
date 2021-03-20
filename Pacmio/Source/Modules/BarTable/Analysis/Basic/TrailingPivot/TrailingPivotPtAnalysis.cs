@@ -11,25 +11,27 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotAnalysis : BarAnalysis
+    public class TrailingPivotPtAnalysis : BarAnalysis
     {
-        public TrailingPivotAnalysis(NativePivotAnalysis ans)
+        public TrailingPivotPtAnalysis(NativePivotAnalysis ans)
         {
+            NativePivotAnalysis = ans;
+
             TestLength = ans.MaximumPeakProminence;
-            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            NativePivotAnalysis = ans;
             NativePivotAnalysis.AddChild(this);
         }
 
-        public TrailingPivotAnalysis(int test_length = 250)
+        public TrailingPivotPtAnalysis(int test_length = 250)
         {
+            NativePivotAnalysis = new NativePivotAnalysis(test_length);
+
             TestLength = test_length;
-            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminenceForAnalysis + ")";
+            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            NativePivotAnalysis = new NativePivotAnalysis(test_length);
             NativePivotAnalysis.AddChild(this);
         }
 
@@ -41,7 +43,7 @@ namespace Pacmio.Analysis
 
         public virtual int TestLength { get; }
 
-        public virtual int MinimumPeakProminenceForAnalysis => 5;
+        public virtual int MinimumPeakProminence => NativePivotAnalysis.MinimumPeakProminence;
 
         #endregion Parameters
 
@@ -70,34 +72,35 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b0)
                 {
-                    lock (b0.PatternPointLockObject) 
+                    lock (b0.PivotPtLockObject)
                     {
-                        b0.ResetPatternPointList();
+                        b0.ResetPivotPtList();
 
-                        for (int j = MinimumPeakProminenceForAnalysis; j < TestLength; j++)
+                        for (int j = MinimumPeakProminence; j < TestLength; j++)
                         {
-                            int i_test = i - j;
-                            if (i_test < 0) break;
+                            int index = i - j;
+                            if (index < 0) break;
 
-                            if (bt[i_test] is Bar b)
+                            if (bt[index] is Bar b)
                             {
-                                double prominence = b.Pivot; //[PivotPointAnalysis.Column_Result];
-                                double trendStrength = b.TrendStrength;//[TrendStrengthAnalysis.Column_TrendStrength];
+                                double pivot = b.Pivot;
+                                //double trendStrength = b.TrendStrength;
 
-                                // For simulation accuracy, the prominence can't be greater than the back testing offset.
-                                if (prominence > j) prominence = j;
+                                double strength = pivot + (b.TrendStrength + b.PivotStrength) / 2;
 
-                                if (prominence > MinimumPeakProminenceForAnalysis)// || trendStrength > MinimumTrendStrength)
+                                if (pivot > j) pivot = j;
+
+                                if (pivot > MinimumPeakProminence)
                                 {
                                     double high = b.High;
-                                    b0.PositivePatternPointList[i_test] = new(i_test, b.Time, high, prominence, trendStrength);
-                                    b0.PatternPointsRange.Insert(high);
+                                    b0.PositivePivotPtList[index] = new(index, b.Time, high, strength); // pivot, trendStrength);
+                                    b0.PivotRange.Insert(high);
                                 }
-                                else if (prominence < -MinimumPeakProminenceForAnalysis)// || trendStrength < -MinimumTrendStrength)
+                                else if (pivot < -MinimumPeakProminence)
                                 {
                                     double low = b.Low;
-                                    b0.NegativePatternPointList[i_test] = new(i_test, b.Time, low, prominence, trendStrength);
-                                    b0.PatternPointsRange.Insert(low);
+                                    b0.NegativePivotPtList[index] = new(index, b.Time, low, strength); // , pivot, trendStrength);
+                                    b0.PivotRange.Insert(low);
                                 }
                             }
                         }
