@@ -41,7 +41,6 @@ namespace Pacmio.Analysis
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     //new NativePivotAnalysis(),
-
                     //csd_potf,
                     //csd_typ,
                     //csd_pivot,
@@ -49,6 +48,9 @@ namespace Pacmio.Analysis
 
                     new TrendAnalysis(260),
                     new GetReversalIndexFromRangeBoundAnalysis(),
+
+                    new FlagAnalysis(),
+                    new VolumeByPriceAnalysis(),
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(sample_list);

@@ -163,21 +163,20 @@ namespace Pacmio
         /// <param name="start">Start and included index</param>
         /// <param name="stop">End and not included index</param>
         /// <returns></returns>
-        public List<Bar> this[int start, int stop]
+        public List<Bar> this[int i, int count]
         {
             get
             {
-                lock (DataLockObject)
+                if (i >= Count)
+                    return new();
+                else
                 {
-                    if (stop > Count) stop = Count;
-                    int cnt = stop - start;
+                    i++;
+                    int skip = i - count;
+                    if (skip < 0) skip = 0;
+                    count = i - skip;
 
-                    if (cnt > 0)
-                    {
-                        return Rows.Skip(start).Take(cnt).OrderBy(n => n.Index).ToList();
-                    }
-                    return
-                        null;
+                    return Rows.Skip(skip).Take(count).ToList();
                 }
             }
         }

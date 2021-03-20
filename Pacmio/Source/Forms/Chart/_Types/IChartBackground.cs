@@ -8,17 +8,13 @@ using System.Drawing;
 
 namespace Pacmio
 {
-    public interface IChartPattern
+    public interface IChartBackground
     {
         string Name { get; }
-
-        //CalculatePivotRange CalculatePivotRange { get; }
 
         string AreaName { get; }
 
         bool ChartEnabled { get; set; }
-
-        void DrawOverlay(Graphics g, BarChart bc);
 
         void DrawBackground(Graphics g, BarChart bc);
     }

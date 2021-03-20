@@ -17,8 +17,8 @@ namespace Pacmio.Analysis
         {
             NativePivotAnalysis = ans;
 
-            TestLength = ans.MaximumPeakProminence;
-            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminence + ")";
+            MaximumInterval = ans.MaximumPeakProminence;
+            string label = "(" + Bar.Column_Close.Name + "," + MaximumInterval + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
             NativePivotAnalysis.AddChild(this);
@@ -28,8 +28,8 @@ namespace Pacmio.Analysis
         {
             NativePivotAnalysis = new NativePivotAnalysis(test_length);
 
-            TestLength = test_length;
-            string label = "(" + Bar.Column_Close.Name + "," + TestLength + "," + MinimumPeakProminence + ")";
+            MaximumInterval = test_length;
+            string label = "(" + Bar.Column_Close.Name + "," + MaximumInterval + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
             NativePivotAnalysis.AddChild(this);
@@ -41,7 +41,7 @@ namespace Pacmio.Analysis
 
         public NativePivotAnalysis NativePivotAnalysis { get; }
 
-        public virtual int TestLength { get; }
+        public virtual int MaximumInterval { get; }
 
         public virtual int MinimumPeakProminence => NativePivotAnalysis.MinimumPeakProminence;
 
@@ -76,7 +76,7 @@ namespace Pacmio.Analysis
                     {
                         b0.ResetPivotPtList();
 
-                        for (int j = MinimumPeakProminence; j < TestLength; j++)
+                        for (int j = MinimumPeakProminence; j < MaximumInterval; j++)
                         {
                             int index = i - j;
                             if (index < 0) break;

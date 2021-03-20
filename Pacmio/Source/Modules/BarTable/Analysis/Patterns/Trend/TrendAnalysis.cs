@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class TrendAnalysis : BarAnalysis, IChartPattern
+    public class TrendAnalysis : PatternAnalysis, IChartOverlay
     {
         public TrendAnalysis(int test_interval)
         {
@@ -33,6 +33,8 @@ namespace Pacmio.Analysis
             this.AddChild(RangeBoundAnalysis);
         }
 
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
+
         #region Calculation
 
         public ATR ATR { get; }
@@ -41,7 +43,7 @@ namespace Pacmio.Analysis
 
         public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
 
-        public PatternColumn Column_Result { get; }
+        public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumInterval;
 
         public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
         {

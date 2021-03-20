@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Forms\Chart\BarChartManager.cs" />
     <Compile Include="Source\Forms\Chart\Series\CandleStickSeries.cs" />
+    <Compile Include="Source\Forms\Chart\_Types\IChartBackground.cs" />
     <Compile Include="Source\Forms\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
@@ -214,7 +215,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IOscillator.cs" />
-    <Compile Include="Source\Forms\Chart\_Types\IChartPattern.cs" />
+    <Compile Include="Source\Forms\Chart\_Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\_Types\MovingAverageType.cs" />
     <Compile Include="Source\Forms\Chart\Area\PositionArea.cs" />

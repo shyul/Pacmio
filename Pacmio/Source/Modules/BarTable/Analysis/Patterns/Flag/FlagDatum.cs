@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class FlagDatum //: PatternDatum
+    public class FlagDatum : IDatum //: PatternDatum
     {
         public FlagDatum(FlagType type)
         {

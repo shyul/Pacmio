@@ -10,7 +10,7 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLine : IPatternObject
     {
-        public HorizontalLine(IChartPattern source, PivotPt pt1, double tolerance)
+        public HorizontalLine(IChartOverlay source, PivotPt pt1, double tolerance)
         {
             Source = source;
             P1 = pt1;
@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 
         public double Y1 => P1.Level;
 
-        public IChartPattern Source { get; }
+        public IChartOverlay Source { get; }
 
         public double Weight { get; set; }
 

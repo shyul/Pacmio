@@ -50,7 +50,7 @@ namespace Pacmio
             }
         }
 
-        public Dictionary<IChartPattern, double> WeightList { get; } = new();
+        public Dictionary<IChartOverlay, double> WeightList { get; } = new();
 
         public Range<double> Box { get; } = new(double.MaxValue, double.MinValue);
 

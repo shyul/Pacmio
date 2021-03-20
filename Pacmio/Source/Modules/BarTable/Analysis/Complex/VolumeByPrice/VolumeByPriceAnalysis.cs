@@ -17,6 +17,13 @@ namespace Pacmio.Analysis
 {
     public sealed class VolumeByPriceAnalysis : BarAnalysis
     {
+        public VolumeByPriceAnalysis()
+        {
+            Name = GetType() + " Test Only";
+
+            Column_Result = new DatumColumn(Name, typeof(VolumeByPriceDatum));
+        }
+
         public int NumOfLevels { get; } = 10;
 
         public int MaximumInterval { get; } = 200;
@@ -33,29 +40,24 @@ namespace Pacmio.Analysis
                 VolumeByPriceDatum datum =  new VolumeByPriceDatum();
                 b[Column_Result] = datum;
 
-                var bars = bt[i - MaximumInterval, i];
-                Console.WriteLine("Number of bars selected" + bars.Count);
+                var bars = bt[i, MaximumInterval];
+                //Console.WriteLine("Bars i = " + i + " | LastIndex = " + bars.Last().Index + " | Bar Index = " + bt[i].Index + " | Count = " + bars.Count);
 
-                var price_list = bars.Select(n => n.Typical);
+                datum.IntervalRange = new Range<double>(bars.Select(n => n.Typical));
+                double max_price = datum.IntervalRange.Maximum;
+                double min_price = datum.IntervalRange.Minimum;
 
-                double max_price = price_list.Max();
-                double min_price = price_list.Min();
-                double delta_price = (max_price - min_price) / MaximumInterval;
-
-                datum.IntervalRange = new Range<double>(min_price, max_price);
-
-                for (int j = 0; j < MaximumInterval; j++)
+                if (!datum.IntervalRange.IsEmpty) 
                 {
-                    double min = min_price + j * delta_price;
-                    double max = min_price + (j + 1) * delta_price;
-                    datum.PriceRangeToVolumeLUT.Add(new Range<double>(min, max), 0);
-                }
-
-                var price_to_volume_list = bars.Select(n => (n.Typical, n.Volume));
-
-                foreach (var range in datum.PriceRangeToVolumeLUT.Keys)
-                {
-                    datum.PriceRangeToVolumeLUT[range] = price_to_volume_list.Where(n => range.ContainsNoMax(n.Typical)).Select(n => n.Volume).Sum();
+                    double delta_price = (max_price - min_price) / NumOfLevels;
+                    for (int j = 0; j < NumOfLevels; j++)
+                    {
+                        double min = min_price + j * delta_price;
+                        double max = min_price + (j + 1) * delta_price;
+                        var key = new Range<double>(min, max);
+                        var value = bars.Where(n => key.ContainsNoMax(n.Typical)).Select(n => n.Volume).Sum();
+                        datum.PriceRangeToVolumeLUT[key] = value;
+                    }
                 }
             }
         }

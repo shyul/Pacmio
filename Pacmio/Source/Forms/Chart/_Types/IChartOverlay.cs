@@ -4,18 +4,20 @@
 /// 
 /// ***************************************************************************
 
-using System;
+using System.Drawing;
 
 namespace Pacmio
 {
-    public interface IPatternObject
+    public interface IChartOverlay
     {
-        IChartOverlay Source { get; }
+        string Name { get; }
 
-        double Weight { get; }
+        string AreaName { get; }
 
-        double Level { get; }
+        bool ChartEnabled { get; set; }
 
-        double Tolerance { get; }
+        void DrawOverlay(Graphics g, BarChart bc);
+
+        void DrawBackground(Graphics g, BarChart bc);
     }
 }

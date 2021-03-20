@@ -28,6 +28,13 @@ namespace TestClient
                     //var result = source.GetPair();
                     //Console.WriteLine(result.ToString(", "));
 
+                    List<int> source = new() { 137801, 2, 3, 3, 1, 6, 10000, 100, 203, -1 };
+
+                    var Range = new Range<int>(source);
+                    Console.WriteLine(Range.ToString());
+
+
+
                     Root.Load();
                     Console.WriteLine("Quandl is connected? " + Quandl.Connected);
 

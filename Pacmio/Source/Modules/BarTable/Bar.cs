@@ -424,7 +424,7 @@ namespace Pacmio
             }
         }
 
-        public RangeBoundDatum this[IChartPattern column]
+        public RangeBoundDatum this[IChartOverlay column]
         {
             get
             {

@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public class PatternColumn : DatumColumn //, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
     {
-        public PatternColumn(IChartPattern source, int maximumTrailingIndex = int.MaxValue)
+        public PatternColumn(IChartOverlay source, int maximumTrailingIndex = int.MaxValue)
             : base(source.Name, typeof(PatternDatum))
         {
             Source = source;
@@ -23,7 +23,7 @@ namespace Pacmio
             MaximumTrailingIndex = maximumTrailingIndex;
         }
 
-        public IChartPattern Source { get; }
+        public IChartOverlay Source { get; }
 
         public string AreaName => Source.AreaName;
 
