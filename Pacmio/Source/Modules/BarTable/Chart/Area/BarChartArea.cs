@@ -55,7 +55,7 @@ namespace Pacmio
                 int x2 = a.Bounds.Right;
 
                 int full_width = x2 - x1;
-
+                /*
                 if (a.BarChart.LastBar_1 is Bar b && b[a] is RangeBoundDatum prd)
                 {
                     var rangeList = prd.BoxList.OrderByDescending(n => n.Weight);
@@ -82,7 +82,7 @@ namespace Pacmio
                         }
                     }
                 }
-
+                */
                 g.ResetClip();
             }
         }

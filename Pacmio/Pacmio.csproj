@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />

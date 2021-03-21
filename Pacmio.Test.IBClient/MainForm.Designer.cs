@@ -1864,7 +1864,7 @@ namespace TestClient
             this.SelectBoxSingleContractExchange.Name = "SelectBoxSingleContractExchange";
             this.SelectBoxSingleContractExchange.Size = new System.Drawing.Size(110, 21);
             this.SelectBoxSingleContractExchange.TabIndex = 23;
-            this.SelectBoxSingleContractExchange.Text = "NYSE";
+            this.SelectBoxSingleContractExchange.Text = "ARCA";
             // 
             // LabelSingleContractExchange
             // 
@@ -1909,7 +1909,7 @@ namespace TestClient
             this.TextBoxSingleContractName.Name = "TextBoxSingleContractName";
             this.TextBoxSingleContractName.Size = new System.Drawing.Size(132, 22);
             this.TextBoxSingleContractName.TabIndex = 18;
-            this.TextBoxSingleContractName.Text = "TQQQ";
+            this.TextBoxSingleContractName.Text = "ARKK";
             this.TextBoxSingleContractName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
             // 
             // MainProgBar

@@ -14,32 +14,12 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class PatternDatum : IDatum, IEnumerable<IPatternObject>
+    public abstract class PatternDatum : IDatum
     {
-        public PatternDatum(double min, double max)
-        {
-            LevelRange = new Range<double>(min);
-            LevelRange.Insert(max);
-        }
+        public Range<double> TotalRange { get; set; }
 
-        public void Add(IPatternObject p)
-        {
-            PatternObjects.Add(p);
-            WeightRange.Insert(p.Weight);
-        }
+        public Range<double> StrengthRange { get; } = new(double.MaxValue, double.MinValue);
 
-        public Range<double> LevelRange { get; }
-
-        public Range<double> WeightRange { get; } = new(double.MaxValue, double.MinValue);
-
-        private List<IPatternObject> PatternObjects { get; } = new();
-
-        public IEnumerator<IPatternObject> GetEnumerator() => PatternObjects.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => PatternObjects.GetEnumerator();
-
-        /// <summary>
-        /// Acompany with the MaximumTrailingIndex, this time limits the perticular datum's effective time boundary
-        /// </summary>
-        public DateTime MaximumEffectiveTime { get; set; } = DateTime.MaxValue;
+        public abstract IEnumerable<IPatternObject> PatternObjects { get; }
     }
 }

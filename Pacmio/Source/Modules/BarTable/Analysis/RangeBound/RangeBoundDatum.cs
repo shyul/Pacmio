@@ -14,6 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
+    /*
     public class RangeBoundDatum
     {
         public List<RangeBound> BoxList { get; } = new List<RangeBound>();
@@ -47,5 +48,5 @@ namespace Pacmio.Analysis
             else if (min > max) return -w;
             else return 0;
         }
-    }
+    }*/
 }

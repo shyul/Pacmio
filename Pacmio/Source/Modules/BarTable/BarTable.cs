@@ -163,7 +163,8 @@ namespace Pacmio
         /// <param name="start">Start and included index</param>
         /// <param name="stop">End and not included index</param>
         /// <returns></returns>
-        public List<Bar> this[int i, int count]
+        public List<Bar> this[int i, int count] => Rows.Last(i, count);
+        /*
         {
             get
             {
@@ -179,7 +180,7 @@ namespace Pacmio
                     return Rows.Skip(skip).Take(count).ToList();
                 }
             }
-        }
+        }*/
 
         public List<Bar> this[Period pd]
         {

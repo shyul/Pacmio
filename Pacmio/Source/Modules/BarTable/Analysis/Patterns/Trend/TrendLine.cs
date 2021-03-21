@@ -14,15 +14,25 @@ namespace Pacmio.Analysis
     /// 2. Distance between Points
     /// 3. Tolerance
     /// </summary>
-    public class TrendLine : HorizontalLine
+    public class TrendLine : IPatternObject, IEquatable<TrendLine>
     {
-        public TrendLine(PatternAnalysis source, PivotPt pt1, PivotPt pt2, int x3, double tolerance) : base(source, pt1, tolerance)
+        public TrendLine((PivotPt pt1, PivotPt pt2) pt) : this(pt.pt1, pt.pt2) { }
+
+        public TrendLine(PivotPt pt1, PivotPt pt2)
         {
+            P1 = pt1;
             P2 = pt2;
+
             DeltaX = Math.Abs(X2 - X1);
             TrendRate = (Y2 - Y1) / (X2 - X1);
-            Level = Y1 + (TrendRate * (x3 - X1));
+            Strength = DeltaX * (pt1.Strength + pt2.Strength);
         }
+
+        public PivotPt P1 { get; }
+
+        public int X1 => P1.Index;
+
+        public double Y1 => P1.Level;
 
         public PivotPt P2 { get; }
 
@@ -33,5 +43,23 @@ namespace Pacmio.Analysis
         public int DeltaX { get; }
 
         public double TrendRate { get; }
+
+        public double Strength { get; }
+
+        public double Level(int x3) => Y1 + (TrendRate * (x3 - X1));
+
+        #region Equality
+
+        public bool Equals(TrendLine other) => (other.P1.Equals(other.P1) && other.P2.Equals(other.P2)) || (other.P1.Equals(other.P2) && other.P2.Equals(other.P1));
+
+        public static bool operator !=(TrendLine s1, TrendLine s2) => !s1.Equals(s2);
+
+        public static bool operator ==(TrendLine s1, TrendLine s2) => s1.Equals(s2);
+
+        public override int GetHashCode() => (P1, P2).GetHashCode();
+
+        public override bool Equals(object other) => other is TrendLine s1 && Equals(s1);
+
+        #endregion Equality
     }
 }

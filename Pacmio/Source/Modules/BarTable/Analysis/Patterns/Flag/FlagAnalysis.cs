@@ -17,7 +17,7 @@ namespace Pacmio.Analysis
         {
             Name = GetType() + " Test Only";
 
-            Column_Result = new PatternColumn(this, MaximumInterval);
+            Column_Result = new PatternColumn(this, typeof(FlagDatum), MaximumInterval);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();

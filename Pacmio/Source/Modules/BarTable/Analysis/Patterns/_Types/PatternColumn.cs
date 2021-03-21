@@ -15,11 +15,10 @@ namespace Pacmio.Analysis
 {
     public class PatternColumn : DatumColumn
     {
-        public PatternColumn(PatternAnalysis source, int maximumTrailingIndex = int.MaxValue)
-            : base(source.Name, typeof(PatternDatum))
+        public PatternColumn(PatternAnalysis source, Type datumType, int maximumTrailingIndex = int.MaxValue)
+            : base(source.Name, datumType)
         {
             Source = source;
-            //Name = Label = Source.Name;
             MaximumTrailingIndex = maximumTrailingIndex;
         }
 

@@ -55,10 +55,10 @@ namespace Pacmio.Analysis
             UpperColor = Color.DodgerBlue;
             LowerColor = Color.MediumVioletRed;
 
-            CalculatePivotRange.AddChild(this);
+           // CalculatePivotRange.AddChild(this);
         }
 
-        public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis();
+        //public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis();
 
         public ISingleData SourceAnalysis { get; protected set; }
 
@@ -83,6 +83,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
+                    /*
                     if (SourceAnalysis is null && b.GetRangeBoundDatum() is RangeBoundDatum prd)
                     {
                         double open = b.Open;
@@ -116,7 +117,7 @@ namespace Pacmio.Analysis
                         // Less to zero sum but large distance means reversal
 
                         // Large sum and large abs sums means penitration
-                    }
+                    }*/
                 }
 
             }

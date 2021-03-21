@@ -47,6 +47,7 @@ namespace Pacmio.Analysis
                     //csd_trend,
 
                     new TrendLineAnalysis(260),
+                    new HorizontalLineAnalysis(260),
                     new GetReversalIndexFromRangeBoundAnalysis(),
 
                     new FlagAnalysis(),

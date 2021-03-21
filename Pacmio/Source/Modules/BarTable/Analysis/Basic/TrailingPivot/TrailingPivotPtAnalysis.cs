@@ -24,11 +24,11 @@ namespace Pacmio.Analysis
             NativePivotAnalysis.AddChild(this);
         }
 
-        public TrailingPivotPtAnalysis(int test_length = 250)
+        public TrailingPivotPtAnalysis(int maximumInterval = 250)
         {
-            NativePivotAnalysis = new NativePivotAnalysis(test_length);
+            NativePivotAnalysis = new NativePivotAnalysis(maximumInterval);
 
-            MaximumInterval = test_length;
+            MaximumInterval = maximumInterval;
             string label = "(" + Bar.Column_Close.Name + "," + MaximumInterval + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 

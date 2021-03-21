@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class FlagDatum : IDatum //: PatternDatum
+    public class FlagDatum : PatternDatum
     {
         public FlagDatum(FlagType type)
         {
@@ -28,15 +28,30 @@ namespace Pacmio.Analysis
 
         public double BreakOutLevel { get; set; }
 
+        /// <summary>
+        ///         (P2)
+        ///         ||-----____(P3)
+        ///        P2_B--___  ||
+        ///       ||        --P3_B
+        ///        |
+        ///       ||
+        ///       |
+        ///      ||
+        ///      |
+        ///    (P1)         
+        /// </summary>
+        public PivotPt P1 { get; set; }
 
+        public PivotPt P2 { get; set; }
 
+        public PivotPt P2_B { get; set; }
 
+        public PivotPt P3 { get; set; }
 
-        public Range<double> TotalRange { get; set; }
+        public PivotPt P3_B { get; set; }
 
-        public List<IPatternObject> PatternObjects { get; } = new();
-
-        //public Dictionary<double, double> KeyLevels { get; } = new();
-        public List<TrendLine> TrendLines { get; } = new();
+        public override IEnumerable<IPatternObject> PatternObjects => new IPatternObject[] {  };
     }
 }
+
+

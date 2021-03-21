@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 
         public void Config(BarFreq freq, MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
-            BarAnalysisSet bas = new BarAnalysisSet();
+            //BarAnalysisSet bas = new BarAnalysisSet();
 
             switch (type_fast)
             {
@@ -64,7 +64,7 @@ namespace Pacmio.Analysis
                     break;
             }
 
-            bas.List = new List<BarAnalysis>() { MA_Fast, MA_Slow};
+            //bas.List = new List<BarAnalysis>() { MA_Fast, MA_Slow};
 
 
         }

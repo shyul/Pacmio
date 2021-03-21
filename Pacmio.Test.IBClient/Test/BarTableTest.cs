@@ -185,18 +185,5 @@ namespace TestClient
                 return bas;
             }
         }
-
-        public static BarAnalysisSet EmptyBarAnalysisSet
-        {
-            get
-            {
-                BarAnalysisSet bas = new BarAnalysisSet()
-                {
-                    List = new List<BarAnalysis>()
-                };
-
-                return bas;
-            }
-        }
     }
 }

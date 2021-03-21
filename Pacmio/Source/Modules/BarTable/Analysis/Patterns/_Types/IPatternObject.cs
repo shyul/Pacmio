@@ -10,12 +10,10 @@ namespace Pacmio.Analysis
 {
     public interface IPatternObject
     {
-        PatternAnalysis Source { get; }
+        double Strength { get; }
 
-        double Weight { get; }
+        double Level(int x);
 
-        double Level { get; }
 
-        double Tolerance { get; }
     }
 }

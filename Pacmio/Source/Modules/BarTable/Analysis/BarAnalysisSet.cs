@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
-using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -29,7 +29,7 @@ namespace Pacmio
             {
                 return m_List;
             }
-            set
+            private set
             {
                 lock (m_List)
                 {
@@ -51,7 +51,9 @@ namespace Pacmio
 
         public bool Contains(BarAnalysis ba) => m_List.Contains(ba);
 
-        public void AddRange(IEnumerable<BarAnalysis> list)
+        //public bool Contains(Column ba) => m_List.Contains(ba);
+
+        private void AddRange(IEnumerable<BarAnalysis> list)
         {
             // The purpose of ordering by the children and parents first is
             // We want to add the ones with less dependancy first so its setting
@@ -87,11 +89,15 @@ namespace Pacmio
 
         public void PrintList()
         {
-            this.ToList().ForEach(n =>
+            this.RunEach(n =>
             {
-                Console.WriteLine("BarAnalysisSet | Added BA: " + n.Name);
+                Console.WriteLine("BarAnalysisSet | BA: " + n.Name);
             });
         }
+
+        public IEnumerable<PatternAnalysis> PatternAnalyses => m_List.SelectType<PatternAnalysis, BarAnalysis>();
+
+        public List<PatternColumn> PatternColumns => PatternAnalyses.Select(n => n.Column_Result).ToList();
 
         public IEnumerable<IChartBackground> ChartBackgrounds => m_List.SelectType<IChartBackground, BarAnalysis>().OrderBy(n => n.DrawOrder);
 

@@ -381,12 +381,12 @@ namespace Pacmio
 
         #region Pattern
 
-        public IEnumerable<IPatternObject> Pivots => DatumColumnsLUT.Values.Where(n => n is PatternDatum).SelectMany(n => n as PatternDatum);
+        //public IEnumerable<IPatternObject> Pivots(BarAnalysisSet bas) => DatumColumnsLUT.Where(n => bas.Contains(n.Key)).Values.SelectType<PatternDatum, IDatum>().SelectMany(n => n.PatternObjects);
 
         #endregion Pattern
 
         #region Range Bound
-
+        /*
         private Dictionary<string, RangeBoundDatum> RangeBoundDatums { get; } = new Dictionary<string, RangeBoundDatum>();
 
         public void CalculateRangeBoundDatums()
@@ -434,7 +434,7 @@ namespace Pacmio
                     return null;
             }
         }
-
+        */
         #endregion Range Bound
 
         #region Signal Information Tools
@@ -521,8 +521,7 @@ namespace Pacmio
             DatumColumnsLUT.Clear();
             PositivePivotPtList.Clear();
             NegativePivotPtList.Clear();
-            RangeBoundDatums.Clear();
-            //PositionDatums.Clear();
+            //RangeBoundDatums.Clear();
         }
 
         public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();

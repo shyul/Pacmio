@@ -10,12 +10,10 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLine : IPatternObject
     {
-        public HorizontalLine(PatternAnalysis source, PivotPt pt1, double tolerance)
+        public HorizontalLine(PivotPt pt1)
         {
-            Source = source;
             P1 = pt1;
-            Level = P1.Level;
-            Tolerance = tolerance;
+            Strength = pt1.Strength * 2;
         }
 
         public PivotPt P1 { get; }
@@ -24,12 +22,22 @@ namespace Pacmio.Analysis
 
         public double Y1 => P1.Level;
 
-        public PatternAnalysis Source { get; }
+        public double Strength { get; set; }
 
-        public double Weight { get; set; }
+        public double Level(int _) => P1.Level;
 
-        public double Level { get; protected set; }
+        #region Equality
 
-        public double Tolerance { get; }
+        public bool Equals(HorizontalLine other) => other.P1.Equals(other.P1);
+
+        public static bool operator !=(HorizontalLine s1, HorizontalLine s2) => !s1.Equals(s2);
+
+        public static bool operator ==(HorizontalLine s1, HorizontalLine s2) => s1.Equals(s2);
+
+        public override int GetHashCode() => P1.GetHashCode();
+
+        public override bool Equals(object other) => other is HorizontalLine s1 && Equals(s1);
+
+        #endregion Equality
     }
 }

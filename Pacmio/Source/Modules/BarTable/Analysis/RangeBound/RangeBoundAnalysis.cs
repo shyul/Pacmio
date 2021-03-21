@@ -13,7 +13,7 @@ using Xu;
 using Xu.Chart;
 
 namespace Pacmio.Analysis
-{
+{/*
     public class RangeBoundAnalysis : BarAnalysis
     {
         public RangeBoundAnalysis() 
@@ -45,5 +45,5 @@ namespace Pacmio.Analysis
                 if (bt[i] is Bar b) b.CalculateRangeBoundDatums();
             }
         }
-    }
+    }*/
 }

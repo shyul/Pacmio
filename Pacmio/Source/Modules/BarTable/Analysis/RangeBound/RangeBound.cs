@@ -13,15 +13,15 @@ using Xu;
 using Xu.Chart;
 
 namespace Pacmio.Analysis
-{
+{/*
     public class RangeBound
     {
         public void Insert(IPatternObject p)
         {
             if (WeightList.ContainsKey(p.Source))
-                WeightList[p.Source] += p.Weight;
+                WeightList[p.Source] += p.Strength;
             else
-                WeightList.Add(p.Source, p.Weight);
+                WeightList.Add(p.Source, p.Strength);
 
             Box.Insert(p.Level);
         }
@@ -55,5 +55,5 @@ namespace Pacmio.Analysis
         public Range<double> Box { get; } = new(double.MaxValue, double.MinValue);
 
         public double Level => (Box.Max + Box.Min) / 2;
-    }
+    }*/
 }
