@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class TrendAnalysis : PatternAnalysis, IChartBackground
+    public class TrendLineAnalysis : PatternAnalysis, IChartBackground
     {
-        public TrendAnalysis(int test_interval)
+        public TrendLineAnalysis(int test_interval)
         {
             string label = "(" + test_interval + ")";
             Name = GetType().Name + label;
@@ -44,21 +44,6 @@ namespace Pacmio.Analysis
         public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
 
         public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumInterval;
-
-        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
-        {
-            if (!bap.IsUpToDate && bap.Count > 0)
-            {
-                bap.StopPt = bap.Count - 1;
-
-                if (bap.StartPt < 0)
-                    bap.StartPt = 0;
-
-                Calculate(bap);
-                bap.StartPt = bap.StopPt;
-                bap.StopPt++;
-            }
-        }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -127,7 +112,7 @@ namespace Pacmio.Analysis
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
                 double maxWeight = pd.WeightRange.Max;
-                foreach (IPatternObject ip in pd)//.Pivots)
+                foreach (IPatternObject ip in pd)
                 {
                     if (ip is TrendLine line)
                     {
@@ -136,7 +121,7 @@ namespace Pacmio.Analysis
                         {
                             int x3 = StopPt - StartPt - 1;
                             double y1 = line.Y1;
-                            double y3 = y1 + (line.TrendRate * (x3 - x1)); //line.Level;// 
+                            double y3 = y1 + (line.TrendRate * (x3 - x1));
 
                             Point pt1 = new Point(a.IndexToPixel(x1), a.AxisY(AlignType.Right).ValueToPixel(y1));
                             Point pt3 = new Point(a.IndexToPixel(x3), a.AxisY(AlignType.Right).ValueToPixel(y3));

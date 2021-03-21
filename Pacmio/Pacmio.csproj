@@ -90,10 +90,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\DualColumnPivotAnalysis.cs" />
@@ -161,14 +162,14 @@
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\GetReversalIndexFromRangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\IPatternObject.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrailingPivot\PivotPt.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_PatternObject\HorizontalLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBound.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\RangeBound\RangeBoundDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\TrailingPivot\TrailingPivotPtAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_Types\PatternDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\_PatternObject\TrendLine.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
@@ -216,7 +217,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\PriceChannel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\IOscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartOverlay.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\_Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\PositionArea.cs" />

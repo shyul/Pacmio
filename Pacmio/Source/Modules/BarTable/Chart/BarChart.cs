@@ -216,13 +216,13 @@ namespace Pacmio
             }
         }
 
-        public Bar LastBar => (LastIndex < 0) ? null : m_BarTable[LastIndex];
+        public Bar LastBar => LastIndex < 0 ? null : m_BarTable[LastIndex];
 
-        public Bar LastBar_1 => (LastIndex < 1) ? null : m_BarTable[LastIndex - 1];
+        public Bar LastBar_1 => LastIndex < 1 ? null : m_BarTable[LastIndex - 1];
 
-        public double LastClose => (LastBar is null) ? double.NaN : LastBar.Close;
+        public double LastClose => LastBar is null ? double.NaN : LastBar.Close;
 
-        public DateTime LastTime => (LastBar is null) ? DateTime.Now : LastBar.Time;
+        public DateTime LastTime => LastBar is null ? DateTime.Now : LastBar.Time;
 
         public string LastTimeString => this[LastIndex - StartPt];
 
@@ -242,9 +242,9 @@ namespace Pacmio
 
         public Range<double> ChartRange => MainArea.AxisY(AlignType.Right).Range;
 
-        public double ChartRangePercent => (ChartRange.Minimum != 0) ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
+        public double ChartRangePercent => ChartRange.Minimum != 0 ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
 
-        public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set { m_ReadyToShow = value; } }
+        public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set => m_ReadyToShow = value; }
 
         public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
 
@@ -257,8 +257,7 @@ namespace Pacmio
                 LeftYAxisLabelWidth + Margin.Left,
                 Margin.Top,
                 ClientRectangle.Width - LeftYAxisLabelWidth - Margin.Left - RightYAxisLabelWidth - Margin.Right,
-                ClientRectangle.Height - Margin.Top - Margin.Bottom
-                );
+                ClientRectangle.Height - Margin.Top - Margin.Bottom);
 
             if (ReadyToShow)
             {

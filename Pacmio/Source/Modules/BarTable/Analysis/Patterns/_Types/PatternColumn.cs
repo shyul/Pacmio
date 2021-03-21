@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PatternColumn : DatumColumn //, IEquatable<PatternColumn>, IEquatable<IChartPattern>, IEquatable<IArea>, IEquatable<string>
+    public class PatternColumn : DatumColumn
     {
         public PatternColumn(PatternAnalysis source, int maximumTrailingIndex = int.MaxValue)
             : base(source.Name, typeof(PatternDatum))

@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
-using Pacmio.Analysis;
+using Xu.Chart;
 
 namespace Pacmio
 {
@@ -93,11 +93,11 @@ namespace Pacmio
             });
         }
 
-        public IEnumerable<IChartBackground> ChartBackgrounds => m_List.SelectType<IChartBackground, BarAnalysis>(); //m_List.Where(n => n is IChartBackground).Select(n => n as IChartBackground);
+        public IEnumerable<IChartBackground> ChartBackgrounds => m_List.SelectType<IChartBackground, BarAnalysis>().OrderBy(n => n.DrawOrder);
 
         public IEnumerable<IChartSeries> ChartSeries => m_List.SelectType<IChartSeries, BarAnalysis>().OrderBy(n => n.DrawOrder);
 
-        public IEnumerable<IChartOverlay> ChartOverlays => m_List.SelectType<IChartOverlay, BarAnalysis>(); //m_List.Where(n => n is IChartOverlay).Select(n => n as IChartOverlay);
+        public IEnumerable<IChartOverlay> ChartOverlays => m_List.SelectType<IChartOverlay, BarAnalysis>().OrderBy(n => n.DrawOrder);
 
         public IEnumerable<ITagAnalysis> TagSeries => m_List.SelectType<ITagAnalysis, BarAnalysis>();
 
@@ -105,7 +105,5 @@ namespace Pacmio
         /// List all indicator types, and aggreagte all signal columns here...
         /// </summary>
         public virtual IEnumerable<SignalColumn> SignalColumns => m_List.Where(n => n is Indicator id && id.SignalColumns is SignalColumn[]).SelectMany(n => ((Indicator)n).SignalColumns).Where(n => n.Enabled).OrderBy(n => n.Order);
-
-        public virtual IEnumerable<SignalColumn> SignalColumn(SignalColumnType type) => SignalColumns.Where(n => n.Type == type);
     }
 }
