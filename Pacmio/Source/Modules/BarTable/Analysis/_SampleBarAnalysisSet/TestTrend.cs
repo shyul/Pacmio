@@ -38,6 +38,9 @@ namespace Pacmio.Analysis
                 PositionOfTimeframe potf = new PositionOfTimeframe(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
+                NativePivotAnalysis npa = new NativePivotAnalysis(250);
+                TrailingPivotPtAnalysis tpa = new TrailingPivotPtAnalysis(npa);
+
                 List<BarAnalysis> sample_list = new List<BarAnalysis>
                 {
                     //new NativePivotAnalysis(),
@@ -46,10 +49,9 @@ namespace Pacmio.Analysis
                     //csd_pivot,
                     //csd_trend,
 
-                    new TrendLineAnalysis(260),
-                    new HorizontalLineAnalysis(260),
-                    new GetReversalIndexFromRangeBoundAnalysis(),
-
+                    new TrendLineAnalysis(tpa),
+                    new HorizontalLineAnalysis(tpa),
+                    //new GetReversalIndexFromRangeBoundAnalysis(),
                     new FlagAnalysis(),
                     new VolumeByPriceAnalysis(),
                 };

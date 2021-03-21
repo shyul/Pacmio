@@ -16,6 +16,18 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLineAnalysis : PatternAnalysis, IChartBackground
     {
+        public HorizontalLineAnalysis(TrailingPivotPtAnalysis tpa)
+        {
+            string label = "(" + tpa.MaximumInterval + ")";
+            Name = GetType().Name + label;
+
+            TrailingPivotPointAnalysis = tpa;
+            TrailingPivotPointAnalysis.AddChild(this);
+
+            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), tpa.MaximumInterval);
+            AreaName = MainBarChartArea.DefaultName;
+        }
+
         public HorizontalLineAnalysis(int maximumInterval)
         {
             string label = "(" + maximumInterval + ")";
