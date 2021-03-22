@@ -634,7 +634,7 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     Calculate(bas);
-
+                    //GC.Collect();
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
 

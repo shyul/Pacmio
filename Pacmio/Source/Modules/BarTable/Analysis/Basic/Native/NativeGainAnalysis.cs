@@ -51,7 +51,7 @@ namespace Pacmio.Analysis
                     {
                         b.BarType = BarType.White;
                     }
-                    else if (open < close)
+                    else if (open > close)
                     {
                         b.BarType = BarType.Black;
                     }
@@ -62,7 +62,7 @@ namespace Pacmio.Analysis
                     {
                         b.BarType = BarType.HollowRed;
                     }
-                    else if (open < close)
+                    else if (open > close)
                     {
                         b.BarType = BarType.Red;
                     }
