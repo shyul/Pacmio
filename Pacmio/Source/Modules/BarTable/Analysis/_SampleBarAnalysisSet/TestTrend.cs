@@ -49,8 +49,8 @@ namespace Pacmio.Analysis
                     //csd_pivot,
                     //csd_trend,
 
-                    //new TrendLineAnalysis(tpa),
-                    //new HorizontalLineAnalysis(tpa),
+                    new TrendLineAnalysis(tpa),
+                    new HorizontalLineAnalysis(tpa),
                     //new GetReversalIndexFromRangeBoundAnalysis(),
                     new FlagAnalysis(),
                     //new VolumeByPriceAnalysis(),
