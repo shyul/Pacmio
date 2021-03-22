@@ -26,7 +26,7 @@ namespace Pacmio.Analysis
 
         public int MaxRunInterval { get; } = 8;
 
-        public int MinPullPackInterval { get; } = 3;
+        public int MinPullPackInterval { get; } = 2;
 
         public int MaxPullPackInterval { get; } = 8;
 
@@ -60,9 +60,9 @@ namespace Pacmio.Analysis
 
                         if (j == 0)
                         {
-                            if (b.BarType == BarType.Red)
+                            if (b.Open > b.Close)
                                 type = FlagType.Bull;
-                            else if (b.BarType == BarType.White)
+                            else if (b.Open < b.Close)
                                 type = FlagType.Bear;
                             else
                                 break;
@@ -70,9 +70,9 @@ namespace Pacmio.Analysis
 
                         if (testPullPack)
                         {
-                            if (b.BarType == BarType.Red && type == FlagType.Bull)
+                            if (b.Open > b.Close && type == FlagType.Bull)
                                 pull_back_bars.Add(b);
-                            else if (b.BarType == BarType.White && type == FlagType.Bear)
+                            else if (b.Open < b.Close && type == FlagType.Bear)
                                 pull_back_bars.Add(b);
                             else if (j >= MinPullPackInterval)
                                 testPullPack = false;
@@ -82,9 +82,9 @@ namespace Pacmio.Analysis
 
                         if (!testPullPack)
                         {
-                            if (b.BarType == BarType.White && type == FlagType.Bull)
+                            if (b.Open < b.Close && type == FlagType.Bull)
                                 run_bars.Add(b);
-                            else if (b.BarType == BarType.Red && type == FlagType.Bear)
+                            else if (b.Open > b.Close && type == FlagType.Bear)
                                 run_bars.Add(b);
                             else
                                 break;
@@ -93,8 +93,6 @@ namespace Pacmio.Analysis
 
                     if (type != FlagType.None && pull_back_bars.Count >= MinPullPackInterval && run_bars.Count >= MinRunInterval && run_bars.Count >= pull_back_bars.Count)
                     {
-                        Console.WriteLine(bars.Last().Time + " | " + type + " is detected!!");
-                        //Console.WriteLine(bars.Last().Time + " | " + bars.Last().BarType + " | " + type + " | pull_back_bars = " + pull_back_bars.Count + " | pull_back_bars = " + run_bars.Count);
 
 
                         Bar b = bt[i];
@@ -115,16 +113,14 @@ namespace Pacmio.Analysis
 
                         fd.PullBackRatio = (fd.TotalRange.Max - fd.PullBackRange.Min) / (fd.TotalRange.Max - fd.TotalRange.Min);
 
-                        if (fd.PullBackRatio > MinPullBackRatio && fd.PullBackRatio < MaxPullBackRatio)
+                        if (fd.PullBackRatio >= MinPullBackRatio && fd.PullBackRatio <= MaxPullBackRatio)
                         {
                             // Get the trend line of the pull back
-
                             fd.BreakOutLevel = fd.TotalRange.Max;
-
+                            Console.WriteLine(bars.Last().Time + " | " + type + " is detected!!");
+                            //Console.WriteLine(bars.Last().Time + " | " + bars.Last().BarType + " | " + type + " | pull_back_bars = " + pull_back_bars.Count + " | pull_back_bars = " + run_bars.Count);
 
                         }
-
-
 
                         // Yield Pattern
                         // Yield Critical Levels
