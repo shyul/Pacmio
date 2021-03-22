@@ -50,7 +50,7 @@ namespace Pacmio.Analysis
 
         public PivotPt P3_B { get; set; }
 
-        public override IEnumerable<IPatternObject> PatternObjects => new IPatternObject[] {  };
+        public override IEnumerable<IPatternObject> PatternObjects => new IPatternObject[] { };
     }
 }
 

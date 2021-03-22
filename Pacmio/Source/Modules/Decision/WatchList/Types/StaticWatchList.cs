@@ -27,6 +27,8 @@ namespace Pacmio
             Contracts = list;
         }
 
+        public StaticWatchList(string name, ref string csvList) : this(name, GetSymbolListFromCsv(ref csvList)) { }
+
         public StaticWatchList(string name, IEnumerable<string> list, string countryCode = "US", CancellationTokenSource cts = null, IProgress<float> progress = null) :
             this(name, ContractManager.GetOrFetch(list, countryCode, cts, progress).ToList())
         {
@@ -47,8 +49,6 @@ namespace Pacmio
                 Console.WriteLine("Can't find: " + s);
             }
         }
-
-        public StaticWatchList(string name, ref string csvList) : this(name, GetSymbolListFromCsv(ref csvList)) { }
 
         public void Add(Contract c)
         {
@@ -74,10 +74,10 @@ namespace Pacmio
 
         public override bool Equals(WatchList other) => other is StaticWatchList wt && Name == wt.Name;
 
-        public static HashSet<string> GetSymbolListFromCsv(ref string csvList)
+        public static IEnumerable<string> GetSymbolListFromCsv(ref string csvList)
         {
             string[] symbolFields = csvList.Replace('/', ',').CsvReadFields();
-            HashSet<string> symbolItemList = new HashSet<string>();
+            //HashSet<string> symbolItemList = new HashSet<string>();
             HashSet<string> symbolList = new HashSet<string>();
             foreach (string field in symbolFields)
             {
@@ -85,13 +85,16 @@ namespace Pacmio
 
                 if (!string.IsNullOrWhiteSpace(symbol))
                 {
-                    symbolItemList.CheckAdd("\"" + symbol + "\"");
+                    //symbolItemList.CheckAdd("\"" + symbol + "\"");
                     symbolList.CheckAdd(symbol);
                 }
 
             }
-            csvList = symbolItemList.ToString(", ");
-            return symbolList;
+
+            var list = symbolList.OrderBy(n => n);
+
+            csvList = list.ToString(", ");
+            return list;
         }
     }
 }

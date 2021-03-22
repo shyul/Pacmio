@@ -55,7 +55,7 @@ namespace Pacmio.Analysis
             UpperColor = Color.DodgerBlue;
             LowerColor = Color.MediumVioletRed;
 
-           // CalculatePivotRange.AddChild(this);
+            // CalculatePivotRange.AddChild(this);
         }
 
         //public RangeBoundAnalysis CalculatePivotRange { get; } = new RangeBoundAnalysis();

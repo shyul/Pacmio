@@ -1641,7 +1641,7 @@ namespace TestClient
             this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
             this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet3.TabIndex = 50;
-            this.BtnHistoricalDataContractSet3.Text = "LAZR";
+            this.BtnHistoricalDataContractSet3.Text = "AAPL";
             this.BtnHistoricalDataContractSet3.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet3.Click += new System.EventHandler(this.BtnHistoricalDataContractSet3_Click);
             // 
@@ -1746,7 +1746,8 @@ namespace TestClient
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
             this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 213);
             this.TextBoxMultiContracts.TabIndex = 9;
-            this.TextBoxMultiContracts.Text = resources.GetString("TextBoxMultiContracts.Text");
+            this.TextBoxMultiContracts.Text = "ARKK,AAPL,V,SQ,GEVO,BLNK,CLOV,CLII,CHPT,FDX,NIO,TSLA,LAZR,MARA,RIDE,PLUG,VUZI,CPN" +
+    "G,SLGG,SNAP,BNGO,CCIV,YVR,OCG,TKAT,KOSS,BA,TLRY,AAL";
             // 
             // CheckBoxChartToCurrent
             // 
