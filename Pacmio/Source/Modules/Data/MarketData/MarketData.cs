@@ -270,6 +270,8 @@ namespace Pacmio
                                 //Console.WriteLine("bt.Status = " + bt.Status);
                             }
                         });
+
+
                     }
                 }
             }

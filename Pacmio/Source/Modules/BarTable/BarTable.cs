@@ -438,6 +438,8 @@ namespace Pacmio
 
         #region Add Ticks
 
+        public DateTime LastTickTime { get; private set; } = DateTime.MinValue;
+
         public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
         {
             DateTime time = Frequency.Align(tickTime);
@@ -494,11 +496,13 @@ namespace Pacmio
                     Rows.Add(nb);
                     TimeToRows.Add(nb.Time, nb.Index);
                 }
+
+                LastTickTime = tickTime;
             }
 
-            if (Status == TableStatus.Ready)
+            if (Status >= TableStatus.DataReady)
             {
-                Status = TableStatus.Ticking;
+                //Status = TableStatus.Ticking;
                 SetCalculationPointer(LastCalculateIndex);
                 CalculateTickRequested = true;
             }
@@ -634,7 +638,6 @@ namespace Pacmio
                 lock (DataLockObject)
                 {
                     Calculate(bas);
-                    //GC.Collect();
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
 
@@ -651,6 +654,8 @@ namespace Pacmio
 
         private bool CalculateTickRequested { get; set; } = false;
 
+        public DateTime LastCalculatedTickTime { get; private set; } = DateTime.MinValue;
+
         private void CalculateTickWorker()
         {
             while (CalculateTickCancelTs is CancellationTokenSource cts && !cts.IsCancellationRequested)
@@ -660,6 +665,7 @@ namespace Pacmio
                     Status = TableStatus.Ticking;
                     lock (DataLockObject)
                     {
+                        LastCalculatedTickTime = LastTickTime;
                         CalculateTickRequested = false;
                         Calculate(BarAnalysisPointerList.Keys);
                     }

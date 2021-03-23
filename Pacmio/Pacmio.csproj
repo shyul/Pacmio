@@ -175,7 +175,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\Indicators\MovingAverageCrossIndicator.cs" />
-    <Compile Include="Source\Modules\Decision\DecisionManager.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepth.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />
@@ -203,7 +202,7 @@
     <Compile Include="Source\Modules\Data\MarketDepth\_IB\MarketDepth_Parse.cs" />
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
-    <Compile Include="Source\Modules\Decision\Strategy\Rules\MovingAverageCrossStrategy.cs" />
+    <Compile Include="Source\Modules\Decision\Strategy\Methods\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -243,7 +242,7 @@
     <Compile Include="Source\Modules\Decision\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationSet.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\SimulationResult.cs" />
-    <Compile Include="Source\Modules\Decision\Strategy\StrategyFactory.cs" />
+    <Compile Include="Source\Modules\Decision\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\Trade\Account\AccountInfo.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\Strategy.cs" />

@@ -1746,8 +1746,9 @@ namespace TestClient
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
             this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 213);
             this.TextBoxMultiContracts.TabIndex = 9;
-            this.TextBoxMultiContracts.Text = "ARKK,AAPL,V,SQ,GEVO,BLNK,CLOV,CLII,CHPT,FDX,NIO,TSLA,LAZR,MARA,RIDE,PLUG,VUZI,CPN" +
-    "G,SLGG,SNAP,BNGO,CCIV,YVR,OCG,TKAT,KOSS,BA,TLRY,AAL";
+            this.TextBoxMultiContracts.Text = "TDOC,ROKU,BIDU,Z,SPOT,SHOP,CRSP,ZM,ARKK,AAPL,V,SQ,GEVO,BLNK,CLOV,CLII,CHPT,FDX,NI" +
+    "O,TSLA,LAZR,MARA,RIDE,PLUG,VUZI,CPNG,SLGG,SNAP,BNGO,CCIV,YVR,OCG,TKAT,KOSS,BA,TL" +
+    "RY,AAL";
             // 
             // CheckBoxChartToCurrent
             // 

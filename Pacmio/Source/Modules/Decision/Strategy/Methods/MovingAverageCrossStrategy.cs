@@ -15,6 +15,11 @@ namespace Pacmio.Analysis
 {
     public class MovingAverageCrossStrategy : Strategy
     {
+        public override void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public MovingAverageCrossStrategy()
         {
 

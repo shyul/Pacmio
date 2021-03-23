@@ -2,42 +2,26 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// https://school.stockcharts.com/doku.php?id=trading_strategies:moving_momentum
-/// 
-/// Typically, chartists 
-/// first establish a trading bias or long-term perspective.
-/// Second, chartists wait for pullbacks or bounces that will improve the risk-reward ratio.
-/// Third, chartists look for a reversal that indicates a subsequent upturn or downturn in price.
-/// 
-/// Bearish signals are ignored when the bias is bullish. Bullish signals are ignored when the bias is bearish.
-/// 
 /// ***************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Pacmio.Analysis;
+using Xu;
 
 namespace Pacmio
 {
-    public static class StrategyFactory
+    public static class StrategyManager
     {
-        /// <summary>
-        /// Each strategy can have only one account
-        /// </summary>
-        public static Dictionary<Strategy, AccountInfo> ActiveStrategyList { get; } = new Dictionary<Strategy, AccountInfo>();
+        public static Dictionary<Contract, IntraDayBarTableSet> BarTableSetLUT { get; } = new();
 
-        /// <summary>
-        /// List of all available Strategies
-        /// </summary>
-        public static List<Strategy> List { get; } = new List<Strategy>();
 
-        /// <summary>
-        /// Build the list of the strategies with different parameters
-        /// </summary>
-        public static void BuildStrategy()
-        {
-            
 
-        }
+
 
         // New Types for Bar
         // ===================

@@ -18,7 +18,7 @@ namespace Pacmio
             Strategy = tr;
             //Status = new PositionStatus(c);
 
-            BarTableSet = new IntraDayBarTableSet(Contract);
+            //BarTableSet = new IntraDayBarTableSet(Contract);
         }
 
         public Contract Contract { get; }
@@ -27,7 +27,7 @@ namespace Pacmio
 
         public SimulationResult Result { get; } = new SimulationResult();
 
-        public IntraDayBarTableSet BarTableSet { get; } 
+
 
 
 
