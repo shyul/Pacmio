@@ -93,6 +93,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendLineDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\IndicatorExec.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Signals\IndicatorFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
@@ -150,6 +152,8 @@
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\ReportSnapshot.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\WSHData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
+    <Compile Include="Source\Modules\Decision\Strategy\StepOneTraining\StrategyTrainingColumn.cs" />
+    <Compile Include="Source\Modules\Decision\Strategy\StepOneTraining\StrategyTrainingDatum.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\AverageLoss.cs" />
@@ -179,11 +183,9 @@
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\FundamentalManager.cs" />
-    <Compile Include="Source\Modules\Decision\Strategy\ExitMethod.cs" />
     <Compile Include="Source\Forms\Grid\ContractGridRenderer.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthDatum.cs" />
     <Compile Include="Source\Modules\Data\BusinessInfo\Types\News.cs" />
-    <Compile Include="Source\Modules\Decision\Strategy\EntryMethod.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionInfo.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfo\TradeInfoGridView.cs" />
@@ -202,7 +204,7 @@
     <Compile Include="Source\Modules\Data\MarketDepth\_IB\MarketDepth_Parse.cs" />
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
-    <Compile Include="Source\Modules\Decision\Strategy\Methods\MovingAverageCrossStrategy.cs" />
+    <Compile Include="Source\Modules\Decision\Strategy\Examples\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Signals\SignalColumn.cs" />
@@ -395,6 +397,8 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Modules\Decision\Strategy\StepTwoTrading\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

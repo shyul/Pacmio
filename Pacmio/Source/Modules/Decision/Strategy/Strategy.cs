@@ -38,17 +38,7 @@ namespace Pacmio
 
         public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
 
-
-
-
-        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
-            => Indicators.Select(n => (n.Key.freq, n.Key.type, n.Value.bas)).GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-
-
+        #region Watch List
 
         /// <summary>
         /// Acquire from WatchListManager
@@ -82,15 +72,11 @@ namespace Pacmio
                 ContractList = w.Contracts.ToList();
                 ContractList.ForEach(n => n.MarketData.AddDataConsumer(this));
             }
-            else if (provider is MarketData md)
-            {
-
-                // Shall I use Indicator to trigger decision????
-            }
         }
 
+        #endregion Watch List
 
-
+        #region Indicators
 
         public (BarFreq freq, DataType type) PrimaryTimeFrame { get; protected set; }
 
@@ -103,34 +89,36 @@ namespace Pacmio
                 var key = (freq, type);
                 return Indicators.ContainsKey(key) ? Indicators[key].ind : null;
             }
-            set
+            protected set
             {
-                value.Strategy = this;
                 Indicators[(freq, type)] = (value, new BarAnalysisSet(value));
             }
         }
 
-        /// <summary>
-        /// Subscribe to MarketData8 
-        /// </summary>
-        public void Decide() 
+        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
+            => Indicators.Select(n => (n.Key.freq, n.Key.type, n.Value.bas)).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        #endregion Indicators
+
+        #region Order
+
+        public double MinimumRiskRewardRatio { get; set; }
+
+        public double MinimumTradeSize { get; set; }
+
+
+
+
+        #endregion Order
+
+        public OrderInfo GenerateOrder(ExecutionDatum ed)
         {
-            WatchList.Contracts.AsParallel().RunEach(c => 
-            { 
-                
-            
-            
-            });
+
+
+            return new OrderInfo();
         }
-
-
-
-
-
-
-
-
-
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
 
@@ -140,18 +128,18 @@ namespace Pacmio
 
 
 
-        #region Training / Simulation Settings
+        #region Training Settings
 
         /// <summary>
         /// The unit for training time frames
         /// </summary>
-        public virtual BarFreq SimulateBarFreq { get; set; } = BarFreq.Daily;
+        public virtual BarFreq TrainingUnitFreq { get; set; } = BarFreq.Daily;
 
         /// <summary>
         /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
         /// The commission model shall be defined by Simulate Engine.
         /// </summary>
-        public virtual int SimulateLength { get; set; } = 5;
+        public virtual int TrainingLength { get; set; } = 5;
 
         /// <summary>
         /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
@@ -159,6 +147,8 @@ namespace Pacmio
         /// </summary>
         public virtual int TradingLength { get; set; } = 1;
 
-        #endregion Training / Simulation Settings
+        public BarTable GetTrainingTable(Contract c) => BarTableManager.GetOrCreateDailyBarTable(c, TrainingUnitFreq);
+
+        #endregion Training Settings
     }
 }

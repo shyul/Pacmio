@@ -13,14 +13,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
+    public enum IndicatorFilterResultType : int
+    {
+        Bearish = -1,
+        None = 0,
+        Bullish = 1,
+    }
+
     /// <summary>
     /// Indication: Move into Either Enter or Exit
-    /// Passive: Only yield signal score
+    /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Indicator : BarAnalysis
+    public abstract class IndicatorFilter : Indicator
     {
-        public abstract IEnumerable<SignalColumn> SignalColumns { get; }
+        public double HighScoreLimit { get; protected set; }
+
+        public double LowScoreLimit { get; protected set; }
     }
 }

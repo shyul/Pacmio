@@ -452,6 +452,14 @@ namespace Pacmio
             }
         }
 
+        public IEnumerable<KeyValuePair<SignalColumn, SignalDatum>> this[Indicator indicator] 
+        {
+            get
+            {
+                return SignalLUT.Where(n => indicator.SignalColumns.Contains(n.Key));
+            }
+        }
+
         public void SetSignal(SignalColumn column, double[] score, string message)
         {
             SignalDatum sd = this[column];
@@ -465,6 +473,8 @@ namespace Pacmio
                 sd.Set(score, message);
             }
         }
+
+        public (double bullish, double bearish) SignalScore(Indicator indicator) => SignalScore(indicator.SignalColumns);
 
         public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {
