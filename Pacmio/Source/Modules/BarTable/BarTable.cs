@@ -503,7 +503,7 @@ namespace Pacmio
             if (Status >= TableStatus.DataReady)
             {
                 //Status = TableStatus.Ticking;
-                SetCalculationPointer(LastCalculateIndex);
+                SetCalculationPointer(LastCalculateIndex - 1);
                 CalculateTickRequested = true;
             }
         }
@@ -621,13 +621,13 @@ namespace Pacmio
                     }
                 }
             }
-            LastCalculateIndex = startPt - 1;
+
+            LastCalculateIndex = startPt;
 
             if (debugInfo)
             {
                 Console.WriteLine("------------------");
-                Console.WriteLine(Name + " | Calculate(): " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex);
-                Console.WriteLine(Name + " | LastTime = " + LastTime + " | LastBar.Close = " + LastBar.Close);
+                Console.WriteLine(Name + " | " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex + " | LastTime = " + (BarFreq >= BarFreq.Daily ? LastTime.ToString("MM-dd-yyyy") : LastTimeBound.ToString("HH:mm:ss")) + " | LastClose = " + LastClose);
                 Console.WriteLine("==================\n");
             }
         }

@@ -98,7 +98,7 @@ namespace Pacmio
                 BarAnalysisSet = bas;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex + 1;
+                if (ReadyToShow) StopPt = m_BarTable.LastCalculateIndex;
             }
             m_AsyncUpdateUI = true;
         }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xu;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -139,7 +140,7 @@ namespace Pacmio
                 bt.CalculateRefresh(bas); 
             });
 
-            var res = tables.Where(n => n.LastBar[filter])
+            //var res = tables.Where(n => n.LastBar[filter])
 
         }
     }
