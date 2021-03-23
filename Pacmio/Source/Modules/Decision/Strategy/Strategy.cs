@@ -32,6 +32,43 @@ namespace Pacmio
     {
         public abstract void Dispose();
 
+        public virtual string Name => "Default TradeRule";
+
+        public override int GetHashCode() => Name.GetHashCode();
+
+        public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
+
+
+
+
+        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
+            => Indicators.Select(n => (n.Key.freq, n.Key.type, n.Value.bas)).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+
+
+
+        /// <summary>
+        /// Acquire from WatchListManager
+        /// </summary>
+        public WatchList WatchList
+        {
+            get => m_WatchList;
+            
+            set
+            {
+                if (m_WatchList is WatchList w) w.RemoveDataConsumer(this);
+                m_WatchList = value;
+                m_WatchList.AddDataConsumer(this);
+            }
+        }
+
+        private WatchList m_WatchList = null;
+
+        public List<Contract> ContractList { get; private set; }
+
         public void DataIsUpdated(IDataProvider provider)
         {
             if (provider is WatchList w)
@@ -52,35 +89,8 @@ namespace Pacmio
             }
         }
 
-        public virtual string Name => "Default TradeRule";
 
-        public override int GetHashCode() => Name.GetHashCode();
 
-        public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
-
-        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
-            => Indicators.Select(n => (n.Key.freq, n.Key.type, n.Value.bas)).GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Acquire from WatchListManager
-        /// </summary>
-        public WatchList WatchList
-        {
-            get => m_WatchList;
-            
-            set
-            {
-                if (m_WatchList is WatchList w) w.RemoveDataConsumer(this);
-                m_WatchList = value;
-                m_WatchList.AddDataConsumer(this);
-            }
-        }
-
-        private WatchList m_WatchList = null;
-
-        public List<Contract> ContractList { get; private set; }
 
         public (BarFreq freq, DataType type) PrimaryTimeFrame { get; protected set; }
 

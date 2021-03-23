@@ -5,20 +5,25 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections.Concurrent;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using Xu;
 
 namespace Pacmio
 {
-    public abstract class WatchList : IEquatable<WatchList>, IDataProvider
+    public abstract class WatchList : IDataProvider, IEquatable<WatchList>, IEnumerable<Contract>
     {
         public virtual string Name { get; set; }
 
         public virtual List<Contract> Contracts { get; protected set; }
+
+        public IEnumerator<Contract> GetEnumerator()
+        {
+            return Contracts.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public virtual int NumberOfRows { get => Contracts.Count(); set { } }
 

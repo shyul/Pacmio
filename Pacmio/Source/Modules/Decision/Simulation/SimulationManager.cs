@@ -19,21 +19,20 @@ namespace Pacmio
         {
             for (DateTime t = period.Start.Date; t < period.Stop; t = t.AddDays(1))
             {
-                // Get list of contracts at the particular date
-                List<Contract> list = new List<Contract>();
+                // Set the time for the WatchList;
 
-                Period pd = new Period(t, t.AddDays(2)); // Length...
+                // Get the list of contract
+                var ContractList = s.WatchList.Contracts;
 
-                foreach (Contract c in list)
-                {
-                    // Create Intraday Bar Table Set
+                // run highest time frame first, 
 
-                    // Run
+                //BarTable daily_bt = new BarTable(...);, monthly, weekdly and so on...
 
-                    // Trade, with assumptions.
+                // get a list of Period
 
-                    // Keep (yield) the Trade log...
-                }
+
+
+
             }
         }
     }
