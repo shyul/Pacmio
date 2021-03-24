@@ -83,12 +83,7 @@ namespace Pacmio
 
             if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
             {
-                BarTable bt = new(bdf_daily_base, period, adjustDividend);
-                /*
-                BarTable bt = bdf_daily_base.GetBarTable();
-                var sorted_list = bdf_daily_base.LoadBars(bt, period, adjustDividend);
-                bt.LoadBars(sorted_list);*/
-                return bt;
+                return new(bdf_daily_base, period, adjustDividend);
             }
             else if (barFreq > BarFreq.Daily)
             {
@@ -97,8 +92,7 @@ namespace Pacmio
                 if (dataType != DataType.Trades)
                     bdf_daily.Fetch(Period.Full, cts);
 
-                BarTable bt_daily = new(bdf_daily);//, period, adjustDividend);
-                //BarTable bt_daily = bdf_daily.GetBarTable();
+                BarTable bt_daily = new(bdf_daily);
                 var sorted_daily_list = bdf_daily.LoadBars(bt_daily, period, adjustDividend);
                 BarTable bt = new(c, barFreq, dataType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
@@ -109,9 +103,6 @@ namespace Pacmio
                 BarDataFile bdf = c.GetOrCreateBarDataFile(barFreq, dataType);
                 bdf.Fetch(period, cts);
                 BarTable bt = new(bdf, period, adjustDividend);
-                //BarTable bt = bdf.GetBarTable();
-                //var sorted_list = bdf.LoadBars(bt, period, adjustDividend);
-                //bt.LoadBars(sorted_list);
                 return bt;
             }
         }

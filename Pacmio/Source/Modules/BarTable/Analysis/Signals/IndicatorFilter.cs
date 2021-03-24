@@ -15,7 +15,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum IndicatorFilterResultType : int
+    public enum FilterType : int
     {
         Bearish = -1,
         None = 0,
@@ -28,8 +28,8 @@ namespace Pacmio.Analysis
     /// </summary>
     public abstract class IndicatorFilter : Indicator
     {
-        public double HighScoreLimit { get; protected set; }
+        public abstract double HighScoreLimit { get; }
 
-        public double LowScoreLimit { get; protected set; }
+        public abstract double LowScoreLimit { get; }
     }
 }

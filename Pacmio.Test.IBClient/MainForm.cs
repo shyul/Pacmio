@@ -338,10 +338,11 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = freq < BarFreq.Daily ?
+                    /*BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisSet);
                     //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
@@ -367,10 +368,11 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = freq < BarFreq.Daily ?
+                    /*BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -395,10 +397,11 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    BarTable bt = freq < BarFreq.Daily ?
+                    /*BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -423,10 +426,12 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
+                    /*
                     BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -451,13 +456,13 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
+                    /*
                     BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
-
-
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
@@ -486,12 +491,12 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
 
-
                 //Console.WriteLine("startTime = " + startTime);
                 double totalseconds = 0;
                 TableList = cList.AsParallel().Select(c => {
                     DateTime startTime = DateTime.Now;
-                    var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
                     bt.CalculateRefresh(bas);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
@@ -518,7 +523,7 @@ namespace TestClient
                     Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
                 );
 
-                Console.WriteLine("averagetime = " + totalseconds / TableList.Count());
+                Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
 
             }, Cts.Token);
         }

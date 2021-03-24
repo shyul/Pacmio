@@ -454,12 +454,27 @@ namespace Pacmio
             }
         }
 
+        /*
         public IEnumerable<KeyValuePair<SignalColumn, SignalDatum>> this[Indicator indicator]
         {
             get
             {
                 return SignalLUT.Where(n => indicator.SignalColumns.Contains(n.Key));
             }
+        }*/
+
+        public FilterType this[IndicatorFilter filter] => GetResult(filter);
+
+        public FilterType GetResult(IndicatorFilter filter)
+        {
+            var (bullish, bearish) = SignalScore(filter.SignalColumns);
+
+            if (bullish > filter.HighScoreLimit && bullish > bearish)
+                return FilterType.Bullish;
+            else if (bearish < filter.LowScoreLimit && Math.Abs(bearish) > bullish)
+                return FilterType.Bearish;
+            else
+                return FilterType.None;
         }
 
         public void SetSignal(SignalColumn column, double[] score, string message)
@@ -476,7 +491,7 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) SignalScore(Indicator indicator) => SignalScore(indicator.SignalColumns);
+        //public (double bullish, double bearish) SignalScore(Indicator indicator) => SignalScore(indicator.SignalColumns);
 
         public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {
@@ -490,6 +505,12 @@ namespace Pacmio
                     else if (score < 0) bear += score;
                 }
             }
+            /*
+            if (bull > Math.Abs(bear))
+                return (bull, 0);
+            else if (bull < Math.Abs(bear))
+                return (0, bear);
+            */
             return (bull, bear);
         }
 
