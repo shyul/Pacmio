@@ -486,25 +486,39 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
 
-                //cList.RunEach(n => Console.WriteLine(n));
+
+                //Console.WriteLine("startTime = " + startTime);
+                double totalseconds = 0;
                 TableList = cList.AsParallel().Select(c => {
+                    DateTime startTime = DateTime.Now;
                     var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
                     bt.CalculateRefresh(bas);
+                    DateTime endTime = DateTime.Now;
+                    double seconds = (endTime - startTime).TotalSeconds;
+                    totalseconds += seconds;
                     return bt;
                 });
 
-                TableList.Where(bt =>
+                DateTime endTime = DateTime.Now;
+
+                Console.WriteLine("################# Finished Loading Tables and calculation!! Start searching now!! ####################");
+
+                DateTime time = DateTime.Now.AddDays(-6).Date;
+
+                TableList.AsParallel().Where(bt =>
                     //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
                     //bt.LastClose > 10 && bt.LastClose < 100 &&
                     //bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
-                    bt[DateTime.Now.AddDays(-7)] is Bar b &&
+                    bt[time] is Bar b &&
                     b.Close > 10 && b.Close < 100 &&
-                    b[rsi] > 20 && b[rsi] < 40
+                    b[rsi] > 40 && b[rsi] < 60
 
                 ).RunEach(bt =>
                     //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
-                    Console.WriteLine(bt.ToString() + " | rsi = " + bt[DateTime.Now.AddDays(-7)][rsi].ToString())
+                    Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
                 );
+
+                Console.WriteLine("averagetime = " + totalseconds / TableList.Count());
 
             }, Cts.Token);
         }

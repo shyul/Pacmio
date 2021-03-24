@@ -845,7 +845,7 @@ namespace TestClient
             this.LabelGenericTickList.AutoSize = true;
             this.LabelGenericTickList.Location = new System.Drawing.Point(11, 16);
             this.LabelGenericTickList.Name = "LabelGenericTickList";
-            this.LabelGenericTickList.Size = new System.Drawing.Size(92, 13);
+            this.LabelGenericTickList.Size = new System.Drawing.Size(91, 13);
             this.LabelGenericTickList.TabIndex = 47;
             this.LabelGenericTickList.Text = "Generic Tick List:";
             // 
@@ -1044,7 +1044,7 @@ namespace TestClient
             this.LabelOrderSettingType.AutoSize = true;
             this.LabelOrderSettingType.Location = new System.Drawing.Point(15, 52);
             this.LabelOrderSettingType.Name = "LabelOrderSettingType";
-            this.LabelOrderSettingType.Size = new System.Drawing.Size(33, 13);
+            this.LabelOrderSettingType.Size = new System.Drawing.Size(32, 13);
             this.LabelOrderSettingType.TabIndex = 70;
             this.LabelOrderSettingType.Text = "Type:";
             // 
@@ -1062,7 +1062,7 @@ namespace TestClient
             this.LabelOrderSettingTIF.AutoSize = true;
             this.LabelOrderSettingTIF.Location = new System.Drawing.Point(23, 135);
             this.LabelOrderSettingTIF.Name = "LabelOrderSettingTIF";
-            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(25, 13);
+            this.LabelOrderSettingTIF.Size = new System.Drawing.Size(24, 13);
             this.LabelOrderSettingTIF.TabIndex = 71;
             this.LabelOrderSettingTIF.Text = "TIF:";
             // 
@@ -1099,7 +1099,7 @@ namespace TestClient
             this.LabelOrderSettingGTD.AutoSize = true;
             this.LabelOrderSettingGTD.Location = new System.Drawing.Point(16, 163);
             this.LabelOrderSettingGTD.Name = "LabelOrderSettingGTD";
-            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(32, 13);
+            this.LabelOrderSettingGTD.Size = new System.Drawing.Size(31, 13);
             this.LabelOrderSettingGTD.TabIndex = 78;
             this.LabelOrderSettingGTD.Text = "GTD:";
             // 
@@ -1768,7 +1768,7 @@ namespace TestClient
             this.LabelBarFreq.AutoSize = true;
             this.LabelBarFreq.Location = new System.Drawing.Point(7, 117);
             this.LabelBarFreq.Name = "LabelBarFreq";
-            this.LabelBarFreq.Size = new System.Drawing.Size(52, 13);
+            this.LabelBarFreq.Size = new System.Drawing.Size(53, 13);
             this.LabelBarFreq.TabIndex = 27;
             this.LabelBarFreq.Text = "Bar Freq:";
             // 
@@ -1890,7 +1890,7 @@ namespace TestClient
             this.LabelSingleContractType.AutoSize = true;
             this.LabelSingleContractType.Location = new System.Drawing.Point(33, 80);
             this.LabelSingleContractType.Name = "LabelSingleContractType";
-            this.LabelSingleContractType.Size = new System.Drawing.Size(33, 13);
+            this.LabelSingleContractType.Size = new System.Drawing.Size(32, 13);
             this.LabelSingleContractType.TabIndex = 20;
             this.LabelSingleContractType.Text = "Type:";
             // 
