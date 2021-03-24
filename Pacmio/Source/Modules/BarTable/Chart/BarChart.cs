@@ -132,7 +132,7 @@ namespace Pacmio
                         tg.ConfigChart(this);
                     }
 
-                    if (m_BarTable is BarTable bt) 
+                    if (m_BarTable is BarTable bt)
                     {
                         bt.CalculateRefresh(bas);
                     }

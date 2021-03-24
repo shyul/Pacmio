@@ -33,15 +33,17 @@ namespace Pacmio
         NYSE = 1000,
 
         [EnumMember, ApiCode("AMEX")]
-        [ExchangeInfo("US", "AMEX", "NYSE MKT", ExchangeWorkHours.Amex, ExchangeWorkHours.NorthAmericaExtended)]
+        //[ExchangeInfo("US", "AMEX", "NYSE MKT", ExchangeWorkHours.Amex, ExchangeWorkHours.NorthAmericaExtended)]
+        [ExchangeInfo("US", "AMEX", "NYSE MKT", ExchangeWorkHours.NorthAmerica, ExchangeWorkHours.NorthAmericaExtended)]
         AMEX = 1001,
 
         [EnumMember, ApiCode("ARCA")]
-        [ExchangeInfo("US", "ARCA", "NYSE Arca", ExchangeWorkHours.NorthAmericaExtended, ExchangeWorkHours.NorthAmericaExtended)]
+        //[ExchangeInfo("US", "ARCA", "NYSE Arca", ExchangeWorkHours.NorthAmericaExtended, ExchangeWorkHours.NorthAmericaExtended)]
+        [ExchangeInfo("US", "ARCA", "NYSE Arca", ExchangeWorkHours.NorthAmerica, ExchangeWorkHours.NorthAmericaExtended)]
         ARCA = 1002,
 
         [EnumMember, ApiCode("ISLAND")]
-        [ExchangeInfo("US", "NASDAQ", "Nasdaq Stock Market", ExchangeWorkHours.NorthAmerica, ExchangeWorkHours.NorthAmericaExtended)]
+        [ExchangeInfo("US", "NASDAQ", "NASDAQ Stock Market", ExchangeWorkHours.NorthAmerica, ExchangeWorkHours.NorthAmericaExtended)]
         NASDAQ = 1020,
 
         [EnumMember, ApiCode("PSX")]

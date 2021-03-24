@@ -320,6 +320,8 @@ namespace Pacmio
             }
         }
 
+        public double this[ISingleData isd] => this[isd.Column_Result];
+
         #endregion Numeric Column
 
         #region Datum Column
@@ -452,7 +454,7 @@ namespace Pacmio
             }
         }
 
-        public IEnumerable<KeyValuePair<SignalColumn, SignalDatum>> this[Indicator indicator] 
+        public IEnumerable<KeyValuePair<SignalColumn, SignalDatum>> this[Indicator indicator]
         {
             get
             {

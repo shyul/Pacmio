@@ -76,7 +76,7 @@ namespace Pacmio
             GC.Collect();
         }
 
-        public override string ToString() => Name;
+        public override string ToString() => Name + " | LastTime = " + (BarFreq >= BarFreq.Daily ? LastTime.ToString("MM-dd-yyyy") : LastTimeBound.ToString("dd, HH:mm:ss")) + " | Count = " + Count + " | LastClose = " + LastClose;
 
         public string Name => Contract.TypeFullName + ": " + Contract.Name + " (" + Contract.ExchangeName +
                 " / " + Contract.CurrencySymbol + Contract.CurrencyCode + " / " + Frequency + ")";
@@ -197,6 +197,17 @@ namespace Pacmio
 
         public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column]; // this[i] is Bar b ? b[column] : null;
 
+        public double LastClose
+        {
+            get
+            {
+                lock (DataLockObject)
+                {
+                    return Count > 0 ? Rows.Last().Close : -1;
+                }
+            }
+        }
+
         #endregion Access Bars
 
         #region Time
@@ -253,6 +264,8 @@ namespace Pacmio
                 }
             }
         }
+
+        public bool IsActiveToday => LastTime.Date == Contract.CurrentTime.Date || (!Contract.IsTrading && LastTime.Date == Contract.LatestClosingDateTime.Date);
 
         /// <summary>
         /// Returns current BarTable's maximum time span
@@ -514,12 +527,8 @@ namespace Pacmio
 
         private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new();
 
-        public int LastCalculateIndex { get; private set; } = -1;
 
-        /// <summary>
-        /// Last most Close
-        /// </summary>
-        public double LastClose => (LastBar is null) ? -1 : LastBar.Close;
+        public int LastCalculateIndex { get; private set; } = -1;
 
         /// <summary>
         /// Returns the Last Bar in the Table. Null is the BarTable is empty.
@@ -527,6 +536,7 @@ namespace Pacmio
         public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
 
         public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
+
 
         private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
@@ -613,6 +623,7 @@ namespace Pacmio
                     int original_start = bap.StartPt;
                     int original_stop = bap.StopPt;
                     ba.Update(bap);
+
                     startPt = Math.Min(startPt, bap.StartPt);
 
                     if (debugInfo)
@@ -622,7 +633,7 @@ namespace Pacmio
                 }
             }
 
-            LastCalculateIndex = startPt;
+            LastCalculateIndex = Math.Min(Count - 1, startPt);
 
             if (debugInfo)
             {

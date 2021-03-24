@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xu;
+using Pacmio.Analysis;
 
 
 namespace TestClient
@@ -454,7 +455,9 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);
 
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestSignals.BarAnalysisSet);
+                    BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
+
+
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
@@ -463,24 +466,53 @@ namespace TestClient
             }
         }
 
-        private void BtnLoadMultiHistoricalChart_Click(object sender, EventArgs e)
+        private void BtnLoadMultiBarTable_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
             BarFreq freq = BarFreq;
             DataType type = DataType;
-            //IAnalysisSetting tr = new TestStrategy(freq);
-
-            var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
-            var cList = ContractManager.GetOrFetch(symbols, "US", Cts = new CancellationTokenSource(), null).Select(n => (n, BarTableTest.TestBarAnalysisSet));
+            Period pd = HistoricalPeriod;
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>
             {
-                //BarTableTest.BarTableSet.AddChart(cList, freq, type, HistoricalPeriod, Cts, Progress);
+                var rsi = new RSI(14);
+
+                BarAnalysisSet bas = new BarAnalysisSet(new List<BarAnalysis>() {
+                    rsi,
+                });
+
+                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+                var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
+
+                //cList.RunEach(n => Console.WriteLine(n));
+                TableList = cList.AsParallel().Select(c => {
+                    var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    bt.CalculateRefresh(bas);
+                    return bt;
+                });
+
+                //TableList.RunEach(bt => bt.CalculateRefresh(bas));
+
+                // && n.Contract.CurrentTime.Date <= n.Contract.LatestClosingDateTime.Date);
+                TableList
+                .Where(bt =>
+                    bt.IsActiveToday &&
+                    bt.LastClose > 10 && bt.LastClose < 100 &&
+                    //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
+                    bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
+                )
+                .RunEach(bt => Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString()));
+
             }, Cts.Token);
-            Root.Form.Show();
+            //Root.Form.Show();
+
+
+
         }
+
+        public IEnumerable<BarTable> TableList { get; set; }
 
         private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartManager.PointerToEndAll();
 

@@ -45,7 +45,7 @@ namespace Pacmio
                 DateTime startTime = bdf.LastTimeBy(DataSourceType.Quandl);
                 DateTime stopTime = c.LatestClosingDateTime;
 
-                Console.WriteLine("startTime = " + startTime + " | stopTime = " + stopTime);
+                Console.WriteLine(bdf.Contract + " | startTime = " + startTime + " | stopTime = " + stopTime);
 
                 if (startTime > stopTime)
                 {

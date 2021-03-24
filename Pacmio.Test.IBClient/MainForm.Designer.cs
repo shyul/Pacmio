@@ -47,7 +47,7 @@ namespace TestClient
             this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
             this.BtnExportBarTableData = new System.Windows.Forms.Button();
             this.BtnExportFundamental = new System.Windows.Forms.Button();
-            this.BtnLoadMultiHistoricalChart = new System.Windows.Forms.Button();
+            this.BtnLoadMultiBarTable = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
             this.BtnCloseChart = new System.Windows.Forms.Button();
@@ -280,7 +280,7 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
             this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
             this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
-            this.tabHistoricalData.Controls.Add(this.BtnLoadMultiHistoricalChart);
+            this.tabHistoricalData.Controls.Add(this.BtnLoadMultiBarTable);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
             this.tabHistoricalData.Controls.Add(this.BtnCloseChart);
@@ -392,15 +392,15 @@ namespace TestClient
             this.BtnExportFundamental.UseVisualStyleBackColor = true;
             this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
             // 
-            // BtnLoadMultiHistoricalChart
+            // BtnLoadMultiBarTable
             // 
-            this.BtnLoadMultiHistoricalChart.Location = new System.Drawing.Point(7, 181);
-            this.BtnLoadMultiHistoricalChart.Name = "BtnLoadMultiHistoricalChart";
-            this.BtnLoadMultiHistoricalChart.Size = new System.Drawing.Size(230, 23);
-            this.BtnLoadMultiHistoricalChart.TabIndex = 45;
-            this.BtnLoadMultiHistoricalChart.Text = "Show Multi Historical Chart";
-            this.BtnLoadMultiHistoricalChart.UseVisualStyleBackColor = true;
-            this.BtnLoadMultiHistoricalChart.Click += new System.EventHandler(this.BtnLoadMultiHistoricalChart_Click);
+            this.BtnLoadMultiBarTable.Location = new System.Drawing.Point(695, 404);
+            this.BtnLoadMultiBarTable.Name = "BtnLoadMultiBarTable";
+            this.BtnLoadMultiBarTable.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadMultiBarTable.TabIndex = 45;
+            this.BtnLoadMultiBarTable.Text = "Download Multi BarTable";
+            this.BtnLoadMultiBarTable.UseVisualStyleBackColor = true;
+            this.BtnLoadMultiBarTable.Click += new System.EventHandler(this.BtnLoadMultiBarTable_Click);
             // 
             // label12
             // 
@@ -1746,9 +1746,7 @@ namespace TestClient
             this.TextBoxMultiContracts.Name = "TextBoxMultiContracts";
             this.TextBoxMultiContracts.Size = new System.Drawing.Size(398, 213);
             this.TextBoxMultiContracts.TabIndex = 9;
-            this.TextBoxMultiContracts.Text = "TDOC,ROKU,BIDU,Z,SPOT,SHOP,CRSP,ZM,ARKK,AAPL,V,SQ,GEVO,BLNK,CLOV,CLII,CHPT,FDX,NI" +
-    "O,TSLA,LAZR,MARA,RIDE,PLUG,VUZI,CPNG,SLGG,SNAP,BNGO,CCIV,YVR,OCG,TKAT,KOSS,BA,TL" +
-    "RY,AAL";
+            this.TextBoxMultiContracts.Text = resources.GetString("TextBoxMultiContracts.Text");
             // 
             // CheckBoxChartToCurrent
             // 
@@ -2337,7 +2335,7 @@ namespace TestClient
         private System.Windows.Forms.GroupBox GroupBoxOrderSetting;
         private System.Windows.Forms.Button BtnOrderSettingApplyCurrentPrice;
         private System.Windows.Forms.TabPage tabSimulation;
-        private System.Windows.Forms.Button BtnLoadMultiHistoricalChart;
+        private System.Windows.Forms.Button BtnLoadMultiBarTable;
         private System.Windows.Forms.Button BtnImportSymbols;
         private System.Windows.Forms.Button BtnUpdateContracts;
         private System.Windows.Forms.Button BtnImportNasdaq;

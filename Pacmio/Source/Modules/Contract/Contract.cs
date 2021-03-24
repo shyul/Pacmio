@@ -160,6 +160,9 @@ namespace Pacmio
         public virtual DateTime CurrentTime => WorkHours.CurrentTime;
 
         [IgnoreDataMember]
+        public bool IsTrading => WorkHours.IsWorkTime();
+
+        [IgnoreDataMember]
         public virtual DateTime LatestClosingDateTime
         {
             get
