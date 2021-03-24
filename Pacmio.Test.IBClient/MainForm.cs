@@ -493,23 +493,20 @@ namespace TestClient
                     return bt;
                 });
 
-                //TableList.RunEach(bt => bt.CalculateRefresh(bas));
+                TableList.Where(bt =>
+                    //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
+                    //bt.LastClose > 10 && bt.LastClose < 100 &&
+                    //bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
+                    bt[DateTime.Now.AddDays(-7)] is Bar b &&
+                    b.Close > 10 && b.Close < 100 &&
+                    b[rsi] > 20 && b[rsi] < 40
 
-                // && n.Contract.CurrentTime.Date <= n.Contract.LatestClosingDateTime.Date);
-                TableList
-                .Where(bt =>
-                    bt.IsActiveToday &&
-                    bt.LastClose > 10 && bt.LastClose < 100 &&
-                    //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
-                    bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
-                )
-                .RunEach(bt => Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString()));
+                ).RunEach(bt =>
+                    //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
+                    Console.WriteLine(bt.ToString() + " | rsi = " + bt[DateTime.Now.AddDays(-7)][rsi].ToString())
+                );
 
             }, Cts.Token);
-            //Root.Form.Show();
-
-
-
         }
 
         public IEnumerable<BarTable> TableList { get; set; }

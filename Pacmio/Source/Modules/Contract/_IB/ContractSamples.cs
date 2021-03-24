@@ -28,6 +28,14 @@ namespace Pacmio.IB
 
         private static void SendRequest_ContractSamples(string symbol) // Valid control send
         {
+            symbol = symbol.Trim();
+
+            if(symbol.Contains(' ')) 
+            {
+                var slist = symbol.Split(' ');
+                symbol = slist[0];
+            }
+
             if (DataRequestReady)
             {
                 Console.WriteLine("SendRequest_ContractSamples: " + symbol);

@@ -4,6 +4,8 @@
 /// 
 /// The trade rule applies to each contract
 /// 
+/// https://support.stockcharts.com/doku.php?id=scans:library:sample_scans
+/// 
 /// ***************************************************************************
 
 using System;

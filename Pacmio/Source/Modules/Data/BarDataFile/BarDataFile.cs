@@ -279,7 +279,7 @@ namespace Pacmio
 
                     lock (DataLockObject)
                     {
-                        Console.WriteLine("Adding Data Source Segment: " + pd.ToString() + " | " + sourceType.ToString());
+                        Console.WriteLine(Contract.ToString() + " | Adding Data Source Segment: " + pd.ToString() + " | " + sourceType.ToString());
                         DataSourceSegments.Add(pd, sourceType);
 
                         foreach (var row in sortedList)
@@ -287,6 +287,11 @@ namespace Pacmio
                             Rows[row.time] = (sourceType, row.O, row.H, row.L, row.C, row.V);
                         }
                     }
+                    /*
+                    if (double.IsNaN(Contract.MarketData.LastPrice) && sortedList.Count() > 0) 
+                    {
+                        Contract.MarketData.LastPrice = sortedList.Last().C;
+                    }*/
 
                     LastUpdateTime = DateTime.Now;
                     IsModified = true;

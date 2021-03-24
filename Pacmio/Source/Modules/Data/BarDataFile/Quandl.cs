@@ -133,6 +133,26 @@ namespace Pacmio
             return false;
         }
 
+        private static void SaveFile(BarDataFile bdf_save, FundamentalData currentFd, IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows, Period data_pd)
+        {
+            var rowsToSave = rows.ToArray();
+            Period pd_to_save = new Period(data_pd);
+            pd_to_save.Insert(data_pd.Stop + bdf_save.Frequency.Span);
+
+            Task.Run(() =>
+            {
+                bdf_save.AddRows(rowsToSave, DataSourceType.Quandl, pd_to_save);
+                bdf_save.SaveFile();
+                currentFd.SaveFile();
+
+                MarketData md = bdf_save.Contract.MarketData;
+                if (double.IsNaN(md.LastPrice) && rowsToSave.Count() > 0)
+                {
+                    md.LastPrice = rowsToSave.Last().C;
+                }
+            });
+        }
+
         public static void ImportEOD(string fileName, IProgress<float> progress, CancellationTokenSource cts)
         {
             long bytesRead = 0;
@@ -145,6 +165,7 @@ namespace Pacmio
             BarDataFile currentBtd = null;
             var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
 
+            ContractManager.RemoveDuplicateStock("US", cts);
             Dictionary<string, Contract> symbolLUT = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").ToDictionary(n => n.Name, n => n);
             HashSet<string> Unknown = new HashSet<string>();
 
@@ -176,10 +197,11 @@ namespace Pacmio
                                 /// Save File Now
                                 if (currentBtd is BarDataFile bdf_save)
                                 {
-                                    data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
-                                    bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
-                                    bdf_save.SaveFile();
-                                    currentFd.SaveFile();
+                                    SaveFile(bdf_save, currentFd, rows, data_pd);
+                                    //data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
+                                    //bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
+                                    //bdf_save.SaveFile();
+                                    //currentFd.SaveFile();
 
                                     rows.Clear();
                                     data_pd.Reset();
@@ -196,9 +218,26 @@ namespace Pacmio
                                     currentFd.Remove(DataSourceType.Quandl);
                                     currentBtd = BarDataFile.LoadFile((currentContract.Key, BarFreq.Daily, DataType.Trades));
                                 }
+                                else if (currentSymbolName.Contains("ATEST ") ||
+                                    currentSymbolName.Contains("CTEST ") ||
+                                    currentSymbolName == "ZVZZT" ||
+                                    currentSymbolName == "ZWZZT")
+                                {
+                                    currentContract = null;
+                                    currentBtd = null;
+                                }
+                                else if (ContractManager.GetOrFetch(currentSymbolName, "US").FirstOrDefault() is Contract c)
+                                {
+                                    currentContract = c;
+                                    currentFd = currentContract.GetOrCreateFundamentalData();
+
+                                    currentFd.Remove(DataSourceType.Quandl);
+                                    currentBtd = BarDataFile.LoadFile((currentContract.Key, BarFreq.Daily, DataType.Trades));
+                                }
                                 else
                                 {
                                     UnknownContractList.CheckIn(currentSymbolName);
+                                    currentContract = null;
                                     currentBtd = null;
                                 }
                             }
@@ -372,6 +411,8 @@ namespace Pacmio
 
         public static string ConvertToQuandlName(string input)
         {
+            input = input.Trim();
+
             if (input.Contains(" PR"))
             {
                 input = input.Replace(" PR", "_P_");
@@ -406,7 +447,7 @@ namespace Pacmio
                 input = input.Replace("_CL", " CL");
             }
 
-            return input.Replace("_", " ");
+            return input.Replace("_", " ").Trim();
         }
     }
 }
