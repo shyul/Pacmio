@@ -491,9 +491,14 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
 
-                //Console.WriteLine("startTime = " + startTime);
+
                 double totalseconds = 0;
-                TableList = cList.AsParallel().Select(c => {
+                float total_num = cList.Count();
+                float i = 0;
+
+                TableList = new List<BarTable>();
+
+                Parallel.ForEach(cList, c => {
                     DateTime startTime = DateTime.Now;
                     //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
                     var bt = c.LoadBarTable(pd, freq, type, false, Cts);
@@ -501,16 +506,18 @@ namespace TestClient
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
                     totalseconds += seconds;
-                    return bt;
-                }).ToList();
+                    i++;
+                    Progress.Report(i * 100.0f / total_num);
+                    TableList.Add(bt);
+                });
 
                 DateTime endTime = DateTime.Now;
 
                 Console.WriteLine("################# Finished Loading Tables and calculation!! Start searching now!! ####################");
 
-                DateTime time = DateTime.Now.AddDays(-6).Date;
+                DateTime time = DateTime.Now.AddDays(-8).Date;
 
-                TableList.AsParallel().Where(bt =>
+                var result = TableList.AsParallel().Where(bt =>
                     //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
                     //bt.LastClose > 10 && bt.LastClose < 100 &&
                     //bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
@@ -518,7 +525,9 @@ namespace TestClient
                     b.Close > 10 && b.Close < 100 &&
                     b[rsi] > 40 && b[rsi] < 60
 
-                ).RunEach(bt =>
+                ).ToList();
+
+                result.ForEach(bt =>
                     //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
                     Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
                 );
@@ -582,7 +591,7 @@ namespace TestClient
 
                 ).ToList();
 
-                result.RunEach(bt =>
+                result.ForEach(bt =>
                     //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
                     Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
                 );

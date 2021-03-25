@@ -518,7 +518,7 @@ namespace Pacmio
             if (isUpdated && Status >= TableStatus.DataReady)
             {
                 //Status = TableStatus.Ticking;
-                SetCalculationPointer(LastCalculateIndex - 1);
+                //SetCalculationPointer(LastCalculateIndex - 1);
                 CalculateTickRequested = true;
             }
         }
@@ -527,49 +527,60 @@ namespace Pacmio
 
         #region Data/Bar Analysis (TA) Calculation
 
-        private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerList { get; } = new();
-
-
-        public int LastCalculateIndex { get; private set; } = -1;
-
-        /// <summary>
-        /// Returns the Last Bar in the Table. Null is the BarTable is empty.
-        /// </summary>
-        public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
-
-        public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
-
+        private Dictionary<BarAnalysis, BarAnalysisPointer> BarAnalysisPointerLUT { get; } = new();
 
         private BarAnalysisPointer GetBarAnalysisPointer(BarAnalysis ba)
         {
-            lock (BarAnalysisPointerList)
+            lock (BarAnalysisPointerLUT)
             {
-                if (!BarAnalysisPointerList.ContainsKey(ba))
-                    BarAnalysisPointerList.Add(ba, new BarAnalysisPointer(this, ba));
+                if (!BarAnalysisPointerLUT.ContainsKey(ba))
+                    BarAnalysisPointerLUT.Add(ba, new BarAnalysisPointer(this, ba));
 
-                return BarAnalysisPointerList[ba];
+                return BarAnalysisPointerLUT[ba];
             }
         }
 
+        private Dictionary<BarAnalysisSet, BarAnalysisSetPointer> BarAnalysisSetPointerLUT { get; } = new();
+
+        private BarAnalysisSetPointer GetBarAnalysisSetPointer(BarAnalysisSet bas)
+        {
+            lock (BarAnalysisSetPointerLUT)
+            {
+                if (!BarAnalysisSetPointerLUT.ContainsKey(bas))
+                    BarAnalysisSetPointerLUT.Add(bas, new BarAnalysisSetPointer(this, bas));
+
+                return BarAnalysisSetPointerLUT[bas];
+            }
+        }
+
+        public BarAnalysisSetPointer this[BarAnalysisSet bas] => GetBarAnalysisSetPointer(bas);
+
         private void ResetCalculationPointer()
         {
-            lock (BarAnalysisPointerList)
-            {
-                BarAnalysisPointerList.Clear();
-            }
+            lock (BarAnalysisSetPointerLUT)
+                lock (BarAnalysisPointerLUT)
+                {
+                    BarAnalysisPointerLUT.Clear();
+                    BarAnalysisSetPointerLUT.Clear();
+                }
         }
 
         private void SetCalculationPointer(int pt)
         {
             if (pt < 0)
                 pt = 0;
+            else if (pt > LastIndex)
+                pt = LastIndex;
 
-            lock (BarAnalysisPointerList)
-            {
-                foreach (BarAnalysisPointer bap in BarAnalysisPointerList.Values)
-                    if (bap.StartPt > pt)
-                        bap.StartPt = pt;
-            }
+            lock (BarAnalysisSetPointerLUT)
+                lock (BarAnalysisPointerLUT)
+                {
+                    foreach (BarAnalysisSetPointer basp in BarAnalysisSetPointerLUT.Values)
+                        basp.LastCalculateIndex = Math.Min(basp.LastCalculateIndex, pt);
+
+                    foreach (BarAnalysisPointer bap in BarAnalysisPointerLUT.Values)
+                        bap.StartPt = Math.Min(bap.StartPt, pt); //if (bap.StartPt > pt) bap.StartPt = pt;
+                }
         }
 
         public void SetCalculationPointer(ref DateTime time)
@@ -595,10 +606,19 @@ namespace Pacmio
 
         #endregion Basic Analysis
 
+        public int LastCalculateIndex { get; private set; } = -1;
+
+        /// <summary>
+        /// Returns the Last Bar in the Table. Null is the BarTable is empty.
+        /// </summary>
+        public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
+
+        public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
+
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
-        private void Calculate(IEnumerable<BarAnalysis> analyses, bool debugInfo = true)
+        private void Calculate(IEnumerable<BarAnalysis> bas, bool debugInfo = true)
         {
             Status = TableStatus.Calculating;
 
@@ -617,7 +637,7 @@ namespace Pacmio
                 startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
                 //startPt = Math.Min(startPt, Calculate(PivotAnalysis).StartPt);
 
-                foreach (BarAnalysis ba in analyses)
+                foreach (BarAnalysis ba in bas)
                 {
                     DateTime single_start_time = DateTime.Now;
 
@@ -636,6 +656,9 @@ namespace Pacmio
             }
 
             LastCalculateIndex = Math.Min(Count - 1, startPt);
+
+            if (bas is BarAnalysisSet bas0)
+                GetBarAnalysisSetPointer(bas0).LastCalculateIndex = LastCalculateIndex;
 
             if (debugInfo)
             {
@@ -680,7 +703,7 @@ namespace Pacmio
                     {
                         LastCalculatedTickTime = LastTickTime;
                         CalculateTickRequested = false;
-                        Calculate(BarAnalysisPointerList.Keys);
+                        Calculate(BarAnalysisPointerLUT.Keys);
                     }
                     Status = TableStatus.TickingFinished;
                     Status = TableStatus.Ready;

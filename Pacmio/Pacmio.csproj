@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Patterns\Trend\TrendLineDatum.cs" />
