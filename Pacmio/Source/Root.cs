@@ -185,7 +185,7 @@ namespace Pacmio
             Task saveContract = Task.Run(() => ContractManager.Save());
             Task saveBusinessInfo = Task.Run(() => BusinessInfoManager.Save());
             FundamentalManager.Save();
-            BarDataFileManager.Save();
+            //Task saveBarData = Task.Run(() => BarDataFileManager.Save());
             MarketDataManager.Save();
             TradeInfoManager.Save();
             OrderManager.Save();

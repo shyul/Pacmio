@@ -414,9 +414,10 @@ namespace Pacmio
         {
             if (!IsEmpty)
             {
+                Console.WriteLine("Start Saving Contract List");
                 Contract[] list = Values.ToArray();
                 list.SerializeJsonFile(FileName);
-                //Parallel.ForEach(list, c => { c.MarketData.SaveFile(); });
+                Console.WriteLine("Finished Saving Contract List");
             }
         }
 

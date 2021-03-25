@@ -34,6 +34,8 @@ namespace Pacmio
 
         #endregion URLs
 
+        public static object DownloadLockObject { get; } = new object();
+
         public static DateTime LastFetchTime { get; private set; } = DateTime.MinValue;
 
         public static bool Fetch(BarDataFile bdf)
@@ -63,26 +65,29 @@ namespace Pacmio
 
                 byte[] result = null;
 
-                while ((DateTime.Now - LastFetchTime).TotalMilliseconds < 90)
+                lock (DownloadLockObject)
                 {
-                    Thread.Sleep(20);
-                }
-
-                LastFetchTime = DateTime.Now;
-
-                try
-                {
-                    Console.WriteLine("Quandl Requesting: " + url);
-                    lock (Client)
+                    while ((DateTime.Now - LastFetchTime).TotalMilliseconds < 90)
                     {
-                        result = Client.DownloadData(url);
+                        Thread.Sleep(20);
                     }
-                }
-                catch (Exception e) when (e is WebException || e is ArgumentException)
-                {
-                    Console.WriteLine(c + " | Quandl download failed" + e.ToString());
-                    c.Status = ContractStatus.Error;
-                    return false;
+
+                    LastFetchTime = DateTime.Now;
+
+                    try
+                    {
+                        Console.WriteLine("Quandl Requesting: " + url);
+                        lock (Client)
+                        {
+                            result = Client.DownloadData(url);
+                        }
+                    }
+                    catch (Exception e) when (e is WebException || e is ArgumentException)
+                    {
+                        Console.WriteLine(c + " | Quandl download failed" + e.ToString());
+                        c.Status = ContractStatus.Error;
+                        return false;
+                    }
                 }
 
                 if (result is not null)
@@ -128,10 +133,16 @@ namespace Pacmio
                     }
 
                     Console.WriteLine("The data segment has: " + data_pd);
+
+                    if ((getAll && rows.Count == 0) || (DateTime.Now - data_pd.Stop).TotalDays > 30)
+                    {
+                        c.Status = ContractStatus.Delist;
+                    }
+
                     data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
                     bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
 
-                    if (getAll)
+                    if (getAll && rows.Count > 0)
                         bdf.HistoricalHeadTime = data_pd.Start;
 
                     bdf.SaveFile();

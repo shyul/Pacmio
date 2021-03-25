@@ -38,6 +38,7 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnLoadAllBarTable = new System.Windows.Forms.Button();
             this.BtnTestSignal = new System.Windows.Forms.Button();
             this.BtnTestPatternAnalysis = new System.Windows.Forms.Button();
             this.BtnTestNativeAnalysis = new System.Windows.Forms.Button();
@@ -211,7 +212,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnLoadAllBarTable = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -299,6 +299,16 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnLoadAllBarTable
+            // 
+            this.BtnLoadAllBarTable.Location = new System.Drawing.Point(695, 433);
+            this.BtnLoadAllBarTable.Name = "BtnLoadAllBarTable";
+            this.BtnLoadAllBarTable.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadAllBarTable.TabIndex = 55;
+            this.BtnLoadAllBarTable.Text = "Test Load All BarTable";
+            this.BtnLoadAllBarTable.UseVisualStyleBackColor = true;
+            this.BtnLoadAllBarTable.Click += new System.EventHandler(this.BtnLoadAllBarTable_Click);
             // 
             // BtnTestSignal
             // 
@@ -2142,16 +2152,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnLoadAllBarTable
-            // 
-            this.BtnLoadAllBarTable.Location = new System.Drawing.Point(695, 433);
-            this.BtnLoadAllBarTable.Name = "BtnLoadAllBarTable";
-            this.BtnLoadAllBarTable.Size = new System.Drawing.Size(230, 23);
-            this.BtnLoadAllBarTable.TabIndex = 55;
-            this.BtnLoadAllBarTable.Text = "Test Load All BarTable";
-            this.BtnLoadAllBarTable.UseVisualStyleBackColor = true;
-            this.BtnLoadAllBarTable.Click += new System.EventHandler(this.BtnLoadAllBarTable_Click);
             // 
             // MainForm
             // 
