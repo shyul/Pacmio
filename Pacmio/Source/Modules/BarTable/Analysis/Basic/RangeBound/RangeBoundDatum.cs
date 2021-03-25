@@ -14,7 +14,6 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    /*
     public class RangeBoundDatum
     {
         public List<RangeBound> BoxList { get; } = new List<RangeBound>();
@@ -22,9 +21,9 @@ namespace Pacmio.Analysis
         public void Reset() => BoxList.Clear();
 
         public void Insert(IPatternObject p)
-        {
+        {/*
             double level = p.Level;
-            var list = BoxList.Where(n => n.Offset(level) <= p.Tolerance).ToArray();
+            var list = BoxList.Where(n => n.Distance(level) <= p.Tolerance).ToArray();
             if (list.Count() > 0)
             {
                 list.OrderBy(n => n.Offset(level)).First().Insert(p);
@@ -34,7 +33,7 @@ namespace Pacmio.Analysis
                 RangeBound pr = new RangeBound();
                 BoxList.Add(pr);
                 pr.Insert(p);
-            }
+            }*/
         }
 
         public double Weight(double min, double max)
@@ -42,11 +41,11 @@ namespace Pacmio.Analysis
             Range<double> r = new Range<double>(min);
             r.Insert(max);
 
-            double w = BoxList.Where(n => n.Box.Intersects(r)).Select(n => n.Weight).Sum();
+            double w = BoxList.Where(n => n.Intersects(r)).Select(n => n.Weight).Sum();
 
             if (min < max) return w;
             else if (min > max) return -w;
             else return 0;
         }
-    }*/
+    }
 }

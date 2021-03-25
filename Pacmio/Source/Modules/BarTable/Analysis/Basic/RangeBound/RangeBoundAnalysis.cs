@@ -21,7 +21,7 @@ namespace Pacmio.Analysis
 
         public override int GetHashCode() => GetType().GetHashCode();
 
-        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
+        public override void Update(BarAnalysisPointer bap)
         {
             if (!bap.IsUpToDate && bap.Count > 0)
             {

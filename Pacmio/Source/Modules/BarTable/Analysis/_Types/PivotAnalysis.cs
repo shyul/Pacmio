@@ -70,6 +70,6 @@ namespace Pacmio.Analysis
 
         public ColorTheme LowerTagTheme { get; } = new ColorTheme();
 
-        public abstract void ConfigChart(BarChart bc);
+        public virtual void ConfigChart(BarChart bc) { }
     }
 }

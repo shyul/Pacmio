@@ -13,27 +13,33 @@ using Xu;
 using Xu.Chart;
 
 namespace Pacmio.Analysis
-{/*
-    public class RangeBound
+{
+    public class RangeBound : Range<double>
     {
-        public void Insert(IPatternObject p)
+        public RangeBound() : base(double.MaxValue, double.MinValue) 
         {
+        
+        }
+
+        public void Insert(PatternDatum pd)
+        {
+            /*
             if (WeightList.ContainsKey(p.Source))
                 WeightList[p.Source] += p.Strength;
             else
                 WeightList.Add(p.Source, p.Strength);
 
-            Box.Insert(p.Level);
+            Insert(pd.Level);*/
         }
 
-        public double Offset(double level)
+        public double Distance(double level)
         {
-            double offset = level - Box.Min;
+            double offset = level - Minimum;
 
             if (offset >= 0)
                 return offset;
 
-            offset = Box.Max - level;
+            offset = Maximum - level;
 
             if (offset >= 0)
                 return offset;
@@ -52,8 +58,6 @@ namespace Pacmio.Analysis
 
         public Dictionary<PatternAnalysis, double> WeightList { get; } = new();
 
-        public Range<double> Box { get; } = new(double.MaxValue, double.MinValue);
-
-        public double Level => (Box.Max + Box.Min) / 2;
-    }*/
+        public double Level => (Maximum + Minimum) / 2;
+    }
 }

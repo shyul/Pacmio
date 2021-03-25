@@ -18,13 +18,13 @@ namespace Pacmio.Analysis
     {
         public TrendLineAnalysis(TrailingPivotPtAnalysis tpa)
         {
-            string label = "(" + tpa.MaximumInterval + ")";
+            string label = "(" + tpa.MaximumPeakProminence + ")";
             Name = GetType().Name + label;
 
             TrailingPivotPointAnalysis = tpa;
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Column_Result = new PatternColumn(this, typeof(TrendLineDatum), tpa.MaximumInterval);
+            Column_Result = new PatternColumn(this, typeof(TrendLineDatum), tpa.MaximumPeakProminence);
             AreaName = MainBarChartArea.DefaultName;
         }
 
@@ -46,7 +46,7 @@ namespace Pacmio.Analysis
 
         public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
 
-        public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumInterval;
+        public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

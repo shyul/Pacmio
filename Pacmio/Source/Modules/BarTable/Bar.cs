@@ -498,8 +498,6 @@ namespace Pacmio
             }
         }
 
-        //public (double bullish, double bearish) SignalScore(Indicator indicator) => SignalScore(indicator.SignalColumns);
-
         public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
         {
             double bull = 0, bear = 0;

@@ -11,14 +11,16 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotPtAnalysis : BarAnalysis
+    public class TrailingPivotPtAnalysis : PivotAnalysis
     {
         public TrailingPivotPtAnalysis(NativePivotAnalysis ans)
         {
             NativePivotAnalysis = ans;
 
-            MaximumInterval = ans.MaximumPeakProminence;
-            string label = "(" + Bar.Column_Close.Name + "," + MaximumInterval + "," + MinimumPeakProminence + ")";
+            MaximumPeakProminence = ans.MaximumPeakProminence;
+            MinimumPeakProminence = NativePivotAnalysis.MinimumPeakProminence;
+
+            string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
             NativePivotAnalysis.AddChild(this);
@@ -28,8 +30,10 @@ namespace Pacmio.Analysis
         {
             NativePivotAnalysis = new NativePivotAnalysis(maximumInterval);
 
-            MaximumInterval = maximumInterval;
-            string label = "(" + Bar.Column_Close.Name + "," + MaximumInterval + "," + MinimumPeakProminence + ")";
+            MaximumPeakProminence = maximumInterval;
+            MinimumPeakProminence = NativePivotAnalysis.MinimumPeakProminence;
+
+            string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
             NativePivotAnalysis.AddChild(this);
@@ -41,28 +45,9 @@ namespace Pacmio.Analysis
 
         public NativePivotAnalysis NativePivotAnalysis { get; }
 
-        public virtual int MaximumInterval { get; }
-
-        public virtual int MinimumPeakProminence => NativePivotAnalysis.MinimumPeakProminence;
-
         #endregion Parameters
 
         #region Calculation
-
-        public override void Update(BarAnalysisPointer bap) // Cancellation Token should be used
-        {
-            if (!bap.IsUpToDate && bap.Count > 0)
-            {
-                bap.StopPt = bap.Count - 1;
-
-                if (bap.StartPt < 0)
-                    bap.StartPt = 0;
-
-                Calculate(bap);
-                bap.StartPt = bap.StopPt;
-                bap.StopPt++;
-            }
-        }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -76,7 +61,7 @@ namespace Pacmio.Analysis
                     {
                         b0.ResetPivotPtList();
 
-                        for (int j = MinimumPeakProminence; j < MaximumInterval; j++)
+                        for (int j = MinimumPeakProminence; j < MaximumPeakProminence; j++)
                         {
                             int index = i - j;
                             if (index < 0) break;
