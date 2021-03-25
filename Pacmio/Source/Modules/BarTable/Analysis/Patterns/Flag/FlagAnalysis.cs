@@ -6,12 +6,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class FlagAnalysis : PatternAnalysis
+    public class FlagAnalysis : PatternAnalysis, IChartBackground
     {
         public FlagAnalysis()
         {
@@ -130,6 +131,11 @@ namespace Pacmio.Analysis
 
 
             }
+        }
+
+        public void DrawBackground(Graphics g, BarChart bc)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

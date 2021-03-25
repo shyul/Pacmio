@@ -185,8 +185,6 @@ namespace Pacmio
 
         public override int DataCount => m_BarTable is BarTable bt ? bt.Count : 0;
 
-
-
         public override string this[int i]
         {
             get
@@ -200,7 +198,9 @@ namespace Pacmio
             }
         }
 
-        public int LastIndexMax => m_BarTable.Count - 1;
+        //  m_BarTable[m_BarAnalysisSet].LastCalculateIndex;
+
+        public int LastIndexMax => m_BarTable[m_BarAnalysisSet].LastCalculateIndex;  // m_BarTable.Count - 1;
 
         public int LastIndex // Of the bar
         {
