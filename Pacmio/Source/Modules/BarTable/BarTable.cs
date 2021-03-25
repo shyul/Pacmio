@@ -631,7 +631,7 @@ namespace Pacmio
         //public static TrailingPivotAnalysis TrailingPivotAnalysis { get; } = new();
 
         #endregion Basic Analysis
-
+        
         public int LastCalculateIndex { get; private set; } = -1;
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace Pacmio
         public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
 
         public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
-
+        
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
@@ -681,15 +681,17 @@ namespace Pacmio
                 }
             }
 
-            LastCalculateIndex = Math.Min(Count - 1, startPt);
+            int lastIndex = Math.Min(Count - 1, startPt);
 
             if (bas is BarAnalysisSet bas0)
-                GetBarAnalysisSetPointer(bas0).LastCalculateIndex = LastCalculateIndex;
+                GetBarAnalysisSetPointer(bas0).LastCalculateIndex = lastIndex;
+            else
+                LastCalculateIndex = lastIndex;
 
             if (debugInfo)
             {
                 Console.WriteLine("------------------");
-                Console.WriteLine(Name + " | " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + LastCalculateIndex + " | LastTime = " + (BarFreq >= BarFreq.Daily ? LastTime.ToString("MM-dd-yyyy") : LastTimeBound.ToString("HH:mm:ss")) + " | LastClose = " + LastClose);
+                Console.WriteLine(Name + " | " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + lastIndex + " | LastTime = " + (BarFreq >= BarFreq.Daily ? Rows[lastIndex].Time.ToString("MM-dd-yyyy") : Rows[lastIndex].DataSourcePeriod.Stop.ToString("HH:mm:ss")) + " | LastClose = " + LastClose);
                 Console.WriteLine("==================\n");
             }
         }
