@@ -11,7 +11,7 @@ namespace Pacmio.Analysis
 {
     public class PivotPt : IEquatable<PivotPt>
     {
-        public PivotPt(int index, DateTime time, double level, double strength) // double prominence, double trendStrength)
+        public PivotPt(int index, DateTime time, double level, double strength = 0) // double prominence, double trendStrength)
         {
             Index = index;
             Time = time;

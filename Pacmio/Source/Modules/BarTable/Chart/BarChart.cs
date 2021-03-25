@@ -509,7 +509,7 @@ namespace Pacmio
                                 g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
                                     Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
-                                foreach (var ic in BarAnalysisSet.ChartBackgrounds)
+                                foreach (var ic in BarAnalysisSet.ChartBackgrounds.Where(n => n.ChartEnabled))
                                 {
                                     ic.DrawBackground(g, this);
                                 }

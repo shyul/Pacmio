@@ -73,7 +73,7 @@ namespace Pacmio.Analysis
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (ChartEnabled && bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is HorizontalLineDatum hld)
+            if (bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is HorizontalLineDatum hld)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
