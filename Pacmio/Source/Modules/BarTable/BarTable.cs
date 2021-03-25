@@ -164,23 +164,6 @@ namespace Pacmio
         /// <param name="stop">End and not included index</param>
         /// <returns></returns>
         public List<Bar> this[int i, int count] => Rows.Last(i, count);
-        /*
-        {
-            get
-            {
-                if (i >= Count)
-                    return new();
-                else
-                {
-                    i++;
-                    int skip = i - count;
-                    if (skip < 0) skip = 0;
-                    count = i - skip;
-
-                    return Rows.Skip(skip).Take(count).ToList();
-                }
-            }
-        }*/
 
         public List<Bar> this[Period pd]
         {
@@ -383,6 +366,49 @@ namespace Pacmio
                         Rows.Add(b);
                         TimeToRows.Add(b.Time, i);
                     }
+                }
+
+                Status = TableStatus.DataReady;
+            }
+        }
+
+        public void AppendBars(List<Bar> sorted_bars)
+        {
+            if (sorted_bars.Count > 0)
+            {
+                if (this != sorted_bars.FirstOrDefault().Table)
+                    throw new("bar's table has to match with this table!");
+
+                Status = TableStatus.Loading;
+
+                lock (DataLockObject)
+                {
+                    int earliestIndex = -1;
+
+                    for (int i = 0; i < sorted_bars.Count; i++)
+                    {
+                        Bar b = sorted_bars[i];
+
+                        if (this[b.Time] is Bar b_ori)
+                        {
+                            if (b.Source <= b_ori.Source)
+                            {
+                                b_ori.Copy(b);
+                                b.Index = b_ori.Index;
+                            }
+                        }
+                        else
+                        {
+                            Rows.Add(b);
+                            b.Index = LastIndex;
+                            TimeToRows.Add(b.Time, b.Index);
+                        }
+
+                        if (earliestIndex == -1)
+                            earliestIndex = b.Index;
+                    }
+
+                    if (earliestIndex > 0) SetCalculationPointer(earliestIndex - 1);
                 }
 
                 Status = TableStatus.DataReady;

@@ -101,7 +101,7 @@ namespace Pacmio
 
         #region Time and Period Info
 
-        public int Index { get; set; } = 0;
+        public int Index { get; set; } = -1;
 
         /// <summary>
         /// Start Time of the Bar
@@ -118,7 +118,7 @@ namespace Pacmio
         /// The actual period according from the datasource
         /// For identifing partial bar (If the Period "Contains" and "Wider" than DataSourcePeriod)
         /// </summary>
-        public Period DataSourcePeriod { get; }
+        public Period DataSourcePeriod { get; private set; }
 
         #endregion
 
@@ -148,6 +148,21 @@ namespace Pacmio
         public static NumericColumn Column_Volume { get; } = new NumericColumn("VOLUME", string.Empty);
 
         #endregion Original
+
+        public void Copy(Bar b)
+        {
+            if (b.Table != Table || b.Time != Time || b.Period != Period)
+                throw new("bar's table has to match with this table!");
+
+            ClearAllCalculationData();
+            Source = b.Source;
+            Open = b.Open;
+            High = b.High;
+            Low = b.Low;
+            Close = b.Close;
+            Volume = b.Volume;
+            DataSourcePeriod = b.DataSourcePeriod;
+        }
 
         #region Smaller Bars
 
@@ -197,25 +212,26 @@ namespace Pacmio
 
         #endregion Smaller Bars
 
+
         public List<CandleStickType> CandleStickList { get; } = new();
 
         #region Intrinsic Indicators | NativeGainAnalysis
 
         public BarType BarType { get; set; } = BarType.None;
 
-        public double Gain { get; set; } = 0;
+        public double Gain { get; set; } = double.NaN;
 
-        public double GainPercent { get; set; } = 0;
+        public double GainPercent { get; set; } = double.NaN;
 
-        public double Gap { get; set; } = 0;
+        public double Gap { get; set; } = double.NaN;
 
-        public double GapPercent { get; set; } = 0;
+        public double GapPercent { get; set; } = double.NaN;
 
-        public double Typical { get; set; }
+        public double Typical { get; set; } = double.NaN;
 
-        public double Range { get; set; } = 0;
+        public double Range { get; set; } = double.NaN;
 
-        public double TrueRange { get; set; }
+        public double TrueRange { get; set; } = double.NaN;
 
         public int NarrowRange { get; set; } = 0;
 
@@ -454,15 +470,6 @@ namespace Pacmio
             }
         }
 
-        /*
-        public IEnumerable<KeyValuePair<SignalColumn, SignalDatum>> this[Indicator indicator]
-        {
-            get
-            {
-                return SignalLUT.Where(n => indicator.SignalColumns.Contains(n.Key));
-            }
-        }*/
-
         public FilterType this[IndicatorFilter filter] => GetResult(filter);
 
         public FilterType GetResult(IndicatorFilter filter)
@@ -505,12 +512,6 @@ namespace Pacmio
                     else if (score < 0) bear += score;
                 }
             }
-            /*
-            if (bull > Math.Abs(bear))
-                return (bull, 0);
-            else if (bull < Math.Abs(bear))
-                return (0, bear);
-            */
             return (bull, bear);
         }
 
@@ -518,38 +519,23 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        //#region Position / Simulation Information
-
-        /// <summary>
-        /// Data sets for simulation analysis, virtualization
-        /// </summary>
-
-        /*
-        private Dictionary<Strategy, BarPositionData> PositionDatums { get; } = new Dictionary<Strategy, BarPositionData>();
-
-        public BarPositionData this[Strategy s]
-        {
-            get
-            {
-                if (!PositionDatums.ContainsKey(s))
-                    PositionDatums.Add(s, new BarPositionData(this, s));
-
-                return PositionDatums[s];
-            }
-        }
-
-        public void RemoveTradeDatum(Strategy s)
-        {
-            if (PositionDatums.ContainsKey(s))
-            {
-                PositionDatums.Remove(s);
-            }
-        }*/
-
-        //#endregion Position / Simulation Information
-
         public void ClearAllCalculationData()
         {
+            CandleStickList.Clear();
+
+            BarType = BarType.None;
+            Gain = double.NaN;
+            GainPercent = double.NaN;
+            Gap = double.NaN;
+            GapPercent = double.NaN;
+            Typical = double.NaN;
+            Range = double.NaN;
+            TrueRange = double.NaN;
+            NarrowRange = 0;
+            TrendStrength = 0;
+            Pivot = 0;
+            PivotStrength = 0;
+
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
             PositivePivotPtList.Clear();
