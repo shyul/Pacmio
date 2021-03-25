@@ -236,6 +236,7 @@ namespace Pacmio
 
                 if (price > 0)
                 {
+                    IsModified = true;
                     lock (DataLockObject)
                     {
                         Parallel.ForEach(DataConsumers.Where(n => n is BarTable).Select(n => n as BarTable), bt =>
@@ -357,6 +358,7 @@ namespace Pacmio
         {
             lock (DataLockObject)
             {
+                IsModified = true;
                 UpdateTime = DateTime.Now;
                 Parallel.ForEach(DataConsumers, idk => idk.DataIsUpdated(this));
             }

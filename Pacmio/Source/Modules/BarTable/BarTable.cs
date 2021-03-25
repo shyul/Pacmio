@@ -456,6 +456,7 @@ namespace Pacmio
         public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
         {
             DateTime time = Frequency.Align(tickTime);
+            bool isUpdated = true;
 
             lock (DataLockObject)
             {
@@ -496,6 +497,7 @@ namespace Pacmio
                     else
                     {
                         Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
+                        isUpdated = false;
                     }
                 }
                 else
@@ -513,7 +515,7 @@ namespace Pacmio
                 LastTickTime = tickTime;
             }
 
-            if (Status >= TableStatus.DataReady)
+            if (isUpdated && Status >= TableStatus.DataReady)
             {
                 //Status = TableStatus.Ticking;
                 SetCalculationPointer(LastCalculateIndex - 1);

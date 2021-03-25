@@ -526,9 +526,58 @@ namespace TestClient
                 Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
 
             }, Cts.Token);
+
         }
 
         public IEnumerable<BarTable> TableList { get; set; }
+
+        private void BtnLoadAllBarTable_Click(object sender, EventArgs e)
+        {
+            string symbolText = TextBoxMultiContracts.Text;
+            BarFreq freq = BarFreq;
+            DataType type = DataType;
+            Period pd = HistoricalPeriod;
+            Task.Run(() =>
+            {
+                var rsi = new RSI(14);
+
+                BarAnalysisSet bas = new BarAnalysisSet(new List<BarAnalysis>() {
+                    rsi,
+                });
+
+                var cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive).Select(n => n as Stock);
+                Console.WriteLine("total number = " + cList.Count());
+                double totalseconds = 0;
+                TableList = cList.AsParallel().Select(c =>
+                {
+                    DateTime startTime = DateTime.Now;
+                    //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
+                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    bt.CalculateRefresh(bas);
+                    DateTime endTime = DateTime.Now;
+                    double seconds = (endTime - startTime).TotalSeconds;
+                    totalseconds += seconds;
+                    return bt;
+                });
+
+                DateTime time = DateTime.Now.AddDays(-6).Date;
+
+                TableList.AsParallel().Where(bt =>
+                    //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
+                    //bt.LastClose > 10 && bt.LastClose < 100 &&
+                    //bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
+                    bt[time] is Bar b &&
+                    b.Close > 10 && b.Close < 100 &&
+                    b[rsi] > 40 && b[rsi] < 60
+
+                ).RunEach(bt =>
+                    //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
+                    Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
+                );
+
+                Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
+            });
+        }
 
         private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartManager.PointerToEndAll();
 
@@ -829,7 +878,7 @@ namespace TestClient
         private void BtnCleanUpDuplicateStock_Click(object sender, EventArgs e)
         {
             Cts = new CancellationTokenSource();
-            Task.Run(() => { ContractManager.RemoveDuplicateStock("US", Cts); });
+            Task.Run(() => { ContractManager.RemoveDuplicateUSStock("US", Cts); });
         }
 
         #region Quandl Tools

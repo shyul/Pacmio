@@ -34,6 +34,8 @@ namespace Pacmio
 
         #endregion URLs
 
+        public static DateTime LastFetchTime { get; private set; } = DateTime.MinValue;
+
         public static bool Fetch(BarDataFile bdf)
         {
             bool use_quandl = bdf.Contract is Stock && bdf.Contract.Country == "US" && bdf.BarFreq == BarFreq.Daily && bdf.Type == DataType.Trades;
@@ -61,6 +63,13 @@ namespace Pacmio
 
                 byte[] result = null;
 
+                while ((DateTime.Now - LastFetchTime).TotalMilliseconds < 90)
+                {
+                    Thread.Sleep(20);
+                }
+
+                LastFetchTime = DateTime.Now;
+
                 try
                 {
                     Console.WriteLine("Quandl Requesting: " + url);
@@ -71,7 +80,8 @@ namespace Pacmio
                 }
                 catch (Exception e) when (e is WebException || e is ArgumentException)
                 {
-                    Console.WriteLine("Quandl download failed" + e.ToString());
+                    Console.WriteLine(c + " | Quandl download failed" + e.ToString());
+                    c.Status = ContractStatus.Error;
                     return false;
                 }
 
@@ -165,8 +175,11 @@ namespace Pacmio
             BarDataFile currentBtd = null;
             var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
 
-            ContractManager.RemoveDuplicateStock("US", cts);
-            Dictionary<string, Contract> symbolLUT = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").ToDictionary(n => n.Name, n => n);
+            ContractManager.RemoveDuplicateUSStock("US", cts);
+            Dictionary<string, Contract> symbolLUT = new();
+            ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").RunEach(n => symbolLUT[n.Name] = n);
+
+            //Dictionary<string, Contract> symbolLUT = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").ToDictionary(n => n.Name, n => n);
             HashSet<string> Unknown = new HashSet<string>();
 
             if (File.Exists(fileName))
@@ -197,11 +210,18 @@ namespace Pacmio
                                 /// Save File Now
                                 if (currentBtd is BarDataFile bdf_save)
                                 {
-                                    SaveFile(bdf_save, currentFd, rows, data_pd);
-                                    //data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
-                                    //bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
-                                    //bdf_save.SaveFile();
-                                    //currentFd.SaveFile();
+                                    //SaveFile(bdf_save, currentFd, rows, data_pd);
+
+                                    data_pd.Insert(data_pd.Stop + bdf_save.Frequency.Span);
+                                    bdf_save.AddRows(rows, DataSourceType.Quandl, data_pd);
+                                    bdf_save.SaveFile();
+                                    currentFd.SaveFile();
+
+                                    MarketData md = bdf_save.Contract.MarketData;
+                                    if (double.IsNaN(md.LastPrice) && rows.Count() > 0)
+                                    {
+                                        md.LastPrice = rows.Last().C;
+                                    }
 
                                     rows.Clear();
                                     data_pd.Reset();

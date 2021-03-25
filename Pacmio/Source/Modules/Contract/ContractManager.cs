@@ -297,23 +297,22 @@ namespace Pacmio
             }
         }
 
-        public static IEnumerable<Stock> RemoveDuplicateStock(string countryCode, CancellationTokenSource cts)
+        public static IEnumerable<Stock> RemoveDuplicateUSStock(string countryCode, CancellationTokenSource cts)
         {
-            IEnumerable<Stock> cList = Values.AsParallel().Where(n => n is Stock s && s.Country == countryCode).Select(n => (Stock)n); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
-
             Dictionary<string, int> duplicate = new Dictionary<string, int>();
 
-            foreach (Stock c in cList)
-            {
+            var list = Values.Where(n => n is Stock s && s.Country == countryCode).Select(n => n as Stock);
+
+            list.RunEach(c => {
                 string name = c.Name;
 
                 if (!duplicate.ContainsKey(name))
                     duplicate.Add(name, 1);
                 else
                     duplicate[name]++;
-            }
+            }); // && s.Exchange != Exchange.OTCMKT && s.Exchange != Exchange.OTCBB);
 
-            var result = duplicate.AsParallel().Where(n => n.Value > 1).SelectMany(n => cList.Where(c => c.Name == n.Key));
+            var result = duplicate.Where(n => n.Value > 1).SelectMany(n => list.Where(c => c.Name == n.Key));
 
             foreach (Stock s in result)
             {
@@ -325,7 +324,7 @@ namespace Pacmio
                 Console.WriteLine(s.Status + " | " + s.ToString());
             }
 
-            var toDelete = result.AsParallel().Where(n => n.Status != ContractStatus.Alive).ToList();
+            var toDelete = result.Where(n => n.Status != ContractStatus.Alive).ToList();
 
             foreach (Stock s in toDelete)
             {
