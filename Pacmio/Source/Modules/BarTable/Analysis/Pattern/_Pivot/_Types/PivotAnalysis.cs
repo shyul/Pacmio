@@ -79,6 +79,8 @@ namespace Pacmio.Analysis
 
         public ColorTheme LowerTagTheme { get; } = new ColorTheme();
 
+        public virtual string AreaName { get; protected set; } = MainBarChartArea.DefaultName;
+
         public virtual void ConfigChart(BarChart bc) { }
     }
 }

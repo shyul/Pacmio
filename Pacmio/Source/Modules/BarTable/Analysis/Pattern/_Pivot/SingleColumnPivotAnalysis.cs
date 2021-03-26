@@ -29,6 +29,8 @@ namespace Pacmio.Analysis
 
             UpperColor = Color.Green;
             LowerColor = Color.Red;
+
+            AreaName = null;
         }
 
         public SingleColumnPivotAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
@@ -53,6 +55,8 @@ namespace Pacmio.Analysis
                 UpperColor = iosc.UpperColor;
                 LowerColor = iosc.LowerColor;
             }
+
+            AreaName = isd is IChartAnalysis ica ? ica.AreaName : null;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;

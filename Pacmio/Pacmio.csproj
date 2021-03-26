@@ -123,7 +123,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\PositionOfTimeframe.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\Flag\FlagType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\_Types\PatternAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\Examples\TwrcGapGo.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\TwrcGapGo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NativeGain.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestSignals.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\_Pivot\_Types\PivotAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\Examples\TwrcReversalndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\TwrcReversalndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestNative.cs" />
@@ -184,7 +184,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\Trend\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Types\Indicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\Examples\MovingAverageCrossIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepth.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />

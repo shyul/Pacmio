@@ -147,7 +147,7 @@ namespace Pacmio.Analysis
             }
         }
 
-        public override void ConfigChart(BarChart bc) 
+        public override void ConfigChart(BarChart bc)
         {
             bc.MainArea.PriceSeries.TagColumns.Add(Column_PeakTags);
         }

@@ -13,11 +13,11 @@ namespace Pacmio.Analysis
 {
     public class TrailingPivotPtAnalysis : PivotAnalysis, ISingleDatum
     {
-        public TrailingPivotPtAnalysis(PivotAnalysis pa)
+        public TrailingPivotPtAnalysis(int maximumInterval = 250)
         {
-            PivotAnalysis = pa;
+            PivotAnalysis = new NativePivotAnalysis(maximumInterval);
 
-            MaximumPeakProminence = pa.MaximumPeakProminence;
+            MaximumPeakProminence = maximumInterval;
             MinimumPeakProminence = PivotAnalysis.MinimumPeakProminence;
 
             string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
@@ -27,11 +27,11 @@ namespace Pacmio.Analysis
             Column_Result = new(Name, typeof(TrailingPivotPtDatum));
         }
 
-        public TrailingPivotPtAnalysis(int maximumInterval = 250)
+        public TrailingPivotPtAnalysis(PivotAnalysis pa)
         {
-            PivotAnalysis = new NativePivotAnalysis(maximumInterval);
+            PivotAnalysis = pa;
 
-            MaximumPeakProminence = maximumInterval;
+            MaximumPeakProminence = pa.MaximumPeakProminence;
             MinimumPeakProminence = PivotAnalysis.MinimumPeakProminence;
 
             string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";

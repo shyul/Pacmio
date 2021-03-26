@@ -16,28 +16,43 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLineAnalysis : PatternAnalysis, IChartBackground
     {
-        public HorizontalLineAnalysis(TrailingPivotPtAnalysis tpa)
-        {
-            string label = "(" + tpa.MaximumPeakProminence + ")";
-            Name = GetType().Name + label;
-
-            TrailingPivotPointAnalysis = tpa;
-            TrailingPivotPointAnalysis.AddChild(this);
-
-            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), tpa.MaximumPeakProminence);
-            AreaName = MainBarChartArea.DefaultName;
-        }
-
         public HorizontalLineAnalysis(int maximumInterval)
         {
-            string label = "(" + maximumInterval + ")";
-            Name = GetType().Name + label;
-
             TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(maximumInterval);
+            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+
             TrailingPivotPointAnalysis.AddChild(this);
 
-            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), maximumInterval);
+            string label = "(" + TrailingPivotPointAnalysis.Name + ")";
+            Name = GetType().Name + label;
+
+            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), MaximumInterval);
             AreaName = MainBarChartArea.DefaultName;
+        }
+        public HorizontalLineAnalysis(PivotAnalysis pa)
+        {
+            PivotAnalysis = pa;
+            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(pa);
+            TrailingPivotPointAnalysis.AddChild(this);
+
+            string label = "(" + TrailingPivotPointAnalysis.Name + ")";
+            Name = GetType().Name + label;
+
+            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), MaximumInterval);
+            AreaName = PivotAnalysis.AreaName;
+        }
+
+        public HorizontalLineAnalysis(TrailingPivotPtAnalysis tpa)
+        {
+            TrailingPivotPointAnalysis = tpa;
+            TrailingPivotPointAnalysis.AddChild(this);
+            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+
+            string label = "(" + TrailingPivotPointAnalysis.Name + ")";
+            Name = GetType().Name + label;
+
+            Column_Result = new PatternColumn(this, typeof(HorizontalLineDatum), MaximumInterval);
+            AreaName = PivotAnalysis.AreaName;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
@@ -46,7 +61,9 @@ namespace Pacmio.Analysis
 
         public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
 
-        public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence;
+        public PivotAnalysis PivotAnalysis { get; }
+
+        public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence * 2;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

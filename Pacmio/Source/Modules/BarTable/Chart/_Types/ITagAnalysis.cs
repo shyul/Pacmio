@@ -11,6 +11,8 @@ namespace Pacmio
 {
     public interface ITagAnalysis
     {
+        string AreaName { get; }
+
         void ConfigChart(BarChart bc);
     }
 }

@@ -29,6 +29,8 @@ namespace Pacmio.Analysis
 
             UpperColor = idd.UpperColor;// Color.Green;
             LowerColor = idd.LowerColor; // Color.Red;
+
+            AreaName = idd is IChartAnalysis ica ? ica.AreaName : null;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column_High.GetHashCode() ^ Column_Low.GetHashCode() ^ MaximumPeakProminence ^ MinimumPeakProminence;
