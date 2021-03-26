@@ -470,9 +470,9 @@ namespace Pacmio
             }
         }
 
-        public FilterType this[IndicatorFilter filter] => GetResult(filter);
+        public FilterType this[IndicatorFilter filter] => GetFilterResult(filter);
 
-        public FilterType GetResult(IndicatorFilter filter)
+        public FilterType GetFilterResult(IndicatorFilter filter)
         {
             var (bullish, bearish) = SignalScore(filter.SignalColumns);
 

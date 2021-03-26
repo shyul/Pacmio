@@ -51,15 +51,9 @@ namespace Pacmio.Analysis
 
         public Strategy Strategy { get; }
 
-
-
-
         public double MaximumHoldingTimeInMs { get; set; }
 
-
         public void GenerateOrder(ExecutionDatum ed) => Strategy.GenerateOrder(ed);
-
-
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM

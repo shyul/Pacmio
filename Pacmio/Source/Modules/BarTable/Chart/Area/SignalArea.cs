@@ -6,6 +6,7 @@
 /// 
 /// ***************************************************************************
 
+using System.Collections.Generic;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
@@ -44,21 +45,44 @@ namespace Pacmio
         {
             //if (BarChart.Strategy is Strategy s)
             //PositionArea.DrawPosition(g, this, BarTable, s);
-            if (Indicator is IndicatorExec idex)
+
+            if (BarTable is BarTable bt && bt.Count > 0)
             {
+                List<(Brush br, Rectangle rect)> rectangles = new();
+
+                if (Indicator is IndicatorExec idex)
+                {
 
 
 
 
 
+                }
+                else if (Indicator is IndicatorFilter filter)
+                {
+                    for (int i = StartPt; i < StopPt; i++)
+                    {
+                        Bar b = bt[i];
+                        FilterType type = b[filter];
+                        if (type == FilterType.Bullish)
+                        {
+
+                        }
+                        else if (type == FilterType.Bearish)
+                        {
+
+
+                        }
+
+
+                    }
+                }
+
+                g.SetClip(Bounds);
+                foreach (var (br, rect) in rectangles)
+                    g.FillRectangle(br, rect);
+                g.ResetClip();
             }
-            else if(Indicator is IndicatorFilter filter) 
-            {
-            
-            
-            
-            }
-
         }
     }
 }
