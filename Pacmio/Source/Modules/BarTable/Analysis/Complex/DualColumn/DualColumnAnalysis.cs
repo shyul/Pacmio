@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class DualColumnAnalysis : BarAnalysis
+    public sealed class DualColumnAnalysis : BarAnalysis, ISingleDatum
     {
         public DualColumnAnalysis(IDualData analysis)
         {

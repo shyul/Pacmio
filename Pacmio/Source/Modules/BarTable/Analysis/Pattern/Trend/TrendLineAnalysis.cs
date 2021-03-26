@@ -54,14 +54,11 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
                 {
-                    double range_delta = (b.PivotRange.Max - b.PivotRange.Min) / 2;
-                    double center = b.Close;
-
                     TrendLineDatum tld = new();
-                    tld.TotalRange = new(center - range_delta, center + range_delta);
-                    tld.AddLine(b.PivotPts.Select(n => n.Value));
+                    tld.TotalRange = tpd.TotalRange;
+                    tld.AddLine(tpd.PivotPts.Select(n => n.Value));
                     b[Column_Result] = tld;
                 }
             }

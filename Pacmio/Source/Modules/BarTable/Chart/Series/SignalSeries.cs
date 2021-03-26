@@ -44,7 +44,7 @@ namespace Pacmio
                         break;
                     else if (i > 0)
                     {
-                        var (bullish, bearish) = bt[i].SignalScore(Indicator);
+                        var (bullish, bearish) = bt[i].GetSignalScore(Indicator);
                         axisY.Range.Insert(bullish);
                         axisY.Range.Insert(bearish);
                     }
@@ -60,7 +60,7 @@ namespace Pacmio
 
             if (table is BarTable bt)
             {
-                var (bullish, bearish) = bt[pt].SignalScore(Indicator);
+                var (bullish, bearish) = bt[pt].GetSignalScore(Indicator);
                 double score = bullish + bearish;
 
                 if (score > 0)

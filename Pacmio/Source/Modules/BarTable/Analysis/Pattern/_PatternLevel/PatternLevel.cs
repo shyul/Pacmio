@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class RangeBound : Range<double>
+    public class PatternLevel : Range<double>
     {
-        public RangeBound() : base(double.MaxValue, double.MinValue) 
+        public PatternLevel() : base(double.MaxValue, double.MinValue) 
         {
         
         }

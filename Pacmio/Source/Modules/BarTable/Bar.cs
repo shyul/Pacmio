@@ -365,16 +365,12 @@ namespace Pacmio
             }
         }
 
+        public IDatum this[ISingleDatum isd] => this[isd.Column_Result];
+
         #endregion Datum Column
 
+        /*
         #region Trailing PivotPt
-
-        public void ResetPivotPtList()
-        {
-            PivotRange.Reset(double.MaxValue, double.MinValue);
-            PositivePivotPtList.Clear();
-            NegativePivotPtList.Clear();
-        }
 
         public object PivotPtLockObject { get; } = new object();
 
@@ -395,65 +391,15 @@ namespace Pacmio
             }
         }
 
+        public void ResetPivotPtList()
+        {
+            PivotRange.Reset(double.MaxValue, double.MinValue);
+            PositivePivotPtList.Clear();
+            NegativePivotPtList.Clear();
+        }
+
         #endregion Trailing PivotPt
-
-        #region Pattern
-
-        //public IEnumerable<IPatternObject> Pivots(BarAnalysisSet bas) => DatumColumnsLUT.Where(n => bas.Contains(n.Key)).Values.SelectType<PatternDatum, IDatum>().SelectMany(n => n.PatternObjects);
-
-        #endregion Pattern
-
-        #region Range Bound
-        /*
-        private Dictionary<string, RangeBoundDatum> RangeBoundDatums { get; } = new Dictionary<string, RangeBoundDatum>();
-
-        public void CalculateRangeBoundDatums()
-        {
-            RangeBoundDatums.Clear();
-            foreach (var p in Pivots)
-            {
-                string areaName = p.Source.AreaName;
-                if (!RangeBoundDatums.ContainsKey(areaName))
-                    RangeBoundDatums[areaName] = new RangeBoundDatum();
-
-                RangeBoundDatum prd = RangeBoundDatums[areaName];// = new PivotRangeDatum();
-                prd.Insert(p);
-            }
-        }
-
-        public RangeBoundDatum GetRangeBoundDatum() => GetRangeBoundDatum(MainBarChartArea.DefaultName);
-
-        public RangeBoundDatum GetRangeBoundDatum(string areaName)
-        {
-            if (RangeBoundDatums.ContainsKey(areaName))
-                return RangeBoundDatums[areaName];
-            else
-                return null;
-        }
-
-        public RangeBoundDatum this[IBarChartArea column]
-        {
-            get
-            {
-                if (RangeBoundDatums.ContainsKey(column.Name))
-                    return RangeBoundDatums[column.Name];
-                else
-                    return null;
-            }
-        }
-
-        public RangeBoundDatum this[IChartOverlay column]
-        {
-            get
-            {
-                if (RangeBoundDatums.ContainsKey(column.AreaName))
-                    return RangeBoundDatums[column.AreaName];
-                else
-                    return null;
-            }
-        }
         */
-        #endregion Range Bound
 
         #region Signal Information Tools
 
@@ -470,20 +416,6 @@ namespace Pacmio
             }
         }
 
-        public FilterType this[IndicatorFilter filter] => GetFilterResult(filter);
-
-        public FilterType GetFilterResult(IndicatorFilter filter)
-        {
-            var (bullish, bearish) = SignalScore(filter.SignalColumns);
-
-            if (bullish > filter.HighScoreLimit && bullish > bearish)
-                return FilterType.Bullish;
-            else if (bearish < filter.LowScoreLimit && Math.Abs(bearish) > bullish)
-                return FilterType.Bearish;
-            else
-                return FilterType.None;
-        }
-
         public void SetSignal(SignalColumn column, double[] score, string message)
         {
             SignalDatum sd = this[column];
@@ -498,7 +430,7 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) SignalScore(IEnumerable<SignalColumn> scs)
+        public (double bullish, double bearish) GetSignalScore(IEnumerable<SignalColumn> scs)
         {
             double bull = 0, bear = 0;
             foreach (SignalColumn sc in scs)
@@ -513,7 +445,21 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public (double bullish, double bearish) SignalScore(Indicator ind) => SignalScore(ind.SignalColumns);
+        public (double bullish, double bearish) GetSignalScore(Indicator ind) => GetSignalScore(ind.SignalColumns);
+
+        public FilterType this[IndicatorFilter filter] => GetSignalFilterType(filter);
+
+        public FilterType GetSignalFilterType(IndicatorFilter filter)
+        {
+            var (bullish, bearish) = GetSignalScore(filter.SignalColumns);
+
+            if (bullish > filter.HighScoreLimit && bullish > bearish)
+                return FilterType.Bullish;
+            else if (bearish < filter.LowScoreLimit && Math.Abs(bearish) > bullish)
+                return FilterType.Bearish;
+            else
+                return FilterType.None;
+        }
 
         #endregion Signal Information Tools
 
@@ -536,9 +482,8 @@ namespace Pacmio
 
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            PositivePivotPtList.Clear();
-            NegativePivotPtList.Clear();
-            //RangeBoundDatums.Clear();
+            //PositivePivotPtList.Clear();
+            //NegativePivotPtList.Clear();
         }
 
         public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();

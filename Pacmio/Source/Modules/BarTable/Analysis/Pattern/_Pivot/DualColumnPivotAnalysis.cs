@@ -24,6 +24,7 @@ namespace Pacmio.Analysis
             Description = Name + " " + label;
 
             Column_Result = new(Name, label);
+            Column_Strength_Result = new(Name + "_STRENGTH", label + "_STRENGTH");
             Column_PeakTags = new(Name + "_PIVOTPOINTTAG", "PIVOTPOINT", typeof(TagInfo));
 
             UpperColor = idd.UpperColor;// Color.Green;
@@ -34,11 +35,13 @@ namespace Pacmio.Analysis
 
         public IDualData DualDataAnalysis { get; }
 
-        public NumericColumn Column_High => DualDataAnalysis.Column_High;
+        public override NumericColumn Column_High => DualDataAnalysis.Column_High;
 
-        public NumericColumn Column_Low => DualDataAnalysis.Column_Low;
+        public override NumericColumn Column_Low => DualDataAnalysis.Column_Low;
 
         public NumericColumn Column_Result { get; }
+
+        public NumericColumn Column_Strength_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -52,13 +55,16 @@ namespace Pacmio.Analysis
                     double low = b[Column_Low];
 
                     // Get Peak and Troughs
-                    int peak_result = 0;
+                    int pivot_result = 0, strength_result = 0;
                     int j = 1;
-                    bool test_high = true, test_low = true;
+                    bool test_pivot_high = true, test_pivot_low = true;
+                    bool test_strength_high = true, test_strength_low = true;
+                    double last_left_strength_high = high, last_left_strength_low = low;
+                    double last_right_strength_high = high, last_right_strength_low = low;
 
-                    while (j < MaximumPeakProminence)
+                    while (j < MaximumPeakProminence && (test_pivot_high || test_pivot_low))
                     {
-                        if ((!test_high) && (!test_low)) break;
+                        //if ((!test_pivot_high) && (!test_pivot_low)) break;
 
                         int right_index = i + j;
                         if (right_index >= bap.StopPt) break;
@@ -66,37 +72,64 @@ namespace Pacmio.Analysis
                         int left_index = i - j;
                         if (left_index < 0) break;
 
-                        if (test_high)
+                        if (test_pivot_high)
                         {
                             double left_high = bt[left_index][Column_High];
                             double right_high = bt[right_index][Column_High];
 
                             if (high >= left_high && high >= right_high)
                             {
-                                peak_result = j;
+                                pivot_result = j;
                                 if (high == left_high) bt[left_index][Column_Result] = 0;
                             }
                             else
-                                test_high = false;
+                                test_pivot_high = false;
+
+                            if (test_strength_high)
+                            {
+                                if (last_left_strength_high > left_high && last_right_strength_high > right_high)
+                                {
+                                    strength_result = j;
+                                }
+                                else
+                                    test_strength_high = false;
+
+                                last_left_strength_high = left_high;
+                                last_right_strength_high = right_high;
+                            }
                         }
 
-                        if (test_low)
+                        if (test_pivot_low)
                         {
                             double left_low = bt[left_index][Column_Low];
                             double right_low = bt[right_index][Column_Low];
 
                             if (low <= left_low && low <= right_low)
                             {
-                                peak_result = -j;
+                                pivot_result = -j;
                                 if (low == left_low) bt[left_index][Column_Result] = 0;
                             }
                             else
-                                test_low = false;
+                                test_pivot_low = false;
+
+                            if (test_strength_low)
+                            {
+                                if (last_left_strength_low < left_low && last_right_strength_low < right_low)
+                                {
+                                    strength_result = -j;
+                                }
+                                else
+                                    test_strength_low = false;
+
+                                last_left_strength_low = left_low;
+                                last_right_strength_low = right_low;
+                            }
                         }
                         j++;
                     }
 
-                    b[Column_Result] = peak_result;
+                    b[Column_Result] = pivot_result;
+                    b[Column_Strength_Result] = strength_result;
                 }
             }
 
@@ -120,7 +153,7 @@ namespace Pacmio.Analysis
             }
         }
 
-        public override void ConfigChart(BarChart bc) 
+        public override void ConfigChart(BarChart bc)
         {
             if (DualDataAnalysis is IChartSeries ics && ics.MainSeries is ITagSeries ts)
             {

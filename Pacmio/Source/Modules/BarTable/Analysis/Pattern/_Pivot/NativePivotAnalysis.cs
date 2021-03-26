@@ -33,6 +33,10 @@ namespace Pacmio.Analysis
 
         public override int GetHashCode() => GetType().GetHashCode();
 
+        public override NumericColumn Column_High => Bar.Column_High;
+
+        public override NumericColumn Column_Low => Bar.Column_Low;
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -68,7 +72,8 @@ namespace Pacmio.Analysis
                         if (high >= left_high && high >= right_high)
                         {
                             pivot_result = j;
-                            if (high == left_high) bt[left_index].Pivot = 0;
+                            if (high == left_high)
+                                bt[left_index].Pivot = 0;
                         }
                         else
                             test_pivot_high = false;
@@ -95,7 +100,8 @@ namespace Pacmio.Analysis
                         if (low <= left_low && low <= right_low)
                         {
                             pivot_result = -j;
-                            if (low == left_low) bt[left_index].Pivot = 0;
+                            if (low == left_low)
+                                bt[left_index].Pivot = 0;
                         }
                         else
                             test_pivot_low = false;

@@ -5,7 +5,6 @@
 /// ***************************************************************************
 
 using System.Drawing;
-using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
 
@@ -19,6 +18,16 @@ namespace Pacmio.Analysis
         /// Mainly for tag display
         /// </summary>
         public int MinimumPeakProminence { get; protected set; } = 5;
+
+        /// <summary>
+        /// Will use as a reference for pattern momo / reversal
+        /// </summary>
+        public abstract NumericColumn Column_High { get; }
+
+        /// <summary>
+        /// Will use as a reference for pattern momo / reversal
+        /// </summary>
+        public abstract NumericColumn Column_Low { get; }
 
         public DatumColumn Column_PeakTags { get; protected set; }
 

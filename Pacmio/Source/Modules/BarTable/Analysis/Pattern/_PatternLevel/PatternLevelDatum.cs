@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class RangeBoundDatum
+    public class PatternLevelDatum : IDatum
     {
-        public List<RangeBound> BoxList { get; } = new List<RangeBound>();
+        public List<PatternLevel> BoxList { get; } = new List<PatternLevel>();
 
         public void Reset() => BoxList.Clear();
 

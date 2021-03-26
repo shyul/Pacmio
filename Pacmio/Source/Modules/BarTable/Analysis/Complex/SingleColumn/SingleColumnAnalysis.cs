@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SingleColumnAnalysis : BarAnalysis
+    public sealed class SingleColumnAnalysis : BarAnalysis, ISingleDatum
     {
         // new SingleColumnAnalysis(rsi),
         public SingleColumnAnalysis(IOscillator analysis, double range_percent = 0.05)
