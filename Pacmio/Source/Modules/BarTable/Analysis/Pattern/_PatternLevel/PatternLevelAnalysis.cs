@@ -16,13 +16,15 @@ namespace Pacmio.Analysis
 {
     public class PatternLevelAnalysis : BarAnalysis
     {
-        public PatternLevelAnalysis(PatternAnalysis pa, double tolerance = 0) 
+        public PatternLevelAnalysis(PatternAnalysis pa, double tolerance = 0.01) 
         {
             PatternAnalysis = pa;
             Tolerance = tolerance;
-
+            Name = GetType().Name + "(" + pa.Name + ")";
             Column_Result = new(Name, typeof(PatternLevelDatum));
         }
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ Tolerance.GetHashCode();
 
         public double Tolerance { get; }
 
@@ -36,7 +38,15 @@ namespace Pacmio.Analysis
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                if (bt[i] is Bar b && b[Column_Result] is null && b[PatternAnalysis] is PatternDatum tpd)
+                {
+
+                }
+            }
         }
     }
     

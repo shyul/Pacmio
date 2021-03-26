@@ -336,7 +336,21 @@ namespace Pacmio
             }
         }
 
-        public double this[ISingleData isd] => this[isd.Column_Result];
+        public double this[ISingleData isd]
+        {
+            get => this[isd.Column_Result];
+            set => this[isd.Column_Result] = value;
+        }
+
+        public (double high, double low) this[IDualData idd]
+        {
+            get => (this[idd.Column_High], this[idd.Column_Low]);
+            set
+            {
+                this[idd.Column_High] = value.high;
+                this[idd.Column_Low] = value.low;
+            }
+        }
 
         #endregion Numeric Column
 
@@ -365,7 +379,17 @@ namespace Pacmio
             }
         }
 
-        public IDatum this[ISingleDatum isd] => this[isd.Column_Result];
+        public IDatum this[ISingleDatum isd]
+        {
+            get => this[isd.Column_Result];
+            set => this[isd.Column_Result] = value;
+        }
+
+        public PatternDatum this[PatternAnalysis pa]
+        {
+            get => this[pa.Column_Result] as PatternDatum;
+            set => this[pa.Column_Result] = value;
+        }
 
         #endregion Datum Column
 
