@@ -39,7 +39,7 @@ namespace Pacmio.Analysis
 
                 SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
+                var ma_cross = new CrossIndicator(fast_MA, slow_MA);
 
                 DebugSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
                 DebugSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);

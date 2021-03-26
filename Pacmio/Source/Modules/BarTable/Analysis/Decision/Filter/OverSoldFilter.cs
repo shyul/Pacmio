@@ -9,21 +9,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TwrcGapGo : Indicator
+    public class OverSoldFilter : IndicatorFilter
     {
+        public override double HighScoreLimit => 100;
 
-        public TwrcGapGo() 
-        {
-            SignalSeries = new SignalSeries(this);
-        }
+        public override double LowScoreLimit => -100;
 
+        public override IEnumerable<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+        //public Indicator 
+
+        public IOscillator OverSoldAnalysis { get; set; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

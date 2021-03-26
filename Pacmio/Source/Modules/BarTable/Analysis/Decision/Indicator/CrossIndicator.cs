@@ -14,9 +14,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class MovingAverageCrossIndicator : Indicator
+    public class CrossIndicator : Indicator
     {
-        public MovingAverageCrossIndicator(ISingleData fast_MA, ISingleData slow_MA)
+        public CrossIndicator(ISingleData fast_MA, ISingleData slow_MA)
         {
             FastMovingAverage = fast_MA;
             SlowMovingAverage = slow_MA;

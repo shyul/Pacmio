@@ -369,38 +369,6 @@ namespace Pacmio
 
         #endregion Datum Column
 
-        /*
-        #region Trailing PivotPt
-
-        public object PivotPtLockObject { get; } = new object();
-
-        public Range<double> PivotRange { get; set; } = new Range<double>(double.MaxValue, double.MinValue);
-
-        public Dictionary<int, PivotPt> PositivePivotPtList { get; } = new Dictionary<int, PivotPt>();
-
-        public Dictionary<int, PivotPt> NegativePivotPtList { get; } = new Dictionary<int, PivotPt>();
-
-        public KeyValuePair<int, PivotPt>[] PivotPts
-        {
-            get
-            {
-                lock (PivotPtLockObject)
-                {
-                    return PositivePivotPtList.Concat(NegativePivotPtList).OrderBy(n => n.Key).ToArray();
-                }
-            }
-        }
-
-        public void ResetPivotPtList()
-        {
-            PivotRange.Reset(double.MaxValue, double.MinValue);
-            PositivePivotPtList.Clear();
-            NegativePivotPtList.Clear();
-        }
-
-        #endregion Trailing PivotPt
-        */
-
         #region Signal Information Tools
 
         private Dictionary<SignalColumn, SignalDatum> SignalLUT { get; } = new Dictionary<SignalColumn, SignalDatum>();
@@ -482,8 +450,6 @@ namespace Pacmio
 
             NumericColumnsLUT.Clear();
             DatumColumnsLUT.Clear();
-            //PositivePivotPtList.Clear();
-            //NegativePivotPtList.Clear();
         }
 
         public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();
