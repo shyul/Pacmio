@@ -40,7 +40,7 @@ namespace Pacmio
             */
         }
 
-        internal static List<string> OutputMessages = new List<string>();
+        internal static List<string> OutputMessages = new();
 
         [Conditional("DEBUG")]
         public static void Print(string str)

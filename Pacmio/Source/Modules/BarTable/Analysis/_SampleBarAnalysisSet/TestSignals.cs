@@ -30,12 +30,12 @@ namespace Pacmio.Analysis
 
                 var twrc = new TwrcReversalndicator();
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     twrc,
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

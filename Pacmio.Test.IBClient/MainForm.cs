@@ -131,8 +131,8 @@ namespace TestClient
 
             DateTimePickerHistoricalDataStart.Value = time.Date;
 
-            TestFreqAlign tfa = new TestFreqAlign();
-            TestMultiPeriodDataSource tmpds = new TestMultiPeriodDataSource();
+            TestFreqAlign tfa = new();
+            TestMultiPeriodDataSource tmpds = new();
             //tfa.Show();
             //tmpds.Show();
 
@@ -484,7 +484,7 @@ namespace TestClient
             {
                 var rsi = new RSI(14);
 
-                BarAnalysisSet bas = new BarAnalysisSet(new List<BarAnalysis>() {
+                BarAnalysisSet bas = new(new List<BarAnalysis>() {
                     rsi,
                 });
 
@@ -553,7 +553,7 @@ namespace TestClient
             {
                 var rsi = new RSI(14);
 
-                BarAnalysisSet bas = new BarAnalysisSet(new List<BarAnalysis>() {
+                BarAnalysisSet bas = new(new List<BarAnalysis>() {
                     rsi,
                 });
 
@@ -623,7 +623,7 @@ namespace TestClient
                 BarFreq freq = BarFreq;
                 DataType type = DataType;
                 if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
-                Period pd = new Period(new DateTime(1000, 1, 1), DateTime.Now);
+                Period pd = new(new DateTime(1000, 1, 1), DateTime.Now);
 
                 Task.Run(() =>
                 {
@@ -926,7 +926,7 @@ namespace TestClient
                 var list = MergeEODFiles.OrderByDescending(n => n.Value).Select(n => n.Key);
 
                 Cts = new CancellationTokenSource();
-                Task m = new Task(() => { Quandl.MergeEODFiles(list, Root.SaveFile.FileName, Cts, Progress); });
+                Task m = new(() => { Quandl.MergeEODFiles(list, Root.SaveFile.FileName, Cts, Progress); });
                 m.Start();
             }
         }
@@ -944,7 +944,7 @@ namespace TestClient
                     string destFileName = Root.SaveFile.FileName;
 
                     Cts = new CancellationTokenSource();
-                    Task m = new Task(() =>
+                    Task m = new(() =>
                     {
                         var list = Quandl.ImportSymbols(sourceFileName, Cts, Progress);
 
@@ -958,7 +958,7 @@ namespace TestClient
 
 
                         using (var fs = new FileStream(destFileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-                        using (StreamWriter file = new StreamWriter(fs))
+                        using (StreamWriter file = new(fs))
                         {
                             foreach (var symbol in list)
                             {
@@ -981,7 +981,7 @@ namespace TestClient
             if (Root.OpenFile.ShowDialog() == DialogResult.OK)
             {
                 Cts = new CancellationTokenSource();
-                Task m = new Task(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
+                Task m = new(() => { Quandl.ImportEOD(Root.OpenFile.FileName, Progress, Cts); });
                 m.Start();
             }
         }
@@ -1002,9 +1002,9 @@ namespace TestClient
                 {
                     string sourceFileName = Root.OpenFile.FileName;
                     using (var fs = new FileStream(sourceFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (StreamReader sr = new StreamReader(fs))
+                    using (StreamReader sr = new(fs))
                     {
-                        List<string> symbollist = new List<string>();
+                        List<string> symbollist = new();
                         while (!sr.EndOfStream)
                         {
                             string line = sr.ReadLine();
@@ -1084,7 +1084,7 @@ namespace TestClient
         private void BtnFormatSymbolsList_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            StaticWatchList wt = new StaticWatchList("Test Static WatchList", ref symbolText);
+            StaticWatchList wt = new("Test Static WatchList", ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
 
             WatchListManager.Add(wt);
@@ -1163,7 +1163,7 @@ namespace TestClient
         private void BtnMarketDataSnapshotMultiContracts_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            StaticWatchList wt = new StaticWatchList("Default", ref symbolText);
+            StaticWatchList wt = new("Default", ref symbolText);
             TextBoxMultiContracts.Text = symbolText;
 
             WatchListManager.Add(wt);

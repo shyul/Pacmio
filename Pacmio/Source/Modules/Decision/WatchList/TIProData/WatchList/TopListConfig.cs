@@ -67,7 +67,7 @@ namespace Pacmio.TIProData
 
         public List<Contract> GetContractList(List<RowData> rows, string symbolColumnName = "symbol")
         {
-            List<Contract> List = new List<Contract>();
+            List<Contract> List = new();
             lock (Columns)
             {
                 foreach (RowData row in rows)

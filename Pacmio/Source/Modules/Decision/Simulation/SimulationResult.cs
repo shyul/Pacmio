@@ -56,7 +56,7 @@ namespace Pacmio
 
         }
 
-        private readonly SortedDictionary<DateTime, TradeInfo> TradeLog = new SortedDictionary<DateTime, TradeInfo>();
+        private readonly SortedDictionary<DateTime, TradeInfo> TradeLog = new();
 
         public double MaxTradeValue { get; set; } = 0;
 

@@ -16,7 +16,7 @@ namespace TestClient
 
         private void BtnAlign_Click(object sender, EventArgs e)
         {
-            Frequency freq = new Frequency(ComboBoxTimeUnit.Text.ParseEnum<TimeUnit>(), (int)NumUpDownFreq.Value);
+            Frequency freq = new(ComboBoxTimeUnit.Text.ParseEnum<TimeUnit>(), (int)NumUpDownFreq.Value);
 
             DateTimePicker.Value = freq.Align(DateTimePicker.Value, (int)NumAlign.Value);
         }

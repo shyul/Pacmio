@@ -128,7 +128,7 @@ namespace Pacmio
 
         public static void ExportTradeLog(this IEnumerable<TradeInfo> log, string fileName)
         {
-            StringBuilder sb = new StringBuilder("ACCOUNT_INFORMATION\n");
+            StringBuilder sb = new("ACCOUNT_INFORMATION\n");
             sb.AppendLine("ACT_INF|DU332281|Xu Li|Individual|3581 Greenlee Dr. Apt 133 San Jose CA 95117 United States");
             sb.AppendLine("\n\nSTOCK_TRANSACTIONS");
 

@@ -92,8 +92,8 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b)
                 {
-                    Dictionary<double, int> high_index = new Dictionary<double, int>();
-                    Dictionary<double, int> low_index = new Dictionary<double, int>();
+                    Dictionary<double, int> high_index = new();
+                    Dictionary<double, int> low_index = new();
 
                     for (int j = 0; j < Interval; j++)
                     {

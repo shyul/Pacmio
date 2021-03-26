@@ -198,13 +198,13 @@ namespace Pacmio
 
         #endregion File Storage Utilities
 
-        public static readonly ColorTheme Upper_Theme = new ColorTheme();
+        public static readonly ColorTheme Upper_Theme = new();
 
-        public static readonly ColorTheme Upper_TextTheme = new ColorTheme();
+        public static readonly ColorTheme Upper_TextTheme = new();
 
-        public static readonly ColorTheme Lower_Theme = new ColorTheme();
+        public static readonly ColorTheme Lower_Theme = new();
 
-        public static readonly ColorTheme Lower_TextTheme = new ColorTheme();
+        public static readonly ColorTheme Lower_TextTheme = new();
 
         public static Color UpperColor
         {
@@ -239,7 +239,7 @@ namespace Pacmio
         }
 
         public static readonly string GUID = ((Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true))[0] as GuidAttribute).Value;
-        public static readonly Mutex InstanceMutex = new Mutex(true, GUID);
+        public static readonly Mutex InstanceMutex = new(true, GUID);
         public static readonly int SHOW_PACMIO = User32.RegisterWindowMessage("SHOW_PACMIO");
 
         public static string TitleText => Application.ProductName + " - Rev " + Application.ProductVersion;

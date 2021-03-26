@@ -40,14 +40,14 @@ namespace TestClient
 
 
 
-        private static readonly DataTable Table = new DataTable("Order List");
+        private static readonly DataTable Table = new("Order List");
 
         public static DataTable InitializeTable(DataGridView gv)
         {
             DataTable table = Table;
             gv.DataSource = table;
 
-            DataColumn keyColumn = new DataColumn("PermId", typeof(int));
+            DataColumn keyColumn = new("PermId", typeof(int));
             table.Columns.Add(keyColumn);
             table.PrimaryKey = new DataColumn[] { keyColumn };
             gv.Columns[0].Width = 80;

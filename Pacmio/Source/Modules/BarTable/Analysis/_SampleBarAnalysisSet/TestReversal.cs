@@ -38,7 +38,7 @@ namespace Pacmio.Analysis
                     AreaOrder = int.MaxValue - 10
                 };
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     rvol,
                     csd_rvol,
@@ -52,7 +52,7 @@ namespace Pacmio.Analysis
                     new VWAP(BarFreq.Daily) { Color = Color.Plum, LineWidth = 2  },
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

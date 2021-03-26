@@ -631,7 +631,7 @@ namespace Pacmio
         //public static TrailingPivotAnalysis TrailingPivotAnalysis { get; } = new();
 
         #endregion Basic Analysis
-        
+
         public int LastCalculateIndex { get; private set; } = -1;
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace Pacmio
         public Bar LastBar => LastCalculateIndex < 0 ? null : this[LastCalculateIndex];
 
         public Bar LastBar_1 => LastCalculateIndex < 1 ? null : this[LastCalculateIndex - 1];
-        
+
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>

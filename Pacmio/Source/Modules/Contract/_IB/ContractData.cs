@@ -16,7 +16,7 @@ namespace Pacmio.IB
 {
     public static partial class Client
     {
-        private static readonly List<Contract> active_ContractData_ResultList = new List<Contract>();
+        private static readonly List<Contract> active_ContractData_ResultList = new();
 
         private static Contract active_ContractData = null;
 
@@ -166,7 +166,7 @@ namespace Pacmio.IB
 
                     int pt = 33;
 
-                    Dictionary<string, string> tags = new Dictionary<string, string>();
+                    Dictionary<string, string> tags = new();
 
                     for (int i = 0; i < tagNum; i++)
                     {
@@ -210,7 +210,7 @@ namespace Pacmio.IB
                 if (!pd_string.ToUpper().Contains("CLOSED"))
                 {
                     string[] pd_string_pair = pd_string.Split('-');
-                    Period pd = new Period(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
+                    Period pd = new(DateTime.ParseExact(pd_string_pair[0], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture), DateTime.ParseExact(pd_string_pair[1], "yyyyMMdd:HHmm", CultureInfo.InvariantCulture));
                     q.TradingSchedule.Add(pd);
                 }
             }

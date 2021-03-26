@@ -44,7 +44,7 @@ namespace Pacmio
 
         public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, bool adjustDividend = false, CancellationTokenSource cts = null)
         {
-            Period pd = new Period(Period);
+            Period pd = new(Period);
             var key = (freq, type);
             lock (BarTableLUT)
             {

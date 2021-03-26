@@ -35,7 +35,7 @@ namespace Pacmio
             else throw new Exception("Invalid BarSize");
         }
 
-        internal static readonly Dictionary<BarFreq, Frequency> BarSizeToFreq = new Dictionary<BarFreq, Frequency>()
+        internal static readonly Dictionary<BarFreq, Frequency> BarSizeToFreq = new()
         {
             { BarFreq.Annually,     new Frequency(TimeUnit.Years,   1) },
             { BarFreq.Quarterly,    new Frequency(TimeUnit.Months,  3) },

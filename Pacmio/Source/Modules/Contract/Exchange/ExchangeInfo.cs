@@ -80,7 +80,7 @@ namespace Pacmio
         }
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursAll = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursAll = new("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Sunday,     new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
             { DayOfWeek.Monday,     new MultiTimePeriod(new Time(0), new Time(23, 59, 59, 999)) },
@@ -92,7 +92,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmerica = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursNorthAmerica = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod(new Time(9, 30), new Time(16)) },
             { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(9, 30), new Time(16)) },
@@ -102,7 +102,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmericaExtended = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursNorthAmericaExtended = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod(new Time(4), new Time(20)) },
             { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(4), new Time(20)) },
@@ -112,7 +112,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursNorthAmericaExtended2 = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursNorthAmericaExtended2 = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod(new Time(8), new Time(17)) },
             { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(8), new Time(17)) },
@@ -122,7 +122,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursAmex = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursAmex = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(7), new Time(20)) } },
@@ -132,7 +132,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursArcaEdge = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursArcaEdge = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(7, 30), new Time(16, 1)) } },
@@ -142,7 +142,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCboe = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursCboe = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16, 15)) } },
@@ -152,7 +152,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCanadianVenture = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursCanadianVenture = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(16)), new TimePeriod(new Time(16, 15), new Time(17)) } },
@@ -162,7 +162,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursLSE = new WorkHours("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursLSE = new("GMT Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(16, 50)) } },
@@ -172,7 +172,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursCentralEurope = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursCentralEurope = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 40)) } },
@@ -182,7 +182,7 @@ namespace Pacmio
          });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursFWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursFWB = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(20)) } },
@@ -192,7 +192,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSWB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursSWB = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(8), new Time(22)) } },
@@ -202,7 +202,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSFB = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursSFB = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 30)) } },
@@ -212,7 +212,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursEBS = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursEBS = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 32)) } },
@@ -222,7 +222,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursBM = new WorkHours("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursBM = new("Central European Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(17, 35)) } },
@@ -232,7 +232,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursChina = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursChina = new("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(11, 30)), new TimePeriod(new Time(13), new Time(15)) } },
@@ -242,7 +242,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursHongKong = new WorkHours("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursHongKong = new("China Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 30), new Time(12)), new TimePeriod(new Time(13), new Time(16)) } },
@@ -252,7 +252,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursSingapore = new WorkHours("Singapore Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursSingapore = new("Singapore Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9), new Time(12)), new TimePeriod(new Time(13), new Time(17)) } },
@@ -262,7 +262,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursIndia = new WorkHours("India Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursIndia = new("India Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(9, 15), new Time(15, 30)) } },
@@ -272,7 +272,7 @@ namespace Pacmio
         });
 
         [NonSerialized, IgnoreDataMember, XmlIgnore]
-        public static readonly WorkHours WorkHoursASX = new WorkHours("E. Australia Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHoursASX = new("E. Australia Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod(new Time(10), new Time(16)) },
             { DayOfWeek.Tuesday,    new MultiTimePeriod(new Time(10), new Time(16)) },
@@ -286,7 +286,7 @@ namespace Pacmio
         /// <summary>
         /// This Exchange Lookup table has to be updated according to IbApi
         /// </summary>
-        private static readonly Dictionary<string, Exchange> ApiToExchange = new Dictionary<string, Exchange>()
+        private static readonly Dictionary<string, Exchange> ApiToExchange = new()
         {
             //{ "SMART",          Exchange.SMART },
 

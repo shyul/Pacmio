@@ -10,14 +10,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
     public sealed class SignalSeries : Series
     {
-        public SignalSeries(BarChart chart)
+        public SignalSeries(Indicator ind)
         {
-            BarChart = chart;
+            Indicator = ind;
 
             Name = "Signal";
             LegendName = "SIGNAL: ";
@@ -29,18 +30,13 @@ namespace Pacmio
             Width = 40;
         }
 
-        public BarChart BarChart { get; }
-
-        public BarTable Table => BarChart.BarTable;
-
-        public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
+        public Indicator Indicator { get; }
 
         public override void RefreshAxis(IIndexArea area, ITable table)
         {
             ContinuousAxis axisY = area.AxisY(Side);
 
-            // TODO: If PositionAnalysis is available, please use PositionAnalysis SignalColumn CASH -> LONG -> SHORT
-            if (BarChart.HasSignalColumn)
+            if (table is BarTable bt)
             {
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
@@ -48,16 +44,11 @@ namespace Pacmio
                         break;
                     else if (i > 0)
                     {
-                        var (bullish, bearish) = Table[i].SignalScore(BarAnalysisSet);
+                        var (bullish, bearish) = bt[i].SignalScore(Indicator);
                         axisY.Range.Insert(bullish);
                         axisY.Range.Insert(bearish);
                     }
                 }
-            }
-            else
-            {
-                axisY.Range.Insert(1);
-                axisY.Range.Insert(-1);
             }
 
             axisY.Range.Insert(0);
@@ -65,40 +56,42 @@ namespace Pacmio
 
         public override List<(string text, Font font, Brush brush)> ValueLabels(ITable table, int pt)
         {
-            List<(string text, Font font, Brush brush)> labels = new List<(string text, Font font, Brush brush)>();
+            List<(string text, Font font, Brush brush)> labels = new();
 
-            var (bullish, bearish) = Table[pt].SignalScore(BarAnalysisSet);
-            double score = bullish + bearish;
-
-            if (score > 0)
+            if (table is BarTable bt)
             {
-                labels.Add((score.ToString(), Main.Theme.FontBold, Root.Upper_TextTheme.ForeBrush));
-            }
-            else if (score < 0)
-            {
-                labels.Add((score.ToString(), Main.Theme.FontBold, Root.Lower_TextTheme.ForeBrush));
-            }
-            else
-            {
-                labels.Add((score.ToString(), Main.Theme.FontBold, BarChart.Theme.ForeBrush));
-            }
+                var (bullish, bearish) = bt[pt].SignalScore(Indicator);
+                double score = bullish + bearish;
 
-            foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
-            {
-                SignalDatum sd = Table[pt][sc] as SignalDatum;
+                if (score > 0)
+                {
+                    labels.Add((score.ToString(), Main.Theme.FontBold, Root.Upper_TextTheme.ForeBrush));
+                }
+                else if (score < 0)
+                {
+                    labels.Add((score.ToString(), Main.Theme.FontBold, Root.Lower_TextTheme.ForeBrush));
+                }
+                else
+                {
+                    labels.Add((score.ToString(), Main.Theme.FontBold, Main.Theme.DimTextBrush));
+                }
 
-                if (sd.Score > 0)
-                    labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
-                else if (sd.Score < 0)
-                    labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                foreach (SignalColumn sc in Indicator.SignalColumns)
+                {
+                    SignalDatum sd = bt[pt][sc];
+
+                    if (sd.Score > 0)
+                        labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
+                    else if (sd.Score < 0)
+                        labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                }
             }
-
             return labels;
         }
 
         public override void Draw(Graphics g, IIndexArea area, ITable table)
         {
-            if (BarChart.HasSignalColumn)
+            if (table is BarTable bt)
             {
                 ContinuousAxis axisY = area.AxisY(Side);
                 int pt = 0;
@@ -115,9 +108,9 @@ namespace Pacmio
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        foreach (SignalColumn sc in BarChart.BarAnalysisSet.SignalColumns)
+                        foreach (SignalColumn sc in Indicator.SignalColumns)
                         {
-                            SignalDatum sd = Table[i][sc] as SignalDatum;
+                            SignalDatum sd = bt[i][sc];
 
                             string desc = sd.Description;
                             double score = sd.Score;

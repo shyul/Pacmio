@@ -58,7 +58,7 @@ namespace TestClient
         }
 
         internal static readonly string GUID = ((Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true))[0] as GuidAttribute).Value;
-        internal static readonly Mutex InstanceMutex = new Mutex(true, GUID);
+        internal static readonly Mutex InstanceMutex = new(true, GUID);
         internal static readonly int SHOW_PACMIO = User32.RegisterWindowMessage("SHOW_PACMIO");
 
         public static string TitleText => Application.ProductName + " - Rev " + Application.ProductVersion;

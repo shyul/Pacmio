@@ -56,6 +56,8 @@ namespace Pacmio.Analysis
             };
 
             SignalColumns = new SignalColumn[] { RSISignalColumn, BollingerBandSignalColumn, CandleStickSignalColumn };
+
+            SignalSeries = new(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
@@ -66,7 +68,7 @@ namespace Pacmio.Analysis
 
         public SignalColumn RSISignalColumn { get; protected set; }
 
-        public Dictionary<Range<double>, double[]> RSILevelScores = new Dictionary<Range<double>, double[]>() {
+        public Dictionary<Range<double>, double[]> RSILevelScores = new() {
             { new Range<double>(-1, 5), new double[] { -7, -5 } },
             { new Range<double>(5, 10), new double[] { -3 } },
             { new Range<double>(10, 20), new double[] { -1 } },

@@ -38,7 +38,7 @@ namespace Pacmio.Analysis
 
         public double Weight(double min, double max)
         {
-            Range<double> r = new Range<double>(min);
+            Range<double> r = new(min);
             r.Insert(max);
 
             double w = BoxList.Where(n => n.Intersects(r)).Select(n => n.Weight).Sum();

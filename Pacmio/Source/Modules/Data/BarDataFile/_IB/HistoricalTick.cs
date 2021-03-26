@@ -78,7 +78,7 @@ namespace Pacmio.IB
                     multiplier = opt.Multiplier;
                 }
 
-                List<string> paramsList = new List<string>() {
+                List<string> paramsList = new() {
                     requestType,
                     requestId.ParamPos(),
 
@@ -153,7 +153,7 @@ namespace Pacmio.IB
 
         public static void InboundTick(Contract c, DateTime time, double price, double size) => TickList[c].Add((time, price, size));
 
-        private static readonly ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>> TickList = new ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>>();
+        private static readonly ConcurrentDictionary<Contract, List<(DateTime time, double price, double size)>> TickList = new();
 
 
     }

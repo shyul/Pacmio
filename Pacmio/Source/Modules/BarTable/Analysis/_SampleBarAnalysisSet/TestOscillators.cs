@@ -37,7 +37,7 @@ namespace Pacmio.Analysis
                 var aroon = new Aroon() { HasXAxisBar = true, Order = int.MaxValue };
                 //aroon.LineSeries.Enabled = false;
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     //new Bollinger(20, 2.0),
                     //new ATR(14),
@@ -59,7 +59,7 @@ namespace Pacmio.Analysis
                     volumeEma,
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

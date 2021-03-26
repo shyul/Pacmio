@@ -17,7 +17,7 @@ namespace Pacmio.IB
     public static partial class Client
     {
 
-        internal static readonly ConcurrentDictionary<int, Contract> ActiveRealTimeBars = new ConcurrentDictionary<int, Contract>();
+        internal static readonly ConcurrentDictionary<int, Contract> ActiveRealTimeBars = new();
 
         /// <summary>
         /// 5 Seconds Realtime Bars, the period can not be changed.

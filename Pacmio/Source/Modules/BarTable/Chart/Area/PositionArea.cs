@@ -67,7 +67,7 @@ namespace Pacmio
         {
             if (s is Strategy && bt.Count > 0)
             {
-                List<(Brush br, Rectangle rect)> rectangles = new List<(Brush, Rectangle)>();
+                List<(Brush br, Rectangle rect)> rectangles = new();
 
                 int ref_pix = area.AxisY(AlignType.Right).ValueToPixel(0);
 

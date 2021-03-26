@@ -69,7 +69,7 @@ namespace Pacmio.IB
         /// <summary>
         /// usfarm
         /// </summary>
-        public static readonly ConcurrentDictionary<string, ConnectionStatus> ServerList = new ConcurrentDictionary<string, ConnectionStatus>();
+        public static readonly ConcurrentDictionary<string, ConnectionStatus> ServerList = new();
 
         public static ConnectionStatus ApiStatus { get; private set; } = ConnectionStatus.Disconnected;
 
@@ -185,7 +185,7 @@ namespace Pacmio.IB
             }
         }
 
-        public static Task Disconnect => new Task(() =>
+        public static Task Disconnect => new(() =>
         {
             WatchListManager.List.Where(n => n is InteractiveBrokerWatchList).ToList().ForEach(n => { if (n is InteractiveBrokerWatchList wt) wt.Stop(); });
 
@@ -273,7 +273,7 @@ namespace Pacmio.IB
         //private static readonly string VERSION_STR = "v100.." + VERSION.ToString(); //"v100..136";
 
         private static string ToBigEndianString(int input) =>
-            new string(new char[] {
+            new(new char[] {
             Convert.ToChar((input >> 24) & 0xFF),
             Convert.ToChar((input >> 16) & 0xFF),
             Convert.ToChar((input >> 8) & 0xFF),
@@ -281,7 +281,7 @@ namespace Pacmio.IB
 
         public static bool IsWorkHours => WorkHours.IsWorkTime();
 
-        public static readonly WorkHours WorkHours = new WorkHours("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
+        public static readonly WorkHours WorkHours = new("Eastern Standard Time", new Dictionary<DayOfWeek, MultiTimePeriod>()
         {
             { DayOfWeek.Monday,     new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },
             { DayOfWeek.Tuesday,    new MultiTimePeriod() { new TimePeriod(new Time(1), new Time(23, 30)) } },

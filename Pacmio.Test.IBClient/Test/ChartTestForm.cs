@@ -31,7 +31,7 @@ namespace TestClient
 
         }
 
-        private readonly Command c_IBHistorial = new Command()
+        private readonly Command c_IBHistorial = new()
         {
             //Enabled = false,
             Label = "Historical Data Request Awseome with more Awesome!!",

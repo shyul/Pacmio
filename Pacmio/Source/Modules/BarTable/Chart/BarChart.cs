@@ -39,7 +39,7 @@ namespace Pacmio
             Style[Importance.Minor].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
 
             //AddArea(PositionArea = new PositionArea(this));
-            AddArea(SignalArea = new SignalArea(this));
+            //AddArea(SignalArea = new SignalArea(this));
             AddArea(MainArea = new MainBarChartArea(this, 50, 0.3f) { HasXAxisBar = true, });
 
             OhlcType = type;
@@ -76,8 +76,8 @@ namespace Pacmio
         public override string Description { get => MainArea.PriceSeries.Description; set => MainArea.PriceSeries.Description = value; }
 
         public MainBarChartArea MainArea { get; }
-        public SignalArea SignalArea { get; }
-        public PositionArea PositionArea { get; }
+        //public SignalArea SignalArea { get; }
+        //public PositionArea PositionArea { get; }
 
         public override void RemoveDataSource()
         {
@@ -107,7 +107,8 @@ namespace Pacmio
         {
             // Remove all areas and series.
             //List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea && n != Test_Gain_Area && n != Test_Trend_Area).ToList();
-            List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
+            //List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
+            List<Area> areaToRemove = Areas.Where(n => n != MainArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
         }
 
@@ -164,6 +165,11 @@ namespace Pacmio
                 {
                     StopPt = 0;
                     TabName = "No BarTable";
+                }
+
+                if(m_BarAnalysisSet is BarAnalysisSet bas) 
+                {
+                    m_BarTable.CalculateRefresh(bas);
                 }
             }
         }
@@ -266,7 +272,7 @@ namespace Pacmio
                 lock (m_BarTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        SignalArea.Visible = HasSignalColumn; //true;
+                        //SignalArea.Visible = HasSignalColumn; //true;
                         //PositionArea.Visible = HasPositionColumn;
 
                         AxisX.TickList.Clear();

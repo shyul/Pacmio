@@ -54,7 +54,7 @@ namespace Pacmio
                 if (File.Exists(IndustrySectorsFile))
                 {
                     using var fs = new FileStream(IndustrySectorsFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                    using StreamReader sr = new StreamReader(fs);
+                    using StreamReader sr = new(fs);
                     string[] headers = sr.ReadLine().Split(',');
 
                     if (headers.Length == 3)
@@ -75,7 +75,7 @@ namespace Pacmio
         public static void Save()
         {
             // Save Industry Sectors
-            StringBuilder sb = new StringBuilder("Type,Code,Title\n");
+            StringBuilder sb = new("Type,Code,Title\n");
 
             lock (IndustrySectors)
             {

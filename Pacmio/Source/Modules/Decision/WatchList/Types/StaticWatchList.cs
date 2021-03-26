@@ -34,7 +34,7 @@ namespace Pacmio
         {
             Console.WriteLine("Count() = " + Contracts.Count());
 
-            HashSet<string> existingSymbols = new HashSet<string>();
+            HashSet<string> existingSymbols = new();
             var existingSymbolsArray = Contracts.Select(n => n.Name);
 
             foreach (string symbol in existingSymbolsArray)
@@ -78,7 +78,7 @@ namespace Pacmio
         {
             string[] symbolFields = csvList.Replace('/', ',').CsvReadFields();
             //HashSet<string> symbolItemList = new HashSet<string>();
-            HashSet<string> symbolList = new HashSet<string>();
+            HashSet<string> symbolList = new();
             foreach (string field in symbolFields)
             {
                 string symbol = field.TrimCsvValueField().ToUpper();

@@ -94,11 +94,11 @@ namespace Pacmio
                 {
                     FundamentalData fd = bdf.Contract.GetOrCreateFundamentalData();
                     if (getAll) fd.Remove(DataSourceType.Quandl);
-                    Period data_pd = new Period();
+                    Period data_pd = new();
 
                     var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
-                    using (MemoryStream stream = new MemoryStream(result))
-                    using (StreamReader sr = new StreamReader(stream))
+                    using (MemoryStream stream = new(result))
+                    using (StreamReader sr = new(stream))
                     {
                         string[] headers = sr.CsvReadFields();
                         if (headers.Length == 13)
@@ -157,7 +157,7 @@ namespace Pacmio
         private static void SaveFile(BarDataFile bdf_save, FundamentalData currentFd, IEnumerable<(DateTime time, double O, double H, double L, double C, double V)> rows, Period data_pd)
         {
             var rowsToSave = rows.ToArray();
-            Period pd_to_save = new Period(data_pd);
+            Period pd_to_save = new(data_pd);
             pd_to_save.Insert(data_pd.Stop + bdf_save.Frequency.Span);
 
             Task.Run(() =>
@@ -191,17 +191,17 @@ namespace Pacmio
             ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").RunEach(n => symbolLUT[n.Name] = n);
 
             //Dictionary<string, Contract> symbolLUT = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US").ToDictionary(n => n.Name, n => n);
-            HashSet<string> Unknown = new HashSet<string>();
+            HashSet<string> Unknown = new();
 
             if (File.Exists(fileName))
             {
                 long totalSize = new FileInfo(fileName).Length;
 
                 using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader sr = new StreamReader(fs);
+                using StreamReader sr = new(fs);
                 string line = sr.ReadLine();
                 string[] headers = line.CsvReadFields();
-                Period data_pd = new Period();
+                Period data_pd = new();
 
                 if (headers.Length == 14)
                     while (!sr.EndOfStream && !cts.IsCancellationRequested)
@@ -313,8 +313,8 @@ namespace Pacmio
 
         public static void MergeEODFiles(IEnumerable<string> EODFiles, string mergedFile, CancellationTokenSource cts, IProgress<float> progress)
         {
-            Dictionary<(string symbol, DateTime time), string> Lines = new Dictionary<(string symbol, DateTime time), string>();
-            HashSet<string> Symbols = new HashSet<string>();
+            Dictionary<(string symbol, DateTime time), string> Lines = new();
+            HashSet<string> Symbols = new();
 
             long totalSize = 0;
 
@@ -329,7 +329,7 @@ namespace Pacmio
                 if (cts is CancellationTokenSource cs && cs.IsCancellationRequested) break;
                 Console.WriteLine("loading: " + file);
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (StreamReader sr = new StreamReader(fs))
+                using (StreamReader sr = new(fs))
                 {
                     while (!sr.EndOfStream)
                     {
@@ -374,7 +374,7 @@ namespace Pacmio
             pt = 0;
 
             using (var fs = new FileStream(mergedFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-            using (StreamWriter file = new StreamWriter(fs))
+            using (StreamWriter file = new(fs))
             {
                 foreach (var line in sorted)
                 {
@@ -386,7 +386,7 @@ namespace Pacmio
             }
 
             using (var fs = new FileStream(mergedFile.Replace(".csv", "_Symbols.csv"), FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-            using (StreamWriter file = new StreamWriter(fs))
+            using (StreamWriter file = new(fs))
             {
                 //StringBuilder sb = new StringBuilder();
                 foreach (string s in Symbols) file.WriteLine(s);//sb.Append(s + ",");
@@ -401,7 +401,7 @@ namespace Pacmio
 
         public static HashSet<string> ImportSymbols(string EODFile, CancellationTokenSource cts, IProgress<float> progress)
         {
-            HashSet<string> Symbols = new HashSet<string>();
+            HashSet<string> Symbols = new();
 
             long byteread = 0;
             if (File.Exists(EODFile))
@@ -409,7 +409,7 @@ namespace Pacmio
                 long totalSize = new FileInfo(EODFile).Length;
 
                 using var fs = new FileStream(EODFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader sr = new StreamReader(fs);
+                using StreamReader sr = new(fs);
                 string line = sr.ReadLine();
                 string[] headers = line.CsvReadFields();
 

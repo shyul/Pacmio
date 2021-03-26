@@ -9,16 +9,17 @@
 using System.Drawing;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
     public sealed class SignalArea : OscillatorArea, IBarChartArea
     {
-        public SignalArea(BarChart chart) : base(chart, "Signal", 10)
+        public SignalArea(BarChart chart, SignalSeries sgs) : base(chart, "Signal", 10)
         {
             BarChart = chart;
             Importance = Importance.Major;
-            Order = int.MinValue + 1;
+            //Order = int.MinValue + 1;
 
             UpperLimit = 0;
             LowerLimit = 0;
@@ -27,7 +28,8 @@ namespace Pacmio
             Reference = 0;
             //FixedTickStep_Right = 2;
 
-            AddSeries(SignalSeries = new SignalSeries(chart));
+            SignalSeries = sgs;
+            //AddSeries(SignalSeries = new SignalSeries(chart));
         }
 
         public BarChart BarChart { get; }
@@ -36,10 +38,27 @@ namespace Pacmio
 
         public SignalSeries SignalSeries { get; }
 
+        public Indicator Indicator => SignalSeries.Indicator;
+
         public override void DrawCustomBackground(Graphics g)
         {
             //if (BarChart.Strategy is Strategy s)
-                //PositionArea.DrawPosition(g, this, BarTable, s);
+            //PositionArea.DrawPosition(g, this, BarTable, s);
+            if (Indicator is IndicatorExec idex)
+            {
+
+
+
+
+
+            }
+            else if(Indicator is IndicatorFilter filter) 
+            {
+            
+            
+            
+            }
+
         }
     }
 }

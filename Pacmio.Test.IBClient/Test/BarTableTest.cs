@@ -37,14 +37,14 @@ namespace TestClient
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
 
-                DebugColumnSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
-                DebugColumnSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);
-                DebugColumnSeriesOsc csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
-                DebugColumnSeries csd_typ = new DebugColumnSeries(Bar.Column_Typical);
-                DebugColumnSeriesOsc csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
-                DebugColumnSeriesOsc csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
+                DebugColumnSeries csd_range = new(Bar.Column_Range);
+                DebugColumnSeries csd_nr = new(Bar.Column_NarrowRange);
+                DebugColumnSeriesOsc csd_gp = new(Bar.Column_GapPercent);
+                DebugColumnSeries csd_typ = new(Bar.Column_Typical);
+                DebugColumnSeriesOsc csd_pivot = new(Bar.Column_Pivot);
+                DebugColumnSeriesOsc csd_trend = new(Bar.Column_TrendStrength);
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     new PivotLevelAnalysis(),
                     //new RelativeAnalysis(),
@@ -97,7 +97,7 @@ namespace TestClient
                     new GetReversalIndexFromRangeBoundAnalysis(),
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }
@@ -128,7 +128,7 @@ namespace TestClient
                 //var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {                        
                     //mfi,
                     
@@ -180,7 +180,7 @@ namespace TestClient
                     new TrendLineAnalysis(260),
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

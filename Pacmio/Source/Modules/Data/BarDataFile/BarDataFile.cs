@@ -191,7 +191,7 @@ namespace Pacmio
             if (start < stop)
             {
                 WorkHours wh = Contract.WorkHoursExtended;
-                MultiPeriod missing_period_list = new MultiPeriod(new Period(start, stop));
+                MultiPeriod missing_period_list = new(new Period(start, stop));
 
                 DateTime rm_check = start, rm_start = start;
                 bool start_chk_pd = true;
@@ -213,7 +213,7 @@ namespace Pacmio
                         if (!start_chk_pd)
                         {
                             start_chk_pd = true;
-                            Period off_market_pd = new Period(rm_start, rm_check);
+                            Period off_market_pd = new(rm_start, rm_check);
                             Console.WriteLine("Chop off Non-Market: " + off_market_pd);
                             missing_period_list.Remove(off_market_pd);
                         }
@@ -226,7 +226,7 @@ namespace Pacmio
 
                 if (!start_chk_pd)
                 {
-                    Period off_market_pd = new Period(rm_start, rm_check);
+                    Period off_market_pd = new(rm_start, rm_check);
                     Console.WriteLine("Chop off Non-Market: " + off_market_pd);
                     missing_period_list.Remove(off_market_pd);
                 }
@@ -437,7 +437,7 @@ namespace Pacmio
             lock (DataLockObject)
             {
                 var list = Rows.OrderByDescending(n => n.Key);
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 sb.AppendLine("Time,Data Source,Open,High,Low,Close,Volume,Event");
 
                 var fd = ContractKey.GetOrCreateFundamentalData();

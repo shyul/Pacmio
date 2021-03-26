@@ -37,7 +37,7 @@ namespace Pacmio
         public string CUSIP { get; set; } = string.Empty;
 
         [DataMember, Browsable(true), Category("IDs")]
-        public Dictionary<string, string> IDs = new Dictionary<string, string>();
+        public Dictionary<string, string> IDs = new();
 
         [DataMember]
         public bool FullNameLocked { get; set; } = false;

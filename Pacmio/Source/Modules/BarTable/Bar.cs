@@ -513,7 +513,7 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public (double bullish, double bearish) SignalScore(BarAnalysisSet bas) => SignalScore(bas.SignalColumns);
+        public (double bullish, double bearish) SignalScore(Indicator ind) => SignalScore(ind.SignalColumns);
 
         #endregion Signal Information Tools
 

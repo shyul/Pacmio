@@ -23,12 +23,12 @@ namespace Pacmio.TradeCAD
 
             //IsRibbonShrink = true;
 
-            RibbonButton rbtn_1 = new RibbonButton(c_IBHistorial, 0, Importance.Major);
+            RibbonButton rbtn_1 = new(c_IBHistorial, 0, Importance.Major);
 
-            RibbonPane rbtpane_IBClient = new RibbonPane("IBClient Test", 0);
+            RibbonPane rbtpane_IBClient = new("IBClient Test", 0);
             rbtpane_IBClient.Add(rbtn_1);
 
-            RibbonTabItem rbtIBClient = new RibbonTabItem("IBClient");
+            RibbonTabItem rbtIBClient = new("IBClient");
             rbtIBClient.Add(rbtpane_IBClient, 0);
 
             Ribbon.AddRibbonTab(rbtIBClient);
@@ -46,7 +46,7 @@ namespace Pacmio.TradeCAD
 
         #region Data Components
 
-        private readonly Command c_IBHistorial = new Command()
+        private readonly Command c_IBHistorial = new()
         {
             //Enabled = false,
             Label = "Historical Data Request Awseome with more Awesome!!",

@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
         Sell = -1,
     }
 
-    public class ExecutionDatum : IDatum 
+    public class ExecutionDatum : IDatum
     {
         public ExecutionType Type { get; } = ExecutionType.None;
 
@@ -43,7 +43,11 @@ namespace Pacmio.Analysis
     /// </summary>
     public abstract class IndicatorExec : Indicator
     {
-        protected IndicatorExec(Strategy s) => Strategy = s;
+        protected IndicatorExec(Strategy s)
+        {
+            Strategy = s;
+            SignalSeries = new(this);
+        }
 
         public Strategy Strategy { get; }
 

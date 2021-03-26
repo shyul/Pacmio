@@ -61,7 +61,7 @@ namespace Pacmio.IB
                 //if (od.TimeInForce == OrderTimeInForce.GoodAfterDate) goodAfterDate = od.GoodAfterDate.ToString("yyyyMMdd HH:mm:ss EST");
                 //if (od.TimeInForce == OrderTimeInForce.GoodUntilDate) goodAfterDate = od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss EST");
 
-                List<string> paramsList = new List<string>() {
+                List<string> paramsList = new() {
                     ((int)RequestType.PlaceOrder).ToString(), // 0
                     od.OrderId.ParamPos(), // 1
 

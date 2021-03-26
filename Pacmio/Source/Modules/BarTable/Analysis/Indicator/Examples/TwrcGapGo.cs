@@ -17,7 +17,10 @@ namespace Pacmio.Analysis
     public class TwrcGapGo : Indicator
     {
 
-
+        public TwrcGapGo() 
+        {
+            SignalSeries = new SignalSeries(this);
+        }
 
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }

@@ -96,7 +96,7 @@ namespace Pacmio.Analysis
 
                     if (type != FlagType.None && pull_back_bars.Count >= MinPullPackInterval && run_bars.Count >= MinRunInterval && run_bars.Count >= pull_back_bars.Count)
                     {
-                        FlagDatum fd = new FlagDatum(type);
+                        FlagDatum fd = new(type);
 
                         var run_up_highs = run_bars.Select(n => n.High);
                         var run_up_lows = run_bars.Select(n => n.Low);
@@ -148,6 +148,8 @@ namespace Pacmio.Analysis
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
+                if (StopPt > bc.DataCount) StopPt = bc.DataCount;
+
                 for (int i = StartPt; i < StopPt; i++)
                 {
                     if (bc.BarTable[i] is Bar b && b[Column_Result] is FlagDatum fd && fd.Type != FlagType.None)
@@ -162,15 +164,15 @@ namespace Pacmio.Analysis
                         int y3 = a.AxisY(AlignType.Right).ValueToPixel(fd.P3.Level);
                         int y3_b = a.AxisY(AlignType.Right).ValueToPixel(fd.P3_B.Level);
 
-                        Point pt1 = new Point(x1, y1);
-                        Point pt2 = new Point(x2, y2);
-                        Point pt2_b = new Point(x2, y2_b);
-                        Point pt3 = new Point(x3, y3);
-                        Point pt3_b = new Point(x3, y3_b);
+                        Point pt1 = new(x1, y1);
+                        Point pt2 = new(x2, y2);
+                        Point pt2_b = new(x2, y2_b);
+                        Point pt3 = new(x3, y3);
+                        Point pt3_b = new(x3, y3_b);
 
-                        Console.WriteLine(pt1.ToString());
+                        //Console.WriteLine(pt1.ToString());
 
-                        GraphicsPath gp = new GraphicsPath(); // new Point[] { pt1, pt2_b, pt2, pt3, pt3_b, pt2_b }, new byte[] { 0, 1, 1, 1, 1, 1 });
+                        GraphicsPath gp = new(); // new Point[] { pt1, pt2_b, pt2, pt3, pt3_b, pt2_b }, new byte[] { 0, 1, 1, 1, 1, 1 });
 
                         gp.AddLine(pt1, pt2);
                         gp.AddLine(pt2, pt3);
@@ -178,8 +180,7 @@ namespace Pacmio.Analysis
                         gp.AddLine(pt3_b, pt2_b);
                         //gp.AddLine(pt2, pt2);
 
-                        g.DrawPath(new Pen(Color.Red, 2), gp);
-
+                        g.DrawPath(new Pen(Color.Blue, 2), gp);
                     }
                 }
 

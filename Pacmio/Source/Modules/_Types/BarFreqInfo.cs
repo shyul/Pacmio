@@ -24,7 +24,7 @@ namespace Pacmio
         {
             Frequency = new Frequency(unit, length);
 
-            TimeSpan proposedDuration = new TimeSpan(0, 0, 0, (Frequency.Span.TotalSeconds * 4500).ToInt32());
+            TimeSpan proposedDuration = new(0, 0, 0, (Frequency.Span.TotalSeconds * 4500).ToInt32());
 
             if (unit == TimeUnit.Minutes && length == 1)
             {

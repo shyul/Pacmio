@@ -25,7 +25,7 @@ namespace TestClient
 
         public static InteractiveBrokerWatchList AddIBMostActive() 
         {
-            InteractiveBrokerWatchList wt = new InteractiveBrokerWatchList("Most Active Sample", 100)
+            InteractiveBrokerWatchList wt = new("Most Active Sample", 100)
             {
                 ScannerType = Pacmio.IB.ScannerType.MOST_ACTIVE, //  "MOST_ACTIVE",
                 Price = (10, 100),
@@ -46,7 +46,7 @@ namespace TestClient
         {
             double percent = Math.Abs(minPercent);
 
-          TopListHandler wt = new TopListHandler(name)
+          TopListHandler wt = new(name)
             {
                 Price = (minPrice, maxPrice),
                 Volume = (minVolume, double.NaN),
@@ -59,7 +59,7 @@ namespace TestClient
 
         public static AlertHandler AddTradeIdeasAlert()
         {
-            AlertHandler wt = new AlertHandler("Low Float MOMO")
+            AlertHandler wt = new("Low Float MOMO")
             {
                 Price = (1, double.NaN),
                 GainPercent = (1, double.NaN),

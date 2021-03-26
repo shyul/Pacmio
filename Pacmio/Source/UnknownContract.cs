@@ -91,7 +91,7 @@ namespace Pacmio
 
                 if (!List.ContainsKey(key))
                 {
-                    UnknownContract uc = new UnknownContract() { Key = key }; //, LastCheckedTime = DateTime.Now };
+                    UnknownContract uc = new() { Key = key }; //, LastCheckedTime = DateTime.Now };
                     List.Add(key, uc);
                     return uc;
                 }
@@ -162,7 +162,7 @@ namespace Pacmio
 
         public static void Export(string fileName)
         {
-            StringBuilder sb = new StringBuilder("LastCheckedTime,Symbol,Exchange,ExSuffix,Type,Contract ID,Business Name,Suffix,ISIN,CUSIP\n");
+            StringBuilder sb = new("LastCheckedTime,Symbol,Exchange,ExSuffix,Type,Contract ID,Business Name,Suffix,ISIN,CUSIP\n");
 
             lock (List)
             {
@@ -192,7 +192,7 @@ namespace Pacmio
             {
                 lock (List)
                     using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (StreamReader sr = new StreamReader(fs))
+                    using (StreamReader sr = new(fs))
                     {
                         string[] headers = sr.CsvReadFields();
 

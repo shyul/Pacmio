@@ -48,10 +48,10 @@ namespace Pacmio.Analysis
                 DebugSeries csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
                 DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
-                PositionOfTimeframe potf = new PositionOfTimeframe(BarFreq.Annually);
+                PositionOfTimeframe potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     new PivotLevelAnalysis(),
                     //new RelativeAnalysis(),
@@ -104,7 +104,7 @@ namespace Pacmio.Analysis
                     new GetReversalIndexFromRangeBoundAnalysis(),
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

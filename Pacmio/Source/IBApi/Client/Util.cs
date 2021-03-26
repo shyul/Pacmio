@@ -26,7 +26,7 @@ namespace Pacmio.IB
         public static string Param(this Enum eu) => eu.GetAttribute<ApiCode>() is ApiCode ac ? ac.Code : null;
         public static string Param(this ICollection<(string, string)> options)
         {
-            StringBuilder tagValuesStr = new StringBuilder();
+            StringBuilder tagValuesStr = new();
 
             if (!(options is null))
                 foreach ((string Tag, string Value) in options)

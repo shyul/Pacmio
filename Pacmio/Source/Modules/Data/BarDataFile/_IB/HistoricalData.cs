@@ -209,7 +209,7 @@ namespace Pacmio.IB
                     multiplier = opt.Multiplier;
                 }
 
-                List<string> paramsList = new List<string>() {
+                List<string> paramsList = new() {
                     requestType,
                     requestId.ParamPos(),
                     c.ConId.Param(),
@@ -284,7 +284,7 @@ namespace Pacmio.IB
             if (fields.Length == 5 + num * 8 && requestId == DataRequestID)
             {
                 var rows = new List<(DateTime time, double O, double H, double L, double C, double V)>();
-                Period data_pd = new Period();
+                Period data_pd = new();
 
                 for (int i = 0; i < num; i++)
                 {

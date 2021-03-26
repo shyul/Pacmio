@@ -41,7 +41,7 @@ namespace Pacmio.IB
 
                 ScanParameters.SerializeXMLFile("D:\\test.xml");
 
-                List<string> allFilterList = new List<string>();
+                List<string> allFilterList = new();
 
                 foreach (var ins in ScanParameters.InstrumentList[0].Instrument)
                 {
@@ -62,7 +62,7 @@ namespace Pacmio.IB
 
                 Console.WriteLine("\n\n");
 
-                List<string> codeList = new List<string>();
+                List<string> codeList = new();
 
                 foreach (var flt in ScanParameters.FilterList[0].RangeFilter)
                 {

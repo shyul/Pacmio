@@ -55,7 +55,7 @@ namespace Pacmio.IB
                     multiplier = opt.Multiplier;
                 }
 
-                List<string> paramsList = new List<string>() {
+                List<string> paramsList = new() {
                     requestType,
                     "5",
                     requestId.ParamPos(),

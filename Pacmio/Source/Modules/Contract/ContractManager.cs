@@ -155,7 +155,7 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, CancellationTokenSource cts, IProgress<float> progress)
         {
-            HashSet<string> existing_symbols = new HashSet<string>();
+            HashSet<string> existing_symbols = new();
             GetList(symbols).Where(n => (DateTime.Now - n.UpdateTime).Days < 7).Select(n => n.Name).ToList().ForEach(n => existing_symbols.CheckAdd(n));
 
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n));
@@ -194,7 +194,7 @@ namespace Pacmio
 
         public static IEnumerable<Contract> GetOrFetch(IEnumerable<string> symbols, string countryCode, CancellationTokenSource cts, IProgress<float> progress)
         {
-            List<string> existing_symbols = new List<string>();
+            List<string> existing_symbols = new();
             GetList(symbols, countryCode).Where(n => (DateTime.Now - n.UpdateTime).Days < 7).Select(n => n.Name).ToList().ForEach(n => existing_symbols.CheckAdd(n));
 
             var non_existing_symbols = symbols.AsParallel().Where(n => !existing_symbols.Contains(n) && (!UnknownContractList.Contains(n)));
@@ -299,7 +299,7 @@ namespace Pacmio
 
         public static IEnumerable<Stock> RemoveDuplicateUSStock(string countryCode, CancellationTokenSource cts)
         {
-            Dictionary<string, int> duplicate = new Dictionary<string, int>();
+            Dictionary<string, int> duplicate = new();
 
             var list = Values.Where(n => n is Stock s && s.Country == countryCode).Select(n => n as Stock);
 
@@ -350,7 +350,7 @@ namespace Pacmio
 
                 long totalSize = new FileInfo(fileName).Length;
                 using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader sr = new StreamReader(fs);
+                using StreamReader sr = new(fs);
                 string[] headers = sr.ReadLine().Split('|');
 
                 long byteread = 0;
@@ -438,7 +438,7 @@ namespace Pacmio
 
         public static bool ExportCSV(string fileName, CancellationTokenSource cts, IProgress<float> progress)
         {
-            StringBuilder sb = new StringBuilder("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
+            StringBuilder sb = new("Status,Type,Contract ID,Symbol,Exchange,ExSuffix,Business Name,Suffix,ISIN,CUSIP\n");
 
             Console.WriteLine("Start sorting the list!");
 
@@ -544,7 +544,7 @@ namespace Pacmio
                 long totalSize = new FileInfo(fileName).Length;
 
                 using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader sr = new StreamReader(fs);
+                using StreamReader sr = new(fs);
                 string[] headers = sr.ReadLine().Split(',');
 
                 while (!sr.EndOfStream)

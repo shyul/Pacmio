@@ -33,7 +33,7 @@ namespace Pacmio.IB
         public static int RequestId { get; private set; }
         public static bool IsRequestIdValid { get; private set; } = false;
 
-        private static readonly ConcurrentDictionary<int, RequestType> ActiveRequestIds = new ConcurrentDictionary<int, RequestType>();
+        private static readonly ConcurrentDictionary<int, RequestType> ActiveRequestIds = new();
 
         private static bool ActiveRequestContains(RequestType type) => ActiveRequestIds.Values.Contains(type);
         private static bool ActiveRequestContains(int reqId) => ActiveRequestIds.ContainsKey(reqId);
@@ -120,7 +120,7 @@ namespace Pacmio.IB
         {
             lock (ActiveRequestIds)
             {
-                List<int> removeList = new List<int>();
+                List<int> removeList = new();
 
                 foreach (int reqId in ActiveRequestIds.Keys)
                     if (ActiveRequestIds[reqId] == type)
@@ -137,13 +137,13 @@ namespace Pacmio.IB
 
         private const char MSG_EOL = '\0';
         private static Task SendTask { get; set; }
-        private static readonly ConcurrentQueue<string[]> sendDataBuffer = new ConcurrentQueue<string[]>();
+        private static readonly ConcurrentQueue<string[]> sendDataBuffer = new();
         private static bool SendDataEmpty => sendDataBuffer.IsEmpty;
         private static void FlushSendData() { lock (sendDataBuffer) while (!SendDataEmpty) sendDataBuffer.TryDequeue(out _); }
 
         private static void Send(string[] paramsList) // 50 request per second
         {
-            StringBuilder sb = new StringBuilder("0000"); // Clear 4 byte (octet) for request length.
+            StringBuilder sb = new("0000"); // Clear 4 byte (octet) for request length.
 
             for (int i = 0; i < paramsList.Length; i++)
                 sb.Append(paramsList[i] + MSG_EOL);

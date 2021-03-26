@@ -73,7 +73,7 @@ namespace TestClient
                 }
                 dayTradingString = dayTradingString.Trim().TrimEnd(',') + " ]";
 
-                TreeNode tr = new TreeNode(ac.AccountId + ": " + ac.AccountType + " " + dayTradingString);
+                TreeNode tr = new(ac.AccountId + ": " + ac.AccountType + " " + dayTradingString);
 
                 foreach (PropertyInfo p in ac.GetType().GetProperties())
                 {

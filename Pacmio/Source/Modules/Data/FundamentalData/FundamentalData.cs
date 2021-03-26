@@ -149,9 +149,9 @@ namespace Pacmio
 
         public MultiPeriod<(double Price, double Volume)> BarTableAdjust(bool includeDividend = false)
         {
-            MultiPeriod<(double Price, double Volume)> list = new MultiPeriod<(double Price, double Volume)>();
+            MultiPeriod<(double Price, double Volume)> list = new();
 
-            List<(DateTime AsOfDate, bool isSplit, double adjust_ratio)> split_dividend_list = new List<(DateTime AsOfDate, bool isSplit, double adjust_ratio)>();
+            List<(DateTime AsOfDate, bool isSplit, double adjust_ratio)> split_dividend_list = new();
 
             lock (DataLUT)
             {
@@ -283,7 +283,7 @@ namespace Pacmio
         {
             var rows = GetList().OrderByDescending(n => n.AsOfDate).ThenBy(n => n.TypeName).ThenBy(n => n.DataSource);
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.AppendLine("Type,Date Time,Data Source,Close Price,Value,Other Info");
 
             foreach (var row in rows)

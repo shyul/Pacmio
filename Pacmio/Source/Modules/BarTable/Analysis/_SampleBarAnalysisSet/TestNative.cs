@@ -27,10 +27,10 @@ namespace Pacmio.Analysis
 
                 DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
-                PositionOfTimeframe potf = new PositionOfTimeframe(BarFreq.Annually);
+                PositionOfTimeframe potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
-                List<BarAnalysis> sample_list = new List<BarAnalysis>
+                List<BarAnalysis> sample_list = new()
                 {
                     new NativePivotAnalysis(),
                     //new CandleStickDojiMarubozuAnalysis(),
@@ -45,7 +45,7 @@ namespace Pacmio.Analysis
                     csd_trend,
                 };
 
-                BarAnalysisSet bas = new BarAnalysisSet(sample_list);
+                BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }

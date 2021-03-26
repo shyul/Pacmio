@@ -47,7 +47,7 @@ namespace Pacmio
                     _ => string.Empty
                 };
 
-                OrderInfo od = new OrderInfo()
+                OrderInfo od = new()
                 {
                     Contract = c,
                     Quantity = quantity,

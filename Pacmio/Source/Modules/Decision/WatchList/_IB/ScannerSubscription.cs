@@ -113,7 +113,7 @@ namespace Pacmio.IB
 
             if (msgVersion == "3" && GetInteractiveBrokerWatchList(requestId) is InteractiveBrokerWatchList wt)
             {
-                List<Contract> list = new List<Contract>();
+                List<Contract> list = new();
                 for (int i = 4; i < fields.Length; i += 16)
                 {
                     int rank = fields[i].ToInt32(-1);

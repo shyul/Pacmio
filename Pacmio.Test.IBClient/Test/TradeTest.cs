@@ -9,14 +9,14 @@ namespace TestClient
 {
     public static class TradeTest
     {
-        private static readonly DataTable Table = new DataTable("Trade List");
+        private static readonly DataTable Table = new("Trade List");
 
         public static DataTable InitializeTable(DataGridView gv)
         {
             DataTable table = Table;
             gv.DataSource = table;
 
-            DataColumn keyColumn = new DataColumn("ExecId", typeof(string));
+            DataColumn keyColumn = new("ExecId", typeof(string));
             table.Columns.Add(keyColumn);
             table.PrimaryKey = new DataColumn[] { keyColumn };
             gv.Columns[0].Width = 150;

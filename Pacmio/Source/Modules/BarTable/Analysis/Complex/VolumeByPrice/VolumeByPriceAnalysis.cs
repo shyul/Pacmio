@@ -37,7 +37,7 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                VolumeByPriceDatum datum =  new VolumeByPriceDatum();
+                VolumeByPriceDatum datum =  new();
                 b[Column_Result] = datum;
 
                 var bars = bt[i, MaximumInterval];

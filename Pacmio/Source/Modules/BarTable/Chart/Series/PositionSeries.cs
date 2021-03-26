@@ -32,7 +32,7 @@ namespace Pacmio
 
         public override List<(string text, Font font, Brush brush)> ValueLabels(ITable table, int pt)
         {
-            List<(string text, Font font, Brush brush)> labels = new List<(string text, Font font, Brush brush)>();
+            List<(string text, Font font, Brush brush)> labels = new();
 
 
 
@@ -69,7 +69,7 @@ namespace Pacmio
 
         public (List<(int index, Point point)>, int, int, int) GetPixel(IIndexArea area, AlignType side)
         {
-            List<(int index, Point point)> points = new List<(int index, Point point)>();
+            List<(int index, Point point)> points = new();
             int max_y = area.Bottom;
             int min_y = area.Top;
             int pt = 0;

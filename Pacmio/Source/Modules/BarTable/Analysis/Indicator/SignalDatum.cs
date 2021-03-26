@@ -13,7 +13,7 @@ namespace Pacmio
     {
         public void Set(double[] points, string description = "", SignalDatum sd_1 = null)
         {
-            List<double> point_list = new List<double>();
+            List<double> point_list = new();
 
             if (points is double[] pts && pts.Length > 0)
                 point_list.AddRange(points);

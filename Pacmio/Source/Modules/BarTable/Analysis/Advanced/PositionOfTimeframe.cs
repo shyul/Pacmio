@@ -59,7 +59,7 @@ namespace Pacmio.Analysis
 
             if (bt.Frequency.Span < Frequency.Span)
             {
-                Range<double> cumulative_range = new Range<double>(double.MaxValue, double.MinValue);
+                Range<double> cumulative_range = new(double.MaxValue, double.MinValue);
                 DateTime base_time = DateTime.MinValue;
 
                 for (int i = bap.StartPt; i < bap.StopPt; i++)

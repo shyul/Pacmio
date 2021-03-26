@@ -110,6 +110,6 @@ namespace Pacmio
             => Root.HistoricalDataPath(contractKey) + "\\_FinancialData\\$" + contractKey.name + "_" + type.ToString() + ".xml";
 
         private static FileInfo GetXmlFile((string name, Exchange exchange, string typeName) contractKey, FinancialDataRequestType type)
-            => new FileInfo(GetXmlFileName(contractKey, type));
+            => new(GetXmlFileName(contractKey, type));
     }
 }

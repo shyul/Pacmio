@@ -46,6 +46,6 @@ namespace Pacmio
 
         public double UnrealizedPnL { get; set; }
 
-        public override Rectangle GridBounds => new Rectangle(new Point(0, 0), Size);
+        public override Rectangle GridBounds => new(new Point(0, 0), Size);
     }
 }

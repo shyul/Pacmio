@@ -45,6 +45,8 @@ namespace Pacmio.Analysis
             }
 
             SignalColumns = new SignalColumn[] { CrossSignalColumn };
+
+            SignalSeries = new SignalSeries(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ FastMovingAverage.GetHashCode() ^ SlowMovingAverage.GetHashCode();
@@ -83,7 +85,7 @@ namespace Pacmio.Analysis
                 if (b[DualColumnAnalysis.Column_Result] is DualColumnDatum d)
                 {
                     var list = d.List;
-                    List<double> point_list = new List<double>();
+                    List<double> point_list = new();
 
                     foreach (var type in list)
                     {

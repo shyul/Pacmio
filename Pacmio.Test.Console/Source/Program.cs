@@ -44,17 +44,17 @@ namespace TestConsole
         {
             Console.WriteLine("Start Test: ");
 
-            Time t1 = new Time(9, 30, 12);//, 599);
-            Time t2 = new Time(4, 30, 30);//, 599);
+            Time t1 = new(9, 30, 12);//, 599);
+            Time t2 = new(4, 30, 30);//, 599);
             //t1 = t1.AddHours(24);
             //t1 = t1.AddMinutes(1440);
             //t1 = t1.AddSeconds(55403);
 
-            DateTime dt = new DateTime(2020, 7, 16, 9, 30, 12);
+            DateTime dt = new(2020, 7, 16, 9, 30, 12);
 
             Console.WriteLine((t1 == dt) + " " + t1.ToString());
 
-            TimePeriod tpd = new TimePeriod(t1, t2);
+            TimePeriod tpd = new(t1, t2);
 
             Console.WriteLine(tpd.ToString());
 

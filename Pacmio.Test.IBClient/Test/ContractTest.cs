@@ -23,7 +23,7 @@ namespace TestClient
             SymbolInfoTable.TableName = "Symbol Info Table";
             gv.DataSource = SymbolInfoTable;
 
-            System.Data.DataColumn keyColumn = new System.Data.DataColumn("Id", typeof(int));
+            System.Data.DataColumn keyColumn = new("Id", typeof(int));
             SymbolInfoTable.Columns.Add(keyColumn);
             //SymbolInfoTable.PrimaryKey = new System.Data.DataColumn[] { keyColumn };
             gv.Columns[0].Width = 35;

@@ -8,7 +8,7 @@ namespace TestClient
 {
     public partial class TestMultiPeriodDataSource : Form
     {
-        public MultiPeriod<DataSourceType> d = new MultiPeriod<DataSourceType>();
+        public MultiPeriod<DataSourceType> d = new();
 
         public DateTime GetDataSourceStartTime(DateTime endTime, DataSourceType source)
         {
