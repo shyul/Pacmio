@@ -60,21 +60,26 @@ namespace Pacmio
                 }
                 else if (Indicator is IndicatorFilter filter)
                 {
+                    FilterType lastType = FilterType.None;
+
                     for (int i = StartPt; i < StopPt; i++)
                     {
                         Bar b = bt[i];
-                        FilterType type = b[filter];
-                        if (type == FilterType.Bullish)
+                        FilterType thisType = b[filter];
+                        int tickWidth = AxisX.TickWidth;
+                        int half_tickWidth = (tickWidth / 2.0f).ToInt32();
+                        if (thisType == FilterType.Bullish)
                         {
+                            //g.FillRectangle(fillBrush, IndexToPixel(i) - half_tickWidth, upper_pix, tickWidth, height);
 
                         }
-                        else if (type == FilterType.Bearish)
+                        else if (thisType == FilterType.Bearish)
                         {
 
 
                         }
 
-
+                        lastType = thisType;
                     }
                 }
 

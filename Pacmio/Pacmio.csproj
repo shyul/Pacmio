@@ -91,11 +91,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Filter\FilterType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_TradeExecution\ExecutionDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\Trend\TrendLineDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\IndicatorExec.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\IndicatorFilter.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_TradeExecution\IndicatorExec.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Filter\IndicatorFilter.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
@@ -178,7 +181,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\_Types\PatternDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\Trend\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\Indicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Types\Indicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Indicator\Examples\MovingAverageCrossIndicator.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepth.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
@@ -206,9 +209,9 @@
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\Examples\MovingAverageCrossStrategy.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\SignalDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Types\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\SignalColumn.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_Types\SignalColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\SingleColumn\SingleColumnAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\Divergence\DivergenceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Complex\DualColumn\DualColumnAnalysis.cs" />
@@ -226,7 +229,7 @@
     <Compile Include="Source\Modules\BarTable\Chart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\PositionSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Position\BarPositionData.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Indicator\_TradeExecution\TradeExecutionType.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\MovingAverage\SMMA.cs" />
@@ -250,7 +253,6 @@
     <Compile Include="Source\Modules\Decision\Simulation\PositionSimTools.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfo\LiquidityType.cs" />
-    <Compile Include="Source\Modules\BarTable\Position\TradeActionType.cs" />
     <Compile Include="Source\Modules\_Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\_Types\DataType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\ADX.cs" />

@@ -2,28 +2,47 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// BarTable Data Types
+/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Runtime.Serialization;
+using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
+    public abstract class PositionAnalysis : BarAnalysis
+    {
+
+
+
+        public double InitialFunds { get; }
+
+        public double AverageCommission { get; }
+
+        public IndicatorExec IndicatorExec { get; }
+
+
+
+    }
+
     public sealed class BarPositionData
     {
-        public BarPositionData(Bar b, Strategy s)
+        public BarPositionData(Bar b)
         {
             Bar = b;
-            Strategy = s;
+
             //Snapshot();
             Reset();
         }
 
         public void Reset()
         {
-            ActionType = TradeActionType.None;
+            ActionType = TradeExecutionType.None;
             Quantity = 0;
             AveragePrice = double.NaN;
 
@@ -53,20 +72,20 @@ namespace Pacmio
             double new_qty = ps.Quantity;
             if (Quantity < new_qty)
             {
-                ActionType = (Quantity < 0) ? TradeActionType.Cover : TradeActionType.Long;
+                ActionType = (Quantity < 0) ? TradeExecutionType.Cover : TradeExecutionType.Long;
             }
             else if (Quantity > new_qty)
             {
-                ActionType = (Quantity > 0) ? TradeActionType.Sell : TradeActionType.Short;
+                ActionType = (Quantity > 0) ? TradeExecutionType.Sell : TradeExecutionType.Short;
             }
             else
             {
                 if (Quantity > 0)
-                    ActionType = TradeActionType.LongHold;
+                    ActionType = TradeExecutionType.LongHold;
                 else if (Quantity < 0)
-                    ActionType = TradeActionType.ShortHold;
+                    ActionType = TradeExecutionType.ShortHold;
                 else
-                    ActionType = TradeActionType.None;
+                    ActionType = TradeExecutionType.None;
             }
 
             Quantity = new_qty;
@@ -75,12 +94,12 @@ namespace Pacmio
 
         public Bar Bar { get; }
 
-        public Strategy Strategy { get; }
 
 
 
 
-        public TradeActionType ActionType { get; private set; } = TradeActionType.None;
+
+        public TradeExecutionType ActionType { get; private set; } = TradeExecutionType.None;
 
         public double Quantity { get; private set; } = 0;
 

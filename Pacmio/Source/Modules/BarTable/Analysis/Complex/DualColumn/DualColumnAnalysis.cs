@@ -147,7 +147,5 @@ namespace Pacmio.Analysis
         }
 
         #endregion Calculation
-
-
     }
 }
