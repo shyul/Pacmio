@@ -152,7 +152,7 @@ namespace Pacmio.Analysis
 
                 for (int i = StartPt; i < StopPt; i++)
                 {
-                    if (bc.BarTable[i] is Bar b && b[Column_Result] is FlagDatum fd && fd.Type != FlagType.None)
+                    if (StartPt > -1 && bc.BarTable[i] is Bar b && b[Column_Result] is FlagDatum fd && fd.Type != FlagType.None)
                     {
                         int x1 = a.IndexToPixel(fd.P1.Index - StartPt);
                         int x2 = a.IndexToPixel(fd.P2.Index - StartPt);
