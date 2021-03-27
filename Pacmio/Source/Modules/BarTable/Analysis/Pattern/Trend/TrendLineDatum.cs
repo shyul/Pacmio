@@ -30,11 +30,13 @@ namespace Pacmio.Analysis
             StrengthRange.Insert(strength);
         }*/
 
-        public void AddLine(IEnumerable<PivotPt> points)
+        public void AddLine(IEnumerable<PivotPt> points, int x3)
         {
-            points.SelectPair().Select(n => new TrendLine(n)).RunEach(n => { m_TrendLines.Add(n); StrengthRange.Insert(n.Strength); });
-            //m_TrendLines.AddRange(points.SelectPair().Select(n => new TrendLine(n)));
-            //m_TrendLines.ForEach(n => StrengthRange.Insert(n.Strength));
+            points.SelectPair().Select(n => new TrendLine(n)).RunEach(n => {
+                m_TrendLines.Add(n);
+                TotalStrengthRange.Insert(n.Strength);
+                Levels.Add(new Level(n.Level(x3), n.Strength));
+            });
         }
 
         private List<TrendLine> m_TrendLines { get; set; } = new();

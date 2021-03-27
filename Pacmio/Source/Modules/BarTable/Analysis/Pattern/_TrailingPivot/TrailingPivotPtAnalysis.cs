@@ -96,7 +96,7 @@ namespace Pacmio.Analysis
 
                     double range_delta = (tpd.PivotRange.Max - tpd.PivotRange.Min) / 2;
                     double center = (b0[Column_High] + b0[Column_Low]) / 2;
-                    tpd.TotalRange = new(center - range_delta, center + range_delta);
+                    tpd.TotalLevelRange = new(center - range_delta, center + range_delta);
 
                     b0[Column_Result] = tpd;
                 }

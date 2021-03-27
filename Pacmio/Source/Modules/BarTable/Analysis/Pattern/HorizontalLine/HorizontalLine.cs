@@ -22,7 +22,7 @@ namespace Pacmio.Analysis
 
         public double Y1 => P1.Level;
 
-        public double Strength { get; set; }
+        public double Strength { get; set; } = 1;
 
         public double Level(int _) => P1.Level;
 

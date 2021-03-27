@@ -77,8 +77,8 @@ namespace Pacmio.Analysis
                 if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
                 {
                     TrendLineDatum tld = new();
-                    tld.TotalRange = tpd.TotalRange;
-                    tld.AddLine(tpd.PivotPts.Select(n => n.Value));
+                    tld.TotalLevelRange = tpd.TotalLevelRange;
+                    tld.AddLine(tpd.PivotPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
                 }
             }
@@ -98,7 +98,7 @@ namespace Pacmio.Analysis
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
-                double maxStrength = tld.StrengthRange.Max;
+                double maxStrength = tld.TotalStrengthRange.Max;
                 foreach (TrendLine line in tld)
                 {
                     int x1 = line.X1 - StartPt;

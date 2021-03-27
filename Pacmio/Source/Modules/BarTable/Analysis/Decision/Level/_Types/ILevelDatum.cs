@@ -14,18 +14,8 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PivotLevelDatum : ILevelDatum
+    public interface ILevelDatum : IDatum
     {
-        public double P { get; set; }
-
-        public double S1 { get; set; }
-
-        public double S2 { get; set; }
-
-        public double R1 { get; set; }
-
-        public double R2 { get; set; }
-
-        public List<Level> Levels { get; } = new();
+        List<Level> Levels { get; }
     }
 }

@@ -107,15 +107,17 @@ namespace Pacmio.Analysis
                         var pull_back_lows = pull_back_bars.Select(n => n.Low);
 
                         fd.PullBackRange = new(pull_back_lows.Min(), pull_back_highs.Max());
-                        fd.TotalRange = new(Math.Min(fd.RunUpRange.Min, fd.PullBackRange.Min), Math.Max(fd.RunUpRange.Max, fd.PullBackRange.Max));
+                        fd.TotalLevelRange = new(Math.Min(fd.RunUpRange.Min, fd.PullBackRange.Min), Math.Max(fd.RunUpRange.Max, fd.PullBackRange.Max));
 
-                        fd.PullBackRatio = (fd.TotalRange.Max - fd.PullBackRange.Min) / (fd.TotalRange.Max - fd.TotalRange.Min);
+                        fd.PullBackRatio = (fd.TotalLevelRange.Max - fd.PullBackRange.Min) / (fd.TotalLevelRange.Max - fd.TotalLevelRange.Min);
 
                         if (bt[i] is Bar b && fd.PullBackRatio >= MinPullBackRatio && fd.PullBackRatio <= MaxPullBackRatio)
                         {
                             // Yield Critical Levels
                             // Get the trend line of the pull back
-                            fd.BreakOutLevel = fd.TotalRange.Max;
+                            fd.BreakOutLevel = fd.TotalLevelRange.Max;
+
+                            fd.Levels.Add(new Level(fd.BreakOutLevel));
 
                             Console.WriteLine(bars.Last().Time + " | " + type + " is detected!!");
                             //Console.WriteLine(bars.Last().Time + " | " + bars.Last().BarType + " | " + type + " | pull_back_bars = " + pull_back_bars.Count + " | pull_back_bars = " + run_bars.Count);
@@ -140,7 +142,7 @@ namespace Pacmio.Analysis
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (AreaName is string areaName && bc[areaName] is Area a )
+            if (AreaName is string areaName && bc[areaName] is Area a)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;

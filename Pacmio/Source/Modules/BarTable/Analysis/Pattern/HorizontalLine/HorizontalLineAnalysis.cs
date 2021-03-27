@@ -76,7 +76,7 @@ namespace Pacmio.Analysis
                 if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
                 {
                     HorizontalLineDatum hld = new();
-                    hld.TotalRange = tpd.TotalRange;
+                    hld.TotalLevelRange = tpd.TotalLevelRange;
                     hld.AddLine(tpd.PivotPts.Select(n => n.Value));
                     b[Column_Result] = hld;
                 }
@@ -97,7 +97,7 @@ namespace Pacmio.Analysis
                 g.SetClip(a.Bounds);
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
-                double maxStrength = hld.StrengthRange.Max;
+                double maxStrength = hld.TotalStrengthRange.Max;
                 foreach (HorizontalLine line in hld)
                 {
                     int x1 = line.X1 - StartPt;

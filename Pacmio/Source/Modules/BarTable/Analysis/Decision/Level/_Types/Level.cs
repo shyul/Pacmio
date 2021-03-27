@@ -14,18 +14,16 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PivotLevelDatum : ILevelDatum
+    public class Level : ILevel
     {
-        public double P { get; set; }
+        public Level(double val, double strength = 1)
+        {
+            Value = val;
+            Strength = strength;
+        }
 
-        public double S1 { get; set; }
+        public double Value { get; }
 
-        public double S2 { get; set; }
-
-        public double R1 { get; set; }
-
-        public double R2 { get; set; }
-
-        public List<Level> Levels { get; } = new();
+        public double Strength { get; }
     }
 }

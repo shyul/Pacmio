@@ -566,6 +566,15 @@ namespace Pacmio
             }
         }
 
+        public void ResetCalculationPointer(BarAnalysis ba)
+        {
+            lock (BarAnalysisPointerLUT)
+            {
+                if (BarAnalysisPointerLUT.ContainsKey(ba))
+                    BarAnalysisPointerLUT.Remove(ba);
+            }
+        }
+
         private Dictionary<BarAnalysisSet, BarAnalysisSetPointer> BarAnalysisSetPointerLUT { get; } = new();
 
         private BarAnalysisSetPointer GetBarAnalysisSetPointer(BarAnalysisSet bas)
@@ -577,6 +586,19 @@ namespace Pacmio
 
                 return BarAnalysisSetPointerLUT[bas];
             }
+        }
+
+        public void ResetCalculationPointer(BarAnalysisSet bas)
+        {
+            lock (BarAnalysisPointerLUT)
+                lock (BarAnalysisSetPointerLUT)
+                {
+                    if (BarAnalysisSetPointerLUT.ContainsKey(bas))
+                    {
+                        BarAnalysisSetPointerLUT.Remove(bas);
+                        bas.RunEach(ba => ResetCalculationPointer(ba));
+                    }
+                }
         }
 
         public BarAnalysisSetPointer this[BarAnalysisSet bas] => GetBarAnalysisSetPointer(bas);

@@ -134,7 +134,9 @@ namespace Pacmio
         {
             UpdateTime = DateTime.Now;
             DataConsumers.ForEach(n => n.DataIsUpdated(provider));
-            AccountPositionManager.PositionDataProvider.Updated();
+            AccountPositionManager.PositionDataUpdated(); // PositionDataProvider.Updated();
+
+
             //Console.WriteLine("Position " + Contract.ToString() + " | Price: " + MarketPrice + ", is updated.");
             //Console.WriteLine("Account " + AccountId + " | UnrealizedPnL = " + AccountInfo.UnrealizedPnL2 + ", is updated.");
         }

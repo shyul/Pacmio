@@ -1432,6 +1432,7 @@ namespace TestClient
 
         private void BtnUpdateContract_Click(object sender, EventArgs e)
         {
+            ValidateSymbol();
             ContractManager.Fetch(ContractTest.ActiveContract);
         }
 

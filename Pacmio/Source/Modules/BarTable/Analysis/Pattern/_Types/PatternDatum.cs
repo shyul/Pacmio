@@ -14,11 +14,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public abstract class PatternDatum : IDatum
+    public abstract class PatternDatum : ILevelDatum
     {
-        public Range<double> TotalRange { get; set; }
+        public Range<double> TotalLevelRange { get; set; }
 
-        public Range<double> StrengthRange { get; } = new(double.MaxValue, double.MinValue);
+        public Range<double> TotalStrengthRange { get; } = new(double.MaxValue, double.MinValue);
+
+        public List<Level> Levels { get; } = new();
 
         public abstract IEnumerable<IPatternObject> PatternObjects { get; }
     }

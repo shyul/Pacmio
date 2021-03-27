@@ -27,9 +27,7 @@ namespace Pacmio
             }
         }
 
-        public static PositionInfo[] Positions => Accounts.SelectMany(n => n.Positions is PositionInfo[] p ? p : new PositionInfo[] { }).Where(p => p.Quantity != 0).ToArray();
 
-        public static double UnrealizedPnL => Positions.Select(n => n.UnrealizedPnL).Sum();
 
         public static int Count => AccountLUT.Count;
 
@@ -93,21 +91,41 @@ namespace Pacmio
             lock (AccountLUT)
             {
                 foreach (AccountInfo ac in AccountLUT.Values) ac.ResetNonRefreshedPositions();
+                PositionDataUpdated();
             }
         }
 
-        internal static void PositionEnd()
+        public static PositionInfo[] Positions => Accounts.SelectMany(n => n.Positions is PositionInfo[] p ? p : new PositionInfo[] { }).Where(p => p.Quantity != 0).ToArray();
+
+        public static double UnrealizedPnL
         {
-            ResetNonRefreshedPositions();
-            PositionDataProvider.Updated();
+            get => m_UnrealizedPnL;
+
+            private set
+            {
+                if (Math.Abs(value - m_UnrealizedPnL) > 0.01)
+                {
+                    Console.WriteLine("Total Unrealized PnL = " + value.ToString("0.###"));
+                }
+                m_UnrealizedPnL = value;
+            }
         }
+
+        private static double m_UnrealizedPnL = 0;
 
         #endregion Data Requests
 
         #region Updates
 
         public static SimpleDataProvider AccountDataProvider { get; } = new SimpleDataProvider();
+        
         public static SimpleDataProvider PositionDataProvider { get; } = new SimpleDataProvider();
+
+        public static void PositionDataUpdated() 
+        {
+            UnrealizedPnL = Positions.Select(n => n.UnrealizedPnL).Sum();
+            PositionDataProvider.Updated();
+        }
 
         #endregion Updates
 

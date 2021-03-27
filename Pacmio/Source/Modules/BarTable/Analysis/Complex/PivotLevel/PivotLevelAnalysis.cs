@@ -32,7 +32,7 @@ namespace Pacmio.Analysis
                 double low = b.Low;
                 double p = b.Typical;
 
-                b[Column_Result] = new PivotLevelDatum()
+                var result = new PivotLevelDatum()
                 {
                     P = p,
                     S1 = (2 * p) - high,
@@ -40,6 +40,16 @@ namespace Pacmio.Analysis
                     R1 = (2 * p) - low,
                     R2 = p + (high - low),
                 };
+
+                result.Levels.AddRange(new Level[] {
+                    new Level(result.P),
+                    new Level(result.S1),
+                    new Level(result.S2),
+                    new Level(result.R1),
+                    new Level(result.R2),
+                });
+
+                b[Column_Result] = result;
             }
         }
     }

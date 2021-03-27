@@ -14,14 +14,14 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class PatternLevelAnalysis : BarAnalysis
+    public class LevelRangeIndicator : BarAnalysis
     {
-        public PatternLevelAnalysis(PatternAnalysis pa, double tolerance = 0.01) 
+        public LevelRangeIndicator(PatternAnalysis pa, double tolerance = 0.01)
         {
             PatternAnalysis = pa;
             Tolerance = tolerance;
             Name = GetType().Name + "(" + pa.Name + ")";
-            Column_Result = new(Name, typeof(PatternLevelDatum));
+            Column_Result = new(Name, typeof(LevelRangeDatum));
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ Tolerance.GetHashCode();
@@ -49,7 +49,7 @@ namespace Pacmio.Analysis
             }
         }
     }
-    
+
     /*
     public class RangeBoundAnalysis : BarAnalysis
     {

@@ -36,10 +36,12 @@ namespace Pacmio
 
             double unrealizedPnL = AccountPositionManager.UnrealizedPnL;
 
+            /*
             if (Math.Abs(unrealizedPnL - UnrealizedPnL) > 0.005)
             {
                 Console.WriteLine("Total Unrealized PnL = " + unrealizedPnL.ToString("0.###"));
             }
+            */
 
             UnrealizedPnL = unrealizedPnL;
         }

@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 
         public Range<double> PivotRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
         
-        public Range<double> TotalRange { get; set; }
+        public Range<double> TotalLevelRange { get; set; }
 
         public Dictionary<int, PivotPt> PositivePivotPtList { get; } = new Dictionary<int, PivotPt>();
 

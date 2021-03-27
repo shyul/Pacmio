@@ -77,7 +77,7 @@ namespace Pacmio.IB
 
             }*/
 
-            AccountPositionManager.PositionEnd();
+            AccountPositionManager.ResetNonRefreshedPositions();
 
             IsBusy_Position = false;
 

@@ -16,7 +16,11 @@ namespace Pacmio.Analysis
     {
         public void AddLine(IEnumerable<PivotPt> points)
         {
-            points.Select(n => new HorizontalLine(n)).RunEach(n => { m_HorizontalLines.Add(n); StrengthRange.Insert(n.Strength); });
+            points.Select(n => new HorizontalLine(n)).RunEach(n => {
+                m_HorizontalLines.Add(n);
+                TotalStrengthRange.Insert(n.Strength);
+                Levels.Add(new Level(n.Y1, n.Strength));
+            });
         }
 
         private List<HorizontalLine> m_HorizontalLines { get; } = new();
