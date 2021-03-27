@@ -11,15 +11,18 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class PivotLevelAnalysis : BarAnalysis
+    public class PivotLevelAnalysis : BarAnalysis, ILevelAnalysis
     {
         public PivotLevelAnalysis()
         {
             Name = GetType().Name;
             Column_Result = new(Name, typeof(PivotLevelDatum));
+            AreaName = MainBarChartArea.DefaultName;
         }
 
         public DatumColumn Column_Result { get; }
+
+        public string AreaName { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

@@ -28,7 +28,7 @@ namespace Pacmio.Analysis
                 //SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 //var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA);
 
-                var twrc = new TwrcReversalndicator();
+                var twrc = new RossReversalndicator();
 
                 List<BarAnalysis> sample_list = new()
                 {

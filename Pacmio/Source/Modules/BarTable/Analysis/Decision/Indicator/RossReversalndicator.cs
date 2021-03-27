@@ -14,9 +14,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TwrcReversalndicator : Indicator
+    public class RossReversalndicator : Indicator
     {
-        public TwrcReversalndicator()
+        public RossReversalndicator()
         {
             string label = "(" + "," + ")";
             GroupName = Name = GetType().Name + label;

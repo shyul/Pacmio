@@ -14,8 +14,8 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public interface ILevelDatum : IDatum//, IEnumerable<Level>
+    public interface ILevelAnalysis : ISingleDatum
     {
-        List<Level> Levels { get; }
+        string AreaName { get; }
     }
 }

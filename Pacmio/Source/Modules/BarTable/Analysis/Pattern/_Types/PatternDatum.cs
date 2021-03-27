@@ -22,6 +22,10 @@ namespace Pacmio.Analysis
 
         public List<Level> Levels { get; } = new();
 
+        //public IEnumerator<Level> GetEnumerator() => Levels.GetEnumerator();
+
+        //IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
         public abstract IEnumerable<IPatternObject> PatternObjects { get; }
     }
 }

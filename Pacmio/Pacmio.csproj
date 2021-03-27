@@ -93,7 +93,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\Filter\OverSoldFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\Filter\_Types\FilterType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Indicator\RossMomentumIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\Level\_Types\ILevel.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Level\_Types\ILevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\Level\_Types\ILevelDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\Level\_Types\Level.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Decision\TradeExecution\_Types\ExecutionDatum.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\Advanced\PositionOfTimeframe.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\Flag\FlagType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\_Types\PatternAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Indicator\TwrcGapGolndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Indicator\RossGapGolndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Basic\NativeGain.cs" />
@@ -138,7 +140,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestSignals.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\Pattern\_Pivot\_Types\PivotAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Indicator\TwrcReversalndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\Decision\Indicator\RossReversalndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestNative.cs" />

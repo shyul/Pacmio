@@ -16,9 +16,14 @@ namespace Pacmio.Analysis
 {
     public class LevelRangeDatum : IDatum, IEnumerable<LevelRange>
     {
+        public LevelRangeDatum(ILevelDatum ild, double tolerancePercent) 
+        {
+            ild.Levels.ForEach(n => Insert(n, tolerancePercent));
+        }
+
         private List<LevelRange> List { get; } = new List<LevelRange>();
 
-        public IEnumerator<LevelRange> GetEnumerator() => List.GetEnumerator();
+        public IEnumerator<LevelRange> GetEnumerator() => List.OrderBy(n => n.Strength).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

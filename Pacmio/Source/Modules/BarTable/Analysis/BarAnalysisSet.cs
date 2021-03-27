@@ -97,7 +97,7 @@ namespace Pacmio
 
         public IEnumerable<PatternAnalysis> PatternAnalyses => m_List.SelectType<PatternAnalysis, BarAnalysis>();
 
-        public List<PatternColumn> PatternColumns => PatternAnalyses.Select(n => n.Column_Result).ToList();
+        //public List<PatternColumn> PatternColumns => PatternAnalyses.Select(n => n.Column_Result).ToList();
 
         public IEnumerable<IChartBackground> ChartBackgrounds => m_List.SelectType<IChartBackground, BarAnalysis>().OrderBy(n => n.DrawOrder);
 

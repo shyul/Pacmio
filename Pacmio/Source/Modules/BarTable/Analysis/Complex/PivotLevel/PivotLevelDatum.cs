@@ -7,8 +7,8 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Xu;
 using Xu.Chart;
 
@@ -27,5 +27,9 @@ namespace Pacmio.Analysis
         public double R2 { get; set; }
 
         public List<Level> Levels { get; } = new();
+
+        //public IEnumerator<Level> GetEnumerator() => Levels.GetEnumerator();
+
+        //IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

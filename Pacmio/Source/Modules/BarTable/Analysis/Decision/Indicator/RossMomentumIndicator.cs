@@ -14,20 +14,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TwrcGapGolndicator : Indicator
+    public class RossMomentumIndicator : Indicator
     {
-
-        public TwrcGapGolndicator() 
-        {
-            SignalSeries = new SignalSeries(this);
-        }
-
-
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+        public override IEnumerable<SignalColumn> SignalColumns => throw new NotImplementedException();
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

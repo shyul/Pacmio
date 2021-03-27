@@ -55,34 +55,7 @@ namespace Pacmio
                 int x2 = a.Bounds.Right;
 
                 int full_width = x2 - x1;
-                /*
-                if (a.BarChart.LastBar_1 is Bar b && b[a] is RangeBoundDatum prd)
-                {
-                    var rangeList = prd.BoxList.OrderByDescending(n => n.Weight);
 
-                    if (rangeList.Count() > 0)
-                    {
-                        double max_weight = rangeList.Select(n => n.Weight).Max();// .Last().Weight;
-
-                        foreach (var pr in rangeList)
-                        {
-                            int y1 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Max);
-                            int y2 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Min);
-                            int height = y2 - y1;
-
-                            double weight = pr.Weight;
-
-                            int width = (weight * full_width / max_weight).ToInt32();
-
-                            Rectangle rect = new Rectangle(x2 - width, y1, width, height);
-
-                            g.FillRectangle(a.BarChart.Theme.FillBrush, rect);
-                            g.DrawRectangle(new Pen(Color.Magenta), rect);
-
-                        }
-                    }
-                }
-                */
                 g.ResetClip();
             }
         }

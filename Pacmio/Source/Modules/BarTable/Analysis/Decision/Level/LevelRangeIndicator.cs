@@ -14,21 +14,21 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class LevelRangeIndicator : BarAnalysis
+    public class LevelRangeIndicator : BarAnalysis, ISingleDatum, IChartBackground
     {
-        public LevelRangeIndicator(PatternAnalysis pa, double tolerance = 0.01)
+        public LevelRangeIndicator(ILevelAnalysis pa, double tolerance = 0.01)
         {
-            PatternAnalysis = pa;
-            Tolerance = tolerance;
+            LevelAnalysis = pa;
+            TolerancePercent = tolerance;
             Name = GetType().Name + "(" + pa.Name + ")";
             Column_Result = new(Name, typeof(LevelRangeDatum));
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ Tolerance.GetHashCode();
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ TolerancePercent.GetHashCode();
 
-        public double Tolerance { get; }
+        public double TolerancePercent { get; }
 
-        public PatternAnalysis PatternAnalysis { get; set; }
+        public ILevelAnalysis LevelAnalysis { get; set; }
 
         public DatumColumn Column_Result { get; }
 
@@ -36,16 +36,59 @@ namespace Pacmio.Analysis
 
         public NumericColumn Column_Direction { get; }
 
+        public string AreaName => LevelAnalysis.AreaName;
+
+        public bool ChartEnabled { get; set; } = true;
+
+        public int DrawOrder { get; set; } = 0;
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[PatternAnalysis] is PatternDatum tpd)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[LevelAnalysis] is ILevelDatum ild)
                 {
-
+                    LevelRangeDatum lrd = new LevelRangeDatum(ild, TolerancePercent);
+                    b[Column_Result] = lrd;
                 }
+            }
+        }
+
+        public void DrawBackground(Graphics g, BarChart bc)
+        {
+            if (bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is LevelRangeDatum lrd)
+            {
+                /*
+                if (a.BarChart.LastBar_1 is Bar b && b[a] is RangeBoundDatum prd)
+                {
+                    var rangeList = prd.BoxList.OrderByDescending(n => n.Weight);
+
+                    if (rangeList.Count() > 0)
+                    {
+                        double max_weight = rangeList.Select(n => n.Weight).Max();// .Last().Weight;
+
+                        foreach (var pr in rangeList)
+                        {
+                            int y1 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Max);
+                            int y2 = a.AxisY(AlignType.Right).ValueToPixel(pr.Box.Min);
+                            int height = y2 - y1;
+
+                            double weight = pr.Weight;
+
+                            int width = (weight * full_width / max_weight).ToInt32();
+
+                            Rectangle rect = new Rectangle(x2 - width, y1, width, height);
+
+                            g.FillRectangle(a.BarChart.Theme.FillBrush, rect);
+                            g.DrawRectangle(new Pen(Color.Magenta), rect);
+
+                        }
+                    }
+                }
+                */
+
             }
         }
     }

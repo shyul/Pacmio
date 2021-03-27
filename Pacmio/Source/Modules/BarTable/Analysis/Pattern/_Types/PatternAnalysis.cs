@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public abstract class PatternAnalysis : BarAnalysis, IChartAnalysis
+    public abstract class PatternAnalysis : BarAnalysis, IChartAnalysis, ILevelAnalysis
     {
         public override void Update(BarAnalysisPointer bap)
         {
@@ -30,7 +30,8 @@ namespace Pacmio.Analysis
             }
         }
 
-        public virtual PatternColumn Column_Result { get; protected set; }
+        //public virtual PatternColumn Column_Result { get; protected set; }
+        public virtual DatumColumn Column_Result { get; protected set; }
 
         public abstract int MaximumInterval { get; }
 
