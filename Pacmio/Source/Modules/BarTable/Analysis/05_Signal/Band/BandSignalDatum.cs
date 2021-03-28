@@ -23,6 +23,6 @@ namespace Pacmio.Analysis
 
         public double Position { get; } = 50;
 
-        public override string Description => Type.ToString();
+        public override string Description => Type.ToString() + " " + Position.ToString("0.##") + "%";
     }
 }

@@ -60,7 +60,7 @@ namespace Pacmio.Analysis
                 double position = 50;
 
                 if (span != 0)
-                    position = (reference - bbl) / span;
+                    position = (reference - bbl) * 100.0 / span;
                 else if (reference > bbh)
                     position = 101;
                 else if (reference < bbl)
@@ -74,7 +74,6 @@ namespace Pacmio.Analysis
                 };
 
                 d.SetPoints(datum.Points);
-
             }
         }
     }

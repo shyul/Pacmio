@@ -18,5 +18,7 @@ namespace Pacmio.Analysis
         public SingleDataSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
 
         public SingleDataSignalType Type { get; set; } = SingleDataSignalType.None;
+
+        public override string Description => Type.ToString();
     }
 }

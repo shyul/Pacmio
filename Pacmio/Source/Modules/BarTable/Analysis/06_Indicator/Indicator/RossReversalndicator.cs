@@ -25,23 +25,24 @@ namespace Pacmio.Analysis
             RsiSignal = new OscillatorSignal(RSI);
 
             BollingerBand = new Bollinger(20, 2);
+            BollingerBandSignal = new BandSignal(Bar.Column_Typical, BollingerBand);
+
             CandleStickDojiMarubozuAnalysis = new CandleStickDojiMarubozuAnalysis();
             NarrowRange = new NarrowRange();
 
-            RsiSignal.AddChild(this);
-            BollingerBand.AddChild(this);
-            CandleStickDojiMarubozuAnalysis.AddChild(this);
-            NarrowRange.AddChild(this);
-
-            var csd = new DebugColumnSeries(NarrowRange.Column_Result);
-            NarrowRange.AddChild(csd);
-            csd.AddChild(this);
-
+            /*
             BollingerBandSignalColumn = new SignalColumn(this, BollingerBand.Name)
             {
                 BullishColor = Color.YellowGreen,
                 BearishColor = Color.Pink,
             };
+            */
+
+
+            NarrowRange.AddChild(this);
+
+            var csd = new DebugColumnSeries(NarrowRange.Column_Result);
+            NarrowRange.AddChild(csd);
 
             CandleStickSignalColumn = new SignalColumn(this, CandleStickDojiMarubozuAnalysis.Name)
             {
@@ -49,14 +50,23 @@ namespace Pacmio.Analysis
                 BearishColor = Color.DarkOrange
             };
 
-            SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignalColumn, CandleStickSignalColumn };
+            SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignal.Column_Result, CandleStickSignalColumn };
 
             SignalSeries = new(this);
+
+
+
+            RsiSignal.AddChild(this);
+            BollingerBandSignal.AddChild(this);
+            CandleStickDojiMarubozuAnalysis.AddChild(this);
+            csd.AddChild(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
 
         public TimePeriod TimeInForce { get; } = new TimePeriod(new Time(9, 25), new Time(16));
+
+
 
         public IOscillator RSI { get; }
 
@@ -64,22 +74,23 @@ namespace Pacmio.Analysis
 
 
 
-
-        public NarrowRange NarrowRange { get; }
-
-
-
         public IDualData BollingerBand { get; }
 
-        public SignalColumn BollingerBandSignalColumn { get; protected set; }
+        public BandSignal BollingerBandSignal { get; }
 
-        public double[] BollingerBandScores { get; } = { 5, 2, -2, -5 };
+        //public SignalColumn BollingerBandSignalColumn { get; protected set; }
+
+        //public double[] BollingerBandScores { get; } = { 5, 2, -2, -5 };
 
 
+
+        public NarrowRange NarrowRange { get; }
 
         public CandleStickDojiMarubozuAnalysis CandleStickDojiMarubozuAnalysis { get; }
 
         public SignalColumn CandleStickSignalColumn { get; protected set; }
+
+
 
 
 
@@ -101,20 +112,23 @@ namespace Pacmio.Analysis
 
                     double rsi = b[RSI.Column_Result];
 
-                    double bbh = b[BollingerBand.Column_High];
-                    double bbl = b[BollingerBand.Column_Low];
+                    //double bbh = b[BollingerBand.Column_High];
+                    //double bbl = b[BollingerBand.Column_Low];
 
-                    double[] points_bb = new double[] { };
+                    //double[] points_bb = new double[] { };
+
+
                     double trend = b.TrendStrength;
 
                     double[] points_candle = new double[] { };
 
                     if (rsi > 80 && trend > 3)
                     {
+                        /*
                         if (low > bbh)
                             points_bb = new double[] { 5 * trend, 3 * trend };
                         else if (high > bbh)
-                            points_bb = new double[] { 2 * trend };
+                            points_bb = new double[] { 2 * trend };*/
 
                         if (b.CandleStickList.Contains(CandleStickType.Doji))
                         {
@@ -127,10 +141,11 @@ namespace Pacmio.Analysis
                     }
                     else if (rsi < 20 && trend < -3)
                     {
+                        /*
                         if (high < bbl)
                             points_bb = new double[] { 5 * trend, 3 * trend };
                         else if (low < bbl)
-                            points_bb = new double[] { 2 * trend };
+                            points_bb = new double[] { 2 * trend };*/
 
                         if (b.CandleStickList.Contains(CandleStickType.Doji))
                         {
@@ -142,7 +157,7 @@ namespace Pacmio.Analysis
                         }
                     }
 
-                    SignalDatum sd_bb = new SignalDatum(b, BollingerBandSignalColumn, points_bb);
+                    //SignalDatum sd_bb = new SignalDatum(b, BollingerBandSignalColumn, points_bb);
                     SignalDatum sd_candle = new SignalDatum(b, CandleStickSignalColumn, points_candle);
                 }
             }
