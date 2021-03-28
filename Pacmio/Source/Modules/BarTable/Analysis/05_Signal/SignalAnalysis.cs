@@ -17,8 +17,6 @@ namespace Pacmio.Analysis
     {
         public SignalColumn Column_Result { get; protected set; }
 
-        #region Graphics Properties
-
         public Color BullishColor
         {
             get => Column_Result.BullishColor;
@@ -42,7 +40,5 @@ namespace Pacmio.Analysis
             get => Column_Result.BearishTheme;
             set => Column_Result.BearishTheme = value;
         }
-
-        #endregion Graphics Properties
     }
 }

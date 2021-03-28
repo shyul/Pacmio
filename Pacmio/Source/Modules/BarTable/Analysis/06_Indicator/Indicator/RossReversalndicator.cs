@@ -36,7 +36,7 @@ namespace Pacmio.Analysis
 
 
             var csd = new DebugColumnSeries(NarrowRange.Column_Result);
-      
+
             CandleStickSignalColumn = new SignalColumn(this, CandleStickDojiMarubozuAnalysis.Name)
             {
                 BullishColor = Color.BlueViolet,
