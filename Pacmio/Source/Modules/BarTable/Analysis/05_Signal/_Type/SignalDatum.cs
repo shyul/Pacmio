@@ -34,9 +34,9 @@ namespace Pacmio.Analysis
 
             List<double> point_list = TrailPoints.Merge(points).ToList();
 
-            if (Bar.Bar_1 is Bar b_1 && b_1[SignalColumn] is SignalDatum sd_1 && sd_1.TrailPoints is double[] pts_1 && pts_1.Length > 1)
+            if (Bar.Bar_1 is Bar b_1 && b_1[SignalColumn] is SignalDatum sd_1 && sd_1.TrailPoints is List<double> pts_1 && pts_1.Count > 1)
             {
-                for (int i = 1; i < pts_1.Length; i++)
+                for (int i = 1; i < pts_1.Count; i++)
                 {
                     if (i - 1 < point_list.Count)
                         point_list[i - 1] += pts_1[i];
@@ -45,12 +45,30 @@ namespace Pacmio.Analysis
                 }
             }
 
-            TrailPoints = point_list.ToArray();
+            TrailPoints = point_list;
         }
 
         public virtual string Description { get; } = string.Empty;
 
-        public double[] TrailPoints { get; private set; } = new double[] { 0 };
+        public List<double> TrailPoints { get; private set; } = new() { 0 };
+
+        public void Add(double f)
+        {
+            //TrailPoints.ForEach(n => n = n + f);
+            for (int i = 0; i < TrailPoints.Count; i++)
+            {
+                TrailPoints[i] = TrailPoints[i] + f;
+            }
+        }
+
+        public void Multiply(double f)
+        {
+            //TrailPoints.ForEach(n => n = n * f);
+            for (int i = 0; i < TrailPoints.Count; i++)
+            {
+                TrailPoints[i] = TrailPoints[i] * f;
+            }
+        }
 
         public double Score => TrailPoints[0];
     }

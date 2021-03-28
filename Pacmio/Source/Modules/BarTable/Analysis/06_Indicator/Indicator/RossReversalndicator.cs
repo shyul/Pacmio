@@ -25,37 +25,31 @@ namespace Pacmio.Analysis
             RsiSignal = new OscillatorSignal(RSI);
 
             BollingerBand = new Bollinger(20, 2);
-            BollingerBandSignal = new BandSignal(Bar.Column_Typical, BollingerBand);
+            BollingerBandSignal = new BandSignal(Bar.Column_Typical, BollingerBand)
+            {
+                BullishColor = Color.DeepSkyBlue, //.YellowGreen,
+                BearishColor = Color.Pink,
+            };
 
             CandleStickDojiMarubozuAnalysis = new CandleStickDojiMarubozuAnalysis();
             NarrowRange = new NarrowRange();
 
-            /*
-            BollingerBandSignalColumn = new SignalColumn(this, BollingerBand.Name)
-            {
-                BullishColor = Color.YellowGreen,
-                BearishColor = Color.Pink,
-            };
-            */
-
-
-            NarrowRange.AddChild(this);
 
             var csd = new DebugColumnSeries(NarrowRange.Column_Result);
-            NarrowRange.AddChild(csd);
-
+      
             CandleStickSignalColumn = new SignalColumn(this, CandleStickDojiMarubozuAnalysis.Name)
             {
                 BullishColor = Color.BlueViolet,
                 BearishColor = Color.DarkOrange
             };
 
+
             SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignal.Column_Result, CandleStickSignalColumn };
 
             SignalSeries = new(this);
 
-
-
+            NarrowRange.AddChild(csd);
+            NarrowRange.AddChild(this);
             RsiSignal.AddChild(this);
             BollingerBandSignal.AddChild(this);
             CandleStickDojiMarubozuAnalysis.AddChild(this);
@@ -78,9 +72,6 @@ namespace Pacmio.Analysis
 
         public BandSignal BollingerBandSignal { get; }
 
-        //public SignalColumn BollingerBandSignalColumn { get; protected set; }
-
-        //public double[] BollingerBandScores { get; } = { 5, 2, -2, -5 };
 
 
 
@@ -89,7 +80,6 @@ namespace Pacmio.Analysis
         public CandleStickDojiMarubozuAnalysis CandleStickDojiMarubozuAnalysis { get; }
 
         public SignalColumn CandleStickSignalColumn { get; protected set; }
-
 
 
 
@@ -108,28 +98,17 @@ namespace Pacmio.Analysis
                     double close = b.Close;
                     double low = b.Low;
                     double high = b.High;
-                    double nr = b[NarrowRange.Column_Result];
+                    double trend = b.TrendStrength;
 
+                    double nr = b[NarrowRange.Column_Result];
                     double rsi = b[RSI.Column_Result];
 
-                    //double bbh = b[BollingerBand.Column_High];
-                    //double bbl = b[BollingerBand.Column_Low];
-
-                    //double[] points_bb = new double[] { };
-
-
-                    double trend = b.TrendStrength;
+                    // b[BollingerBandSignal.Column_Result].Multiply(trend);
 
                     double[] points_candle = new double[] { };
 
                     if (rsi > 80 && trend > 3)
                     {
-                        /*
-                        if (low > bbh)
-                            points_bb = new double[] { 5 * trend, 3 * trend };
-                        else if (high > bbh)
-                            points_bb = new double[] { 2 * trend };*/
-
                         if (b.CandleStickList.Contains(CandleStickType.Doji))
                         {
                             points_candle = new double[] { 5 * trend };
@@ -141,12 +120,6 @@ namespace Pacmio.Analysis
                     }
                     else if (rsi < 20 && trend < -3)
                     {
-                        /*
-                        if (high < bbl)
-                            points_bb = new double[] { 5 * trend, 3 * trend };
-                        else if (low < bbl)
-                            points_bb = new double[] { 2 * trend };*/
-
                         if (b.CandleStickList.Contains(CandleStickType.Doji))
                         {
                             points_candle = new double[] { 5 * trend };
@@ -157,7 +130,6 @@ namespace Pacmio.Analysis
                         }
                     }
 
-                    //SignalDatum sd_bb = new SignalDatum(b, BollingerBandSignalColumn, points_bb);
                     SignalDatum sd_candle = new SignalDatum(b, CandleStickSignalColumn, points_candle);
                 }
             }
