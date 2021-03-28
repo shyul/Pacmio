@@ -14,8 +14,15 @@ namespace Pacmio.Analysis
 {
     public class BandSignalDatum : SignalDatum
     {
-        public BandSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
+        public BandSignalDatum(Bar b, SignalColumn column, double position) : base(b, column) 
+        {
+            Position = position;
+        }
 
         public BandSignalType Type { get; set; }
+
+        public double Position { get; } = 50;
+
+        public override string Description => Type.ToString();
     }
 }

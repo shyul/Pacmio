@@ -25,7 +25,7 @@ namespace Pacmio.Analysis
             BullishColor = OscillatorAnalysis.UpperColor;
             BearishColor = OscillatorAnalysis.LowerColor;
 
-            iosc.AddChild(this);
+            OscillatorAnalysis.AddChild(this);
         }
 
         public IOscillator OscillatorAnalysis { get; }
@@ -36,13 +36,13 @@ namespace Pacmio.Analysis
 
         public Dictionary<Range<double>, double[]> LevelToTrailPoints = new()
         {
-            { new Range<double>(-1, 5), new double[] { -7, -5 } },
+            { new Range<double>(double.MinValue, 5), new double[] { -7, -5 } },
             { new Range<double>(5, 10), new double[] { -3 } },
             { new Range<double>(10, 20), new double[] { -1 } },
             { new Range<double>(20, 80), new double[] { 0 } },
             { new Range<double>(80, 90), new double[] { 1 } },
             { new Range<double>(90, 95), new double[] { 3 } },
-            { new Range<double>(95, 101), new double[] { 7, 5 } }
+            { new Range<double>(95, double.MaxValue), new double[] { 7, 5 } }
         };
 
         protected override void Calculate(BarAnalysisPointer bap)
@@ -54,7 +54,6 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
 
                 OscillatorSignalDatum d = new(b, Column_Result);
-                //b[Column_Result] = d;
 
                 double rsi = b[OscillatorAnalysis];
 

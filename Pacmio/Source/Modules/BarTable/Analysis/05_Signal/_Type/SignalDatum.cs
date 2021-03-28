@@ -34,7 +34,7 @@ namespace Pacmio.Analysis
 
             List<double> point_list = TrailPoints.Merge(points).ToList();
 
-            if(Bar.Bar_1 is Bar b_1 && b_1[SignalColumn] is SignalDatum sd_1 && sd_1.TrailPoints is double[] pts_1 && pts_1.Length > 1) 
+            if (Bar.Bar_1 is Bar b_1 && b_1[SignalColumn] is SignalDatum sd_1 && sd_1.TrailPoints is double[] pts_1 && pts_1.Length > 1)
             {
                 for (int i = 1; i < pts_1.Length; i++)
                 {

@@ -16,5 +16,7 @@ namespace Pacmio.Analysis
         public OscillatorSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
 
         public OscillatorSignalType Type { get; set; } = OscillatorSignalType.None;
+
+        public override string Description => Type.ToString();
     }
 }

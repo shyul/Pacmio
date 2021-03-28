@@ -396,7 +396,7 @@ namespace Pacmio
         #endregion Datum Column
 
         #region Signal Information Tools
-        
+
         public SignalDatum this[SignalColumn dc]
         {
             get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] as SignalDatum : null;

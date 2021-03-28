@@ -13,18 +13,18 @@ namespace Pacmio.Analysis
 {
     public enum BandSignalType : int
     {
-        UpperPenetrate = 3,
-
-        UpperBound = 2,
-
-        UpperHalf = 1,
-
-        None = 0,
-
-        LowerHalf = -1,
+        LowerPenetrate = -3,
 
         LowerBound = -2,
 
-        LowerPenetrate = -3,
+        LowerHalf = -1,
+
+        None = 0,
+
+        UpperHalf = 1,
+
+        UpperBound = 2,
+
+        UpperPenetrate = 3,
     }
 }
