@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 using Xu;
 
 namespace Pacmio.Analysis
@@ -19,7 +20,10 @@ namespace Pacmio.Analysis
 
             string label = "(" + iosc.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(OscillatorSignalDatum));
+            Column_Result = new(this, typeof(OscillatorSignalDatum));
+
+            BullishColor = OscillatorAnalysis.UpperColor;
+            BearishColor = OscillatorAnalysis.LowerColor;
 
             iosc.AddChild(this);
         }
@@ -29,8 +33,6 @@ namespace Pacmio.Analysis
         public double UpperLimit => OscillatorAnalysis.UpperLimit;
 
         public double LowerLimit => OscillatorAnalysis.LowerLimit;
-
-        public override DatumColumn Column_Result { get; }
 
         public Dictionary<Range<double>, double[]> LevelToTrailPoints = new()
         {
@@ -51,7 +53,8 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
 
-                OscillatorSignalDatum d = new();
+                OscillatorSignalDatum d = new(b, Column_Result);
+                //b[Column_Result] = d;
 
                 double rsi = b[OscillatorAnalysis];
 
@@ -60,9 +63,7 @@ namespace Pacmio.Analysis
                 else if (rsi <= LowerLimit)
                     d.Type = OscillatorSignalType.OverSold;
 
-                d.TrailPoints = LevelToTrailPoints.Where(n => n.Key.Contains(rsi)).Select(n => n.Value).FirstOrDefault();
-
-                b[Column_Result] = d;
+                d.SetPoints(LevelToTrailPoints.Where(n => n.Key.Contains(rsi)).Select(n => n.Value).FirstOrDefault());
             }
         }
     }

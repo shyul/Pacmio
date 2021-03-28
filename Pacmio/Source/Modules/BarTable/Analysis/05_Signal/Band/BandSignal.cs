@@ -18,7 +18,6 @@ namespace Pacmio.Analysis
         
         }
 
-        public override DatumColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

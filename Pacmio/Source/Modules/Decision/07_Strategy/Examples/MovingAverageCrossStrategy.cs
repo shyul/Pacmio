@@ -13,19 +13,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class MovingAverageCrossStrategy : IndicatorGroup
+    public class MovingAverageCrossStrategy
     {
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
-        }
 
-        public MovingAverageCrossStrategy()
-        {
-
-            SignalColumn = new IndicatorColumn(Name);
-
-        }
 
         public void Config(BarFreq freq, MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
         {
@@ -78,7 +68,7 @@ namespace Pacmio.Analysis
 
         public SMA MA_Slow { get; private set; }
 
-        public IndicatorColumn SignalColumn { get; }
+        public SignalColumn SignalColumn { get; }
 
 
 

@@ -120,6 +120,8 @@ namespace Pacmio
         /// </summary>
         public Period DataSourcePeriod { get; private set; }
 
+        public Bar Bar_1 => Index > 1 ? Table[Index - 1] : null;
+
         #endregion
 
         #region Original
@@ -394,40 +396,40 @@ namespace Pacmio
         #endregion Datum Column
 
         #region Signal Information Tools
-
-        private Dictionary<IndicatorColumn, IndicatorDatum> SignalLUT { get; } = new Dictionary<IndicatorColumn, IndicatorDatum>();
-
-        public IndicatorDatum this[IndicatorColumn column]
+        
+        public SignalDatum this[SignalColumn dc]
         {
-            get
-            {
-                if (!SignalLUT.ContainsKey(column))
-                    SignalLUT[column] = new IndicatorDatum();
+            get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] as SignalDatum : null;
 
-                return SignalLUT[column];
+            set
+            {
+                if (value is SignalDatum dat && value.GetType() == dc.DatumType)
+                {
+                    DatumColumnsLUT[dc] = dat;
+                }
+                else if (value is null && DatumColumnsLUT.ContainsKey(dc))
+                {
+                    DatumColumnsLUT.Remove(dc);
+                }
+                else
+                {
+                    throw new("Invalid data type assigned");
+                }
             }
         }
 
-        public void SetSignal(IndicatorColumn column, double[] score, string message)
+        public SignalDatum this[SignalAnalysis sa]
         {
-            IndicatorDatum sd = this[column];
-            if (Index > 0)
-            {
-                IndicatorDatum sd_1 = Table[Index - 1][column];
-                sd.Set(score, message, sd_1);
-            }
-            else
-            {
-                sd.Set(score, message);
-            }
+            get => this[sa.Column_Result];
+            set => this[sa.Column_Result] = value;
         }
 
-        public (double Bullish, double Bearish) GetSignalScore(IEnumerable<IndicatorColumn> scs)
+        public (double Bullish, double Bearish) GetSignalScore(IEnumerable<SignalColumn> scs)
         {
             double bull = 0, bear = 0;
-            foreach (IndicatorColumn sc in scs)
+            foreach (SignalColumn sc in scs)
             {
-                if (this[sc] is IndicatorDatum sd)
+                if (this[sc] is SignalDatum sd)
                 {
                     double score = sd.Score;
                     if (score > 0) bull += score;

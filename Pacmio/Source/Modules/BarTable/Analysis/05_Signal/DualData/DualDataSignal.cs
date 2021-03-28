@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using Xu;
 
 namespace Pacmio.Analysis
@@ -20,7 +20,7 @@ namespace Pacmio.Analysis
 
             string label = "(" + analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualDataSignalDatum));
+            Column_Result = new(this, typeof(DualDataSignalDatum));
 
             analysis.AddChild(this);
         }
@@ -32,7 +32,7 @@ namespace Pacmio.Analysis
 
             string label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualDataSignalDatum));
+            Column_Result = new(this, typeof(DualDataSignalDatum));
 
             fast_analysis.AddChild(this);
             slow_analysis.AddChild(this);
@@ -45,7 +45,7 @@ namespace Pacmio.Analysis
 
             string label = "(" + Fast_Column.Name + "," + Slow_Column.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualDataSignalDatum));
+            Column_Result = new(this, typeof(DualDataSignalDatum));
         }
 
         #region Parameters
@@ -55,8 +55,6 @@ namespace Pacmio.Analysis
         public NumericColumn Fast_Column { get; }
 
         public NumericColumn Slow_Column { get; }
-
-        public override DatumColumn Column_Result { get; }
 
         #endregion Parameters
 
@@ -81,7 +79,7 @@ namespace Pacmio.Analysis
             if (!list.Contains(type))
             {
                 list.Add(type);
-                d.TrailPoints = d.TrailPoints.Merge(TypeToTrailPoints[type]).ToArray();
+                d.SetPoints(TypeToTrailPoints[type]);
             }
         }
 
@@ -98,7 +96,8 @@ namespace Pacmio.Analysis
                 double value_fast = b[Fast_Column];
                 double value_slow = b[Slow_Column];
 
-                DualDataSignalDatum d = new();
+                DualDataSignalDatum d = new(b, Column_Result);
+                //b[Column_Result] = d;
 
                 if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
                 {
@@ -163,7 +162,7 @@ namespace Pacmio.Analysis
                     }
                 }
 
-                b[Column_Result] = d;
+
             }
         }
 

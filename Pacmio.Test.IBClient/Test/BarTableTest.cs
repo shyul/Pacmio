@@ -35,7 +35,7 @@ namespace TestClient
 
                 SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
                 SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
-                var ma_cross = new CrossIndicator(fast_MA, slow_MA);
+                //var ma_cross = new CrossIndicator(fast_MA, slow_MA);
 
                 DebugColumnSeries csd_range = new(Bar.Column_Range);
                 DebugColumnSeries csd_nr = new(Bar.Column_NarrowRange);

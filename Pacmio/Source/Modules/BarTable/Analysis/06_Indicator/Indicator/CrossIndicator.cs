@@ -14,6 +14,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
+    /*
     public class CrossIndicator : Indicator
     {
         public CrossIndicator(ISingleData fast_MA, ISingleData slow_MA)
@@ -44,7 +45,7 @@ namespace Pacmio.Analysis
                 };
             }
 
-            SignalColumns = new IndicatorColumn[] { CrossSignalColumn };
+            SignalColumns = new SignalColumn[] { CrossSignalColumn };
 
             SignalSeries = new SignalSeries(this);
         }
@@ -69,9 +70,9 @@ namespace Pacmio.Analysis
             { DualDataSignalType.TrendDown, new double[] { -0.5 } },
         };
 
-        public IndicatorColumn CrossSignalColumn { get; protected set; }
+        public SignalColumn CrossSignalColumn { get; protected set; }
 
-        public override IEnumerable<IndicatorColumn> SignalColumns { get; }
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -80,7 +81,7 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
 
-                IndicatorDatum sd = b[CrossSignalColumn] as IndicatorDatum;
+                SignalDatum sd = b[CrossSignalColumn] as SignalDatum;
 
                 if (b[DualColumnAnalysis.Column_Result] is DualDataSignalDatum d)
                 {
@@ -89,12 +90,12 @@ namespace Pacmio.Analysis
 
                     foreach (var type in list)
                     {
-                        IndicatorDatum.MergePoints(point_list, TypeToScore[type]);
+                        SignalDatum.MergePoints(point_list, TypeToScore[type]);
                     }
 
                     if (i > 0)
                     {
-                        IndicatorDatum sd_1 = bt[i - 1][CrossSignalColumn] as IndicatorDatum;
+                        SignalDatum sd_1 = bt[i - 1][CrossSignalColumn] as SignalDatum;
                         sd.Set(point_list.ToArray(), list.ToString(","), sd_1);
                     }
                     else
@@ -103,7 +104,7 @@ namespace Pacmio.Analysis
             }
         }
 
-        /*
+        
         public MovingAverageCrossIndicator(SMA fast_MA, SMA slow_MA)
         {
             Fast_MA = fast_MA;
@@ -196,164 +197,199 @@ namespace Pacmio.Analysis
         }
 
         */
-        /*
-        for (int i = bap.StartPt; i < bap.StopPt; i++)
+    /*
+    for (int i = bap.StartPt; i < bap.StopPt; i++)
+    {
+        SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
+
+        var (points, description) = DualDataSignal(bt, i, Fast_Column, Slow_Column, TypeToScore);
+
+        if (i > 0)
         {
-            SignalDatum sd = bt[i][SignalColumn] as SignalDatum;
+            SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
+            sd.Set(points, description, sd_1);
+        }
+        else
+            sd.Set(points, description);
 
-            var (points, description) = DualDataSignal(bt, i, Fast_Column, Slow_Column, TypeToScore);
+        //Console.WriteLine("Score: " + sd.Score);
+    }*/
+    /*
+    public static List<DualColumnType> DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column)
+    {
+        double value_fast = bt[i, fast_Column];
+        double value_slow = bt[i, slow_Column];
 
-            if (i > 0)
+        List<DualColumnType> dualDataTypes = new List<DualColumnType>();
+
+        if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
+        {
+            double delta = value_fast - value_slow;
+            double delta_abs = Math.Abs(delta);
+
+            if (delta > 0)
             {
-                SignalDatum sd_1 = bt[i - 1][SignalColumn] as SignalDatum;
-                sd.Set(points, description, sd_1);
+                dualDataTypes.Add(DualColumnType.Above);
             }
-            else
-                sd.Set(points, description);
-
-            //Console.WriteLine("Score: " + sd.Score);
-        }*/
-        /*
-        public static List<DualColumnType> DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column)
-        {
-            double value_fast = bt[i, fast_Column];
-            double value_slow = bt[i, slow_Column];
-
-            List<DualColumnType> dualDataTypes = new List<DualColumnType>();
-
-            if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
+            else if (delta < 0)
             {
-                double delta = value_fast - value_slow;
-                double delta_abs = Math.Abs(delta);
-
-                if (delta > 0)
-                {
-                    dualDataTypes.Add(DualColumnType.Above);
-                }
-                else if (delta < 0)
-                {
-                    dualDataTypes.Add(DualColumnType.Below);
-                }
-
-                double last_value_fast = bt[i - 1, fast_Column];
-                double last_value_slow = bt[i - 1, slow_Column];
-
-                if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
-                {
-                    double last_delta = last_value_fast - last_value_slow;
-
-                    if (value_fast > last_value_fast && value_slow > last_value_slow)
-                    {
-                        dualDataTypes.Add(DualColumnType.TrendUp);
-                    }
-                    else if (value_fast < last_value_fast && value_slow < last_value_slow)
-                    {
-                        dualDataTypes.Add(DualColumnType.TrendDown);
-                    }
-
-                    if (delta >= 0 && last_delta < 0)
-                    {
-                        dualDataTypes.Add(DualColumnType.CrossUp);
-                    }
-                    else if (delta <= 0 && last_delta > 0)
-                    {
-                        dualDataTypes.Add(DualColumnType.CrossDown);
-                    }
-
-                    double last_delta_abs = Math.Abs(last_delta);
-
-                    if (delta_abs > last_delta_abs)
-                    {
-                        dualDataTypes.Add(DualColumnType.Expansion);
-                    }
-                    else
-                    {
-                        dualDataTypes.Add(DualColumnType.Contraction);
-                    }
-                }
+                dualDataTypes.Add(DualColumnType.Below);
             }
 
-            return dualDataTypes;
+            double last_value_fast = bt[i - 1, fast_Column];
+            double last_value_slow = bt[i - 1, slow_Column];
+
+            if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
+            {
+                double last_delta = last_value_fast - last_value_slow;
+
+                if (value_fast > last_value_fast && value_slow > last_value_slow)
+                {
+                    dualDataTypes.Add(DualColumnType.TrendUp);
+                }
+                else if (value_fast < last_value_fast && value_slow < last_value_slow)
+                {
+                    dualDataTypes.Add(DualColumnType.TrendDown);
+                }
+
+                if (delta >= 0 && last_delta < 0)
+                {
+                    dualDataTypes.Add(DualColumnType.CrossUp);
+                }
+                else if (delta <= 0 && last_delta > 0)
+                {
+                    dualDataTypes.Add(DualColumnType.CrossDown);
+                }
+
+                double last_delta_abs = Math.Abs(last_delta);
+
+                if (delta_abs > last_delta_abs)
+                {
+                    dualDataTypes.Add(DualColumnType.Expansion);
+                }
+                else
+                {
+                    dualDataTypes.Add(DualColumnType.Contraction);
+                }
+            }
         }
 
-        public static (double[] points, string description) DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column, Dictionary<DualColumnType, double[]> typeToScore)
-        {
-            List<DualColumnType> dualDataTypes = new List<DualColumnType>();
-            List<double> point_list = new List<double>();
-
-            double value_fast = bt[i, fast_Column];
-            double value_slow = bt[i, slow_Column];
-
-            if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
-            {
-                double delta = value_fast - value_slow;
-                double delta_abs = Math.Abs(delta);
-
-                if (delta > 0)
-                {
-                    dualDataTypes.Add(DualColumnType.Above);
-                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Above]);
-                }
-                else if (delta < 0)
-                {
-                    dualDataTypes.Add(DualColumnType.Below);
-                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Below]);
-                }
-
-                double last_value_fast = bt[i - 1, fast_Column];
-                double last_value_slow = bt[i - 1, slow_Column];
-
-                if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
-                {
-                    double last_delta = last_value_fast - last_value_slow;
-
-                    if (value_fast > last_value_fast && value_slow > last_value_slow)
-                    {
-                        dualDataTypes.Add(DualColumnType.TrendUp);
-                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.TrendUp]);
-                    }
-                    else if (value_fast < last_value_fast && value_slow < last_value_slow)
-                    {
-                        dualDataTypes.Add(DualColumnType.TrendDown);
-                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.TrendDown]);
-                    }
-
-                    if (delta >= 0 && last_delta < 0)
-                    {
-                        dualDataTypes.Add(DualColumnType.CrossUp);
-                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.CrossUp]);
-                    }
-                    else if (delta <= 0 && last_delta > 0)
-                    {
-                        dualDataTypes.Add(DualColumnType.CrossDown);
-                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.CrossDown]);
-                    }
-
-                    double last_delta_abs = Math.Abs(last_delta);
-
-                    if (delta_abs > last_delta_abs)
-                    {
-                        dualDataTypes.Add(DualColumnType.Expansion);
-                        if (delta > 0)
-                            SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Expansion]);
-                        else if (delta < 0)
-                            SignalDatum.MergePointsNegative(point_list, typeToScore[DualColumnType.Expansion]);
-                    }
-                    else
-                    {
-                        dualDataTypes.Add(DualColumnType.Contraction);
-                        if (delta > 0)
-                            SignalDatum.MergePointsNegative(point_list, typeToScore[DualColumnType.Contraction]);
-                        else if (delta < 0)
-                            SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Contraction]);
-                    }
-                }
-            }
-
-            return (point_list.ToArray(), dualDataTypes.ToString(","));
-        }
-        */
+        return dualDataTypes;
     }
+
+    public static (double[] points, string description) DualDataSignal(BarTable bt, int i, NumericColumn fast_Column, NumericColumn slow_Column, Dictionary<DualColumnType, double[]> typeToScore)
+    {
+        List<DualColumnType> dualDataTypes = new List<DualColumnType>();
+        List<double> point_list = new List<double>();
+
+        double value_fast = bt[i, fast_Column];
+        double value_slow = bt[i, slow_Column];
+
+        if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
+        {
+            double delta = value_fast - value_slow;
+            double delta_abs = Math.Abs(delta);
+
+            if (delta > 0)
+            {
+                dualDataTypes.Add(DualColumnType.Above);
+                SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Above]);
+            }
+            else if (delta < 0)
+            {
+                dualDataTypes.Add(DualColumnType.Below);
+                SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Below]);
+            }
+
+            double last_value_fast = bt[i - 1, fast_Column];
+            double last_value_slow = bt[i - 1, slow_Column];
+
+            if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
+            {
+                double last_delta = last_value_fast - last_value_slow;
+
+                if (value_fast > last_value_fast && value_slow > last_value_slow)
+                {
+                    dualDataTypes.Add(DualColumnType.TrendUp);
+                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.TrendUp]);
+                }
+                else if (value_fast < last_value_fast && value_slow < last_value_slow)
+                {
+                    dualDataTypes.Add(DualColumnType.TrendDown);
+                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.TrendDown]);
+                }
+
+                if (delta >= 0 && last_delta < 0)
+                {
+                    dualDataTypes.Add(DualColumnType.CrossUp);
+                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.CrossUp]);
+                }
+                else if (delta <= 0 && last_delta > 0)
+                {
+                    dualDataTypes.Add(DualColumnType.CrossDown);
+                    SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.CrossDown]);
+                }
+
+                double last_delta_abs = Math.Abs(last_delta);
+
+                if (delta_abs > last_delta_abs)
+                {
+                    dualDataTypes.Add(DualColumnType.Expansion);
+                    if (delta > 0)
+                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Expansion]);
+                    else if (delta < 0)
+                        SignalDatum.MergePointsNegative(point_list, typeToScore[DualColumnType.Expansion]);
+                }
+                else
+                {
+                    dualDataTypes.Add(DualColumnType.Contraction);
+                    if (delta > 0)
+                        SignalDatum.MergePointsNegative(point_list, typeToScore[DualColumnType.Contraction]);
+                    else if (delta < 0)
+                        SignalDatum.MergePoints(point_list, typeToScore[DualColumnType.Contraction]);
+                }
+            }
+        }
+
+        return (point_list.ToArray(), dualDataTypes.ToString(","));
+    }}
+
+            #region Point Tools
+
+        public static void MergePoints(List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] += points[i];
+                else
+                    list.Add(points[i]);
+            }
+        }
+
+        public static void MergePointsNegative(List<double> list, double[] points)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (i < list.Count)
+                    list[i] -= points[i];
+                else
+                    list.Add(-points[i]);
+            }
+        }
+
+        public static void MergePoints(List<double> list, double point)
+        {
+            if (list.Count > 0)
+                list[0] += point;
+            else
+                list.Add(point);
+        }
+
+        #endregion Point Tools
+
+    */
+
 }
 
 

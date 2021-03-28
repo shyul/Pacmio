@@ -13,9 +13,9 @@ namespace Pacmio
 {
     public static class SimulationManager
     {
-        public static Dictionary<Contract, IntraDayBarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, IntraDayBarTableSet>();
+        public static Dictionary<Contract, BarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
 
-        public static void Run(IndicatorGroup s, Period period)
+        public static void Run(IndicatorSet s, Period period)
         {
             for (DateTime t = period.Start.Date; t < period.Stop; t = t.AddDays(1))
             {

@@ -3,36 +3,28 @@
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
-
+/// 
+using System;
 using System.Drawing;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public class IndicatorColumn : Column, IOrdered
+    public class SignalColumn : DatumColumn
     {
-        public IndicatorColumn(string name, SignalColumnType type = SignalColumnType.Filter)
+        public SignalColumn(BarAnalysis source, string name)
+            : base(source.Name + "_Signal_" + name, typeof(SignalDatum))
         {
-            Name = Label = name;
-            Type = type;
+            Source = source;
         }
 
-        public IndicatorColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter)
+        public SignalColumn(SignalAnalysis source, Type datumType)
+            : base(source.Name + "_Signal", datumType)
         {
-            Name = name;
-            Label = label;
-            Type = type;
+            Source = source;
         }
 
-        public SignalColumnType Type { get; }
-
-        public bool Enabled { get; set; } = true;
-
-        public int Order { get; set; } = 0;
-
-        public Importance Importance { get; set; } = Importance.None;
-
-        #region Graphics Properties
+        public BarAnalysis Source { get; }
 
         public Color BullishColor
         {
@@ -62,21 +54,8 @@ namespace Pacmio
             }
         }
 
-        public ColorTheme BullishTheme { get; } = new ColorTheme();
+        public ColorTheme BullishTheme { get; set; } = new();
 
-        public ColorTheme BearishTheme { get; } = new ColorTheme();
-
-        #endregion Graphics Properties
-    }
-
-    public enum SignalColumnType : int
-    {
-        Filter = 0,
-
-        Entry = 10,
-
-        ExitLong = 11,
-
-        ExitShort = 12
+        public ColorTheme BearishTheme { get; set; } = new();
     }
 }

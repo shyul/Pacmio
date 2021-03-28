@@ -76,13 +76,19 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorGroup : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
+    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
     {
-        public IndicatorGroup(IndicatorExec ie, BarFreq freq, DataType type) 
+        public IndicatorSet(IndicatorExec ie, BarFreq freq, DataType type) 
         {
             ExecutingIndicator = ie;
             ExecutingTimeFrame = (freq, type);
             Indicators[ExecutingTimeFrame] = ExecutingIndicator;
+        }
+
+        public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
+        {
+            var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.Type))).Where(bt => bt.LastCalculatedTickTime < tickTime);
+            return btList.Count() == 0;
         }
 
         #region Indicators
@@ -92,6 +98,8 @@ namespace Pacmio
         public (BarFreq freq, DataType type) ExecutingTimeFrame { get; set; }
 
         private Dictionary<(BarFreq freq, DataType type), Indicator> Indicators { get; } = new();
+
+        public List<(BarFreq freq, DataType type)> TimeFrameList => Indicators.Keys.ToList();
 
         public Indicator this[BarFreq freq, DataType type = DataType.Trades]
         {

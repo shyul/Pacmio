@@ -8,14 +8,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class DivergenceDatum : SignalDatum
+    public enum BandSignalType : int
     {
-        public DivergenceDatum(Bar b, SignalColumn column) : base(b, column) { }
+        UpperPenetrate = 3,
 
-        public DivergenceSignalType Type { get; set; }
+        UpperBound = 2,
+
+        UpperHalf = 1,
+
+        None = 0,
+
+        LowerHalf = -1,
+
+        LowerBound = -2,
+
+        LowerPenetrate = -3,
     }
 }

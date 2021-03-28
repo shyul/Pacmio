@@ -568,7 +568,7 @@ namespace Pacmio
             }
         }
 
-        public void ResetCalculationPointer(BarAnalysis ba)
+        public void Remove(BarAnalysis ba)
         {
             lock (BarAnalysisPointerLUT)
             {
@@ -576,6 +576,8 @@ namespace Pacmio
                     BarAnalysisPointerLUT.Remove(ba);
             }
         }
+
+        public void ResetCalculationPointer(BarAnalysis ba) => Remove(ba);
 
         private Dictionary<BarAnalysisSet, BarAnalysisSetPointer> BarAnalysisSetPointerLUT { get; } = new();
 
@@ -753,9 +755,9 @@ namespace Pacmio
                     Status = TableStatus.Ticking;
                     lock (DataLockObject)
                     {
-                        LastCalculatedTickTime = LastTickTime;
                         CalculateTickRequested = false;
                         Calculate(BarAnalysisPointerLUT.Keys);
+                        LastCalculatedTickTime = LastTickTime;
                     }
                     Status = TableStatus.TickingFinished;
                     Status = TableStatus.Ready;
@@ -778,6 +780,9 @@ namespace Pacmio
         }
 
         #endregion Data/Bar Analysis (TA) Calculation
+
+
+
 
         #region Data Consumers
 

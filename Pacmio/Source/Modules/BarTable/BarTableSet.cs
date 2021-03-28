@@ -13,15 +13,15 @@ using Xu;
 
 namespace Pacmio
 {
-    public sealed class IntraDayBarTableSet : IDisposable
+    public sealed class BarTableSet : IDisposable
     {
-        public IntraDayBarTableSet(Contract c, Period pd)
+        public BarTableSet(Contract c, Period pd)
         {
             Contract = c;
             Period = pd;
         }
 
-        ~IntraDayBarTableSet() => Dispose();
+        ~BarTableSet() => Dispose();
 
         public void Dispose()
         {
@@ -64,34 +64,4 @@ namespace Pacmio
             }
         }
     }
-
-    /*
-         public class StrategyDataSet
-    {
-        public StrategyDataSet(Strategy s, Contract c, Period pd) 
-        {
-            Contract = c;
-            s.RunEach(n =>
-            {
-                BarFreq freq = n.freq;
-                DataType type = n.type;
-                if (type == DataType.Trades && freq >= BarFreq.Daily) 
-                {
-                    BarTables.Add((freq, type), (Contract.GetOrCreateDailyBarTable(freq), n.indicator));
-                }
-                else
-                {
-                    DateTime newStart = pd.Start.AddSeconds(-1000 * freq.GetAttribute<BarFreqInfo>().Frequency.Span.TotalSeconds);
-                    pd.Insert(newStart); // Always have enough bars to buffer for good TA averages.
-                    BarTables.Add((freq, type), (Contract.LoadBarTable(pd, freq, type, false, null), n.indicator));
-                }
-            });
-        }
-
-        public Contract Contract { get; }
-
-        private Dictionary<(BarFreq, DataType), (BarTable, Indicator)> BarTables { get; } = new();
-    }
-     
-     */
 }

@@ -11,10 +11,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class OscillatorSignalDatum : ISignalDatum
+    public class OscillatorSignalDatum : SignalDatum
     {
-        public OscillatorSignalType Type { get; set; } = OscillatorSignalType.None;
+        public OscillatorSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
 
-        public double[] TrailPoints { get; set; } = new double[] { };
+        public OscillatorSignalType Type { get; set; } = OscillatorSignalType.None;
     }
 }

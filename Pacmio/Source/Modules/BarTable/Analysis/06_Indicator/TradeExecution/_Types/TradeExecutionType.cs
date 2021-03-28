@@ -18,7 +18,7 @@ namespace Pacmio
         [EnumMember]
         None = 0,
 
-        // Add Liquidation
+        // Add Liquidation, Enter
 
         [EnumMember]
         Long = 3,
@@ -34,7 +34,7 @@ namespace Pacmio
         [EnumMember]
         ShortHold = -1,
 
-        // Remove Liquidation
+        // Remove Liquidation, Exit
 
         [EnumMember]
         Sell = -2,

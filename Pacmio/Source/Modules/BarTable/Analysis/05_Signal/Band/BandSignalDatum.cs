@@ -4,12 +4,18 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public interface ISignalDatum : IDatum
+    public class BandSignalDatum : SignalDatum
     {
-        double[] TrailPoints { get; }
+        public BandSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
+
+        public BandSignalType Type { get; set; }
     }
 }

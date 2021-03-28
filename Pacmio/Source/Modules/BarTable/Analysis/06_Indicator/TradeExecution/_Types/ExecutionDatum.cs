@@ -26,5 +26,7 @@ namespace Pacmio.Analysis
         public double AuxPrice { get; } = double.NaN;
 
         // Use to calculate simulation result... position vs time, price, so on...
+
+        public int SameDecisionCount { get; set; } = 0;
     }
 }

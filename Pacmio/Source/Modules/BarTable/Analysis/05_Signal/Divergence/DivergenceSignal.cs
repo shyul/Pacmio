@@ -41,8 +41,6 @@ namespace Pacmio.Analysis
         /// </summary>
         public ISingleData IndicatorColumn { get; }
 
-        public override DatumColumn Column_Result { get; }
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             // Yield Trend Lines

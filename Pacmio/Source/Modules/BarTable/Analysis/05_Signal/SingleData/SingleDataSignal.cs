@@ -27,7 +27,7 @@ namespace Pacmio.Analysis
             GroupName = Name = GetType().Name + label;
             //SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
             //SignalColumns = new SignalColumn[] { SignalColumn };
-            Column_Result = new(Name, typeof(SingleDataSignalDatum));
+            Column_Result = new(this, typeof(SingleDataSignalDatum));
             //Order = iosc.Order + 1;
         }
 
@@ -39,7 +39,7 @@ namespace Pacmio.Analysis
             Range = range;
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(SingleDataSignalDatum));
+            Column_Result = new(this, typeof(SingleDataSignalDatum));
         }
 
         public SingleDataSignal(NumericColumn column, Range<double> range)
@@ -49,7 +49,7 @@ namespace Pacmio.Analysis
             Range = range;
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(SingleDataSignalDatum));
+            Column_Result = new(this, typeof(SingleDataSignalDatum));
         }
 
         #region Parameters
@@ -62,9 +62,7 @@ namespace Pacmio.Analysis
 
         public NumericColumn Column { get; set; }
 
-        public override DatumColumn Column_Result { get; }
-
-        public IndicatorColumn Column_Signal { get; }
+        public SignalColumn Column_Signal { get; }
 
         #endregion Parameters
 
@@ -87,7 +85,7 @@ namespace Pacmio.Analysis
         public void SetType(SingleDataSignalDatum d, SingleDataSignalType type)
         {
             d.Type = type;
-            d.TrailPoints = TypeToTrailPoints[type];
+            d.SetPoints(TypeToTrailPoints[type]);
         }
 
         protected override void Calculate(BarAnalysisPointer bap)
@@ -105,7 +103,8 @@ namespace Pacmio.Analysis
                 double value = b[Column];
                 double last_value = bt[i - 1][Column];
 
-                SingleDataSignalDatum d = new();
+                SingleDataSignalDatum d = new(b, Column_Result);
+                //b[Column_Result] = d;
 
                 if (!double.IsNaN(value) && !double.IsNaN(last_value))
                 {
@@ -155,8 +154,6 @@ namespace Pacmio.Analysis
                         }
                     }
                 }
-
-                b[Column_Result] = d;
             }
         }
 

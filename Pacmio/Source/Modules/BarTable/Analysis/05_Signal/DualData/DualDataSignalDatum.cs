@@ -11,8 +11,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class DualDataSignalDatum : ISignalDatum
+    public class DualDataSignalDatum : SignalDatum
     {
+        public DualDataSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
+
         public List<DualDataSignalType> List { get; } = new List<DualDataSignalType>();
 
         public double Ratio { get; set; }
@@ -20,7 +22,5 @@ namespace Pacmio.Analysis
         public double Difference { get; set; }
 
         public double DifferenceRatio { get; set; }
-
-        public double[] TrailPoints { get; set; } = new double[] { };
     }
 }

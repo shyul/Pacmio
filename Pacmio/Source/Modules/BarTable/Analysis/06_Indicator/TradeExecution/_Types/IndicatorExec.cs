@@ -19,19 +19,50 @@ namespace Pacmio.Analysis
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class IndicatorExec : Indicator
+    public abstract class IndicatorExec : Indicator, ISingleComplex
     {
         protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
         {
-            IndicatorGroup = new(this, freq, type);
+            IndicatorSet = new(this, freq, type);
+      
+
+
+            Column_Result = new DatumColumn(Name, typeof(ExecutionDatum));
+
+
             SignalSeries = new(this);
         }
 
-        public IndicatorGroup IndicatorGroup { get; }
+        public IndicatorSet IndicatorSet { get; }
 
         public double MaximumHoldingTimeInMs { get; set; }
 
-        public void GenerateOrder(ExecutionDatum ed) => IndicatorGroup.GenerateOrder(ed);
+
+        #region Execution
+
+        public DatumColumn Column_Result { get; }
+
+
+
+
+        public abstract ExecutionDatum GenerateExecution(BarAnalysisPointer bap);
+
+        // Assure Tables from other time frame has the same or later ticker time...
+
+        // Get existing Position...
+
+        // Determine trade direction, add liquidity or remove  liquidity
+
+        // Fetch all results from other filtes.
+
+        // Construct the score...
+
+
+
+
+        #endregion Execution
+
+
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM

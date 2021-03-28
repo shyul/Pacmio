@@ -272,7 +272,17 @@ namespace Pacmio
                             }
                         });
 
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable).Select(n => n as BarTable), bt =>
+                        {
+                            //foreach (var exec in bt.IndicatorExecList) exec.GenerateExecution();
 
+                            // ExecutionDatum GenerateOrder(BarAnalysisPointer bap);
+
+                                // Get Tethered Strategy
+
+                                // Gener
+
+                        });
                     }
                 }
             }

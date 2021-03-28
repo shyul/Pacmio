@@ -8,13 +8,41 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using Xu;
 
 namespace Pacmio.Analysis
 {
-    public abstract class SignalAnalysis : BarAnalysis, ISingleComplex
+    public abstract class SignalAnalysis : BarAnalysis
     {
-        public abstract DatumColumn Column_Result { get; }
+        public SignalColumn Column_Result { get; protected set; }
+
+        #region Graphics Properties
+
+        public Color BullishColor
+        {
+            get => Column_Result.BullishColor;
+            set => Column_Result.BullishColor = value;
+        }
+
+        public Color BearishColor
+        {
+            get => Column_Result.BearishColor;
+            set => Column_Result.BearishColor = value;
+        }
+
+        public ColorTheme BullishTheme
+        {
+            get => Column_Result.BullishTheme;
+            set => Column_Result.BullishTheme = value;
+        }
+
+        public ColorTheme BearishTheme
+        {
+            get => Column_Result.BearishTheme;
+            set => Column_Result.BearishTheme = value;
+        }
+
+        #endregion Graphics Properties
     }
 }

@@ -76,14 +76,15 @@ namespace Pacmio
                     labels.Add((score.ToString(), Main.Theme.FontBold, Main.Theme.DimTextBrush));
                 }
 
-                foreach (IndicatorColumn sc in Indicator.SignalColumns)
+                foreach (SignalColumn sc in Indicator.SignalColumns)
                 {
-                    IndicatorDatum sd = bt[pt][sc];
-
-                    if (sd.Score > 0)
-                        labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
-                    else if (sd.Score < 0)
-                        labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                    if (bt[pt][sc] is SignalDatum sd)
+                    {
+                        if (sd.Score > 0)
+                            labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
+                        else if (sd.Score < 0)
+                            labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                    }
                 }
             }
             return labels;
@@ -108,31 +109,32 @@ namespace Pacmio
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        foreach (IndicatorColumn sc in Indicator.SignalColumns)
+                        foreach (SignalColumn sc in Indicator.SignalColumns)
                         {
-                            IndicatorDatum sd = bt[i][sc];
-
-                            string desc = sd.Description;
-                            double score = sd.Score;
-
-                            Rectangle rect;
-                            int height;
-
-                            if (score > 0)
+                            if (bt[i][sc] is SignalDatum sd)
                             {
-                                height = ref_pix - axisY.ValueToPixel(score);
-                                pos_base_pix -= height;
-                                rect = new Rectangle(x, pos_base_pix, tickWidth, height);
-                                g.FillRectangleE(sc.BullishTheme.FillBrush, rect);
-                                g.DrawRectangle(sc.BullishTheme.EdgePen, rect);
-                            }
-                            else if (score < 0)
-                            {
-                                height = axisY.ValueToPixel(score) - ref_pix;
-                                rect = new Rectangle(x, neg_base_pix, tickWidth, height);
-                                neg_base_pix += height;
-                                g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
-                                g.DrawRectangle(sc.BearishTheme.EdgePen, rect);
+                                string desc = sd.Description;
+                                double score = sd.Score;
+
+                                Rectangle rect;
+                                int height;
+
+                                if (score > 0)
+                                {
+                                    height = ref_pix - axisY.ValueToPixel(score);
+                                    pos_base_pix -= height;
+                                    rect = new Rectangle(x, pos_base_pix, tickWidth, height);
+                                    g.FillRectangleE(sc.BullishTheme.FillBrush, rect);
+                                    g.DrawRectangle(sc.BullishTheme.EdgePen, rect);
+                                }
+                                else if (score < 0)
+                                {
+                                    height = axisY.ValueToPixel(score) - ref_pix;
+                                    rect = new Rectangle(x, neg_base_pix, tickWidth, height);
+                                    neg_base_pix += height;
+                                    g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
+                                    g.DrawRectangle(sc.BearishTheme.EdgePen, rect);
+                                }
                             }
                         }
                     }
