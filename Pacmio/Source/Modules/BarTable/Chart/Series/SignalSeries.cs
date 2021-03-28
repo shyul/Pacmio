@@ -32,6 +32,8 @@ namespace Pacmio
 
         public Indicator Indicator { get; }
 
+        public TimePeriod TimeInForce => Indicator.TimeInForce;
+
         public override void RefreshAxis(IIndexArea area, ITable table)
         {
             ContinuousAxis axisY = area.AxisY(Side);
@@ -58,9 +60,9 @@ namespace Pacmio
         {
             List<(string text, Font font, Brush brush)> labels = new();
 
-            if (table is BarTable bt)
+            if (table is BarTable bt && bt[pt] is Bar b && TimeInForce.Contains(b.Time))
             {
-                var (bullish, bearish) = bt[pt].GetSignalScore(Indicator);
+                var (bullish, bearish) = b.GetSignalScore(Indicator);
                 double score = bullish + bearish;
 
                 if (score > 0)
@@ -78,7 +80,7 @@ namespace Pacmio
 
                 foreach (SignalColumn sc in Indicator.SignalColumns)
                 {
-                    if (bt[pt][sc] is SignalDatum sd)
+                    if (b[sc] is SignalDatum sd)
                     {
                         if (sd.Score > 0)
                             labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
@@ -87,6 +89,7 @@ namespace Pacmio
                     }
                 }
             }
+
             return labels;
         }
 
@@ -103,15 +106,16 @@ namespace Pacmio
 
                 for (int i = area.StartPt; i < area.StopPt; i++)
                 {
-                    if (i >= table.Count) break;
-                    if (i >= 0)
+                    if (i >= table.Count)
+                        break;
+                    else if (i >= 0 && bt[i] is Bar b && TimeInForce.Contains(b.Time))
                     {
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
                         foreach (SignalColumn sc in Indicator.SignalColumns)
                         {
-                            if (bt[i][sc] is SignalDatum sd)
+                            if (b[sc] is SignalDatum sd)
                             {
                                 string desc = sd.Description;
                                 double score = sd.Score;

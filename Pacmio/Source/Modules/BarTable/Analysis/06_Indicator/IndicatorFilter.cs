@@ -21,6 +21,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
+    public enum FilterType : int
+    {
+        Bearish = -1,
+        None = 0,
+        Bullish = 1,
+    }
+
     /// <summary>
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores

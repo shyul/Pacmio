@@ -30,6 +30,8 @@ namespace Pacmio.Analysis
 
         public abstract IEnumerable<SignalColumn> SignalColumns { get; }
 
+        public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+
         #region Series
 
         public Color Color { get => SignalSeries.Color; set => SignalSeries.Color = value; }

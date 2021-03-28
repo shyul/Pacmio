@@ -13,10 +13,5 @@ using Xu;
 
 namespace Pacmio
 {
-    public enum FilterType : int
-    {
-        Bearish = -1,
-        None = 0,
-        Bullish = 1,
-    }
+
 }

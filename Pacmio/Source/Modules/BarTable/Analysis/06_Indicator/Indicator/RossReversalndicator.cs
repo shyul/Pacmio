@@ -54,11 +54,13 @@ namespace Pacmio.Analysis
             BollingerBandSignal.AddChild(this);
             CandleStickDojiMarubozuAnalysis.AddChild(this);
             csd.AddChild(this);
+
+            TimeInForce = new TimePeriod(new Time(9, 25), new Time(16));
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
 
-        public TimePeriod TimeInForce { get; } = new TimePeriod(new Time(9, 25), new Time(16));
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
 
 
 

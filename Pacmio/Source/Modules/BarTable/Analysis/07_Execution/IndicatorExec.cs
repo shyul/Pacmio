@@ -84,5 +84,51 @@ namespace Pacmio.Analysis
         /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
         /// </summary>
         public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
+
+        #region Order
+
+        public double MinimumRiskRewardRatio { get; set; }
+
+        public double MinimumTradeSize { get; set; }
+
+        #endregion Order
+
+        public OrderInfo GenerateOrder(ExecutionDatum ed)
+        {
+
+
+            return new OrderInfo();
+        }
+
+        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
+
+        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
+
+        // Step 2: Define Signal Group
+
+
+
+        #region Training Settings
+
+        /// <summary>
+        /// The unit for training time frames
+        /// </summary>
+        public virtual BarFreq TrainingUnitFreq { get; set; } = BarFreq.Daily;
+
+        /// <summary>
+        /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
+        /// The commission model shall be defined by Simulate Engine.
+        /// </summary>
+        public virtual int TrainingLength { get; set; } = 5;
+
+        /// <summary>
+        /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
+        /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
+        /// </summary>
+        public virtual int TradingLength { get; set; } = 1;
+
+        public BarTable GetTrainingTable(Contract c) => BarTableManager.GetOrCreateDailyBarTable(c, TrainingUnitFreq);
+
+        #endregion Training Settings
     }
 }
