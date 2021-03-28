@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
@@ -141,16 +142,16 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Flag\FlagDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestOscillators.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestSignals.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestTrend.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestOscillators.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestSignals.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\_Types\PivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Decision\Indicator\RossReversalndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\DebugSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestNative.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestGapGo.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_SampleBarAnalysisSet\TestReversal.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\_DebugSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestNative.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestGapGo.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestReversal.cs" />
     <Compile Include="Source\Modules\BarTable\IntraDayBarTableSet.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />

@@ -11,10 +11,18 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class OscillatorSignalDatum : ISignalDatum
+    public class BandSignal : SignalAnalysis
     {
-        public OscillatorSignalType Type { get; set; } = OscillatorSignalType.None;
+        public BandSignal(NumericColumn source, IDualData band) 
+        {
+        
+        }
 
-        public double[] TrailPoints { get; set; } = new double[] { };
+        public override DatumColumn Column_Result { get; }
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
     }
 }

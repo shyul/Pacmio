@@ -70,6 +70,26 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
+        public Dictionary<SingleDataSignalType, double[]> TypeToTrailPoints { get; set; } = new()
+        {
+            //{ SingleDataSignalType.None, new double[] { 0 } },
+            //{ SingleDataSignalType.Within, new double[] { 0 } },
+            { SingleDataSignalType.EnterFromBelow, new double[] { 2 } },
+            { SingleDataSignalType.EnterFromAbove, new double[] { -2 } },
+            { SingleDataSignalType.Above, new double[] { 1 } },
+            { SingleDataSignalType.Below, new double[] { -1 } },
+            { SingleDataSignalType.ExitAbove, new double[] { 5, 5 } },
+            { SingleDataSignalType.ExitBelow, new double[] { -5, -5 } },
+            { SingleDataSignalType.CrossUp, new double[] { 7, 5, 2 } },
+            { SingleDataSignalType.CrossDown, new double[] { -7, -5, -2 } },
+        };
+
+        public void SetType(SingleDataSignalDatum d, SingleDataSignalType type)
+        {
+            d.Type = type;
+            d.TrailPoints = TypeToTrailPoints[type];
+        }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -86,7 +106,6 @@ namespace Pacmio.Analysis
                 double last_value = bt[i - 1][Column];
 
                 SingleDataSignalDatum d = new();
-                b[Column_Result] = d;
 
                 if (!double.IsNaN(value) && !double.IsNaN(last_value))
                 {
@@ -94,51 +113,50 @@ namespace Pacmio.Analysis
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleDataSignalType.Above;
+                            SetType(d, SingleDataSignalType.Above);
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleDataSignalType.CrossDown;
+                            SetType(d, SingleDataSignalType.CrossDown);
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleDataSignalType.EnterFromAbove;
+                            SetType(d, SingleDataSignalType.EnterFromAbove);
                         }
                     }
                     else if (last_value == Range)
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleDataSignalType.ExitAbove;
+                            SetType(d, SingleDataSignalType.ExitAbove);
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleDataSignalType.ExitBelow;
+                            SetType(d, SingleDataSignalType.ExitBelow);
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleDataSignalType.Within;
+                            SetType(d, SingleDataSignalType.Within);
                         }
                     }
                     else if (last_value < Range)
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleDataSignalType.CrossUp;
+                            SetType(d, SingleDataSignalType.CrossUp);
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleDataSignalType.Below;
+                            SetType(d, SingleDataSignalType.Below);
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleDataSignalType.EnterFromBelow;
+                            SetType(d, SingleDataSignalType.EnterFromBelow);
                         }
                     }
                 }
 
-
-
+                b[Column_Result] = d;
             }
         }
 

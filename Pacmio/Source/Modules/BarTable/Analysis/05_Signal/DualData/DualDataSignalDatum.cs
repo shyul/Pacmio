@@ -21,6 +21,6 @@ namespace Pacmio.Analysis
 
         public double DifferenceRatio { get; set; }
 
-        public double[] TrailPoints { get; set; }
+        public double[] TrailPoints { get; set; } = new double[] { };
     }
 }

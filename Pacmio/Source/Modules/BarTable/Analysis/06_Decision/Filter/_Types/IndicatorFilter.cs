@@ -7,6 +7,9 @@
 /// 3 Criteria for Finding Swing Stocks
 /// https://www.youtube.com/watch?v=GHG3Kf-FYvw
 /// 
+/// 3 (Powerful) Swing Trading Strategies
+/// https://www.youtube.com/watch?v=MK2V6GKBmf0
+/// 
 /// ***************************************************************************
 
 using System;

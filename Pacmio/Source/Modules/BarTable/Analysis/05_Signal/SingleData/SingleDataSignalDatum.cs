@@ -17,6 +17,6 @@ namespace Pacmio.Analysis
     {
         public SingleDataSignalType Type { get; set; } = SingleDataSignalType.None;
 
-        public double[] TrailPoints { get; set; }
+        public double[] TrailPoints { get; set; } = new double[] { };
     }
 }

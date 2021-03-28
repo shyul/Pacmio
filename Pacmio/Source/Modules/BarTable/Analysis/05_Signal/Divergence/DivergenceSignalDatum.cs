@@ -16,6 +16,6 @@ namespace Pacmio.Analysis
     {
         public DivergenceSignalType Type { get; set; }
 
-        public double[] TrailPoints { get; set; }
+        public double[] TrailPoints { get; set; } = new double[] { };
     }
 }

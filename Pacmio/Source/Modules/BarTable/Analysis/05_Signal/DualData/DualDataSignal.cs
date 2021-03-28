@@ -62,6 +62,29 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
+        public Dictionary<DualDataSignalType, double[]> TypeToTrailPoints { get; set; } = new()
+        {
+            { DualDataSignalType.Above, new double[] { 0.5 } },
+            { DualDataSignalType.Below, new double[] { -0.5 } },
+            { DualDataSignalType.Expansion, new double[] { 1 } },
+            { DualDataSignalType.Contraction, new double[] { 1 } },
+            { DualDataSignalType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
+            { DualDataSignalType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
+            { DualDataSignalType.TrendUp, new double[] { 0.5 } },
+            { DualDataSignalType.TrendDown, new double[] { -0.5 } },
+        };
+
+        public void AddType(DualDataSignalDatum d, DualDataSignalType type)
+        {
+            List<DualDataSignalType> list = d.List;
+
+            if (!list.Contains(type))
+            {
+                list.Add(type);
+                d.TrailPoints = d.TrailPoints.Merge(TypeToTrailPoints[type]).ToArray();
+            }
+        }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -76,8 +99,6 @@ namespace Pacmio.Analysis
                 double value_slow = b[Slow_Column];
 
                 DualDataSignalDatum d = new();
-                b[Column_Result] = d;
-                List<DualDataSignalType> dualDataTypes = d.List;
 
                 if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
                 {
@@ -95,11 +116,11 @@ namespace Pacmio.Analysis
 
                     if (delta > 0)
                     {
-                        dualDataTypes.Add(DualDataSignalType.Above);
+                        AddType(d, DualDataSignalType.Above);
                     }
                     else if (delta < 0)
                     {
-                        dualDataTypes.Add(DualDataSignalType.Below);
+                        AddType(d, DualDataSignalType.Below);
                     }
 
                     Bar b_1 = bt[i - 1];
@@ -113,34 +134,36 @@ namespace Pacmio.Analysis
 
                         if (value_fast > last_value_fast && value_slow > last_value_slow)
                         {
-                            dualDataTypes.Add(DualDataSignalType.TrendUp);
+                            AddType(d, DualDataSignalType.TrendUp);
                         }
                         else if (value_fast < last_value_fast && value_slow < last_value_slow)
                         {
-                            dualDataTypes.Add(DualDataSignalType.TrendDown);
+                            AddType(d, DualDataSignalType.TrendDown);
                         }
 
                         if (delta >= 0 && last_delta < 0)
                         {
-                            dualDataTypes.Add(DualDataSignalType.CrossUp);
+                            AddType(d, DualDataSignalType.CrossUp);
                         }
                         else if (delta <= 0 && last_delta > 0)
                         {
-                            dualDataTypes.Add(DualDataSignalType.CrossDown);
+                            AddType(d, DualDataSignalType.CrossDown);
                         }
 
                         double last_delta_abs = Math.Abs(last_delta);
 
                         if (delta_abs > last_delta_abs)
                         {
-                            dualDataTypes.Add(DualDataSignalType.Expansion);
+                            AddType(d, DualDataSignalType.Expansion);
                         }
                         else
                         {
-                            dualDataTypes.Add(DualDataSignalType.Contraction);
+                            AddType(d, DualDataSignalType.Contraction);
                         }
                     }
                 }
+
+                b[Column_Result] = d;
             }
         }
 
