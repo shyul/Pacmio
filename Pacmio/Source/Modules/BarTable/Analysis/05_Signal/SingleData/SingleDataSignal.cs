@@ -13,10 +13,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SingleColumnAnalysis : BarAnalysis, ISingleDatum
+    public sealed class SingleDataSignal : BarAnalysis, ISingleComplex
     {
         // new SingleColumnAnalysis(rsi),
-        public SingleColumnAnalysis(IOscillator analysis, double range_percent = 0.05)
+        public SingleDataSignal(IOscillator analysis, double range_percent = 0.05)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -27,11 +27,11 @@ namespace Pacmio.Analysis
             GroupName = Name = GetType().Name + label;
             //SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
             //SignalColumns = new SignalColumn[] { SignalColumn };
-            Column_Result = new(Name, typeof(SingleColumnDatum));
+            Column_Result = new(Name, typeof(SingleDataSignalDatum));
             //Order = iosc.Order + 1;
         }
 
-        public SingleColumnAnalysis(ISingleData analysis, Range<double> range)
+        public SingleDataSignal(ISingleData analysis, Range<double> range)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -39,17 +39,17 @@ namespace Pacmio.Analysis
             Range = range;
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(SingleColumnDatum));
+            Column_Result = new(Name, typeof(SingleDataSignalDatum));
         }
 
-        public SingleColumnAnalysis(NumericColumn column, Range<double> range)
+        public SingleDataSignal(NumericColumn column, Range<double> range)
         {
             Column = column;
 
             Range = range;
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(SingleColumnDatum));
+            Column_Result = new(Name, typeof(SingleDataSignalDatum));
         }
 
         #region Parameters
@@ -58,9 +58,13 @@ namespace Pacmio.Analysis
 
         public Range<double> Range { get; set; }
 
+        public Dictionary<Range<double>, double[]> LevelScores { get; }
+
         public NumericColumn Column { get; set; }
 
         public DatumColumn Column_Result { get; }
+
+        public SignalColumn Column_Signal { get; }
 
         #endregion Parameters
 
@@ -81,7 +85,7 @@ namespace Pacmio.Analysis
                 double value = b[Column];
                 double last_value = bt[i - 1][Column];
 
-                SingleColumnDatum d = new();
+                SingleDataSignalDatum d = new();
                 b[Column_Result] = d;
 
                 if (!double.IsNaN(value) && !double.IsNaN(last_value))
@@ -90,48 +94,50 @@ namespace Pacmio.Analysis
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleColumnType.Above;
+                            d.Type = SingleDataSignalType.Above;
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleColumnType.CrossDown;
+                            d.Type = SingleDataSignalType.CrossDown;
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleColumnType.EnterFromAbove;
+                            d.Type = SingleDataSignalType.EnterFromAbove;
                         }
                     }
                     else if (last_value == Range)
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleColumnType.ExitAbove;
+                            d.Type = SingleDataSignalType.ExitAbove;
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleColumnType.ExitBelow;
+                            d.Type = SingleDataSignalType.ExitBelow;
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleColumnType.Within;
+                            d.Type = SingleDataSignalType.Within;
                         }
                     }
                     else if (last_value < Range)
                     {
                         if (value > Range)
                         {
-                            d.Type = SingleColumnType.CrossUp;
+                            d.Type = SingleDataSignalType.CrossUp;
                         }
                         else if (value < Range)
                         {
-                            d.Type = SingleColumnType.Below;
+                            d.Type = SingleDataSignalType.Below;
                         }
                         else if (value == Range)
                         {
-                            d.Type = SingleColumnType.EnterFromBelow;
+                            d.Type = SingleDataSignalType.EnterFromBelow;
                         }
                     }
                 }
+
+
 
             }
         }
@@ -169,7 +175,7 @@ namespace Pacmio.Analysis
         else
         sd.Set(points, description);*/
 
-        public static (double[] points, string description) ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range, Dictionary<SingleColumnType, double[]> typeToScore)
+        public static (double[] points, string description) ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range, Dictionary<SingleDataSignalType, double[]> typeToScore)
         {
             double value = bt[i, column];
             double last_value = bt[i - 1, column];
@@ -180,45 +186,45 @@ namespace Pacmio.Analysis
                 {
                     if (value > range.Max)
                     {
-                        return (typeToScore[SingleColumnType.Above], "Above");
+                        return (typeToScore[SingleDataSignalType.Above], "Above");
                     }
                     else if (value < range.Min)
                     {
-                        return (typeToScore[SingleColumnType.CrossDown], "Cross Down");
+                        return (typeToScore[SingleDataSignalType.CrossDown], "Cross Down");
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return (typeToScore[SingleColumnType.EnterFromAbove], "Enter From Above");
+                        return (typeToScore[SingleDataSignalType.EnterFromAbove], "Enter From Above");
                     }
                 }
                 else if (last_value >= range.Min && last_value <= range.Max)
                 {
                     if (value > range.Max)
                     {
-                        return (typeToScore[SingleColumnType.ExitAbove], "Exit Above");
+                        return (typeToScore[SingleDataSignalType.ExitAbove], "Exit Above");
                     }
                     else if (value < range.Min)
                     {
-                        return (typeToScore[SingleColumnType.ExitBelow], "Exit Below");
+                        return (typeToScore[SingleDataSignalType.ExitBelow], "Exit Below");
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return (typeToScore[SingleColumnType.Within], "Within");
+                        return (typeToScore[SingleDataSignalType.Within], "Within");
                     }
                 }
                 else if (last_value < range.Min)
                 {
                     if (value > range.Max)
                     {
-                        return (typeToScore[SingleColumnType.CrossUp], "Cross Up");
+                        return (typeToScore[SingleDataSignalType.CrossUp], "Cross Up");
                     }
                     else if (value < range.Min)
                     {
-                        return (typeToScore[SingleColumnType.Below], "Below");
+                        return (typeToScore[SingleDataSignalType.Below], "Below");
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return (typeToScore[SingleColumnType.EnterFromBelow], "Enter From Below");
+                        return (typeToScore[SingleDataSignalType.EnterFromBelow], "Enter From Below");
                     }
                 }
             }
@@ -226,10 +232,10 @@ namespace Pacmio.Analysis
             return (new double[] { 0 }, "");
         }
 
-        public static SingleColumnType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, double constant)
+        public static SingleDataSignalType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, double constant)
             => ConstantDataSignal(bt, i, analysis.Column_Result, constant);
 
-        public static SingleColumnType ConstantDataSignal(BarTable bt, int i, NumericColumn column, double constant)
+        public static SingleDataSignalType ConstantDataSignal(BarTable bt, int i, NumericColumn column, double constant)
         {
             double value = bt[i, column];
             double last_value = bt[i - 1, column];
@@ -240,56 +246,56 @@ namespace Pacmio.Analysis
                 {
                     if (value > constant)
                     {
-                        return SingleColumnType.Above;
+                        return SingleDataSignalType.Above;
                     }
                     else if (value < constant)
                     {
-                        return SingleColumnType.CrossDown;
+                        return SingleDataSignalType.CrossDown;
                     }
                     else if (value == constant)
                     {
-                        return SingleColumnType.EnterFromAbove;
+                        return SingleDataSignalType.EnterFromAbove;
                     }
                 }
                 else if (last_value == constant)
                 {
                     if (value > constant)
                     {
-                        return SingleColumnType.ExitAbove;
+                        return SingleDataSignalType.ExitAbove;
                     }
                     else if (value < constant)
                     {
-                        return SingleColumnType.ExitBelow;
+                        return SingleDataSignalType.ExitBelow;
                     }
                     else if (value == constant)
                     {
-                        return SingleColumnType.Within;
+                        return SingleDataSignalType.Within;
                     }
                 }
                 else if (last_value < constant)
                 {
                     if (value > constant)
                     {
-                        return SingleColumnType.CrossUp;
+                        return SingleDataSignalType.CrossUp;
                     }
                     else if (value < constant)
                     {
-                        return SingleColumnType.Below;
+                        return SingleDataSignalType.Below;
                     }
                     else if (value == constant)
                     {
-                        return SingleColumnType.EnterFromBelow;
+                        return SingleDataSignalType.EnterFromBelow;
                     }
                 }
             }
 
-            return SingleColumnType.None;
+            return SingleDataSignalType.None;
         }
 
-        public static SingleColumnType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, Range<double> range)
+        public static SingleDataSignalType ConstantDataSignal(BarTable bt, int i, ISingleData analysis, Range<double> range)
             => ConstantDataSignal(bt, i, analysis.Column_Result, range);
 
-        public static SingleColumnType ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range)
+        public static SingleDataSignalType ConstantDataSignal(BarTable bt, int i, NumericColumn column, Range<double> range)
         {
             double value = bt[i, column];
             double last_value = bt[i - 1, column];
@@ -300,50 +306,50 @@ namespace Pacmio.Analysis
                 {
                     if (value > range.Max)
                     {
-                        return SingleColumnType.Above;
+                        return SingleDataSignalType.Above;
                     }
                     else if (value < range.Min)
                     {
-                        return SingleColumnType.CrossDown;
+                        return SingleDataSignalType.CrossDown;
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return SingleColumnType.EnterFromAbove;
+                        return SingleDataSignalType.EnterFromAbove;
                     }
                 }
                 else if (last_value >= range.Min && last_value <= range.Max)
                 {
                     if (value > range.Max)
                     {
-                        return SingleColumnType.ExitAbove;
+                        return SingleDataSignalType.ExitAbove;
                     }
                     else if (value < range.Min)
                     {
-                        return SingleColumnType.ExitBelow;
+                        return SingleDataSignalType.ExitBelow;
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return SingleColumnType.Within;
+                        return SingleDataSignalType.Within;
                     }
                 }
                 else if (last_value < range.Min)
                 {
                     if (value > range.Max)
                     {
-                        return SingleColumnType.CrossUp;
+                        return SingleDataSignalType.CrossUp;
                     }
                     else if (value < range.Min)
                     {
-                        return SingleColumnType.Below;
+                        return SingleDataSignalType.Below;
                     }
                     else if (value <= range.Max && value >= range.Min)
                     {
-                        return SingleColumnType.EnterFromBelow;
+                        return SingleDataSignalType.EnterFromBelow;
                     }
                 }
             }
 
-            return SingleColumnType.None;
+            return SingleDataSignalType.None;
         }
 
         #endregion Constant Data Tools

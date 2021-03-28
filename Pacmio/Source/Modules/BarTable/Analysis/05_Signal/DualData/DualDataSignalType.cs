@@ -13,14 +13,22 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class DualColumnDatum : IDatum
+    public enum DualDataSignalType : int
     {
-        public List<DualColumnType> List { get; } = new List<DualColumnType>();
+        Above,
 
-        public double Ratio { get; set; }
+        Below,
 
-        public double Difference { get; set; }
+        Expansion,
 
-        public double DifferenceRatio { get; set; }
+        Contraction,
+
+        CrossUp,
+
+        CrossDown,
+
+        TrendUp,
+
+        TrendDown,
     }
 }

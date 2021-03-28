@@ -13,26 +13,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum SingleColumnType : int
+    public class OscillatorSignal
     {
-        None = 0,
-
-        Within = 1,
-
-        EnterFromBelow = 1,
-
-        EnterFromAbove = -1,
-
-        Above = 3,
-
-        Below = -3,
-
-        ExitAbove = 5,
-
-        ExitBelow = -5,
-
-        CrossUp = 6,
-
-        CrossDown = -6
     }
 }

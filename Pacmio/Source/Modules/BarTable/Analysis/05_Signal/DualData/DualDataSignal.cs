@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class DualColumnAnalysis : BarAnalysis, ISingleDatum
+    public sealed class DualDataSignal : BarAnalysis, ISingleComplex
     {
-        public DualColumnAnalysis(IDualData analysis)
+        public DualDataSignal(IDualData analysis)
         {
             Fast_Column = analysis.Column_High;
             Slow_Column = analysis.Column_Low;
@@ -24,10 +24,10 @@ namespace Pacmio.Analysis
 
             string label = "(" + analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualColumnDatum));
+            Column_Result = new(Name, typeof(DualDataSignalDatum));
         }
 
-        public DualColumnAnalysis(ISingleData fast_analysis, ISingleData slow_analysis)
+        public DualDataSignal(ISingleData fast_analysis, ISingleData slow_analysis)
         {
             Fast_Column = fast_analysis.Column_Result;
             Slow_Column = slow_analysis.Column_Result;
@@ -37,17 +37,17 @@ namespace Pacmio.Analysis
 
             string label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualColumnDatum));
+            Column_Result = new(Name, typeof(DualDataSignalDatum));
         }
 
-        public DualColumnAnalysis(NumericColumn fast_column, NumericColumn slow_column)
+        public DualDataSignal(NumericColumn fast_column, NumericColumn slow_column)
         {
             Fast_Column = fast_column;
             Slow_Column = slow_column;
 
             string label = "(" + Fast_Column.Name + "," + Slow_Column.Name + ")";
             GroupName = Name = GetType().Name + label;
-            Column_Result = new(Name, typeof(DualColumnDatum));
+            Column_Result = new(Name, typeof(DualDataSignalDatum));
         }
 
         #region Parameters
@@ -77,9 +77,9 @@ namespace Pacmio.Analysis
                 double value_fast = b[Fast_Column];
                 double value_slow = b[Slow_Column];
 
-                DualColumnDatum d = new();
+                DualDataSignalDatum d = new();
                 b[Column_Result] = d;
-                List<DualColumnType> dualDataTypes = d.List;
+                List<DualDataSignalType> dualDataTypes = d.List;
 
                 if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
                 {
@@ -97,11 +97,11 @@ namespace Pacmio.Analysis
 
                     if (delta > 0)
                     {
-                        dualDataTypes.Add(DualColumnType.Above);
+                        dualDataTypes.Add(DualDataSignalType.Above);
                     }
                     else if (delta < 0)
                     {
-                        dualDataTypes.Add(DualColumnType.Below);
+                        dualDataTypes.Add(DualDataSignalType.Below);
                     }
 
                     Bar b_1 = bt[i - 1];
@@ -115,31 +115,31 @@ namespace Pacmio.Analysis
 
                         if (value_fast > last_value_fast && value_slow > last_value_slow)
                         {
-                            dualDataTypes.Add(DualColumnType.TrendUp);
+                            dualDataTypes.Add(DualDataSignalType.TrendUp);
                         }
                         else if (value_fast < last_value_fast && value_slow < last_value_slow)
                         {
-                            dualDataTypes.Add(DualColumnType.TrendDown);
+                            dualDataTypes.Add(DualDataSignalType.TrendDown);
                         }
 
                         if (delta >= 0 && last_delta < 0)
                         {
-                            dualDataTypes.Add(DualColumnType.CrossUp);
+                            dualDataTypes.Add(DualDataSignalType.CrossUp);
                         }
                         else if (delta <= 0 && last_delta > 0)
                         {
-                            dualDataTypes.Add(DualColumnType.CrossDown);
+                            dualDataTypes.Add(DualDataSignalType.CrossDown);
                         }
 
                         double last_delta_abs = Math.Abs(last_delta);
 
                         if (delta_abs > last_delta_abs)
                         {
-                            dualDataTypes.Add(DualColumnType.Expansion);
+                            dualDataTypes.Add(DualDataSignalType.Expansion);
                         }
                         else
                         {
-                            dualDataTypes.Add(DualColumnType.Contraction);
+                            dualDataTypes.Add(DualDataSignalType.Contraction);
                         }
                     }
                 }

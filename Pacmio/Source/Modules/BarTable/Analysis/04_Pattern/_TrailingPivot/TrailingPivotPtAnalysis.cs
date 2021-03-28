@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotPtAnalysis : PivotAnalysis, ISingleDatum
+    public class TrailingPivotPtAnalysis : PivotAnalysis, ISingleComplex
     {
         public TrailingPivotPtAnalysis(int maximumInterval = 250)
         {

@@ -13,22 +13,26 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum DualColumnType : int
+    public enum SingleDataSignalType : int
     {
-        Above,
+        None = 0,
 
-        Below,
+        Within = 1,
 
-        Expansion,
+        EnterFromBelow = 1,
 
-        Contraction,
+        EnterFromAbove = -1,
 
-        CrossUp,
+        Above = 3,
 
-        CrossDown,
+        Below = -3,
 
-        TrendUp,
+        ExitAbove = 5,
 
-        TrendDown,
+        ExitBelow = -5,
+
+        CrossUp = 6,
+
+        CrossDown = -6
     }
 }

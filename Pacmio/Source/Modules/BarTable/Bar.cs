@@ -379,7 +379,7 @@ namespace Pacmio
             }
         }
 
-        public IDatum this[ISingleDatum isd]
+        public IDatum this[ISingleComplex isd]
         {
             get => this[isd.Column_Result];
             set => this[isd.Column_Result] = value;

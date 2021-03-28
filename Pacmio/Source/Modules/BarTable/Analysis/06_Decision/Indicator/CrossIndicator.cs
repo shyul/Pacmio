@@ -21,7 +21,7 @@ namespace Pacmio.Analysis
             FastMovingAverage = fast_MA;
             SlowMovingAverage = slow_MA;
 
-            DualColumnAnalysis = new DualColumnAnalysis(FastMovingAverage, SlowMovingAverage);
+            DualColumnAnalysis = new DualDataSignal(FastMovingAverage, SlowMovingAverage);
             DualColumnAnalysis.AddChild(this);
 
             string label = "(" + FastMovingAverage.Name + "," + SlowMovingAverage.Name + ")";
@@ -55,18 +55,18 @@ namespace Pacmio.Analysis
 
         public ISingleData SlowMovingAverage { get; }
 
-        public DualColumnAnalysis DualColumnAnalysis { get; }
+        public DualDataSignal DualColumnAnalysis { get; }
 
-        public virtual Dictionary<DualColumnType, double[]> TypeToScore { get; } = new Dictionary<DualColumnType, double[]>
+        public virtual Dictionary<DualDataSignalType, double[]> TypeToScore { get; } = new Dictionary<DualDataSignalType, double[]>
         {
-            { DualColumnType.Above, new double[] { 0.5 } },
-            { DualColumnType.Below, new double[] { -0.5 } },
-            { DualColumnType.Expansion, new double[] { 1 } },
-            { DualColumnType.Contraction, new double[] { 1 } },
-            { DualColumnType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
-            { DualColumnType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
-            { DualColumnType.TrendUp, new double[] { 0.5 } },
-            { DualColumnType.TrendDown, new double[] { -0.5 } },
+            { DualDataSignalType.Above, new double[] { 0.5 } },
+            { DualDataSignalType.Below, new double[] { -0.5 } },
+            { DualDataSignalType.Expansion, new double[] { 1 } },
+            { DualDataSignalType.Contraction, new double[] { 1 } },
+            { DualDataSignalType.CrossUp, new double[] { 4, 3.5, 3, 2.5 } },
+            { DualDataSignalType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
+            { DualDataSignalType.TrendUp, new double[] { 0.5 } },
+            { DualDataSignalType.TrendDown, new double[] { -0.5 } },
         };
 
         public SignalColumn CrossSignalColumn { get; protected set; }
@@ -82,7 +82,7 @@ namespace Pacmio.Analysis
 
                 SignalDatum sd = b[CrossSignalColumn] as SignalDatum;
 
-                if (b[DualColumnAnalysis.Column_Result] is DualColumnDatum d)
+                if (b[DualColumnAnalysis.Column_Result] is DualDataSignalDatum d)
                 {
                     var list = d.List;
                     List<double> point_list = new();

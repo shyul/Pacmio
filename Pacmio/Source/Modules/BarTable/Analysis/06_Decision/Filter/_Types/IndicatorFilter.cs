@@ -4,6 +4,9 @@
 /// 
 /// The trade rule applies to each contract
 /// 
+/// 3 Criteria for Finding Swing Stocks
+/// https://www.youtube.com/watch?v=GHG3Kf-FYvw
+/// 
 /// ***************************************************************************
 
 using System;

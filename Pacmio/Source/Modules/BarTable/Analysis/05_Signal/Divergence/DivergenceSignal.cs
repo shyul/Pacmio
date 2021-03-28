@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class DivergenceAnalysis : BarAnalysis
+    public class DivergenceSignal : BarAnalysis
     {
         public override int GetHashCode() => GetType().GetHashCode() ^ MaximumPivotDistance ^ MinimumPivotDistance;
 

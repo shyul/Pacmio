@@ -2,6 +2,9 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
+/// How To Avoid FALSE Breakouts
+/// https://www.youtube.com/watch?v=WMRDuAdk7q4
+/// 
 /// ***************************************************************************
 
 using System;
@@ -14,7 +17,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class LevelRangeIndicator : BarAnalysis, ISingleDatum, IChartBackground
+    public class LevelRangeIndicator : BarAnalysis, ISingleComplex, IChartBackground
     {
         public LevelRangeIndicator(ILevelAnalysis pa, double tolerance = 0.01)
         {

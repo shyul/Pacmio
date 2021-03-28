@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum DivergenceType : int
+    public enum DivergenceSignalType : int
     {
         None = 0,
         /// <summary>
