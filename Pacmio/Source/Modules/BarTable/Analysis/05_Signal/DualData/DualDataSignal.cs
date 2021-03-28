@@ -1,8 +1,6 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -13,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class DualDataSignal : BarAnalysis, ISingleComplex
+    public sealed class DualDataSignal : SignalAnalysis
     {
         public DualDataSignal(IDualData analysis)
         {
@@ -58,7 +56,7 @@ namespace Pacmio.Analysis
 
         public NumericColumn Slow_Column { get; }
 
-        public DatumColumn Column_Result { get; }
+        public override DatumColumn Column_Result { get; }
 
         #endregion Parameters
 

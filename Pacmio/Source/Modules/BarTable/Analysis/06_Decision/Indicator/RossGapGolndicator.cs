@@ -23,7 +23,7 @@ namespace Pacmio.Analysis
         }
 
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+        public override IEnumerable<IndicatorColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

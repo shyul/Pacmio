@@ -21,7 +21,7 @@ namespace Pacmio.Analysis
 
         public override double LowScoreLimit => -100;
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
+        public override IEnumerable<IndicatorColumn> SignalColumns { get; } = new List<IndicatorColumn>();
 
         //public Indicator 
 

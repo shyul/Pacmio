@@ -1,8 +1,6 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// BarTable Data Types
 /// 
 /// ***************************************************************************
 
@@ -14,8 +12,10 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class DivergenceDatum : IDatum
+    public class DivergenceDatum : ISignalDatum
     {
         public DivergenceSignalType Type { get; set; }
+
+        public double[] TrailPoints { get; set; }
     }
 }

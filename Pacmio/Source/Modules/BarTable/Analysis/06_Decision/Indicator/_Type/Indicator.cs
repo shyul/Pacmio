@@ -28,7 +28,7 @@ namespace Pacmio.Analysis
             SignalSeries = new(this);
         }
 
-        public abstract IEnumerable<SignalColumn> SignalColumns { get; }
+        public abstract IEnumerable<IndicatorColumn> SignalColumns { get; }
 
         #region Series
 

@@ -11,12 +11,8 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum OscillatorSignalType : int
+    public class OscillatorSignalDatum : ISignalDatum
     {
-        OverBought = -1,
-
-        None = 0,
-
-        OverSold = 1
+        public double[] TrailPoints { get; set; }
     }
 }

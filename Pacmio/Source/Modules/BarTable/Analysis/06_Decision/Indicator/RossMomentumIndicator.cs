@@ -16,7 +16,7 @@ namespace Pacmio.Analysis
 {
     public class RossMomentumIndicator : Indicator
     {
-        public override IEnumerable<SignalColumn> SignalColumns => throw new NotImplementedException();
+        public override IEnumerable<IndicatorColumn> SignalColumns => throw new NotImplementedException();
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

@@ -76,9 +76,9 @@ namespace Pacmio
                     labels.Add((score.ToString(), Main.Theme.FontBold, Main.Theme.DimTextBrush));
                 }
 
-                foreach (SignalColumn sc in Indicator.SignalColumns)
+                foreach (IndicatorColumn sc in Indicator.SignalColumns)
                 {
-                    SignalDatum sd = bt[pt][sc];
+                    IndicatorDatum sd = bt[pt][sc];
 
                     if (sd.Score > 0)
                         labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
@@ -108,9 +108,9 @@ namespace Pacmio
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        foreach (SignalColumn sc in Indicator.SignalColumns)
+                        foreach (IndicatorColumn sc in Indicator.SignalColumns)
                         {
-                            SignalDatum sd = bt[i][sc];
+                            IndicatorDatum sd = bt[i][sc];
 
                             string desc = sd.Description;
                             double score = sd.Score;

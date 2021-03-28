@@ -11,8 +11,19 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class DivergenceSignal : BarAnalysis
+    public class DivergenceSignal : SignalAnalysis
     {
+        public DivergenceSignal(ISingleData osc)
+        {
+
+        }
+
+        public DivergenceSignal(ISingleData source, ISingleData osc)
+        {
+
+
+        }
+
         public override int GetHashCode() => GetType().GetHashCode() ^ MaximumPivotDistance ^ MinimumPivotDistance;
 
 
@@ -23,12 +34,14 @@ namespace Pacmio.Analysis
         /// <summary>
         /// Add peak detection
         /// </summary>
-        public NumericColumn Column { get; }
+        public ISingleData SourceAnalysis { get; }
 
         /// <summary>
         /// Add peak detection
         /// </summary>
-        public NumericColumn IndicatorColumn { get; }
+        public ISingleData IndicatorColumn { get; }
+
+        public override DatumColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

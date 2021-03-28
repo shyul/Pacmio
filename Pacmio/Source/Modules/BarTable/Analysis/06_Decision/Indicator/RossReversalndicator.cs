@@ -37,25 +37,25 @@ namespace Pacmio.Analysis
 
             csd.AddChild(this);
 
-            RSISignalColumn = new SignalColumn(Name + "_" + RSI.Name + "_Singal")
+            RSISignalColumn = new IndicatorColumn(Name + "_" + RSI.Name + "_Singal")
             {
                 BullishColor = RSI.UpperColor,
                 BearishColor = RSI.LowerColor
             };
 
-            BollingerBandSignalColumn = new SignalColumn(Name + "_" + BollingerBand.Name + "_Singal")
+            BollingerBandSignalColumn = new IndicatorColumn(Name + "_" + BollingerBand.Name + "_Singal")
             {
                 BullishColor = Color.YellowGreen,
                 BearishColor = Color.Pink,
             };
 
-            CandleStickSignalColumn = new SignalColumn(Name + "_" + CandleStickDojiMarubozuAnalysis.Name + "_Singal")
+            CandleStickSignalColumn = new IndicatorColumn(Name + "_" + CandleStickDojiMarubozuAnalysis.Name + "_Singal")
             {
                 BullishColor = Color.BlueViolet,
                 BearishColor = Color.DarkOrange
             };
 
-            SignalColumns = new SignalColumn[] { RSISignalColumn, BollingerBandSignalColumn, CandleStickSignalColumn };
+            SignalColumns = new IndicatorColumn[] { RSISignalColumn, BollingerBandSignalColumn, CandleStickSignalColumn };
 
             SignalSeries = new(this);
         }
@@ -66,7 +66,7 @@ namespace Pacmio.Analysis
 
         public IOscillator RSI { get; }
 
-        public SignalColumn RSISignalColumn { get; protected set; }
+        public IndicatorColumn RSISignalColumn { get; protected set; }
 
         public Dictionary<Range<double>, double[]> RSILevelScores = new() {
             { new Range<double>(-1, 5), new double[] { -7, -5 } },
@@ -82,15 +82,15 @@ namespace Pacmio.Analysis
 
         public IDualData BollingerBand { get; }
 
-        public SignalColumn BollingerBandSignalColumn { get; protected set; }
+        public IndicatorColumn BollingerBandSignalColumn { get; protected set; }
 
         public double[] BollingerBandScores { get; } = { 5, 2, -2, -5 };
 
         public CandleStickDojiMarubozuAnalysis CandleStickDojiMarubozuAnalysis { get; }
 
-        public SignalColumn CandleStickSignalColumn { get; protected set; }
+        public IndicatorColumn CandleStickSignalColumn { get; protected set; }
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+        public override IEnumerable<IndicatorColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

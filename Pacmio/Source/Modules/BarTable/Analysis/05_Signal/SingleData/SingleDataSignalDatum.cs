@@ -13,10 +13,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class SingleDataSignalDatum : IDatum
+    public class SingleDataSignalDatum : ISignalDatum
     {
         public SingleDataSignalType Type { get; set; } = SingleDataSignalType.None;
 
-        //public List<SingleColumnType> List { get; } = new List<SingleColumnType>();
+        public double[] TrailPoints { get; set; }
     }
 }

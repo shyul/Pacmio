@@ -29,7 +29,7 @@ namespace Pacmio.Analysis
 
             if (fast_MA is IChartSeries fast_ics && slow_MA is IChartSeries slow_ics)
             {
-                CrossSignalColumn = new SignalColumn(Name, label)
+                CrossSignalColumn = new IndicatorColumn(Name, label)
                 {
                     BullishColor = fast_ics.Color,
                     BearishColor = slow_ics.Color
@@ -37,14 +37,14 @@ namespace Pacmio.Analysis
             }
             else
             {
-                CrossSignalColumn = new SignalColumn(Name, label)
+                CrossSignalColumn = new IndicatorColumn(Name, label)
                 {
                     BullishColor = Color.Green,
                     BearishColor = Color.Red
                 };
             }
 
-            SignalColumns = new SignalColumn[] { CrossSignalColumn };
+            SignalColumns = new IndicatorColumn[] { CrossSignalColumn };
 
             SignalSeries = new SignalSeries(this);
         }
@@ -69,9 +69,9 @@ namespace Pacmio.Analysis
             { DualDataSignalType.TrendDown, new double[] { -0.5 } },
         };
 
-        public SignalColumn CrossSignalColumn { get; protected set; }
+        public IndicatorColumn CrossSignalColumn { get; protected set; }
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+        public override IEnumerable<IndicatorColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -80,7 +80,7 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
 
-                SignalDatum sd = b[CrossSignalColumn] as SignalDatum;
+                IndicatorDatum sd = b[CrossSignalColumn] as IndicatorDatum;
 
                 if (b[DualColumnAnalysis.Column_Result] is DualDataSignalDatum d)
                 {
@@ -89,12 +89,12 @@ namespace Pacmio.Analysis
 
                     foreach (var type in list)
                     {
-                        SignalDatum.MergePoints(point_list, TypeToScore[type]);
+                        IndicatorDatum.MergePoints(point_list, TypeToScore[type]);
                     }
 
                     if (i > 0)
                     {
-                        SignalDatum sd_1 = bt[i - 1][CrossSignalColumn] as SignalDatum;
+                        IndicatorDatum sd_1 = bt[i - 1][CrossSignalColumn] as IndicatorDatum;
                         sd.Set(point_list.ToArray(), list.ToString(","), sd_1);
                     }
                     else

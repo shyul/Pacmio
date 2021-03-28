@@ -9,15 +9,15 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SignalColumn : Column, IOrdered
+    public class IndicatorColumn : Column, IOrdered
     {
-        public SignalColumn(string name, SignalColumnType type = SignalColumnType.Filter)
+        public IndicatorColumn(string name, SignalColumnType type = SignalColumnType.Filter)
         {
             Name = Label = name;
             Type = type;
         }
 
-        public SignalColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter)
+        public IndicatorColumn(string name, string label, SignalColumnType type = SignalColumnType.Filter)
         {
             Name = name;
             Label = label;

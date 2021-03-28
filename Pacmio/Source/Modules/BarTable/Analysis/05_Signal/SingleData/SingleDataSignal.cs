@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SingleDataSignal : BarAnalysis, ISingleComplex
+    public sealed class SingleDataSignal : SignalAnalysis
     {
         // new SingleColumnAnalysis(rsi),
         public SingleDataSignal(IOscillator analysis, double range_percent = 0.05)
@@ -62,9 +62,9 @@ namespace Pacmio.Analysis
 
         public NumericColumn Column { get; set; }
 
-        public DatumColumn Column_Result { get; }
+        public override DatumColumn Column_Result { get; }
 
-        public SignalColumn Column_Signal { get; }
+        public IndicatorColumn Column_Signal { get; }
 
         #endregion Parameters
 

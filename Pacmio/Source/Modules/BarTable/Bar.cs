@@ -395,25 +395,25 @@ namespace Pacmio
 
         #region Signal Information Tools
 
-        private Dictionary<SignalColumn, SignalDatum> SignalLUT { get; } = new Dictionary<SignalColumn, SignalDatum>();
+        private Dictionary<IndicatorColumn, IndicatorDatum> SignalLUT { get; } = new Dictionary<IndicatorColumn, IndicatorDatum>();
 
-        public SignalDatum this[SignalColumn column]
+        public IndicatorDatum this[IndicatorColumn column]
         {
             get
             {
                 if (!SignalLUT.ContainsKey(column))
-                    SignalLUT[column] = new SignalDatum();
+                    SignalLUT[column] = new IndicatorDatum();
 
                 return SignalLUT[column];
             }
         }
 
-        public void SetSignal(SignalColumn column, double[] score, string message)
+        public void SetSignal(IndicatorColumn column, double[] score, string message)
         {
-            SignalDatum sd = this[column];
+            IndicatorDatum sd = this[column];
             if (Index > 0)
             {
-                SignalDatum sd_1 = Table[Index - 1][column];
+                IndicatorDatum sd_1 = Table[Index - 1][column];
                 sd.Set(score, message, sd_1);
             }
             else
@@ -422,12 +422,12 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) GetSignalScore(IEnumerable<SignalColumn> scs)
+        public (double bullish, double bearish) GetSignalScore(IEnumerable<IndicatorColumn> scs)
         {
             double bull = 0, bear = 0;
-            foreach (SignalColumn sc in scs)
+            foreach (IndicatorColumn sc in scs)
             {
-                if (this[sc] is SignalDatum sd)
+                if (this[sc] is IndicatorDatum sd)
                 {
                     double score = sd.Score;
                     if (score > 0) bull += score;

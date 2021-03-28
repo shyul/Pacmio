@@ -9,9 +9,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SignalDatum
+    public class IndicatorDatum
     {
-        public void Set(double[] points, string description = "", SignalDatum sd_1 = null)
+        public void Set(double[] points, string description = "", IndicatorDatum sd_1 = null)
         {
             List<double> point_list = new();
 
@@ -20,7 +20,7 @@ namespace Pacmio
             else
                 point_list.Add(0);
 
-            if (sd_1 is SignalDatum && sd_1.Points is double[] pts_1 && pts_1.Length > 1)
+            if (sd_1 is IndicatorDatum && sd_1.Points is double[] pts_1 && pts_1.Length > 1)
             {
                 for (int i = 1; i < pts_1.Length; i++)
                 {

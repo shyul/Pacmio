@@ -1,6 +1,8 @@
 ﻿/// ***************************************************************************
-/// Shared Libraries and Utilities
+/// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// 
+/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -11,12 +13,8 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum OscillatorSignalType : int
+    public abstract class SignalAnalysis : BarAnalysis, ISingleComplex
     {
-        OverBought = -1,
-
-        None = 0,
-
-        OverSold = 1
+        public abstract DatumColumn Column_Result { get; }
     }
 }

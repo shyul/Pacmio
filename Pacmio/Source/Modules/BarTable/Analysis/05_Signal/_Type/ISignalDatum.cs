@@ -4,19 +4,12 @@
 /// 
 /// ***************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xu;
 
 namespace Pacmio.Analysis
 {
-    public enum OscillatorSignalType : int
+    public interface ISignalDatum : IDatum
     {
-        OverBought = -1,
-
-        None = 0,
-
-        OverSold = 1
+        double[] TrailPoints { get; }
     }
 }

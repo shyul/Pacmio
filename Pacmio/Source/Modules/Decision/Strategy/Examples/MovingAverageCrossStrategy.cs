@@ -23,7 +23,7 @@ namespace Pacmio.Analysis
         public MovingAverageCrossStrategy()
         {
 
-            SignalColumn = new SignalColumn(Name);
+            SignalColumn = new IndicatorColumn(Name);
 
         }
 
@@ -78,7 +78,7 @@ namespace Pacmio.Analysis
 
         public SMA MA_Slow { get; private set; }
 
-        public SignalColumn SignalColumn { get; }
+        public IndicatorColumn SignalColumn { get; }
 
 
 

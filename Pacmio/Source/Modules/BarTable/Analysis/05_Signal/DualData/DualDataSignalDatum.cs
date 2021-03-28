@@ -1,8 +1,6 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -13,7 +11,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class DualDataSignalDatum : IDatum
+    public class DualDataSignalDatum : ISignalDatum
     {
         public List<DualDataSignalType> List { get; } = new List<DualDataSignalType>();
 
@@ -22,5 +20,7 @@ namespace Pacmio.Analysis
         public double Difference { get; set; }
 
         public double DifferenceRatio { get; set; }
+
+        public double[] TrailPoints { get; set; }
     }
 }
