@@ -422,7 +422,7 @@ namespace Pacmio
             }
         }
 
-        public (double bullish, double bearish) GetSignalScore(IEnumerable<IndicatorColumn> scs)
+        public (double Bullish, double Bearish) GetSignalScore(IEnumerable<IndicatorColumn> scs)
         {
             double bull = 0, bear = 0;
             foreach (IndicatorColumn sc in scs)
@@ -437,7 +437,7 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public (double bullish, double bearish) GetSignalScore(Indicator ind) => GetSignalScore(ind.SignalColumns);
+        public (double Bullish, double Bearish) GetSignalScore(Indicator ind) => GetSignalScore(ind.SignalColumns);
 
         public FilterType this[IndicatorFilter filter] => GetSignalFilterType(filter);
 

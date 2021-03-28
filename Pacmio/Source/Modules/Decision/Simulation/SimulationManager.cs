@@ -15,14 +15,14 @@ namespace Pacmio
     {
         public static Dictionary<Contract, IntraDayBarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, IntraDayBarTableSet>();
 
-        public static void Run(Strategy s, Period period)
+        public static void Run(IndicatorGroup s, Period period)
         {
             for (DateTime t = period.Start.Date; t < period.Stop; t = t.AddDays(1))
             {
                 // Set the time for the WatchList;
 
                 // Get the list of contract
-                var ContractList = s.WatchList.Contracts;
+                //var ContractList = s.WatchList.Contracts;
 
                 // run highest time frame first, 
 

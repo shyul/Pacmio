@@ -17,11 +17,21 @@ namespace Pacmio
 {
     public class BarAnalysisSet : IEnumerable<BarAnalysis>
     {
-        public BarAnalysisSet(Indicator ind) { List = new List<BarAnalysis>() { ind }; }
+        public static BarAnalysisSet Create(BarAnalysis ba = null)
+        {
+            if (ba is null)
+                return new BarAnalysisSet();
+            else
+                return new BarAnalysisSet(ba);
+        }
 
         public BarAnalysisSet(IEnumerable<BarAnalysis> list) => List = list;
 
         public BarAnalysisSet(BarAnalysisSet bas) => List = bas.List;
+
+        public BarAnalysisSet(BarAnalysis ba) { List = new List<BarAnalysis>() { ba }; }
+
+        public BarAnalysisSet() => m_List = new List<BarAnalysis>();
 
         public IEnumerable<BarAnalysis> List
         {

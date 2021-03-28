@@ -157,6 +157,8 @@ namespace Pacmio
             }
         }
 
+        public IEnumerable<Bar> Bars => Rows;
+
         /// <summary>
         /// 
         /// </summary>

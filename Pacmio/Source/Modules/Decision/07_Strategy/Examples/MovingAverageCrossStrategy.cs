@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class MovingAverageCrossStrategy : Strategy
+    public class MovingAverageCrossStrategy : IndicatorGroup
     {
         public override void Dispose()
         {

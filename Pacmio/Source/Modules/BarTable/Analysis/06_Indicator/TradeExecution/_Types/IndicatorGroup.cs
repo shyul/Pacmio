@@ -17,6 +17,54 @@
 /// 
 /// ***************************************************************************
 
+// New Types for Bar
+// ===================
+// 1. TrendLine Type (Will be derived)
+// 2. Signal Type
+// 3. Pattern Type
+// 4. Position Status
+// 5. Better Tags
+// 
+// <<<<<<<<<< Get them from the Technical Anlysis (TA)'s purpose >>>>>>>>>>
+// 1. For example, RSI: see how the overbought and oversold are causing price reversals
+// 2. Moving average crossings. Test difference time periods
+
+// Condition
+// --------------------
+// Result: List of symbol matching the condition
+// 1. Volume, 
+// 2. Price Range
+// 3. Indicators + Elevation Factors
+
+//public Dictionary<Contract, int> Parameters = new Dictionary<Contract, int>();
+
+// Indication
+// --------------------
+// Elevation Factors (Bullish)
+// Deprication Factors (Bearish)
+// Signals
+// Result: Signals list, sum of all signals at the close of a Bar
+// --------------------
+// 1. A pool of bullish and bearish factor-tets: <<<<<<<<<< Get them from the Technical Anlysis (TA)'s purpose >>>>>>>>>>
+// 2. Test each of them individually for each contract. Signal clarity -> bullish signal to bullish upside rate / Bearish to downside rate. Delay, strength, winrate
+// 3. Classic combination: Moving Average Cross (s) + Oscillator (s)
+// 4. Combined Score to simulated trades: KPI: winrate, per trade profit
+
+// Confirmation
+// --------------------
+// 1. Signal reseaches a certain level for the last Bar
+// 2. Match time frame
+// 3. One technical situation is met for current Bar.
+// Buy Limit, Buy Stop Limit
+// Result: Long / Short. Scale in??? Most unlikely.
+
+// Validation
+// --------------------
+// 1. Entry Stop is met
+// 2. Breakeven Stop is met
+// 3. Profit taking limit is met
+// Result: Remove liquidation, scale out, Sell / Cover
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,75 +76,42 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class Strategy : IDataConsumer, IEquatable<Strategy>, IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
+    public class IndicatorGroup : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
     {
-        public abstract void Dispose();
-
-        public virtual string Name => "Default TradeRule";
-
-        public override int GetHashCode() => Name.GetHashCode();
-
-        public bool Equals(Strategy other) => other.GetType() == GetType() && Name == other.Name;
-
-        #region Watch List
-
-        /// <summary>
-        /// Acquire from WatchListManager
-        /// </summary>
-        public WatchList WatchList
+        public IndicatorGroup(IndicatorExec ie, BarFreq freq, DataType type) 
         {
-            get => m_WatchList;
-            
-            set
-            {
-                if (m_WatchList is WatchList w) w.RemoveDataConsumer(this);
-                m_WatchList = value;
-                m_WatchList.AddDataConsumer(this);
-            }
+            ExecutingIndicator = ie;
+            ExecutingTimeFrame = (freq, type);
+            Indicators[ExecutingTimeFrame] = ExecutingIndicator;
         }
-
-        private WatchList m_WatchList = null;
-
-        public List<Contract> ContractList { get; private set; }
-
-        public void DataIsUpdated(IDataProvider provider)
-        {
-            if (provider is WatchList w)
-            {
-                if (ContractList is List<Contract>)
-                {
-                    var list_to_remove = ContractList.Where(n => !w.Contracts.Contains(n));
-                    list_to_remove.RunEach(n => n.MarketData.RemoveDataConsumer(this));
-                }
-
-                ContractList = w.Contracts.ToList();
-                ContractList.ForEach(n => n.MarketData.AddDataConsumer(this));
-            }
-        }
-
-        #endregion Watch List
 
         #region Indicators
 
-        public (BarFreq freq, DataType type) PrimaryTimeFrame { get; protected set; }
+        public IndicatorExec ExecutingIndicator { get; set; }
 
-        private Dictionary<(BarFreq freq, DataType type), (Indicator ind, BarAnalysisSet bas)> Indicators { get; } = new();
+        public (BarFreq freq, DataType type) ExecutingTimeFrame { get; set; }
 
-        public Indicator this[BarFreq freq, DataType type]
+        private Dictionary<(BarFreq freq, DataType type), Indicator> Indicators { get; } = new();
+
+        public Indicator this[BarFreq freq, DataType type = DataType.Trades]
         {
             get
             {
                 var key = (freq, type);
-                return Indicators.ContainsKey(key) ? Indicators[key].ind : null;
+                return Indicators.ContainsKey(key) ? Indicators[key] : null;
             }
-            protected set
+            set
             {
-                Indicators[(freq, type)] = (value, new BarAnalysisSet(value));
+                var key = (freq, type);
+                if (key != ExecutingTimeFrame)
+                    Indicators[(freq, type)] = value;
+                else
+                    throw new Exception("Can not override default executing indicator");
             }
         }
 
         public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
-            => Indicators.Select(n => (n.Key.freq, n.Key.type, n.Value.bas)).GetEnumerator();
+            => Indicators.Select(n => (n.Key.freq, n.Key.type, new BarAnalysisSet(n.Value))).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -107,9 +122,6 @@ namespace Pacmio
         public double MinimumRiskRewardRatio { get; set; }
 
         public double MinimumTradeSize { get; set; }
-
-
-
 
         #endregion Order
 

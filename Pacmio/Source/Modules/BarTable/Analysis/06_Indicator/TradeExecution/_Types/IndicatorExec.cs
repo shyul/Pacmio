@@ -21,17 +21,17 @@ namespace Pacmio.Analysis
     /// </summary>
     public abstract class IndicatorExec : Indicator
     {
-        protected IndicatorExec(Strategy s)
+        protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
         {
-            Strategy = s;
+            IndicatorGroup = new(this, freq, type);
             SignalSeries = new(this);
         }
 
-        public Strategy Strategy { get; }
+        public IndicatorGroup IndicatorGroup { get; }
 
         public double MaximumHoldingTimeInMs { get; set; }
 
-        public void GenerateOrder(ExecutionDatum ed) => Strategy.GenerateOrder(ed);
+        public void GenerateOrder(ExecutionDatum ed) => IndicatorGroup.GenerateOrder(ed);
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM

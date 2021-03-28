@@ -12,7 +12,7 @@ namespace Pacmio
 {
     public class SimulationSet : IEquatable<SimulationSet>
     {
-        public SimulationSet(Contract c, Strategy tr)
+        public SimulationSet(Contract c, IndicatorGroup tr)
         {
             Contract = c;
             Strategy = tr;
@@ -23,7 +23,7 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public Strategy Strategy { get; }
+        public IndicatorGroup Strategy { get; }
 
         public SimulationResult Result { get; } = new SimulationResult();
 
