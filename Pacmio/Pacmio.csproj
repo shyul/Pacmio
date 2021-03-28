@@ -122,7 +122,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\Relative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\SingleColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\PriceDirection.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickShadowStarAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickShadowStarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\DualData\DualDataSignalDatum.cs" />
@@ -223,13 +223,13 @@
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
     <Compile Include="Source\Modules\Decision\Strategy\Examples\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Decision\Indicator\_Type\IndicatorDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Decision\Indicator\_Type\IndicatorColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SingleData\SingleDataSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\DualData\DualDataSignal.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\TIProData\Signal\IAlert.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IBarChartArea.cs" />

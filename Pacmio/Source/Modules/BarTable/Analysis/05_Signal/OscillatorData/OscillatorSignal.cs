@@ -13,11 +13,36 @@ namespace Pacmio.Analysis
 {
     public class OscillatorSignal : SignalAnalysis
     {
+        public OscillatorSignal(IOscillator iosc)
+        {
+            OscillatorAnalysis = iosc;
+
+            string label = "(" + iosc.Name + ")";
+            GroupName = Name = GetType().Name + label;
+            Column_Result = new(Name, typeof(OscillatorSignalDatum));
+
+            iosc.AddChild(this);
+        }
+
+        public IOscillator OscillatorAnalysis { get; }
+
+        public double UpperLimit => OscillatorAnalysis.UpperLimit;
+
+        public double LowerLimit => OscillatorAnalysis.LowerLimit;
+
         public override DatumColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+
+                OscillatorSignalDatum d = new();
+                b[Column_Result] = d;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 /// 
 /// ***************************************************************************
 
+using System.Drawing;
 using Xu;
 
 namespace Pacmio.Analysis

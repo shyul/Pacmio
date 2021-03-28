@@ -18,11 +18,11 @@ namespace Pacmio.Analysis
             Fast_Column = analysis.Column_High;
             Slow_Column = analysis.Column_Low;
 
-            analysis.AddChild(this);
-
             string label = "(" + analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
             Column_Result = new(Name, typeof(DualDataSignalDatum));
+
+            analysis.AddChild(this);
         }
 
         public DualDataSignal(ISingleData fast_analysis, ISingleData slow_analysis)
@@ -30,12 +30,12 @@ namespace Pacmio.Analysis
             Fast_Column = fast_analysis.Column_Result;
             Slow_Column = slow_analysis.Column_Result;
 
-            fast_analysis.AddChild(this);
-            slow_analysis.AddChild(this);
-
             string label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
             Column_Result = new(Name, typeof(DualDataSignalDatum));
+
+            fast_analysis.AddChild(this);
+            slow_analysis.AddChild(this);
         }
 
         public DualDataSignal(NumericColumn fast_column, NumericColumn slow_column)
