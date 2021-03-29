@@ -10,15 +10,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xu;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
-    public sealed class BarTableSet : IDisposable, IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
+    public sealed class BarTableSet :
+        IDataProvider,
+        IDataConsumer,
+        IDisposable,
+        IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
     {
-        public BarTableSet(Contract c, bool ajustDividend)
+        public BarTableSet(BarTable bt, bool adjustDividend = false)
+        {
+            Contract = bt.Contract;
+            AdjustDividend = adjustDividend;
+            BarTableLUT[(bt.BarFreq, bt.Type)] = bt;
+        }
+
+        public BarTableSet(Contract c, bool adjustDividend)
         {
             Contract = c;
-            AdjustDividend = ajustDividend;
+            AdjustDividend = adjustDividend;
         }
 
         ~BarTableSet() => Dispose();
@@ -58,17 +70,20 @@ namespace Pacmio
             }
         }
 
-        public void SetPeriod(Period pd, CancellationTokenSource cts = null) => SetPeriod(new MultiPeriod(pd), cts);
+        public void SetPeriod(Period pd, CancellationTokenSource cts = null)
+            => SetPeriod(new MultiPeriod(pd), cts);
 
         private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; }
             = new Dictionary<(BarFreq freq, DataType type), BarTable>();
+
 
         public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
             => BarTableLUT.Select(n => (n.Key.freq, n.Key.type, n.Value)).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public BarTable this[BarFreq freq, DataType type = DataType.Trades] => GetOrCreateBarTable(freq, type);
+        public BarTable this[BarFreq freq, DataType type = DataType.Trades]
+            => GetOrCreateBarTable(freq, type);
 
         public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, CancellationTokenSource cts = null)
         {
@@ -78,44 +93,41 @@ namespace Pacmio
             {
                 if (!BarTableLUT.ContainsKey(key))
                 {
-                    BarTableLUT[key] = LoadBarTable(freq, type, m_MultiPeriod, cts);
+                    BarTableLUT[key] = this.LoadBarTable(freq, type, m_MultiPeriod, cts);
                 }
 
                 return BarTableLUT[key];
             }
         }
 
-        private BarTable LoadBarTable(BarFreq barFreq, DataType dataType, MultiPeriod mp = null, CancellationTokenSource cts = null)
+        public void CalculateRefresh(IndicatorSet ins)
         {
-            BarDataFile bdf_daily_base = Contract.GetBarDataFile(BarFreq.Daily);
-            bdf_daily_base.Fetch(Period.Full, cts);
-
-            if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
+            foreach (var item in ins)
             {
-                BarTable bt = new(this, BarFreq.Daily, DataType.Trades);
-                bt.LoadBars(bdf_daily_base, AdjustDividend);
-                return bt;
+                BarTable bt = this[item.freq, item.type];
+                bt.CalculateRefresh(item.bas);
             }
-            else if (barFreq > BarFreq.Daily)
-            {
-                BarDataFile bdf_daily = dataType == DataType.Trades ? bdf_daily_base : Contract.GetBarDataFile(BarFreq.Daily, dataType);
+        }
 
-                if (dataType != DataType.Trades)
-                    bdf_daily.Fetch(Period.Full, cts);
 
-                BarTable bt_daily = new(this, BarFreq.Daily, dataType);
-                var sorted_daily_list = bdf_daily.LoadBars(bt_daily, AdjustDividend);
 
-                BarTable bt = new(this, barFreq, dataType);
-                bt.LoadFromSmallerBar(sorted_daily_list);
-                return bt;
-            }
-            else
-            {
-                BarTable bt = new(this, barFreq, dataType);
-                bt.LoadBars(mp, AdjustDividend);
-                return bt;
-            }
+
+
+        public DateTime UpdateTime => throw new NotImplementedException();
+
+        public void DataIsUpdated(IDataProvider provider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

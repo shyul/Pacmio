@@ -312,7 +312,7 @@ namespace Pacmio
                     Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
-            return AdjustBars(bt, sortedList, adjustDividend);
+            return AdjustBars(sortedList, adjustDividend);
         }
 
         public List<Bar> LoadBars(BarTable bt, MultiPeriod pds, bool adjustDividend = false)
@@ -329,7 +329,7 @@ namespace Pacmio
                     Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
-            return AdjustBars(bt, sortedList, adjustDividend);
+            return AdjustBars(sortedList, adjustDividend);
         }
 
         public List<Bar> LoadBars(BarTable bt, bool adjustDividend = false)
@@ -345,10 +345,10 @@ namespace Pacmio
                     Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
-            return AdjustBars(bt, sortedList, adjustDividend);
+            return AdjustBars(sortedList, adjustDividend);
         }
 
-        private List<Bar> AdjustBars(BarTable bt, List<Bar> sortedList, bool adjustDividend)
+        private List<Bar> AdjustBars(List<Bar> sortedList, bool adjustDividend)
         {
             if (sortedList is not null && sortedList.Count > 0)
             {

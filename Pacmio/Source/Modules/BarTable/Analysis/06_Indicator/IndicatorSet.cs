@@ -87,23 +87,46 @@ namespace Pacmio.Analysis
             return btList.Count() == 0;
         }
 
-        private Dictionary<(BarFreq freq, DataType type), Indicator> Indicators { get; } = new();
+        private Dictionary<(BarFreq freq, DataType type), Indicator> IndicatorLUT { get; } = new();
 
-        public List<(BarFreq freq, DataType type)> TimeFrameList => Indicators.Keys.ToList();
+        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
 
         public Indicator this[BarFreq freq, DataType type = DataType.Trades]
         {
             get
             {
                 var key = (freq, type);
-                return Indicators.ContainsKey(key) ? Indicators[key] : null;
+                return IndicatorLUT.ContainsKey(key) ? IndicatorLUT[key] : null;
             }
 
-            set => Indicators[(freq, type)] = value;
+            set
+            {
+                var key = (freq, type);
+
+                if (value is null)
+                {
+                    if (IndicatorLUT.ContainsKey(key))
+                        IndicatorLUT.Remove(key);
+
+                    if (BarAnalysisSetLUT.ContainsKey(key))
+                        BarAnalysisSetLUT.Remove(key);
+                }
+                else
+                {
+                    IndicatorLUT[key] = value;
+                    BarAnalysisSetLUT[key] = new BarAnalysisSet(value);
+                }
+            }
         }
 
+        private Dictionary<(BarFreq freq, DataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
+
         public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
-            => Indicators.Select(n => (n.Key.freq, n.Key.type, new BarAnalysisSet(n.Value))).GetEnumerator();
+            => BarAnalysisSetLUT.
+            OrderByDescending(n => n.Key.freq).
+            ThenByDescending(n => n.Key.type).
+            Select(n => (n.Key.freq, n.Key.type, n.Value)).
+            GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

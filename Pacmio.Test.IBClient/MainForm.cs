@@ -50,20 +50,6 @@ namespace TestClient
 
                     }
                 });
-                /*
-                if (InvokeRequired)
-                {
-                    Invoke((MethodInvoker)delegate
-                    {
-                        DateTimePickerHistoricalDataStart.Value = value.Start;
-                        DateTimePickerHistoricalDataStop.Value = value.Stop;
-                    });
-                }
-                else
-                {
-                    DateTimePickerHistoricalDataStart.Value = value.Start;
-                    DateTimePickerHistoricalDataStop.Value = value.Stop;
-                }*/
             }
         }
 
@@ -342,7 +328,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisSet);
                     //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
@@ -372,7 +358,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -401,7 +387,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -431,7 +417,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -461,7 +447,7 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -501,7 +487,8 @@ namespace TestClient
                 Parallel.ForEach(cList, c => {
                     DateTime startTime = DateTime.Now;
                     //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     bt.CalculateRefresh(bas);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
@@ -569,7 +556,8 @@ namespace TestClient
                 Parallel.ForEach(cList, c => {
                     DateTime startTime = DateTime.Now;
                     //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    var bt = c.LoadBarTable(pd, freq, type, false, Cts);
+                    
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     bt.CalculateRefresh(bas);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;

@@ -31,6 +31,21 @@ namespace Pacmio
     {
         #region Ctor
 
+        public BarTable(Contract c, BarFreq barFreq, DataType type, bool adjustDividend = false)
+        {
+            Contract = c;
+            BarFreq = barFreq;
+            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+            Type = type;
+            Contract.MarketData.AddDataConsumer(this);
+
+            BarTableSet = new BarTableSet(c, adjustDividend);
+
+            CalculateTickCancelTs = new CancellationTokenSource();
+            CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
+            CalculateTickTask.Start();
+        }
+
         public BarTable(BarTableSet bts, BarFreq barFreq, DataType type)
         {
             BarTableSet = bts;
@@ -39,14 +54,11 @@ namespace Pacmio
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
             Contract.MarketData.AddDataConsumer(this);
-            //IsLive = true;
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
             CalculateTickTask.Start();
         }
-
-
 
         ~BarTable() => Dispose();
 
@@ -75,9 +87,9 @@ namespace Pacmio
         public string Name => Contract.TypeFullName + ": " + Contract.Name + " (" + Contract.ExchangeName +
                 " / " + Contract.CurrencySymbol + Contract.CurrencyCode + " / " + Frequency + ")";
 
-        public bool Enabled { get; set; } = true;
+        public bool IsLive { get; set; } = false;
 
-        public bool AdjustDividend { get; set; } = false;
+        public bool AdjustDividend => BarTableSet.AdjustDividend;
 
         /// <summary>
         /// BarTableSet this BarTable belongs to: specified for multi-time frame access.
@@ -349,10 +361,15 @@ namespace Pacmio
         {
             if (mp is not null)
             {
+                bool isLive = false;
+
                 BarDataFile bdf = Contract.GetBarDataFile(BarFreq, Type);
                 foreach (var period in mp)
                 {
                     Period pd = new Period(period);
+
+                    if (pd.IsCurrent || pd.Stop.Date > DateTime.Now.Date) isLive = true;
+
                     DateTime newStart = pd.Start.AddSeconds(-1000 * Frequency.Span.TotalSeconds);
                     pd.Insert(newStart);
                     bdf.Fetch(pd, cts);
@@ -360,6 +377,8 @@ namespace Pacmio
 
                 var sorted_list = bdf.LoadBars(this, mp, adjustDividend);
                 LoadBars(sorted_list);
+
+                IsLive = isLive;
             }
         }
 
@@ -369,7 +388,7 @@ namespace Pacmio
             LoadBars(sorted_list);
         }
 
-        public void LoadBars(List<Bar> sorted_bars)
+        private void LoadBars(List<Bar> sorted_bars)
         {
             if (sorted_bars.Count > 0)
             {
@@ -397,6 +416,7 @@ namespace Pacmio
             }
         }
 
+        /*
         public void AppendBars(List<Bar> sorted_bars)
         {
             if (sorted_bars.Count > 0)
@@ -439,6 +459,7 @@ namespace Pacmio
                 Status = TableStatus.DataReady;
             }
         }
+        */
 
         public void LoadFromSmallerBar(List<Bar> sorted_bars)
         {
@@ -506,71 +527,74 @@ namespace Pacmio
 
         public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
         {
-            DateTime time = Frequency.Align(tickTime);
-            bool isUpdated = true;
-
-            lock (DataLockObject)
+            if (IsLive)
             {
-                if (this[time] is Bar b)
+                DateTime time = Frequency.Align(tickTime);
+                bool isUpdated = true;
+
+                lock (DataLockObject)
                 {
-                    if (b.Source >= minimumSource)
+                    if (this[time] is Bar b)
                     {
-                        if (last > b.High) // New High
+                        if (b.Source >= minimumSource)
                         {
-                            b.High = last; // Also update 
-                        }
+                            if (last > b.High) // New High
+                            {
+                                b.High = last; // Also update 
+                            }
 
-                        if (last < b.Low) // New Low
-                        {
-                            b.Low = last;
-                        }
+                            if (last < b.Low) // New Low
+                            {
+                                b.Low = last;
+                            }
 
-                        if (tickTime <= b.DataSourcePeriod.Start && tickTime >= b.Period.Start) // Eariler Open
-                        {
-                            b.Open = last;
-                            b.DataSourcePeriod.Insert(tickTime);
-                        }
+                            if (tickTime <= b.DataSourcePeriod.Start && tickTime >= b.Period.Start) // Eariler Open
+                            {
+                                b.Open = last;
+                                b.DataSourcePeriod.Insert(tickTime);
+                            }
 
-                        if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
-                        {
-                            b.Close = last;
-                            b.DataSourcePeriod.Insert(tickTime);
-                            Console.WriteLine("Added inbound tick[ " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + " | " + b.Period + "] to existing bar: " + b.DataSourcePeriod + " | " + b.Period);
+                            if (tickTime >= b.DataSourcePeriod.Stop && tickTime < b.Period.Stop) // Later Close
+                            {
+                                b.Close = last;
+                                b.DataSourcePeriod.Insert(tickTime);
+                                Console.WriteLine("Added inbound tick[ " + b.Source + " | " + tickTime + " | " + b.DataSourcePeriod.Start + " -> " + b.DataSourcePeriod.Stop + " | " + b.Period + "] to existing bar: " + b.DataSourcePeriod + " | " + b.Period);
+                            }
+                            else
+                            {
+                                Console.WriteLine("********** Inbound Tick Time Overflow ***********");
+                            }
+
+                            b.Volume += volume;
+                            b.Source = DataSourceType.Realtime;
                         }
                         else
                         {
-                            Console.WriteLine("********** Inbound Tick Time Overflow ***********");
+                            Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
+                            isUpdated = false;
                         }
-
-                        b.Volume += volume;
-                        b.Source = DataSourceType.Realtime;
                     }
                     else
                     {
-                        Console.WriteLine("###### Inbound Tick Ignored, because source = " + b.Source);
-                        isUpdated = false;
+                        if (Count > 0 && this[LastIndex] is Bar lb && lb.Source >= DataSourceType.IB)
+                        {
+                            lb.Source = DataSourceType.Realtime;
+                        }
+                        Bar nb = new(this, tickTime, last, volume);
+                        nb.Index = Count;
+                        Rows.Add(nb);
+                        TimeToRows.Add(nb.Time, nb.Index);
                     }
+
+                    LastTickTime = tickTime;
                 }
-                else
+
+                if (isUpdated && Status >= TableStatus.DataReady)
                 {
-                    if (Count > 0 && this[LastIndex] is Bar lb && lb.Source >= DataSourceType.IB)
-                    {
-                        lb.Source = DataSourceType.Realtime;
-                    }
-                    Bar nb = new(this, tickTime, last, volume);
-                    nb.Index = Count;
-                    Rows.Add(nb);
-                    TimeToRows.Add(nb.Time, nb.Index);
+                    //Status = TableStatus.Ticking;
+                    //SetCalculationPointer(LastCalculateIndex - 1);
+                    CalculateTickRequested = true;
                 }
-
-                LastTickTime = tickTime;
-            }
-
-            if (isUpdated && Status >= TableStatus.DataReady)
-            {
-                //Status = TableStatus.Ticking;
-                //SetCalculationPointer(LastCalculateIndex - 1);
-                CalculateTickRequested = true;
             }
         }
 
@@ -747,7 +771,7 @@ namespace Pacmio
 
         public void CalculateRefresh(BarAnalysisSet bas)
         {
-            if (Enabled && Count > 0 && bas is BarAnalysisSet)
+            if (Count > 0 && bas is BarAnalysisSet)
                 lock (DataLockObject)
                 {
                     Calculate(bas);
