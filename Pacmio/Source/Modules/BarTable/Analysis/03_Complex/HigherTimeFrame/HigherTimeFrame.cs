@@ -13,9 +13,9 @@ namespace Pacmio.Analysis
 {
     public class HigherTimeFrame : BarAnalysis, ISingleComplex
     {
-        public HigherTimeFrame(BarTableGroup group, BarFreq freq, DataType type)
+        public HigherTimeFrame(BarFreq freq, DataType type)
         {
-            Name = GetType().Name + "_" + freq + "_" + type + "_" + group.GetHashCode();
+            Name = GetType().Name + "_" + freq + "_" + type;
             Column_Result = new(Name, typeof(HigherTimeFrameDatum));
         }
 
@@ -23,16 +23,13 @@ namespace Pacmio.Analysis
 
         public DataType DataType { get; }
 
-        public BarTableGroup BarTableGroup { get; }
-
         public DatumColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
 
-            BarTable bt_ht = BarTableGroup.GetOrCreateBarTable(bt.Contract, BarFreq, DataType);
-
+            BarTable bt_ht = bt.BarTableSet[BarFreq, DataType];
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {

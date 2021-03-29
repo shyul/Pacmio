@@ -17,6 +17,7 @@ namespace Pacmio
 {
     public sealed class BarTableSet :
         IDataConsumer,
+        IDataProvider,
         IDisposable,
         IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
     {
@@ -90,9 +91,6 @@ namespace Pacmio
         {
             if (IsLive)
             {
-                //lock (DataLockObject)
-                //{
-
                 //Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
                 this.Select(n => n.bt).RunEach(bt =>
                 {
@@ -131,7 +129,7 @@ namespace Pacmio
                         }
                     }
                 });
-                
+
                 /*
                 Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
                 {
@@ -143,8 +141,39 @@ namespace Pacmio
 
                     // Gener
 
-                });*/
-                //}
+                });
+                */
+            }
+        }
+
+        /// <summary>
+        /// Trading Data
+        /// </summary>
+        private List<IDataConsumer> DataConsumers { get; set; } = new List<IDataConsumer>();
+
+        public bool AddDataConsumer(IDataConsumer idk)
+        {
+            lock (DataLockObject)
+            {
+                if (!DataConsumers.Contains(idk))
+                {
+                    DataConsumers.Add(idk);
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool RemoveDataConsumer(IDataConsumer idk)
+        {
+            lock (DataLockObject)
+            {
+                if (DataConsumers.Contains(idk))
+                {
+                    DataConsumers.RemoveAll(n => n == idk);
+                    return true;
+                }
+                return false;
             }
         }
 
