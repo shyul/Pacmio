@@ -17,6 +17,19 @@ namespace Pacmio
     {
         private Dictionary<Contract, BarTableSet> ContractBarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
 
+        public BarTableSet this[Contract c] 
+        {
+            get
+            {
+                if (!ContractBarTableSetLUT.ContainsKey(c))
+                    ContractBarTableSetLUT[c] = new BarTableSet(c, false);
+
+                return ContractBarTableSetLUT[c];
+            }
+        }
+
+
+
         public BarTable GetOrCreateBarTable(Contract c, BarFreq freq, DataType type = DataType.Trades, CancellationTokenSource cts = null)
         {
             if (!ContractBarTableSetLUT.ContainsKey(c))

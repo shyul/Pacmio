@@ -302,7 +302,7 @@ namespace Pacmio
                         int px = 0;
                         switch (TimeUnit)
                         {
-                            case (TimeUnit.Years): // 02, 03, 04 || 2002, 2003, 2004
+                            case TimeUnit.Years: // 02, 03, 04 || 2002, 2003, 2004
                                 MinorTick = new Frequency(TimeUnit.Years, Frequency.Length * tickMulti);
                                 MajorTick = MinorTick * 5;
                                 for (int i = StartPt; i < StopPt; i++)
@@ -314,25 +314,25 @@ namespace Pacmio
                                 }
                                 break;
 
-                            case (TimeUnit.Months): // 1, 2, 3, 4 || Jan, Feb, Mar, Apr
+                            case TimeUnit.Months: // 1, 2, 3, 4 || Jan, Feb, Mar, Apr
                                 MinorTick = Frequency * tickMulti;
                                 MajorTick = MinorTick * 6;
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
                                     DateTime time = m_BarTable.IndexToTime(i);
-                                    if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
+                                    if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("yyyy")));
                                     if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
                                     px++;
                                 }
                                 break;
 
-                            case (TimeUnit.Weeks): // 1, 8, 15, 23, 30
+                            case TimeUnit.Weeks: // 1, 8, 15, 23, 30
                                 MinorTick = Frequency * tickMulti;
                                 MajorTick = new Frequency(TimeUnit.Months, 1);
 
                                 break;
 
-                            case (TimeUnit.Days): // 1, 2, 3, 4, 5
+                            case TimeUnit.Days: // 1, 2, 3, 4, 5
                                 if (tickMulti < 3)
                                 {
                                     MinorTick = Frequency * tickMulti;
@@ -368,7 +368,7 @@ namespace Pacmio
                                 }
                                 break;
 
-                            case (TimeUnit.Hours): // 09, 10, 11, ... 16
+                            case TimeUnit.Hours: // 09, 10, 11, ... 16
                                 MinorTick = Frequency * tickMulti;
                                 MajorTick = new Frequency(TimeUnit.Hours, 1);
                                 for (int i = StartPt; i < StopPt; i++)
@@ -388,7 +388,7 @@ namespace Pacmio
                                 }
                                 break;
 
-                            case (TimeUnit.Minutes): // How many minutes 
+                            case TimeUnit.Minutes: // How many minutes 
                                 MinorTick = Frequency * 5;
                                 MajorTick = new Frequency(TimeUnit.Minutes, 30);
                                 for (int i = StartPt; i < StopPt; i++)
@@ -406,7 +406,7 @@ namespace Pacmio
                                 }
                                 break;
 
-                            case (TimeUnit.Seconds):
+                            case TimeUnit.Seconds:
                                 MinorTick = Frequency * 10;
                                 MajorTick = new Frequency(TimeUnit.Minutes, 30);
                                 for (int i = StartPt; i < StopPt; i++)
@@ -431,7 +431,7 @@ namespace Pacmio
 
                                 break;
 
-                            case (TimeUnit.None):
+                            case TimeUnit.None:
                             default:
                                 throw new("Invalid TimeInterval Type!");
                         }

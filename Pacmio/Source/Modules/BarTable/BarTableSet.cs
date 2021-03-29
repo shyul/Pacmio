@@ -194,10 +194,13 @@ namespace Pacmio
             lock (DataLockObject)
             {
                 bool isLive = false;
-                foreach (var period in mp)
+                foreach (var pd in mp)
                 {
-                    Period pd = new Period(period);
-                    if (pd.IsCurrent || pd.Stop.Date > DateTime.Now.Date) isLive = true;
+                    if (pd.IsCurrent || pd.Stop.Date > DateTime.Now.Date)
+                    {
+                        isLive = true;
+                        break;
+                    }
                 }
                 IsLive = isLive;
 
@@ -254,11 +257,5 @@ namespace Pacmio
                 }
             }
         }
-
-
-
-
-
-
     }
 }

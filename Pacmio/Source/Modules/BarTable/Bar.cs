@@ -68,10 +68,32 @@ namespace Pacmio
             Volume = volume;
         }
 
+        public Bar(BarTable bt, Period pd, double open, double high, double low, double close, double volume, DataSourceType source = DataSourceType.Tick)
+        {
+            Table = bt;
+            Period = pd;
+            DataSourcePeriod = new Period(pd.Start);
+            Source = source;
+
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            Volume = volume;
+        }
+
         public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume, DataSourceType source = DataSourceType.Tick)
         {
             Table = bt;
+
+            //Period = Frequency.AlignPeriodUnit(time);
             Period = Frequency.AlignPeriod(time);
+
+            if (Period.Start != time)
+            {
+                Console.WriteLine("time = " + time + " | Period Start = " + Period.Start);
+            }
+
             DataSourcePeriod = new Period(time);
             Source = source;
 

@@ -309,6 +309,8 @@ namespace TestClient
             }
         }
 
+        public BarTableGroup BarTableGroup { get; } = new BarTableGroup();
+
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
         {
             if (ValidateSymbol())
@@ -442,12 +444,16 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(pd, Cts);
+                    BarTable bt = bts[freq, type];
+
                     /*
                     BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;

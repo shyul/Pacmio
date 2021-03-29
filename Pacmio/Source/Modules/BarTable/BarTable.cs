@@ -384,15 +384,19 @@ namespace Pacmio
             if (mp is not null)
             {
                 BarDataFile bdf = Contract.GetBarDataFile(BarFreq, Type);
+
+                MultiPeriod new_mp = new MultiPeriod();
+
                 foreach (var period in mp)
                 {
                     Period pd = new Period(period);
                     DateTime newStart = pd.Start.AddSeconds(-1000 * Frequency.Span.TotalSeconds);
                     pd.Insert(newStart);
                     bdf.Fetch(pd, cts);
+                    new_mp.Add(pd);
                 }
 
-                var sorted_list = bdf.LoadBars(this, mp, adjustDividend);
+                var sorted_list = bdf.LoadBars(this, new_mp, adjustDividend);
                 LoadBars(sorted_list);
             }
         }
@@ -438,7 +442,7 @@ namespace Pacmio
                         }
                     }
 
-                    //Rows[Count - 1].Source = DataSourceType.Tick;
+                    Rows[Count - 1].Source = DataSourceType.Tick;
                 }
 
                 Status = TableStatus.DataReady;
@@ -479,10 +483,11 @@ namespace Pacmio
 
         public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
         {
-            DateTime time = Frequency.Align(tickTime);
+            DateTime time = Frequency.AlignUnit(tickTime);
             bool isUpdated = true;
 
-            if (this[time] is Bar b)
+            //if (this[time] is Bar b)
+            if (Count > 0 && Rows[Count - 1] is Bar b && b.Period.Contains(time))
             {
                 if (b.Source >= minimumSource)
                 {
@@ -541,7 +546,7 @@ namespace Pacmio
             if (isUpdated && Status >= TableStatus.DataReady)
             {
                 //Status = TableStatus.Ticking;
-                //SetCalculationPointer(LastCalculateIndex - 1);
+                SetCalculationPointer(LastCalculateIndex - 1);
                 CalculateTickRequested = true;
             }
 

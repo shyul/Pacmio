@@ -309,7 +309,7 @@ namespace Pacmio
                 sortedList = Rows.
                     Where(n => pd.Contains(n.Key)).
                     OrderBy(n => n.Key).
-                    Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
+                    Select(n => new Bar(bt, new Period(bt.Frequency.AlignPeriodUnit(n.Key)), n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
             return AdjustBars(sortedList, adjustDividend);
@@ -326,8 +326,27 @@ namespace Pacmio
                 sortedList = Rows.
                     Where(n => pds.Contains(n.Key)).
                     OrderBy(n => n.Key).
-                    Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
+                    Select(n => new Bar(bt, new Period(bt.Frequency.AlignPeriodUnit(n.Key)), n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).
+                    //ToDictionary(n => n.Time, n => n).
+                    //Select(n => n.Value).
+                    ToList();
+
+                //sortedList.RunEach
+
+                /*
+                Dictionary<DateTime, Bar> result = new();
+
+                Rows.Where(n => pds.Contains(n.Key)).
+                    OrderBy(n => n.Key).
+                    Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).
+                    RunEach(n => result[n.Time] = n);
+
+                sortedList = result.Values.ToList();*/
             }
+
+            //Dictionary<DateTime, Bar> result = sortedList.ToDictionary(n => n.Time, n => n);
+
+            //sortedList.RunEach(n => )
 
             return AdjustBars(sortedList, adjustDividend);
         }
@@ -342,7 +361,7 @@ namespace Pacmio
             {
                 sortedList = Rows.
                     OrderBy(n => n.Key).
-                    Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
+                    Select(n => new Bar(bt, new Period(bt.Frequency.AlignPeriodUnit(n.Key)), n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
             }
 
             return AdjustBars(sortedList, adjustDividend);
