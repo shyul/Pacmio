@@ -9,13 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 using Pacmio.Analysis;
 
 namespace Pacmio
 {
     public sealed class BarTableSet :
-        IDataProvider,
         IDataConsumer,
         IDisposable,
         IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
@@ -37,8 +37,9 @@ namespace Pacmio
 
         public void Dispose()
         {
-            lock (BarTableLUT)
+            lock (DataLockObject)
             {
+                IsLive = false;
                 var bts = BarTableLUT.Values.ToList();
                 BarTableLUT.Clear();
                 bts.ForEach(n => n.Dispose());
@@ -47,7 +48,109 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
+        public MarketData MarketData => Contract.MarketData;
+
         public bool AdjustDividend { get; } = false;
+
+        #region Data Update
+
+        public bool IsLive
+        {
+            get => m_IsLive;
+            private set
+            {
+                m_IsLive = value;
+
+                if (m_IsLive)
+                {
+                    Contract.MarketData.AddDataConsumer(this);
+                }
+                else
+                {
+                    Contract.MarketData.RemoveDataConsumer(this);
+                }
+            }
+        }
+
+        public bool m_IsLive = false;
+
+        public DateTime UpdateTime { get; private set; }
+
+        public void DataIsUpdated(IDataProvider provider)
+        {
+            if (provider is MarketData md)
+            {
+
+            }
+
+            UpdateTime = DateTime.Now;
+        }
+
+        public void InboundLiveTick(DateTime time, double price, double size)
+        {
+            if (IsLive)
+            {
+                //lock (DataLockObject)
+                //{
+
+                //Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
+                this.Select(n => n.bt).RunEach(bt =>
+                {
+                    lock (bt.DataLockObject)
+                    {
+                        if (bt.Status > TableStatus.Loading)
+                        {
+                            if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
+                            {
+                                bt.AddPriceTick(time, price, size);
+                            }
+                            else if (bt.BarFreq >= BarFreq.Daily)// && bt.LastTime < time.Date)
+                            {
+                                DateTime date = time.Date;
+
+                                Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTimeBound.Date + " | time = " + date);
+
+                                if (bt.LastTimeBound.Date < date)
+                                {
+                                    // Also check the Stock Data time stamp here! Is it current???
+                                    if (bt.Status == TableStatus.Ready &&
+                                    (!double.IsNaN(MarketData.Open)) &&
+                                    (!double.IsNaN(MarketData.High)) &&
+                                    (!double.IsNaN(MarketData.Low)) &&
+                                    (!double.IsNaN(price)) &&
+                                    (!double.IsNaN(MarketData.Volume)))
+                                    {
+                                        bt.MergeFromSmallerBar(time, new Bar(bt, date, MarketData.Open, MarketData.High, MarketData.Low, price, MarketData.Volume));
+                                    }
+                                }
+                                else if (bt.LastTimeBound.Date == date)
+                                {
+                                    bt.AddPriceTick(time, price, size, DataSourceType.Manual);
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                /*
+                Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
+                {
+                    //foreach (var exec in bt.IndicatorExecList) exec.GenerateExecution();
+
+                    // ExecutionDatum GenerateOrder(BarAnalysisPointer bap);
+
+                    // Get Tethered Strategy
+
+                    // Gener
+
+                });*/
+                //}
+            }
+        }
+
+        #endregion Data Update
+
+        public object DataLockObject { get; private set; } = new();
 
         public MultiPeriod MultiPeriod
         {
@@ -59,8 +162,16 @@ namespace Pacmio
 
         public void SetPeriod(MultiPeriod mp, CancellationTokenSource cts = null)
         {
-            lock (BarTableLUT)
+            lock (DataLockObject)
             {
+                bool isLive = false;
+                foreach (var period in mp)
+                {
+                    Period pd = new Period(period);
+                    if (pd.IsCurrent || pd.Stop.Date > DateTime.Now.Date) isLive = true;
+                }
+                IsLive = isLive;
+
                 foreach (BarTable bt in BarTableLUT.Values)
                 {
                     bt.LoadBars(mp, AdjustDividend, cts);
@@ -78,7 +189,10 @@ namespace Pacmio
 
 
         public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
-            => BarTableLUT.Select(n => (n.Key.freq, n.Key.type, n.Value)).GetEnumerator();
+            => BarTableLUT.
+            OrderByDescending(n => n.Key.freq).
+            ThenByDescending(n => n.Key.type).
+            Select(n => (n.Key.freq, n.Key.type, n.Value)).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -89,7 +203,7 @@ namespace Pacmio
         {
             var key = (freq, type);
 
-            lock (BarTableLUT)
+            lock (DataLockObject)
             {
                 if (!BarTableLUT.ContainsKey(key))
                 {
@@ -102,10 +216,13 @@ namespace Pacmio
 
         public void CalculateRefresh(IndicatorSet ins)
         {
-            foreach (var item in ins)
+            lock (DataLockObject)
             {
-                BarTable bt = this[item.freq, item.type];
-                bt.CalculateRefresh(item.bas);
+                foreach (var item in ins)
+                {
+                    BarTable bt = this[item.freq, item.type];
+                    bt.CalculateRefresh(item.bas);
+                }
             }
         }
 
@@ -113,21 +230,6 @@ namespace Pacmio
 
 
 
-        public DateTime UpdateTime => throw new NotImplementedException();
 
-        public void DataIsUpdated(IDataProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool AddDataConsumer(IDataConsumer idk)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RemoveDataConsumer(IDataConsumer idk)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -205,11 +205,13 @@ namespace Pacmio
         [IgnoreDataMember]
         public double RTLastPrice { get; private set; } = -1;
 
-        // TODO: 
-        // Queue the Tape Here
+
 
         public void InboundLiveTick(DateTime time, double price, double size)
         {
+
+            // TODO: 
+            // Queue the Tape Here
             if (time > RTLastTime)
             {
                 RTLastTime = time;
@@ -239,49 +241,10 @@ namespace Pacmio
                     IsModified = true;
                     lock (DataLockObject)
                     {
-                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable).Select(n => n as BarTable), bt =>
+                        Parallel.ForEach(DataConsumers.Where(n => n is BarTableSet bts && bts.IsLive).Select(n => n as BarTableSet), bts =>
                         {
-                            if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
-                            {
-                                bt.AddPriceTick(time, price, size);
-                            }
-                            else if (bt.BarFreq >= BarFreq.Daily)// && bt.LastTime < time.Date)
-                            {
-                                DateTime date = time.Date;
-                                //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTime.Date + " | time = " + time.Date);
-                                if (bt.LastTime.Date < date)
-                                {
-                                    // Also check the Stock Data time stamp here! Is it current???
-                                    if (bt.Status == TableStatus.Ready && (!double.IsNaN(Open)) && (!double.IsNaN(High)) && (!double.IsNaN(Low)) && (!double.IsNaN(LastPrice)) && (!double.IsNaN(Volume)))
-                                    {
-                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + date + " | " + Open + " | " + High + " | " + Low + " | " + LastPrice + " | " + Volume);
-                                        Bar b = new(bt, date, Open, High, Low, LastPrice, Volume);
-                                        Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [[[[ Adding new candle: " + b.DataSourcePeriod.Stop);
-                                        bt.MergeFromSmallerBar(b);
-                                        //Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
-                                        //Console.WriteLine("bt.LastBar.DataSourcePeriod.Stop = " + bt.LastBar.DataSourcePeriod.Stop);
-                                    }
-                                }
-                                else if (bt.LastTime == date)
-                                {
-                                    bt.AddPriceTick(time, price, size);
-                                }
-
-                                bt.DataIsUpdated(this);
-                                //Console.WriteLine("bt.Status = " + bt.Status);
-                            }
-                        });
-
-                        Parallel.ForEach(DataConsumers.Where(n => n is BarTable).Select(n => n as BarTable), bt =>
-                        {
-                            //foreach (var exec in bt.IndicatorExecList) exec.GenerateExecution();
-
-                            // ExecutionDatum GenerateOrder(BarAnalysisPointer bap);
-
-                                // Get Tethered Strategy
-
-                                // Gener
-
+                            bts.InboundLiveTick(time, price, size);
+                            bts.DataIsUpdated(this);
                         });
                     }
                 }

@@ -37,7 +37,6 @@ namespace Pacmio
             {
                 BarTable bt = new(bts, BarFreq.Daily, DataType.Trades);
                 bt.LoadBars(bdf_daily_base, bts.AdjustDividend);
-                bt.IsLive = true;
                 return bt;
             }
             else if (barFreq > BarFreq.Daily)
@@ -54,7 +53,6 @@ namespace Pacmio
 
                 BarTable bt = new(bts, barFreq, dataType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
-                bt.IsLive = true;
                 return bt;
             }
             else

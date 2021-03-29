@@ -46,7 +46,7 @@ namespace Pacmio
             if (BarFreq >= small_b.BarFreq) // Merge From A Smaller Bar
             {
                 Period = Frequency.AlignPeriod(small_b.Time);
-                DataSourcePeriod = new Period(small_b.Period);
+                DataSourcePeriod = new Period(small_b.DataSourcePeriod);
                 Source = small_b.Source;
                 Open = small_b.Open;
                 High = small_b.High;
@@ -186,19 +186,19 @@ namespace Pacmio
                     isModified = true;
                 }
 
-                if (b.Period.Stop <= DataSourcePeriod.Start) // Eariler Open
+                if (b.DataSourcePeriod.Stop <= DataSourcePeriod.Start) // Eariler Open
                 {
                     Open = b.Open;
                     Volume += b.Volume;
-                    DataSourcePeriod.Insert(b.Period.Start);
+                    DataSourcePeriod.Insert(b.DataSourcePeriod.Start);
                     isModified = true;
                 }
 
-                if (b.Period.Start >= DataSourcePeriod.Stop) // Later Close
+                if (b.DataSourcePeriod.Start >= DataSourcePeriod.Stop) // Later Close
                 {
                     Close = b.Close;
                     Volume += b.Volume;
-                    DataSourcePeriod.Insert(b.Period.Stop);
+                    DataSourcePeriod.Insert(b.DataSourcePeriod.Stop);
                     isModified = true;
                 }
 
