@@ -15,11 +15,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class OverSoldFilter : IndicatorFilter
+    public class OverSoldFilter : Indicator
     {
-        public override double HighScoreLimit => 100;
 
-        public override double LowScoreLimit => -100;
 
         public override IEnumerable<SignalColumn> SignalColumns { get; } = new List<SignalColumn>();
 

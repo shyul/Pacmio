@@ -100,8 +100,8 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Filter\OverSoldFilter.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Indicator\RossMomentumIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\OverSoldFilter.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossMomentumIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\ILevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\ILevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\ILevelDatum.cs" />
@@ -111,7 +111,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Trend\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\07_Execution\IndicatorExec.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_TrailingPivot\TrailingPivotPtDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\08_Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleComplex.cs" />
@@ -137,9 +136,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\02_Advanced\PositionOfTimeframe.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Flag\FlagType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Types\PatternAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Indicator\RossGapGolndicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugColumnSeriesOsc.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossGapGolndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\00_Debug\DebugColumnSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\00_Debug\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\NativeGain.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\NativePivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Flag\FlagAnalysis.cs" />
@@ -148,9 +147,9 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestSignals.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestTrend.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\_Types\PivotAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Indicator\RossReversalndicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\DebugLineSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_DebugSeries\_DebugSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossReversalndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\00_Debug\DebugLineSeries.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\00_Debug\_DebugSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestNative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestGapGo.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestReversal.cs" />
@@ -172,8 +171,8 @@
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\ReportSnapshot.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\ReutersXML\WSHData.cs" />
     <Compile Include="Source\Modules\Data\MarketData\MarketDataManager.cs" />
-    <Compile Include="Source\Modules\Decision\07_Strategy\StepOneTraining\StrategyTrainingColumn.cs" />
-    <Compile Include="Source\Modules\Decision\07_Strategy\StepOneTraining\StrategyTrainingDatum.cs" />
+    <Compile Include="Source\Modules\Decision\Simulation\StepOneTraining\StrategyTrainingColumn.cs" />
+    <Compile Include="Source\Modules\Decision\Simulation\StepOneTraining\StrategyTrainingDatum.cs" />
     <Compile Include="Source\Modules\Trade\Position\PositionInfoGridView.cs" />
     <Compile Include="Source\Modules\Trade\Order\OrderInfoGridView.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\AverageLoss.cs" />
@@ -198,7 +197,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Trend\TrendLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\VolumeByPrice\VolumeByPriceAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Indicator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Indicator\CrossIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\CrossIndicator.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepth.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthGridView.cs" />
     <Compile Include="Source\Modules\Data\MarketDepth\MarketDepthManager.cs" />
@@ -224,7 +223,7 @@
     <Compile Include="Source\Modules\Data\MarketDepth\_IB\MarketDepth_Parse.cs" />
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
-    <Compile Include="Source\Modules\Decision\07_Strategy\Examples\MovingAverageCrossStrategy.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalColumn.cs" />
@@ -416,8 +415,6 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Modules\Decision\07_Strategy\StepTwoTrading\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

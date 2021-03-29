@@ -116,23 +116,6 @@ namespace Pacmio
             bt.LoadBars(sorted_list);
         }
 
-        public static void LoadBarTables(IEnumerable<Contract> list)
-        {
 
-        }
-
-        public static void Search(IEnumerable<Contract> list, IndicatorFilter filter, DateTime AsOfDate, BarFreq timeFrame = BarFreq.Daily)
-        {
-            BarAnalysisSet bas = new(filter);
-
-            var tables = list.Select(c => c.LoadDailyBarTable(timeFrame));
-            tables.AsParallel().Where(n => n.LastTime >= AsOfDate).RunEach(bt =>
-            {
-                bt.CalculateRefresh(bas);
-            });
-
-            //var res = tables.Where(n => n.LastBar[filter])
-
-        }
     }
 }

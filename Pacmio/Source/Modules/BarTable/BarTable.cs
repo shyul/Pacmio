@@ -781,9 +781,6 @@ namespace Pacmio
 
         #endregion Data/Bar Analysis (TA) Calculation
 
-
-
-
         #region Data Consumers
 
         private List<IDataConsumer> DataConsumers { get; } = new();

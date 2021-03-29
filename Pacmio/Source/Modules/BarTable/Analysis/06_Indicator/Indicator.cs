@@ -6,6 +6,7 @@
 /// 
 /// https://support.stockcharts.com/doku.php?id=scans:library:sample_scans
 /// 
+/// 
 /// ***************************************************************************
 
 using System;
@@ -31,6 +32,42 @@ namespace Pacmio.Analysis
         public abstract IEnumerable<SignalColumn> SignalColumns { get; }
 
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+
+        public double HighScoreLimit { get; set; }
+
+        public double LowScoreLimit { get; set; }
+
+        public static (double BullishPercent, double BearishPercent) Evaluate(Indicator indf, BarTable bt)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
+
+        public static (double HighScorePercent, double LowScorePercent) Evaluate2(Indicator indf, BarTable bt)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
 
         #region Series
 
@@ -66,5 +103,12 @@ namespace Pacmio.Analysis
         }
 
         #endregion Series
+    }
+
+    public enum FilterType : int
+    {
+        Bearish = -1,
+        None = 0,
+        Bullish = 1,
     }
 }

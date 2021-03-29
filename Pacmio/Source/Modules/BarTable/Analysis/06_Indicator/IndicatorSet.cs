@@ -65,6 +65,12 @@
 // 3. Profit taking limit is met
 // Result: Remove liquidation, scale out, Sell / Cover
 
+/// 3 Criteria for Finding Swing Stocks
+/// https://www.youtube.com/watch?v=GHG3Kf-FYvw
+/// 
+/// 3 (Powerful) Swing Trading Strategies
+/// https://www.youtube.com/watch?v=MK2V6GKBmf0
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -100,5 +106,25 @@ namespace Pacmio.Analysis
             => Indicators.Select(n => (n.Key.freq, n.Key.type, new BarAnalysisSet(n.Value))).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /*
+        public static void LoadBarTables(IEnumerable<Contract> list)
+        {
+
+        }
+
+        public static void Search(IEnumerable<Contract> list, Indicator filter, DateTime AsOfDate, BarFreq timeFrame = BarFreq.Daily)
+        {
+            BarAnalysisSet bas = new(filter);
+
+            var tables = list.Select(c => c.LoadDailyBarTable(timeFrame));
+            tables.AsParallel().Where(n => n.LastTime >= AsOfDate).RunEach(bt =>
+            {
+                bt.CalculateRefresh(bas);
+            });
+
+            //var res = tables.Where(n => n.LastBar[filter])
+
+        }*/
     }
 }

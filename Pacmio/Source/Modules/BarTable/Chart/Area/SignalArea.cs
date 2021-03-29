@@ -58,7 +58,7 @@ namespace Pacmio
 
 
                 }
-                else if (Indicator is IndicatorFilter filter)
+                else if (Indicator is Indicator filter)
                 {
                     FilterType lastType = FilterType.None;
 

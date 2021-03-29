@@ -441,9 +441,9 @@ namespace Pacmio
 
         public (double Bullish, double Bearish) GetSignalScore(Indicator ind) => GetSignalScore(ind.SignalColumns);
 
-        public FilterType this[IndicatorFilter filter] => GetSignalFilterType(filter);
+        public FilterType this[Indicator filter] => GetSignalFilterType(filter);
 
-        public FilterType GetSignalFilterType(IndicatorFilter filter)
+        public FilterType GetSignalFilterType(Indicator filter)
         {
             var (bullish, bearish) = GetSignalScore(filter.SignalColumns);
 
