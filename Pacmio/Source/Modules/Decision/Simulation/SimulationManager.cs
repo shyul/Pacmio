@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xu;
 using Pacmio.Analysis;
 
@@ -33,6 +34,20 @@ namespace Pacmio
 
 
 
+
+            }
+        }
+
+
+        public static void Simulate(IEnumerable<Contract> cList, Indicator ind, Period pd, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        {
+            foreach(Contract c in cList)
+            {
+                //BarTableSet bts = new BarTableSet(c);
+
+                // Run daily first,
+
+                // 
 
             }
         }

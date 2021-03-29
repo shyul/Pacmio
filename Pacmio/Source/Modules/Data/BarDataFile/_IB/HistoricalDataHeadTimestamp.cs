@@ -135,7 +135,7 @@ namespace Pacmio.IB
                 c.UpdateTime = DateTime.Now;
             }
 
-            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = c.GetOrCreateBarDataFile().HistoricalHeadTime; // TimeTool.MinInvalid;
+            ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime = c.GetBarDataFile().HistoricalHeadTime; // TimeTool.MinInvalid;
 
             Console.WriteLine("Requesting HeadTimestamp errors: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.ToString() + " | " + fields.ToStringWithIndex());
             Console.WriteLine("Using daily BDF's HeadTimestamp: " + ActiveBarDataFile_HistoricalDataHeadTimestamp.HistoricalHeadTime);

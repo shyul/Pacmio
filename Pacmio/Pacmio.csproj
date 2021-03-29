@@ -114,6 +114,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_TrailingPivot\TrailingPivotPtDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\08_Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleComplex.cs" />
+    <Compile Include="Source\Modules\BarTable\BarTableGroup.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\_Test\TestReversal.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableSet.cs" />
     <Compile Include="Source\Modules\Data\BarDataFile\BarDataFileManager.cs" />
-    <Compile Include="Source\Modules\BarTable\BarTableManager.cs" />
     <Compile Include="Source\Modules\Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\DividendDatum.cs" />
     <Compile Include="Source\Modules\Data\FundamentalData\Datums\RevenueDatum.cs" />

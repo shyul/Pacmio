@@ -15,9 +15,10 @@ namespace Pacmio
 {
     public sealed class BarTableSet : IDisposable, IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
     {
-        public BarTableSet(Contract c)
+        public BarTableSet(Contract c, bool ajustDividend)
         {
             Contract = c;
+            AdjustDividend = ajustDividend;
         }
 
         ~BarTableSet() => Dispose();
@@ -26,27 +27,40 @@ namespace Pacmio
         {
             lock (BarTableLUT)
             {
-                foreach (BarTable bt in BarTableLUT.Values.Where(n => n.Type != DataType.Trades || n.BarFreq < BarFreq.Daily))
-                {
-                    bt.Dispose();
-                }
+                var bts = BarTableLUT.Values.ToList();
                 BarTableLUT.Clear();
+                bts.ForEach(n => n.Dispose());
             }
         }
 
         public Contract Contract { get; }
 
-        // public Period Period { get; }
+        public bool AdjustDividend { get; } = false;
 
-        public void AddPeriod(Period pd, BarFreq freq, DataType type)
+        public MultiPeriod MultiPeriod
         {
-            // Does not apply to Daily and above tables...
-
+            get => m_MultiPeriod;
+            set => SetPeriod(m_MultiPeriod);
         }
 
-        public Period Period { get; }
+        private MultiPeriod m_MultiPeriod = null;
 
-        private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; } 
+        public void SetPeriod(MultiPeriod mp, CancellationTokenSource cts = null)
+        {
+            lock (BarTableLUT)
+            {
+                foreach (BarTable bt in BarTableLUT.Values)
+                {
+                    bt.LoadBars(mp, AdjustDividend, cts);
+                }
+
+                m_MultiPeriod = mp;
+            }
+        }
+
+        public void SetPeriod(Period pd, CancellationTokenSource cts = null) => SetPeriod(new MultiPeriod(pd), cts);
+
+        private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; }
             = new Dictionary<(BarFreq freq, DataType type), BarTable>();
 
         public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
@@ -54,50 +68,54 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public BarTable GetOrCreateBarTable(BarFreq freq, DataType type = DataType.Trades, bool adjustDividend = false, CancellationTokenSource cts = null)
+        public BarTable this[BarFreq freq, DataType type = DataType.Trades] => GetOrCreateBarTable(freq, type);
+
+        public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, CancellationTokenSource cts = null)
         {
-            Period pd = new(Period);
             var key = (freq, type);
+
             lock (BarTableLUT)
             {
                 if (!BarTableLUT.ContainsKey(key))
                 {
-                    if (type == DataType.Trades && freq >= BarFreq.Daily)
-                        BarTableLUT[key] = Contract.GetOrCreateDailyBarTable(freq);
-                    else
-                    {
-                        DateTime newStart = pd.Start.AddSeconds(-1000 * freq.GetAttribute<BarFreqInfo>().Frequency.Span.TotalSeconds);
-                        pd.Insert(newStart); // Always have enough bars to buffer for good TA averages.
-
-                        // TODO: non-Trades and above daily BarTable shall be downloaded at full range...
-                        BarTableLUT[key] = Contract.LoadBarTable(pd, freq, type, adjustDividend, cts);
-                    }
+                    BarTableLUT[key] = LoadBarTable(freq, type, m_MultiPeriod, cts);
                 }
 
                 return BarTableLUT[key];
             }
         }
 
-        public Bar Find(DateTime time, BarFreq freq, DataType type = DataType.Trades)
+        private BarTable LoadBarTable(BarFreq barFreq, DataType dataType, MultiPeriod mp = null, CancellationTokenSource cts = null)
         {
-            BarTable bt = GetOrCreateBarTable(freq, type);
-            return bt[time];
+            BarDataFile bdf_daily_base = Contract.GetBarDataFile(BarFreq.Daily);
+            bdf_daily_base.Fetch(Period.Full, cts);
+
+            if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
+            {
+                BarTable bt = new(this, BarFreq.Daily, DataType.Trades);
+                bt.LoadBars(bdf_daily_base, AdjustDividend);
+                return bt;
+            }
+            else if (barFreq > BarFreq.Daily)
+            {
+                BarDataFile bdf_daily = dataType == DataType.Trades ? bdf_daily_base : Contract.GetBarDataFile(BarFreq.Daily, dataType);
+
+                if (dataType != DataType.Trades)
+                    bdf_daily.Fetch(Period.Full, cts);
+
+                BarTable bt_daily = new(this, BarFreq.Daily, dataType);
+                var sorted_daily_list = bdf_daily.LoadBars(bt_daily, AdjustDividend);
+
+                BarTable bt = new(this, barFreq, dataType);
+                bt.LoadFromSmallerBar(sorted_daily_list);
+                return bt;
+            }
+            else
+            {
+                BarTable bt = new(this, barFreq, dataType);
+                bt.LoadBars(mp, AdjustDividend);
+                return bt;
+            }
         }
-    }
-
-    public sealed class BarTableGroup 
-    {
-        private Dictionary<Contract, BarTableSet> ContractBarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
-
-        public BarTable GetOrCreateBarTable(Contract c, BarFreq freq, DataType type = DataType.Trades, bool adjustDividend = false, CancellationTokenSource cts = null)
-        {
-            if (!ContractBarTableSetLUT.ContainsKey(c))
-                ContractBarTableSetLUT[c] = new BarTableSet(c);
-
-            BarTableSet bts = ContractBarTableSetLUT[c];
-
-            return bts.GetOrCreateBarTable(freq, type, adjustDividend, cts);
-        }
-
     }
 }

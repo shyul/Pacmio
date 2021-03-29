@@ -15,38 +15,15 @@ using Xu;
 namespace Pacmio
 {
     public static class BarDataFileManager
-    {
-        private static Dictionary<(Contract c, BarFreq barFreq, DataType type), BarDataFile> DataLUT { get; }
-            = new Dictionary<(Contract c, BarFreq barFreq, DataType type), BarDataFile>();
-
-        public static void Clear()
-        {
-            lock (DataLUT)
-            {
-                DataLUT.Clear();
-            }
-
-            GC.Collect();
-        }
-
-        public static BarDataFile GetOrCreateBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
+    {        
+        public static BarDataFile GetBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
         {
             if (barFreq > BarFreq.Daily) throw new Exception("We don't support storging BarFreq greater than daily as file");
 
-            var key = (c, barFreq, type);
-
-            lock (DataLUT)
-            {
-                if (!DataLUT.ContainsKey(key))
-                {
-                    DataLUT[key] = BarDataFile.LoadFile((c.Key, barFreq, type));
-                }
-
-                return DataLUT[key];
-            }
+            return BarDataFile.LoadFile((c.Key, barFreq, type));
         }
 
-        public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetOrCreateBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
+        public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
 
         #region Download
 
@@ -87,17 +64,5 @@ namespace Pacmio
         }
 
         #endregion Download
-
-        #region File Operation
-
-        public static void Save()
-        {
-            lock (DataLUT)
-            {
-                Parallel.ForEach(DataLUT.Values.Where(n => n.IsModified), bi => bi.SaveFile());
-            }
-        }
-
-        #endregion File Operation
     }
 }

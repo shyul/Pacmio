@@ -31,9 +31,10 @@ namespace Pacmio
     {
         #region Ctor
 
-        public BarTable(Contract c, BarFreq barFreq, DataType type)
+        public BarTable(BarTableSet bts, BarFreq barFreq, DataType type)
         {
-            Contract = c;
+            BarTableSet = bts;
+            Contract = bts.Contract;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
             Type = type;
@@ -45,14 +46,7 @@ namespace Pacmio
             CalculateTickTask.Start();
         }
 
-        public BarTable(BarDataFile bdf, Period period = null, bool adjustDividend = false) : this(bdf.Contract, bdf.BarFreq, bdf.Type)
-        {
-            if (period is not null && !period.IsEmpty)
-            {
-                var sorted_list = bdf.LoadBars(this, period, adjustDividend);
-                LoadBars(sorted_list);
-            }
-        }
+
 
         ~BarTable() => Dispose();
 
@@ -84,6 +78,11 @@ namespace Pacmio
         public bool Enabled { get; set; } = true;
 
         public bool AdjustDividend { get; set; } = false;
+
+        /// <summary>
+        /// BarTableSet this BarTable belongs to: specified for multi-time frame access.
+        /// </summary>
+        public BarTableSet BarTableSet { get; }
 
         public Contract Contract { get; }
 
@@ -344,6 +343,30 @@ namespace Pacmio
                 Rows.Clear();
                 ResetCalculationPointer();
             }
+        }
+
+        public void LoadBars(MultiPeriod mp, bool adjustDividend, CancellationTokenSource cts = null)
+        {
+            if (mp is not null)
+            {
+                BarDataFile bdf = Contract.GetBarDataFile(BarFreq, Type);
+                foreach (var period in mp)
+                {
+                    Period pd = new Period(period);
+                    DateTime newStart = pd.Start.AddSeconds(-1000 * Frequency.Span.TotalSeconds);
+                    pd.Insert(newStart);
+                    bdf.Fetch(pd, cts);
+                }
+
+                var sorted_list = bdf.LoadBars(this, mp, adjustDividend);
+                LoadBars(sorted_list);
+            }
+        }
+
+        public void LoadBars(BarDataFile bdf, bool adjustDividend)
+        {
+            var sorted_list = bdf.LoadBars(this, adjustDividend);
+            LoadBars(sorted_list);
         }
 
         public void LoadBars(List<Bar> sorted_bars)

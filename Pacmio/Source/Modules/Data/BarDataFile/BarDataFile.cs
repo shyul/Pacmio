@@ -315,6 +315,23 @@ namespace Pacmio
             return AdjustBars(bt, sortedList, adjustDividend);
         }
 
+        public List<Bar> LoadBars(BarTable bt, MultiPeriod pds, bool adjustDividend = false)
+        {
+            if (this != bt) throw new Exception("BarTable must match!");
+
+            List<Bar> sortedList = null;
+
+            lock (DataLockObject)
+            {
+                sortedList = Rows.
+                    Where(n => pds.Contains(n.Key)).
+                    OrderBy(n => n.Key).
+                    Select(n => new Bar(bt, n.Key, n.Value.O, n.Value.H, n.Value.L, n.Value.C, n.Value.V, n.Value.SRC)).ToList();
+            }
+
+            return AdjustBars(bt, sortedList, adjustDividend);
+        }
+
         public List<Bar> LoadBars(BarTable bt, bool adjustDividend = false)
         {
             if (this != bt) throw new Exception("BarTable must match!");

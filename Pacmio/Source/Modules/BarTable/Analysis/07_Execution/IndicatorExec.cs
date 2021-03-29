@@ -129,8 +129,6 @@ namespace Pacmio.Analysis
         /// </summary>
         public virtual int TradingLength { get; set; } = 1;
 
-        public BarTable GetTrainingTable(Contract c) => BarTableManager.GetOrCreateDailyBarTable(c, TrainingUnitFreq);
-
         #endregion Training Settings
     }
 }
