@@ -69,33 +69,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Pacmio.Analysis;
 using Xu;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
     public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
     {
-        public IndicatorSet(IndicatorExec ie, BarFreq freq, DataType type) 
-        {
-            ExecutingIndicator = ie;
-            ExecutingTimeFrame = (freq, type);
-            Indicators[ExecutingTimeFrame] = ExecutingIndicator;
-        }
-
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
             var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.Type))).Where(bt => bt.LastCalculatedTickTime < tickTime);
             return btList.Count() == 0;
         }
-
-        #region Indicators
-
-        public IndicatorExec ExecutingIndicator { get; set; }
-
-        public (BarFreq freq, DataType type) ExecutingTimeFrame { get; set; }
 
         private Dictionary<(BarFreq freq, DataType type), Indicator> Indicators { get; } = new();
 
@@ -108,23 +92,13 @@ namespace Pacmio
                 var key = (freq, type);
                 return Indicators.ContainsKey(key) ? Indicators[key] : null;
             }
-            set
-            {
-                var key = (freq, type);
-                if (key != ExecutingTimeFrame)
-                    Indicators[(freq, type)] = value;
-                else
-                    throw new Exception("Can not override default executing indicator");
-            }
+
+            set => Indicators[(freq, type)] = value;
         }
 
         public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
             => Indicators.Select(n => (n.Key.freq, n.Key.type, new BarAnalysisSet(n.Value))).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion Indicators
-
-
     }
 }

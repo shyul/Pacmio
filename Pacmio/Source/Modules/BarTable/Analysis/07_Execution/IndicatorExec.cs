@@ -23,9 +23,9 @@ namespace Pacmio.Analysis
     {
         protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
         {
-            IndicatorSet = new(this, freq, type);
-      
+            //IndicatorSet = new(this, freq, type);
 
+            IndicatorSet = new();
 
             Column_Result = new DatumColumn(Name, typeof(ExecutionDatum));
 
@@ -109,6 +109,8 @@ namespace Pacmio.Analysis
 
 
         #region Training Settings
+
+        //   public double SlippageRatio { get; set; } = 0.0001;
 
         /// <summary>
         /// The unit for training time frames

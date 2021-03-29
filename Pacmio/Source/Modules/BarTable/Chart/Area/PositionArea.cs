@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {

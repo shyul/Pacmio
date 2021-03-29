@@ -8,11 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Xu;
+using Pacmio.Analysis;
 
 namespace Pacmio
 {
     public static class SimulationManager
     {
+        // Find Contracts!!
+
+
         public static Dictionary<Contract, BarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
 
         public static void Run(IndicatorSet s, Period period)

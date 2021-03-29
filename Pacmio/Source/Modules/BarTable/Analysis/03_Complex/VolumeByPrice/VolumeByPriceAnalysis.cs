@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class VolumeByPriceAnalysis : BarAnalysis
+    public sealed class VolumeByPriceAnalysis : BarAnalysis, ISingleComplex
     {
         public VolumeByPriceAnalysis()
         {

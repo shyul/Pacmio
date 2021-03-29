@@ -90,6 +90,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrame.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrameDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalType.cs" />
@@ -265,7 +267,7 @@
     <Compile Include="Source\Modules\Decision\DecisionDataManager.cs" />
     <Compile Include="Source\Modules\Trade\Account\AccountInfo.cs" />
     <Compile Include="Source\Modules\Decision\Simulation\PositionSimTools.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\07_Execution\IndicatorSet.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorSet.cs" />
     <Compile Include="Source\Modules\Trade\TradeInfo\LiquidityType.cs" />
     <Compile Include="Source\Modules\_Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\_Types\DataType.cs" />
