@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 using Xu;
 using Pacmio.Analysis;
 
@@ -15,9 +15,6 @@ namespace Pacmio
     public static class SimulationManager
     {
         // Find Contracts!!
-
-
-        public static Dictionary<Contract, BarTableSet> BarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
 
         public static void Run(IndicatorSet s, Period period)
         {
@@ -39,5 +36,53 @@ namespace Pacmio
 
             }
         }
+
+
+        #region Search for tradeable contracts
+
+        public static (double BullishPercent, double BearishPercent) Evaluate(this BarTable bt, Indicator indf)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
+
+        public static (double HighScorePercent, double LowScorePercent) Evaluate2(Indicator indf, BarTable bt)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
+
+        public static IEnumerable<Contract> Search(Indicator ind, Period pd)
+        {
+            return Search(ContractManager.Values.Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive).OrderBy(n => n.Name).Select(n => n as Stock).ToList(), ind, pd);
+        }
+
+        public static IEnumerable<Contract> Search(IEnumerable<Contract> clist, Indicator ind, Period pd) 
+        {
+
+            return new List<Contract>();
+        }
+
+        #endregion Search for tradeable contracts
     }
 }
