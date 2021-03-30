@@ -259,4 +259,23 @@ namespace Pacmio
             }
         }
     }
+
+    /// public void Simulate(BarTableSet bts, IndicatorSet inds, OrderRule)
+    /// {
+    ///      1) Run Indicators (includeded in the Strategy) ->
+    ///      1.5) Run higher timeframe indicator first
+    ///      1.6) Yield MultiPeriod for intested intraday bars
+    ///      2) Run Intraday Indicators
+    ///      3) Yield all scores ->
+    ///      4) Run OrderRules identify all of the scores
+    ///      5) Yield OrderDatum Only
+    ///
+    /// }
+
+
+    public class OrderRule 
+    {
+    
+    
+    }
 }

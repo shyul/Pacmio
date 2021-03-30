@@ -119,6 +119,8 @@ namespace Pacmio.Analysis
             }
         }
 
+        public BarAnalysisSet this[BarTable bt] => BarAnalysisSetLUT.ContainsKey((bt.BarFreq, bt.Type)) ? BarAnalysisSetLUT[(bt.BarFreq, bt.Type)] : null;
+
         private Dictionary<(BarFreq freq, DataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
 
         public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
@@ -129,6 +131,52 @@ namespace Pacmio.Analysis
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+        public MultiPeriod Evaluate(BarTable bt)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = this[bt];
+                bt.CalculateRefresh(bas);
+
+            }
+
+            return null;
+        }
+
+        public static (double BullishPercent, double BearishPercent) Evaluate(BarTable bt, Indicator indf)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
+
+        public static (double HighScorePercent, double LowScorePercent) Evaluate2(Indicator indf, BarTable bt)
+        {
+            int countTotal = bt.Count;
+            if (countTotal > 0)
+            {
+                var bas = BarAnalysisSet.Create(indf);
+                bt.CalculateRefresh(bas);
+                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
+                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
+                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
+                return (countBullish / countTotal, countBearish / countTotal);
+            }
+            else
+                return (0, 0);
+        }
 
         /*
         public static void LoadBarTables(IEnumerable<Contract> list)
