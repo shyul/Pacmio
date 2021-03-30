@@ -2,6 +2,12 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
+/// MACD (Moving Average Convergence/Divergence Oscillator)
+/// https://school.stockcharts.com/doku.php?id=technical_indicators:moving_average_convergence_divergence_macd
+/// 
+/// auto Backtesting is STUPID... How to actually get a 65% WIN RATE in Trading | Algo Forex Day Trading
+/// https://youtu.be/vq0mtlJNJMg
+/// 
 /// ***************************************************************************
 
 using System;

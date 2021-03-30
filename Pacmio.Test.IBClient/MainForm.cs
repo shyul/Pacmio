@@ -53,7 +53,38 @@ namespace TestClient
             }
         }
 
-        int MainProgBarValue = 0;
+        private Task PercentTask { get; }
+
+        float Percent { get; set; } = 0;
+
+        private void ProgressWorker()
+        {
+            float percent = 0;
+
+            while (true)
+            {
+                if(Percent != percent) 
+                {
+                    percent = Percent;
+                    int pct = percent.ToInt32();
+
+                    if (pct < 0) pct = 0;
+                    else if (pct > 100) pct = 100;
+
+                    if(MainProgBar.Value != pct) 
+                    {
+                        this?.Invoke(() =>
+                        {
+                            MainProgBar.Value = pct;
+                        });
+                    }
+
+                    Console.WriteLine("Progress Reported: " + percent.ToString("0.##") + "%");
+                }
+
+                Thread.Sleep(30);
+            }
+        }
 
         public MainForm()
         {
@@ -71,15 +102,21 @@ namespace TestClient
             Root.Form.AddForm(DockStyle.Fill, 0, OrderInfoGridView);
             Root.Form.AddForm(DockStyle.Fill, 0, PositionInfoGridView);
 
+            PercentTask = new Task(() => ProgressWorker());
+            PercentTask.Start();
             Progress = new Progress<float>(percent =>
             {
-                //Console.WriteLine("Progress Reported: " + percent.ToString("0.##") + "%");
+                //Console.WriteLine("++++++++++++++++++ Progress Reported: " + percent.ToString("0.##") + "%");
+                Percent = percent;
+                /*
                 int pct = percent.ToInt32();
                 if (pct >= 0 && pct <= 100 && MainProgBarValue != pct)
                 {
+
+
                     MainProgBar.Value = MainProgBarValue = pct;
                     Console.WriteLine("Progress Reported: " + MainProgBarValue.ToString("0.##") + "%");
-                }
+                }*/
             });
 
             Detailed_Progress = new Progress<float>(p =>
@@ -447,13 +484,6 @@ namespace TestClient
                     BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(pd, Cts);
                     BarTable bt = bts[freq, type];
-
-                    /*
-                    BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
@@ -483,25 +513,23 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
 
-
                 double totalseconds = 0;
                 float total_num = cList.Count();
                 float i = 0;
 
-                TableList = new List<BarTable>();
-
                 Parallel.ForEach(cList, c => {
                     DateTime startTime = DateTime.Now;
                     //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(pd, Cts);
+                    BarTable bt = bts[freq, type];
+
                     bt.CalculateRefresh(bas);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
                     totalseconds += seconds;
                     i++;
                     Progress.Report(i * 100.0f / total_num);
-                    TableList.Add(bt);
                 });
 
                 DateTime endTime = DateTime.Now;
@@ -509,7 +537,7 @@ namespace TestClient
                 Console.WriteLine("################# Finished Loading Tables and calculation!! Start searching now!! ####################");
 
                 DateTime time = DateTime.Now.AddDays(-8).Date;
-
+                /*
                 var result = TableList.AsParallel().Where(bt =>
                     //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
                     //bt.LastClose > 10 && bt.LastClose < 100 &&
@@ -526,12 +554,11 @@ namespace TestClient
                 );
 
                 Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
-
+                */
             }, Cts.Token);
 
         }
 
-        public List<BarTable> TableList { get; set; }
 
         private void BtnLoadAllBarTable_Click(object sender, EventArgs e)
         {
@@ -557,24 +584,24 @@ namespace TestClient
                 float total_num = cList.Count();
                 float i = 0;
 
-                TableList = new List<BarTable>();
-
-                Parallel.ForEach(cList, c => {
+                Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, 
+                    c => {
                     DateTime startTime = DateTime.Now;
-                    //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(pd, Cts);
+                    BarTable bt = bts[freq, type];
+
                     bt.CalculateRefresh(bas);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
                     totalseconds += seconds;
                     i++;
                     Progress.Report(i * 100.0f / total_num);
-                    TableList.Add(bt);
                 });
 
                 DateTime time = DateTime.Now.AddDays(-6).Date;
-
+                /*
                 var result = TableList.AsParallel().Where(bt =>
                     //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
                     //bt.LastClose > 10 && bt.LastClose < 100 &&
@@ -590,7 +617,9 @@ namespace TestClient
                     Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
                 );
 
-                Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
+                Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());*/
+
+                Console.WriteLine("averagetime = " + totalseconds / BarTableGroup.Count + " | Count = " + BarTableGroup.Count);
             }, Cts.Token);
         }
 

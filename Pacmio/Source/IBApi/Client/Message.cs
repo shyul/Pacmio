@@ -100,6 +100,15 @@ namespace Pacmio.IB
                                 case IncomingMessage.HistoricalNewsEnd:
                                 case IncomingMessage.SecurityDefinitionOptionParameter:
                                 case IncomingMessage.SecurityDefinitionOptionParameterEnd:
+
+                                case IncomingMessage.HistoricalData:
+                                case IncomingMessage.HistoricalDataUpdate:
+                                case IncomingMessage.HeadTimestamp:
+                                case IncomingMessage.HistogramData:
+                                case IncomingMessage.HistoricalTick:
+                                case IncomingMessage.HistoricalTickBidAsk:
+                                case IncomingMessage.HistoricalTickLast:
+
                                     SequentialMessageBuffer.Enqueue(fields);
                                     break;
 

@@ -305,7 +305,7 @@ namespace Pacmio.IB
                 }
 
                 data_pd.Insert(data_pd.Stop + ActiveBarDataFile_HistoricalData.Frequency.Span);
-                ActiveBarDataFile_HistoricalData.AddRows(rows, DataSourceType.IB, data_pd);
+                ActiveBarDataFile_HistoricalData.AddRows(rows, DataSourceType.IB, data_pd, true);
                 ActiveBarDataFile_HistoricalData.SaveFile();
             }
 

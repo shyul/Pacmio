@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\02_Advanced\DPPMO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrame.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrameDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\SwingTradeIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\OverSoldFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossMomentumIndicator.cs" />

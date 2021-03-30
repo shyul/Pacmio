@@ -73,7 +73,6 @@ namespace Pacmio
 
             CalculateTickCancelTs.Cancel();
             Clear();
-            GC.Collect();
         }
 
         public override string ToString() => Name + " | LastTime = " + (BarFreq >= BarFreq.Daily ? LastTime.ToString("MM-dd-yyyy") : LastTimeBound.ToString("dd, HH:mm:ss")) + " | Count = " + Count + " | LastClose = " + LastClose;

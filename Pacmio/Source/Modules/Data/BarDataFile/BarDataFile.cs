@@ -109,7 +109,9 @@ namespace Pacmio
         [IgnoreDataMember]
         public DateTime HistoricalHeadTime
         {
-            get => (!m_HistoricalHeadTime.IsInvalid() && BarFreq < BarFreq.Minute && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
+            get => (!m_HistoricalHeadTime.IsInvalid() && BarFreq < BarFreq.Minute && 
+                m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
+
                 DateTime.Now.Date.AddMonths(-6) :
                 m_HistoricalHeadTime;
 
@@ -259,6 +261,12 @@ namespace Pacmio
                     {
                         MultiPeriod<(double Price, double Volume)> barTableAdjust = FundamentalData.BarTableAdjust(adjustDividend);
 
+                        foreach(var item in barTableAdjust) 
+                        {
+                            Console.WriteLine(item.Key + ": " + item.Value.Price + ", " + item.Value.Volume);
+                        }
+                
+
                         // Please notice b.Time is the start time of the Bar
                         // When the adjust event (split or dividend) happens at d 
                         // The adjust will happen in d-1, which belongs to the
@@ -271,6 +279,9 @@ namespace Pacmio
                         {
                             var row = sortedList[i];
                             var (adj_price, adj_vol) = barTableAdjust[row.time];
+
+                
+
                             sortedList[i] = (row.time, row.O / adj_price, row.H / adj_price, row.L / adj_price, row.C / adj_price, row.V * adj_vol);
                         }
                     }
@@ -298,6 +309,7 @@ namespace Pacmio
                 }
         }
 
+        /*
         public List<Bar> LoadBars(BarTable bt, Period pd, bool adjustDividend = false)
         {
             if (this != bt) throw new Exception("BarTable must match!");
@@ -314,6 +326,7 @@ namespace Pacmio
 
             return AdjustBars(sortedList, adjustDividend);
         }
+        */
 
         public List<Bar> LoadBars(BarTable bt, MultiPeriod pds, bool adjustDividend = false)
         {

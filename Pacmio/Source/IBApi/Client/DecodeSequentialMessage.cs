@@ -111,6 +111,38 @@ namespace Pacmio.IB
                             Parse_HistoricalNewsEnd(fields);
                             break;
 
+                        #region Historical Data
+
+                        case IncomingMessage.HistoricalData:
+                            Parse_HistoricalData(fields);
+                            break;
+
+                        case IncomingMessage.HistoricalDataUpdate:
+                            Parse_HistoricalDataUpdate(fields);
+                            break;
+
+                        case IncomingMessage.HeadTimestamp:
+                            Parse_HistoricalHeadDataTimestamp(fields);
+                            break;
+
+                        case IncomingMessage.HistogramData:
+                            Parse_HistogramData(fields);
+                            break;
+
+                        case IncomingMessage.HistoricalTick:
+                            Parse_HistoricalTick(fields);
+                            break;
+
+                        case IncomingMessage.HistoricalTickBidAsk:
+                            Parse_HistoricalTickBidAsk(fields);
+                            break;
+
+                        case IncomingMessage.HistoricalTickLast:
+                            Parse_HistoricalTickLast(fields);
+                            break;
+
+                        #endregion Historical Data
+
                         case IncomingMessage.SecurityDefinitionOptionParameter:
                         case IncomingMessage.SecurityDefinitionOptionParameterEnd:
                         default:

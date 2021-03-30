@@ -4,6 +4,12 @@
 /// 
 /// Ref 1: https://www.tradingview.com/scripts/choppinessindex/?solution=43000501980
 /// Ref 2: https://www.incrediblecharts.com/indicators/choppiness-index.php
+/// Ref 3: https://tradingsim.com/blog/choppiness-index-indicator/
+/// 
+/// #1 – Buy or Sell the Breakout after extreme Choppiness Index Readings
+/// #2 – Ride the Trend using the Choppiness Index Indicator
+/// #3 - Trade within Choppy Markets
+/// #4 – Walk away from stocks that do not trade nicely with the Choppiness Index Indicator
 /// 
 /// ***************************************************************************
 

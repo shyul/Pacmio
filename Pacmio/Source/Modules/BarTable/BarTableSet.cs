@@ -21,7 +21,7 @@ namespace Pacmio
         IDisposable,
         IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
     {
-        public BarTableSet(BarTable bt, bool adjustDividend = false)
+        public BarTableSet(BarTable bt, bool adjustDividend)
         {
             Contract = bt.Contract;
             AdjustDividend = adjustDividend;
@@ -44,6 +44,7 @@ namespace Pacmio
                 var bts = BarTableLUT.Values.ToList();
                 BarTableLUT.Clear();
                 bts.ForEach(n => n.Dispose());
+                GC.Collect();
             }
         }
 

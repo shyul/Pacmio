@@ -120,6 +120,7 @@ namespace Pacmio
             else //if (bdf.BarFreq == BarFreq.Daily)
                 Console.WriteLine("Last Closing Date: " + bdf.Contract.LatestExtendedClosingDateTime.ToString("MMM-dd-yyyy"));
 
+            
             if (bdf.HistoricalHeadTime.IsInvalid())
             {
                 IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
@@ -128,6 +129,8 @@ namespace Pacmio
             {
                 Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
             }
+
+            //Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
 
             if (bdf.Contract.Status != ContractStatus.Error)
             {

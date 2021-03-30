@@ -15,32 +15,41 @@ namespace Pacmio
 {
     public sealed class BarTableGroup
     {
+        public bool AdjustDividend { get; } = false;
+
+        public int Count => ContractBarTableSetLUT.Count();
+
+        public object DataLockObject { get; private set; } = new();
+
         private Dictionary<Contract, BarTableSet> ContractBarTableSetLUT { get; } = new Dictionary<Contract, BarTableSet>();
 
-        public BarTableSet this[Contract c] 
+        public BarTableSet this[Contract c]
         {
             get
             {
-                if (!ContractBarTableSetLUT.ContainsKey(c))
-                    ContractBarTableSetLUT[c] = new BarTableSet(c, false);
+                lock (DataLockObject) 
+                {
+                    if (!ContractBarTableSetLUT.ContainsKey(c))
+                        ContractBarTableSetLUT[c] = new BarTableSet(c, AdjustDividend);
 
-                return ContractBarTableSetLUT[c];
+                    return ContractBarTableSetLUT[c];
+                }
             }
         }
 
-
-
-        public BarTable GetOrCreateBarTable(Contract c, BarFreq freq, DataType type = DataType.Trades, CancellationTokenSource cts = null)
+        public BarTable this[Contract c, BarFreq freq, DataType type = DataType.Trades]
         {
-            if (!ContractBarTableSetLUT.ContainsKey(c))
-                ContractBarTableSetLUT[c] = new BarTableSet(c, AdjustDividend);
+            get
+            {
+                lock (DataLockObject)
+                {
+                    if (!ContractBarTableSetLUT.ContainsKey(c))
+                        ContractBarTableSetLUT[c] = new BarTableSet(c, AdjustDividend);
 
-            BarTableSet bts = ContractBarTableSetLUT[c];
-
-            return bts.GetOrCreateBarTable(freq, type, cts);
+                    BarTableSet bts = ContractBarTableSetLUT[c];
+                    return bts.GetOrCreateBarTable(freq, type);
+                }
+            }
         }
-
-        public bool AdjustDividend { get; } = false;
-
     }
 }

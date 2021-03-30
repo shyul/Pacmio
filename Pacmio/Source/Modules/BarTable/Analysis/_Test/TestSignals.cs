@@ -30,9 +30,12 @@ namespace Pacmio.Analysis
 
                 var twrc = new RossReversalndicator();
 
+                var chop = new CHOP(14);
+
                 List<BarAnalysis> sample_list = new()
                 {
                     twrc,
+                    chop
                 };
 
                 BarAnalysisSet bas = new(sample_list);

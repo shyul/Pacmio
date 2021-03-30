@@ -341,8 +341,10 @@ namespace Pacmio
                                     {
                                         DateTime time = m_BarTable.IndexToTime(i);
                                         DateTime last_time = m_BarTable.IndexToTime(i - 1);
-                                        if (time.DayOfWeek < last_time.DayOfWeek) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd"))); ///.WeekOfYear().ToString())); ;
-                                        if (time.Day % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Day.ToString()));
+                                        if (time.DayOfWeek < last_time.DayOfWeek) 
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd"))); ///.WeekOfYear().ToString())); ;
+                                        if (time.Day % MinorTick.Length == 0)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Day.ToString()));
                                         px++;
                                     }
                                 }
@@ -370,20 +372,32 @@ namespace Pacmio
 
                             case TimeUnit.Hours: // 09, 10, 11, ... 16
                                 MinorTick = Frequency * tickMulti;
-                                MajorTick = new Frequency(TimeUnit.Hours, 1);
+                                MajorTick = new Frequency(TimeUnit.Hours, 2);
                                 for (int i = StartPt; i < StopPt; i++)
                                 {
                                     DateTime time = m_BarTable.IndexToTime(i);
                                     DateTime last_time = m_BarTable.IndexToTime(i - 1);
-                                    if (time.Hour < last_time.Hour)
-                                    {
-                                        if (time.Day < last_time.Day)
-                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("dd")));
-                                        else
-                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("HH:mm")));
-                                    }
 
-                                    //if (time.DayOfWeek < last_time.DayOfWeek) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Day.ToString()));
+                                    if (Frequency.Length == 1)
+                                    {
+                                        if (time.Month < last_time.Month)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("yyyy")));
+                                        else if (time.Month > last_time.Month)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM")));
+                                        else if (time.Day > last_time.Day)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, "[" + time.ToString("%d") + "]"));
+                                        else if (time.Hour % 2 == 0)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("%H")));
+                                    }
+                                    else
+                                    {
+                                        if (time.Month < last_time.Month)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("yyyy")));
+                                        else if (time.Month > last_time.Month)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM")));
+                                        else if (time.DayOfWeek < last_time.DayOfWeek)
+                                            AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("%d")));
+                                    }
                                     px++;
                                 }
                                 break;
@@ -399,7 +413,7 @@ namespace Pacmio
                                     if (time.Hour > last_time.Hour)
                                         AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("HH:mm")));
                                     else if (time.Day > last_time.Day)
-                                        AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd")));
+                                        AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-d")));
 
                                     if (time.Minute % 10 == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("HH:mm")));
                                     px++;
