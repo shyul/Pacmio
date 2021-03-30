@@ -634,13 +634,23 @@ namespace Pacmio
                     foreach (BarAnalysisPointer bap in BarAnalysisPointerLUT.Values)
                         bap.StartPt = Math.Min(bap.StartPt, pt); //if (bap.StartPt > pt) bap.StartPt = pt;
                 }
+
+            lock (DataLockObject) 
+            {
+                for (int i = pt; i < Count; i++)
+                {
+                    this[i].CandleStickList.Clear();
+                }
+            }
         }
+
 
         public void SetCalculationPointer(ref DateTime time)
         {
             int pt = IndexOf(ref time) - 1;
             SetCalculationPointer(pt);
         }
+
 
         private BarAnalysisPointer Calculate(BarAnalysis ba)
         {
