@@ -77,7 +77,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
     {
@@ -133,69 +133,15 @@ namespace Pacmio.Analysis
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
-        public MultiPeriod Evaluate(BarTable bt)
-        {
-            int countTotal = bt.Count;
-            if (countTotal > 0)
-            {
-                var bas = this[bt];
-                bt.CalculateRefresh(bas);
 
-            }
 
-            return null;
-        }
 
-        public static (double BullishPercent, double BearishPercent) Evaluate(BarTable bt, Indicator indf)
-        {
-            int countTotal = bt.Count;
-            if (countTotal > 0)
-            {
-                var bas = BarAnalysisSet.Create(indf);
-                bt.CalculateRefresh(bas);
-                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
-                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
-                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
-                return (countBullish / countTotal, countBearish / countTotal);
-            }
-            else
-                return (0, 0);
-        }
 
-        public static (double HighScorePercent, double LowScorePercent) Evaluate2(Indicator indf, BarTable bt)
-        {
-            int countTotal = bt.Count;
-            if (countTotal > 0)
-            {
-                var bas = BarAnalysisSet.Create(indf);
-                bt.CalculateRefresh(bas);
-                var scores = bt.Bars.Select(n => n.GetSignalScore(indf));
-                int countBullish = scores.Where(n => n.Bullish >= indf.HighScoreLimit).Count();
-                int countBearish = scores.Where(n => n.Bearish >= indf.LowScoreLimit).Count();
-                return (countBullish / countTotal, countBearish / countTotal);
-            }
-            else
-                return (0, 0);
-        }
 
-        /*
-        public static void LoadBarTables(IEnumerable<Contract> list)
-        {
 
-        }
 
-        public static void Search(IEnumerable<Contract> list, Indicator filter, DateTime AsOfDate, BarFreq timeFrame = BarFreq.Daily)
-        {
-            BarAnalysisSet bas = new(filter);
 
-            var tables = list.Select(c => c.LoadDailyBarTable(timeFrame));
-            tables.AsParallel().Where(n => n.LastTime >= AsOfDate).RunEach(bt =>
-            {
-                bt.CalculateRefresh(bas);
-            });
-
-            //var res = tables.Where(n => n.LastBar[filter])
-
-        }*/
     }
+
+
 }

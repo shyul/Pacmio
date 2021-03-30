@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public sealed class DualDataSignal : SignalAnalysis
     {

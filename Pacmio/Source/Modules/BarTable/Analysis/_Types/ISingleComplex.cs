@@ -6,7 +6,7 @@
 
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public interface ISingleComplex : IDependable
     {

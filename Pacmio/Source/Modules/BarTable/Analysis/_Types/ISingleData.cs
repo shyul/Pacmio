@@ -7,7 +7,7 @@
 using System.Drawing;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public interface ISingleData : IDependable
     {

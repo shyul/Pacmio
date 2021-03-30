@@ -469,9 +469,9 @@ namespace Pacmio
         {
             var (bullish, bearish) = GetSignalScore(filter.SignalColumns);
 
-            if (bullish > filter.HighScoreLimit && bullish > bearish)
+            if (bullish > filter.BullishPointLimit && bullish > bearish)
                 return FilterType.Bullish;
-            else if (bearish < filter.LowScoreLimit && Math.Abs(bearish) > bullish)
+            else if (bearish < filter.BearishPointLimit && Math.Abs(bearish) > bullish)
                 return FilterType.Bearish;
             else
                 return FilterType.None;

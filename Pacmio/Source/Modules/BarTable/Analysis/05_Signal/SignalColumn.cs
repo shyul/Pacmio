@@ -8,7 +8,7 @@ using System;
 using System.Drawing;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class SignalColumn : DatumColumn
     {

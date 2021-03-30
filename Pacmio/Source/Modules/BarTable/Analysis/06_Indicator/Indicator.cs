@@ -11,12 +11,11 @@
 
 using System;
 using System.Collections.Generic;
-
 using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     /// <summary>
     /// Indication: Move into Either Enter or Exit
@@ -33,9 +32,12 @@ namespace Pacmio.Analysis
 
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
 
-        public double HighScoreLimit { get; set; }
+        public double BullishPointLimit { get; set; }
 
-        public double LowScoreLimit { get; set; }
+        public double BearishPointLimit { get; set; }
+
+
+
 
         #region Series
 
@@ -71,12 +73,5 @@ namespace Pacmio.Analysis
         }
 
         #endregion Series
-    }
-
-    public enum FilterType : int
-    {
-        Bearish = -1,
-        None = 0,
-        Bullish = 1,
     }
 }

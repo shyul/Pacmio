@@ -4,7 +4,7 @@
 /// 
 /// ***************************************************************************
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public enum MovingAverageType : int
     {

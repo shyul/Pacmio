@@ -14,6 +14,13 @@ using Pacmio.Analysis;
 
 namespace Pacmio
 {
+    public enum FilterType : int
+    {
+        Bearish = -1,
+        None = 0,
+        Bullish = 1,
+    }
+
     public sealed class SignalArea : OscillatorArea, IBarChartArea
     {
         public SignalArea(BarChart chart, SignalSeries sgs) : base(chart, "Signal", 10)

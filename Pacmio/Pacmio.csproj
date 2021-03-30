@@ -101,6 +101,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\SwingTradeIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorEvaluationResult.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\OverSoldFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossMomentumIndicator.cs" />

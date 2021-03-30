@@ -10,7 +10,7 @@ using System.Linq;
 using System.Drawing;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class OscillatorSignal : SignalAnalysis
     {

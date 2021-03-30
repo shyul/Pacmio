@@ -8,7 +8,7 @@ using System.Drawing;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public abstract class DebugSeries : BarAnalysis, IChartSeries
     {
