@@ -131,6 +131,8 @@ namespace Pacmio
         /// </summary>
         private int LastIndex => Count - 1;
 
+        #endregion Data
+
         #region Access Bars
 
         /// <summary>
@@ -333,8 +335,6 @@ namespace Pacmio
         }
 
         #endregion Time
-
-        #endregion Data
 
         #region Load Bars
 

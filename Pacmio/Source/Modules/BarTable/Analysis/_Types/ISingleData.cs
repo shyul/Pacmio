@@ -11,6 +11,8 @@ namespace Pacmio
 {
     public interface ISingleData : IDependable
     {
+        //Color Color { get; }
+
         NumericColumn Column_Result { get; }
     }
 }

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Xu;
 
 namespace Pacmio
@@ -22,6 +23,9 @@ namespace Pacmio
             GroupName = Name = GetType().Name + label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
+            BullishColor = analysis.UpperColor;
+            BearishColor = analysis.LowerColor;
+
             analysis.AddChild(this);
         }
 
@@ -33,6 +37,9 @@ namespace Pacmio
             string label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
             GroupName = Name = GetType().Name + label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
+
+            if (fast_analysis is IChartSeries fast_ics) BullishColor = fast_ics.Color;
+            if (slow_analysis is IChartSeries slow_ics) BearishColor = slow_ics.Color;
 
             fast_analysis.AddChild(this);
             slow_analysis.AddChild(this);
@@ -70,15 +77,15 @@ namespace Pacmio
             { DualDataSignalType.CrossDown, new double[] { -4, -3.5, -3, -2.5 } },
             { DualDataSignalType.TrendUp, new double[] { 0.5 } },
             { DualDataSignalType.TrendDown, new double[] { -0.5 } },
+            { DualDataSignalType.BounceUp, new double[] { 10, 7, 2 } },
+            { DualDataSignalType.BounceDown, new double[] { -10, -7, -2 } },
         };
 
         public void AddType(DualDataSignalDatum d, DualDataSignalType type)
         {
-            List<DualDataSignalType> list = d.List;
-
-            if (!list.Contains(type))
+            if (!d.List.Contains(type))
             {
-                list.Add(type);
+                d.List.Add(type);
                 d.SetPoints(TypeToTrailPoints[type]);
             }
         }
@@ -87,17 +94,22 @@ namespace Pacmio
         {
             BarTable bt = bap.Table;
 
+            int bounce_range = 5;
+            int bounce_middle_point = Math.Floor(bounce_range / 2f).ToInt32(bounce_range / 2);
+
+
             if (bap.StartPt < 1)
                 bap.StartPt = 1;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                Bar b = bt[i];
+                var bars = bt[i, bounce_range];
+                Bar b = bars.Last();
+
                 double value_fast = b[Fast_Column];
                 double value_slow = b[Slow_Column];
 
                 DualDataSignalDatum d = new(b, Column_Result);
-                //b[Column_Result] = d;
 
                 if (!double.IsNaN(value_fast) && !double.IsNaN(value_slow))
                 {
@@ -122,42 +134,65 @@ namespace Pacmio
                         AddType(d, DualDataSignalType.Below);
                     }
 
-                    Bar b_1 = bt[i - 1];
-
-                    double last_value_fast = b_1[Fast_Column];
-                    double last_value_slow = b_1[Slow_Column];
-
-                    if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
+                    if (bars.Count > 1)
                     {
-                        double last_delta = last_value_fast - last_value_slow;
+                        Bar b_1 = bars[bars.Count - 2];
 
-                        if (value_fast > last_value_fast && value_slow > last_value_slow)
+                        double last_value_fast = b_1[Fast_Column];
+                        double last_value_slow = b_1[Slow_Column];
+
+                        if (!double.IsNaN(last_value_fast) && !double.IsNaN(last_value_slow))
                         {
-                            AddType(d, DualDataSignalType.TrendUp);
-                        }
-                        else if (value_fast < last_value_fast && value_slow < last_value_slow)
-                        {
-                            AddType(d, DualDataSignalType.TrendDown);
+                            double last_delta = last_value_fast - last_value_slow;
+
+                            if (value_fast > last_value_fast && value_slow > last_value_slow)
+                            {
+                                AddType(d, DualDataSignalType.TrendUp);
+                            }
+                            else if (value_fast < last_value_fast && value_slow < last_value_slow)
+                            {
+                                AddType(d, DualDataSignalType.TrendDown);
+                            }
+
+                            if (delta >= 0 && last_delta < 0)
+                            {
+                                AddType(d, DualDataSignalType.CrossUp);
+                            }
+                            else if (delta <= 0 && last_delta > 0)
+                            {
+                                AddType(d, DualDataSignalType.CrossDown);
+                            }
+
+                            double last_delta_abs = Math.Abs(last_delta);
+
+                            if (delta_abs > last_delta_abs)
+                            {
+                                AddType(d, DualDataSignalType.Expansion);
+                            }
+                            else
+                            {
+                                AddType(d, DualDataSignalType.Contraction);
+                            }
                         }
 
-                        if (delta >= 0 && last_delta < 0)
+                        if (bars.Count() == bounce_range)
                         {
-                            AddType(d, DualDataSignalType.CrossUp);
-                        }
-                        else if (delta <= 0 && last_delta > 0)
-                        {
-                            AddType(d, DualDataSignalType.CrossDown);
-                        }
+                            Bar b_first = bars.First();
+                            Bar b_middle = bars.ElementAt(bounce_middle_point);
 
-                        double last_delta_abs = Math.Abs(last_delta);
+                            double first_fast_value = b_first[Fast_Column];
+                            double first_slow_value = b_first[Slow_Column];
+                            double middle_fast_value = b_middle[Fast_Column];
+                            double middle_slow_value = b_middle[Slow_Column];
 
-                        if (delta_abs > last_delta_abs)
-                        {
-                            AddType(d, DualDataSignalType.Expansion);
-                        }
-                        else
-                        {
-                            AddType(d, DualDataSignalType.Contraction);
+                            if (first_fast_value > first_slow_value && value_fast > value_slow && middle_fast_value <= middle_slow_value)
+                            {
+                                AddType(d, DualDataSignalType.BounceUp);
+                            }
+                            else if (first_fast_value < first_slow_value && value_fast < value_slow && middle_fast_value >= middle_slow_value)
+                            {
+                                AddType(d, DualDataSignalType.BounceDown);
+                            }
                         }
                     }
                 }

@@ -14,7 +14,108 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
+    public class CrossIndicator : Indicator
+    {
+        public CrossIndicator(int fast = 5, int slow = 20)
+        {
+            Fast_SingleData = new SMA(fast) { Color = Color.Orange };
+            Slow_SingleData = new SMA(slow) { Color = Color.YellowGreen };
+
+            DualDataSignal = new DualDataSignal(Fast_SingleData, Slow_SingleData);
+
+            string label = "(" + Fast_SingleData.Name + "," + Slow_SingleData.Name + ")";
+            GroupName = Name = GetType().Name + label;
+
+            SignalColumns = new SignalColumn[] { DualDataSignal.Column_Result };
+
+            DualDataSignal.AddChild(this);
+        }
+
+        public ISingleData Fast_SingleData { get; }
+
+        public ISingleData Slow_SingleData { get; }
+
+        public DualDataSignal DualDataSignal { get; }
+
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
+    }
+
     /*
+     * 
+         public class MovingAverageCrossStrategy
+    {
+
+
+        public void Config(BarFreq freq, MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)
+        {
+            //BarAnalysisSet bas = new BarAnalysisSet();
+
+            switch (type_fast)
+            {
+                case MovingAverageType.Simple:
+                    MA_Fast = new SMA(interval_fast);
+                    break;
+                case MovingAverageType.Smoothed:
+                    MA_Fast = new SMMA(interval_fast);
+                    break;
+                case MovingAverageType.Exponential:
+                    MA_Fast = new EMA(interval_fast);
+                    break;
+                case MovingAverageType.Weighted:
+                    MA_Fast = new WMA(interval_fast);
+                    break;
+                case MovingAverageType.Hull:
+                    MA_Fast = new HMA(interval_fast);
+                    break;
+            }
+
+            switch (type_slow)
+            {
+                case MovingAverageType.Simple:
+                    MA_Slow = new SMA(interval_slow);
+                    break;
+                case MovingAverageType.Smoothed:
+                    MA_Slow = new SMMA(interval_slow);
+                    break;
+                case MovingAverageType.Exponential:
+                    MA_Slow = new EMA(interval_slow);
+                    break;
+                case MovingAverageType.Weighted:
+                    MA_Slow = new WMA(interval_slow);
+                    break;
+                case MovingAverageType.Hull:
+                    MA_Slow = new HMA(interval_slow);
+                    break;
+            }
+
+            //bas.List = new List<BarAnalysis>() { MA_Fast, MA_Slow};
+
+
+        }
+
+        public SMA MA_Fast { get; private set; }
+
+        public SMA MA_Slow { get; private set; }
+
+        public SignalColumn SignalColumn { get; }
+
+
+
+
+        // Make this part to research manager...
+        public void Tweak(IEnumerable<(MovingAverageType type_fast, int interval_fast, MovingAverageType type_slow, int interval_slow)> configs) // arg: Tweak Plan....
+        {
+
+        }
+
+
+    }
+     * 
     public class CrossIndicator : Indicator
     {
         public CrossIndicator(ISingleData fast_MA, ISingleData slow_MA)

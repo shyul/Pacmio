@@ -13,6 +13,8 @@ namespace Pacmio
 {
     public enum DualDataSignalType : int
     {
+        None = 0,
+
         Above,
 
         Below,
@@ -28,5 +30,9 @@ namespace Pacmio
         TrendUp,
 
         TrendDown,
+
+        BounceUp = 100,
+
+        BounceDown = -100,
     }
 }

@@ -13,12 +13,27 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SingleDataSignalDatum : SignalDatum
+    public class SingleDataSignalDatum : SignalDatum, IDifferentialDatum
     {
         public SingleDataSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
 
-        public SingleDataSignalType Type { get; set; } = SingleDataSignalType.None;
+        public List<SingleDataSignalType> List { get; } = new();
 
-        public override string Description => Type.ToString();
+        public double Ratio { get; set; }
+
+        public double Difference { get; set; }
+
+        public double DifferenceRatio { get; set; }
+
+        public override string Description => List.ToString(',');
+    }
+
+    public interface IDifferentialDatum
+    {
+        double Ratio { get; }
+
+        double Difference { get; }
+
+        double DifferenceRatio { get; }
     }
 }

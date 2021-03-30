@@ -33,6 +33,10 @@ namespace Pacmio
 
         CrossUp = 6,
 
-        CrossDown = -6
+        CrossDown = -6,
+
+        BounceUp = 100,
+
+        BounceDown = -100,
     }
 }

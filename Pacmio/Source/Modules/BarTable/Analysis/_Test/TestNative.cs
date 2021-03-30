@@ -43,6 +43,9 @@ namespace Pacmio.Analysis
                     csd_pivot,
                     csd_pivotstr,
                     csd_trend,
+
+                    new CrossIndicator(),
+                    new CHOP(),
                 };
 
                 BarAnalysisSet bas = new(sample_list);
