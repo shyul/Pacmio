@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class CandleStickShadowStarAnalysis : BarAnalysis
+    public class CandleStickShadowStarSignal : BarAnalysis
     {
-        public CandleStickShadowStarAnalysis()
+        public CandleStickShadowStarSignal()
         {
             Name = GetType().Name;
         }

@@ -236,7 +236,7 @@ namespace Pacmio
 
         #endregion Smaller Bars
 
-        public List<CandleStickType> CandleStickList { get; } = new();
+
 
         #region Intrinsic Indicators | NativeGainAnalysis
 
@@ -417,6 +417,8 @@ namespace Pacmio
         #endregion Datum Column
 
         #region Signal Information Tools
+
+        public List<CandleStickType> CandleStickList { get; } = new();
 
         public SignalDatum this[SignalColumn dc]
         {

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public interface IPatternObject
     {

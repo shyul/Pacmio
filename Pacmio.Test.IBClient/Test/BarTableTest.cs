@@ -50,8 +50,8 @@ namespace TestClient
                     //new RelativeAnalysis(),
                     //new NarrowRange(),
 
-                    new CandleStickDojiMarubozuAnalysis(),
-                    new CandleStickShadowStarAnalysis(),
+                    new CandleStickDojiMarubozuSignal(),
+                    new CandleStickShadowStarSignal(),
 
                     //new GainAnalysis(),
                     //new TrueRange(),

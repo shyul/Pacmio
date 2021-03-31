@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class CandleStickDojiMarubozuAnalysis : BarAnalysis
+    public class CandleStickDojiMarubozuSignal : BarAnalysis
     {
-        public CandleStickDojiMarubozuAnalysis(double doji_ratio = 0.12, double marubozu_ratio = 0.92)
+        public CandleStickDojiMarubozuSignal(double doji_ratio = 0.12, double marubozu_ratio = 0.92)
         {
             Doji_Ratio = doji_ratio;
             Marubozu_Ratio = marubozu_ratio;

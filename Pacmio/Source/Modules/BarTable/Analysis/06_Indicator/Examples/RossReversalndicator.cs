@@ -31,7 +31,7 @@ namespace Pacmio.Analysis
                 BearishColor = Color.Pink,
             };
 
-            CandleStickDojiMarubozuAnalysis = new CandleStickDojiMarubozuAnalysis();
+            CandleStickDojiMarubozuAnalysis = new CandleStickDojiMarubozuSignal();
             NarrowRange = new NarrowRange();
 
 
@@ -84,7 +84,7 @@ namespace Pacmio.Analysis
 
         public NarrowRange NarrowRange { get; }
 
-        public CandleStickDojiMarubozuAnalysis CandleStickDojiMarubozuAnalysis { get; }
+        public CandleStickDojiMarubozuSignal CandleStickDojiMarubozuAnalysis { get; }
 
         public SignalColumn CandleStickSignalColumn { get; protected set; }
 

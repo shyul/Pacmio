@@ -11,7 +11,7 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public abstract class PatternAnalysis : BarAnalysis, IChartAnalysis, ILevelAnalysis
     {

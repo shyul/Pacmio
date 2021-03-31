@@ -12,7 +12,7 @@ using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class Level : ILevel
     {

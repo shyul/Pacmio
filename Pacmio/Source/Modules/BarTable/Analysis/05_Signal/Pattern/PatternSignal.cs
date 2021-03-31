@@ -1,21 +1,27 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// BarTable Data Types
 /// 
 /// ***************************************************************************
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface ILevelDatum : IDatum//, IEnumerable<Level>
+    public class PatternSignal : SignalAnalysis
     {
-        List<Level> Levels { get; }
+        public PatternSignal(IEnumerable<PatternAnalysis> pas) 
+        {
+        
+        }
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
     }
 }

@@ -11,7 +11,7 @@ using System.Text;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class PatternColumn : DatumColumn
     {

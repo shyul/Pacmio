@@ -6,7 +6,7 @@ Code Tasks:
 
 3. (easy) Historical Headtime shall be based on Daily BarData's earliest time.
 4. Candlestick as SignalAnalysis
-5. Pattern Momo-Reversal as SignalAnalysis
+5. Pattern Momo-Reversal as SignalAnalysis, PatternSignal
 6. BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
 7. PivotPt -> ApexPt
 

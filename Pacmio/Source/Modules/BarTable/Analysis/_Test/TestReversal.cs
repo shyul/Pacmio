@@ -43,8 +43,8 @@ namespace Pacmio.Analysis
                     rvol,
                     csd_rvol,
 
-                    new CandleStickDojiMarubozuAnalysis(),
-                    new CandleStickShadowStarAnalysis(),
+                    new CandleStickDojiMarubozuSignal(),
+                    new CandleStickShadowStarSignal(),
 
                     new Bollinger(20, 2),
                     rsi,

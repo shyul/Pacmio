@@ -96,9 +96,12 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Pattern\PatternSignal.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Pattern\PatternSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Filters\DayTradeFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorEvaluationResult.cs" />
@@ -128,7 +131,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\Relative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\Apex\SingleColumnApexAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\PriceDirection.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickShadowStarAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickShadowStarSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\DualData\DualDataSignalDatum.cs" />
@@ -187,7 +190,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\02_Advanced\VO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\LevelRangeIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\PivotLevel\PivotLevelAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\GetReversalIndexFromRangeBoundAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Pattern\GetReversalIndexFromRangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Types\IPatternObject.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\Apex\_Types\ApexPt.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLine.cs" />
@@ -227,7 +230,7 @@
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickDojiMarubozuSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SingleData\SingleDataSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignal.cs" />

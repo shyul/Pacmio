@@ -1,8 +1,6 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// BarTable Data Types
 /// 
 /// ***************************************************************************
 
@@ -14,8 +12,12 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public interface ILevelDatum : IDatum//, IEnumerable<Level>
+    public class CandleStickSignalDatum : SignalDatum
     {
-        List<Level> Levels { get; }
+        public CandleStickSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
+
+        public List<CandleStickType> CandleStickList { get; } = new();
+
+
     }
 }
