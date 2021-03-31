@@ -32,7 +32,7 @@ namespace Pacmio.Analysis
 
                 var twrc = new SwingTradeFilter();
 
-                var chop = new CHOP(14);
+                var chop = new CHOP(20);
 
                 List<BarAnalysis> sample_list = new()
                 {

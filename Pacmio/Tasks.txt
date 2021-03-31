@@ -6,7 +6,10 @@
 A. Study Chop for SwingTrade
 B. MACD Back testing.
 
+Reading tasks:
+==============
 
+1. Ross Cameron's How to day trade on Kindle.
 
 
 0. IB Api code: (Enum.GetValues(typeof(T)) as T[])

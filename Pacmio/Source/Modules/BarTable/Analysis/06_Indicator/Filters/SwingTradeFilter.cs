@@ -13,6 +13,8 @@
 ///     
 ///     *** Stonks | How To Scan For Stocks Using Finviz For Swing Traders
 ///     https://www.youtube.com/watch?v=MMpqYK9C2iI
+///     
+///     https://support.stockcharts.com/doku.php?id=scans:library:sample_scans
 /// 
 /// 1. Volatility: 
 ///     https://www.investopedia.com/terms/v/volatility.asp#:~:text=Volatility%20is%20a%20statistical%20measure,same%20security%20or%20market%20index.
@@ -69,6 +71,13 @@ namespace Pacmio.Analysis
 
             SignalColumns = new SignalColumn[] { OscillatorSignal.Column_Result, BollingerBandSignal.Column_Result, SingleDataSignal.Column_Result };
             SignalSeries = new(this);
+
+
+
+            ChopAnalysis = new CHOP(20);
+            ChopAnalysis.AddChild(this);
+            StandardDeviationAnalysis = new STDEV(Bar.Column_Typical, 20);
+            StandardDeviationAnalysis.AddChild(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ OscillatorAnalysis.GetHashCode() ^ BollingerBand.GetHashCode() ^ SingleDataSignal.GetHashCode();
@@ -76,7 +85,9 @@ namespace Pacmio.Analysis
         public override IEnumerable<SignalColumn> SignalColumns { get; } 
 
 
-        public CHOP ChopAnAnalysis { get; }
+        public CHOP ChopAnalysis { get; }
+
+        public STDEV StandardDeviationAnalysis { get; }
 
 
         public IOscillator OscillatorAnalysis { get; }

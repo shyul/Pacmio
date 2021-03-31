@@ -27,6 +27,10 @@ namespace Pacmio.Analysis
 
                 DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
+                var stdev = new STDEV(Bar.Column_Typical, 20);
+                DebugSeries csd_stdev = new DebugColumnSeries(stdev.Column_Percent);
+                stdev.AddChild(csd_stdev);
+
                 PositionOfTimeframe potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
@@ -40,12 +44,17 @@ namespace Pacmio.Analysis
                     //csd_nr,
                     //csd_gp,
                     //csd_typ,
+
+
                     csd_pivot,
                     csd_pivotstr,
                     csd_trend,
 
-                    new CrossIndicator(),
-                    new CHOP(),
+                    csd_stdev, 
+                    new CHOP(20),
+
+                    //new CrossIndicator(),
+                    //new CHOP(),
                 };
 
                 BarAnalysisSet bas = new(sample_list);

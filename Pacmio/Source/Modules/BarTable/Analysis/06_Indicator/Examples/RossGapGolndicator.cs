@@ -4,6 +4,9 @@
 /// 
 /// The trade rule applies to each contract
 /// 
+/// Opening Range Breakout Trading Strategy
+/// https://www.warriortrading.com/opening-range-breakout/
+/// 
 /// ***************************************************************************
 
 using System;
