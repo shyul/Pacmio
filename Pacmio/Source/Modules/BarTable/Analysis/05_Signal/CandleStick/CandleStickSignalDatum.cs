@@ -16,7 +16,7 @@ namespace Pacmio
     {
         public CandleStickSignalDatum(Bar b, SignalColumn column) : base(b, column) { }
 
-        public List<CandleStickType> CandleStickList { get; } = new();
+        public List<CandleStickType> List { get; } = new();
 
 
     }

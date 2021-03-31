@@ -55,8 +55,8 @@ namespace Pacmio
             if (table is BarTable bt)
             {
                 Bar b = bt[pt];
-                List<CandleStickType> list = b.CandleStickList;
-                text = list.ToString(", ").Trim().TrimEnd(',');
+                //List<CandleStickType> list = b.CandleStickList;
+                text = b.CandleStickList.ToString(", ").Trim().TrimEnd(',');
                 if (text.Length > 0) labels.Add(("  " + text, Main.Theme.Font, (percent < 0) ? Legend.LabelBrush(LowerTheme) : Legend.LabelBrush(Theme)));
             }
 

@@ -418,7 +418,7 @@ namespace Pacmio
 
         #region Signal Information Tools
 
-        public List<CandleStickType> CandleStickList { get; } = new();
+        public IEnumerable<CandleStickType> CandleStickList => DatumColumnsLUT.Values.Where(n => n is CandleStickSignalDatum).Select(n => n as CandleStickSignalDatum).SelectMany(n => n.List);
 
         public SignalDatum this[SignalColumn dc]
         {
@@ -482,8 +482,6 @@ namespace Pacmio
 
         public void ClearAllCalculationData()
         {
-            CandleStickList.Clear();
-
             BarType = BarType.None;
             Gain = double.NaN;
             GainPercent = double.NaN;

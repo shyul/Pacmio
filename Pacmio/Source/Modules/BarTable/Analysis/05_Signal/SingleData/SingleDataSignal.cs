@@ -71,8 +71,6 @@ namespace Pacmio
 
         public NumericColumn Column { get; set; }
 
-        public SignalColumn Column_Signal { get; }
-
         #endregion Parameters
 
         #region Calculation

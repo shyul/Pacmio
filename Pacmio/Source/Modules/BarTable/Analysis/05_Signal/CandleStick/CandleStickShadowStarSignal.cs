@@ -11,11 +11,33 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class CandleStickShadowStarSignal : BarAnalysis
+    public class CandleStickShadowStarSignal : SignalAnalysis
     {
         public CandleStickShadowStarSignal()
         {
             Name = GetType().Name;
+
+            Column_Result = new(this, typeof(CandleStickSignalDatum));
+        }
+
+        public Dictionary<CandleStickType, double[]> TypeToTrailPoints { get; set; } = new()
+        {
+            { CandleStickType.SpinningTop, new double[] { 0 } },
+            { CandleStickType.LongButtomShadows, new double[] { 0 } },
+            { CandleStickType.HangingMan, new double[] { 0 } },
+            { CandleStickType.Hammer, new double[] { 0 } },
+            { CandleStickType.LongTopShadows, new double[] { 0 } },
+            { CandleStickType.ShootingStar, new double[] { 0 } },
+            { CandleStickType.InvertedHammer, new double[] { 0 } },
+        };
+
+        public void AddType(CandleStickSignalDatum d, CandleStickType type)
+        {
+            if (!d.List.Contains(type))
+            {
+                d.List.Add(type);
+                d.SetPoints(TypeToTrailPoints[type]);
+            }
         }
 
         protected override void Calculate(BarAnalysisPointer bap)
@@ -25,12 +47,15 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
+
                 double high = b.High;
                 double low = b.Low;
                 double hl_Range = Math.Abs(high - low);
 
                 if (hl_Range > 0)
                 {
+                    CandleStickSignalDatum d = new(b, Column_Result);
+
                     double open = b.Open;
                     double close = b.Close;
                     double oc_Range = Math.Abs(open - close);
@@ -49,16 +74,16 @@ namespace Pacmio.Analysis
                             double shadow_ratio = top_shadow / buttom_shadow;
                             if (shadow_ratio > 0.9 && shadow_ratio < 1.1)
                             {
-                                b.CandleStickList.Add(CandleStickType.SpinningTop);
+                                AddType(d, CandleStickType.SpinningTop);
                             }
                             else if (shadow_ratio < 0.2 && oc_Range / buttom_shadow < 0.3)
                             {
-                                b.CandleStickList.Add(CandleStickType.LongButtomShadows);
+                                AddType(d, CandleStickType.LongButtomShadows);
 
                                 if (trend_1 > 2)
-                                    b.CandleStickList.Add(CandleStickType.HangingMan);
+                                    AddType(d, CandleStickType.HangingMan);
                                 else if (trend_1 < -2)
-                                    b.CandleStickList.Add(CandleStickType.Hammer);
+                                    AddType(d, CandleStickType.Hammer);
                             }
                         }
 
@@ -67,11 +92,11 @@ namespace Pacmio.Analysis
                             double shadow_ratio = buttom_shadow / top_shadow;
                             if (shadow_ratio < 0.2 && oc_Range / top_shadow < 0.3)
                             {
-                                b.CandleStickList.Add(CandleStickType.LongTopShadows);
+                                AddType(d, CandleStickType.LongTopShadows);
                                 if (trend_1 > 2)
-                                    b.CandleStickList.Add(CandleStickType.ShootingStar);
+                                    AddType(d, CandleStickType.ShootingStar);
                                 else if (trend_1 < -2)
-                                    b.CandleStickList.Add(CandleStickType.InvertedHammer);
+                                    AddType(d, CandleStickType.InvertedHammer);
                             }
                         }
                     }
