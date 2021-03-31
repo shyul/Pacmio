@@ -34,6 +34,6 @@ namespace Pacmio
         /// <summary>
         /// Check if the this analysis is up to date
         /// </summary>
-        public bool IsUpToDate => StartPt >= Count;
+        public bool IsUpToDate => Count == 0 || StartPt >= Count;
     }
 }

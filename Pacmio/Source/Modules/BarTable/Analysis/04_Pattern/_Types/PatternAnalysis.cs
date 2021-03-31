@@ -17,20 +17,20 @@ namespace Pacmio.Analysis
     {
         public override void Update(BarAnalysisPointer bap)
         {
-            if (!bap.IsUpToDate && bap.Count > 0)
+            if (!bap.IsUpToDate)
             {
                 bap.StopPt = bap.Count - 1;
 
                 if (bap.StartPt < 0)
                     bap.StartPt = 0;
+                else if(bap.StartPt > bap.StopPt)
+                    bap.StartPt = bap.StopPt - 1;
 
                 Calculate(bap);
-                bap.StartPt = bap.StopPt;
-                bap.StopPt++;
+                bap.StartPt = bap.Count;
             }
         }
 
-        //public virtual PatternColumn Column_Result { get; protected set; }
         public virtual DatumColumn Column_Result { get; protected set; }
 
         public abstract int MaximumInterval { get; }

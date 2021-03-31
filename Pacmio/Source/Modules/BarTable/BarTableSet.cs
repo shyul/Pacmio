@@ -99,11 +99,11 @@ namespace Pacmio
                     {
                         if (bt.Status > TableStatus.Loading)
                         {
-                            if (bt.BarFreq < BarFreq.Daily)// || bt.LastTime == time.Date)
+                            if (bt.BarFreq < BarFreq.Daily) // || bt.LastTime == time.Date)
                             {
                                 bt.AddPriceTick(time, price, size);
                             }
-                            else if (bt.BarFreq >= BarFreq.Daily)// && bt.LastTime < time.Date)
+                            else if (bt.BarFreq >= BarFreq.Daily) // && bt.LastTime < time.Date)
                             {
                                 DateTime date = time.Date;
 
@@ -111,16 +111,11 @@ namespace Pacmio
 
                                 if (bt.LastTimeBound.Date < date)
                                 {
-                                    // Also check the Stock Data time stamp here! Is it current???
-                                    if (bt.Status == TableStatus.Ready &&
-                                    (!double.IsNaN(MarketData.Open)) &&
-                                    (!double.IsNaN(MarketData.High)) &&
-                                    (!double.IsNaN(MarketData.Low)) &&
-                                    (!double.IsNaN(price)) &&
-                                    (!double.IsNaN(MarketData.Volume)))
-                                    {
-                                        bt.MergeFromSmallerBar(time, new Bar(bt, date, MarketData.Open, MarketData.High, MarketData.Low, price, MarketData.Volume));
-                                    }
+                                    double open = double.IsNaN(MarketData.Open) || MarketData.Open <= 0 ? price : MarketData.Open;
+                                    double high = double.IsNaN(MarketData.High) || MarketData.High <= 0 ? price : MarketData.High;
+                                    double low = double.IsNaN(MarketData.Low) || MarketData.Low <= 0 ? price : MarketData.Low;
+                                    double volume = double.IsNaN(MarketData.Volume) ? price : 0;
+                                    bt.MergeFromSmallerBar(time, new Bar(bt, date, open, high, low, price, volume));
                                 }
                                 else if (bt.LastTimeBound.Date == date)
                                 {
@@ -244,24 +239,5 @@ namespace Pacmio
                 }
             }
         }
-    }
-
-    /// public void Simulate(BarTableSet bts, IndicatorSet inds, OrderRule)
-    /// {
-    ///      1) Run Indicators (includeded in the Strategy) ->
-    ///      1.5) Run higher timeframe indicator first
-    ///      1.6) Yield MultiPeriod for intested intraday bars
-    ///      2) Run Intraday Indicators
-    ///      3) Yield all scores ->
-    ///      4) Run OrderRules identify all of the scores
-    ///      5) Yield OrderDatum Only
-    ///
-    /// }
-
-
-    public class OrderRule 
-    {
-    
-    
     }
 }

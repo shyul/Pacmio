@@ -14,22 +14,6 @@ namespace Pacmio.Analysis
 {
     public class TrendLineDatum : PatternDatum, IEnumerable<TrendLine>
     {
-        /*
-        public void AddLine(TrendLine tl) 
-        {
-            double strength = tl.Strength;
-
-            if (!m_TrendLines.Contains(tl)) 
-                m_TrendLines.Add(tl);
-            else if(m_TrendLines.Where(n => n == tl).FirstOrDefault() is TrendLine tl0)
-            {
-                tl0.Strength += tl.Strength;
-                strength = tl0.Strength;
-            }
-
-            StrengthRange.Insert(strength);
-        }*/
-
         public void AddLine(IEnumerable<PivotPt> points, int x3)
         {
             points.SelectPair().Select(n => new TrendLine(n)).RunEach(n => {
@@ -40,6 +24,8 @@ namespace Pacmio.Analysis
         }
 
         private List<TrendLine> m_TrendLines { get; set; } = new();
+
+        public int Count => m_TrendLines.Count;
 
         public override IEnumerable<IPatternObject> PatternObjects => m_TrendLines.Select(n => n as IPatternObject);
 

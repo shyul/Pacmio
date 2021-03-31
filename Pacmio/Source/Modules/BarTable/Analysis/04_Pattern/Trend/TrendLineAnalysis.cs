@@ -74,12 +74,16 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
+               // Console.WriteLine("+++++ TrendLineAnalysis | StartPt = " + bap.StartPt + "; StopPt = " + bap.StopPt);
+                //if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
+                if (bt[i] is Bar b && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
                 {
                     TrendLineDatum tld = new();
                     tld.TotalLevelRange = tpd.TotalLevelRange;
                     tld.AddLine(tpd.PivotPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
+
+                    //Console.WriteLine("+++++ TrendLineAnalysis | tld.Count = " + tld.Count + ";  tld.TotalLevelRange = " + tld.TotalLevelRange);
                 }
             }
         }
@@ -90,7 +94,9 @@ namespace Pacmio.Analysis
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
+            //Console.WriteLine("+++++ TrendLineAnalysis Chart, bc.LastIndex = " + bc.LastIndex + " | bc.LastIndexMax = " + bc.LastIndexMax);
             if (bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
+            //if (bc.BarTable.Count > 2 && bc.BarTable[bc.BarTable.Count - 2] is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
@@ -99,6 +105,9 @@ namespace Pacmio.Analysis
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
                 double maxStrength = tld.TotalStrengthRange.Max;
+
+                //Console.WriteLine("+++++ TrendLineAnalysis | tld.Count = " + tld.Count + ";  tld.TotalLevelRange = " + tld.TotalLevelRange);
+
                 foreach (TrendLine line in tld)
                 {
                     int x1 = line.X1 - StartPt;

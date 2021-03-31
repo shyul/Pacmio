@@ -454,23 +454,21 @@ namespace Pacmio
 
         public void MergeFromSmallerBar(DateTime tickTime, Bar sb)
         {
-            if (this[sb.Time] is Bar b)
-            {
-                b.MergeFromSmallerBar(sb);
-            }
-            else
-            {
-                Bar nb = new(this, sb);
-                nb.Index = Count;
-                Rows.Add(nb);
-                TimeToRows.Add(nb.Time, nb.Index);
-            }
-
-            LastTickTime = tickTime;
-
             if (Status >= TableStatus.DataReady)
             {
-                //Status = TableStatus.Ticking;
+                if (this[sb.Time] is Bar b)
+                {
+                    b.MergeFromSmallerBar(sb);
+                }
+                else
+                {
+                    Bar nb = new(this, sb);
+                    nb.Index = Count;
+                    Rows.Add(nb);
+                    TimeToRows.Add(nb.Time, nb.Index);
+                }
+
+                LastTickTime = tickTime;
                 //SetCalculationPointer(LastCalculateIndex - 1);
                 CalculateTickRequested = true;
             }
@@ -535,14 +533,12 @@ namespace Pacmio
                 nb.Index = Count;
                 Rows.Add(nb);
                 TimeToRows.Add(nb.Time, nb.Index);
-
             }
 
             LastTickTime = tickTime;
 
             if (isUpdated && Status >= TableStatus.DataReady)
             {
-                //Status = TableStatus.Ticking;
                 SetCalculationPointer(LastCalculateIndex - 1);
                 CalculateTickRequested = true;
             }
@@ -629,8 +625,9 @@ namespace Pacmio
                 lock (BarAnalysisPointerLUT)
                 {
                     foreach (BarAnalysisSetPointer basp in BarAnalysisSetPointerLUT.Values)
-                        basp.LastCalculateIndex = Math.Min(basp.LastCalculateIndex, pt);
+                        basp.LastCalculateIndex = Math.Min(LastCalculateIndex, pt);
 
+                    //foreach (BarAnalysisPointer bap in BarAnalysisPointerLUT.Where(n => !(n.Key is PatternAnalysis)).Select(n => n.Value))
                     foreach (BarAnalysisPointer bap in BarAnalysisPointerLUT.Values)
                         bap.StartPt = Math.Min(bap.StartPt, pt); //if (bap.StartPt > pt) bap.StartPt = pt;
                 }

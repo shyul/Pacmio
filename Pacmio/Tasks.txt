@@ -1,4 +1,8 @@
-1. The Pattern will clapse if new ticks were added to Daily and above BarTables
+1. The Pattern will clapse and vanish if new ticks were added to Daily and above BarTables
+p1: In the chart Last Bar public void DrawBackground(Graphics g, BarChart bc), 
+p2:         private void SetCalculationPointer(int pt)
+
+
 2. Fatal error casued by trying to save Above daily BarDatas
 3. Doji candle for Above-Daily BarTables when there is an incoming tick.
 4. Historical Headtime shall be based on Daily BarData's earliest time.
