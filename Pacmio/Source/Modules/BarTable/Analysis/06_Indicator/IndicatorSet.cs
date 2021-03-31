@@ -131,17 +131,5 @@ namespace Pacmio
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-
-
-
-
-
-
-
-
     }
-
-
 }

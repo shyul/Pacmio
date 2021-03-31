@@ -100,10 +100,10 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\SwingTradeIndicator.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Filters\DayTradeFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorEvaluationResult.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSetPointer.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\OverSoldFilter.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Filters\SwingTradeFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\RossMomentumIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\ILevel.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\ILevelAnalysis.cs" />
@@ -226,7 +226,6 @@
     <Compile Include="Source\Modules\Data\MarketDepth\_IB\MarketDepth_Parse.cs" />
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Examples\MovingAverageCrossStrategy.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalColumn.cs" />
@@ -418,6 +417,8 @@
       <Name>Xu</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Tasks.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,9 +19,9 @@ namespace Pacmio
 
         Within = 1,
 
-        EnterFromBelow = 1,
+        EnterFromBelow = 2,
 
-        EnterFromAbove = -1,
+        EnterFromAbove = -2,
 
         Above = 3,
 

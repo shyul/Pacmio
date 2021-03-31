@@ -44,9 +44,9 @@ namespace Pacmio.Analysis
             };
 
 
-            SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignal.Column_Result, CandleStickSignalColumn };
 
-            SignalSeries = new(this);
+
+            TimeInForce = new TimePeriod(new Time(9, 25), new Time(16));
 
             NarrowRange.AddChild(csd);
             NarrowRange.AddChild(this);
@@ -55,12 +55,17 @@ namespace Pacmio.Analysis
             CandleStickDojiMarubozuAnalysis.AddChild(this);
             csd.AddChild(this);
 
-            TimeInForce = new TimePeriod(new Time(9, 25), new Time(16));
+            SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignal.Column_Result, CandleStickSignalColumn };
+            SignalSeries = new(this);
         }
 
 
 
         public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
+
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
+
+
 
 
 
@@ -86,7 +91,7 @@ namespace Pacmio.Analysis
 
 
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
+
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

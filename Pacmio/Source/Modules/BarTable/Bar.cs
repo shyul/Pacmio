@@ -236,7 +236,6 @@ namespace Pacmio
 
         #endregion Smaller Bars
 
-
         public List<CandleStickType> CandleStickList { get; } = new();
 
         #region Intrinsic Indicators | NativeGainAnalysis

@@ -448,6 +448,10 @@ namespace Pacmio
             }
         }
 
+        #endregion Load Bars
+
+        #region Add Ticks
+
         public void MergeFromSmallerBar(DateTime tickTime, Bar sb)
         {
             if (this[sb.Time] is Bar b)
@@ -473,12 +477,6 @@ namespace Pacmio
 
             UpdateTime = DateTime.Now;
         }
-
-        #endregion Load Bars
-
-        #region Add Ticks
-
-        public DateTime LastTickTime { get; private set; } = DateTime.MinValue;
 
         public void AddPriceTick(DateTime tickTime, double last, double volume, DataSourceType minimumSource = DataSourceType.IB)
         {
@@ -551,6 +549,8 @@ namespace Pacmio
 
             UpdateTime = DateTime.Now;
         }
+
+        public DateTime LastTickTime { get; private set; } = DateTime.MinValue;
 
         #endregion Add Ticks
 

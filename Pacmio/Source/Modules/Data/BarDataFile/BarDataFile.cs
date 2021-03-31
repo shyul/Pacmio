@@ -216,7 +216,7 @@ namespace Pacmio
                         {
                             start_chk_pd = true;
                             Period off_market_pd = new(rm_start, rm_check);
-                            Console.WriteLine("Chop off Non-Market: " + off_market_pd);
+                            //Console.WriteLine("Chop off Non-Market: " + off_market_pd);
                             missing_period_list.Remove(off_market_pd);
                         }
                     }
@@ -229,13 +229,13 @@ namespace Pacmio
                 if (!start_chk_pd)
                 {
                     Period off_market_pd = new(rm_start, rm_check);
-                    Console.WriteLine("Chop off Non-Market: " + off_market_pd);
+                    //Console.WriteLine("Chop off Non-Market: " + off_market_pd);
                     missing_period_list.Remove(off_market_pd);
                 }
 
                 foreach (Period existingPd in DataSourceSegments.Keys.Where(n => DataSourceSegments[n] <= minimumSource))
                 {
-                    Console.WriteLine("Chop off Existing: " + existingPd);
+                    //Console.WriteLine("Chop off Existing: " + existingPd);
                     missing_period_list.Remove(existingPd);
                 }
 
@@ -290,7 +290,7 @@ namespace Pacmio
 
                     lock (DataLockObject)
                     {
-                        Console.WriteLine(Contract.ToString() + " | Adding Data Source Segment: " + pd.ToString() + " | " + sourceType.ToString());
+                        //Console.WriteLine(Contract.ToString() + " | Adding Data Source Segment: " + pd.ToString() + " | " + sourceType.ToString());
                         DataSourceSegments.Add(pd, sourceType);
 
                         foreach (var row in sortedList)

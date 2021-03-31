@@ -124,26 +124,12 @@ namespace Pacmio
                                 }
                                 else if (bt.LastTimeBound.Date == date)
                                 {
-                                    bt.AddPriceTick(time, price, size, DataSourceType.Manual);
+                                    bt.AddPriceTick(time, price, size); //, DataSourceType.Manual);
                                 }
                             }
                         }
                     }
                 });
-
-                /*
-                Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
-                {
-                    //foreach (var exec in bt.IndicatorExecList) exec.GenerateExecution();
-
-                    // ExecutionDatum GenerateOrder(BarAnalysisPointer bap);
-
-                    // Get Tethered Strategy
-
-                    // Gener
-
-                });
-                */
             }
         }
 

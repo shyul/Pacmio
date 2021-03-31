@@ -36,9 +36,6 @@ namespace Pacmio
 
         public double BearishPointLimit { get; set; }
 
-
-
-
         #region Series
 
         public Color Color { get => SignalSeries.Color; set => SignalSeries.Color = value; }
