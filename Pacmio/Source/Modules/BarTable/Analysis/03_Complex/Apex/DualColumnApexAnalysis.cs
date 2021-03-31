@@ -11,9 +11,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class DualColumnPivotAnalysis : PivotAnalysis
+    public class DualColumnApexAnalysis : ApexAnalysis
     {
-        public DualColumnPivotAnalysis(IDualData idd, int maximumPeakProminence = 50, int minimumPeakProminence = 5)
+        public DualColumnApexAnalysis(IDualData idd, int maximumPeakProminence = 50, int minimumPeakProminence = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminence = minimumPeakProminence;

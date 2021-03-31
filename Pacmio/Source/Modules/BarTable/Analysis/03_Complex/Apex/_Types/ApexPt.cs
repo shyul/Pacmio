@@ -9,9 +9,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class PivotPt : IEquatable<PivotPt>
+    public class ApexPt : IEquatable<ApexPt>
     {
-        public PivotPt(int index, DateTime time, double level, double strength = 0) // double prominence, double trendStrength)
+        public ApexPt(int index, DateTime time, double level, double strength = 0) // double prominence, double trendStrength)
         {
             Index = index;
             Time = time;
@@ -31,14 +31,14 @@ namespace Pacmio.Analysis
         // Z
         public double Strength { get; }
 
-        public bool Equals(PivotPt other) => Index == other.Index && Level == other.Level;
+        public bool Equals(ApexPt other) => Index == other.Index && Level == other.Level;
 
-        public static bool operator !=(PivotPt s1, PivotPt s2) => !s1.Equals(s2);
+        public static bool operator !=(ApexPt s1, ApexPt s2) => !s1.Equals(s2);
 
-        public static bool operator ==(PivotPt s1, PivotPt s2) => s1.Equals(s2);
+        public static bool operator ==(ApexPt s1, ApexPt s2) => s1.Equals(s2);
 
         public override int GetHashCode() => (Index, Level).GetHashCode();
 
-        public override bool Equals(object other) => other is PivotPt s1 && Equals(s1);
+        public override bool Equals(object other) => other is ApexPt s1 && Equals(s1);
     }
 }

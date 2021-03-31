@@ -123,15 +123,15 @@ namespace Pacmio.Analysis
                             //Console.WriteLine(bars.Last().Time + " | " + bars.Last().BarType + " | " + type + " | pull_back_bars = " + pull_back_bars.Count + " | pull_back_bars = " + run_bars.Count);
                             // Yield Pattern
                             Bar b_p1 = run_bars.Last();
-                            fd.P1 = new PivotPt(b_p1.Index, b_p1.Time, b_p1.Low);
+                            fd.P1 = new ApexPt(b_p1.Index, b_p1.Time, b_p1.Low);
 
                             Bar b_p2 = run_bars.First();
-                            fd.P2 = new PivotPt(b_p2.Index, b_p2.Time, b_p2.High);
-                            fd.P2_B = new PivotPt(b_p2.Index, b_p2.Time, b_p2.Low);
+                            fd.P2 = new ApexPt(b_p2.Index, b_p2.Time, b_p2.High);
+                            fd.P2_B = new ApexPt(b_p2.Index, b_p2.Time, b_p2.Low);
 
                             Bar b_p3 = pull_back_bars.First();
-                            fd.P3 = new PivotPt(b_p3.Index, b_p3.Time, b_p3.High);
-                            fd.P3_B = new PivotPt(b_p3.Index, b_p3.Time, b_p3.Low);
+                            fd.P3 = new ApexPt(b_p3.Index, b_p3.Time, b_p3.High);
+                            fd.P3_B = new ApexPt(b_p3.Index, b_p3.Time, b_p3.Low);
 
                             b[Column_Result] = fd;
                         }

@@ -4,6 +4,11 @@
 /// 
 /// Technical Analysis Chart UI
 /// 
+/// 1. The Pattern will clapse and vanish if new ticks were added to Daily and above BarTables
+///     p1: In the chart Last Bar public void DrawBackground(Graphics g, BarChart bc), 
+///     p2:         private void SetCalculationPointer(int pt)
+///     p3: BAS LastCalculateIndex is bound to use with BarChart
+/// 
 /// ***************************************************************************
 
 using System;
@@ -14,7 +19,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
-using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -169,7 +173,7 @@ namespace Pacmio
                     TabName = "No BarTable";
                 }
 
-                if(m_BarAnalysisSet is BarAnalysisSet bas) 
+                if (m_BarAnalysisSet is BarAnalysisSet bas)
                 {
                     m_BarTable.CalculateRefresh(bas);
                 }
@@ -356,7 +360,7 @@ namespace Pacmio
                                     {
                                         DateTime time = m_BarTable.IndexToTime(i);
                                         DateTime last_time = m_BarTable.IndexToTime(i - 1);
-                                        if (time.DayOfWeek < last_time.DayOfWeek) 
+                                        if (time.DayOfWeek < last_time.DayOfWeek)
                                             AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-dd"))); ///.WeekOfYear().ToString())); ;
                                         if (time.Day % MinorTick.Length == 0)
                                             AxisX.TickList.CheckAdd(px, (Importance.Minor, time.Day.ToString()));

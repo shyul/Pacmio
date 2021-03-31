@@ -14,9 +14,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class NativePivotAnalysis : PivotAnalysis
+    public sealed class NativeApexAnalysis : ApexAnalysis
     {
-        public NativePivotAnalysis(int maximumPeakProminence = 50, int minimumPeakProminence = 5)
+        public NativeApexAnalysis(int maximumPeakProminence = 50, int minimumPeakProminence = 5)
         {
             MaximumPeakProminence = maximumPeakProminence;
             MinimumPeakProminence = minimumPeakProminence;

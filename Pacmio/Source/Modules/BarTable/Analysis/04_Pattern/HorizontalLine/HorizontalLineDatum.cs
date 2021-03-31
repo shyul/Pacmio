@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLineDatum : PatternDatum, IEnumerable<HorizontalLine>
     {
-        public void AddLine(IEnumerable<PivotPt> points)
+        public void AddLine(IEnumerable<ApexPt> points)
         {
             points.Select(n => new HorizontalLine(n)).RunEach(n => {
                 m_HorizontalLines.Add(n);

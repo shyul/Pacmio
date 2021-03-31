@@ -16,9 +16,9 @@ namespace Pacmio.Analysis
     /// </summary>
     public class TrendLine : IPatternObject, IEquatable<TrendLine>
     {
-        public TrendLine((PivotPt pt1, PivotPt pt2) pt) : this(pt.pt1, pt.pt2) { }
+        public TrendLine((ApexPt pt1, ApexPt pt2) pt) : this(pt.pt1, pt.pt2) { }
 
-        public TrendLine(PivotPt pt1, PivotPt pt2)
+        public TrendLine(ApexPt pt1, ApexPt pt2)
         {
             P1 = pt1;
             P2 = pt2;
@@ -28,13 +28,13 @@ namespace Pacmio.Analysis
             Strength = DeltaX * (pt1.Strength + pt2.Strength);
         }
 
-        public PivotPt P1 { get; }
+        public ApexPt P1 { get; }
 
         public int X1 => P1.Index;
 
         public double Y1 => P1.Level;
 
-        public PivotPt P2 { get; }
+        public ApexPt P2 { get; }
 
         public int X2 => P2.Index;
 

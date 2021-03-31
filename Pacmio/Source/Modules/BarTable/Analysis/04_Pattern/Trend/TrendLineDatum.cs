@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public class TrendLineDatum : PatternDatum, IEnumerable<TrendLine>
     {
-        public void AddLine(IEnumerable<PivotPt> points, int x3)
+        public void AddLine(IEnumerable<ApexPt> points, int x3)
         {
             points.SelectPair().Select(n => new TrendLine(n)).RunEach(n => {
                 m_TrendLines.Add(n);

@@ -40,15 +40,15 @@ namespace Pacmio.Analysis
         ///      |
         ///    (P1)         
         /// </summary>
-        public PivotPt P1 { get; set; }
+        public ApexPt P1 { get; set; }
 
-        public PivotPt P2 { get; set; }
+        public ApexPt P2 { get; set; }
 
-        public PivotPt P2_B { get; set; }
+        public ApexPt P2_B { get; set; }
 
-        public PivotPt P3 { get; set; }
+        public ApexPt P3 { get; set; }
 
-        public PivotPt P3_B { get; set; }
+        public ApexPt P3_B { get; set; }
 
         public override IEnumerable<IPatternObject> PatternObjects => new IPatternObject[] { };
     }

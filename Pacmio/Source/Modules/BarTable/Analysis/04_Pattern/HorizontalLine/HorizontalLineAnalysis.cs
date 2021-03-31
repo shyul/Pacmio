@@ -18,7 +18,7 @@ namespace Pacmio.Analysis
     {
         public HorizontalLineAnalysis(int maximumInterval)
         {
-            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(maximumInterval);
+            TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(maximumInterval);
             PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
@@ -29,10 +29,10 @@ namespace Pacmio.Analysis
 
             TrailingPivotPointAnalysis.AddChild(this);
         }
-        public HorizontalLineAnalysis(PivotAnalysis pa)
+        public HorizontalLineAnalysis(ApexAnalysis pa)
         {
             PivotAnalysis = pa;
-            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(pa);
+            TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(pa);
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;
@@ -43,7 +43,7 @@ namespace Pacmio.Analysis
             TrailingPivotPointAnalysis.AddChild(this);
         }
 
-        public HorizontalLineAnalysis(TrailingPivotPtAnalysis tpa)
+        public HorizontalLineAnalysis(TrailingApexPtAnalysis tpa)
         {
             TrailingPivotPointAnalysis = tpa;
             PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
@@ -61,9 +61,9 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
+        public TrailingApexPtAnalysis TrailingPivotPointAnalysis { get; }
 
-        public PivotAnalysis PivotAnalysis { get; }
+        public ApexAnalysis PivotAnalysis { get; }
 
         public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence * 2;
 
@@ -73,7 +73,7 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
+                if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingApexPtDatum tpd)
                 {
                     HorizontalLineDatum hld = new();
                     hld.TotalLevelRange = tpd.TotalLevelRange;

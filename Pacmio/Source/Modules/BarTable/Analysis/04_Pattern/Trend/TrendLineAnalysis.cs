@@ -18,7 +18,7 @@ namespace Pacmio.Analysis
     {
         public TrendLineAnalysis(int maximumInterval)
         {
-            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(maximumInterval);
+            TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(maximumInterval);
             PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
@@ -30,10 +30,10 @@ namespace Pacmio.Analysis
             TrailingPivotPointAnalysis.AddChild(this);
         }
 
-        public TrendLineAnalysis(PivotAnalysis pa)
+        public TrendLineAnalysis(ApexAnalysis pa)
         {
             PivotAnalysis = pa;
-            TrailingPivotPointAnalysis = new TrailingPivotPtAnalysis(pa);
+            TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(pa);
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;
@@ -44,7 +44,7 @@ namespace Pacmio.Analysis
             TrailingPivotPointAnalysis.AddChild(this);
         }
 
-        public TrendLineAnalysis(TrailingPivotPtAnalysis tpa)
+        public TrendLineAnalysis(TrailingApexPtAnalysis tpa)
         {
             TrailingPivotPointAnalysis = tpa;
             PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
@@ -62,9 +62,9 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public TrailingPivotPtAnalysis TrailingPivotPointAnalysis { get; }
+        public TrailingApexPtAnalysis TrailingPivotPointAnalysis { get; }
 
-        public PivotAnalysis PivotAnalysis { get; }
+        public ApexAnalysis PivotAnalysis { get; }
 
         public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence * 2;
 
@@ -76,7 +76,7 @@ namespace Pacmio.Analysis
             {
                // Console.WriteLine("+++++ TrendLineAnalysis | StartPt = " + bap.StartPt + "; StopPt = " + bap.StopPt);
                 //if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
-                if (bt[i] is Bar b && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
+                if (bt[i] is Bar b && b[TrailingPivotPointAnalysis] is TrailingApexPtDatum tpd)
                 {
                     TrendLineDatum tld = new();
                     tld.TotalLevelRange = tpd.TotalLevelRange;

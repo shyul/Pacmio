@@ -10,7 +10,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public abstract class PivotAnalysis : BarAnalysis, ITagAnalysis
+    public abstract class ApexAnalysis : BarAnalysis, ITagAnalysis
     {
         public int MaximumPeakProminence { get; protected set; }
 

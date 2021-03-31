@@ -11,11 +11,11 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotPtAnalysis : PivotAnalysis, ISingleComplex
+    public class TrailingApexPtAnalysis : ApexAnalysis, ISingleComplex
     {
-        public TrailingPivotPtAnalysis(int maximumInterval = 250)
+        public TrailingApexPtAnalysis(int maximumInterval = 250)
         {
-            PivotAnalysis = new NativePivotAnalysis(maximumInterval);
+            PivotAnalysis = new NativeApexAnalysis(maximumInterval);
 
             MaximumPeakProminence = maximumInterval;
             MinimumPeakProminence = PivotAnalysis.MinimumPeakProminence;
@@ -24,10 +24,10 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             PivotAnalysis.AddChild(this);
-            Column_Result = new(Name, typeof(TrailingPivotPtDatum));
+            Column_Result = new(Name, typeof(TrailingApexPtDatum));
         }
 
-        public TrailingPivotPtAnalysis(PivotAnalysis pa)
+        public TrailingApexPtAnalysis(ApexAnalysis pa)
         {
             PivotAnalysis = pa;
 
@@ -38,7 +38,7 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             PivotAnalysis.AddChild(this);
-            Column_Result = new(Name, typeof(TrailingPivotPtDatum));
+            Column_Result = new(Name, typeof(TrailingApexPtDatum));
         }
 
         #region Parameters
@@ -49,7 +49,7 @@ namespace Pacmio.Analysis
 
         public override NumericColumn Column_Low => PivotAnalysis.Column_Low;
 
-        public PivotAnalysis PivotAnalysis { get; }
+        public ApexAnalysis PivotAnalysis { get; }
 
         public DatumColumn Column_Result { get; }
 
@@ -65,7 +65,7 @@ namespace Pacmio.Analysis
             {
                 if (bt[i] is Bar b0)
                 {
-                    TrailingPivotPtDatum tpd = new(this);
+                    TrailingApexPtDatum tpd = new(this);
 
                     for (int j = MinimumPeakProminence; j < MaximumPeakProminence; j++)
                     {

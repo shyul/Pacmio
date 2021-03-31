@@ -13,23 +13,23 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingPivotPtDatum : IDatum
+    public class TrailingApexPtDatum : IDatum
     {
-        public TrailingPivotPtDatum(TrailingPivotPtAnalysis tpa)
+        public TrailingApexPtDatum(TrailingApexPtAnalysis tpa)
         {
             TrailingPivotPtAnalysis = tpa;
         }
 
-        public TrailingPivotPtAnalysis TrailingPivotPtAnalysis { get; }
+        public TrailingApexPtAnalysis TrailingPivotPtAnalysis { get; }
 
         public Range<double> PivotRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
         
         public Range<double> TotalLevelRange { get; set; }
 
-        public Dictionary<int, PivotPt> PositivePivotPtList { get; } = new Dictionary<int, PivotPt>();
+        public Dictionary<int, ApexPt> PositivePivotPtList { get; } = new Dictionary<int, ApexPt>();
 
-        public Dictionary<int, PivotPt> NegativePivotPtList { get; } = new Dictionary<int, PivotPt>();
+        public Dictionary<int, ApexPt> NegativePivotPtList { get; } = new Dictionary<int, ApexPt>();
 
-        public KeyValuePair<int, PivotPt>[] PivotPts => PositivePivotPtList.Concat(NegativePivotPtList).OrderBy(n => n.Key).ToArray();
+        public KeyValuePair<int, ApexPt>[] PivotPts => PositivePivotPtList.Concat(NegativePivotPtList).OrderBy(n => n.Key).ToArray();
     }
 }

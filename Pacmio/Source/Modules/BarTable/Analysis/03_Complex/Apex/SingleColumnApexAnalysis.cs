@@ -11,9 +11,9 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class SingleColumnPivotAnalysis : PivotAnalysis, ISingleData
+    public class SingleColumnApexAnalysis : ApexAnalysis, ISingleData
     {
-        public SingleColumnPivotAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public SingleColumnApexAnalysis(NumericColumn column, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             Column = column;
             MaximumPeakProminence = maximumPeakProminence;
@@ -33,7 +33,7 @@ namespace Pacmio.Analysis
             AreaName = null;
         }
 
-        public SingleColumnPivotAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
+        public SingleColumnApexAnalysis(ISingleData isd, int maximumPeakProminence, int minimumPeakProminenceForAnalysis = 5)
         {
             SingleDataAnalysis = isd;
             Column = isd.Column_Result;

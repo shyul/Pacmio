@@ -36,7 +36,7 @@ namespace Pacmio.Analysis
 
                 List<BarAnalysis> sample_list = new()
                 {
-                    new NativePivotAnalysis(),
+                    new NativeApexAnalysis(),
                     //new CandleStickDojiMarubozuAnalysis(),
                     //new CandleStickShadowStarAnalysis(),
                     //csd_potf,

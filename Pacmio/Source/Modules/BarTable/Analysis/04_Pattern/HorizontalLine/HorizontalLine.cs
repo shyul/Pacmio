@@ -10,13 +10,13 @@ namespace Pacmio.Analysis
 {
     public class HorizontalLine : IPatternObject
     {
-        public HorizontalLine(PivotPt pt1)
+        public HorizontalLine(ApexPt pt1)
         {
             P1 = pt1;
             Strength = pt1.Strength * 2;
         }
 
-        public PivotPt P1 { get; }
+        public ApexPt P1 { get; }
 
         public int X1 => P1.Index;
 

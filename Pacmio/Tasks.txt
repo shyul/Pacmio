@@ -1,24 +1,27 @@
+Code Tasks:
+==============
 
-
-1. The Pattern will clapse and vanish if new ticks were added to Daily and above BarTables
-    p1: In the chart Last Bar public void DrawBackground(Graphics g, BarChart bc), 
-    p2:         private void SetCalculationPointer(int pt)
-    p3: BAS LastCalculateIndex is bound to use with BarChart
-
+1. Doji candle for Above-Daily BarTables when there is an incoming tick.
 2. Fatal error casued by trying to save Above daily BarDatas
-3. Doji candle for Above-Daily BarTables when there is an incoming tick.
 
-4. (easy) Historical Headtime shall be based on Daily BarData's earliest time.
+3. (easy) Historical Headtime shall be based on Daily BarData's earliest time.
+4. Candlestick as SignalAnalysis
+5. Pattern Momo-Reversal as SignalAnalysis
+6. BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
+7. PivotPt -> ApexPt
 
-A. Study Chop for SwingTrade
-B. MACD Back testing.
+
 
 Reading tasks:
 ==============
 
+A. Study Chop for SwingTrade
+B. MACD Back testing.
 1. Ross Cameron's How to day trade on Kindle.
 ## Tip: Market follows large cap stocks
 2. Get a sample scalping Strategy complete
+
+
 
 Program Flow:
 

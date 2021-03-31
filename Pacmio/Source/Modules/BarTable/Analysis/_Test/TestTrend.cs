@@ -38,8 +38,8 @@ namespace Pacmio.Analysis
                 PositionOfTimeframe potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
-                NativePivotAnalysis npa = new(250);
-                TrailingPivotPtAnalysis tpa = new(npa);
+                NativeApexAnalysis npa = new(250);
+                TrailingApexPtAnalysis tpa = new(npa);
 
                 List<BarAnalysis> sample_list = new()
                 {
