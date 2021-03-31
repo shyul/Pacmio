@@ -1,11 +1,14 @@
-1. The Pattern will clapse and vanish if new ticks were added to Daily and above BarTables
-p1: In the chart Last Bar public void DrawBackground(Graphics g, BarChart bc), 
-p2:         private void SetCalculationPointer(int pt)
 
+
+1. The Pattern will clapse and vanish if new ticks were added to Daily and above BarTables
+    p1: In the chart Last Bar public void DrawBackground(Graphics g, BarChart bc), 
+    p2:         private void SetCalculationPointer(int pt)
+    p3: BAS LastCalculateIndex is bound to use with BarChart
 
 2. Fatal error casued by trying to save Above daily BarDatas
 3. Doji candle for Above-Daily BarTables when there is an incoming tick.
-4. Historical Headtime shall be based on Daily BarData's earliest time.
+
+4. (easy) Historical Headtime shall be based on Daily BarData's earliest time.
 
 A. Study Chop for SwingTrade
 B. MACD Back testing.
@@ -14,45 +17,39 @@ Reading tasks:
 ==============
 
 1. Ross Cameron's How to day trade on Kindle.
-
-
-0. IB Api code: (Enum.GetValues(typeof(T)) as T[])
-
-
-0. Period as class instead of struct impact !!!
-1. Add(new Bar(this, time) { DataSourcePeriod = new Period(time) });
-2. Test Monthly Chart
-3. StockData renovation :)
-
 ## Tip: Market follows large cap stocks
-
-
-Task for Initial Strategy:
-1. ASK: How to get signal datum?
 2. Get a sample scalping Strategy complete
-3. Compare Training vs without training?
+
+Program Flow:
+
+1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
+                                                        a. OrderRules           a. Can Contain Several Orders
 
 
-a. Strategy as BAS group vs BarFreq
-b. Strategy Datum containing SignalDatum and Position Log
-c. Strategy Signal Calculation BarAnalysis -> Knows which BAS it belongs to..
+Confirmation Template
+Validation Template
 
 
-1. Order -> OrderInfo -> Trade Log -> Position
-2. Pattern:
+
+
+
+
+
+
+
+
 
 Unable to locate this request Id in the table, maybe this message just tells your something has been properly removed.
 Parse Errors: (0)"4"-(1)"2"-(2)"202"-(3)"162"-(4)"Historical Market Data Service error message:API historical data query cancelled: 202"
 
-Strategy: A static class
+
 
 |||||||||||||||||||||||||||||||||
 
 Definitions:
 1. Condition
 2. Pool of Indication Template
-3. Confirmation Template
-4. Validation Template
+
 
 Tasks:
 1. Simulation ->
@@ -132,13 +129,6 @@ Simulation Report
 
 
 
-New Types for Bar
-===================
-1. TrendLine Type
-2. Signal Type
-3. Pattern Type
-4. Position Status
-5. Better Tags
 
 
 

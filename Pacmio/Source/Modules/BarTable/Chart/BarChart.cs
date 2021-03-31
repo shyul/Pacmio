@@ -98,7 +98,9 @@ namespace Pacmio
                 BarAnalysisSet = bas;
 
                 ReadyToShow = m_BarTable is BarTable;
-                if (ReadyToShow) StopPt = m_BarTable[bas].LastCalculateIndex;
+
+                if (ReadyToShow)
+                    StopPt = m_BarTable[bas].LastCalculateIndex;
             }
             m_AsyncUpdateUI = true;
         }
@@ -204,24 +206,37 @@ namespace Pacmio
             }
         }
 
-        //  m_BarTable[m_BarAnalysisSet].LastCalculateIndex;
-
-        public int LastIndexMax => m_BarTable[m_BarAnalysisSet].LastCalculateIndex;  // m_BarTable.Count - 1;
-
-        public int LastIndex // Of the bar
+        public override void PointerSnapToEnd()
         {
-            get
+            lock (GraphicsLockObject)
             {
-                int stopPt = StopPt - 1;
-                int maxIndex = LastIndexMax;
-
-                if (stopPt < 0)
-                    stopPt = 0;
-                else if (stopPt > maxIndex)
-                    stopPt = maxIndex;
-
-                return stopPt;
+                if (m_BarTable is BarTable bt && m_BarAnalysisSet is BarAnalysisSet bas)
+                {
+                    LastIndexMax = bt[bas].LastCalculateIndex;
+                    StopPt = LastIndexMax + 1;
+                }
+                else
+                {
+                    LastIndexMax = -1;
+                    StopPt = 0;
+                }
             }
+
+            m_AsyncUpdateUI = true; // async update
+        }
+
+        public override void PointerSnapToNextTick()
+        {
+            lock (GraphicsLockObject)
+            {
+                if (m_BarTable is BarTable bt &&
+                StopPt > bt.LastCalculateIndex - 2 && StopPt < bt.LastCalculateIndex + 2)
+                {
+                    LastIndexMax = bt.LastCalculateIndex;
+                    StopPt = LastIndexMax + 1;
+                }
+            }
+            m_AsyncUpdateUI = true;
         }
 
         public Bar LastBar => LastIndex < 0 ? null : m_BarTable[LastIndex];

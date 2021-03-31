@@ -624,6 +624,8 @@ namespace Pacmio
             lock (BarAnalysisSetPointerLUT)
                 lock (BarAnalysisPointerLUT)
                 {
+                    // We don't set the BAS point back here, because so far the BAS pointer is only bound to use with BarChart
+
                     foreach (BarAnalysisSetPointer basp in BarAnalysisSetPointerLUT.Values)
                         basp.LastCalculateIndex = Math.Min(LastCalculateIndex, pt);
 
@@ -641,13 +643,13 @@ namespace Pacmio
             }
         }
 
-
+        /*
         public void SetCalculationPointer(ref DateTime time)
         {
             int pt = IndexOf(ref time) - 1;
             SetCalculationPointer(pt);
         }
-
+        */
 
         private BarAnalysisPointer Calculate(BarAnalysis ba)
         {
@@ -691,10 +693,10 @@ namespace Pacmio
             if (Count > 0)
             {
                 startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
-                //startPt = Math.Min(startPt, Calculate(PivotAnalysis).StartPt);
-
                 foreach (BarAnalysis ba in bas)
                 {
+                    //Console.WriteLine("startPt = " + startPt);
+
                     DateTime single_start_time = DateTime.Now;
 
                     BarAnalysisPointer bap = GetBarAnalysisPointer(ba);
@@ -711,7 +713,11 @@ namespace Pacmio
                 }
             }
 
+            // Console.WriteLine("Finally startPt = " + startPt);
+
             int lastIndex = Math.Min(Count - 1, startPt);
+
+            // Console.WriteLine("Finally lastIndex = " + lastIndex);
 
             if (bas is BarAnalysisSet bas0)
                 GetBarAnalysisSetPointer(bas0).LastCalculateIndex = lastIndex;
@@ -721,6 +727,7 @@ namespace Pacmio
             if (debugInfo)
             {
                 Console.WriteLine("------------------");
+                Console.WriteLine("LastCalculateIndex = " + lastIndex);
                 Console.WriteLine(Name + " | " + (DateTime.Now - total_start_time).TotalMilliseconds.ToString() + "ms" + " | Stopped at: " + lastIndex + " | LastTime = " + (BarFreq >= BarFreq.Daily ? Rows[lastIndex].Time.ToString("MM-dd-yyyy") : Rows[lastIndex].DataSourcePeriod.Stop.ToString("HH:mm:ss")) + " | LastClose = " + LastClose);
                 Console.WriteLine("==================\n");
             }
@@ -734,11 +741,13 @@ namespace Pacmio
                     Calculate(bas);
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
-
+                    /*
                     lock (DataConsumers)
                     {
-                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).Select(n => n as BarChart).ToList().ForEach(n => { n.PointerToEnd(); });
-                    }
+                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).
+                            Select(n => n as BarChart).ToList().
+                            ForEach(n => { n.PointerToEnd(); });
+                    }*/
                 }
         }
 
@@ -814,11 +823,13 @@ namespace Pacmio
                     {
                         if (m_Status == TableStatus.CalculateFinished)
                         {
-                            foreach (var idr in DataRenderers) idr.PointerToEnd();
+                            foreach (var idr in DataRenderers) 
+                                idr.PointerSnapToEnd();
                         }
                         else if (m_Status == TableStatus.TickingFinished)
                         {
-                            foreach (var idr in DataRenderers) idr.PointerToNextTick();
+                            foreach (var idr in DataRenderers)
+                                idr.PointerSnapToNextTick();
                         }
                     }
 

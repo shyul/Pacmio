@@ -46,7 +46,7 @@ namespace Pacmio
 
         public static void PointerToEndAll()
         {
-            lock (List) List.ForEach(bc => { bc.PointerToEnd(); });
+            lock (List) List.ForEach(bc => { bc.PointerSnapToEnd(); });
         }
         /*
         public static void AddColumnSeries(this BarChart bc, NumericColumn data)

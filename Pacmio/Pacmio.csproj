@@ -114,7 +114,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Trend\TrendLineDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\07_Execution\IndicatorExec.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_TrailingPivot\TrailingPivotPtDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\TrailingPivot\TrailingPivotPtDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\08_Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleComplex.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableGroup.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\Relative.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Pivot\SingleColumnPivotAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\PriceDirection.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickShadowStarAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickShadowStarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignalType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\DualData\DualDataSignalDatum.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLine.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\_Types\LevelRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\LevelRangeDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_TrailingPivot\TrailingPivotPtAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\TrailingPivot\TrailingPivotPtAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\Trend\TrendLineAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Types\PatternColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Types\PatternDatum.cs" />
@@ -227,13 +227,13 @@
     <Compile Include="Source\IBApi\Subscriptions.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\_IB\ScannerType.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalDatum.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickDojiMarubozuAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalColumn.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SingleData\SingleDataSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Divergence\DivergenceSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\DualData\DualDataSignal.cs" />
     <Compile Include="Source\Modules\Decision\WatchList\TIProData\Signal\IAlert.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\CandleStick\CandleStickType.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\CandleStick\CandleStickType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IBarChartArea.cs" />
