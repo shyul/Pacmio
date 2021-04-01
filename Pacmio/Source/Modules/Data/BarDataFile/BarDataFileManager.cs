@@ -141,6 +141,10 @@ namespace Pacmio
                 else
                     return true;
             }
+            else
+            {
+                Console.WriteLine("Contract has errors!");
+            }
 
             return false;
         }

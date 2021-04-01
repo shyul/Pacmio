@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TextBoxMultiContracts.Text" xml:space="preserve">
-    <value>DISCA, ARKX, UPST, CHWY, SKLZ, WAFU, UCO, SCO, NAT, AAL, AAPL, ABNB, ADMS, AMC, ARKK, BA, BABA, BIDU, BLNK, BNGO, CCIV, CHPT, CKPT, CLII, CLOV, CLVS, CPNG, CRSP, CSCW, DIS, EBON, FDX, FSLY, GEVO, GME, GOGO, HIHO, HJLI, HOFV, HTZ, JAGX, JFIN, JKS, JMIA, KCAC, KOSS, LAZR, LMFA, LYFT, MARA, NCTY, NIO, NIU, NNOX, NVAX, OCG, OCGN, PLTR, PLUG, PPBT, PTON, RIDE, RKT, ROKU, SHOP, SLDB, SLGG, SNAP, SOLO, SPOT, SQ, TDOC, TIGR, TKAT, TLRY, TRVN, TSLA, TTCF, UPST, V, VACQ, VIOT, VJET, VUZI, WKEY, WKHS, XPEV, YVR, Z, ZKIN, ZM</value>
+    <value>IPOD, IPOF, DISCA, ARKX, UPST, CHWY, SKLZ, WAFU, UCO, SCO, NAT, AAL, AAPL, ABNB, ADMS, AMC, ARKK, BA, BABA, BIDU, BLNK, BNGO, CCIV, CHPT, CKPT, CLII, CLOV, CLVS, CPNG, CRSP, CSCW, DIS, EBON, FDX, FSLY, GEVO, GME, GOGO, HIHO, HJLI, HOFV, HTZ, JAGX, JFIN, JKS, JMIA, KCAC, KOSS, LAZR, LMFA, LYFT, MARA, NCTY, NIO, NIU, NNOX, NVAX, OCG, OCGN, PLTR, PLUG, PPBT, PTON, RIDE, RKT, ROKU, SHOP, SLDB, SLGG, SNAP, SOLO, SPOT, SQ, TDOC, TIGR, TKAT, TLRY, TRVN, TSLA, TTCF, UPST, V, VACQ, VIOT, VJET, VUZI, WKEY, WKHS, XPEV, YVR, Z, ZKIN, ZM</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -32,6 +32,7 @@ namespace TestClient
                 TextBoxSingleContractName.ForeColor = Color.Green;
                 SelectBoxSingleContractSecurityType.Text = ContractTest.ActiveContract.TypeName.ToString();
                 SelectBoxSingleContractExchange.Text = ContractTest.ActiveContract.Exchange.ToString();
+                ContractTest.ActiveContract.Status = ContractStatus.Alive;
                 return true;
             }
             else
