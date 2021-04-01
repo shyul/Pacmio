@@ -109,20 +109,40 @@ namespace Pacmio
         [IgnoreDataMember]
         public DateTime HistoricalHeadTime
         {
-            get => (!m_HistoricalHeadTime.IsInvalid() && BarFreq < BarFreq.Minute && 
-                m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6)) ?
+            get
+            {
+                DateTime m_HistoricalHeadTime = Contract.HistoricalHeadTime;
 
-                DateTime.Now.Date.AddMonths(-6) :
-                m_HistoricalHeadTime;
-
-            set => m_HistoricalHeadTime = value;
+                if (BarFreq < BarFreq.Minute)
+                {
+                    if (!m_HistoricalHeadTime.IsInvalid() && m_HistoricalHeadTime < DateTime.Now.Date.AddMonths(-6))
+                        return DateTime.Now.Date.AddMonths(-6);
+                    else
+                        return m_HistoricalHeadTime;
+                }
+                else
+                {
+                    return m_HistoricalHeadTime;
+                }
+            }
+            set 
+            {
+                Contract.HistoricalHeadTime = value;
+                //m_HistoricalHeadTime = value; 
+            }
         }
 
-        [DataMember]
-        private DateTime m_HistoricalHeadTime = TimeTool.MinInvalid;
+        /*
+        [IgnoreDataMember]
+        //private DateTime m_HistoricalHeadTime { get; set; } = TimeTool.MinInvalid;
+        private DateTime m_HistoricalHeadTime
+        {
+            get => Contract.HistoricalHeadTime;
+            set => Contract.HistoricalHeadTime = value;
+        }*/
 
         [DataMember]
-        public DateTime LastUpdateTime { get; private set; } = DateTime.MinValue;
+        public DateTime LastUpdateTime { get; private set; } = TimeTool.MinInvalid;
 
         [IgnoreDataMember]
         private object DataLockObject { get; set; } = new object();

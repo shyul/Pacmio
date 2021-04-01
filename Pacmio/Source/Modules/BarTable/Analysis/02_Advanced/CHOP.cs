@@ -11,6 +11,8 @@
 /// #3 - Trade within Choppy Markets
 /// #4 – Walk away from stocks that do not trade nicely with the Choppiness Index Indicator
 /// 
+/// Noteably: Trend usually starts when it cross down 50.
+/// 
 /// ***************************************************************************
 
 using System;

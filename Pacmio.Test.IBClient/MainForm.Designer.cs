@@ -1599,6 +1599,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet8
             // 
+            this.BtnHistoricalDataContractSet8.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet8.Location = new System.Drawing.Point(118, 205);
             this.BtnHistoricalDataContractSet8.Name = "BtnHistoricalDataContractSet8";
             this.BtnHistoricalDataContractSet8.Size = new System.Drawing.Size(45, 23);
@@ -1609,16 +1610,18 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet7
             // 
+            this.BtnHistoricalDataContractSet7.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet7.Location = new System.Drawing.Point(67, 205);
             this.BtnHistoricalDataContractSet7.Name = "BtnHistoricalDataContractSet7";
             this.BtnHistoricalDataContractSet7.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet7.TabIndex = 55;
-            this.BtnHistoricalDataContractSet7.Text = "SLGG";
+            this.BtnHistoricalDataContractSet7.Text = "NIO";
             this.BtnHistoricalDataContractSet7.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet7.Click += new System.EventHandler(this.BtnHistoricalDataContractSet7_Click);
             // 
             // BtnHistoricalDataContractSet6
             // 
+            this.BtnHistoricalDataContractSet6.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet6.Location = new System.Drawing.Point(16, 205);
             this.BtnHistoricalDataContractSet6.Name = "BtnHistoricalDataContractSet6";
             this.BtnHistoricalDataContractSet6.Size = new System.Drawing.Size(45, 23);
@@ -1629,26 +1632,29 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet5
             // 
+            this.BtnHistoricalDataContractSet5.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet5.Location = new System.Drawing.Point(220, 176);
             this.BtnHistoricalDataContractSet5.Name = "BtnHistoricalDataContractSet5";
             this.BtnHistoricalDataContractSet5.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet5.TabIndex = 53;
-            this.BtnHistoricalDataContractSet5.Text = "PLUG";
+            this.BtnHistoricalDataContractSet5.Text = "PLTR";
             this.BtnHistoricalDataContractSet5.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet5.Click += new System.EventHandler(this.BtnHistoricalDataContractSet5_Click);
             // 
             // BtnHistoricalDataContractSet4
             // 
+            this.BtnHistoricalDataContractSet4.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet4.Location = new System.Drawing.Point(169, 176);
             this.BtnHistoricalDataContractSet4.Name = "BtnHistoricalDataContractSet4";
             this.BtnHistoricalDataContractSet4.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet4.TabIndex = 51;
-            this.BtnHistoricalDataContractSet4.Text = "CPNG";
+            this.BtnHistoricalDataContractSet4.Text = "ARKK";
             this.BtnHistoricalDataContractSet4.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet4.Click += new System.EventHandler(this.BtnHistoricalDataContractSet4_Click);
             // 
             // BtnHistoricalDataContractSet3
             // 
+            this.BtnHistoricalDataContractSet3.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet3.Location = new System.Drawing.Point(118, 176);
             this.BtnHistoricalDataContractSet3.Name = "BtnHistoricalDataContractSet3";
             this.BtnHistoricalDataContractSet3.Size = new System.Drawing.Size(45, 23);
@@ -1659,6 +1665,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet2
             // 
+            this.BtnHistoricalDataContractSet2.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet2.Location = new System.Drawing.Point(67, 176);
             this.BtnHistoricalDataContractSet2.Name = "BtnHistoricalDataContractSet2";
             this.BtnHistoricalDataContractSet2.Size = new System.Drawing.Size(45, 23);
@@ -1669,7 +1676,7 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet1
             // 
-            this.BtnHistoricalDataContractSet1.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnHistoricalDataContractSet1.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet1.Location = new System.Drawing.Point(16, 176);
             this.BtnHistoricalDataContractSet1.Name = "BtnHistoricalDataContractSet1";
             this.BtnHistoricalDataContractSet1.Size = new System.Drawing.Size(45, 23);
@@ -2003,21 +2010,23 @@ namespace TestClient
             // 
             // BtnHistoricalDataContractSet10
             // 
+            this.BtnHistoricalDataContractSet10.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet10.Location = new System.Drawing.Point(220, 205);
             this.BtnHistoricalDataContractSet10.Name = "BtnHistoricalDataContractSet10";
             this.BtnHistoricalDataContractSet10.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet10.TabIndex = 67;
-            this.BtnHistoricalDataContractSet10.Text = "YVR";
+            this.BtnHistoricalDataContractSet10.Text = "PYPL";
             this.BtnHistoricalDataContractSet10.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet10.Click += new System.EventHandler(this.BtnHistoricalDataContractSet10_Click);
             // 
             // BtnHistoricalDataContractSet9
             // 
+            this.BtnHistoricalDataContractSet9.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.BtnHistoricalDataContractSet9.Location = new System.Drawing.Point(169, 205);
             this.BtnHistoricalDataContractSet9.Name = "BtnHistoricalDataContractSet9";
             this.BtnHistoricalDataContractSet9.Size = new System.Drawing.Size(45, 23);
             this.BtnHistoricalDataContractSet9.TabIndex = 66;
-            this.BtnHistoricalDataContractSet9.Text = "TKAT";
+            this.BtnHistoricalDataContractSet9.Text = "JMIA";
             this.BtnHistoricalDataContractSet9.UseVisualStyleBackColor = true;
             this.BtnHistoricalDataContractSet9.Click += new System.EventHandler(this.BtnHistoricalDataContractSet9_Click);
             // 

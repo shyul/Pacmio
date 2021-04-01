@@ -248,7 +248,10 @@ namespace Pacmio
         public virtual bool NeedUpdate => ((DateTime.Now - UpdateTime).Days > 2 && MarketData.NeedUpdate) || FullName.Length < 2;
 
         [DataMember]
-        public DateTime UpdateTime { get; set; } = DateTime.MinValue;
+        public DateTime UpdateTime { get; set; } = TimeTool.MinInvalid;
+
+        [DataMember]
+        public DateTime HistoricalHeadTime { get; set; } = TimeTool.MinInvalid;
 
         [DataMember]
         public MultiPeriod<SymbolHistory> History { get; private set; } = new MultiPeriod<SymbolHistory>();

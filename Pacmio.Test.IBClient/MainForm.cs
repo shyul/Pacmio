@@ -86,6 +86,8 @@ namespace TestClient
             }
         }
 
+        private PositionUpdate PositionUpdate { get; }
+
         public MainForm()
         {
             InitializeComponent();
@@ -156,6 +158,11 @@ namespace TestClient
 
             TestFreqAlign tfa = new();
             TestMultiPeriodDataSource tmpds = new();
+
+            PositionUpdate = new PositionUpdate(new Button[] { BtnHistoricalDataContractSet1, BtnHistoricalDataContractSet2, BtnHistoricalDataContractSet3, 
+                BtnHistoricalDataContractSet4, BtnHistoricalDataContractSet5, BtnHistoricalDataContractSet6, BtnHistoricalDataContractSet7, BtnHistoricalDataContractSet8,
+                BtnHistoricalDataContractSet9, BtnHistoricalDataContractSet10 });
+
             //tfa.Show();
             //tmpds.Show();
 
