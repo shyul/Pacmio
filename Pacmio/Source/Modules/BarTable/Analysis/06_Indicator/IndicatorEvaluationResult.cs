@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 
 namespace Pacmio.Analysis
@@ -46,5 +48,34 @@ namespace Pacmio.Analysis
         public double BullishPercent { get; } = 0;
 
         public double BearishPercent { get; } = 0;
+    }
+
+
+    public static class IndicatorManager 
+    {
+        public static void Evaluate(IEnumerable<Contract> cList,  CancellationTokenSource cts, IProgress<float> Progress) 
+        {
+            double totalseconds = 0;
+            float total_num = cList.Count();
+            float i = 0;
+
+            //BarTableSet bts =
+            Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 },
+                c => {
+                    DateTime startTime = DateTime.Now;
+
+                    BarTableSet bts = new BarTableSet(c, false);
+                    bts.SetPeriod(pd, Cts);
+                    BarTable bt = bts[freq, type];
+
+                    bt.CalculateRefresh(bas);
+                    DateTime endTime = DateTime.Now;
+                    double seconds = (endTime - startTime).TotalSeconds;
+                    totalseconds += seconds;
+                    i++;
+                    Progress.Report(i * 100.0f / total_num);
+                });
+
+        }
     }
 }
