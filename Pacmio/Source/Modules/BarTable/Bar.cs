@@ -104,6 +104,8 @@ namespace Pacmio
             Volume = volume;
         }
 
+        public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();
+
         /// <summary>
         /// BarTable this Bar belongs to. And unable to change through the entire life cycle of the Bar.
         /// </summary>
@@ -171,8 +173,6 @@ namespace Pacmio
         public static NumericColumn Column_Close { get; } = new NumericColumn("CLOSE", "CLOSE");
         public static NumericColumn Column_Volume { get; } = new NumericColumn("VOLUME", string.Empty);
 
-        #endregion Original
-
         public void Copy(Bar b)
         {
             if (b.Table != Table || b.Time != Time || b.Period != Period)
@@ -188,43 +188,66 @@ namespace Pacmio
             DataSourcePeriod = b.DataSourcePeriod;
         }
 
+        public void ClearAllCalculationData()
+        {
+            BarType = BarType.None;
+            Gain = double.NaN;
+            GainPercent = double.NaN;
+            Gap = double.NaN;
+            GapPercent = double.NaN;
+            Typical = double.NaN;
+            Range = double.NaN;
+            TrueRange = double.NaN;
+            NarrowRange = 0;
+            TrendStrength = 0;
+            Pivot = 0;
+            PivotStrength = 0;
+
+            NumericColumnsLUT.Clear();
+            DatumColumnsLUT.Clear();
+        }
+
+        #endregion Original
+
         #region Smaller Bars
 
-        public bool MergeFromSmallerBar(Bar b)
+        public bool MergeFromSmallerBar(Bar smaller_b)
         {
             bool isModified = false;
 
-            if (b.BarFreq <= BarFreq)
+            if (smaller_b.BarFreq <= BarFreq)
             {
-                if (b.High > High) // New High
+                if (smaller_b.High > High) // New High
                 {
-                    High = b.High;
+                    High = smaller_b.High;
                     isModified = true;
                 }
 
-                if (b.Low < Low) // New Low
+                if (smaller_b.Low < Low) // New Low
                 {
-                    Low = b.Low;
+                    Low = smaller_b.Low;
                     isModified = true;
                 }
 
-                if (b.DataSourcePeriod.Stop <= DataSourcePeriod.Start) // Eariler Open
+                // Smaller Bar's Stop is even earlier than this Bar's start, smaller_b.Source <= Source && ???
+                if (smaller_b.DataSourcePeriod.Stop < DataSourcePeriod.Start && smaller_b.DataSourcePeriod.Start > Period.Start)
                 {
-                    Open = b.Open;
-                    Volume += b.Volume;
-                    DataSourcePeriod.Insert(b.DataSourcePeriod.Start);
+                    Open = smaller_b.Open;
+                    Volume += smaller_b.Volume;
+                    DataSourcePeriod.Insert(smaller_b.DataSourcePeriod.Start);
                     isModified = true;
                 }
 
-                if (b.DataSourcePeriod.Start >= DataSourcePeriod.Stop) // Later Close
+                // Smaller Bar's Start is even later than this Bar's stop
+                if (smaller_b.DataSourcePeriod.Start >= DataSourcePeriod.Stop)
                 {
-                    Close = b.Close;
-                    Volume += b.Volume;
-                    DataSourcePeriod.Insert(b.DataSourcePeriod.Stop);
+                    Close = smaller_b.Close;
+                    Volume += smaller_b.Volume;
+                    DataSourcePeriod.Insert(smaller_b.DataSourcePeriod.Stop);
                     isModified = true;
                 }
 
-                if (Source < b.Source) Source = b.Source; // Worse Source
+                if (Source < smaller_b.Source) Source = smaller_b.Source; // Worse Source
             }
             else
             {
@@ -235,8 +258,6 @@ namespace Pacmio
         }
 
         #endregion Smaller Bars
-
-
 
         #region Intrinsic Indicators | NativeGainAnalysis
 
@@ -480,25 +501,6 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        public void ClearAllCalculationData()
-        {
-            BarType = BarType.None;
-            Gain = double.NaN;
-            GainPercent = double.NaN;
-            Gap = double.NaN;
-            GapPercent = double.NaN;
-            Typical = double.NaN;
-            Range = double.NaN;
-            TrueRange = double.NaN;
-            NarrowRange = 0;
-            TrendStrength = 0;
-            Pivot = 0;
-            PivotStrength = 0;
 
-            NumericColumnsLUT.Clear();
-            DatumColumnsLUT.Clear();
-        }
-
-        public override int GetHashCode() => Table.GetHashCode() ^ Time.GetHashCode();
     }
 }

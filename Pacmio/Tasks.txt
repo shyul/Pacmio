@@ -1,14 +1,38 @@
-Code Tasks:
+Program Flow:
+
+1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
+                                                        a. OrderRules           a. Can Contain Several Orders
+
+
+Coding Tasks:
 ==============
 
-1. Doji candle for Above-Daily BarTables when there is an incoming tick.
-2. Fatal error casued by trying to save Above daily BarDatas
+1. (addressed and need to test) Error Doji candle for Above-Daily BarTables when there is an incoming tick.
 
-3. (easy) Historical Headtime shall be based on Daily BarData's earliest time.
-4. Candlestick as SignalAnalysis
+MarketData -> BarTableSet -> BarTable -> BarTableSet then run evluation
+Bar.cs  ||  public bool MergeFromSmallerBar(Bar smaller_b)
+
+2. (addressed and need to test) Fatal error casued by trying to save Above daily BarDatas
+
+// Need to limit the scope for period change for BarTable with smaller than daily bars.
+// public sealed class BarTableSet 
+// public void SetPeriod(MultiPeriod mp, CancellationTokenSource cts = null)
+// foreach (BarTable bt in BarTableLUT.Values.Where(bt => bt.BarFreq < BarFreq.Daily))
+
+3. (done)(easy) Historical Headtime shall be based on Daily BarData's earliest time.
+
+4. (done and tested 1st) Candlestick as SignalAnalysis
+
+7. (done) PivotPt -> ApexPt
+
 5. Pattern Momo-Reversal as SignalAnalysis, PatternSignal
-6. BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
-7. PivotPt -> ApexPt
+    a. Count the uptrend lines and down trend lines
+    b. Bar cross up and Bar cross down, and count visited levels
+    c. Marubozu as momentum indication (red maru as bearish, white as bullish) --> long body as momentum
+    d. Doji Star and hammer as reveral (T as bullish, shooting star as bearish) --> long wick as reversal
+
+6. (just started) BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
+
 
 
 
@@ -23,10 +47,6 @@ B. MACD Back testing.
 
 
 
-Program Flow:
-
-1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
-                                                        a. OrderRules           a. Can Contain Several Orders
 
 
 Confirmation Template

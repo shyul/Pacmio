@@ -23,10 +23,12 @@ namespace Pacmio
             return BarDataFile.LoadFile((c.Key, barFreq, type));
         }
 
+        /*
         public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
 
         public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, DataType dataType, Period pd, CancellationTokenSource cts = null)
             => LoadBarTable(bts, barFreq, dataType, new MultiPeriod(pd), cts);
+        */
 
         public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, CancellationTokenSource cts = null)
         {
@@ -106,6 +108,27 @@ namespace Pacmio
 
         #region Download
 
+        public static List<BarDataFile> DownloadingList { get; } = new();
+
+        private static object DataLockObject { get; } = new();
+
+        public static BarDataFile AddDownloadingBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades) 
+        {
+            lock (DataLockObject) 
+            {
+
+                return null;
+            }
+        }
+
+        public static void RemoveDownloadingBarDataFile(BarDataFile bdf)
+        {
+            lock (DataLockObject)
+            {
+                if (DownloadingList.Contains(bdf)) DownloadingList.Remove(bdf);
+            }
+        }
+
         /// <summary>
         /// Only support download daily and smaller bars data file.
         /// </summary>
@@ -115,38 +138,42 @@ namespace Pacmio
         /// <returns></returns>
         public static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts = null)
         {
-            if (bdf.BarFreq > BarFreq.Daily)
-                throw new Exception("Only support download daily and smaller bars data file.");
-            else //if (bdf.BarFreq == BarFreq.Daily)
-                Console.WriteLine("Last Closing Date: " + bdf.Contract.LatestExtendedClosingDateTime.ToString("MMM-dd-yyyy"));
-
-            
-            if (bdf.HistoricalHeadTime.IsInvalid())
+            lock (bdf)
             {
-                IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
-            }
-            else
-            {
-                Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
-            }
+                if (bdf.BarFreq > BarFreq.Daily)
+                    throw new Exception("Only support download daily and smaller bars data file.");
+                else //if (bdf.BarFreq == BarFreq.Daily)
+                    Console.WriteLine("Last Closing Date: " + bdf.Contract.LatestExtendedClosingDateTime.ToString("MMM-dd-yyyy"));
 
-            //Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
 
-            if (bdf.Contract.Status != ContractStatus.Error)
-            {
-                if (!Quandl.Fetch(bdf))
+                if (bdf.Contract.HistoricalHeadTime.IsInvalid())
                 {
-                    IB.Client.Fetch_HistoricalData(bdf, pd, cts);
+                    IB.Client.Fetch_HistoricalDataHeadTimestamp(bdf, cts, false, 1);
                 }
                 else
-                    return true;
-            }
-            else
-            {
-                Console.WriteLine("Contract has errors!");
-            }
+                {
+                    Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
+                }
 
-            return false;
+                //Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
+
+                if (bdf.Contract.Status != ContractStatus.Error)
+                {
+                    if (!Quandl.Fetch(bdf))
+                    {
+                        IB.Client.Fetch_HistoricalData(bdf, pd, cts);
+                        RemoveDownloadingBarDataFile(bdf);
+                    }
+                    else
+                        return true;
+                }
+                else
+                {
+                    Console.WriteLine("Contract has errors!");
+                }
+
+                return false;
+            }
         }
 
         #endregion Download

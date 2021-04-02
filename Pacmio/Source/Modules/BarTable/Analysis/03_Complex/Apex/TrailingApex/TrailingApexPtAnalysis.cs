@@ -82,13 +82,13 @@ namespace Pacmio.Analysis
                             if (pivot > MinimumPeakProminence)
                             {
                                 double high = b.High;
-                                tpd.PositivePivotPtList[index] = new(index, b.Time, high, strength); // pivot, trendStrength);
+                                tpd.PositiveApexPtList[index] = new(index, b.Time, high, strength); // pivot, trendStrength);
                                 tpd.PivotRange.Insert(high);
                             }
                             else if (pivot < -MinimumPeakProminence)
                             {
                                 double low = b.Low;
-                                tpd.NegativePivotPtList[index] = new(index, b.Time, low, strength); // , pivot, trendStrength);
+                                tpd.NegativeApexPtList[index] = new(index, b.Time, low, strength); // , pivot, trendStrength);
                                 tpd.PivotRange.Insert(low);
                             }
                         }

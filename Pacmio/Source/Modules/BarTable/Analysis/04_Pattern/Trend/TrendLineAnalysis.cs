@@ -80,7 +80,7 @@ namespace Pacmio.Analysis
                 {
                     TrendLineDatum tld = new();
                     tld.TotalLevelRange = tpd.TotalLevelRange;
-                    tld.AddLine(tpd.PivotPts.Select(n => n.Value), i);
+                    tld.AddLine(tpd.ApexPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
 
                     //Console.WriteLine("+++++ TrendLineAnalysis | tld.Count = " + tld.Count + ";  tld.TotalLevelRange = " + tld.TotalLevelRange);

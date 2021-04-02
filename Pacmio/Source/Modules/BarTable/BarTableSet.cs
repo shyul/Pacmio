@@ -115,7 +115,7 @@ namespace Pacmio
                                     double high = double.IsNaN(MarketData.High) || MarketData.High <= 0 ? price : MarketData.High;
                                     double low = double.IsNaN(MarketData.Low) || MarketData.Low <= 0 ? price : MarketData.Low;
                                     double volume = double.IsNaN(MarketData.Volume) ? price : 0;
-                                    bt.MergeFromSmallerBar(time, new Bar(bt, date, open, high, low, price, volume));
+                                    bt.MergeFromSmallerBar(time, new Bar(bt, date, open, high, low, price, volume)); ;
                                 }
                                 else if (bt.LastTimeBound.Date == date)
                                 {
@@ -186,7 +186,7 @@ namespace Pacmio
                 }
                 IsLive = isLive;
 
-                foreach (BarTable bt in BarTableLUT.Values)
+                foreach (BarTable bt in BarTableLUT.Values.Where(bt => bt.BarFreq < BarFreq.Daily))
                 {
                     bt.LoadBars(mp, AdjustDividend, cts);
                 }

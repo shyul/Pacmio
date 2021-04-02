@@ -17,19 +17,19 @@ namespace Pacmio.Analysis
     {
         public TrailingApexPtDatum(TrailingApexPtAnalysis tpa)
         {
-            TrailingPivotPtAnalysis = tpa;
+            TrailingApexPtAnalysis = tpa;
         }
 
-        public TrailingApexPtAnalysis TrailingPivotPtAnalysis { get; }
+        public TrailingApexPtAnalysis TrailingApexPtAnalysis { get; }
 
         public Range<double> PivotRange { get; } = new Range<double>(double.MaxValue, double.MinValue);
         
         public Range<double> TotalLevelRange { get; set; }
 
-        public Dictionary<int, ApexPt> PositivePivotPtList { get; } = new Dictionary<int, ApexPt>();
+        public Dictionary<int, ApexPt> PositiveApexPtList { get; } = new Dictionary<int, ApexPt>();
 
-        public Dictionary<int, ApexPt> NegativePivotPtList { get; } = new Dictionary<int, ApexPt>();
+        public Dictionary<int, ApexPt> NegativeApexPtList { get; } = new Dictionary<int, ApexPt>();
 
-        public KeyValuePair<int, ApexPt>[] PivotPts => PositivePivotPtList.Concat(NegativePivotPtList).OrderBy(n => n.Key).ToArray();
+        public KeyValuePair<int, ApexPt>[] ApexPts => PositiveApexPtList.Concat(NegativeApexPtList).OrderBy(n => n.Key).ToArray();
     }
 }

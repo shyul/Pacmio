@@ -77,7 +77,7 @@ namespace Pacmio.Analysis
                 {
                     HorizontalLineDatum hld = new();
                     hld.TotalLevelRange = tpd.TotalLevelRange;
-                    hld.AddLine(tpd.PivotPts.Select(n => n.Value));
+                    hld.AddLine(tpd.ApexPts.Select(n => n.Value));
                     b[Column_Result] = hld;
                 }
             }
