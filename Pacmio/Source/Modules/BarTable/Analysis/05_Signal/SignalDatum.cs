@@ -54,7 +54,6 @@ namespace Pacmio
 
         public void Add(double f)
         {
-            //TrailPoints.ForEach(n => n = n + f);
             for (int i = 0; i < TrailPoints.Count; i++)
             {
                 TrailPoints[i] = TrailPoints[i] + f;
@@ -63,13 +62,12 @@ namespace Pacmio
 
         public void Multiply(double f)
         {
-            //TrailPoints.ForEach(n => n = n * f);
             for (int i = 0; i < TrailPoints.Count; i++)
             {
                 TrailPoints[i] = TrailPoints[i] * f;
             }
         }
 
-        public double Score => TrailPoints[0];
+        public double Points => TrailPoints[0];
     }
 }

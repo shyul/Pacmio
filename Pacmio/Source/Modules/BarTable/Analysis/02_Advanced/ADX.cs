@@ -131,6 +131,7 @@ namespace Pacmio.Analysis
                 double current_high = b.High; // C4
                 double current_low = b.Low; // D4
 
+                /*
                 double prior_high = current_high; // C3
                 double prior_low = current_low; // D3
 
@@ -138,7 +139,10 @@ namespace Pacmio.Analysis
                 {
                     prior_high = b_1.High; // C3
                     prior_low = b_1.Low; // D3
-                }
+                }*/
+
+                double prior_high = b_1.High; // C3
+                double prior_low = b_1.Low; // D3
 
                 double high_diff = current_high - prior_high; // C4 - C3
                 double low_diff = prior_low - current_low; // D3 - D4

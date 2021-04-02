@@ -454,9 +454,9 @@ namespace Pacmio
             {
                 if (this[sc] is SignalDatum sd)
                 {
-                    double score = sd.Score;
-                    if (score > 0) bull += score;
-                    else if (score < 0) bear += score;
+                    double points = sd.Points;
+                    if (points > 0) bull += points;
+                    else if (points < 0) bear += points;
                 }
             }
             return (bull, bear);

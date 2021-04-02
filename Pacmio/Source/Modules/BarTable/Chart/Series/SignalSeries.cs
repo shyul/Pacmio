@@ -82,10 +82,10 @@ namespace Pacmio
                 {
                     if (b[sc] is SignalDatum sd)
                     {
-                        if (sd.Score > 0)
-                            labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
-                        else if (sd.Score < 0)
-                            labels.Add((sc.Name + ": " + sd.Score + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                        if (sd.Points > 0)
+                            labels.Add((sc.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
+                        else if (sd.Points < 0)
+                            labels.Add((sc.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace Pacmio
                             if (b[sc] is SignalDatum sd)
                             {
                                 string desc = sd.Description;
-                                double score = sd.Score;
+                                double score = sd.Points;
 
                                 Rectangle rect;
                                 int height;

@@ -17,15 +17,15 @@ namespace Pacmio.Analysis
 {
     public sealed class DPPMO : ATR, IOscillator
     {
-        public double Reference => throw new NotImplementedException();
+        public double Reference { get; set; } = 0;
 
-        public double UpperLimit => throw new NotImplementedException();
+        public double UpperLimit { get; set; } = 3;
 
-        public double LowerLimit => throw new NotImplementedException();
+        public double LowerLimit { get; set; } = -3;
 
-        public Color UpperColor => throw new NotImplementedException();
+        public Color UpperColor { get; set; } = Color.ForestGreen;
 
-        public Color LowerColor => throw new NotImplementedException();
+        public Color LowerColor { get; set; } = Color.Crimson;
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

@@ -16,6 +16,8 @@
 ///     
 ///     https://support.stockcharts.com/doku.php?id=scans:library:sample_scans
 /// 
+///     https://school.stockcharts.com/doku.php?id=technical_indicators:sctr
+/// 
 /// 1. Volatility: 
 ///     https://www.investopedia.com/terms/v/volatility.asp#:~:text=Volatility%20is%20a%20statistical%20measure,same%20security%20or%20market%20index.
 ///     https://www.wallstreetmojo.com/volatility-formula/
@@ -100,9 +102,32 @@ namespace Pacmio.Analysis
         public BandSignal BollingerBandSignal { get; }
 
 
+        public SMA MA_Long { get; }
+
+
+        public SMA MA_Medium { get; }
+
         public SingleDataSignal SingleDataSignal { get; }
+        /*
+        Long-Term Indicators(weighting)
+        --------------------------------
 
+          * Percent above/below 200-day EMA(30%)
+          * 125-Day Rate-of-Change(30%)
 
+        Medium-Term Indicators(weighting)
+        ----------------------------------
+
+          * Percent above/below 50-day EMA(15%)
+          * 20-day Rate-of-Change(15%)
+
+        Short-Term Indicators(weighting)
+        ---------------------------------
+
+          * 3-day slope of PPO(12,26,9) Histogram/3 (5%)
+          * 14-day RSI(5%)
+        
+         */
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -111,6 +136,37 @@ namespace Pacmio.Analysis
             // Filter Chop Index
 
             // Add SMA?
+
+            BarTable bt = bap.Table;
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+
+                double close = b.Close;
+                double low = b.Low;
+                double high = b.High;
+
+                double volume = b.Volume;
+
+                double point = 0;
+
+                if (high > 2 && low < 50)
+                {
+                    point++;
+                }
+
+                if (volume * close > 5e7)
+                {
+                    point++;
+                }
+
+                double chop = b[ChopAnalysis];
+
+                double rsi = b[OscillatorAnalysis];
+
+                OscillatorSignalDatum osd = b[OscillatorSignal] as OscillatorSignalDatum;
+
+            }
         }
     }
 }

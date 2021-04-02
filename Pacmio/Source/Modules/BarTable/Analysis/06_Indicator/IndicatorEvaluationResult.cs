@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public class IndicatorEvaluationResult
     {
-        public IndicatorEvaluationResult(Contract c , IndicatorSet inds)
+        public IndicatorEvaluationResult(Contract c, IndicatorSet inds)
         {
             Contract = c;
             IndicatorSet = inds;
@@ -99,14 +99,16 @@ namespace Pacmio
             return result;
         }
 
-        public static void PrintResult(Dictionary<Contract, IndicatorEvaluationResult> result) 
+        public static void PrintResult(Dictionary<Contract, IndicatorEvaluationResult> result)
         {
-            var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n=>n.Value).Take(100);
+            var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
 
-            foreach(var ier in r) 
+            foreach (var ier in r)
             {
                 Console.WriteLine(ier.Contract + ": " + ier.BullishPercent);
             }
         }
+
+
     }
 }
