@@ -7,17 +7,15 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio
+namespace Pacmio.Analysis
 {
-    public interface ILevel
+    public class NumericColumnLevelDatum : ILevelDatum
     {
-        double Value { get; }
-
-        double Strength { get; }
+        public List<Level> Levels { get; } = new();
     }
 }

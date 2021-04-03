@@ -74,16 +74,12 @@ namespace Pacmio.Analysis
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
-               // Console.WriteLine("+++++ TrendLineAnalysis | StartPt = " + bap.StartPt + "; StopPt = " + bap.StopPt);
-                //if (bt[i] is Bar b && b[Column_Result] is null && b[TrailingPivotPointAnalysis] is TrailingPivotPtDatum tpd)
                 if (bt[i] is Bar b && b[TrailingPivotPointAnalysis] is TrailingApexPtDatum tpd)
                 {
                     TrendLineDatum tld = new();
                     tld.TotalLevelRange = tpd.TotalLevelRange;
                     tld.AddLine(tpd.ApexPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
-
-                    //Console.WriteLine("+++++ TrendLineAnalysis | tld.Count = " + tld.Count + ";  tld.TotalLevelRange = " + tld.TotalLevelRange);
                 }
             }
         }

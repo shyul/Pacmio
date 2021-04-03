@@ -14,15 +14,15 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class Level : ILevel
+    public class Level
     {
         public Level(double val, double strength = 1)
         {
-            Value = val;
+            LevelValue = val;
             Strength = strength;
         }
 
-        public double Value { get; }
+        public double LevelValue { get; }
 
         public double Strength { get; }
     }

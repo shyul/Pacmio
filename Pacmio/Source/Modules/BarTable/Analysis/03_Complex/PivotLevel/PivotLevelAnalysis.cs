@@ -2,8 +2,6 @@
 /// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// The intermediate calculation for most pattern analysis
-/// 
 /// ***************************************************************************
 
 using System;

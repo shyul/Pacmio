@@ -15,10 +15,12 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class VolumeByPriceDatum : IDatum
+    public class VolumeByPriceDatum : ILevelDatum
     {
         public Range<double> IntervalRange { get; set; }
 
         public Dictionary<Range<double>, double> PriceRangeToVolumeLUT { get; } = new Dictionary<Range<double>, double>();
+
+        public List<Level> Levels { get; } = new();
     }
 }

@@ -27,8 +27,6 @@ namespace Pacmio.Analysis
 
         public int Count => m_TrendLines.Count;
 
-        public override IEnumerable<IPatternObject> PatternObjects => m_TrendLines.Select(n => n as IPatternObject);
-
         public IEnumerator<TrendLine> GetEnumerator() => m_TrendLines.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

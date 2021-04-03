@@ -14,19 +14,19 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class LevelRange : Range<double>, ILevel
+    public class LevelRange : Range<double>
     {
-        public LevelRange(ILevel lvl, double tolerancePercent)
-            : base(lvl.Value * (1 - tolerancePercent), lvl.Value * (1 + tolerancePercent))
+        public LevelRange(Level lvl, double tolerancePercent)
+            : base(lvl.LevelValue * (1 - tolerancePercent), lvl.LevelValue * (1 + tolerancePercent))
         {
             Strength = lvl.Strength;
         }
 
         public LevelRange() : base(double.MaxValue, double.MinValue) { }
 
-        public void Insert(ILevel lvl)
+        public void Insert(Level lvl)
         {
-            Insert(lvl.Value);
+            Insert(lvl.LevelValue);
             Strength += lvl.Strength;
         }
 
@@ -42,7 +42,7 @@ namespace Pacmio
 
         public double DistancePercent(double level) => Distance(level) / level;
 
-        public double Value => (Maximum + Minimum) / 2;
+        public double LevelValue => (Maximum + Minimum) / 2;
 
         public double Strength { get; private set; } = 0;
     }

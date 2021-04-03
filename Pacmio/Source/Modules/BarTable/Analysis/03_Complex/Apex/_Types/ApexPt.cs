@@ -11,7 +11,7 @@ namespace Pacmio.Analysis
 {
     public class ApexPt : IEquatable<ApexPt>
     {
-        public ApexPt(int index, DateTime time, double level, double strength = 0) // double prominence, double trendStrength)
+        public ApexPt(int index, DateTime time, double level, double strength = 0)
         {
             Index = index;
             Time = time;

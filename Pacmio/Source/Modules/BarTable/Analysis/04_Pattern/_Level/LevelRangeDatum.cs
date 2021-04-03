@@ -27,9 +27,9 @@ namespace Pacmio.Analysis
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public void Insert(ILevel lvl, double tolerancePercent)
+        public void Insert(Level lvl, double tolerancePercent)
         {
-            double level = lvl.Value;
+            double level = lvl.LevelValue;
 
             if (List.Where(n => Math.Abs(n.DistancePercent(level)) < tolerancePercent).OrderBy(n => Math.Abs(n.Distance(level))).FirstOrDefault() is LevelRange lr)
             {

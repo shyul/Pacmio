@@ -21,11 +21,5 @@ namespace Pacmio
         public Range<double> TotalStrengthRange { get; } = new(double.MaxValue, double.MinValue);
 
         public List<Level> Levels { get; } = new();
-
-        //public IEnumerator<Level> GetEnumerator() => Levels.GetEnumerator();
-
-        //IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        public abstract IEnumerable<IPatternObject> PatternObjects { get; }
     }
 }

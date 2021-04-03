@@ -49,8 +49,6 @@ namespace Pacmio.Analysis
         public ApexPt P3 { get; set; }
 
         public ApexPt P3_B { get; set; }
-
-        public override IEnumerable<IPatternObject> PatternObjects => new IPatternObject[] { };
     }
 }
 

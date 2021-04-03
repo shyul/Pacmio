@@ -25,8 +25,6 @@ namespace Pacmio.Analysis
 
         private List<HorizontalLine> m_HorizontalLines { get; } = new();
 
-        public override IEnumerable<IPatternObject> PatternObjects => m_HorizontalLines.Select(n => n as IPatternObject);
-
         public IEnumerator<HorizontalLine> GetEnumerator() => m_HorizontalLines.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => m_HorizontalLines.GetEnumerator();

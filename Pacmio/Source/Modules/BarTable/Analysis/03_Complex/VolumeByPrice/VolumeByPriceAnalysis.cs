@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class VolumeByPriceAnalysis : BarAnalysis, ISingleComplex
+    public sealed class VolumeByPriceAnalysis : BarAnalysis, ILevelAnalysis
     {
         public VolumeByPriceAnalysis()
         {
@@ -28,6 +28,8 @@ namespace Pacmio.Analysis
 
         public int MaximumInterval { get; } = 200;
 
+        public string AreaName => MainBarChartArea.DefaultName;
+
         public DatumColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
@@ -37,7 +39,7 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                VolumeByPriceDatum datum =  new();
+                VolumeByPriceDatum datum = new();
                 b[Column_Result] = datum;
 
                 var bars = bt[i, MaximumInterval];
@@ -47,7 +49,7 @@ namespace Pacmio.Analysis
                 double max_price = datum.IntervalRange.Maximum;
                 double min_price = datum.IntervalRange.Minimum;
 
-                if (!datum.IntervalRange.IsEmpty) 
+                if (!datum.IntervalRange.IsEmpty)
                 {
                     double delta_price = (max_price - min_price) / NumOfLevels;
                     for (int j = 0; j < NumOfLevels; j++)
@@ -57,6 +59,7 @@ namespace Pacmio.Analysis
                         var key = new Range<double>(min, max);
                         var value = bars.Where(n => key.ContainsNoMax(n.Typical)).Select(n => n.Volume).Sum();
                         datum.PriceRangeToVolumeLUT[key] = value;
+                        datum.Levels.Add(new Level((min + max) / 2, value));
                     }
                 }
             }
