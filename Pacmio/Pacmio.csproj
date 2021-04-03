@@ -94,6 +94,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrame.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrameDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelAnalysis.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalType.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversal.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\Filters\DayTradeFilter.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\06_Indicator\IndicatorEvaluationResult.cs" />

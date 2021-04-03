@@ -502,8 +502,8 @@ namespace Pacmio
         #endregion Signal Information Tools
 
 
-        public List<Level> GetLevel(MomentumReversal analysis)
-            => DatumColumnsLUT.Where(n => analysis.Columns.Contains(n.Key)).Where(n => n.Value is ILevelDatum).Select(n => n.Value as ILevelDatum).SelectMany(n => n.Levels).ToList();
+        //public List<Level> GetLevel(MomentumReversalAnalysis analysis)
+            //=> DatumColumnsLUT.Where(n => analysis.Columns.Contains(n.Key)).Where(n => n.Value is ILevelDatum).Select(n => n.Value as ILevelDatum).SelectMany(n => n.Levels).ToList();
 
     }
 }

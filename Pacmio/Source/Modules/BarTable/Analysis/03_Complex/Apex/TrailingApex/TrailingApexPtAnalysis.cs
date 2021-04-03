@@ -75,9 +75,9 @@ namespace Pacmio.Analysis
                         if (bt[index] is Bar b)
                         {
                             double pivot = b.Pivot;
-                            double strength = pivot + (b.TrendStrength + b.PivotStrength) / 2;
+                            if (pivot > j - 1) pivot = j - 1;
 
-                            if (pivot > j) pivot = j;
+                            double strength = pivot + (b.TrendStrength + b.PivotStrength) / 2;
 
                             if (pivot > MinimumPeakProminence)
                             {

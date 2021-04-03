@@ -40,6 +40,15 @@ namespace Pacmio.Analysis
 
                 NativeApexAnalysis npa = new(250);
                 TrailingApexPtAnalysis tpa = new(npa);
+                TrendLineAnalysis tla = new TrendLineAnalysis(tpa);
+                MomentumReversalAnalysis mma = new MomentumReversalAnalysis(tla);
+
+                DebugSeries mma_momo = new DebugColumnSeries(mma.Column_Momentum);
+                DebugSeries mma_reversal = new DebugColumnSeries(mma.Column_Reversal);
+
+                DebugSeries tla_strength = new DebugColumnSeries(tla.Column_Strength);
+                //DebugSeries mma_bull = new DebugColumnSeries(mma.Column_BullishReversal);
+                //DebugSeries mma_bear = new DebugColumnSeries(mma.Column_BearishReversal);
 
                 List<BarAnalysis> sample_list = new()
                 {
@@ -49,10 +58,15 @@ namespace Pacmio.Analysis
                     //csd_pivot,
                     //csd_trend,
 
-                    new TrendLineAnalysis(tpa),
-                    new HorizontalLineAnalysis(tpa),
+                    tla,
+                    mma_momo,
+                    mma_reversal,
+                    tla_strength,
+                    //mma_bear,
+
+                    //new HorizontalLineAnalysis(tpa),
                     //new GetReversalIndexFromRangeBoundAnalysis(),
-                    new FlagAnalysis(),
+                    //new FlagAnalysis(),
                     //new VolumeByPriceAnalysis(),
                 };
 

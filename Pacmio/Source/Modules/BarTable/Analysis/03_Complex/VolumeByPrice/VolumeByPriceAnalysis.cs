@@ -43,13 +43,12 @@ namespace Pacmio.Analysis
                 b[Column_Result] = datum;
 
                 var bars = bt[i, MaximumInterval];
-                //Console.WriteLine("Bars i = " + i + " | LastIndex = " + bars.Last().Index + " | Bar Index = " + bt[i].Index + " | Count = " + bars.Count);
 
-                datum.IntervalRange = new Range<double>(bars.Select(n => n.Typical));
-                double max_price = datum.IntervalRange.Maximum;
-                double min_price = datum.IntervalRange.Minimum;
+                datum.TotalPriceRange = new Range<double>(bars.Select(n => n.Typical));
+                double max_price = datum.TotalPriceRange.Maximum;
+                double min_price = datum.TotalPriceRange.Minimum;
 
-                if (!datum.IntervalRange.IsEmpty)
+                if (!datum.TotalPriceRange.IsEmpty)
                 {
                     double delta_price = (max_price - min_price) / NumOfLevels;
                     for (int j = 0; j < NumOfLevels; j++)

@@ -25,6 +25,7 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
+            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = MainBarChartArea.DefaultName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -39,6 +40,7 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
+            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = PivotAnalysis.AreaName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -53,6 +55,7 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
+            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = PivotAnalysis.AreaName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -68,6 +71,8 @@ namespace Pacmio.Analysis
 
         public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence * 2;
 
+        public NumericColumn Column_Strength { get; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -80,6 +85,7 @@ namespace Pacmio.Analysis
                     tld.TotalLevelRange = tpd.TotalLevelRange;
                     tld.AddLine(tpd.ApexPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
+                    b[Column_Strength] = tld.Strength;
                 }
             }
         }
@@ -90,9 +96,7 @@ namespace Pacmio.Analysis
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            //Console.WriteLine("+++++ TrendLineAnalysis Chart, bc.LastIndex = " + bc.LastIndex + " | bc.LastIndexMax = " + bc.LastIndexMax);
             if (bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
-            //if (bc.BarTable.Count > 2 && bc.BarTable[bc.BarTable.Count - 2] is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
@@ -101,8 +105,6 @@ namespace Pacmio.Analysis
                 g.SmoothingMode = SmoothingMode.HighQuality;
 
                 double maxStrength = tld.TotalStrengthRange.Max;
-
-                //Console.WriteLine("+++++ TrendLineAnalysis | tld.Count = " + tld.Count + ";  tld.TotalLevelRange = " + tld.TotalLevelRange);
 
                 foreach (TrendLine line in tld)
                 {

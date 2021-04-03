@@ -17,7 +17,7 @@ namespace Pacmio.Analysis
 {
     public class VolumeByPriceDatum : ILevelDatum
     {
-        public Range<double> IntervalRange { get; set; }
+        public Range<double> TotalPriceRange { get; set; }
 
         public Dictionary<Range<double>, double> PriceRangeToVolumeLUT { get; } = new Dictionary<Range<double>, double>();
 
