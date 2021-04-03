@@ -350,7 +350,7 @@ namespace Pacmio
             }
         }
 
-        private void LoadBars(List<Bar> sorted_bars)
+        public void LoadBars(List<Bar> sorted_bars)
         {
             if (sorted_bars.Count > 0)
             {
@@ -375,28 +375,6 @@ namespace Pacmio
                 }
 
                 Status = TableStatus.DataReady;
-            }
-        }
-
-        public void LoadBars(MultiPeriod mp, bool adjustDividend, CancellationTokenSource cts = null)
-        {
-            if (mp is not null)
-            {
-                BarDataFile bdf = Contract.GetBarDataFile(BarFreq, Type);
-
-                MultiPeriod new_mp = new MultiPeriod();
-
-                foreach (var period in mp)
-                {
-                    Period pd = new Period(period);
-                    DateTime newStart = pd.Start.AddSeconds(-1000 * Frequency.Span.TotalSeconds);
-                    pd.Insert(newStart);
-                    bdf.Fetch(pd, cts);
-                    new_mp.Add(pd);
-                }
-
-                var sorted_list = bdf.LoadBars(this, new_mp, adjustDividend);
-                LoadBars(sorted_list);
             }
         }
 

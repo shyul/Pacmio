@@ -14,26 +14,28 @@ using Xu;
 
 namespace Pacmio
 {
+    public static class BarDataFileManagerTest
+    {
+        // Obsolete, Test Only
+        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, Period pd, bool adjustDividend = false, CancellationTokenSource cts = null)
+            => c.LoadBarTable(barFreq, dataType, new MultiPeriod(pd), adjustDividend, cts);
+
+        // Obsolete, Test Only
+        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, bool adjustDividend = false, CancellationTokenSource cts = null)
+        {
+            BarTableSet bts = new BarTableSet(c, adjustDividend);
+            bts.SetPeriod(mp, cts);
+            return bts[barFreq, dataType];
+        }
+    }
+
     public static class BarDataFileManager
     {
-        public static BarDataFile GetBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
-        {
-            if (barFreq > BarFreq.Daily) throw new Exception("We don't support storging BarFreq greater than daily as file");
-
-            return BarDataFile.LoadFile((c.Key, barFreq, type));
-        }
-
-        /*
-        public static BarDataFile GetOrCreateBarDataFile(this BarTable bt) => GetBarDataFile(bt.Contract, bt.BarFreq, bt.Type);
-
-        public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, DataType dataType, Period pd, CancellationTokenSource cts = null)
-            => LoadBarTable(bts, barFreq, dataType, new MultiPeriod(pd), cts);
-        */
-
         public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, CancellationTokenSource cts = null)
         {
-            BarDataFile bdf_daily_base = bts.Contract.GetBarDataFile(BarFreq.Daily);
+            BarDataFile bdf_daily_base = GetBarDataFile(bts.Contract, BarFreq.Daily);
             bdf_daily_base.Fetch(Period.Full, cts);
+            RemoveDownloadingLUT(bdf_daily_base);
 
             if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
             {
@@ -55,78 +57,82 @@ namespace Pacmio
 
                 BarTable bt = new(bts, barFreq, dataType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
+
+                RemoveDownloadingLUT(bdf_daily);
                 return bt;
             }
             else
             {
                 BarTable bt = new(bts, barFreq, dataType);
-                bt.LoadBars(mp, bts.AdjustDividend);
+                bt.LoadBars(mp);
                 return bt;
             }
         }
 
-        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, Period pd, bool adjustDividend = false, CancellationTokenSource cts = null)
-            => c.LoadBarTable(barFreq, dataType, new MultiPeriod(pd), adjustDividend, cts);
-
-        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, bool adjustDividend = false, CancellationTokenSource cts = null)
+        public static void LoadBars(this BarTable bt, MultiPeriod mp, CancellationTokenSource cts = null)
         {
-            BarTableSet bts = new BarTableSet(c, adjustDividend);
-            bts.SetPeriod(mp, cts);
-            return bts[barFreq, dataType];
-
-            /*
-            BarDataFile bdf_daily_base = c.GetBarDataFile(BarFreq.Daily);
-            bdf_daily_base.Fetch(Period.Full, cts);
-
-            if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
+            if (mp is not null)
             {
-                BarTable bt = new(c, BarFreq.Daily, DataType.Trades);
-                bt.LoadBars(bdf_daily_base, adjustDividend);
-                return bt;
+                bool adjustDividend = bt.AdjustDividend;
+
+                BarDataFile bdf = bt.Contract.GetBarDataFile(bt.BarFreq, bt.Type);
+
+                MultiPeriod new_mp = new MultiPeriod();
+
+                foreach (var period in mp)
+                {
+                    Period pd = new Period(period);
+                    DateTime newStart = pd.Start.AddSeconds(-1000 * bt.Frequency.Span.TotalSeconds);
+                    pd.Insert(newStart);
+                    bdf.Fetch(pd, cts);
+                    new_mp.Add(pd);
+                }
+
+                var sorted_list = bdf.LoadBars(bt, new_mp, adjustDividend);
+                bt.LoadBars(sorted_list);
+
+                RemoveDownloadingLUT(bdf);
             }
-            else if (barFreq > BarFreq.Daily)
-            {
-                BarDataFile bdf_daily = dataType == DataType.Trades ? bdf_daily_base : c.GetBarDataFile(BarFreq.Daily, dataType);
-
-                if (dataType != DataType.Trades)
-                    bdf_daily.Fetch(Period.Full, cts);
-
-                BarTable bt_daily = new(c, BarFreq.Daily, dataType);
-                var sorted_daily_list = bdf_daily.LoadBars(bt_daily, adjustDividend);
-
-                BarTable bt = new(c, barFreq, dataType);
-                bt.LoadFromSmallerBar(sorted_daily_list);
-                return bt;
-            }
-            else
-            {
-                BarTable bt = new(c, barFreq, dataType);
-                bt.LoadBars(mp, adjustDividend);
-                return bt;
-            }*/
         }
 
         #region Download
 
-        public static List<BarDataFile> DownloadingList { get; } = new();
+        private static Dictionary<(Contract c, BarFreq barFreq, DataType dataType), BarDataFile> DownloadingLUT { get; } = new();
 
         private static object DataLockObject { get; } = new();
 
-        public static BarDataFile AddDownloadingBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades) 
+        private static void RemoveDownloadingLUT(BarDataFile bdf)
         {
-            lock (DataLockObject) 
-            {
+            var key = (bdf.Contract, bdf.BarFreq, bdf.Type);
 
-                return null;
-            }
+            lock (DataLockObject)
+                if (DownloadingLUT.ContainsKey(key))
+                {
+                    DownloadingLUT.Remove(key);
+                }
         }
 
-        public static void RemoveDownloadingBarDataFile(BarDataFile bdf)
+        private static BarDataFile GetBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
         {
+            if (barFreq > BarFreq.Daily)
+                throw new Exception("We don't support storging BarFreq greater than daily as file");
+
+            var key = (c, barFreq, type);
+
+            BarDataFile bdf = null;
+
             lock (DataLockObject)
-            {
-                if (DownloadingList.Contains(bdf)) DownloadingList.Remove(bdf);
-            }
+                if (DownloadingLUT.ContainsKey(key))
+                {
+                    bdf = DownloadingLUT[key];
+                }
+                else
+                {
+                    bdf = BarDataFile.LoadFile(key);
+                    DownloadingLUT.Add(key, bdf);
+                }
+
+            return bdf;
         }
 
         /// <summary>
@@ -136,7 +142,7 @@ namespace Pacmio
         /// <param name="pd"></param>
         /// <param name="cts"></param>
         /// <returns></returns>
-        public static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts = null)
+        private static bool Fetch(this BarDataFile bdf, Period pd, CancellationTokenSource cts = null)
         {
             lock (bdf)
             {
@@ -155,14 +161,13 @@ namespace Pacmio
                     Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
                 }
 
-                //Console.WriteLine("Historical Head Time = " + bdf.HistoricalHeadTime);
-
                 if (bdf.Contract.Status != ContractStatus.Error)
                 {
                     if (!Quandl.Fetch(bdf))
                     {
                         IB.Client.Fetch_HistoricalData(bdf, pd, cts);
-                        RemoveDownloadingBarDataFile(bdf);
+
+                        //RemoveDownloadingBarDataFile(bdf);
                     }
                     else
                         return true;

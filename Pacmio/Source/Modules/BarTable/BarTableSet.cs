@@ -188,7 +188,7 @@ namespace Pacmio
 
                 foreach (BarTable bt in BarTableLUT.Values.Where(bt => bt.BarFreq < BarFreq.Daily))
                 {
-                    bt.LoadBars(mp, AdjustDividend, cts);
+                    bt.LoadBars(mp, cts);
                 }
 
                 m_MultiPeriod = mp;

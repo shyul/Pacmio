@@ -31,7 +31,7 @@ Bar.cs  ||  public bool MergeFromSmallerBar(Bar smaller_b)
     c. Marubozu as momentum indication (red maru as bearish, white as bullish) --> long body as momentum
     d. Doji Star and hammer as reveral (T as bullish, shooting star as bearish) --> long wick as reversal
 
-6. (just started) BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
+6. (done and tested 1st) BarDataFile shall not always storage in Memory, but BarDateFileManager shall handle duplicated on-downloading files
 
 
 

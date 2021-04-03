@@ -482,6 +482,8 @@ namespace Pacmio
             }
         }
 
+        public static BarDataFile LoadFile((Contract Contract, BarFreq BarFreq, DataType Type) key) => LoadFile((key.Contract.Key, key.BarFreq, key.Type));
+
         public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
         {
             //var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
