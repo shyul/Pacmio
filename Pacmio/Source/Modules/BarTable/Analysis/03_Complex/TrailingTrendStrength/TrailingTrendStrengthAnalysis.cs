@@ -51,9 +51,8 @@ namespace Pacmio.Analysis
 
                 if (b[TrendLineAnalysis] is TrendLineDatum tpd)
                 {
-                    double range = (b[HighLowBoundary.Column_High] - b[HighLowBoundary.Column_Low]) / 4; // TODO: Range shall be adjustable too.
-                    double middlePoint = (b[TrendLineAnalysis.TrailingPivotPointAnalysis.ApexAnalysis.Column_High] + b[TrendLineAnalysis.TrailingPivotPointAnalysis.ApexAnalysis.Column_Low]) / 2;
-                    
+                    //double range = (b[HighLowBoundary.Column_High] - b[HighLowBoundary.Column_Low]) / 4; // TODO: Range shall be adjustable too.
+                    //double middlePoint = (b[TrendLineAnalysis.TrailingPivotPointAnalysis.ApexAnalysis.Column_High] + b[TrendLineAnalysis.TrailingPivotPointAnalysis.ApexAnalysis.Column_Low]) / 2;
                     //Range<double> targetRange = new(middlePoint - range, middlePoint + range);
                     Range<double> targetRange = new(b[HighLowBoundary.Column_Low], b[HighLowBoundary.Column_High]);
 

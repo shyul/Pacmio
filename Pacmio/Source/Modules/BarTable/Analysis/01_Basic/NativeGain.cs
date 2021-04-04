@@ -43,28 +43,28 @@ namespace Pacmio.Analysis
                 b.GainPercent = (close_1 == 0) ? 0 : (100 * gain / close_1);
                 double range = b.Range = high - low;
 
-                b.BarType = BarType.None;
+                b.Type = BarType.None;
 
                 if (gain > 0)
                 {
                     if (close > open)
                     {
-                        b.BarType = BarType.White;
+                        b.Type = BarType.White;
                     }
                     else if (open > close)
                     {
-                        b.BarType = BarType.Black;
+                        b.Type = BarType.Black;
                     }
                 }
                 else if (gain < 0)
                 {
                     if (close > open)
                     {
-                        b.BarType = BarType.HollowRed;
+                        b.Type = BarType.HollowRed;
                     }
                     else if (open > close)
                     {
-                        b.BarType = BarType.Red;
+                        b.Type = BarType.Red;
                     }
                 }
 

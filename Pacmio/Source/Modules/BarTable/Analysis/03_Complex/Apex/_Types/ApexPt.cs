@@ -7,7 +7,7 @@
 using System;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class ApexPt : IEquatable<ApexPt>
     {

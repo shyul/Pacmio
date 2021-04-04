@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class TrendLineDatum : PatternDatum, IEnumerable<TrendLine>
     {
@@ -20,15 +20,8 @@ namespace Pacmio.Analysis
                 m_TrendLines.Add(n);
                 TotalStrengthRange.Insert(n.Strength);
                 Levels.Add(new Level(n.Level(x3), n.Strength));
-                /*
-                if (n.TrendRate > 0)
-                    Strength += Math.Abs(n.Strength);
-                else if (n.TrendRate < 0)
-                    Strength -= Math.Abs(n.Strength);*/
             });
         }
-
-        //public double Strength { get; private set; } = 0;
 
         private List<TrendLine> m_TrendLines { get; set; } = new();
 

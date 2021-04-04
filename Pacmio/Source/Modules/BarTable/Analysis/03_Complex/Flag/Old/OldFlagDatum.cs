@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class FlagDatum : PatternDatum
+    public class OldFlagDatum : PatternDatum
     {
-        public FlagDatum(FlagType type)
+        public OldFlagDatum(FlagType type)
         {
             Type = type;
         }

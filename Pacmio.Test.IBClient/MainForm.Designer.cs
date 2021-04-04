@@ -212,6 +212,7 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.BtnTestFlag = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -272,6 +273,7 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnTestFlag);
             this.tabHistoricalData.Controls.Add(this.BtnLoadAllBarTable);
             this.tabHistoricalData.Controls.Add(this.BtnTestSignal);
             this.tabHistoricalData.Controls.Add(this.BtnTestPatternAnalysis);
@@ -313,7 +315,7 @@ namespace TestClient
             // BtnTestSignal
             // 
             this.BtnTestSignal.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestSignal.Location = new System.Drawing.Point(7, 134);
+            this.BtnTestSignal.Location = new System.Drawing.Point(7, 165);
             this.BtnTestSignal.Name = "BtnTestSignal";
             this.BtnTestSignal.Size = new System.Drawing.Size(230, 23);
             this.BtnTestSignal.TabIndex = 54;
@@ -2162,6 +2164,17 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
+            // BtnTestFlag
+            // 
+            this.BtnTestFlag.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnTestFlag.Location = new System.Drawing.Point(7, 122);
+            this.BtnTestFlag.Name = "BtnTestFlag";
+            this.BtnTestFlag.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestFlag.TabIndex = 56;
+            this.BtnTestFlag.Text = "Test Flag";
+            this.BtnTestFlag.UseVisualStyleBackColor = false;
+            this.BtnTestFlag.Click += new System.EventHandler(this.BtnTestFlag_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2397,5 +2410,6 @@ namespace TestClient
         private System.Windows.Forms.Button BtnHistoricalDataContractSet10;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet9;
         private System.Windows.Forms.Button BtnLoadAllBarTable;
+        private System.Windows.Forms.Button BtnTestFlag;
     }
 }

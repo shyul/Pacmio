@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public enum FlagType
     {

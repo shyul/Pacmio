@@ -73,7 +73,7 @@ namespace Pacmio.Analysis
                     //ma_cross,
                     csd_potf,
                     //new CHOP(),
-                    
+
                     //new RSI(14),
                     //new CCI(20, 0.015),
                     //new MFI(14),

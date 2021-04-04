@@ -190,7 +190,7 @@ namespace Pacmio
 
         public void ClearAllCalculationData()
         {
-            BarType = BarType.None;
+            Type = BarType.None;
             Gain = double.NaN;
             GainPercent = double.NaN;
             Gap = double.NaN;
@@ -261,7 +261,7 @@ namespace Pacmio
 
         #region Intrinsic Indicators | NativeGainAnalysis
 
-        public BarType BarType { get; set; } = BarType.None;
+        public BarType Type { get; set; } = BarType.None;
 
         public double Gain { get; set; } = double.NaN;
 

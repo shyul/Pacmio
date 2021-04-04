@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public sealed class NativeApexAnalysis : ApexAnalysis
     {

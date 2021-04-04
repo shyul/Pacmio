@@ -6,21 +6,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using Xu;
 using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class FlagAnalysis : PatternAnalysis, IChartBackground
+    public class OldFlagAnalysis : PatternAnalysis, IChartBackground
     {
-        public FlagAnalysis()
+        public OldFlagAnalysis()
         {
             Name = GetType() + " Test Only";
             AreaName = MainBarChartArea.DefaultName;
-            Column_Result = new PatternColumn(this, typeof(FlagDatum), MaximumInterval);
+            Column_Result = new PatternColumn(this, typeof(OldFlagDatum), MaximumInterval);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
@@ -96,7 +96,7 @@ namespace Pacmio.Analysis
 
                     if (type != FlagType.None && pull_back_bars.Count >= MinPullPackInterval && run_bars.Count >= MinRunInterval && run_bars.Count >= pull_back_bars.Count)
                     {
-                        FlagDatum fd = new(type);
+                        OldFlagDatum fd = new(type);
 
                         var run_up_highs = run_bars.Select(n => n.High);
                         var run_up_lows = run_bars.Select(n => n.Low);
@@ -154,7 +154,7 @@ namespace Pacmio.Analysis
 
                 for (int i = StartPt; i < StopPt; i++)
                 {
-                    if (StartPt > -1 && bc.BarTable[i] is Bar b && b[Column_Result] is FlagDatum fd && fd.Type != FlagType.None)
+                    if (StartPt > -1 && bc.BarTable[i] is Bar b && b[Column_Result] is OldFlagDatum fd && fd.Type != FlagType.None)
                     {
                         int x1 = a.IndexToPixel(fd.P1.Index - StartPt);
                         int x2 = a.IndexToPixel(fd.P2.Index - StartPt);

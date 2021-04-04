@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Xu;
 using Xu.Chart;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class NumericColumnLevelDatum : ILevelDatum
     {

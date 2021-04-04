@@ -1466,7 +1466,35 @@ namespace TestClient
             ContractManager.Fetch(ContractTest.ActiveContract);
         }
 
+        private void BtnTestFlag_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                DataType type = DataType;
+                Period pd = HistoricalPeriod;
+                Contract c = ContractTest.ActiveContract;
 
+                if (pd.IsCurrent) c.MarketData.Start();
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*
+                    BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    BarChart bc = bt.GetChart(TestFlag.BarAnalysisSet);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
     }
     public static class DataGridHelper
     {
