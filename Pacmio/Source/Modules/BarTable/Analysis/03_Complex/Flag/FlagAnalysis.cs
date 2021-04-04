@@ -56,7 +56,7 @@ namespace Pacmio.Analysis
                 foreach (Bar b0 in bars)
                 {
                     double rangeLocation = (b0.Typical - d.TotalRange.Minimum) / (d.TotalRange.Maximum - d.TotalRange.Minimum);
-                    testElements[j].RangeLocation  = rangeLocation;
+                    testElements[j].RangeLocation = rangeLocation;
                     j++;
                 }
 
@@ -75,49 +75,59 @@ namespace Pacmio.Analysis
 
                     var running_bars = testElements.Where(n => n.IsRunning).OrderByDescending(n => n.Bar.Index);
 
-                    if (running_bars.Count() > 0) 
+                    if (running_bars.Count() > 0)
                     {
-                        var white_bars = running_bars.Where(n => n.Bar.Type == BarType.White);
-                        
-                        if((white_bars.Count() / running_bars.Count()) > 0.7) 
+                        var white_bars = running_bars.Where(n => n.Bar.Gain > 0);
+
+                        if ((white_bars.Count() / running_bars.Count()) > 0.7)
                         {
-                            d.Type = FlagType.Bull;
-
                             Bar lastRunningBar = running_bars.First().Bar;
-                            Bar firstRunningBar = running_bars.Last().Bar;
+                            var flag_bars = testElements.Where(n => n.Bar.Index > lastRunningBar.Index && n.Bar.Type != BarType.White).OrderByDescending(n => n.Bar.Index);
 
-                            ApexPt runUp_pt1 = new ApexPt(firstRunningBar.Index, firstRunningBar.Time, firstRunningBar.Low);
-                            ApexPt runUp_pt2 = new ApexPt(lastRunningBar.Index, lastRunningBar.Time, lastRunningBar.High);
+                            if (flag_bars.Count() > 1)
+                            {
+                                Bar firstFlagBar = flag_bars.Last().Bar;
+                                Bar firstRunningBar = running_bars.Last().Bar;
 
-                            d.RunUp = new TrendLine(runUp_pt1, runUp_pt2);
+                                ApexPt runUp_pt1 = new ApexPt(firstRunningBar.Index, firstRunningBar.Time, firstRunningBar.Low);
+                                ApexPt runUp_pt2 = new ApexPt(firstFlagBar.Index, firstFlagBar.Time, firstFlagBar.High);
 
-                            var flag_bars = testElements.Where(n => n.Bar.Index >= lastRunningBar.Index).OrderByDescending(n => n.Bar.Index);
-                            var upper_trends = flag_bars.Select(n => new ApexPt(n.Bar.Index, n.Bar.Time, n.Bar.High)).SelectPair().Select(n => new TrendLine(n));
-                            var lower_trends = flag_bars.Select(n => new ApexPt(n.Bar.Index, n.Bar.Time, n.Bar.Low)).SelectPair().Select(n => new TrendLine(n));
+                                d.RunUp = new TrendLine(runUp_pt1, runUp_pt2);
 
-                            double average_upper_trendrate = upper_trends.Select(n => n.TrendRate).Sum() / upper_trends.Count();
-                            double average_lower_trendrate = lower_trends.Select(n => n.TrendRate).Sum() / lower_trends.Count();
+                                var upper_trends = flag_bars.Select(n => new ApexPt(n.Bar.Index, n.Bar.Time, n.Bar.High)).SelectPair().Select(n => new TrendLine(n));
+                                var lower_trends = flag_bars.Select(n => new ApexPt(n.Bar.Index, n.Bar.Time, n.Bar.Low)).SelectPair().Select(n => new TrendLine(n));
 
-                            Console.WriteLine("\nIndex = " + i);
-                            Console.WriteLine("average_upper_trendrate = " + average_upper_trendrate);
-                            Console.WriteLine("average_lower_trendrate = " + average_lower_trendrate);
+                                double average_upper_trendrate = upper_trends.Select(n => n.TrendRate).Sum() / upper_trends.Count();
 
-                            Bar lastFlagBar = flag_bars.First().Bar;
+                                if (true) //average_upper_trendrate <= 0)
+                                {
+                                    double average_lower_trendrate = lower_trends.Select(n => n.TrendRate).Sum() / lower_trends.Count();
 
-                            int trend_index1 = lastRunningBar.Index;
-                            int trend_index2 = lastFlagBar.Index;
+                                    // Console.WriteLine("\nIndex = " + i);
+                                    // Console.WriteLine("average_upper_trendrate = " + average_upper_trendrate);
+                                    // Console.WriteLine("average_lower_trendrate = " + average_lower_trendrate);
 
-                            double upper_trend_level1 = lastFlagBar.High - (average_upper_trendrate * (trend_index2 - trend_index1));
-                            ApexPt upper_trend_pt2 = new ApexPt(trend_index2, lastFlagBar.Time, lastFlagBar.High);
-                            ApexPt upper_trend_pt1 = new ApexPt(trend_index1, lastRunningBar.Time, upper_trend_level1);
+                                    Bar lastFlagBar = flag_bars.First().Bar;
 
-                            d.UpperFlag = new TrendLine(upper_trend_pt1, upper_trend_pt2);
+                                    int trend_index1 = firstFlagBar.Index;
+                                    int trend_index2 = lastFlagBar.Index;
 
-                            double lower_trend_level1 = lastFlagBar.Low - (average_lower_trendrate * (trend_index2 - trend_index1));
-                            ApexPt lower_trend_pt2 = new ApexPt(trend_index2, lastFlagBar.Time, lastFlagBar.Low);
-                            ApexPt lower_trend_pt1 = new ApexPt(trend_index1, lastRunningBar.Time, lower_trend_level1);
+                                    double upper_trend_level1 = lastFlagBar.High - (average_upper_trendrate * (trend_index2 - trend_index1));
+                                    ApexPt upper_trend_pt2 = new ApexPt(trend_index2, lastFlagBar.Time, lastFlagBar.High);
+                                    ApexPt upper_trend_pt1 = new ApexPt(trend_index1, firstFlagBar.Time, upper_trend_level1);
 
-                            d.LowerFlag = new TrendLine(lower_trend_pt1, lower_trend_pt2);
+                                    d.UpperFlag = new TrendLine(upper_trend_pt1, upper_trend_pt2);
+
+                                    double lower_trend_level1 = lastFlagBar.Low - (average_lower_trendrate * (trend_index2 - trend_index1));
+                                    ApexPt lower_trend_pt2 = new ApexPt(trend_index2, lastFlagBar.Time, lastFlagBar.Low);
+                                    ApexPt lower_trend_pt1 = new ApexPt(trend_index1, firstFlagBar.Time, lower_trend_level1);
+
+                                    d.LowerFlag = new TrendLine(lower_trend_pt1, lower_trend_pt2);
+
+
+                                    d.Type = FlagType.Bull;
+                                }
+                            }
                         }
                     }
                 }
@@ -138,7 +148,7 @@ namespace Pacmio.Analysis
 
                         if ((red_bars.Count() / running_bars.Count()) > 0.7)
                         {
-                            d.Type = FlagType.Bear;
+                            //d.Type = FlagType.Bear;
 
 
 
@@ -187,7 +197,7 @@ namespace Pacmio.Analysis
 
         public static void DrawTrendLine(Graphics g, TrendLine line, Area a, Color c)
         {
-            if(line is TrendLine)// && line.X1 != line.X2) 
+            if (line is TrendLine)// && line.X1 != line.X2) 
             {
                 int StartPt = a.StartPt;
                 //int StopPt = a.StopPt;
