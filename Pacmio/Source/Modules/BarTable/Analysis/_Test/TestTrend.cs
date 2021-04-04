@@ -46,7 +46,12 @@ namespace Pacmio.Analysis
                 DebugSeries mma_momo = new DebugColumnSeries(mma.Column_Momentum);
                 DebugSeries mma_reversal = new DebugColumnSeries(mma.Column_Reversal);
 
-                DebugSeries tla_strength = new DebugColumnSeries(tla.Column_Strength);
+                TrailingTrendStrengthAnalysis ttsa = new TrailingTrendStrengthAnalysis(tla);
+
+                DebugDualDataOsc tla_c = new DebugDualDataOsc(ttsa);
+
+                //DebugSeries tla_bullish = new DebugColumnSeries(ttsa.Column_High);
+                //DebugSeries tla_bearish = new DebugColumnSeries(ttsa.Column_Low);
                 //DebugSeries mma_bull = new DebugColumnSeries(mma.Column_BullishReversal);
                 //DebugSeries mma_bear = new DebugColumnSeries(mma.Column_BearishReversal);
 
@@ -61,8 +66,9 @@ namespace Pacmio.Analysis
                     tla,
                     mma_momo,
                     mma_reversal,
-                    tla_strength,
-                    //mma_bear,
+                    //tla_bullish,
+                    //tla_bearish,
+                    tla_c,
 
                     //new HorizontalLineAnalysis(tpa),
                     //new GetReversalIndexFromRangeBoundAnalysis(),

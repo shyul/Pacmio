@@ -19,13 +19,13 @@ namespace Pacmio.Analysis
         public TrendLineAnalysis(int maximumInterval)
         {
             TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(maximumInterval);
-            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+            PivotAnalysis = TrailingPivotPointAnalysis.ApexAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
-            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
+            //Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = MainBarChartArea.DefaultName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -40,7 +40,7 @@ namespace Pacmio.Analysis
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
-            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
+            //Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = PivotAnalysis.AreaName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -49,13 +49,13 @@ namespace Pacmio.Analysis
         public TrendLineAnalysis(TrailingApexPtAnalysis tpa)
         {
             TrailingPivotPointAnalysis = tpa;
-            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+            PivotAnalysis = TrailingPivotPointAnalysis.ApexAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;
 
             Column_Result = new PatternColumn(this, typeof(TrendLineDatum), MaximumInterval);
-            Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
+            //Column_Strength = new NumericColumn(Name + "_Strength", "Strength");
             AreaName = PivotAnalysis.AreaName;
 
             TrailingPivotPointAnalysis.AddChild(this);
@@ -71,7 +71,7 @@ namespace Pacmio.Analysis
 
         public override int MaximumInterval => TrailingPivotPointAnalysis.MaximumPeakProminence * 2;
 
-        public NumericColumn Column_Strength { get; }
+        //public NumericColumn Column_Strength { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -85,7 +85,7 @@ namespace Pacmio.Analysis
                     tld.TotalLevelRange = tpd.TotalLevelRange;
                     tld.AddLine(tpd.ApexPts.Select(n => n.Value), i);
                     b[Column_Result] = tld;
-                    b[Column_Strength] = tld.Strength;
+                    //b[Column_Strength] = tld.Strength;
                 }
             }
         }

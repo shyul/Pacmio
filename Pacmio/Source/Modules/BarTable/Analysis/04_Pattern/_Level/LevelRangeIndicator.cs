@@ -17,7 +17,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class LevelRangeIndicator : BarAnalysis, ISingleComplex, IChartBackground
+    public class LevelRangeIndicator : BarAnalysis, ISingleDatum, IChartBackground
     {
         public LevelRangeIndicator(ILevelAnalysis pa, double tolerance = 0.01)
         {

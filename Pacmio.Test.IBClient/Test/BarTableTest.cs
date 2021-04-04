@@ -94,7 +94,6 @@ namespace TestClient
                     //new VWAP(new Frequency(TimeUnit.Days)) { Color = Color.Plum, LineWidth = 2  },
 
                     new TrendLineAnalysis(260),
-                    new GetReversalIndexFromRangeBoundAnalysis(),
                 };
 
                 BarAnalysisSet bas = new(sample_list);

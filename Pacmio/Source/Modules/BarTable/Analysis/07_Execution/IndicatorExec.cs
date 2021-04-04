@@ -19,7 +19,7 @@ namespace Pacmio.Analysis
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class IndicatorExec : Indicator, ISingleComplex
+    public abstract class IndicatorExec : Indicator, ISingleDatum
     {
         protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
         {

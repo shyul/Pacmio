@@ -90,11 +90,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Modules\BarTable\Analysis\00_Debug\DebugDualDataOsc.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\02_Advanced\DPPMO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrame.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrameDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelDatum.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\TrailingTrendStrength\TrailingTrendStrengthAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignal.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\05_Signal\Band\BandSignalType.cs" />
@@ -119,12 +122,13 @@
     <Compile Include="Source\Modules\BarTable\Analysis\07_Execution\IndicatorExec.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\08_Position\PositionAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleComplex.cs" />
+    <Compile Include="Source\Modules\BarTable\Analysis\NativeBarAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\BarTableGroup.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartBackground.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartOverlay.cs" />
+    <Compile Include="Source\Modules\BarTable\Chart\_Types\IOscillator.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\Apex\DualColumnApexAnalysis.cs" />
@@ -190,7 +194,6 @@
     <Compile Include="Source\Modules\BarTable\Analysis\02_Advanced\VO.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Level\LevelRangeIndicator.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\PivotLevel\PivotLevelAnalysis.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\MomentumReversal\GetReversalIndexFromRangeBoundAnalysis.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\_Types\IPatternObject.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\03_Complex\Apex\_Types\ApexPt.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLine.cs" />
@@ -241,10 +244,7 @@
     <Compile Include="Source\Modules\BarTable\Chart\Area\BarChartOscillatorArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IBarChartArea.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\_Types\IChartSeries.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\IDualData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\PriceChannel.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\IOscillator.cs" />
-    <Compile Include="Source\Modules\BarTable\Analysis\_Types\ISingleData.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\01_Basic\MovingAverage\_Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\BarTable\Chart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\BarTable\Analysis\BarAnalysisSet.cs" />

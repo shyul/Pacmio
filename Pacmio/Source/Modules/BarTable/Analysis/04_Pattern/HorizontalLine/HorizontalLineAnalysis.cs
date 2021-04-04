@@ -19,7 +19,7 @@ namespace Pacmio.Analysis
         public HorizontalLineAnalysis(int maximumInterval)
         {
             TrailingPivotPointAnalysis = new TrailingApexPtAnalysis(maximumInterval);
-            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+            PivotAnalysis = TrailingPivotPointAnalysis.ApexAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;
@@ -46,7 +46,7 @@ namespace Pacmio.Analysis
         public HorizontalLineAnalysis(TrailingApexPtAnalysis tpa)
         {
             TrailingPivotPointAnalysis = tpa;
-            PivotAnalysis = TrailingPivotPointAnalysis.PivotAnalysis;
+            PivotAnalysis = TrailingPivotPointAnalysis.ApexAnalysis;
 
             string label = "(" + TrailingPivotPointAnalysis.Name + ")";
             Name = GetType().Name + label;

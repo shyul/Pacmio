@@ -8,36 +8,37 @@
 
 using System;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class TrailingApexPtAnalysis : ApexAnalysis, ISingleComplex
+    public class TrailingApexPtAnalysis : ApexAnalysis, ISingleDatum
     {
         public TrailingApexPtAnalysis(int maximumInterval = 250)
         {
-            PivotAnalysis = new NativeApexAnalysis(maximumInterval);
+            ApexAnalysis = new NativeApexAnalysis(maximumInterval);
 
             MaximumPeakProminence = maximumInterval;
-            MinimumPeakProminence = PivotAnalysis.MinimumPeakProminence;
+            MinimumPeakProminence = ApexAnalysis.MinimumPeakProminence;
 
             string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            PivotAnalysis.AddChild(this);
+            ApexAnalysis.AddChild(this);
             Column_Result = new(Name, typeof(TrailingApexPtDatum));
         }
 
         public TrailingApexPtAnalysis(ApexAnalysis pa)
         {
-            PivotAnalysis = pa;
+            ApexAnalysis = pa;
 
             MaximumPeakProminence = pa.MaximumPeakProminence;
-            MinimumPeakProminence = PivotAnalysis.MinimumPeakProminence;
+            MinimumPeakProminence = ApexAnalysis.MinimumPeakProminence;
 
             string label = "(" + Bar.Column_Close.Name + "," + MaximumPeakProminence + "," + MinimumPeakProminence + ")";
             Name = GetType().Name + label;
 
-            PivotAnalysis.AddChild(this);
+            ApexAnalysis.AddChild(this);
             Column_Result = new(Name, typeof(TrailingApexPtDatum));
         }
 
@@ -45,11 +46,11 @@ namespace Pacmio.Analysis
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode();
 
-        public override NumericColumn Column_High => PivotAnalysis.Column_High;
+        public override NumericColumn Column_High => ApexAnalysis.Column_High;
 
-        public override NumericColumn Column_Low => PivotAnalysis.Column_Low;
+        public override NumericColumn Column_Low => ApexAnalysis.Column_Low;
 
-        public ApexAnalysis PivotAnalysis { get; }
+        public ApexAnalysis ApexAnalysis { get; }
 
         public DatumColumn Column_Result { get; }
 

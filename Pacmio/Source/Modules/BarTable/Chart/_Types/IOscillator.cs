@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {

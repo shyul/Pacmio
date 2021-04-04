@@ -11,7 +11,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class HigherTimeFrame : BarAnalysis, ISingleComplex
+    public class HigherTimeFrame : BarAnalysis, ISingleDatum
     {
         public HigherTimeFrame(BarFreq freq, DataType type)
         {
