@@ -89,7 +89,7 @@ namespace Pacmio.Analysis
                             ApexPt runUp_pt1 = new ApexPt(firstRunningBar.Index, firstRunningBar.Time, firstRunningBar.Low);
                             ApexPt runUp_pt2 = new ApexPt(lastRunningBar.Index, lastRunningBar.Time, lastRunningBar.High);
 
-                            //d.RunUp = new TrendLine(runUp_pt1, runUp_pt2);
+                            d.RunUp = new TrendLine(runUp_pt1, runUp_pt2);
 
                             var flag_bars = testElements.Where(n => n.Bar.Index >= lastRunningBar.Index).OrderByDescending(n => n.Bar.Index);
                             var upper_trends = flag_bars.Select(n => new ApexPt(n.Bar.Index, n.Bar.Time, n.Bar.High)).SelectPair().Select(n => new TrendLine(n));
@@ -174,9 +174,9 @@ namespace Pacmio.Analysis
                 {
                     if (StartPt > -1 && bc.BarTable[i] is Bar b && b[Column_Result] is FlagDatum fd && fd.Type != FlagType.None)
                     {
-                        DrawTrendLine(g, fd.RunUp, a);
-                        DrawTrendLine(g, fd.LowerFlag, a);
-                        DrawTrendLine(g, fd.UpperFlag, a);
+                        DrawTrendLine(g, fd.RunUp, a, Color.Blue);
+                        DrawTrendLine(g, fd.LowerFlag, a, Color.Red);
+                        DrawTrendLine(g, fd.UpperFlag, a, Color.Green);
                     }
                 }
 
@@ -185,9 +185,9 @@ namespace Pacmio.Analysis
             }
         }
 
-        public static void DrawTrendLine(Graphics g, TrendLine line, Area a)
+        public static void DrawTrendLine(Graphics g, TrendLine line, Area a, Color c)
         {
-            if(line is TrendLine) 
+            if(line is TrendLine)// && line.X1 != line.X2) 
             {
                 int StartPt = a.StartPt;
                 //int StopPt = a.StopPt;
@@ -196,21 +196,23 @@ namespace Pacmio.Analysis
 
                 if (x1 >= 0)
                 {
-                    int x3 = line.X2 - StartPt;
+                    int x2 = line.X2 - StartPt;
 
                     //int x3 = StopPt - StartPt - 1;
                     double y1 = line.Y1;
-                    double y3 = y1 + (line.TrendRate * (x3 - x1));
+                    double y2 = line.Y2; //y1 + (line.TrendRate * (x2 - x1));
 
                     Point pt1 = new(a.IndexToPixel(x1), a.AxisY(AlignType.Right).ValueToPixel(y1));
-                    Point pt3 = new(a.IndexToPixel(x3), a.AxisY(AlignType.Right).ValueToPixel(y3));
+                    Point pt3 = new(a.IndexToPixel(x2), a.AxisY(AlignType.Right).ValueToPixel(y2));
 
-                    if (y3 > y1)
+                    g.DrawLine(new Pen(c), pt1, pt3);
+                    /*
+                    if (y2 > y1)
                         g.DrawLine(new Pen(Color.YellowGreen), pt1, pt3);
-                    else if (y3 < y1)
+                    else if (y2 < y1)
                         g.DrawLine(new Pen(Color.Pink), pt1, pt3);
                     else
-                        g.DrawLine(new Pen(Color.SkyBlue), pt1, pt3);
+                        g.DrawLine(new Pen(Color.SkyBlue), pt1, pt3);*/
                 }
 
             }
