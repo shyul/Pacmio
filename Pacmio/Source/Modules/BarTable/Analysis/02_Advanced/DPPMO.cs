@@ -17,6 +17,16 @@ namespace Pacmio.Analysis
 {
     public sealed class DPPMO : ATR, IOscillator
     {
+        public DPPMO(int interval) 
+        {
+            Interval = interval;
+            SmoothMultiplier = 2 / Interval;
+
+
+        }
+
+        public double SmoothMultiplier { get; }
+
         public double Reference { get; set; } = 0;
 
         public double UpperLimit { get; set; } = 3;
@@ -27,9 +37,24 @@ namespace Pacmio.Analysis
 
         public Color LowerColor { get; set; } = Color.Crimson;
 
+        //public NumericColumn Column_Smooth { get; }
+
+        public NumericColumn Column_Signal { get; }
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            double last_cema35 = bap.StartPt > 0 ? bt[bap.StartPt - 1][Column_Result] / 10 : bt[0].GainPercent;
+            double last_signal = bap.StartPt > 0 ? bt[bap.StartPt - 1][Column_Signal] : bt[0].GainPercent;
+
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                last_cema35 = (b.GainPercent * SmoothMultiplier) + (last_cema35 * (1 - SmoothMultiplier));
+                double result = b[Column_Result] = last_cema35 * 10;
+                last_signal = b[Column_Signal] = ((result - last_signal) * (2 / 20)) + last_signal;
+            }
         }
     }
 }
