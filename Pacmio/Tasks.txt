@@ -4,7 +4,24 @@ Program Flow:
                                                         a. OrderRules           a. Can Contain Several Orders
 
 
-Coding Tasks:
+Current Task
+==============
+1. TrailingTrendStrengthAnalysis is miss aligned with one Bar
+2. New Flag Analysis has glitches
+3. DPPMO needs to finalize
+
+
+To Checked
+==============
+
+
+
+Checked Once
+==============
+
+
+
+Coding History:
 ==============
 
 1. (addressed and need to test) Error Doji candle for Above-Daily BarTables when there is an incoming tick.
