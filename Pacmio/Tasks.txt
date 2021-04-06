@@ -6,12 +6,13 @@ Program Flow:
 
 Current Task
 ==============
-1. TrailingTrendStrengthAnalysis is miss aligned with one Bar
-2. New Flag Analysis has glitches
-3. DPPMO needs to finalize
+1. New Flag Analysis has glitches
+2. DPPMO needs to finalize
+3. Swing Trade Scan Revisit
 
 
-To Checked
+
+To Be Verified
 ==============
 
 
@@ -23,6 +24,8 @@ Checked Once
 
 Coding History:
 ==============
+
+0. (done and tested once) TrailingTrendStrengthAnalysis is miss aligned with one Bar
 
 1. (addressed and need to test) Error Doji candle for Above-Daily BarTables when there is an incoming tick.
 

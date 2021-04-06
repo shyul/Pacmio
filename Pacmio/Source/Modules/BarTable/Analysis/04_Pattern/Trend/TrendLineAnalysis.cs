@@ -96,7 +96,7 @@ namespace Pacmio.Analysis
 
         public void DrawBackground(Graphics g, BarChart bc)
         {
-            if (bc.LastBar_1 is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
+            if (bc.LastBar is Bar b && AreaName is string areaName && bc[areaName] is Area a && b[Column_Result] is TrendLineDatum tld)
             {
                 int StartPt = a.StartPt;
                 int StopPt = a.StopPt;
