@@ -39,27 +39,30 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 var bars = bt[i, MaximumInterval].OrderByDescending(n => n.Index);
-                int barsCount = bars.Count();
-
+  
                 FlagDatum d = new();
-
                 List<FlagTestElement> testElements = new();
+
+                double lowBound = b.High - (b.High - b.Low) / MinimumRangeLocationRatio;
+                double highBound = b.Low + (b.High - b.Low) / MinimumRangeLocationRatio;
 
                 foreach (Bar b0 in bars)
                 {
                     d.TotalRange.Insert(b0.High);
                     d.TotalRange.Insert(b0.Low);
                     testElements.Add(new FlagTestElement(b0, d.TotalRange.Maximum - d.TotalRange.Minimum));
+
+                    if (b0.Typical < lowBound || b0.Typical > highBound) break;
                 }
 
-                int j = 0;
-                foreach (Bar b0 in bars)
+                double totalRangeDiff = d.TotalRange.Maximum - d.TotalRange.Minimum;
+                foreach (var ele in testElements)
                 {
-                    double rangeLocation = (b0.Typical - d.TotalRange.Minimum) / (d.TotalRange.Maximum - d.TotalRange.Minimum);
-                    testElements[j].RangeLocation = rangeLocation;
-                    j++;
+                    ele.RangeLocation = (ele.Bar.Typical - d.TotalRange.Minimum) / totalRangeDiff;
                 }
 
+                int barsCount = testElements.Count;
+                int j = 0;
                 d.LastFlagBarRangeLocation = testElements.First().RangeLocation;
                 bool isRunning = false;
 
