@@ -252,7 +252,8 @@ namespace Pacmio
                                 else if (currentSymbolName.Contains("ATEST ") ||
                                     currentSymbolName.Contains("CTEST ") ||
                                     currentSymbolName == "ZVZZT" ||
-                                    currentSymbolName == "ZWZZT")
+                                    currentSymbolName == "ZWZZT" ||
+                                    (currentSymbolName.Length > 4 && currentSymbolName[0] == 'X'))
                                 {
                                     currentContract = null;
                                     currentBtd = null;
