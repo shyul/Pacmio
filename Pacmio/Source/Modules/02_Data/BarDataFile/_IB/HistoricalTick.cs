@@ -51,7 +51,7 @@ namespace Pacmio.IB
             }
         }
 
-        internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, MarketDataType dataType = MarketDataType.Trades,
+        internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, DataType dataType = DataType.Trades,
             int numberOfTicks = 1000, bool useRTH = true, bool ignoreSize = false, bool includeExpired = false,
             ICollection<(string, string)> options = null)
         {

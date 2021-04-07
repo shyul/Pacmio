@@ -23,7 +23,7 @@ namespace Pacmio
     {
         public BarDataFile(BarTable bt) : this(bt.Contract, bt.BarFreq, bt.Type) { }
 
-        public BarDataFile(Contract c, BarFreq freq, MarketDataType type)
+        public BarDataFile(Contract c, BarFreq freq, DataType type)
         {
             Contract = c;
             BarFreq = freq;
@@ -31,7 +31,7 @@ namespace Pacmio
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
-        public BarDataFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, MarketDataType Type) info)
+        public BarDataFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
         {
             ContractKey = info.ContractKey;
             BarFreq = info.BarFreq;
@@ -49,13 +49,13 @@ namespace Pacmio
         public BarFreq BarFreq { get; set; }
 
         [DataMember]
-        public MarketDataType Type { get; set; }
+        public DataType Type { get; set; }
 
         [DataMember]
         public (string name, Exchange exchange, string typeName) ContractKey { get; private set; }
 
         [IgnoreDataMember]
-        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, MarketDataType type) Key => (ContractKey, BarFreq, Type);
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, DataType type) Key => (ContractKey, BarFreq, Type);
 
         [IgnoreDataMember]
         public Contract Contract
@@ -459,7 +459,7 @@ namespace Pacmio
 
         #region File Operation
 
-        private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, MarketDataType Type) info)
+        private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
         {
             string dir = Root.HistoricalDataPath(info.ContractKey) + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
@@ -482,9 +482,9 @@ namespace Pacmio
             }
         }
 
-        public static BarDataFile LoadFile((Contract Contract, BarFreq BarFreq, MarketDataType Type) key) => LoadFile((key.Contract.Key, key.BarFreq, key.Type));
+        public static BarDataFile LoadFile((Contract Contract, BarFreq BarFreq, DataType Type) key) => LoadFile((key.Contract.Key, key.BarFreq, key.Type));
 
-        public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, MarketDataType Type) info)
+        public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
         {
             //var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
 

@@ -6,6 +6,8 @@ Program Flow:
 
 Current Task
 ==============
+1. Native Analysis
+2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
 1. New Flag Analysis has glitches
 2. DPPMO needs to finalize
 3. Swing Trade Scan Revisit

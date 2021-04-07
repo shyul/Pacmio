@@ -21,7 +21,7 @@ namespace Pacmio.Analysis
     /// </summary>
     public abstract class IndicatorExec : Indicator, ISingleDatum
     {
-        protected IndicatorExec(BarFreq freq, MarketDataType type = MarketDataType.Trades)
+        protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
         {
             //IndicatorSet = new(this, freq, type);
 

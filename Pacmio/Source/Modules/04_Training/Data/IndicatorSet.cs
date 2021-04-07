@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<(BarFreq freq, MarketDataType type, BarAnalysisSet bas)>
+    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
@@ -87,11 +87,11 @@ namespace Pacmio
             return btList.Count() == 0;
         }
 
-        private Dictionary<(BarFreq freq, MarketDataType type), Indicator> IndicatorLUT { get; } = new();
+        private Dictionary<(BarFreq freq, DataType type), Indicator> IndicatorLUT { get; } = new();
 
-        public List<(BarFreq freq, MarketDataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
+        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
 
-        public Indicator this[BarFreq freq, MarketDataType type = MarketDataType.Trades]
+        public Indicator this[BarFreq freq, DataType type = DataType.Trades]
         {
             get
             {
@@ -121,9 +121,9 @@ namespace Pacmio
 
         public BarAnalysisSet this[BarTable bt] => BarAnalysisSetLUT.ContainsKey((bt.BarFreq, bt.Type)) ? BarAnalysisSetLUT[(bt.BarFreq, bt.Type)] : null;
 
-        private Dictionary<(BarFreq freq, MarketDataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
+        private Dictionary<(BarFreq freq, DataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
 
-        public IEnumerator<(BarFreq freq, MarketDataType type, BarAnalysisSet bas)> GetEnumerator()
+        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
             => BarAnalysisSetLUT.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
@@ -131,5 +131,23 @@ namespace Pacmio
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public MultiPeriod RunDailyScreener(BarTableSet bts)
+        {
+            var inds = IndicatorLUT.Where(n => n.Key.freq >= BarFreq.Daily).OrderByDescending(n => n.Key.freq);
+            foreach (var item in inds)
+            {
+                BarTable bt = bts[item.Key.freq, item.Key.type];
+                BarAnalysisSet bas = this[bt];
+                bt.CalculateRefresh(bas);
+
+
+                Indicator ind = this[item.Key.freq, item.Key.type];
+
+                // Get the intercepting MultiPeriods amount all MultiPeriod
+            }
+
+            return new MultiPeriod();
+        }
     }
 }

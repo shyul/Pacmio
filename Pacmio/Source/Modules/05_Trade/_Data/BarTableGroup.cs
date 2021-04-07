@@ -37,7 +37,7 @@ namespace Pacmio
             }
         }
 
-        public BarTable this[Contract c, BarFreq freq, MarketDataType type = MarketDataType.Trades]
+        public BarTable this[Contract c, BarFreq freq, DataType type = DataType.Trades]
         {
             get
             {

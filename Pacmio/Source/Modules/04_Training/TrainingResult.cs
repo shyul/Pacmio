@@ -8,10 +8,11 @@
 
 using System;
 using System.Collections.Generic;
+using Xu;
 
 namespace Pacmio
 {
-    public class SimulationResult
+    public class TrainingResult
     {
         public void AddTrade(TradeInfo tld)
         {
@@ -100,6 +101,36 @@ namespace Pacmio
         public double LongPnL { get; private set; } = 0;
 
         public double ShortPnL { get; private set; } = 0;
+
+    }
+
+    public class StrategyTrainingDatum : IDatum
+    {
+        public int Trades { get; }
+
+        public double MaximumPosition { get; }
+
+        public int WinCount { get; }
+
+        public int LossCount { get; }
+
+        public double WinRate
+        {
+            get
+            {
+                if (WinCount > 0)
+                    return WinCount / (WinCount + LossCount);
+                else
+                    return 0;
+            }
+        }
+
+        public double RiskRewardRatio { get; }
+
+
+
+        public double Accumulation { get; private set; } = 0;
+
 
     }
 }
