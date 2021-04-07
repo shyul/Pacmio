@@ -14,7 +14,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    class FlagAnalysis : BarAnalysis, ILevelAnalysis, IChartBackground
+    class FlagAnalysis : BarAnalysis, ILevelAnalysis, IChartOverlay
     {
         public FlagAnalysis()
         {
@@ -51,24 +51,22 @@ namespace Pacmio.Analysis
                     d.TotalRange.Insert(b0.High);
                     d.TotalRange.Insert(b0.Low);
                     testElements.Add(new FlagTestElement(b0, d.TotalRange.Maximum - d.TotalRange.Minimum));
-
                     if (b0.Typical < lowBound || b0.Typical > highBound) break;
                 }
 
+                int elementCount = testElements.Count;
                 double totalRangeDiff = d.TotalRange.Maximum - d.TotalRange.Minimum;
-                foreach (var ele in testElements)
+                foreach (var element in testElements)
                 {
-                    ele.RangeLocation = (ele.Bar.Typical - d.TotalRange.Minimum) / totalRangeDiff;
+                    element.RangeLocation = (element.Bar.Typical - d.TotalRange.Minimum) / totalRangeDiff;
                 }
 
-                int barsCount = testElements.Count;
-                int j = 0;
                 d.LastFlagBarRangeLocation = testElements.First().RangeLocation;
-                bool isRunning = false;
 
+                bool isRunning = false;
                 if (d.LastFlagBarRangeLocation > (1 - MinimumRangeLocationRatio)) // Detect Bull Flag when the last bar range location is at the top.
                 {
-                    for (j = 0; j < barsCount; j++)
+                    for (int j = 0; j < elementCount; j++)
                     {
                         if (testElements[j].RangeLocation < (1 - MinimumRangeLocationRatio) && testElements[j].RangeLocation > (MinimumRangeLocationRatio / 2))
                             isRunning = testElements[j].IsRunning = true;
@@ -136,7 +134,7 @@ namespace Pacmio.Analysis
                 }
                 else if (d.LastFlagBarRangeLocation < MinimumRangeLocationRatio) // At the lower buttom
                 {
-                    for (j = 0; j < barsCount; j++)
+                    for (int j = 0; j < elementCount; j++)
                     {
                         if (testElements[j].RangeLocation > MinimumRangeLocationRatio && testElements[j].RangeLocation < (1 - (MinimumRangeLocationRatio / 2)))
                             isRunning = testElements[j].IsRunning = true;
@@ -171,7 +169,7 @@ namespace Pacmio.Analysis
 
         public int DrawOrder { get; set; } = 0;
 
-        public void DrawBackground(Graphics g, BarChart bc)
+        public void DrawOverlay(Graphics g, BarChart bc)
         {
             if (AreaName is string areaName && bc[areaName] is Area a)
             {

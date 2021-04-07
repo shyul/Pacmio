@@ -19,7 +19,7 @@ namespace Pacmio
         IDataConsumer,
         IDataProvider,
         IDisposable,
-        IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
+        IEnumerable<(BarFreq freq, MarketDataType type, BarTable bt)>
     {
         public BarTableSet(BarTable bt, bool adjustDividend)
         {
@@ -198,11 +198,11 @@ namespace Pacmio
         public void SetPeriod(Period pd, CancellationTokenSource cts = null)
             => SetPeriod(new MultiPeriod(pd), cts);
 
-        private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; }
-            = new Dictionary<(BarFreq freq, DataType type), BarTable>();
+        private Dictionary<(BarFreq freq, MarketDataType type), BarTable> BarTableLUT { get; }
+            = new Dictionary<(BarFreq freq, MarketDataType type), BarTable>();
 
 
-        public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
+        public IEnumerator<(BarFreq freq, MarketDataType type, BarTable bt)> GetEnumerator()
             => BarTableLUT.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
@@ -210,10 +210,10 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public BarTable this[BarFreq freq, DataType type = DataType.Trades]
+        public BarTable this[BarFreq freq, MarketDataType type = MarketDataType.Trades]
             => GetOrCreateBarTable(freq, type);
 
-        public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, CancellationTokenSource cts = null)
+        public BarTable GetOrCreateBarTable(BarFreq freq, MarketDataType type, CancellationTokenSource cts = null)
         {
             var key = (freq, type);
 

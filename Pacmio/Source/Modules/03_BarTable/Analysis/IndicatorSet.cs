@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
+    public class IndicatorSet : IEnumerable<(BarFreq freq, MarketDataType type, BarAnalysisSet bas)>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
@@ -87,11 +87,11 @@ namespace Pacmio
             return btList.Count() == 0;
         }
 
-        private Dictionary<(BarFreq freq, DataType type), Indicator> IndicatorLUT { get; } = new();
+        private Dictionary<(BarFreq freq, MarketDataType type), Indicator> IndicatorLUT { get; } = new();
 
-        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
+        public List<(BarFreq freq, MarketDataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
 
-        public Indicator this[BarFreq freq, DataType type = DataType.Trades]
+        public Indicator this[BarFreq freq, MarketDataType type = MarketDataType.Trades]
         {
             get
             {
@@ -121,9 +121,9 @@ namespace Pacmio
 
         public BarAnalysisSet this[BarTable bt] => BarAnalysisSetLUT.ContainsKey((bt.BarFreq, bt.Type)) ? BarAnalysisSetLUT[(bt.BarFreq, bt.Type)] : null;
 
-        private Dictionary<(BarFreq freq, DataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
+        private Dictionary<(BarFreq freq, MarketDataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
 
-        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
+        public IEnumerator<(BarFreq freq, MarketDataType type, BarAnalysisSet bas)> GetEnumerator()
             => BarAnalysisSetLUT.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
