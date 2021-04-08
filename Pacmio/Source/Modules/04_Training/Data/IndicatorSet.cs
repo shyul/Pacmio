@@ -132,22 +132,48 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public MultiPeriod RunDailyScreener(BarTableSet bts)
+        public (MultiPeriod bullish, MultiPeriod bearish) RunDailyScreener(BarTableSet bts)
         {
             var inds = IndicatorLUT.Where(n => n.Key.freq >= BarFreq.Daily).OrderByDescending(n => n.Key.freq);
+
+            Dictionary<(BarFreq freq, DataType type), (MultiPeriod bullish, MultiPeriod bearish)> Periods = new();
+
+            Period range = new Period();
+
             foreach (var item in inds)
             {
                 BarTable bt = bts[item.Key.freq, item.Key.type];
+
+                range.Insert(bt.Period.Start);
+                range.Insert(bt.Period.Stop);
+
                 BarAnalysisSet bas = this[bt];
                 bt.CalculateRefresh(bas);
 
-
                 Indicator ind = this[item.Key.freq, item.Key.type];
+                var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
+                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish > ind.BearishPointLimit);
 
-                // Get the intercepting MultiPeriods amount all MultiPeriod
+                Periods[item.Key] = (new(BullishBars.Select(n => n.Period)), new(BearishBars.Select(n => n.Period)));
             }
 
-            return new MultiPeriod();
+            MultiPeriod bullish = new MultiPeriod();
+            MultiPeriod bearish = new MultiPeriod();
+
+            for (DateTime t = range.Start.Date; t < range.Stop; t.AddDays(1))
+            {
+                if (Periods.Where(n => n.Value.bullish.Contains(t)).Count() == inds.Count())
+                {
+                    bullish.Add(new Period(t, t.AddDays(1)));
+                }
+
+                if (Periods.Where(n => n.Value.bearish.Contains(t)).Count() == inds.Count())
+                {
+                    bearish.Add(new Period(t, t.AddDays(1)));
+                }
+            }
+
+            return (bullish, bearish);
         }
     }
 }

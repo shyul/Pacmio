@@ -3,6 +3,17 @@ Program Flow:
 1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
                                                         a. OrderRules           a. Can Contain Several Orders
 
+Screener:
+1. Search the daily bars using RunScreener
+2. Yield testPeriods = bullishPeriods + bearishPeriods 
+3. Check if it is worthwhile to download
+4. apply testPeriods to BarTableSet and download
+6. Analyze the Intraday Bars
+7. Yield the straight results
+
+9. Yield the Strategy results
+
+
 
 Current Task
 ==============
