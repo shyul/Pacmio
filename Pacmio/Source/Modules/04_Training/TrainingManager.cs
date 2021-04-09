@@ -46,7 +46,13 @@ namespace Pacmio
 
                     bts.SetPeriod(bullish, cts);
 
+                    
+                    
                     BarTable bt = bts[BarFreq.Minute];
+
+
+
+
                     //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;

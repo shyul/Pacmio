@@ -227,17 +227,5 @@ namespace Pacmio
                 return BarTableLUT[key];
             }
         }
-
-        public void CalculateRefresh(IndicatorSet ins)
-        {
-            lock (DataLockObject)
-            {
-                foreach (var item in ins)
-                {
-                    BarTable bt = this[item.freq, item.type];
-                    bt.CalculateRefresh(item.bas);
-                }
-            }
-        }
     }
 }

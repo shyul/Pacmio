@@ -132,9 +132,13 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        public (BarFreq freq, DataType type) PrimaryTimeFrame { get; set; }
+
+        public OrderRule OrderRune { get; set; }
+
         public (MultiPeriod bullish, MultiPeriod bearish) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
         {
-            var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq);
+            var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
 
             Dictionary<(BarFreq freq, DataType type), (MultiPeriod bullish, MultiPeriod bearish)> Periods = new();
 
@@ -175,6 +179,24 @@ namespace Pacmio
             Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: Completed!");
 
             return (bullish, bearish);
+        }
+
+        public IndicatorEvaluationResult RunAnalysis(BarTableSet bts)
+        {
+            var inds = IndicatorLUT.OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
+
+            foreach (var item in inds)
+            {
+                BarTable bt = bts[item.Key.freq, item.Key.type];
+                bt.CalculateRefresh(this[bt]);
+            }
+
+            // Then run order / trade / position analysis
+            // This analysis shall not be BarAnalysis  
+
+            //Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
+
+            return null;
         }
 
         public Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
