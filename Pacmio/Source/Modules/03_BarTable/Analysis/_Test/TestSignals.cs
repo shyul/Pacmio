@@ -32,18 +32,38 @@ namespace Pacmio.Analysis
 
                 var twrc = new SwingTradeFilter();
 
-                var chop = new CHOP(20);
+                //var chop = new CHOP(20);
 
                 List<BarAnalysis> sample_list = new()
                 {
                     twrc,
-                    chop
+                    //chop
                 };
 
                 BarAnalysisSet bas = new(sample_list);
 
                 return bas;
             }
+        
+        
+
+        
         }
+
+        public static IndicatorSet IndicatorSet 
+        {
+            get 
+            {
+
+                var idset = new IndicatorSet();
+
+                idset[BarFreq.Daily] = new SwingTradeFilter();
+
+
+                return idset;
+
+            }
+        }
+
     }
 }

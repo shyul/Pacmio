@@ -32,9 +32,9 @@ namespace Pacmio
 
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
 
-        public double BullishPointLimit { get; set; }
+        public double BullishPointLimit { get; set; } = 1;
 
-        public double BearishPointLimit { get; set; }
+        public double BearishPointLimit { get; set; } = -1;
 
         #region Series
 

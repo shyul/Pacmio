@@ -80,6 +80,10 @@ namespace Pacmio.Analysis
             ChopAnalysis.AddChild(this);
             StandardDeviationAnalysis = new STDEV(Bar.Column_Typical, 20);
             StandardDeviationAnalysis.AddChild(this);
+
+
+            BullishPointLimit = 1;
+            BearishPointLimit = -1;
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ OscillatorAnalysis.GetHashCode() ^ BollingerBand.GetHashCode() ^ SingleDataSignal.GetHashCode();
@@ -150,15 +154,17 @@ namespace Pacmio.Analysis
 
                 double point = 0;
 
-                if (high > 2 && low < 50)
+                if (low > 2 && high < 50 && volume * close > 1e7 && (b.Gap > 0.5 || b.Gap < -0.5))
                 {
                     point++;
+                }
+                else
+                {
+                    SignalColumns.Select(sc => b[sc]).RunEach(sd => { if (sd is not null) sd.ResetPoints(); });
                 }
 
-                if (volume * close > 5e7)
-                {
-                    point++;
-                }
+
+
 
                 double chop = b[ChopAnalysis];
 

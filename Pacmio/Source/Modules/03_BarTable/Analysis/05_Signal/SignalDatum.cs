@@ -48,6 +48,11 @@ namespace Pacmio
             TrailPoints = point_list;
         }
 
+        public void ResetPoints() 
+        {
+            TrailPoints.Clear();
+        }
+
         public virtual string Description { get; } = string.Empty;
 
         public List<double> TrailPoints { get; private set; } = new() { 0 };
@@ -68,6 +73,6 @@ namespace Pacmio
             }
         }
 
-        public double Points => TrailPoints[0];
+        public double Points => TrailPoints.Count > 0 ? TrailPoints[0] : 0;
     }
 }

@@ -140,38 +140,39 @@ namespace Pacmio
 
             Period range = new Period();
 
+            MultiPeriod bullish = new MultiPeriod();
+            MultiPeriod bearish = new MultiPeriod();
+
+            int i = 0;
             foreach (var item in inds)
             {
+                Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: " + item.Value.Name);
+
                 BarTable bt = bts[item.Key.freq, item.Key.type];
 
-                range.Insert(bt.Period.Start);
-                range.Insert(bt.Period.Stop);
+                range.Insert(bt.Period);
 
                 BarAnalysisSet bas = this[bt];
                 bt.CalculateRefresh(bas);
 
                 Indicator ind = this[item.Key.freq, item.Key.type];
                 var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
-                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish > ind.BearishPointLimit);
+                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish < ind.BearishPointLimit);
 
-                Periods[item.Key] = (new(BullishBars.Select(n => n.Period)), new(BearishBars.Select(n => n.Period)));
+                if (i == 0)
+                {
+                    BullishBars.RunEach(n => bullish.Add(n.Period));
+                    BearishBars.RunEach(n => bearish.Add(n.Period));
+                }
+                else
+                {
+                    bullish.Remove(new MultiPeriod(BullishBars.Select(n => n.Period)));
+                    bearish.Remove(new MultiPeriod(BearishBars.Select(n => n.Period)));
+                }
+                i++;
             }
 
-            MultiPeriod bullish = new MultiPeriod();
-            MultiPeriod bearish = new MultiPeriod();
-
-            for (DateTime t = range.Start.Date; t < range.Stop; t.AddDays(1))
-            {
-                if (Periods.Where(n => n.Value.bullish.Contains(t)).Count() == inds.Count())
-                {
-                    bullish.Add(new Period(t, t.AddDays(1)));
-                }
-
-                if (Periods.Where(n => n.Value.bearish.Contains(t)).Count() == inds.Count())
-                {
-                    bearish.Add(new Period(t, t.AddDays(1)));
-                }
-            }
+            Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: Completed!");
 
             return (bullish, bearish);
         }

@@ -488,16 +488,50 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
+                    IndicatorSet iset = TestSignals.IndicatorSet;
                     BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(pd, Cts);
+
+
                     BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(TestSignals.BarAnalysisSet);
+
+
+
+                    BarChart bc = bt.GetChart(iset[bt]);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
 
                 Root.Form.Show();
             }
+        }
+
+        private void BtnRunScreener_Click(object sender, EventArgs e)
+        {
+            Contract c = ContractTest.ActiveContract;
+            Cts = new CancellationTokenSource();
+            Period pd = HistoricalPeriod;
+
+            Task.Run(() =>
+            {
+                IndicatorSet iset = TestSignals.IndicatorSet;
+                BarTableSet bts = BarTableGroup[c];
+        
+                var (bullish, bearish) = iset.RunDailyScreener(bts);
+
+                foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
+                foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+
+                bts.SetPeriod(bullish, Cts);
+
+                BarTable bt = bts[BarFreq.Minute];
+                BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
+
+                //BarTable bt = bts[BarFreq.Daily];
+                //BarChart bc = bt.GetChart(iset[bt]);
+
+                //HistoricalPeriod = bt.Period;
+            }, Cts.Token);
         }
 
         private void BtnLoadMultiBarTable_Click(object sender, EventArgs e)
@@ -1495,6 +1529,8 @@ namespace TestClient
                 Root.Form.Show();
             }
         }
+
+
     }
     public static class DataGridHelper
     {
