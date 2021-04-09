@@ -8,42 +8,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Xu;
 using Pacmio.Analysis;
+
 
 namespace Pacmio
 {
     public static class TrainingManager
     {
-        public static void Run(BarTableSet bts, IndicatorSet inds)
+        public static void RunScreener(IEnumerable<Contract> contracts, IndicatorSet iset, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null) 
         {
+            if (cts is null) cts = new CancellationTokenSource();
+            double totalseconds = 0;
+            int total_num = contracts.Count();
+            int i = 0;
 
-
-            foreach (var item in inds.Where(n => n.freq >= BarFreq.Daily).OrderByDescending(n => n.freq))
+            ParallelOptions po = new ParallelOptions()
             {
-                BarTable bt = bts[item.freq, item.type];
-                bt.CalculateRefresh(item.bas);
+                MaxDegreeOfParallelism = maxDegreeOfParallelism,
+                CancellationToken = cts.Token
+            };
+
+            try
+            {
+                Parallel.ForEach(contracts, po, c =>
+                {
+                    DateTime startTime = DateTime.Now;
+                    BarTableSet bts = new BarTableSet(c, false);
+
+                    bts.SetPeriod(pd, cts);
+
+                    var (bullish, bearish) = iset.RunScreener(bts);
+
+                    foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
+                    foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+
+                    bts.SetPeriod(bullish, cts);
+
+                    BarTable bt = bts[BarFreq.Minute];
+                    //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
+                    DateTime endTime = DateTime.Now;
+                    double seconds = (endTime - startTime).TotalSeconds;
+                    totalseconds += seconds;
+                    i++;
+                    progress.Report(i * 100.0f / total_num);
+                    po.CancellationToken.ThrowIfCancellationRequested();
+                });
+            }
+            catch (OperationCanceledException e)
+            {
+                Console.WriteLine("Parallel task is cancelled: " + e.Message);
+            }
+            finally
+            {
+                cts.Dispose();
             }
 
-
-
         }
 
-        #region Search for tradeable contracts
 
 
 
-        public static IEnumerable<Contract> Search(Indicator ind, Period pd)
-        {
-            return Search(ContractManager.Values.Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive).OrderBy(n => n.Name).Select(n => n as Stock).ToList(), ind, pd);
-        }
 
-        public static IEnumerable<Contract> Search(IEnumerable<Contract> clist, Indicator ind, Period pd) 
-        {
-            return new List<Contract>();
-        }
-
-        #endregion Search for tradeable contracts
 
         /// <summary>
         /// Commission Calculator based on IB Tiered Fee Structure.

@@ -28,7 +28,7 @@ namespace Pacmio
             BarTableLUT[(bt.BarFreq, bt.Type)] = bt;
         }
 
-        public BarTableSet(Contract c, bool adjustDividend)
+        public BarTableSet(Contract c, bool adjustDividend = false)
         {
             Contract = c;
             AdjustDividend = adjustDividend;

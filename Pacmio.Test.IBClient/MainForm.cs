@@ -517,7 +517,7 @@ namespace TestClient
                 IndicatorSet iset = TestSignals.IndicatorSet;
                 BarTableSet bts = BarTableGroup[c];
         
-                var (bullish, bearish) = iset.RunDailyScreener(bts);
+                var (bullish, bearish) = iset.RunScreener(bts);
 
                 foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
                 foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
@@ -545,6 +545,14 @@ namespace TestClient
 
             Task.Run(() =>
             {
+                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+
+                TrainingManager.RunScreener(ContractManager.GetOrFetch(symbols, "US", Cts, null),
+                    TestSignals.IndicatorSet,
+                    pd, 8, Cts, Progress);
+
+
+                /*
                 var rsi = new RSI(14);
 
                 BarAnalysisSet bas = new(new List<BarAnalysis>() {
@@ -578,23 +586,6 @@ namespace TestClient
                 Console.WriteLine("################# Finished Loading Tables and calculation!! Start searching now!! ####################");
 
                 DateTime time = DateTime.Now.AddDays(-8).Date;
-                /*
-                var result = TableList.AsParallel().Where(bt =>
-                    //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
-                    //bt.LastClose > 10 && bt.LastClose < 100 &&
-                    //bt.LastBar[rsi] > 20 && bt.LastBar[rsi] < 40
-                    bt[time] is Bar b &&
-                    b.Close > 10 && b.Close < 100 &&
-                    b[rsi] > 40 && b[rsi] < 60
-
-                ).ToList();
-
-                result.ForEach(bt =>
-                    //Console.WriteLine(bt.ToString() + " | rsi = " + bt.LastBar[rsi].ToString())
-                    Console.WriteLine(bt.ToString() + " | rsi = " + bt[time][rsi].ToString("0.##"))
-                );
-
-                Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());
                 */
             }, Cts.Token);
 

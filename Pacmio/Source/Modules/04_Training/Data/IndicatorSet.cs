@@ -132,9 +132,9 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public (MultiPeriod bullish, MultiPeriod bearish) RunDailyScreener(BarTableSet bts)
+        public (MultiPeriod bullish, MultiPeriod bearish) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
         {
-            var inds = IndicatorLUT.Where(n => n.Key.freq >= BarFreq.Daily).OrderByDescending(n => n.Key.freq);
+            var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq);
 
             Dictionary<(BarFreq freq, DataType type), (MultiPeriod bullish, MultiPeriod bearish)> Periods = new();
 
@@ -146,7 +146,7 @@ namespace Pacmio
             int i = 0;
             foreach (var item in inds)
             {
-                Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: " + item.Value.Name);
+                Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: " + item.Value.Name + " <<<<<<<<<<<<<<<<<<<");
 
                 BarTable bt = bts[item.Key.freq, item.Key.type];
 
@@ -161,8 +161,8 @@ namespace Pacmio
 
                 if (i == 0)
                 {
-                    BullishBars.RunEach(n => bullish.Add(n.Period));
-                    BearishBars.RunEach(n => bearish.Add(n.Period));
+                    BullishBars.RunEach(n => bullish.Add(ToDailyPeriod(n.Period)));
+                    BearishBars.RunEach(n => bearish.Add(ToDailyPeriod(n.Period)));
                 }
                 else
                 {
@@ -176,5 +176,7 @@ namespace Pacmio
 
             return (bullish, bearish);
         }
+
+        public Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
     }
 }
