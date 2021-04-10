@@ -127,6 +127,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\08_Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\PriceBarAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
+    <Compile Include="Source\Modules\04_Training\Data\SimulationDatum.cs" />
     <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\BarChartManager.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\Series\CandleStickSeries.cs" />
