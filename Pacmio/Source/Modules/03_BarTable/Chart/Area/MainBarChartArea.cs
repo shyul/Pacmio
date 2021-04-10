@@ -46,6 +46,11 @@ namespace Pacmio
 
         public AdColumnSeries VolumeSeries { get; }
 
+        public override void RemoveSeries()
+        {
+            Series.Where(ser => ser != PriceSeries && ser != VolumeSeries).RunEach(ser => RemoveSeries(ser));
+        }
+
         public override void DrawCursor(Graphics g, ITable table)
         {
             if (Chart.SelectedDataPointUnregulated >= 0)

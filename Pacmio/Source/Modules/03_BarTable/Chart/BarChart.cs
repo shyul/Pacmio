@@ -80,8 +80,6 @@ namespace Pacmio
         public override string Description { get => MainArea.PriceSeries.Description; set => MainArea.PriceSeries.Description = value; }
 
         public MainBarChartArea MainArea { get; }
-        //public SignalArea SignalArea { get; }
-        //public PositionArea PositionArea { get; }
 
         public override void RemoveDataSource()
         {
@@ -111,11 +109,9 @@ namespace Pacmio
 
         private void RemoveAllChartSeries()
         {
-            // Remove all areas and series.
-            //List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea && n != Test_Gain_Area && n != Test_Trend_Area).ToList();
-            //List<Area> areaToRemove = Areas.Where(n => n != MainArea && n != SignalArea && n != PositionArea).ToList();
             List<Area> areaToRemove = Areas.Where(n => n != MainArea).ToList();
             areaToRemove.ForEach(n => Areas.Remove(n));
+            MainArea.RemoveSeries();
         }
 
         public BarAnalysisSet BarAnalysisSet

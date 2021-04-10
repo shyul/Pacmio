@@ -638,7 +638,7 @@ namespace Pacmio
 
         #region Basic Analysis
 
-        public static NativeGainAnalysis GainAnalysis { get; } = new();
+        public static PriceBarAnalysis PriceBarAnalysis { get; } = new();
 
         #endregion Basic Analysis
 
@@ -670,7 +670,7 @@ namespace Pacmio
 
             if (Count > 0)
             {
-                startPt = Math.Min(startPt, Calculate(GainAnalysis).StartPt);
+                startPt = Math.Min(startPt, Calculate(PriceBarAnalysis).StartPt);
                 foreach (BarAnalysis ba in bas)
                 {
                     //Console.WriteLine("startPt = " + startPt);
