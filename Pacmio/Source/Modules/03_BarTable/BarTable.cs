@@ -801,7 +801,7 @@ namespace Pacmio
                     {
                         if (m_Status == TableStatus.CalculateFinished)
                         {
-                            foreach (var idr in DataRenderers) 
+                            foreach (var idr in DataRenderers)
                                 idr.PointerSnapToEnd();
                         }
                         else if (m_Status == TableStatus.TickingFinished)
@@ -857,49 +857,52 @@ namespace Pacmio
 
         #endregion Equality
 
-        /*
-public void AppendBars(List<Bar> sorted_bars)
-{
-    if (sorted_bars.Count > 0)
-    {
-        if (this != sorted_bars.FirstOrDefault().Table)
-            throw new("bar's table has to match with this table!");
-
-        Status = TableStatus.Loading;
-
-        lock (DataLockObject)
+        /// <summary>
+        /// Used for periodically requested historical data
+        /// </summary>
+        /// <param name="sorted_bars"></param>
+        public void AppendBars(List<Bar> sorted_bars)
         {
-            int earliestIndex = -1;
-
-            for (int i = 0; i < sorted_bars.Count; i++)
+            if (sorted_bars.Count > 0)
             {
-                Bar b = sorted_bars[i];
+                if (this != sorted_bars.FirstOrDefault().Table)
+                    throw new("bar's table has to match with this table!");
 
-                if (this[b.Time] is Bar b_ori)
+                Status = TableStatus.Loading;
+
+                lock (DataLockObject)
                 {
-                    if (b.Source <= b_ori.Source)
+                    int earliestIndex = -1;
+
+                    for (int i = 0; i < sorted_bars.Count; i++)
                     {
-                        b_ori.Copy(b);
-                        b.Index = b_ori.Index;
+                        Bar b = sorted_bars[i];
+
+                        if (this[b.Time] is Bar b_ori)
+                        {
+                            if (b.Source <= b_ori.Source)
+                            {
+                                b_ori.Copy(b);
+                                b.Index = b_ori.Index;
+                            }
+                        }
+                        else
+                        {
+                            Rows.Add(b);
+                            b.Index = LastIndex;
+                            TimeToRows.Add(b.Time, b.Index);
+                        }
+
+                        if (earliestIndex == -1)
+                            earliestIndex = b.Index;
                     }
-                }
-                else
-                {
-                    Rows.Add(b);
-                    b.Index = LastIndex;
-                    TimeToRows.Add(b.Time, b.Index);
+
+                    if (earliestIndex > 0) SetCalculationPointer(earliestIndex - 1);
                 }
 
-                if (earliestIndex == -1)
-                    earliestIndex = b.Index;
+                Status = TableStatus.DataReady;
             }
-
-            if (earliestIndex > 0) SetCalculationPointer(earliestIndex - 1);
         }
 
-        Status = TableStatus.DataReady;
-    }
-}
-*/
     }
 }

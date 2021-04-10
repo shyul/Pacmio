@@ -17,7 +17,27 @@ namespace Pacmio.Analysis
 {
     public class ExecutionDatum : IDatum
     {
-        public TradeExecutionType Type { get; } = TradeExecutionType.None;
+        public TradeExecutionType Type
+        {
+            get => m_Type;
+
+            set
+            {
+                TradeExecutionType type = value;
+
+                if (type != TradeExecutionType.None)
+                    if (type == m_Type)
+                        DecisionCount++;
+                    else
+                        DecisionCount = 1;
+                else
+                    DecisionCount = 0;
+
+                m_Type = type;
+            }
+        }
+
+        private TradeExecutionType m_Type = TradeExecutionType.None;
 
         public double Size { get; } = 1;
 
@@ -25,8 +45,6 @@ namespace Pacmio.Analysis
 
         public double AuxPrice { get; } = double.NaN;
 
-        // Use to calculate simulation result... position vs time, price, so on...
-
-        public int SameDecisionCount { get; set; } = 0;
+        public int DecisionCount { get; private set; } = 0;
     }
 }

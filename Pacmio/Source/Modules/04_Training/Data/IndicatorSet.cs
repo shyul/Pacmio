@@ -134,8 +134,6 @@ namespace Pacmio
 
         public (BarFreq freq, DataType type) PrimaryTimeFrame { get; set; }
 
-        public OrderRule OrderRune { get; set; }
-
         public (MultiPeriod bullish, MultiPeriod bearish) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
         {
             var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
@@ -183,18 +181,23 @@ namespace Pacmio
 
         public IndicatorEvaluationResult RunAnalysis(BarTableSet bts)
         {
-            var inds = IndicatorLUT.OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
-
-            foreach (var item in inds)
+            foreach (var item in this)
             {
-                BarTable bt = bts[item.Key.freq, item.Key.type];
-                bt.CalculateRefresh(this[bt]);
+                BarTable bt = bts[item.freq, item.type];
+                bt.CalculateRefresh(item.bas);
             }
 
-            // Then run order / trade / position analysis
+            BarTable bt_exec = bts[PrimaryTimeFrame.freq, PrimaryTimeFrame.type];
+            bt_exec.CalculateRefresh(this[bt_exec]);
+
+            // Then run order / trade / position analysis, and ignore any data outside BarTableSet MultiPeriod
             // This analysis shall not be BarAnalysis  
 
-            //Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
+            // Effectiveness Result -> 
+
+            // Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
+
+            // Overlapping Strategy Result ->
 
             return null;
         }

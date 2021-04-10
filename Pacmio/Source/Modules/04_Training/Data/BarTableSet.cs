@@ -92,8 +92,7 @@ namespace Pacmio
         {
             if (IsLive)
             {
-                //Parallel.ForEach(BarTableLUT.Select(n => n.Value), bt =>
-                this.Select(n => n.bt).RunEach(bt =>
+                this.Select(n => n.bt).RunEach(bt => // Already sorted by BarFreq!!
                 {
                     lock (bt.DataLockObject)
                     {
@@ -106,9 +105,7 @@ namespace Pacmio
                             else if (bt.BarFreq >= BarFreq.Daily) // && bt.LastTime < time.Date)
                             {
                                 DateTime date = time.Date;
-
-                                Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTimeBound.Date + " | time = " + date);
-
+                                //Console.WriteLine(">>> [[[[ Received for " + bt.ToString() + " | LastTime = " + bt.LastTimeBound.Date + " | time = " + date);
                                 if (bt.LastTimeBound.Date < date)
                                 {
                                     double open = double.IsNaN(MarketData.Open) || MarketData.Open <= 0 ? price : MarketData.Open;

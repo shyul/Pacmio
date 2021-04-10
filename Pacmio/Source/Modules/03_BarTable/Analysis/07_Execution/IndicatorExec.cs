@@ -43,10 +43,6 @@ namespace Pacmio.Analysis
         public DatumColumn Column_Result { get; }
 
 
-
-
-        public abstract ExecutionDatum GenerateExecution(BarAnalysisPointer bap);
-
         // Assure Tables from other time frame has the same or later ticker time...
 
         // Get existing Position...
@@ -69,21 +65,7 @@ namespace Pacmio.Analysis
         /// </summary>
         public MultiTimePeriod TradeTimeOfDay { get; set; }
 
-        /// <summary>
-        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
-        /// </summary>
-        public double WaitMsForOutstandingOrder { get; }
 
-        /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
-        /// Can use wait Ms and set limit price.
-        /// </summary>
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
-
-        /// <summary>
-        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
-        /// </summary>
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
 
         #region Order
 
