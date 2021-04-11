@@ -28,6 +28,8 @@ namespace Pacmio.Analysis
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            Calculate(bap.Table, Column, Column_Result, bap.StartPt, bap.StopPt, Interval);
+            /*
             BarTable bt = bap.Table;
 
             double sum = (bap.StartPt == 0) ? bt[0][Column] * Interval : bt[bap.StartPt - 1][Column_Result] * Interval;
@@ -38,6 +40,19 @@ namespace Pacmio.Analysis
                     sum = sum - bt[i - 1][Column_Result] + bt[i][Column];
 
                 bt[i][Column_Result] = sum / Interval;
+            }*/
+        }
+
+        public static void Calculate(BarTable bt, NumericColumn column, NumericColumn column_result, int startPt, int stopPt, int interval)
+        {
+            double sum = (startPt == 0) ? bt[0][column] * interval : bt[startPt - 1][column_result] * interval;
+
+            for (int i = startPt; i < stopPt; i++)
+            {
+                if (i != 0)
+                    sum = sum - bt[i - 1][column_result] + bt[i][column];
+
+                bt[i][column_result] = sum / interval;
             }
         }
 

@@ -20,6 +20,8 @@ namespace Pacmio.Analysis
         public HMA(NumericColumn column, int interval)
         {
             Interval = interval;
+            Interval_Fast = (Interval / 2D).ToInt32();
+            Interval_Sqrt = Math.Sqrt(Interval).ToInt32();
             Column = column;
 
             Label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
@@ -34,18 +36,12 @@ namespace Pacmio.Analysis
             /// When deleting Column, you have to delete all
             /// Column's downstream analysis data first
 
-            WMA_Fast = new WMA(Column, (Interval / 2D).ToInt32());
-            WMA_Fast.AddChild(this);
-
-            WMA_Slow = new WMA(Column, Interval);
-            WMA_Slow.AddChild(this);
-
+            WMA_Fast = new WMA(Column, Interval_Fast) { ChartEnabled = false };
+            WMA_Slow = new WMA(Column, Interval) { ChartEnabled = false };
+        
             Order = WMA_Slow.Order + 1;
-            HMA_Result = new WMA(IM_Column, Math.Sqrt(Interval).ToInt32()) { Order = Order + 1 };
-            this.AddChild(HMA_Result);
+            HMA_Result = new WMA(IM_Column, Interval_Sqrt) { ChartEnabled = false, Order = Order + 1 };
 
-            //Result_Column.Name = Name;
-            //Result_Column.Label = label;
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
@@ -54,11 +50,19 @@ namespace Pacmio.Analysis
                 IsAntialiasing = true,
                 DrawLimitShade = false
             };
+
+            WMA_Fast.AddChild(this);
+            WMA_Slow.AddChild(this);
+            this.AddChild(HMA_Result);
         }
 
         #region Calculation
 
         public override string Label { get; }
+
+        public int Interval_Fast { get; }
+
+        public int Interval_Sqrt { get; }
 
         public WMA WMA_Fast { get; }
 
@@ -73,16 +77,27 @@ namespace Pacmio.Analysis
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            //WMA_Fast.Update(bap);
-            //WMA_Slow.Update(bap);
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 bt[i][IM_Column] = (2 * bt[i][WMA_Fast.Column_Result]) - bt[i][WMA_Slow.Column_Result];
             }
-
-            //HMA_Result.Update(bap);
         }
+        /*
+        public static void Calculate(BarTable bt, NumericColumn column, NumericColumn column_result, int startPt, int stopPt, int interval, int interval_fast, int interval_sqrt)
+        {
+            WMA.Calculate(bt, column, Column_Result, startPt, stopPt, interval_fast);
+            WMA.Calculate(bt, column, Column_Result, startPt, stopPt, interval);
+
+            for (int i = startPt; i < stopPt; i++)
+            {
+                bt[i][IM_Column] = (2 * bt[i][WMA_Fast.Column_Result]) - bt[i][WMA_Slow.Column_Result];
+            }
+
+            WMA.Calculate(bt, column, Column_Result, startPt, stopPt, interval_sqrt);
+        }
+        */
+
 
         #endregion Calculation
     }

@@ -40,13 +40,14 @@ namespace Pacmio.Analysis
                 List<BarAnalysis> sample_list = new()
                 {
                     //new Bollinger(20, 2.0),
-                    //new ATR(14),
+                    new ATR(14),
                     new ULTO(),
                     //aroon,
-                    new HMA(10),
-                    new SMA(5),
+                    new HMA(10) { Color = Color.Plum },
+                    new HMA(20) { Color = Color.Green },
+                    //new SMA(20) { Color = Color.Orange },
 
-                    new MACD(12, 26, 9),
+                    //new MACD(12, 26, 9),
                     //new STO(8, 3, 3) { Order = int.MaxValue - 1 },
                     //new VO() { HasXAxisBar = true, Order = int.MaxValue },
                     //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },
@@ -56,8 +57,8 @@ namespace Pacmio.Analysis
                     new CHOP(),
                     //new MFI(14),
                     rsi,
-                    new TSI(25,13,7),
-                    new VWAP(BarFreq.Annually) { Color = Color.Plum, LineWidth = 2  },
+                    //new TSI(25,13,7),
+                    //new VWAP(BarFreq.Annually) { Color = Color.Plum, LineWidth = 2  },
                     new WaveTrend(10, 21, 4, 0.015) { AreaRatio = 15, HasXAxisBar = true, Order = int.MaxValue },
                     volumeEma,
                 };
