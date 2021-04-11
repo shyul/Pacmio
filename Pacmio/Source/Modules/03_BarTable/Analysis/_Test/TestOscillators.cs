@@ -43,7 +43,10 @@ namespace Pacmio.Analysis
                     //new ATR(14),
                     new ULTO(),
                     //aroon,
-                    //new MACD(12, 26, 9),
+                    new HMA(10),
+                    new SMA(5),
+
+                    new MACD(12, 26, 9),
                     //new STO(8, 3, 3) { Order = int.MaxValue - 1 },
                     //new VO() { HasXAxisBar = true, Order = int.MaxValue },
                     //new Chanderlier(22, 3) { UpperColor = Color.Blue, LowerColor = Color.Plum },

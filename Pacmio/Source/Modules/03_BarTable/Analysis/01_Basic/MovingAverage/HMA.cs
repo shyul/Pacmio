@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class HMA : SMA
+    public sealed class HMA : MovingAverage
     {
         public HMA(int interval) : this(Bar.Column_Close, interval) { }
 
@@ -22,10 +22,10 @@ namespace Pacmio.Analysis
             Interval = interval;
             Column = column;
 
-            string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
-            Name = GetType().Name + label;
+            Label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
+            Name = GetType().Name + Label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
-            Description = "Hull Moving Average " + label;
+            Description = "Hull Moving Average " + Label;
 
             // Set Names for Each Column here
             IM_Column = new NumericColumn(Name + "_IM");
@@ -50,13 +50,15 @@ namespace Pacmio.Analysis
             {
                 Name = Name,
                 LegendName = GroupName,
-                Label = label,
+                Label = Label,
                 IsAntialiasing = true,
                 DrawLimitShade = false
             };
         }
 
         #region Calculation
+
+        public override string Label { get; }
 
         public WMA WMA_Fast { get; }
 

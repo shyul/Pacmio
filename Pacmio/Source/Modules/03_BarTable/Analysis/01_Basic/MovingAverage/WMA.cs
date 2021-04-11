@@ -13,13 +13,13 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class WMA : SMA
+    public sealed class WMA : MovingAverage
     {
         public WMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public WMA(NumericColumn column, int interval) : base(column, interval)
         {
-            Description = "Weighted Moving Average " + LineSeries.Label;
+            Description = "Weighted Moving Average " + Label;
         }
 
         #region Calculation

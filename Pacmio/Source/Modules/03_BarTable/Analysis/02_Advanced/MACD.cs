@@ -19,7 +19,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class MACD : SMA, IOscillator
+    public sealed class MACD : IntervalColumnAnalysis, IOscillator
     {
         public MACD(int interval_fast, int interval_slow, int interval_sl,
             MovingAverageType avgType = MovingAverageType.Exponential) :
@@ -28,7 +28,6 @@ namespace Pacmio.Analysis
 
         public MACD(NumericColumn column, int interval_fast, int interval_slow, int interval_sl,
             MovingAverageType avgType = MovingAverageType.Exponential)
-            : base(column, interval_fast)
         {
             Interval = interval_fast;
             Interval_Slow = interval_slow;
@@ -138,11 +137,11 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = double.NaN;
 
-        public SMA Fast_MA { get; }
+        public MovingAverage Fast_MA { get; }
 
-        public SMA Slow_MA { get; }
+        public MovingAverage Slow_MA { get; }
 
-        public SMA MACD_SL { get; }
+        public MovingAverage MACD_SL { get; }
 
         public NumericColumn HIST_Column { get; }
 
@@ -180,8 +179,6 @@ namespace Pacmio.Analysis
         public LineSeries LineSeries_SL { get; }
 
         public override bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => ColumnSeries.Enabled = LineSeries.Enabled = value; }
-
-        public int AreaOrder { get; set; } = 0;
 
         public override void ConfigChart(BarChart bc)
         {

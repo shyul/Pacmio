@@ -92,6 +92,9 @@
   <ItemGroup>
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugDualDataOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalColumnAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverage.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\DPPMO.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagDatum.cs" />
@@ -247,7 +250,7 @@
     <Compile Include="Source\Modules\03_BarTable\Chart\_Types\IBarChartArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\_Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\PriceChannel.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\_Types\MovingAverageType.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\Series\PositionSeries.cs" />

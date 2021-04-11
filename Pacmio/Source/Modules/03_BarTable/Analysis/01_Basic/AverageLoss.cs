@@ -8,9 +8,12 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class AverageLoss : AverageGain
+    public class AverageLoss : IntervalAnalysis
     {
-        public AverageLoss(int interval) : base(interval) { }
+        public AverageLoss(int interval) : base(interval)
+        {
+            Description = "Average Loss " + Label;
+        }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

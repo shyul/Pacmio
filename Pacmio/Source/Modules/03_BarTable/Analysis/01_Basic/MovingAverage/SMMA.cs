@@ -15,13 +15,13 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SMMA : SMA
+    public sealed class SMMA : MovingAverage
     {
         public SMMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public SMMA(NumericColumn column, int interval) : base(column, interval)
         {
-            Description = "Smoothed Moving Average " + LineSeries.Label;
+            Description = "Smoothed Moving Average " + Label;
         }
 
         #region Calculation

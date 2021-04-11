@@ -13,14 +13,14 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class EMA : SMA
+    public sealed class EMA : MovingAverage
     {
         public EMA(int interval) : this(Bar.Column_Close, interval) { }
 
         public EMA(NumericColumn column, int interval) : base(column, interval)
         {
             Multiplier = 2D / (Interval + 1D);
-            Description = "Exponential Moving Average " + LineSeries.Label;
+            Description = "Exponential Moving Average " + Label;
         }
 
         #region Calculation
@@ -29,8 +29,10 @@ namespace Pacmio.Analysis
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
-            BarTable bt = bap.Table;
+            Calculate(bap.Table, Column, Column_Result, bap.StartPt, bap.StopPt, Multiplier);
 
+            /*
+            BarTable bt = bap.Table;
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 if (i > 0)
@@ -40,6 +42,20 @@ namespace Pacmio.Analysis
                 }
                 else
                     bt[i][Column_Result] = bt[i][Column];
+            }*/
+        }
+
+        public static void Calculate(BarTable bt, NumericColumn column, NumericColumn column_result, int startPt, int stopPt, double multiplier)
+        {
+            for (int i = startPt; i < stopPt; i++)
+            {
+                if (i > 0)
+                {
+                    double y0 = bt[i - 1][column_result];
+                    bt[i][column_result] = (bt[i][column] - y0) * multiplier + y0;
+                }
+                else
+                    bt[i][column_result] = bt[i][column];
             }
         }
 

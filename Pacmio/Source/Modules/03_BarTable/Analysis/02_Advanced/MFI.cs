@@ -22,7 +22,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class MFI : ATR, IOscillator
+    public sealed class MFI : IntervalAnalysis, IOscillator
     {
         public MFI(int interval)
         {

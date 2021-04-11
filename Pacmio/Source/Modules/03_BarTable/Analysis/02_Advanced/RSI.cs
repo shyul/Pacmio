@@ -24,7 +24,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class RSI : ATR, IOscillator
+    public sealed class RSI : IntervalAnalysis, IOscillator
     {
         public RSI(int interval, double lowerLimit = 20, double upperLimit = 80)
         {

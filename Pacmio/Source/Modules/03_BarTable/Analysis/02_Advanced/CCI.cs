@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class CCI : ATR, IOscillator
+    public sealed class CCI : IntervalAnalysis, IOscillator
     {
         public CCI(int interval, double constant = 0.015)
         {

@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class ADX : ATR, IDualData, IOscillator
+    public sealed class ADX : IntervalAnalysis, IDualData, IOscillator
     {
         public ADX(int interval = 14)
         {

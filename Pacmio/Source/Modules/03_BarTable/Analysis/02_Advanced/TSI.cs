@@ -132,19 +132,19 @@ namespace Pacmio.Analysis
 
         //public NumericColumn Column_Gain { get; } = BarTable.GainAnalysis.Column_Gain;
 
-        public SMA MA_1_PC { get; }
+        public MovingAverage MA_1_PC { get; }
 
-        public SMA MA_2_PC { get; }
+        public MovingAverage MA_2_PC { get; }
 
         public NumericColumn APC_Column { get; }
 
-        public SMA MA_1_APC { get; }
+        public MovingAverage MA_1_APC { get; }
 
-        public SMA MA_2_APC { get; }
+        public MovingAverage MA_2_APC { get; }
 
         public NumericColumn Column_Result { get; }
 
-        public SMA MA_SL { get; }
+        public MovingAverage MA_SL { get; }
 
         public NumericColumn HIST_Column { get; }
 

@@ -21,49 +21,20 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class SMA : BarAnalysis, ISingleData, IChartSeries
+    public sealed class SMA : MovingAverage
     {
         public SMA(int interval) : this(Bar.Column_Close, interval) { }
 
-        public SMA(NumericColumn column, int interval)
+        public SMA(NumericColumn column, int interval) : base(Bar.Column_Close, interval)
         {
-            Interval = interval;
-            Column = column;
-
-            string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
-            Name = GetType().Name + label;
-            GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
-            Description = "Simple Moving Average " + label;
-
-            Column_Result = new NumericColumn(Name, label);
-            LineSeries = new LineSeries(Column_Result)
-            {
-                Name = Name,
-                LegendName = GroupName,
-                Label = label,
-                IsAntialiasing = true,
-                DrawLimitShade = false
-            };
+            Description = "Simple Moving Average " + Label;
         }
-
-        protected SMA() { }
-
-        #region Parameters
-
-        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ Interval;
-
-        public virtual int Interval { get; protected set; }
-
-        public NumericColumn Column { get; protected set; }
-
-        #endregion Parameters
-
-        #region Calculation
-
-        public virtual NumericColumn Column_Result { get; protected set; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            Calculate(bap.Table, Column, Column_Result, bap.StartPt, bap.StopPt, Interval);
+
+            /*
             BarTable bt = bap.Table;
 
             double last_sum = 0;
@@ -83,45 +54,29 @@ namespace Pacmio.Analysis
                 if (head < 0) head = 0;
                 last_sum = last_sum - bt[head][Column] + bt[i][Column];
                 bt[i][Column_Result] = last_sum / Interval;
-            }
+            }*/
         }
 
-        #endregion Calculation
-
-        #region Series
-
-        public Color Color { get => LineSeries.Color; set => LineSeries.Color = LineSeries.EdgeColor = value; }
-
-        public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
-
-        public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
-
-        public Series MainSeries => LineSeries;
-
-        public LineSeries LineSeries { get; protected set; }
-
-        public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
-
-        public int DrawOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
-
-        public virtual bool HasXAxisBar { get; set; } = false;
-
-        public string AreaName { get; set; } = MainBarChartArea.DefaultName;
-
-        public float AreaRatio { get; set; } = 12;
-
-        public virtual void ConfigChart(BarChart bc)
+        public static void Calculate(BarTable bt, NumericColumn column, NumericColumn column_result, int startPt, int stopPt, int interval)
         {
-            if (ChartEnabled)
+            double last_sum = 0;
+
+            for (int i = 0; i < interval; i++)
             {
-                BarChartArea a = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
-                {
-                    HasXAxisBar = HasXAxisBar,
-                });
-                a.AddSeries(LineSeries);
+                int j = startPt - i;
+                if (j < 0) j = 0;
+                last_sum += bt[j][column];
+            }
+
+            bt[startPt][column_result] = last_sum / interval;
+
+            for (int i = startPt + 1; i < stopPt; i++)
+            {
+                int head = i - interval;
+                if (head < 0) head = 0;
+                last_sum = last_sum - bt[head][column] + bt[i][column];
+                bt[i][column_result] = last_sum / interval;
             }
         }
-
-        #endregion Series
     }
 }

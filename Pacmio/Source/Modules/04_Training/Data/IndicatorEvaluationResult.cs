@@ -34,7 +34,6 @@ namespace Pacmio
         public double BearishPercent { get; set; } = 0;
     }
 
-
     public static class IndicatorManager
     {
         /// <summary>

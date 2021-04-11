@@ -15,14 +15,11 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class DPPMO : ATR, IOscillator
+    public sealed class DPPMO : IntervalAnalysis, IOscillator
     {
-        public DPPMO(int interval) 
+        public DPPMO(int interval) : base(interval)
         {
-            Interval = interval;
             SmoothMultiplier = 2 / Interval;
-
-
         }
 
         public double SmoothMultiplier { get; }
@@ -36,8 +33,6 @@ namespace Pacmio.Analysis
         public Color UpperColor { get; set; } = Color.ForestGreen;
 
         public Color LowerColor { get; set; } = Color.Crimson;
-
-        //public NumericColumn Column_Smooth { get; }
 
         public NumericColumn Column_Signal { get; }
 

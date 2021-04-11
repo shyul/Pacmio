@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
             Interval_Slow = interval_sl;
             Weight = weight;
             Interval_Channel_Multiplier = 2D / (Interval_Channel + 1D);
-            //Column_Typical = Bar.Column_Typical;
+            Interval_Average_Multiplier = 2D / (Interval_Average + 1D);
 
             string label = "(" + Interval_Channel.ToString() + "," + Interval_Average.ToString() + "," + Interval_Slow.ToString() + "," + Weight.ToString() + ")";
             Description = "Wave Trend Oscillator " + label;
@@ -34,23 +34,22 @@ namespace Pacmio.Analysis
             D_Column = new NumericColumn(Name + "_D");
             DE_Column = new NumericColumn(Name + "_DE");
             HIST_Column = new NumericColumn(Name + "_HIST");
+            EMA_DE = new NumericColumn(Name + "_EMA_DE");
+            EMA_TCI = new NumericColumn(Name + "_EMA_TCI");
+            SMA_WT2 = new NumericColumn(Name, string.Empty);
 
-            EMA_DE = new EMA(D_Column, Interval_Channel);
 
-            EMA_TCI = new EMA(DE_Column, Interval_Average);
-            EMA_TCI.LineSeries.LegendName = GroupName;
-            EMA_TCI.LineSeries.Name = Name + "_WT";
-            EMA_TCI.LineSeries.Label = string.Empty;
-            EMA_TCI.LineSeries.Importance = Importance.Major;
-            EMA_TCI.LineSeries.DrawLimitShade = true;
-            EMA_TCI.Color = Color.DarkSlateGray;
+            EMA_TCI_LineSeries = new LineSeries(EMA_TCI, Color.DarkSlateGray, LineType.Default, 1.5f)
+            {
+                Name = Name + "_WT",
+                Label = string.Empty,
+                LegendName = GroupName,
+                Importance = Importance.Major,
+                IsAntialiasing = true,
+                DrawLimitShade = true,
+            };
 
-            SMA_WT2 = new SMA(EMA_TCI.Column_Result, Interval_Slow);
-
-            Column_Result.Name = Name;
-            Column_Result.Label = string.Empty;
-
-            DotSeries = new DotSeries(SMA_WT2.Column_Result, Color.DarkOrange, 1)
+            DotSeries = new DotSeries(SMA_WT2, Color.DarkOrange, 1)
             {
                 Importance = Importance.Major,
                 Name = Name + "_SIGNAL",
@@ -77,6 +76,8 @@ namespace Pacmio.Analysis
 
         private double Interval_Channel_Multiplier { get; }
 
+        private double Interval_Average_Multiplier { get; }
+
         public int Interval_Average { get; }
 
         public int Interval_Slow { get; }
@@ -93,21 +94,19 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = -53;
 
-        //public NumericColumn Column_Typical { get; }
-
         public NumericColumn ESA_Column { get; }
 
         public NumericColumn D_Column { get; }
 
-        public EMA EMA_DE { get; }
+        public NumericColumn EMA_DE { get; }
 
         public NumericColumn DE_Column { get; }
 
-        public EMA EMA_TCI { get; }
+        public NumericColumn EMA_TCI { get; }
 
-        public SMA SMA_WT2 { get; }
+        public NumericColumn SMA_WT2 { get; }
 
-        public NumericColumn Column_Result => SMA_WT2.Column_Result;
+        public NumericColumn Column_Result => SMA_WT2;
 
         public NumericColumn HIST_Column { get; }
 
@@ -115,8 +114,7 @@ namespace Pacmio.Analysis
         {
             BarTable bt = bap.Table;
 
-            int startPt = bap.StartPt;
-            for (int i = startPt; i < bap.StopPt; i++)
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
                 double typical = b.Typical;
@@ -131,34 +129,25 @@ namespace Pacmio.Analysis
                     b[ESA_Column] = typical_esa = typical;
 
                 b[D_Column] = Math.Abs(typical - typical_esa);
-
-                //Console.WriteLine("b[D_Column] = " + b[D_Column]);
             }
 
-            bap.StartPt = startPt;
-            EMA_DE.Update(bap);
+            EMA.Calculate(bt, D_Column, EMA_DE, bap.StartPt, bap.StopPt, Interval_Channel_Multiplier);
 
-            for (int i = startPt; i < bap.StopPt; i++)
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double de = b[EMA_DE.Column_Result];
+                double de = b[EMA_DE];
                 if (de == 0) de = 0.001;
-                //Console.WriteLine("de = " + de);
-
                 b[DE_Column] = (b.Typical - b[ESA_Column]) / (Weight * de);
-                //Console.WriteLine("b[DE_Column] = " + b[DE_Column]);
             }
 
-            bap.StartPt = startPt;
-            EMA_TCI.Update(bap);
+            EMA.Calculate(bt, DE_Column, EMA_TCI, bap.StartPt, bap.StopPt, Interval_Average_Multiplier);
+            SMA.Calculate(bt, EMA_TCI, SMA_WT2, bap.StartPt, bap.StopPt, Interval_Slow);
 
-            bap.StartPt = startPt;
-            SMA_WT2.Update(bap);
-
-            for (int i = startPt; i < bap.StopPt; i++)
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                b[HIST_Column] = b[EMA_TCI.Column_Result] - b[SMA_WT2.Column_Result];
+                b[HIST_Column] = b[EMA_TCI] - b[SMA_WT2];
             }
         }
 
@@ -166,21 +155,23 @@ namespace Pacmio.Analysis
 
         #region Series
 
-        public Series MainSeries => EMA_TCI.LineSeries;
+        public Series MainSeries => EMA_TCI_LineSeries;
+
+        public LineSeries EMA_TCI_LineSeries { get; }
 
         public ColumnSeries ColumnSeries { get; }
 
         public DotSeries DotSeries { get; }
 
-        public Color Color { get => SMA_WT2.Color; set => SMA_WT2.Color = value; }
+        public Color Color { get => DotSeries.Color; set => DotSeries.Color = value; }
 
         public Color UpperColor { get; set; } = Color.YellowGreen;
 
         public Color LowerColor { get; set; } = Color.Crimson;
 
-        public bool ChartEnabled { get => Enabled && EMA_TCI.ChartEnabled; set => EMA_TCI.ChartEnabled = ColumnSeries.Enabled = DotSeries.Enabled = value; }
+        public bool ChartEnabled { get => Enabled && EMA_TCI_LineSeries.Enabled; set => Enabled = EMA_TCI_LineSeries.Enabled = ColumnSeries.Enabled = DotSeries.Enabled = value; }
 
-        public int DrawOrder { get => EMA_TCI.LineSeries.Order; set => EMA_TCI.LineSeries.Order = value; }
+        public int DrawOrder { get => MainSeries.Order; set => MainSeries.Order = value; }
 
         public bool HasXAxisBar { get; set; } = false;
 
@@ -208,7 +199,7 @@ namespace Pacmio.Analysis
                     });
 
                 a.AddSeries(ColumnSeries);
-                a.AddSeries(EMA_TCI.LineSeries);
+                a.AddSeries(MainSeries);
                 a.AddSeries(DotSeries);
             }
         }

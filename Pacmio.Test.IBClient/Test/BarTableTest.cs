@@ -33,8 +33,8 @@ namespace TestClient
                 var aroon = new Aroon() { HasXAxisBar = true, Order = int.MaxValue };
                 //aroon.LineSeries.Enabled = false;
 
-                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                MovingAverage slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                MovingAverage fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 //var ma_cross = new CrossIndicator(fast_MA, slow_MA);
 
                 DebugColumnSeries csd_range = new(Bar.Column_Range);
@@ -122,8 +122,8 @@ namespace TestClient
 
                 //SMA slow_MA = new EMA(50) { Color = Color.YellowGreen, LineWidth = 2 };
                 //SMA fast_MA = new EMA(25) { Color = Color.DodgerBlue, LineWidth = 1 };
-                SMA slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                SMA fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                MovingAverage slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                MovingAverage fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 //var ma_cross = new MovingAverageCrossIndicator(fast_MA, slow_MA) { Order = int.MinValue + 10 };
                 //var ma_cross = new MovingAverageCrossIndicator(MovingAverageType.Exponential, 25, MovingAverageType.Exponential, 50);
 

@@ -10,42 +10,12 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class ATR : BarAnalysis, ISingleData, IChartSeries
+    public sealed class ATR : IntervalAnalysis
     {
-        public ATR(int interval = 14)
+        public ATR(int interval = 14) : base(interval)
         {
-            Interval = interval;
-
-            string label = "(" + Interval.ToString() + ")";
-            Name = GetType().Name + label;
-            AreaName = GroupName = GetType().Name;
-            Description = "Average True Range " + label;
-
-            Column_Result = new NumericColumn(Name);
-            LineSeries = new LineSeries(Column_Result, Color.DarkSlateGray, LineType.Default, 1.5f)
-            {
-                Name = Name,
-                Label = label,
-                LegendName = GroupName,
-                Importance = Importance.Major,
-                IsAntialiasing = true,
-                DrawLimitShade = false,
-            };
+            Description = "Average True Range " + Label;
         }
-
-        protected ATR() { }
-
-        #region Parameters
-
-        public override int GetHashCode() => GetType().GetHashCode() ^ Interval;
-
-        public virtual int Interval { get; protected set; }
-
-        #endregion Parameters
-
-        #region Calculation
-
-        public virtual NumericColumn Column_Result { get; protected set; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -73,46 +43,5 @@ namespace Pacmio.Analysis
                 }
             }
         }
-
-        #endregion Calculation
-
-        #region Series
-
-        public Color Color { get => LineSeries.Color; set => LineSeries.Color = value; }
-
-        public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
-
-        public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
-
-        public Series MainSeries => LineSeries;
-
-        public LineSeries LineSeries { get; protected set; }
-
-        public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
-
-        public int DrawOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
-
-        public virtual bool HasXAxisBar { get; set; } = false;
-
-        public string AreaName { get; protected set; }
-
-        public float AreaRatio { get; set; } = 8;
-
-        public int AreaOrder { get; set; } = 0;
-
-        public virtual void ConfigChart(BarChart bc)
-        {
-            if (ChartEnabled)
-            {
-                BarChartArea a = bc.AddArea(new BarChartArea(bc, AreaName, AreaRatio)
-                {
-                    Order = AreaOrder,
-                    HasXAxisBar = HasXAxisBar,
-                });
-                a.AddSeries(LineSeries);
-            }
-        }
-
-        #endregion Series
     }
 }

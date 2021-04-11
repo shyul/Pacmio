@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class MDEV : SMA
+    public sealed class MDEV : IntervalColumnAnalysis
     {
         public MDEV(NumericColumn column, int interval)
             : this(column, new SMA(column, interval)) { }
@@ -22,21 +22,23 @@ namespace Pacmio.Analysis
             Interval = sma.Interval;
             Column = column;
 
-            string label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
-            Name = GetType().Name + label;
+            Label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
+            Name = GetType().Name + Label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
 
-            Column_Result = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name) { Label = Label };
 
             SMA = sma;
             SMA.AddChild(this);
 
             LineSeries = new LineSeries(Column_Result) { DrawLimitShade = false };
 
-            Description = "Mean Deviation " + (column is null ? "(error)" : label);
+            Description = "Mean Deviation " + (column is null ? "(error)" : Label);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ SMA.GetHashCode() ^ Interval;
+
+        public override string Label { get; }
 
         #region Calculation
 
