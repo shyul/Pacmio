@@ -18,9 +18,11 @@ namespace Pacmio.Analysis
         {
             get
             {
-                SMA avg_body = new SMA(Bar.Column_Body, 20);
-                Relative relative_body = new Relative(Bar.Column_Body, avg_body);
+                Relative relative_body = new Relative(Bar.Column_Body, 20);
+                Relative relative_volume = new Relative(Bar.Column_Volume, 20);
+
                 DebugSeries csd_relative_body = new DebugColumnSeries(relative_body);
+                DebugSeries csd_relative_volume = new DebugColumnSeries(relative_volume);
                 DebugSeries csd_consecutive_type = new DebugColumnSeries(Bar.Column_ConsecutiveType);
 
                 DebugSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
@@ -51,6 +53,7 @@ namespace Pacmio.Analysis
                     //csd_gp,
                     //csd_typ,
                     csd_relative_body,
+                    csd_relative_volume,
                     csd_consecutive_type,
                     csd_trend,
                     //csd_pivot,

@@ -18,24 +18,28 @@ namespace Pacmio.Analysis
 {
     public sealed class Relative : BarAnalysis, ISingleData
     {
-        public Relative(NumericColumn column, ISingleData average_isd)
+        public Relative(NumericColumn column, int interval = 20) :
+            this(column, new SMA(column, interval) { ChartEnabled = false })
+        { }
+
+        public Relative(NumericColumn column, MovingAverage average_isd)
         {
             Column = column;
-            Column_Average = average_isd.Column_Result;
+            MovingAverage = average_isd;
             average_isd.AddChild(this);
 
-            string label = "(" + Column.Name + "," + Column_Average.Name + ")";
+            string label = "(" + Column.Name + "," + MovingAverage.GetType().Name + "," + MovingAverage.Interval + ")";
             GroupName = Name = GetType().Name + label;
             Description = "Relative " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ Column_Average.GetHashCode();
+        public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MovingAverage.GetHashCode();
 
-        public NumericColumn Column { get; private set; }
+        public NumericColumn Column { get; }
 
-        public NumericColumn Column_Average { get; private set; }
+        public MovingAverage MovingAverage { get; }
 
         public NumericColumn Column_Result { get; }
 
@@ -50,7 +54,7 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 double v = b[Column];
-                double v_normal = bt[i - 1][Column_Average];
+                double v_normal = bt[i - 1][MovingAverage.Column_Result];
                 b[Column_Result] = v_normal != 0 ? v / v_normal : 0;
             }
         }

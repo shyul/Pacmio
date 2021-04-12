@@ -1,3 +1,11 @@
+Current Task
+==============
+1.
+2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
+3. New Flag Analysis has glitches
+4. DPPMO needs to finalize
+5. Swing Trade Scan Revisit
+
 Program Flow:
 
 1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
@@ -12,19 +20,6 @@ Screener:
 7. Yield the straight results
 
 9. Yield the Strategy results
-
-
-
-Current Task
-==============
-1. Relative CandleLength, Relative Range Length, Range %, Relative Range
-1. Native Analysis
-2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
-1. New Flag Analysis has glitches
-2. DPPMO needs to finalize
-3. Swing Trade Scan Revisit
-
-
 
 To Be Verified
 ==============

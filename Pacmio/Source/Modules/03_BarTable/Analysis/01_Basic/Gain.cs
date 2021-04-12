@@ -19,7 +19,7 @@ namespace Pacmio.Analysis
             Column = column;
 
             string label = "(" + Column.Name + ")";
-            Name =  GroupName = GetType().Name + label;
+            Name = GroupName = GetType().Name + label;
 
             Column_Gain = new NumericColumn(Name + "_Gain");
             Column_Percent = new NumericColumn(Name + "_Percent") { Label = "" };

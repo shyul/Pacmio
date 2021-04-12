@@ -15,10 +15,7 @@ namespace Pacmio
 {
     public abstract class MovingAverage : IntervalColumnAnalysis
     {
-        protected MovingAverage(NumericColumn column, int interval) : base(column, interval)
-        {
-
-        }
+        protected MovingAverage(NumericColumn column, int interval) : base(column, interval) { }
 
         protected MovingAverage() { }
     }
