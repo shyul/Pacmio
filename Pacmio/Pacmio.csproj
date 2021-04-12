@@ -115,6 +115,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\DayTradeFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossGapGoDailyFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossMomentumDailyFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossReversalDailyFilter.cs" />
     <Compile Include="Source\Modules\04_Training\Data\IndicatorEvaluationResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\SwingTradeFilter.cs" />
