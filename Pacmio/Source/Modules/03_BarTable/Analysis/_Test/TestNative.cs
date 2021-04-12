@@ -18,6 +18,11 @@ namespace Pacmio.Analysis
         {
             get
             {
+                SMA avg_body = new SMA(Bar.Column_Body, 20);
+                Relative relative_body = new Relative(Bar.Column_Body, avg_body);
+                DebugSeries csd_relative_body = new DebugColumnSeries(relative_body);
+                DebugSeries csd_consecutive_type = new DebugColumnSeries(Bar.Column_ConsecutiveType);
+
                 DebugSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
                 DebugSeries csd_nr = new DebugColumnSeries(Bar.Column_NarrowRange);
                 DebugSeries csd_gp = new DebugColumnSeriesOsc(Bar.Column_GapPercent);
@@ -45,14 +50,15 @@ namespace Pacmio.Analysis
                     //csd_nr,
                     //csd_gp,
                     //csd_typ,
-
-
-                    csd_pivot,
-                    csd_pivotstr,
+                    csd_relative_body,
+                    csd_consecutive_type,
                     csd_trend,
+                    //csd_pivot,
+                    //csd_pivotstr,
+                    //csd_trend,
 
-                    csd_stdev, 
-                    new CHOP(20),
+                    //csd_stdev, 
+                    //new CHOP(20),
 
                     //new CrossIndicator(),
                     //new CHOP(),

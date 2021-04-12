@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Drawing;
 using Xu;
-using Xu.Chart;
 
 namespace Pacmio
 {
@@ -54,7 +53,10 @@ namespace Pacmio
 
                 double gain = b.Gain = close - close_1;
                 b.GainPercent = (close_1 == 0) ? 0 : (100 * gain / close_1);
+
                 double range = b.Range = high - low;
+                double body = b.Body = Math.Abs(close - open);
+                b.BodyRatio = range == 0 ? 0 : (body / range);
 
                 b.Type = BarType.None;
 

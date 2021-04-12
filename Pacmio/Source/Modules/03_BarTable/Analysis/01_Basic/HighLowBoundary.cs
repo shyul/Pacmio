@@ -27,7 +27,7 @@ namespace Pacmio.Analysis
             Column_Low = new NumericColumn(Name + "_Low", "Low");
         }
 
-        public HighLowBoundary(IDualData analysis, int length = 200) 
+        public HighLowBoundary(IDualData analysis, int length = 200)
         {
             MaximumTrailingLength = length;
 

@@ -43,16 +43,15 @@ namespace Pacmio.Analysis
         {
             BarTable bt = bap.Table;
 
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            int i = bap.StartPt;
+            if (i == 0) i = 1;
+
+            for (; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
                 double v = b[Column];
-                double v_normal = bt[i][Column_Average];
-
-                if (v_normal != 0)
-                    b[Column_Result] = v_normal != 0 ? v / v_normal : 0;
-                else
-                    continue;
+                double v_normal = bt[i - 1][Column_Average];
+                b[Column_Result] = v_normal != 0 ? v / v_normal : 0;
             }
         }
     }

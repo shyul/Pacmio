@@ -25,7 +25,7 @@ namespace Pacmio.Analysis
     {
         public SMA(int interval) : this(Bar.Column_Close, interval) { }
 
-        public SMA(NumericColumn column, int interval) : base(Bar.Column_Close, interval)
+        public SMA(NumericColumn column, int interval) : base(column, interval)
         {
             Description = "Simple Moving Average " + Label;
         }

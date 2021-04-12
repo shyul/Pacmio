@@ -261,7 +261,26 @@ namespace Pacmio
 
         #region Intrinsic Indicators | NativeGainAnalysis
 
-        public BarType Type { get; set; } = BarType.None;
+        public BarType Type
+        {
+            get => m_Type;
+
+            set
+            {
+                m_Type = value;
+                if (Bar_1 is Bar b_1)
+                {
+                    if (b_1.Type == m_Type)
+                    {
+                        ConsecutiveType = b_1.ConsecutiveType + 1;
+                    }
+                }
+            }
+        }
+
+        private BarType m_Type = BarType.None;
+
+        public int ConsecutiveType { get; private set; } = 1;
 
         public double Gain { get; set; } = double.NaN;
 
@@ -273,6 +292,10 @@ namespace Pacmio
 
         public double Typical { get; set; } = double.NaN;
 
+        public double Body { get; set; } = double.NaN;
+
+        public double BodyRatio { get; set; } = double.NaN;
+
         public double Range { get; set; } = double.NaN;
 
         public double TrueRange { get; set; } = double.NaN;
@@ -281,11 +304,14 @@ namespace Pacmio
 
         public int TrendStrength { get; set; } = 0;
 
+        public static NumericColumn Column_ConsecutiveType { get; } = new NumericColumn("ConsecutiveType", "ConsecutiveType");
         public static NumericColumn Column_Gain { get; } = new NumericColumn("GAIN", "GAIN");
         public static NumericColumn Column_GainPercent { get; } = new NumericColumn("GAINPERCENT", "G%");
         public static NumericColumn Column_Gap { get; } = new NumericColumn("GAP", "GAP");
         public static NumericColumn Column_GapPercent { get; } = new NumericColumn("GAPPERCENT", "GAP%");
         public static NumericColumn Column_Typical { get; } = new NumericColumn("TYPICAL", "TYPICAL");
+        public static NumericColumn Column_Body { get; } = new NumericColumn("BODY", "BODY");
+        public static NumericColumn Column_BodyRatio { get; } = new NumericColumn("BodyRatio", "BR");
         public static NumericColumn Column_Range { get; } = new NumericColumn("RANGE", "RANGE");
         public static NumericColumn Column_TrueRange { get; } = new NumericColumn("TRUERANGE", "TR");
         public static NumericColumn Column_NarrowRange { get; } = new NumericColumn("NARROWRANGE", "NR");
@@ -330,10 +356,14 @@ namespace Pacmio
                     NumericColumn dc when dc == Column_GapPercent => GapPercent,
 
                     NumericColumn dc when dc == Column_Typical => Typical,
+                    NumericColumn dc when dc == Column_Body => Body,
+                    NumericColumn dc when dc == Column_BodyRatio => BodyRatio,
                     NumericColumn dc when dc == Column_Range => Range,
                     NumericColumn dc when dc == Column_TrueRange => TrueRange,
                     NumericColumn dc when dc == Column_NarrowRange => NarrowRange,
                     NumericColumn dc when dc == Column_TrendStrength => TrendStrength,
+
+                    NumericColumn dc when dc == Column_ConsecutiveType => ConsecutiveType,
 
                     NumericColumn dc when dc == Column_Pivot => Pivot,
                     NumericColumn dc when dc == Column_PivotStrength => PivotStrength,
@@ -362,10 +392,14 @@ namespace Pacmio
                         case NumericColumn dc when dc == Column_GapPercent: GapPercent = value; break;
 
                         case NumericColumn dc when dc == Column_Typical: Typical = value; break;
+                        case NumericColumn dc when dc == Column_Body: Body = value; break;
+                        case NumericColumn dc when dc == Column_BodyRatio: BodyRatio = value; break;
                         case NumericColumn dc when dc == Column_Range: Range = value; break;
                         case NumericColumn dc when dc == Column_TrueRange: TrueRange = value; break;
                         case NumericColumn dc when dc == Column_NarrowRange: NarrowRange = value.ToInt32(); break;
                         case NumericColumn dc when dc == Column_TrendStrength: TrendStrength = value.ToInt32(); break;
+
+                        case NumericColumn dc when dc == Column_ConsecutiveType: break;
 
                         case NumericColumn dc when dc == Column_Pivot: Pivot = value.ToInt32(); break;
                         case NumericColumn dc when dc == Column_PivotStrength: PivotStrength = value.ToInt32(); break;

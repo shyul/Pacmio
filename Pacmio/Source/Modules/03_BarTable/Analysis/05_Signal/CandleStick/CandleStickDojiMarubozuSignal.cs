@@ -62,8 +62,7 @@ namespace Pacmio.Analysis
                 {
                     double open = b.Open;
                     double close = b.Close;
-                    double oc_Range = Math.Abs(open - close);
-                    double body_shadow_ratio = oc_Range / hl_Range;
+                    double body_shadow_ratio = b.BodyRatio;
 
                     if (body_shadow_ratio > Marubozu_Ratio) // Marubozu
                     {
