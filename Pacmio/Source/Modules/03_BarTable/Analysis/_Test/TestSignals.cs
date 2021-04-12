@@ -58,7 +58,7 @@ namespace Pacmio.Analysis
                 var idset = new IndicatorSet();
 
                 idset[BarFreq.Daily] = new SwingTradeFilter();
-                idset[BarFreq.Minutes_5] = new RossReversalndicator();
+                idset[BarFreq.Minutes_5] = new RossReversalIndicator();
 
 
                 return idset;

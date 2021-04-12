@@ -17,6 +17,7 @@ Screener:
 
 Current Task
 ==============
+1. Relative CandleLength, Relative Range Length, Range %, Relative Range
 1. Native Analysis
 2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
 1. New Flag Analysis has glitches

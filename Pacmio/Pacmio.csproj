@@ -165,7 +165,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestSignals.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestTrend.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\_Types\ApexAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Examples\RossReversalndicator.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Examples\RossReversalIndicator.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugLineSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\_DebugSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestNative.cs" />

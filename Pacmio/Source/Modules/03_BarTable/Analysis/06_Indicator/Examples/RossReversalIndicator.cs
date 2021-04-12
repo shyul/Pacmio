@@ -4,6 +4,14 @@
 /// 
 /// The trade rule applies to each contract
 /// 
+/// Filter
+/// $15 ~ $250
+/// Volume 500000
+/// Relative Volume 1x
+/// RSI 25 Max
+/// 4x 5 min cons candle
+/// 5D average volume 300000
+/// 
 /// ***************************************************************************
 
 using System;
@@ -14,9 +22,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossReversalndicator : Indicator
+    public class RossReversalIndicator : Indicator
     {
-        public RossReversalndicator()
+        public RossReversalIndicator()
         {
             string label = "(" + "," + ")";
             GroupName = Name = GetType().Name + label;
@@ -66,18 +74,53 @@ namespace Pacmio.Analysis
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
 
+        // Filter: 500000 Volume
+
+        // Long short --> supported by market strength, supported by sector strength
+
+        // Sector extremes
 
 
+        #region High / Low of the Day / VWAP / Pivot / Important Level / 10-1-Half Dollar number sup/res
+
+        // Get High or low from Daily BarTale
+
+        // ******* Get percentage 
 
         public IOscillator RSI { get; }
 
         public OscillatorSignal RsiSignal { get; }
 
+        #endregion
 
 
-        public IDualData BollingerBand { get; }
+        #region 3 - 5, 5 - 10 Conseculative Candles
 
-        public BandSignal BollingerBandSignal { get; }
+        public CHOP Chop { get; }
+
+        public SignalColumn Chop_Signal { get; }
+
+
+        // ******* local trend pattern
+
+        // length of the candle
+
+        // Number of the consecutive candles
+
+        // distance against the EMA9 line.
+
+        #endregion
+
+
+        // Exit: boundce back to 9 EMA or VWAP
+
+
+
+
+
+
+
+
 
 
 
@@ -90,7 +133,27 @@ namespace Pacmio.Analysis
 
 
 
+        #region Last Candle's shape
 
+        // Doji? Hammer?
+
+        public IDualData BollingerBand { get; }
+
+        public BandSignal BollingerBandSignal { get; }
+
+        // fully of outside of the BB -> H is lower than BBL, or L is higher than BBL
+
+        // Near daily support level.... Daily Pivot, SMA,  TrendLines
+
+        #endregion
+
+        #region Execution
+
+        // STOP: high or low of the triggering candle
+
+        // adjust the size with the stop distance.
+
+        #endregion
 
 
         protected override void Calculate(BarAnalysisPointer bap)
