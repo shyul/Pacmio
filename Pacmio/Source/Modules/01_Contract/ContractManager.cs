@@ -21,7 +21,9 @@ namespace Pacmio
     /// </summary>
     public static class ContractManager
     {
-        public static IEnumerable<Contract> TradeableList => Values.AsParallel().Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive && s.Exchange != Exchange.OTCBB && s.Exchange != Exchange.OTCMKT).OrderBy(n => n.Name).Select(n => n as Stock).ToList();
+        public static IEnumerable<Contract> TradeableNoETFList => TradeableList.ToList().AsParallel().Where(s => !s.FullName.Contains("ETF") && !s.FullName.Contains("ETN") && !s.FullName.Contains("ADR"));
+
+        public static IEnumerable<Contract> TradeableList => Values.AsParallel().Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive && s.Exchange != Exchange.OTCBB && s.Exchange != Exchange.OTCMKT).OrderBy(n => n.Name);
 
         /// <summary>
         /// The Master List of all symbols are here

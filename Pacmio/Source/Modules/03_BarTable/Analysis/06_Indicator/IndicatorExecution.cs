@@ -21,7 +21,7 @@ namespace Pacmio
     /// </summary>
     public abstract class IndicatorExecution : Indicator, ISingleDatum
     {
-        public IndicatorSet IndicatorSet { get; }
+        public Strategy IndicatorSet { get; }
 
         public DatumColumn Column_Result { get; }
 

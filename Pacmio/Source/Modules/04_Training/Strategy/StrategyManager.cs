@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class IndicatorManager
+    public static class StrategyManager
     {
         /// <summary>
         /// This function is for narrowing down the group of contracts for actually simulation.
@@ -24,7 +24,7 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, EvaluationResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, EvaluationResult> Evaluate(IEnumerable<Contract> cList, Strategy inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
             Dictionary<Contract, EvaluationResult> result = new();
 

@@ -44,7 +44,7 @@ namespace Pacmio
                 var bts = BarTableLUT.Values.ToList();
                 BarTableLUT.Clear();
                 bts.ForEach(n => n.Dispose());
-                GC.Collect();
+                //GC.Collect();
             }
         }
 
@@ -225,9 +225,9 @@ namespace Pacmio
             }
         }
 
-        public void Build(IndicatorSet inds, Period periodLimit, CancellationTokenSource cts = null)
+        public void Build(Strategy inds, Period periodLimit, CancellationTokenSource cts = null)
         {
-            var (bullish, bearish) = inds.RunFilterMultiPeriod(this);
+            var (bullish, bearish) = inds.RunFilterMultiPeriod(this, periodLimit);
 
             MultiPeriod mps = MultiPeriod is not null ? new MultiPeriod(MultiPeriod) : new MultiPeriod();
 

@@ -117,7 +117,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossGapGoDailyFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossMomentumDailyFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\RossReversalDailyFilter.cs" />
-    <Compile Include="Source\Modules\04_Training\Indicators\EvaluationResult.cs" />
+    <Compile Include="Source\Modules\04_Training\Strategy\EvaluationResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Filters\SwingTradeFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Indicator\Execution\RossMomentumExecution.cs" />
@@ -132,8 +132,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Position\PositionAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
-    <Compile Include="Source\Modules\04_Training\Indicators\SimulationDatum.cs" />
-    <Compile Include="Source\Modules\04_Training\Indicators\IndicatorManager.cs" />
+    <Compile Include="Source\Modules\04_Training\Strategy\SimulationDatum.cs" />
+    <Compile Include="Source\Modules\04_Training\Strategy\StrategyManager.cs" />
     <Compile Include="Source\Modules\04_Training\TrainingSetting.cs" />
     <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\03_BarTable\Chart\BarChartManager.cs" />
@@ -278,7 +278,7 @@
     <Compile Include="Source\Modules\04_Training\TrainingManager.cs" />
     <Compile Include="Source\Modules\04_Training\Data\TrainingResult.cs" />
     <Compile Include="Source\Modules\05_Trade\Account\AccountInfo.cs" />
-    <Compile Include="Source\Modules\04_Training\Indicators\IndicatorSet.cs" />
+    <Compile Include="Source\Modules\04_Training\Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\05_Trade\TradeInfo\LiquidityType.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\DataType.cs" />

@@ -50,18 +50,16 @@ namespace Pacmio.Analysis
         
         }
 
-        public static IndicatorSet IndicatorSet 
+        public static Strategy IndicatorSet 
         {
             get 
             {
 
-                var idset = new IndicatorSet();
+                var s = new Strategy();
 
-                idset[BarFreq.Daily] = new RossGapGoDailyFilter() { BullishPointLimit = 3, BearishPointLimit = -3 };
-                //idset[BarFreq.Minutes_5] = new RossReversalIndicator();
+                s.FilterIndicator = s[BarFreq.Daily] = new RossGapGoDailyFilter(4);
 
-
-                return idset;
+                return s;
 
             }
         }

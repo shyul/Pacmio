@@ -536,9 +536,9 @@ namespace Pacmio
         #endregion Signal Information Tools
 
 
-        private Dictionary<IndicatorSet, SimulationDatum> SimulationResults { get; } = new Dictionary<IndicatorSet, SimulationDatum>();
+        private Dictionary<Strategy, SimulationDatum> SimulationResults { get; } = new Dictionary<Strategy, SimulationDatum>();
 
-        public SimulationDatum this[IndicatorSet dc]
+        public SimulationDatum this[Strategy dc]
         {
             get
             {

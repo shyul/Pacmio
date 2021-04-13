@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public class EvaluationResult
     {
-        public EvaluationResult(Contract c, IndicatorSet inds)
+        public EvaluationResult(Contract c, Strategy inds)
         {
             Contract = c;
             IndicatorSet = inds;
@@ -23,7 +23,7 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public IndicatorSet IndicatorSet { get; }
+        public Strategy IndicatorSet { get; }
 
         public MultiPeriod BullishPeriods { get; } = new MultiPeriod();
 

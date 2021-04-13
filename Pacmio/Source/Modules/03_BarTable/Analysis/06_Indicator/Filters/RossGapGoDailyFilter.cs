@@ -14,9 +14,12 @@ namespace Pacmio.Analysis
 {
     public class RossGapGoDailyFilter : Indicator, IPriceRangFilter, IGapPercentFilter
     {
-        public RossGapGoDailyFilter()
+        public RossGapGoDailyFilter(double gappercent = 4)
         {
-            string label = "(" + "," + ")";
+            BullishPointLimit = BullishGapPercent = gappercent;
+            BearishPointLimit = BearishGapPercent = -gappercent;
+
+            string label = "(" + gappercent + "%)";
             GroupName = Name = GetType().Name + label;
 
             GapPercentSignalColumn = new SignalColumn(this, "Gap Percent")
@@ -40,15 +43,16 @@ namespace Pacmio.Analysis
 
         public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
 
-        public double BullishGapPercent { get; } = 2;
+        public double BullishGapPercent { get; } = 4;
 
-        public double BearishGapPercent { get; } = -2;
+        public double BearishGapPercent { get; } = -4;
 
         public SignalColumn GapPercentSignalColumn { get; protected set; }
 
         public SignalColumn VolumeSignalColumn { get; protected set; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
+
 
 
         public NativeApexAnalysis ApexAnalysis { get; } = new(250);
@@ -59,25 +63,34 @@ namespace Pacmio.Analysis
 
         public TrailingTrendStrengthAnalysis TrendLineStrength { get; }
 
+
+
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                Bar b = bt[i];
-                if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume))
+
+            //if ((DateTime.Now - bt.LastTime).TotalDays < 4)
+            //{
+                for (int i = bap.StartPt; i < bap.StopPt; i++)
                 {
-                    if (b.GapPercent >= BullishGapPercent || b.GapPercent <= BearishGapPercent)
+                    Bar b = bt[i];
+                    if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume))
                     {
-                        new SignalDatum(b, GapPercentSignalColumn, new double[] { b.GainPercent });
-                        //Console.WriteLine("Gain = " + b.GainPercent);
-                        //SignalDatum signal = new SignalDatum(b, GapPercentSignalColumn); //, new double[] { b.GainPercent });
-                        //signal.SetPoints(new double[] { b.GapPercent });
-                        //Console.WriteLine(b.Time + " | Point = " + b[GapPercentSignalColumn].Points);
-                        // new SignalDatum(b, VolumeSignalColumn, new double[] { VolumeRange.Minimum > 0 ? b.Volume / VolumeRange.Minimum : 0 });
+                        if (b.GapPercent >= BullishGapPercent || b.GapPercent <= BearishGapPercent)
+                        {
+                            new SignalDatum(b, GapPercentSignalColumn, new double[] { b.GainPercent });
+                            //Console.WriteLine("Gain = " + b.GainPercent);
+                            //SignalDatum signal = new SignalDatum(b, GapPercentSignalColumn); //, new double[] { b.GainPercent });
+                            //signal.SetPoints(new double[] { b.GapPercent });
+                            //Console.WriteLine(b.Time + " | Point = " + b[GapPercentSignalColumn].Points);
+                            // new SignalDatum(b, VolumeSignalColumn, new double[] { VolumeRange.Minimum > 0 ? b.Volume / VolumeRange.Minimum : 0 });
+                        }
                     }
                 }
-            }
+
+            //}
+
         }
     }
 }

@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
+    public class Strategy : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
@@ -150,15 +150,15 @@ namespace Pacmio
             // Collect Bearish Execution Based on Bearish Periods
         }
 
-        public (BarFreq freq, DataType type) FilterTimeFrame { get; set; }
+        public (BarFreq freq, DataType type) FilterTimeFrame { get; set; } = (BarFreq.Daily, DataType.Trades);
 
-        public Indicator FilterIndicator { get; }
+        public Indicator FilterIndicator { get; set; }
 
-        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts) => RunFilter(bts, FilterIndicator, FilterTimeFrame.freq, FilterTimeFrame.type);
+        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Period pd) => RunFilter(bts, FilterIndicator, pd, FilterTimeFrame.freq, FilterTimeFrame.type);
 
-        public (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts) => RunFilterMultiPeriod(bts, FilterIndicator, FilterTimeFrame.freq, FilterTimeFrame.type);
+        public (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Period pd) => RunFilterMultiPeriod(bts, FilterIndicator, pd, FilterTimeFrame.freq, FilterTimeFrame.type);
 
-        public static (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Indicator filter, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
+        public static (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Indicator filter, Period pd, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
         {
             BarTable bt = bts[freq, type];
 
@@ -166,15 +166,15 @@ namespace Pacmio
             bt.CalculateRefresh(bas);
 
             Indicator ind = filter;
-            var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
-            var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
+            var BullishBars = bt.Bars.Where(b => pd.Contains(b.Time) && b.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
+            var BearishBars = bt.Bars.Where(b => pd.Contains(b.Time) && b.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
 
             return (BullishBars, BearishBars);
         }
 
-        public static (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Indicator filter, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
+        public static (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Indicator filter, Period pd, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
         {
-            var (BullishBars, BearishBars) = RunFilter(bts, filter, freq, type);
+            var (BullishBars, BearishBars) = RunFilter(bts, filter, pd, freq, type);
 
             MultiPeriod bullish = new MultiPeriod();
             MultiPeriod bearish = new MultiPeriod();

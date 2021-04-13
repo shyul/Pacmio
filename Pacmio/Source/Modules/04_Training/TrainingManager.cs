@@ -18,7 +18,7 @@ namespace Pacmio
     public static class TrainingManager
     {
         // IndicatorEvaluationResult
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet inds, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Strategy s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
@@ -42,10 +42,10 @@ namespace Pacmio
 
                     bts.SetPeriod(pd, cts);
 
-                    var (bullishBars, bearishBars) = inds.RunFilter(bts);
+                    var (bullishBars, bearishBars) = s.RunFilter(bts, pd);
 
-                    //foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
-                    //foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+                    foreach (var mp in bullishBars) { Console.WriteLine("Bull: " + mp.Time); }
+                    foreach (var mp in bearishBars) { Console.WriteLine("Bear: " + mp.Time); }
 
                     //bts.SetPeriod(bullish, cts);
 
@@ -69,7 +69,7 @@ namespace Pacmio
                     // Overlapping Backtest N days => trade 1 days Result ->
 
 
-
+                    bts.Dispose();
 
                     //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
                     DateTime endTime = DateTime.Now;
