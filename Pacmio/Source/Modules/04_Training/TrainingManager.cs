@@ -17,12 +17,14 @@ namespace Pacmio
 {
     public static class TrainingManager
     {
-        public static void RunScreener(IEnumerable<Contract> contracts, IndicatorSet iset, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet iset, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
             int total_num = contracts.Count();
             int i = 0;
+
+            List<(Contract c, int m)> clist = new();
 
             ParallelOptions po = new ParallelOptions()
             {
@@ -39,7 +41,7 @@ namespace Pacmio
 
                     bts.SetPeriod(pd, cts);
 
-                    var (bullish, bearish) = iset.RunScreener(bts);
+                    var (bullish, p, bearish, n) = iset.RunScreener(bts);
 
                     foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
                     foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
@@ -47,8 +49,14 @@ namespace Pacmio
                     bts.SetPeriod(bullish, cts);
 
 
+                    int m = p + n;
 
-                    BarTable bt = bts[BarFreq.Minute];
+                    if(m > 0) 
+                    {
+                        clist.Add((c, m));
+                    }
+
+                    //BarTable bt = bts[BarFreq.Minute];
 
                     // Then run order / trade / position analysis, using Typical price of the next bar as entry or matching limit / stop...
                     // This analysis shall not be BarAnalysis  
@@ -80,6 +88,12 @@ namespace Pacmio
                 cts.Dispose();
             }
 
+            foreach(var item in clist.OrderBy(n => n.m)) 
+            {
+                Console.WriteLine(item.c + " | " + item.m);
+            }
+
+            return clist.OrderBy(n => n.m).Select(n => n.c);
         }
 
         /// <summary>

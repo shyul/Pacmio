@@ -508,30 +508,33 @@ namespace TestClient
 
         private void BtnRunScreener_Click(object sender, EventArgs e)
         {
-            Contract c = ContractTest.ActiveContract;
-            Cts = new CancellationTokenSource();
-            Period pd = HistoricalPeriod;
-
-            Task.Run(() =>
+            if (ValidateSymbol())
             {
-                IndicatorSet iset = TestSignals.IndicatorSet;
-                BarTableSet bts = BarTableGroup[c];
-        
-                var (bullish, bearish) = iset.RunScreener(bts);
+                Contract c = ContractTest.ActiveContract;
+                Cts = new CancellationTokenSource();
+                Period pd = HistoricalPeriod;
 
-                foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
-                foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+                Task.Run(() =>
+                {
+                    IndicatorSet iset = TestSignals.IndicatorSet;
+                    BarTableSet bts = BarTableGroup[c];
 
-                bts.SetPeriod(bullish, Cts);
+                    var (bullish, p, bearish, n) = iset.RunScreener(bts);
 
-                BarTable bt = bts[BarFreq.Minute];
-                BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
+                    foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
+                    foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+
+                    bts.SetPeriod(bullish, Cts);
+
+                    //BarTable bt = bts[BarFreq.Minute];
+                    //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
 
                 //BarTable bt = bts[BarFreq.Daily];
                 //BarChart bc = bt.GetChart(iset[bt]);
 
                 //HistoricalPeriod = bt.Period;
             }, Cts.Token);
+            }
         }
 
         private void BtnLoadMultiBarTable_Click(object sender, EventArgs e)
@@ -609,9 +612,13 @@ namespace TestClient
                     rsi,
                 });
 
-                List<Stock> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive).OrderBy(n => n.Name).Select(n => n as Stock).ToList();
+                List<Stock> cList = ContractManager.Values.AsParallel().Where(n => n is Stock s && s.Country == "US" && s.Status == ContractStatus.Alive && s.Exchange != Exchange.OTCBB && s.Exchange != Exchange.OTCMKT).OrderBy(n => n.Name).Select(n => n as Stock).ToList();
                 Console.WriteLine("total number = " + cList.Count());
 
+                TrainingManager.RunScreener(cList,
+                    TestSignals.IndicatorSet,
+                    pd, 12, Cts, Progress);
+                /*
                 double totalseconds = 0;
                 float total_num = cList.Count();
                 float i = 0;
@@ -632,7 +639,7 @@ namespace TestClient
                     Progress.Report(i * 100.0f / total_num);
                 });
 
-                DateTime time = DateTime.Now.AddDays(-6).Date;
+                DateTime time = DateTime.Now.AddDays(-6).Date;*/
                 /*
                 var result = TableList.AsParallel().Where(bt =>
                     //bt.IsActiveToday && //bt.Contract.CurrentTime.Date <= bt.Contract.LatestClosingDateTime.Date
@@ -651,7 +658,7 @@ namespace TestClient
 
                 Console.WriteLine("averagetime = " + totalseconds / TableList.Count() + " | Count = " + TableList.Count());*/
 
-                Console.WriteLine("averagetime = " + totalseconds / BarTableGroup.Count + " | Count = " + BarTableGroup.Count);
+                //Console.WriteLine("averagetime = " + totalseconds / BarTableGroup.Count + " | Count = " + BarTableGroup.Count);
             }, Cts.Token);
         }
 

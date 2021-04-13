@@ -57,8 +57,8 @@ namespace Pacmio.Analysis
 
                 var idset = new IndicatorSet();
 
-                idset[BarFreq.Daily] = new SwingTradeFilter();
-                idset[BarFreq.Minutes_5] = new RossReversalIndicator();
+                idset[BarFreq.Daily] = new RossGapGoDailyFilter() { BullishPointLimit = 3, BearishPointLimit = -3 };
+                //idset[BarFreq.Minutes_5] = new RossReversalIndicator();
 
 
                 return idset;

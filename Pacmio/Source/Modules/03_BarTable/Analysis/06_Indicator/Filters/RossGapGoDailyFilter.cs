@@ -12,29 +12,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public interface IFilter
-    {
-        double BullishPointLimit { get; }
-
-        double BearishPointLimit { get; }
-    }
-
-    public interface IPriceRangFilter : IFilter
-    {
-        Range<double> PriceRange { get; }
-    }
-
-    public interface IGapPercentFilter : IFilter
-    {
-        double BullishGapPercent { get; }
-
-        double BearishGapPercent { get; }
-    }
-
     public class RossGapGoDailyFilter : Indicator, IPriceRangFilter, IGapPercentFilter
     {
         public RossGapGoDailyFilter()
         {
+            string label = "(" + "," + ")";
+            GroupName = Name = GetType().Name + label;
+
             GapPercentSignalColumn = new SignalColumn(this, "Gap Percent")
             {
                 BullishColor = Color.BlueViolet,
@@ -47,23 +31,32 @@ namespace Pacmio.Analysis
                 BearishColor = Color.Yellow
             };
 
-            SignalColumns = new SignalColumn[] { GapPercentSignalColumn, VolumeSignalColumn };
-            SignalSeries = new SignalSeries(this);
+            SignalColumns = new[] { GapPercentSignalColumn, VolumeSignalColumn };
+            SignalSeries = new(this);
         }
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 20);
+        public Range<double> PriceRange { get; } = new Range<double>(1, 30);
 
         public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
 
-        public double BullishGapPercent { get; } = 4;
+        public double BullishGapPercent { get; } = 2;
 
-        public double BearishGapPercent { get; } = -4;
+        public double BearishGapPercent { get; } = -2;
 
         public SignalColumn GapPercentSignalColumn { get; protected set; }
 
         public SignalColumn VolumeSignalColumn { get; protected set; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
+
+
+        public NativeApexAnalysis ApexAnalysis { get; } = new(250);
+
+        public TrailingApexPtAnalysis TrailingApexPtAnalysis { get; }
+
+        public TrendLineAnalysis TrendLine { get; }
+
+        public TrailingTrendStrengthAnalysis TrendLineStrength { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -75,7 +68,11 @@ namespace Pacmio.Analysis
                 {
                     if (b.GapPercent >= BullishGapPercent || b.GapPercent <= BearishGapPercent)
                     {
-                        new SignalDatum(b, GapPercentSignalColumn, new double[] { b.GapPercent });
+                        new SignalDatum(b, GapPercentSignalColumn, new double[] { b.GainPercent });
+                        //Console.WriteLine("Gain = " + b.GainPercent);
+                        //SignalDatum signal = new SignalDatum(b, GapPercentSignalColumn); //, new double[] { b.GainPercent });
+                        //signal.SetPoints(new double[] { b.GapPercent });
+                        //Console.WriteLine(b.Time + " | Point = " + b[GapPercentSignalColumn].Points);
                         // new SignalDatum(b, VolumeSignalColumn, new double[] { VolumeRange.Minimum > 0 ? b.Volume / VolumeRange.Minimum : 0 });
                     }
                 }

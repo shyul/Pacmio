@@ -1,6 +1,6 @@
 Current Task
 ==============
-1.
+1. Inter Bars Trendline (10 Bars H L)
 2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
 3. New Flag Analysis has glitches
 4. DPPMO needs to finalize

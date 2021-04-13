@@ -132,9 +132,15 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        public (BarFreq freq, DataType type) FilterTimeFrame { get; set; }
+
+        public IFilter Filter { get; }
+
         public (BarFreq freq, DataType type) PrimaryTimeFrame { get; set; }
 
-        public (MultiPeriod bullish, MultiPeriod bearish) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
+
+
+        public (MultiPeriod bullish, int bullcount, MultiPeriod bearish, int bearcount) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
         {
             var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
 
@@ -145,7 +151,7 @@ namespace Pacmio
             MultiPeriod bullish = new MultiPeriod();
             MultiPeriod bearish = new MultiPeriod();
 
-            int i = 0;
+            int i = 0, p = 0, n = 0;
             foreach (var item in inds)
             {
                 Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: " + item.Value.Name + " <<<<<<<<<<<<<<<<<<<");
@@ -158,8 +164,14 @@ namespace Pacmio
                 bt.CalculateRefresh(bas);
 
                 Indicator ind = this[item.Key.freq, item.Key.type];
-                var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
-                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish < ind.BearishPointLimit);
+                var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
+                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
+
+                if (item.Key.freq == BarFreq.Daily)
+                {
+                    p = BullishBars.Count();
+                    n = BearishBars.Count();
+                }
 
                 if (i == 0)
                 {
@@ -176,7 +188,7 @@ namespace Pacmio
 
             Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: Completed!");
 
-            return (bullish, bearish);
+            return (bullish, p, bearish, n);
         }
 
         public IndicatorEvaluationResult RunAnalysis(BarTableSet bts)

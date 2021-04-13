@@ -38,6 +38,7 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnRunScreener = new System.Windows.Forms.Button();
             this.BtnTestFlag = new System.Windows.Forms.Button();
             this.BtnLoadAllBarTable = new System.Windows.Forms.Button();
             this.BtnTestSignal = new System.Windows.Forms.Button();
@@ -213,7 +214,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnRunScreener = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -304,6 +304,16 @@ namespace TestClient
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
             // 
+            // BtnRunScreener
+            // 
+            this.BtnRunScreener.Location = new System.Drawing.Point(12, 271);
+            this.BtnRunScreener.Name = "BtnRunScreener";
+            this.BtnRunScreener.Size = new System.Drawing.Size(230, 23);
+            this.BtnRunScreener.TabIndex = 57;
+            this.BtnRunScreener.Text = "Run Screener";
+            this.BtnRunScreener.UseVisualStyleBackColor = true;
+            this.BtnRunScreener.Click += new System.EventHandler(this.BtnRunScreener_Click);
+            // 
             // BtnTestFlag
             // 
             this.BtnTestFlag.BackColor = System.Drawing.Color.YellowGreen;
@@ -317,12 +327,14 @@ namespace TestClient
             // 
             // BtnLoadAllBarTable
             // 
-            this.BtnLoadAllBarTable.Location = new System.Drawing.Point(695, 433);
+            this.BtnLoadAllBarTable.BackColor = System.Drawing.Color.Red;
+            this.BtnLoadAllBarTable.ForeColor = System.Drawing.Color.White;
+            this.BtnLoadAllBarTable.Location = new System.Drawing.Point(12, 329);
             this.BtnLoadAllBarTable.Name = "BtnLoadAllBarTable";
             this.BtnLoadAllBarTable.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadAllBarTable.TabIndex = 55;
             this.BtnLoadAllBarTable.Text = "Test Load All BarTable";
-            this.BtnLoadAllBarTable.UseVisualStyleBackColor = true;
+            this.BtnLoadAllBarTable.UseVisualStyleBackColor = false;
             this.BtnLoadAllBarTable.Click += new System.EventHandler(this.BtnLoadAllBarTable_Click);
             // 
             // BtnTestSignal
@@ -371,7 +383,7 @@ namespace TestClient
             // 
             // BtnTimeZoneTest
             // 
-            this.BtnTimeZoneTest.Location = new System.Drawing.Point(348, 305);
+            this.BtnTimeZoneTest.Location = new System.Drawing.Point(695, 318);
             this.BtnTimeZoneTest.Name = "BtnTimeZoneTest";
             this.BtnTimeZoneTest.Size = new System.Drawing.Size(230, 26);
             this.BtnTimeZoneTest.TabIndex = 50;
@@ -401,7 +413,7 @@ namespace TestClient
             // 
             // BtnExportBarTableData
             // 
-            this.BtnExportBarTableData.Location = new System.Drawing.Point(6, 353);
+            this.BtnExportBarTableData.Location = new System.Drawing.Point(12, 524);
             this.BtnExportBarTableData.Name = "BtnExportBarTableData";
             this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
             this.BtnExportBarTableData.TabIndex = 47;
@@ -411,7 +423,7 @@ namespace TestClient
             // 
             // BtnExportFundamental
             // 
-            this.BtnExportFundamental.Location = new System.Drawing.Point(6, 382);
+            this.BtnExportFundamental.Location = new System.Drawing.Point(12, 553);
             this.BtnExportFundamental.Name = "BtnExportFundamental";
             this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
             this.BtnExportFundamental.TabIndex = 46;
@@ -421,7 +433,7 @@ namespace TestClient
             // 
             // BtnLoadMultiBarTable
             // 
-            this.BtnLoadMultiBarTable.Location = new System.Drawing.Point(695, 404);
+            this.BtnLoadMultiBarTable.Location = new System.Drawing.Point(12, 300);
             this.BtnLoadMultiBarTable.Name = "BtnLoadMultiBarTable";
             this.BtnLoadMultiBarTable.Size = new System.Drawing.Size(230, 23);
             this.BtnLoadMultiBarTable.TabIndex = 45;
@@ -450,7 +462,7 @@ namespace TestClient
             // 
             // BtnCloseChart
             // 
-            this.BtnCloseChart.Location = new System.Drawing.Point(7, 212);
+            this.BtnCloseChart.Location = new System.Drawing.Point(313, 271);
             this.BtnCloseChart.Name = "BtnCloseChart";
             this.BtnCloseChart.Size = new System.Drawing.Size(230, 23);
             this.BtnCloseChart.TabIndex = 37;
@@ -468,7 +480,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(7, 270);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(313, 329);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -498,7 +510,7 @@ namespace TestClient
             // 
             // BtnChartsUpdateAll
             // 
-            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(7, 241);
+            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(313, 300);
             this.BtnChartsUpdateAll.Name = "BtnChartsUpdateAll";
             this.BtnChartsUpdateAll.Size = new System.Drawing.Size(230, 23);
             this.BtnChartsUpdateAll.TabIndex = 2;
@@ -2176,16 +2188,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
-            // 
-            // BtnRunScreener
-            // 
-            this.BtnRunScreener.Location = new System.Drawing.Point(348, 446);
-            this.BtnRunScreener.Name = "BtnRunScreener";
-            this.BtnRunScreener.Size = new System.Drawing.Size(230, 23);
-            this.BtnRunScreener.TabIndex = 57;
-            this.BtnRunScreener.Text = "Run Screener";
-            this.BtnRunScreener.UseVisualStyleBackColor = true;
-            this.BtnRunScreener.Click += new System.EventHandler(this.BtnRunScreener_Click);
             // 
             // MainForm
             // 
