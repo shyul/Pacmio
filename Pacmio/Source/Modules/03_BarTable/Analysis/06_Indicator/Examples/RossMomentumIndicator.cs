@@ -27,6 +27,13 @@ namespace Pacmio.Analysis
 {
     public class RossMomentumIndicator : Indicator
     {
+        public RossMomentumIndicator() 
+        {
+            SignalColumns = new SignalColumn[] {  };
+            SignalSeries = new(this);
+            BarAnalysisSet = new(this);
+        }
+
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)

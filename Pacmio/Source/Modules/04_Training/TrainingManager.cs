@@ -17,7 +17,8 @@ namespace Pacmio
 {
     public static class TrainingManager
     {
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet iset, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        // IndicatorEvaluationResult
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet inds, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
@@ -41,15 +42,15 @@ namespace Pacmio
 
                     bts.SetPeriod(pd, cts);
 
-                    var (bullish, p, bearish, n) = iset.RunScreener(bts);
+                    var (bullishBars, bearishBars) = inds.RunFilter(bts);
 
-                    foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
-                    foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
+                    //foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
+                    //foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
 
-                    bts.SetPeriod(bullish, cts);
+                    //bts.SetPeriod(bullish, cts);
 
 
-                    int m = p + n;
+                    int m = bullishBars.Count() + bearishBars.Count();
 
                     if(m > 0) 
                     {

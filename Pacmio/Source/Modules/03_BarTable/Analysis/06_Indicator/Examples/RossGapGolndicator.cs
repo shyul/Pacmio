@@ -56,7 +56,9 @@ namespace Pacmio.Analysis
 
         public RossGapGolndicator()
         {
-            SignalSeries = new SignalSeries(this);
+            SignalColumns = new SignalColumn[] { };
+            SignalSeries = new(this);
+            BarAnalysisSet = new(this);
         }
 
 

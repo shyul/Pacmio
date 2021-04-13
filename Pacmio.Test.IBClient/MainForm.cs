@@ -497,7 +497,7 @@ namespace TestClient
 
 
 
-                    BarChart bc = bt.GetChart(iset[bt]);
+                    BarChart bc = bt.GetChart(iset);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
@@ -519,7 +519,7 @@ namespace TestClient
                     IndicatorSet iset = TestSignals.IndicatorSet;
                     BarTableSet bts = BarTableGroup[c];
 
-                    var (bullish, p, bearish, n) = iset.RunScreener(bts);
+                    var (bullish, p, bearish, n) = iset.RunFilter(bts);
 
                     foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
                     foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }

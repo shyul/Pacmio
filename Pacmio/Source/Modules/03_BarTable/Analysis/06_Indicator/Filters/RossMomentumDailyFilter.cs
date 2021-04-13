@@ -14,6 +14,13 @@ namespace Pacmio.Analysis
 {
     public class RossMomentumDailyFilter : Indicator, IPriceRangFilter
     {
+        public RossMomentumDailyFilter() 
+        {
+            SignalColumns = new SignalColumn[] { };
+            SignalSeries = new(this);
+            BarAnalysisSet = new(this);
+        }
+
         public Range<double> PriceRange { get; } = new Range<double>(1, 10);
 
         public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);

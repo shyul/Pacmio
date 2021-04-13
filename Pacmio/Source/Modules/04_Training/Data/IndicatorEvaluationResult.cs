@@ -74,7 +74,7 @@ namespace Pacmio
                     Indicator ind = inds[item.freq, item.type];
 
                     int totalBarCount = bt.Count;
-                    bt.CalculateRefresh(item.bas);
+                    bt.CalculateRefresh(item.ind.BarAnalysisSet);
 
                     var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
                     var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish > ind.BearishPointLimit);
@@ -84,7 +84,6 @@ namespace Pacmio
 
                     BullishBars.RunEach(n => ier.BullishPeriods.Add(n.Period));
                     BearishBars.RunEach(n => ier.BearishPeriods.Add(n.Period));
-
                 }
 
                 DateTime endTime = DateTime.Now;

@@ -71,8 +71,7 @@ namespace Pacmio.Analysis
             BollingerBandSignal.AddChild(this);
             SingleDataSignal.AddChild(this);
 
-            SignalColumns = new SignalColumn[] { OscillatorSignal.Column_Result, BollingerBandSignal.Column_Result, SingleDataSignal.Column_Result };
-            SignalSeries = new(this);
+
 
 
 
@@ -84,6 +83,11 @@ namespace Pacmio.Analysis
 
             BullishPointLimit = 1;
             BearishPointLimit = -1;
+
+
+            SignalColumns = new SignalColumn[] { OscillatorSignal.Column_Result, BollingerBandSignal.Column_Result, SingleDataSignal.Column_Result };
+            SignalSeries = new(this);
+            BarAnalysisSet = new(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ OscillatorAnalysis.GetHashCode() ^ BollingerBand.GetHashCode() ^ SingleDataSignal.GetHashCode();

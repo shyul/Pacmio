@@ -65,6 +65,7 @@ namespace Pacmio.Analysis
 
             SignalColumns = new SignalColumn[] { RsiSignal.Column_Result, BollingerBandSignal.Column_Result, CandleStickSignalColumn };
             SignalSeries = new(this);
+            BarAnalysisSet = new(this);
         }
 
 

@@ -26,9 +26,14 @@ namespace Pacmio.Analysis
             string label = "(" + Fast_SingleData.Name + "," + Slow_SingleData.Name + ")";
             GroupName = Name = GetType().Name + label;
 
-            SignalColumns = new SignalColumn[] { DualDataSignal.Column_Result };
+
 
             DualDataSignal.AddChild(this);
+
+
+            SignalColumns = new SignalColumn[] { DualDataSignal.Column_Result };
+            SignalSeries = new(this);
+            BarAnalysisSet = new(this);
         }
 
         public ISingleData Fast_SingleData { get; }

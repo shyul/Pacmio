@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, BarAnalysisSet bas)>
+    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
@@ -107,24 +107,18 @@ namespace Pacmio
                 {
                     if (IndicatorLUT.ContainsKey(key))
                         IndicatorLUT.Remove(key);
-
-                    if (BarAnalysisSetLUT.ContainsKey(key))
-                        BarAnalysisSetLUT.Remove(key);
                 }
                 else
                 {
                     IndicatorLUT[key] = value;
-                    BarAnalysisSetLUT[key] = new BarAnalysisSet(value);
                 }
             }
         }
 
-        public BarAnalysisSet this[BarTable bt] => BarAnalysisSetLUT.ContainsKey((bt.BarFreq, bt.Type)) ? BarAnalysisSetLUT[(bt.BarFreq, bt.Type)] : null;
+        public Indicator this[BarTable bt] => IndicatorLUT.ContainsKey((bt.BarFreq, bt.Type)) ? IndicatorLUT[(bt.BarFreq, bt.Type)] : null;
 
-        private Dictionary<(BarFreq freq, DataType type), BarAnalysisSet> BarAnalysisSetLUT { get; } = new();
-
-        public IEnumerator<(BarFreq freq, DataType type, BarAnalysisSet bas)> GetEnumerator()
-            => BarAnalysisSetLUT.
+        public IEnumerator<(BarFreq freq, DataType type, Indicator ind)> GetEnumerator()
+            => IndicatorLUT.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
             Select(n => (n.Key.freq, n.Key.type, n.Value)).
@@ -132,15 +126,69 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        public (BarFreq freq, DataType type) ExecutionTimeFrame { get; set; }
+
+        public Indicator ExecutionIndicator { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bts"></param>
+        /// <param name="bullish">Only Long Excute in bullish Periods</param>
+        /// <param name="bearish">Only Bear Excute in bearish Periods</param>
+        public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish) 
+        {
+            foreach(var item in this) 
+            {
+                BarTable bt = bts[item.freq, item.type];
+                bt.CalculateRefresh(item.ind.BarAnalysisSet);
+            }
+
+            BarTable bt = bts[ExecutionTimeFrame.freq, ExecutionTimeFrame.type];
+            bt.CalculateRefresh(ExecutionIndicator.BarAnalysisSet);
+
+            // Collect Bullish Execution Based on Bullish Periods
+            // Collect Bearish Execution Based on Bearish Periods
+        }
+
         public (BarFreq freq, DataType type) FilterTimeFrame { get; set; }
 
-        public IFilter Filter { get; }
+        public Indicator FilterIndicator { get; }
 
-        public (BarFreq freq, DataType type) PrimaryTimeFrame { get; set; }
+        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts) => RunFilter(bts, FilterIndicator, FilterTimeFrame.freq, FilterTimeFrame.type);
+
+        public (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts) => RunFilterMultiPeriod(bts, FilterIndicator, FilterTimeFrame.freq, FilterTimeFrame.type);
+
+        public static (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Indicator filter, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
+        {
+            BarTable bt = bts[freq, type];
+
+            BarAnalysisSet bas = filter.BarAnalysisSet;
+            bt.CalculateRefresh(bas);
+
+            Indicator ind = filter;
+            var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
+            var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
+
+            return (BullishBars, BearishBars);
+        }
+
+        public static (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Indicator filter, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
+        {
+            var (BullishBars, BearishBars) = RunFilter(bts, filter, freq, type);
+
+            MultiPeriod bullish = new MultiPeriod();
+            MultiPeriod bearish = new MultiPeriod();
+            BullishBars.RunEach(n => bullish.Add(ToDailyPeriod(n.Period)));
+            BearishBars.RunEach(n => bearish.Add(ToDailyPeriod(n.Period)));
+
+            return (bullish, bearish);
+        }
 
 
 
-        public (MultiPeriod bullish, int bullcount, MultiPeriod bearish, int bearcount) RunScreener(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
+        /*
+        public (MultiPeriod bullish, int bullcount, MultiPeriod bearish, int bearcount) RunFilter(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
         {
             var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
 
@@ -160,7 +208,7 @@ namespace Pacmio
 
                 range.Insert(bt.Period);
 
-                BarAnalysisSet bas = this[bt];
+                BarAnalysisSet bas = this[bt].BarAnalysisSet;
                 bt.CalculateRefresh(bas);
 
                 Indicator ind = this[item.Key.freq, item.Key.type];
@@ -189,31 +237,8 @@ namespace Pacmio
             Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: Completed!");
 
             return (bullish, p, bearish, n);
-        }
+        }*/
 
-        public IndicatorEvaluationResult RunAnalysis(BarTableSet bts)
-        {
-            foreach (var item in this)
-            {
-                BarTable bt = bts[item.freq, item.type];
-                bt.CalculateRefresh(item.bas);
-            }
-
-            BarTable bt_exec = bts[PrimaryTimeFrame.freq, PrimaryTimeFrame.type];
-            bt_exec.CalculateRefresh(this[bt_exec]);
-
-            // Then run order / trade / position analysis, and ignore any data outside BarTableSet MultiPeriod
-            // This analysis shall not be BarAnalysis  
-
-            // Effectiveness Result -> 
-
-            // Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
-
-            // Overlapping Strategy Result ->
-
-            return null;
-        }
-
-        public Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
+        public static Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
     }
 }
