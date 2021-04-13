@@ -721,6 +721,8 @@ namespace Pacmio
                 }
         }
 
+        public void CalculateRefresh(Indicator ind) => CalculateRefresh(ind.BarAnalysisSet);
+
         private Task CalculateTickTask { get; }
 
         private CancellationTokenSource CalculateTickCancelTs { get; }

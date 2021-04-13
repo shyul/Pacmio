@@ -25,11 +25,11 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossMomentumIndicator : Indicator
+    public class RossMomentumExecution : Indicator
     {
-        public RossMomentumIndicator() 
+        public RossMomentumExecution()
         {
-            SignalColumns = new SignalColumn[] {  };
+            SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);
             BarAnalysisSet = new(this);
         }

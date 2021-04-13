@@ -13,27 +13,6 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorEvaluationResult
-    {
-        public IndicatorEvaluationResult(Contract c, IndicatorSet inds)
-        {
-            Contract = c;
-            IndicatorSet = inds;
-        }
-
-        public Contract Contract { get; }
-
-        public IndicatorSet IndicatorSet { get; }
-
-        public MultiPeriod BullishPeriods { get; } = new MultiPeriod();
-
-        public MultiPeriod BearishPeriods { get; } = new MultiPeriod();
-
-        public double BullishPercent { get; set; } = 0;
-
-        public double BearishPercent { get; set; } = 0;
-    }
-
     public static class IndicatorManager
     {
         /// <summary>
@@ -45,9 +24,9 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, IndicatorEvaluationResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, EvaluationResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
-            Dictionary<Contract, IndicatorEvaluationResult> result = new();
+            Dictionary<Contract, EvaluationResult> result = new();
 
             double totalseconds = 0;
             float total_num = cList.Count();
@@ -57,7 +36,7 @@ namespace Pacmio
             Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
             {
 
-                IndicatorEvaluationResult ier = new(c, inds);
+                EvaluationResult ier = new(c, inds);
 
                 DateTime startTime = DateTime.Now;
                 BarTableSet bts = new BarTableSet(c, false);
@@ -97,7 +76,7 @@ namespace Pacmio
             return result;
         }
 
-        public static void PrintResult(Dictionary<Contract, IndicatorEvaluationResult> result)
+        public static void PrintResult(Dictionary<Contract, EvaluationResult> result)
         {
             var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
 

@@ -59,7 +59,7 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (Indicator is IndicatorExec idex)
+                if (Indicator is IndicatorExecution idex)
                 {
 
 

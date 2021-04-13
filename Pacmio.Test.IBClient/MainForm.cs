@@ -519,20 +519,6 @@ namespace TestClient
                     IndicatorSet iset = TestSignals.IndicatorSet;
                     BarTableSet bts = BarTableGroup[c];
 
-                    var (bullish, p, bearish, n) = iset.RunFilter(bts);
-
-                    foreach (var mp in bullish) { Console.WriteLine("Bull: " + mp); }
-                    foreach (var mp in bearish) { Console.WriteLine("Bear: " + mp); }
-
-                    bts.SetPeriod(bullish, Cts);
-
-                    //BarTable bt = bts[BarFreq.Minute];
-                    //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
-
-                //BarTable bt = bts[BarFreq.Daily];
-                //BarChart bc = bt.GetChart(iset[bt]);
-
-                //HistoricalPeriod = bt.Period;
             }, Cts.Token);
             }
         }
@@ -554,46 +540,9 @@ namespace TestClient
                     TestSignals.IndicatorSet,
                     pd, 8, Cts, Progress);
 
-
-                /*
-                var rsi = new RSI(14);
-
-                BarAnalysisSet bas = new(new List<BarAnalysis>() {
-                    rsi,
-                });
-
-                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
-                var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
-
-                double totalseconds = 0;
-                float total_num = cList.Count();
-                float i = 0;
-
-                Parallel.ForEach(cList, c => {
-                    DateTime startTime = DateTime.Now;
-                    //var bt = (freq < BarFreq.Daily || type != DataType.Trades) ? c.LoadBarTable(pd, freq, type, false, Cts) : BarTableManager.GetOrCreateDailyBarTable(c, freq);
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(pd, Cts);
-                    BarTable bt = bts[freq, type];
-
-                    bt.CalculateRefresh(bas);
-                    DateTime endTime = DateTime.Now;
-                    double seconds = (endTime - startTime).TotalSeconds;
-                    totalseconds += seconds;
-                    i++;
-                    Progress.Report(i * 100.0f / total_num);
-                });
-
-                DateTime endTime = DateTime.Now;
-
-                Console.WriteLine("################# Finished Loading Tables and calculation!! Start searching now!! ####################");
-
-                DateTime time = DateTime.Now.AddDays(-8).Date;
-                */
             }, Cts.Token);
 
         }
-
 
         private void BtnLoadAllBarTable_Click(object sender, EventArgs e)
         {

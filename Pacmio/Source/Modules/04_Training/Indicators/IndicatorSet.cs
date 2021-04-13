@@ -140,12 +140,11 @@ namespace Pacmio
         {
             foreach(var item in this) 
             {
-                BarTable bt = bts[item.freq, item.type];
-                bt.CalculateRefresh(item.ind.BarAnalysisSet);
+                bts[item.freq, item.type].CalculateRefresh(item.ind);
             }
 
             BarTable bt = bts[ExecutionTimeFrame.freq, ExecutionTimeFrame.type];
-            bt.CalculateRefresh(ExecutionIndicator.BarAnalysisSet);
+            bt.CalculateRefresh(ExecutionIndicator);
 
             // Collect Bullish Execution Based on Bullish Periods
             // Collect Bearish Execution Based on Bearish Periods

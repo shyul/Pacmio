@@ -13,32 +13,15 @@ using System.Threading;
 using System.Runtime.Serialization;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     /// <summary>
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class IndicatorExec : Indicator, ISingleDatum
+    public abstract class IndicatorExecution : Indicator, ISingleDatum
     {
-        protected IndicatorExec(BarFreq freq, DataType type = DataType.Trades)
-        {
-            //IndicatorSet = new(this, freq, type);
-
-            IndicatorSet = new();
-
-            Column_Result = new DatumColumn(Name, typeof(ExecutionDatum));
-
-
-            SignalSeries = new(this);
-        }
-
         public IndicatorSet IndicatorSet { get; }
-
-        public double MaximumHoldingTimeInMs { get; set; }
-
-
-        #region Execution
 
         public DatumColumn Column_Result { get; }
 
@@ -52,13 +35,6 @@ namespace Pacmio.Analysis
         // Fetch all results from other filtes.
 
         // Construct the score...
-
-
-
-
-        #endregion Execution
-
-
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM
@@ -75,12 +51,7 @@ namespace Pacmio.Analysis
 
         #endregion Order
 
-        public OrderInfo GenerateOrder(ExecutionDatum ed)
-        {
 
-
-            return new OrderInfo();
-        }
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
 

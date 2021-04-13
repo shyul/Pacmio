@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 
         public double AverageCommission { get; }
 
-        public IndicatorExec IndicatorExec { get; }
+        public IndicatorExecution IndicatorExec { get; }
 
 
 

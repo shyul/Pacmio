@@ -13,7 +13,7 @@ using System.Threading;
 using System.Runtime.Serialization;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
     public class ExecutionDatum : IDatum
     {

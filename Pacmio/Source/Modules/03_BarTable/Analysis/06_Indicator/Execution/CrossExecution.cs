@@ -14,9 +14,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class CrossIndicator : Indicator
+    public class CrossExecution : Indicator
     {
-        public CrossIndicator(int fast = 5, int slow = 20)
+        public CrossExecution(int fast = 5, int slow = 20)
         {
             Fast_SingleData = new SMA(fast) { Color = Color.Orange };
             Slow_SingleData = new SMA(slow) { Color = Color.YellowGreen };
