@@ -50,12 +50,12 @@ namespace Pacmio.Analysis
         
         }
 
-        public static Strategy IndicatorSet 
+        public static IndicatorSet IndicatorSet 
         {
             get 
             {
 
-                var s = new Strategy();
+                var s = new IndicatorSet();
 
                 s.FilterIndicator = s[BarFreq.Daily] = new RossGapGoDailyFilter(4);
 

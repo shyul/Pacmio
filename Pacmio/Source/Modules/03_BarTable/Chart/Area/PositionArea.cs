@@ -54,17 +54,17 @@ namespace Pacmio
             //DrawPosition(g, this, BarTable, s);
         }
 
-        public static Dictionary<TradeExecutionType, Brush> ColorPalette { get; } = new Dictionary<TradeExecutionType, Brush>()
+        public static Dictionary<ExecutionType, Brush> ColorPalette { get; } = new Dictionary<ExecutionType, Brush>()
             {
-                { TradeExecutionType.Long, new SolidBrush(Color.LimeGreen.Opaque(50)) },
-                { TradeExecutionType.Sell, new SolidBrush(Color.Pink.Opaque(50)) },
-                { TradeExecutionType.Short, new SolidBrush(Color.SkyBlue.Opaque(60)) },
-                { TradeExecutionType.Cover, new SolidBrush(Color.Yellow.Opaque(50)) },
-                { TradeExecutionType.LongHold, new SolidBrush(Color.LimeGreen.Opaque(25)) },
-                { TradeExecutionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
+                { ExecutionType.Long, new SolidBrush(Color.LimeGreen.Opaque(50)) },
+                { ExecutionType.Sell, new SolidBrush(Color.Pink.Opaque(50)) },
+                { ExecutionType.Short, new SolidBrush(Color.SkyBlue.Opaque(60)) },
+                { ExecutionType.Cover, new SolidBrush(Color.Yellow.Opaque(50)) },
+                { ExecutionType.LongHold, new SolidBrush(Color.LimeGreen.Opaque(25)) },
+                { ExecutionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
             };
 
-        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, Strategy s)
+        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, IndicatorSet s)
         {/*
             if (s is Strategy && bt.Count > 0)
             {

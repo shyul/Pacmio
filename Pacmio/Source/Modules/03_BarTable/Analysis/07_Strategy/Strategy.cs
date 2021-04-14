@@ -19,9 +19,11 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class IndicatorExecution : Indicator, ISingleDatum
+    public abstract class Strategy : BarAnalysis, ISingleDatum
     {
-        public Strategy IndicatorSet { get; }
+
+
+        public IndicatorSet IndicatorSet { get; }
 
         public DatumColumn Column_Result { get; }
 
@@ -66,11 +68,6 @@ namespace Pacmio
         //   public double SlippageRatio { get; set; } = 0.0001;
 
         /// <summary>
-        /// The unit for training time frames
-        /// </summary>
-        public virtual BarFreq TrainingUnitFreq { get; set; } = BarFreq.Daily;
-
-        /// <summary>
         /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
         /// The commission model shall be defined by Simulate Engine.
         /// </summary>
@@ -83,5 +80,25 @@ namespace Pacmio
         public virtual int TradingLength { get; set; } = 1;
 
         #endregion Training Settings
+    }
+
+    public class ExecutionRule
+    {
+
+        /// <summary>
+        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
+        /// </summary>
+        public double WaitMsForOutstandingOrder { get; }
+
+        /// <summary>
+        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
+        /// Can use wait Ms and set limit price.
+        /// </summary>
+        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
+
+        /// <summary>
+        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
+        /// </summary>
+        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
     }
 }

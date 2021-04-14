@@ -152,20 +152,20 @@ namespace Pacmio
         public string Description { get; set; }
 
         [IgnoreDataMember]
-        public TradeExecutionType Action
+        public ExecutionType Action
         {
             get
             {
                 if (Quantity > 0 && LastLiquidity == LiquidityType.Added)
-                    return TradeExecutionType.Long;
+                    return ExecutionType.Long;
                 else if (Quantity < 0 && LastLiquidity == LiquidityType.Added)
-                    return TradeExecutionType.Short;
+                    return ExecutionType.Short;
                 else if (Quantity > 0 && LastLiquidity == LiquidityType.Removed)
-                    return TradeExecutionType.Cover;
+                    return ExecutionType.Cover;
                 else if (Quantity < 0 && LastLiquidity == LiquidityType.Removed)
-                    return TradeExecutionType.Sell;
+                    return ExecutionType.Sell;
 
-                return TradeExecutionType.None;
+                return ExecutionType.None;
             }
         }
 

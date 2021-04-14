@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class Strategy : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
+    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {

@@ -1,5 +1,5 @@
 ﻿/// ***************************************************************************
-/// Shared Libraries and Utilities
+/// Pacmio Research Enivironment
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
@@ -10,11 +10,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
+using Pacmio.Analysis;
+
 
 namespace Pacmio
 {
-    public static class StrategyManager
+    public static class SimulationManager
     {
+
         /// <summary>
         /// This function is for narrowing down the group of contracts for actually simulation.
         /// </summary>
@@ -24,9 +27,9 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, EvaluationResult> Evaluate(IEnumerable<Contract> cList, Strategy inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, IndicatorResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
-            Dictionary<Contract, EvaluationResult> result = new();
+            Dictionary<Contract, IndicatorResult> result = new();
 
             double totalseconds = 0;
             float total_num = cList.Count();
@@ -36,7 +39,7 @@ namespace Pacmio
             Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
             {
 
-                EvaluationResult ier = new(c, inds);
+                IndicatorResult ier = new(c, inds);
 
                 DateTime startTime = DateTime.Now;
                 BarTableSet bts = new BarTableSet(c, false);
@@ -76,7 +79,7 @@ namespace Pacmio
             return result;
         }
 
-        public static void PrintResult(Dictionary<Contract, EvaluationResult> result)
+        public static void PrintResult(Dictionary<Contract, IndicatorResult> result)
         {
             var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
 
@@ -85,7 +88,5 @@ namespace Pacmio
                 Console.WriteLine(ier.Contract + ": " + ier.BullishPercent);
             }
         }
-
-
     }
 }

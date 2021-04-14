@@ -59,15 +59,7 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (Indicator is IndicatorExecution idex)
-                {
-
-
-
-
-
-                }
-                else if (Indicator is Indicator filter)
+                if (Indicator is Indicator filter)
                 {
                     FilterType lastType = FilterType.None;
 

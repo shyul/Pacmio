@@ -225,7 +225,7 @@ namespace Pacmio
             }
         }
 
-        public void Build(Strategy inds, Period periodLimit, CancellationTokenSource cts = null)
+        public void Build(IndicatorSet inds, Period periodLimit, CancellationTokenSource cts = null)
         {
             var (bullish, bearish) = inds.RunFilterMultiPeriod(this, periodLimit);
 

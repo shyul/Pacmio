@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class EvaluationResult
+    public class IndicatorResult
     {
-        public EvaluationResult(Contract c, Strategy inds)
+        public IndicatorResult(Contract c, IndicatorSet inds)
         {
             Contract = c;
             IndicatorSet = inds;
@@ -23,7 +23,7 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public Strategy IndicatorSet { get; }
+        public IndicatorSet IndicatorSet { get; }
 
         public MultiPeriod BullishPeriods { get; } = new MultiPeriod();
 

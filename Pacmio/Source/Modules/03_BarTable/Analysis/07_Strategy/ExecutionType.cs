@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public enum TradeExecutionType : int
+    public enum ExecutionType : int
     {
         [EnumMember]
         None = 0,

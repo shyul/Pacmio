@@ -1,8 +1,6 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
-/// 
-/// The trade rule applies to each contract
 /// 
 /// ***************************************************************************
 
@@ -10,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Xu;
 
-namespace Pacmio.Analysis
+namespace Pacmio
 {
-    public class SimulationDatum
+    public static class StrategyTool
     {
+        // Generate and Tune Strategies from here. 
+
+
     }
 }

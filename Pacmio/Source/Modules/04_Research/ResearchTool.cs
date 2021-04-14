@@ -1,5 +1,5 @@
 ﻿/// ***************************************************************************
-/// Pacmio Research Enivironment
+/// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
@@ -10,15 +10,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
-using Pacmio.Analysis;
-
 
 namespace Pacmio
 {
-    public static class TrainingManager
+    public static class ResearchTool
     {
         // IndicatorEvaluationResult
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Strategy s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
@@ -52,7 +50,7 @@ namespace Pacmio
 
                     int m = bullishBars.Count() + bearishBars.Count();
 
-                    if(m > 0) 
+                    if (m > 0)
                     {
                         clist.Add((c, m));
                     }
@@ -89,7 +87,7 @@ namespace Pacmio
                 cts.Dispose();
             }
 
-            foreach(var item in clist.OrderBy(n => n.m)) 
+            foreach (var item in clist.OrderBy(n => n.m))
             {
                 Console.WriteLine(item.c + " | " + item.m);
             }
@@ -119,25 +117,6 @@ namespace Pacmio
 
             return comms + exchange_fee + transaction_fee + finra_fee + nyse_pass_fee;
         }
-    }
 
-    public class ExecutionRule
-    {
-
-        /// <summary>
-        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
-        /// </summary>
-        public double WaitMsForOutstandingOrder { get; }
-
-        /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
-        /// Can use wait Ms and set limit price.
-        /// </summary>
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
-
-        /// <summary>
-        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
-        /// </summary>
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
     }
 }
