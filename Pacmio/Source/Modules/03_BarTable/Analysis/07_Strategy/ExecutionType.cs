@@ -42,7 +42,4 @@ namespace Pacmio
         [EnumMember]
         Cover = 2,
     }
-
-
-
 }

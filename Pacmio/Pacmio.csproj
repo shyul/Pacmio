@@ -125,7 +125,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\Level.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyResultDatum.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\Trend\TrendLineDatum.cs" />

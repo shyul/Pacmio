@@ -469,6 +469,12 @@ namespace Pacmio
             set => this[pa.Column_Result] = value;
         }
 
+        public StrategyDatum this[Strategy pa]
+        {
+            get => this[pa.Column_Result] as StrategyDatum;
+            set => this[pa.Column_Result] = value;
+        }
+
         #endregion Datum Column
 
         #region Signal Information Tools
@@ -536,17 +542,6 @@ namespace Pacmio
         #endregion Signal Information Tools
 
 
-        private Dictionary<IndicatorSet, SimulationDatum> SimulationResults { get; } = new Dictionary<IndicatorSet, SimulationDatum>();
 
-        public SimulationDatum this[IndicatorSet dc]
-        {
-            get
-            {
-                if (!SimulationResults.ContainsKey(dc))
-                    SimulationResults[dc] = new SimulationDatum();
-
-                return SimulationResults[dc];
-            }
-        }
     }
 }
