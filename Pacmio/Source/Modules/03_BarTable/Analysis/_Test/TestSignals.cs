@@ -30,7 +30,7 @@ namespace Pacmio.Analysis
 
 
 
-                var twrc = new SwingTradeFilter();
+                var twrc = new SwingTradeDailyFilter();
 
                 //var chop = new CHOP(20);
 
@@ -55,11 +55,11 @@ namespace Pacmio.Analysis
             get 
             {
 
-                var s = new IndicatorSet();
+                var inds = new IndicatorSet();
 
-                s.FilterIndicator = s[BarFreq.Daily] = new RossGapGoDailyFilter(4);
+                inds.FilterIndicator = new GapGoDailyFilter(4);
 
-                return s;
+                return inds;
 
             }
         }

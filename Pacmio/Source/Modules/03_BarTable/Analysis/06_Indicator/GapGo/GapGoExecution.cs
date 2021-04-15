@@ -51,10 +51,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossGapGoExecution : Indicator
+    public class GapGoExecution : Indicator
     {
 
-        public RossGapGoExecution()
+        public GapGoExecution()
         {
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);

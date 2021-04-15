@@ -12,6 +12,9 @@ Program Flow:
                                                         a. OrderRules           a. Can Contain Several Orders
 
 Screener:
+1. Instead of using a Dictionary to look up the indicators, we can put the Barfreq/datatype in the indictor, so we can merge different indicators freely.
+2. Or shall we create indicator type BarAnalysis?? Let RSI yield indicator value directly?
+
 1. Search the daily bars using RunScreener
 2. Yield testPeriods = bullishPeriods + bearishPeriods 
 3. Check if it is worthwhile to download

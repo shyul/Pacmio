@@ -45,9 +45,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class SwingTradeFilter : Indicator
+    public class SwingTradeDailyFilter : Indicator
     {
-        public SwingTradeFilter() 
+        public SwingTradeDailyFilter() 
         {
             RSI rsi = new(14);
             Bollinger bb = new Bollinger(20, 2);

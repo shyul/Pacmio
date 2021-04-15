@@ -25,9 +25,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossMomentumExecution : Indicator
+    public class MomentumExecution : Indicator
     {
-        public RossMomentumExecution()
+        public MomentumExecution()
         {
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);

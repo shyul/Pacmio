@@ -12,20 +12,14 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossMomentumDailyFilter : Indicator, IPriceRangFilter
+    public class RsiIndicator : Indicator
     {
-        public RossMomentumDailyFilter() 
-        {
-            SignalColumns = new SignalColumn[] { };
-            SignalSeries = new(this);
-            BarAnalysisSet = new(this);
-        }
+        // 2 minute RSI of Below 25 / Above 75
+        public RSI RSI { get; } = new RSI(14);
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 10);
+        public SingleDataSignal OverBoughtSignal { get; }
 
-        public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
-
-        public Range<double> FloatRange { get; } = new Range<double>(0, 2e7);
+        public SingleDataSignal OverSoldSignal { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 

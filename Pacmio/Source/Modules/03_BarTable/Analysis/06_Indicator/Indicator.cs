@@ -28,6 +28,12 @@ namespace Pacmio
             SignalSeries = new(this);
         }
 
+        public BarFreq BarFreq { get; set; } = BarFreq.Daily;
+
+        public DataType DataType { get; set; } = DataType.Trades;
+
+        public BarAnalysisSet BarAnalysisSet { get; protected set; }
+
         public abstract IEnumerable<SignalColumn> SignalColumns { get; }
 
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
@@ -35,8 +41,6 @@ namespace Pacmio
         public double BullishPointLimit { get; set; } = 1;
 
         public double BearishPointLimit { get; set; } = -1;
-
-        public BarAnalysisSet BarAnalysisSet { get; protected set; }
 
         #region Series
 

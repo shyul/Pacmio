@@ -12,18 +12,6 @@ using Xu;
 
 namespace Pacmio
 {
-    public interface IFilter
-    {
-        double BullishPointLimit { get; }
-
-        double BearishPointLimit { get; }
-    }
-
-    public interface IPriceRangFilter : IFilter
-    {
-        Range<double> PriceRange { get; }
-    }
-
     public interface IGapPercentFilter : IFilter
     {
         double BullishGapPercent { get; }

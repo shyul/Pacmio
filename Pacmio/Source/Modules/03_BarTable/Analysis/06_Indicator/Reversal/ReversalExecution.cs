@@ -22,9 +22,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class RossReversalExecution : Indicator
+    public class ReversalExecution : Indicator
     {
-        public RossReversalExecution()
+        public ReversalExecution()
         {
             string label = "(" + "," + ")";
             GroupName = Name = GetType().Name + label;

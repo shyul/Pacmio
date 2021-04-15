@@ -49,14 +49,12 @@ namespace Pacmio
 
                 // So far we are only getting results from one time frame!
 
-                foreach (var item in inds.Where(n => n.freq >= BarFreq.Daily).OrderByDescending(n => n.freq))
+                foreach (var ind in inds.Where(n => n.BarFreq >= BarFreq.Daily).OrderByDescending(n => n.BarFreq))
                 {
-                    BarTable bt = bts[item.freq, item.type];
-
-                    Indicator ind = inds[item.freq, item.type];
+                    BarTable bt = bts[ind.BarFreq, ind.DataType];
 
                     int totalBarCount = bt.Count;
-                    bt.CalculateRefresh(item.ind.BarAnalysisSet);
+                    bt.CalculateRefresh(ind.BarAnalysisSet);
 
                     var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
                     var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish > ind.BearishPointLimit);
@@ -67,6 +65,7 @@ namespace Pacmio
                     BullishBars.RunEach(n => ier.BullishPeriods.Add(n.Period));
                     BearishBars.RunEach(n => ier.BearishPeriods.Add(n.Period));
                 }
+
 
                 DateTime endTime = DateTime.Now;
                 double seconds = (endTime - startTime).TotalSeconds;

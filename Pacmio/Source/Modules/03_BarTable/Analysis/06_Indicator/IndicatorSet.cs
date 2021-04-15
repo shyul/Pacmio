@@ -79,7 +79,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<(BarFreq freq, DataType type, Indicator ind)>
+    public class IndicatorSet : IEnumerable<Indicator>
     {
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
@@ -87,16 +87,17 @@ namespace Pacmio
             return btList.Count() == 0;
         }
 
-        private Dictionary<(BarFreq freq, DataType type), Indicator> IndicatorLUT { get; } = new();
+        private List<Indicator> IndicatorList { get; } = new();
 
-        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorLUT.Keys.ToList();
+        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorList.Select(n => (n.BarFreq, n.DataType)).ToList();
 
+        /*
         public Indicator this[BarFreq freq, DataType type = DataType.Trades]
         {
             get
             {
                 var key = (freq, type);
-                return IndicatorLUT.ContainsKey(key) ? IndicatorLUT[key] : null;
+                return IndicatorList.ContainsKey(key) ? IndicatorList[key] : null;
             }
 
             set
@@ -105,23 +106,23 @@ namespace Pacmio
 
                 if (value is null)
                 {
-                    if (IndicatorLUT.ContainsKey(key))
-                        IndicatorLUT.Remove(key);
+                    if (IndicatorList.ContainsKey(key))
+                        IndicatorList.Remove(key);
                 }
                 else
                 {
-                    IndicatorLUT[key] = value;
+                    IndicatorList[key] = value;
                 }
             }
         }
 
-        public Indicator this[BarTable bt] => IndicatorLUT.ContainsKey((bt.BarFreq, bt.Type)) ? IndicatorLUT[(bt.BarFreq, bt.Type)] : null;
+        public Indicator this[BarTable bt] => IndicatorList.ContainsKey((bt.BarFreq, bt.Type)) ? IndicatorList[(bt.BarFreq, bt.Type)] : null;
+        */
 
-        public IEnumerator<(BarFreq freq, DataType type, Indicator ind)> GetEnumerator()
-            => IndicatorLUT.
-            OrderByDescending(n => n.Key.freq).
-            ThenByDescending(n => n.Key.type).
-            Select(n => (n.Key.freq, n.Key.type, n.Value)).
+        public IEnumerator<Indicator> GetEnumerator()
+            => IndicatorList.
+            OrderByDescending(n => n.BarFreq).
+            ThenByDescending(n => n.DataType).
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -136,11 +137,11 @@ namespace Pacmio
         /// <param name="bts"></param>
         /// <param name="bullish">Only Long Excute in bullish Periods</param>
         /// <param name="bearish">Only Bear Excute in bearish Periods</param>
-        public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish) 
+        public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish)
         {
-            foreach(var item in this) 
+            foreach (var ind in this)
             {
-                bts[item.freq, item.type].CalculateRefresh(item.ind);
+                bts[ind.BarFreq, ind.DataType].CalculateRefresh(ind);
             }
 
             BarTable bt = bts[ExecutionTimeFrame.freq, ExecutionTimeFrame.type];
@@ -152,6 +153,10 @@ namespace Pacmio
 
         public (BarFreq freq, DataType type) FilterTimeFrame { get; set; } = (BarFreq.Daily, DataType.Trades);
 
+
+        /// <summary>
+        /// The first simple filter to narrow down the list before any complex BarAnalysis.
+        /// </summary>
         public Indicator FilterIndicator { get; set; }
 
         public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Period pd) => RunFilter(bts, FilterIndicator, pd, FilterTimeFrame.freq, FilterTimeFrame.type);
@@ -183,60 +188,6 @@ namespace Pacmio
 
             return (bullish, bearish);
         }
-
-
-
-        /*
-        public (MultiPeriod bullish, int bullcount, MultiPeriod bearish, int bearcount) RunFilter(BarTableSet bts, BarFreq freqLimit = BarFreq.Daily)
-        {
-            var inds = IndicatorLUT.Where(n => n.Key.freq >= freqLimit).OrderByDescending(n => n.Key.freq).ThenBy(n => n.Key.type);
-
-            Dictionary<(BarFreq freq, DataType type), (MultiPeriod bullish, MultiPeriod bearish)> Periods = new();
-
-            Period range = new Period();
-
-            MultiPeriod bullish = new MultiPeriod();
-            MultiPeriod bearish = new MultiPeriod();
-
-            int i = 0, p = 0, n = 0;
-            foreach (var item in inds)
-            {
-                Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: " + item.Value.Name + " <<<<<<<<<<<<<<<<<<<");
-
-                BarTable bt = bts[item.Key.freq, item.Key.type];
-
-                range.Insert(bt.Period);
-
-                BarAnalysisSet bas = this[bt].BarAnalysisSet;
-                bt.CalculateRefresh(bas);
-
-                Indicator ind = this[item.Key.freq, item.Key.type];
-                var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
-                var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
-
-                if (item.Key.freq == BarFreq.Daily)
-                {
-                    p = BullishBars.Count();
-                    n = BearishBars.Count();
-                }
-
-                if (i == 0)
-                {
-                    BullishBars.RunEach(n => bullish.Add(ToDailyPeriod(n.Period)));
-                    BearishBars.RunEach(n => bearish.Add(ToDailyPeriod(n.Period)));
-                }
-                else
-                {
-                    bullish.Remove(new MultiPeriod(BullishBars.Select(n => n.Period)));
-                    bearish.Remove(new MultiPeriod(BearishBars.Select(n => n.Period)));
-                }
-                i++;
-            }
-
-            Console.WriteLine(">>>>>>>>>>>>>>> Run Indicator: Completed!");
-
-            return (bullish, p, bearish, n);
-        }*/
 
         public static Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
     }

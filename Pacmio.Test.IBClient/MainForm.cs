@@ -63,7 +63,7 @@ namespace TestClient
 
             while (true)
             {
-                if(Percent != percent) 
+                if (Percent != percent)
                 {
                     percent = Percent;
                     int pct = percent.ToInt32();
@@ -71,7 +71,7 @@ namespace TestClient
                     if (pct < 0) pct = 0;
                     else if (pct > 100) pct = 100;
 
-                    if(MainProgBar.Value != pct) 
+                    if (MainProgBar.Value != pct)
                     {
                         this?.Invoke(() =>
                         {
@@ -159,7 +159,7 @@ namespace TestClient
             TestFreqAlign tfa = new();
             TestMultiPeriodDataSource tmpds = new();
 
-            PositionUpdate = new PositionUpdate(new Button[] { BtnHistoricalDataContractSet1, BtnHistoricalDataContractSet2, BtnHistoricalDataContractSet3, 
+            PositionUpdate = new PositionUpdate(new Button[] { BtnHistoricalDataContractSet1, BtnHistoricalDataContractSet2, BtnHistoricalDataContractSet3,
                 BtnHistoricalDataContractSet4, BtnHistoricalDataContractSet5, BtnHistoricalDataContractSet6, BtnHistoricalDataContractSet7, BtnHistoricalDataContractSet8,
                 BtnHistoricalDataContractSet9, BtnHistoricalDataContractSet10 });
 
@@ -519,7 +519,7 @@ namespace TestClient
                     IndicatorSet iset = TestSignals.IndicatorSet;
                     BarTableSet bts = BarTableGroup[c];
 
-            }, Cts.Token);
+                }, Cts.Token);
             }
         }
 
