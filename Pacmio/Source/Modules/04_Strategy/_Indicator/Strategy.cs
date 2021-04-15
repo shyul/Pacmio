@@ -40,13 +40,13 @@ namespace Pacmio
         /// <param name="bearish">Only Bear Excute in bearish Periods</param>
         public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish)
         {
-            foreach (var ind in this)
+            foreach (var ind in IndicatorSet)
             {
                 bts[ind.BarFreq, ind.DataType].CalculateRefresh(ind);
             }
 
-            BarTable bt = bts[ExecutionTimeFrame.freq, ExecutionTimeFrame.type];
-            bt.CalculateRefresh(ExecutionIndicator);
+            BarTable bt = bts[BarFreq, DataType];
+            bt.CalculateRefresh(this);
 
             // Collect Bullish Execution Based on Bullish Periods
             // Collect Bearish Execution Based on Bearish Periods

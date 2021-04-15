@@ -35,8 +35,8 @@ namespace Pacmio.Analysis
             };
 
             SignalColumns = new[] { GapPercentSignalColumn, VolumeSignalColumn };
-            SignalSeries = new(this);
             BarAnalysisSet = new(this);
+            SignalSeries = new(this);
         }
 
         public Range<double> PriceRange { get; } = new Range<double>(1, 300);

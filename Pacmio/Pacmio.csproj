@@ -115,15 +115,11 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\04_Strategy\_Indicator\Filter.cs" />
     <Compile Include="Source\Modules\04_Strategy\Common\RsiIndicator.cs" />
-    <Compile Include="Source\Modules\04_Strategy\_Types\IFilter.cs" />
     <Compile Include="Source\Modules\04_Strategy\GapGo\GapGoDailyFilter.cs" />
     <Compile Include="Source\Modules\04_Strategy\Momentum\MomentumDailyFilter.cs" />
     <Compile Include="Source\Modules\04_Strategy\Reversal\ReversalDailyFilter.cs" />
-    <Compile Include="Source\Modules\04_Strategy\_Types\IGapPercentFilter.cs" />
-    <Compile Include="Source\Modules\04_Strategy\_Types\IPriceRangeFilter.cs" />
-    <Compile Include="Source\Modules\04_Strategy\_Types\IVolumeRangeFilter.cs" />
     <Compile Include="Source\Modules\04_Strategy\ResearchTool.cs" />
-    <Compile Include="Source\Modules\04_Strategy\_Types\IndicatorResult.cs" />
+    <Compile Include="Source\Modules\04_Strategy\_Types\IndicatorScanResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\04_Strategy\SwingTrade\SwingTradeDailyFilter.cs" />
     <Compile Include="Source\Modules\04_Strategy\Momentum\MomentumExecution.cs" />
@@ -244,7 +240,7 @@
     <Compile Include="Source\Modules\06_Trade\Order\IBOrder\OrderRequest.cs" />
     <Compile Include="Source\Modules\02_Data\MarketDepth\_IB\MarketDepth_Parse.cs" />
     <Compile Include="Source\IBApi\Subscriptions.cs" />
-    <Compile Include="Source\Modules\02_Data\WatchList\_IB\ScannerType.cs" />
+    <Compile Include="Source\Modules\02_Data\WatchList\IB\ScannerType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\CandleStick\CandleStickDojiMarubozuSignal.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalColumn.cs" />
@@ -322,7 +318,7 @@
     <Compile Include="Source\Modules\06_Trade\Order\IBOrder\OrderError.cs" />
     <Compile Include="Source\Modules\06_Trade\Order\IBOrder\OrderStatus.cs" />
     <Compile Include="Source\Forms\PacmioForm.cs" />
-    <Compile Include="Source\Modules\02_Data\WatchList\_IB\ScanParamSchema.cs" />
+    <Compile Include="Source\Modules\02_Data\WatchList\IB\ScanParamSchema.cs" />
     <Compile Include="Source\IBApi\Client\System.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\TIProData\Signal\AlertHandler.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\TIProData\Client.cs" />
@@ -354,7 +350,7 @@
     <Compile Include="Source\Modules\06_Trade\Position\_IB\PostionMulti.cs" />
     <Compile Include="Source\Modules\06_Trade\Position\_IB\PnL.cs" />
     <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\RealTimeBars.cs" />
-    <Compile Include="Source\Modules\02_Data\WatchList\_IB\ScannerParameters.cs" />
+    <Compile Include="Source\Modules\02_Data\WatchList\IB\ScannerParameters.cs" />
     <Compile Include="Source\Modules\01_Contract\_IB\ContractData.cs" />
     <Compile Include="Source\Modules\01_Contract\_IB\ContractSamples.cs" />
     <Compile Include="Source\Modules\02_Data\MarketData\_IB\SmartComponents.cs" />
@@ -367,7 +363,7 @@
     <Compile Include="Source\IBApi\Client\Request.cs" />
     <Compile Include="Source\Modules\02_Data\MarketData\_IB\MarketData_Request.cs" />
     <Compile Include="Source\Modules\06_Trade\Order\IBOrder\Order.cs" />
-    <Compile Include="Source\Modules\02_Data\WatchList\_IB\ScannerSubscription.cs" />
+    <Compile Include="Source\Modules\02_Data\WatchList\IB\ScannerSubscription.cs" />
     <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistoricalData.cs" />
     <Compile Include="Source\IBApi\_Types\ApiCode.cs" />
     <Compile Include="Source\IBApi\_Types\IncomingMessage.cs" />
@@ -375,7 +371,7 @@
     <Compile Include="Source\IBApi\_Types\ServerVersionHistory.cs" />
     <Compile Include="Source\Modules\02_Data\MarketData\_IB\TickType.cs" />
     <Compile Include="Source\Modules\02_Data\FinancialData\ReutersXML\REarnEstCons.cs" />
-    <Compile Include="Source\Modules\02_Data\WatchList\_IB\IbXmlScannerParameter.cs" />
+    <Compile Include="Source\Modules\02_Data\WatchList\IB\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\02_Data\BusinessInfo\BusinessInfoManager.cs" />
     <Compile Include="Source\Modules\02_Data\BarDataFile\DataSourceType.cs" />

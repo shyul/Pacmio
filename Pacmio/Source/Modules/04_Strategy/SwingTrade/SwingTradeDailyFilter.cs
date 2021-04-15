@@ -86,8 +86,8 @@ namespace Pacmio.Analysis
 
 
             SignalColumns = new SignalColumn[] { OscillatorSignal.Column_Result, BollingerBandSignal.Column_Result, SingleDataSignal.Column_Result };
-            SignalSeries = new(this);
             BarAnalysisSet = new(this);
+            SignalSeries = new(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ OscillatorAnalysis.GetHashCode() ^ BollingerBand.GetHashCode() ^ SingleDataSignal.GetHashCode();

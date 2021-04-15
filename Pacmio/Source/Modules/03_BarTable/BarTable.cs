@@ -32,9 +32,11 @@ namespace Pacmio
         public BarTable(Contract c, BarFreq barFreq, DataType type, bool adjustDividend = false)
         {
             Contract = c;
+
+            Type = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
-            Type = type;
+         
             BarTableSet = new BarTableSet(c, adjustDividend);
 
             CalculateTickCancelTs = new CancellationTokenSource();
@@ -46,9 +48,10 @@ namespace Pacmio
         {
             BarTableSet = bts;
             Contract = bts.Contract;
+
+            Type = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
-            Type = type;
 
             CalculateTickCancelTs = new CancellationTokenSource();
             CalculateTickTask = new Task(() => CalculateTickWorker(), CalculateTickCancelTs.Token);
@@ -91,11 +94,11 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
+        public DataType Type { get; }
+
         public BarFreq BarFreq { get; }
 
         public Frequency Frequency { get; }
-
-        public DataType Type { get; }
 
         public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, DataType type) Key => (Contract.Key, BarFreq, Type);
 
@@ -663,10 +666,8 @@ namespace Pacmio
             if (Count > 0)
             {
                 startPt = Math.Min(startPt, Calculate(PriceBarAnalysis).StartPt);
-                foreach (BarAnalysis ba in bas)
+                foreach (BarAnalysis ba in bas) //.Where(n => n is not Strategy))
                 {
-                    //Console.WriteLine("startPt = " + startPt);
-
                     DateTime single_start_time = DateTime.Now;
 
                     BarAnalysisPointer bap = GetBarAnalysisPointer(ba);

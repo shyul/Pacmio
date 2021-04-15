@@ -15,58 +15,54 @@ using Pacmio.Analysis;
 
 namespace Pacmio
 {
-    public sealed class Filter : Indicator
+    public abstract class Filter : Indicator
     {
-        public Filter()
+        protected Filter() : base(BarFreq.Daily, DataType.Trades) { }
+
+        /*
+        public Filter(Range<double> priceRange, Range<double> volumeRange, Range<double> gapExcluded, Range<double> gainExcluded)
         {
+            PriceRange = priceRange;
+            VolumeRange = volumeRange;
+            GapPercentExcluded = gapExcluded;
+            GainPercentExcluded = gainExcluded;
+
+            RelativeVolume.AddChild(this);
+
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);
             BarAnalysisSet = new(this);
         }
+        */
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 10);
+        public abstract Range<double> PriceRange { get; } //= new Range<double>(1, 10);
 
-        public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
+        public abstract Range<double> VolumeRange { get; } // = new Range<double>(1e6, double.MaxValue);
+
+        public abstract Range<double> RelativeVolumeRange { get; } //= new Range<double>(1.5, double.MaxValue);
+
+        public abstract Range<double> GainPercentExcluded { get; } //= new Range<double>(-1, 1);
+
+        public abstract Range<double> GapPercentExcluded { get; } // = new Range<double>(-4, 4);
 
         public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume))
+                {
+                    //new SignalDatum(b, PriceVolumeSignalColumn, new double[] { 1 });
+                    if ((!GainPercentExcluded.Contains(b.GainPercent)) && (!GapPercentExcluded.Contains(b.GapPercent)))
+                    {
+                        //new SignalDatum(b, GainSignalColumn, new double[] { 1 });
+                    }
+                }
+            }
         }
-
-        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Period pd) => RunFilter(bts, FilterIndicator, pd, FilterTimeFrame.freq, FilterTimeFrame.type);
-
-        public (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Period pd) => RunFilterMultiPeriod(bts, FilterIndicator, pd, FilterTimeFrame.freq, FilterTimeFrame.type);
-
-        public static (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunFilter(BarTableSet bts, Indicator filter, Period pd, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
-        {
-            BarTable bt = bts[freq, type];
-
-            BarAnalysisSet bas = filter.BarAnalysisSet;
-            bt.CalculateRefresh(bas);
-
-            Indicator ind = filter;
-            var BullishBars = bt.Bars.Where(b => pd.Contains(b.Time) && b.GetSignalScore(ind).Bullish >= ind.BullishPointLimit);
-            var BearishBars = bt.Bars.Where(b => pd.Contains(b.Time) && b.GetSignalScore(ind).Bearish <= ind.BearishPointLimit);
-
-            return (BullishBars, BearishBars);
-        }
-
-        public static (MultiPeriod bullish, MultiPeriod bearish) RunFilterMultiPeriod(BarTableSet bts, Indicator filter, Period pd, BarFreq freq = BarFreq.Daily, DataType type = DataType.Trades)
-        {
-            var (BullishBars, BearishBars) = RunFilter(bts, filter, pd, freq, type);
-
-            MultiPeriod bullish = new MultiPeriod();
-            MultiPeriod bearish = new MultiPeriod();
-            BullishBars.RunEach(n => bullish.Add(ToDailyPeriod(n.Period)));
-            BearishBars.RunEach(n => bearish.Add(ToDailyPeriod(n.Period)));
-
-            return (bullish, bearish);
-        }
-
-        public static Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
     }
 }

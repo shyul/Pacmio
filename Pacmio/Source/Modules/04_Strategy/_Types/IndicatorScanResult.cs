@@ -13,30 +13,27 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorResult
+    public class IndicatorScanResult
     {
-        public IndicatorResult(Contract c, IndicatorSet inds)
+        public IndicatorScanResult(Contract c)
         {
             Contract = c;
-            IndicatorSet = inds;
         }
 
         public Contract Contract { get; }
-
-        public IndicatorSet IndicatorSet { get; }
 
         public MultiPeriod BullishPeriods { get; } = new MultiPeriod();
 
         public MultiPeriod BearishPeriods { get; } = new MultiPeriod();
 
-        public double BullishPercent { get; set; } = 0;
+        public int TotalCount { get; set; } = 0;
 
-        public double BearishPercent { get; set; } = 0;
+        public int BullishCount { get; set; } = 0;
 
-        // Total Wins
+        public int BearishCount { get; set; } = 0;
 
-        // Total Loss
+        public double BullishPercent => TotalCount > 0 ? (BullishCount * 100 / TotalCount) : 0;
 
-
+        public double BearishPercent => TotalCount > 0 ? (BearishCount * 100 / TotalCount) : 0;
     }
 }

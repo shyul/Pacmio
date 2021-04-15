@@ -27,9 +27,9 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, IndicatorResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, IndicatorScanResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
-            Dictionary<Contract, IndicatorResult> result = new();
+            Dictionary<Contract, IndicatorScanResult> result = new();
 
             double totalseconds = 0;
             float total_num = cList.Count();
@@ -39,7 +39,7 @@ namespace Pacmio
             Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
             {
 
-                IndicatorResult ier = new(c, inds);
+                IndicatorScanResult ier = new(c, inds);
 
                 DateTime startTime = DateTime.Now;
                 BarTableSet bts = new BarTableSet(c, false);
@@ -78,7 +78,7 @@ namespace Pacmio
             return result;
         }
 
-        public static void PrintResult(Dictionary<Contract, IndicatorResult> result)
+        public static void PrintResult(Dictionary<Contract, IndicatorScanResult> result)
         {
             var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
 

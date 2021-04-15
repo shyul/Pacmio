@@ -12,13 +12,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalDailyFilter : Indicator, IPriceRangeFilter
+    public class ReversalDailyFilter : Indicator
     {
         public ReversalDailyFilter()
         {
             SignalColumns = new SignalColumn[] { };
-            SignalSeries = new(this);
             BarAnalysisSet = new(this);
+            SignalSeries = new(this);
         }
 
         public Range<double> PriceRange { get; } = new Range<double>(15, 250);

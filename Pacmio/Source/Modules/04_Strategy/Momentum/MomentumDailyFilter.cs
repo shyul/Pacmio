@@ -16,13 +16,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class MomentumDailyFilter : Indicator, IPriceRangeFilter
+    public class MomentumDailyFilter : Indicator
     {
         public MomentumDailyFilter() 
         {
             SignalColumns = new SignalColumn[] { };
-            SignalSeries = new(this);
             BarAnalysisSet = new(this);
+            SignalSeries = new(this);
         }
 
         public Range<double> PriceRange { get; } = new Range<double>(1, 10);
