@@ -57,12 +57,7 @@ namespace Pacmio.IB
 
         private static Task ConnectTask { get; set; }
 
-        private static bool IsSocketConnected()
-        {
-            if (TcpClient is null) return false;
-            else
-                return TcpClient.Connected;
-        }
+        private static bool IsSocketConnected => TcpClient is not null ? TcpClient.Connected : false;
 
         public static bool GatewayConnected { get; private set; } = true;
 
@@ -115,7 +110,7 @@ namespace Pacmio.IB
                 Root.NetConnectUpdate(ApiStatus = ConnectionStatus.Connecting, DateTime.Now, "TCP Client is connected: " + Hostname + ":" + Port); // If it is connected
 
                 int j = 0;
-                while (!IsSocketConnected() && j < Timeout)
+                while (!IsSocketConnected && j < Timeout)
                 {
                     Thread.Sleep(1);
                     j++;

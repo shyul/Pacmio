@@ -19,13 +19,43 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Strategy : BarAnalysis, ISingleDatum
+    public abstract class Strategy : Indicator, ISingleDatum
     {
-
+        /// <summary>
+        /// The first simple filter to narrow down the list before any complex BarAnalysis.
+        /// </summary>
+        public Filter Filter { get; set; }
 
         public IndicatorSet IndicatorSet { get; }
 
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bts"></param>
+        /// <param name="bullish">Only Long Excute in bullish Periods</param>
+        /// <param name="bearish">Only Bear Excute in bearish Periods</param>
+        public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish)
+        {
+            foreach (var ind in this)
+            {
+                bts[ind.BarFreq, ind.DataType].CalculateRefresh(ind);
+            }
+
+            BarTable bt = bts[ExecutionTimeFrame.freq, ExecutionTimeFrame.type];
+            bt.CalculateRefresh(ExecutionIndicator);
+
+            // Collect Bullish Execution Based on Bullish Periods
+            // Collect Bearish Execution Based on Bearish Periods
+        }
+
         public DatumColumn Column_Result { get; }
+
+
+
 
 
         // Assure Tables from other time frame has the same or later ticker time...

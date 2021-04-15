@@ -168,7 +168,7 @@ namespace Pacmio.IB
             while (!IsCancelled)
             {
                 // Only dequeue when the pace count is below the threshold
-                if (paceCount < Pace && IsSocketConnected() && sendDataBuffer.Count > 0)
+                if (paceCount < Pace && IsSocketConnected && sendDataBuffer.Count > 0)
                 {
                     try
                     {
@@ -199,7 +199,7 @@ namespace Pacmio.IB
                         break;
                     }
                 }
-                else if (!IsSocketConnected())
+                else if (!IsSocketConnected)
                 {
                     Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();

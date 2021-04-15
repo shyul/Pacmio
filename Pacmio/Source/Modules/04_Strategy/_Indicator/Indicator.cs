@@ -21,7 +21,7 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Passive: Only yield signal score
     /// </summary>
-    public abstract class Indicator : BarAnalysis, IChartSeries
+    public abstract class Indicator : BarAnalysis, IChartSeries, IEquatable<Indicator>
     {
         protected Indicator()
         {

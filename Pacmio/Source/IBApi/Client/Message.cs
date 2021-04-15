@@ -27,7 +27,7 @@ namespace Pacmio.IB
 
         private static BinaryReader TcpReader { get; set; }
 
-        private static bool IsReceiveDataAvailable => IsSocketConnected() && TcpClient.GetStream().DataAvailable;
+        private static bool IsReceiveDataAvailable => IsSocketConnected && TcpClient.GetStream().DataAvailable;
 
         public static int ReceivedMessageCount { get; private set; } = 0;
 
@@ -37,7 +37,7 @@ namespace Pacmio.IB
         {
             while (!IsCancelled)
             {
-                if (IsReceiveDataAvailable && IsSocketConnected())
+                if (IsReceiveDataAvailable && IsSocketConnected)
                 {
                     int msgSize = IPAddress.NetworkToHostOrder(TcpReader.ReadInt32());
 
@@ -121,7 +121,7 @@ namespace Pacmio.IB
 
                     ReceivedMessageCount++;
                 }
-                else if (!IsSocketConnected())
+                else if (!IsSocketConnected)
                 {
                     Root.NetConnectUpdate(ApiStatus, DateTime.Now, "Socket Error, disconnecting.");
                     Disconnect.Start();
