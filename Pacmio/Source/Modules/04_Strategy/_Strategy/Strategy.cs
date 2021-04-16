@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Runtime.Serialization;
 using Xu;
+using System.Drawing;
 
 namespace Pacmio
 {
@@ -19,7 +20,7 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Strategy : Indicator, ISingleDatum
+    public abstract class Strategy : Indicator, ISingleDatum, IChartOverlay
     {
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
@@ -27,6 +28,11 @@ namespace Pacmio
         public abstract Filter Filter { get; set; }
 
         public IndicatorSet IndicatorSet { get; } = new();
+
+        /// <summary>
+        /// Example: Only trade 9:30 AM to 10 AM
+        /// </summary>
+        public MultiTimePeriod TradeTimeOfDay { get; set; }
 
 
 
@@ -69,25 +75,31 @@ namespace Pacmio
                 Bar b = bt[i];
 
                 Bar time_frame_b = bts[b.Time, Filter];
+                
+                // Assure Tables from other time frame has the same or later ticker time...
 
+                // Get existing Position...
+
+                // Determine trade direction, add liquidity or remove  liquidity
+
+                // Fetch all results from other filtes.
+
+                // Construct the score...
             }
         }
 
+        public void DrawOverlay(Graphics g, BarChart bc)
+        {
 
-        // Assure Tables from other time frame has the same or later ticker time...
 
-        // Get existing Position...
 
-        // Determine trade direction, add liquidity or remove  liquidity
 
-        // Fetch all results from other filtes.
+        }
 
-        // Construct the score...
 
-        /// <summary>
-        /// Example: Only trade 9:30 AM to 10 AM
-        /// </summary>
-        public MultiTimePeriod TradeTimeOfDay { get; set; }
+
+
+
 
 
 
@@ -99,7 +111,21 @@ namespace Pacmio
 
         #endregion Order
 
+        /// <summary>
+        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
+        /// </summary>
+        public double WaitMsForOutstandingOrder { get; }
 
+        /// <summary>
+        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
+        /// Can use wait Ms and set limit price.
+        /// </summary>
+        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
+
+        /// <summary>
+        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
+        /// </summary>
+        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
 
         // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
 
@@ -126,25 +152,5 @@ namespace Pacmio
         public virtual int TradingLength { get; set; } = 1;
 
         #endregion Training Settings
-    }
-
-    public class ExecutionRule
-    {
-
-        /// <summary>
-        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
-        /// </summary>
-        public double WaitMsForOutstandingOrder { get; }
-
-        /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
-        /// Can use wait Ms and set limit price.
-        /// </summary>
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
-
-        /// <summary>
-        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
-        /// </summary>
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
     }
 }
