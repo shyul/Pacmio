@@ -22,6 +22,8 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
+        public MultiPeriod Periods { get; } = new MultiPeriod();
+
         public MultiPeriod BullishPeriods { get; } = new MultiPeriod();
 
         public MultiPeriod BearishPeriods { get; } = new MultiPeriod();

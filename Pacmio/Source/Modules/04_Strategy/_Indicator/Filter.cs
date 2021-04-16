@@ -35,17 +35,17 @@ namespace Pacmio
         }
         */
 
-        public abstract Range<double> PriceRange { get; } //= new Range<double>(1, 10);
+        public virtual Range<double> PriceRange { get; } //= new Range<double>(1, 10);
 
-        public abstract Range<double> VolumeRange { get; } // = new Range<double>(1e6, double.MaxValue);
+        public virtual Range<double> VolumeRange { get; } // = new Range<double>(1e6, double.MaxValue);
 
-        public abstract Range<double> RelativeVolumeRange { get; } //= new Range<double>(1.5, double.MaxValue);
+        public virtual Range<double> RelativeVolumeRange { get; } //= new Range<double>(1.5, double.MaxValue);
 
-        public abstract Range<double> GainPercentExcluded { get; } //= new Range<double>(-1, 1);
+        public virtual Range<double> GainPercentExcluded { get; } //= new Range<double>(-1, 1);
 
-        public abstract Range<double> GapPercentExcluded { get; } // = new Range<double>(-4, 4);
+        public virtual Range<double> GapPercentExcluded { get; } // = new Range<double>(-4, 4);
 
-        public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
+        public virtual Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

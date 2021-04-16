@@ -26,11 +26,12 @@ namespace Pacmio
             return bc;
         }
 
+        public static BarChart GetChart(this BarTable bt, Indicator ind) => bt.GetChart(ind.BarAnalysisSet);
 
-        public static IEnumerable<BarChart> GetCharts(this BarTableSet bts, IndicatorSet inds, Period periodLimit, CancellationTokenSource cts = null)
+        public static IEnumerable<BarChart> GetCharts(this BarTableSet bts, Strategy s, Period periodLimit, CancellationTokenSource cts = null)
         {
-            bts.Build(inds, periodLimit, cts);
-            return inds.Select(ind => bts[ind.BarFreq, ind.DataType].GetChart(ind.BarAnalysisSet));
+            s.BackTest(bts, periodLimit, cts);
+            return s.IndicatorSet.Concat(new Indicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.DataType].GetChart(ind.BarAnalysisSet));
         }
 
         public static void Add(BarChart bc)

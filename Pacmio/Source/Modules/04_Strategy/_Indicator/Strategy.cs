@@ -30,16 +30,22 @@ namespace Pacmio
 
 
 
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bts"></param>
-        /// <param name="bullish">Only Long Excute in bullish Periods</param>
-        /// <param name="bearish">Only Bear Excute in bearish Periods</param>
-        public void RunBackTest(BarTableSet bts, MultiPeriod bullish, MultiPeriod bearish)
+        public void BackTest(BarTableSet bts, Period periodLimit, CancellationTokenSource cts = null)
         {
+            var result = Filter.RunScanResult(bts, periodLimit);
+
+            MultiPeriod mps = bts.MultiPeriod is not null ? new MultiPeriod(bts.MultiPeriod) : new MultiPeriod();
+
+            foreach (var pd in result.Periods)
+            {
+                if (periodLimit.Contains(pd))
+                {
+                    mps.Add(pd);
+                }
+            }
+
+            bts.SetPeriod(mps, cts);
+
             foreach (var ind in IndicatorSet)
             {
                 bts[ind.BarFreq, ind.DataType].CalculateRefresh(ind);
@@ -47,10 +53,8 @@ namespace Pacmio
 
             BarTable bt = bts[BarFreq, DataType];
             bt.CalculateRefresh(this);
-
-            // Collect Bullish Execution Based on Bullish Periods
-            // Collect Bearish Execution Based on Bearish Periods
         }
+
 
         public DatumColumn Column_Result { get; }
 

@@ -26,7 +26,7 @@ namespace Pacmio.Analysis
 
             Column_High = new NumericColumn(Name + "_Bullish", "Bullish");
             Column_Low = new NumericColumn(Name + "_Bearish", "Bearish");
-
+            Column_Ratio = new NumericColumn(Name + "_Ratio", "Ratio");
             TrendLineAnalysis.AddChild(HighLowBoundary);
             HighLowBoundary.AddChild(this);
         }
@@ -40,6 +40,8 @@ namespace Pacmio.Analysis
         public NumericColumn Column_High { get; }
 
         public NumericColumn Column_Low { get; }
+
+        public NumericColumn Column_Ratio { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -67,6 +69,18 @@ namespace Pacmio.Analysis
 
                     b[Column_High] = bullish;
                     b[Column_Low] = bearish;
+
+                    double ratio = 0;
+                    if (bullish > bearish && bearish > 0)
+                    {
+                        ratio = (bullish - bearish) / bearish;
+                    }
+                    else if (bearish > bullish && bullish > 0)
+                    {
+                        ratio = (bullish - bearish) / bullish;
+                    }
+
+                    b[Column_Ratio] = ratio;
                 }
             }
         }

@@ -38,9 +38,6 @@ namespace Pacmio
             //BarTableSet bts =
             Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
             {
-
-                IndicatorScanResult ier = new(c, inds);
-
                 DateTime startTime = DateTime.Now;
                 BarTableSet bts = new BarTableSet(c, false);
                 bts.SetPeriod(evaluateTimeRange, cts);
@@ -51,19 +48,7 @@ namespace Pacmio
 
                 foreach (var ind in inds.Where(n => n.BarFreq >= BarFreq.Daily).OrderByDescending(n => n.BarFreq))
                 {
-                    BarTable bt = bts[ind.BarFreq, ind.DataType];
 
-                    int totalBarCount = bt.Count;
-                    bt.CalculateRefresh(ind.BarAnalysisSet);
-
-                    var BullishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bullish > ind.BullishPointLimit);
-                    var BearishBars = bt.Bars.Where(n => n.GetSignalScore(ind).Bearish > ind.BearishPointLimit);
-
-                    ier.BullishPercent = BullishBars.Count() * 100 / totalBarCount;
-                    ier.BearishPercent = BearishBars.Count() * 100 / totalBarCount;
-
-                    BullishBars.RunEach(n => ier.BullishPeriods.Add(n.Period));
-                    BearishBars.RunEach(n => ier.BearishPeriods.Add(n.Period));
                 }
 
 

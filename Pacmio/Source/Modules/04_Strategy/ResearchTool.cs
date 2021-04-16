@@ -16,7 +16,7 @@ namespace Pacmio
     public static class ResearchTool
     {
         // IndicatorEvaluationResult
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, IndicatorSet s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Strategy s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
@@ -40,15 +40,15 @@ namespace Pacmio
 
                     bts.SetPeriod(pd, cts);
 
-                    var (bullishBars, bearishBars) = s.RunFilter(bts, pd);
+                    var res = s.Filter.RunScanResult(bts, pd);
 
-                    foreach (var mp in bullishBars) { Console.WriteLine("Bull: " + mp.Time); }
-                    foreach (var mp in bearishBars) { Console.WriteLine("Bear: " + mp.Time); }
+                    foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
+                    foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
 
                     //bts.SetPeriod(bullish, cts);
 
 
-                    int m = bullishBars.Count() + bearishBars.Count();
+                    int m = res.TotalCount;
 
                     if (m > 0)
                     {

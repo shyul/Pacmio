@@ -492,12 +492,8 @@ namespace TestClient
                     BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(pd, Cts);
 
-
                     BarTable bt = bts[freq, type];
-
-
-
-                    BarChart bc = bt.GetChart(iset);
+                    //BarChart bc = bt.GetCharts(iset);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);

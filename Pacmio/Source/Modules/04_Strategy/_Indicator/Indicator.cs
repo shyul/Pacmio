@@ -24,7 +24,7 @@ namespace Pacmio
     /// </summary>
     public abstract class Indicator : BarAnalysis, IChartSeries, IEquatable<Indicator>
     {
-        protected Indicator(BarFreq barFreq, DataType type)
+        protected Indicator(BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
         {
             DataType = type;
             BarFreq = barFreq;
@@ -67,8 +67,18 @@ namespace Pacmio
             var (BullishBars, BearishBars) = RunScan(bts, pd);
             IndicatorScanResult result = new(bts.Contract);
 
-            BullishBars.RunEach(n => result.BullishPeriods.Add(ToDailyPeriod(n.Period)));
-            BearishBars.RunEach(n => result.BearishPeriods.Add(ToDailyPeriod(n.Period)));
+            BullishBars.RunEach(n => {
+                var pd = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd);
+                result.BullishPeriods.Add(pd); 
+            });
+
+            BearishBars.RunEach(n => {
+                var pd = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd);
+                result.BearishPeriods.Add(pd);
+            });
+
             result.TotalCount = bts[BarFreq, DataType].Count;
             result.BullishCount = BullishBars.Count();
             result.BearishCount = BearishBars.Count();

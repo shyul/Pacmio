@@ -44,25 +44,13 @@ namespace Pacmio.Analysis
 
                 return bas;
             }
-        
-        
 
-        
+
+
+
         }
 
-        public static IndicatorSet IndicatorSet 
-        {
-            get 
-            {
 
-                var inds = new IndicatorSet();
-
-                inds.FilterIndicator = new GapGoDailyFilter(4);
-
-                return inds;
-
-            }
-        }
 
     }
 }

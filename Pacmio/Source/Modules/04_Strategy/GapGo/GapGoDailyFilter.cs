@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class GapGoDailyFilter : Indicator, IPriceRangeFilter, IVolumeRangeFilter, IGapPercentFilter
+    public class GapGoDailyFilter : Filter
     {
         public GapGoDailyFilter(double gappercent = 4)
         {
@@ -39,9 +39,9 @@ namespace Pacmio.Analysis
             SignalSeries = new(this);
         }
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 300);
+        public override Range<double> PriceRange { get; } = new Range<double>(1, 300);
 
-        public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
+        public override Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
 
         public double BullishGapPercent { get; } = 4;
 
@@ -54,6 +54,7 @@ namespace Pacmio.Analysis
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         // Move these complex analysis to other daily Indicator
+
         /*
         public NativeApexAnalysis ApexAnalysis { get; } = new(250);
 

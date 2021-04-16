@@ -224,23 +224,5 @@ namespace Pacmio
                 return BarTableLUT[key];
             }
         }
-
-        public void Build(IndicatorSet inds, Period periodLimit, CancellationTokenSource cts = null)
-        {
-            var (bullish, bearish) = inds.RunFilterMultiPeriod(this, periodLimit);
-
-            MultiPeriod mps = MultiPeriod is not null ? new MultiPeriod(MultiPeriod) : new MultiPeriod();
-
-            foreach (var pd in bullish.Concat(bearish))
-            {
-                if (periodLimit.Contains(pd))
-                {
-                    mps.Add(pd);
-                }
-            }
-
-            SetPeriod(mps, cts);
-            inds.RunBackTest(this, bullish, bearish);
-        }
     }
 }
