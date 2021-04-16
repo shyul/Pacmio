@@ -198,7 +198,6 @@ namespace Pacmio
         private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; }
             = new Dictionary<(BarFreq freq, DataType type), BarTable>();
 
-
         public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
             => BarTableLUT.
             OrderByDescending(n => n.Key.freq).
@@ -206,9 +205,6 @@ namespace Pacmio
             Select(n => (n.Key.freq, n.Key.type, n.Value)).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        public BarTable this[BarFreq freq, DataType type = DataType.Trades]
-            => GetOrCreateBarTable(freq, type);
 
         public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, CancellationTokenSource cts = null)
         {
@@ -224,5 +220,14 @@ namespace Pacmio
                 return BarTableLUT[key];
             }
         }
+
+        public BarTable this[BarFreq freq, DataType type = DataType.Trades]
+            => GetOrCreateBarTable(freq, type);
+
+        public Bar this[DateTime time, BarFreq freq, DataType type = DataType.Trades]
+            => GetOrCreateBarTable(freq, type) is BarTable bt ? bt[time] : null;
+
+        public Bar this[DateTime time, Indicator ind]
+            => this[time, ind.BarFreq, ind.DataType];
     }
 }

@@ -24,9 +24,9 @@ namespace Pacmio
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
-        public Filter Filter { get; set; }
+        public abstract Filter Filter { get; set; }
 
-        public IndicatorSet IndicatorSet { get; }
+        public IndicatorSet IndicatorSet { get; } = new();
 
 
 
@@ -56,10 +56,22 @@ namespace Pacmio
         }
 
 
+
         public DatumColumn Column_Result { get; }
 
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+            BarTable bt = bap.Table;
+            BarTableSet bts = bt.BarTableSet;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
 
+                Bar time_frame_b = bts[b.Time, Filter];
+
+            }
+        }
 
 
         // Assure Tables from other time frame has the same or later ticker time...
