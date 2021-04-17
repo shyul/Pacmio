@@ -312,7 +312,7 @@ namespace TestClient
             this.BtnRunScreener.Name = "BtnRunScreener";
             this.BtnRunScreener.Size = new System.Drawing.Size(230, 23);
             this.BtnRunScreener.TabIndex = 57;
-            this.BtnRunScreener.Text = "Run Screener";
+            this.BtnRunScreener.Text = "Run Simulation Scanner";
             this.BtnRunScreener.UseVisualStyleBackColor = true;
             this.BtnRunScreener.Click += new System.EventHandler(this.BtnRunScreener_Click);
             // 

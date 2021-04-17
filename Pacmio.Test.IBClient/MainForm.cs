@@ -458,17 +458,10 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
                     BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(pd, Cts);
 
                     BarTable bt = bts[freq, type];
-
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
                     BarChart bc = bt.GetChart(TestNative.BarAnalysisSetTimeFrame);
 
                     HistoricalPeriod = bt.Period;
@@ -547,7 +540,6 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-          
                     BarTableSet bts = BarTableGroup[c];
 
                 }, Cts.Token);
@@ -581,15 +573,17 @@ namespace TestClient
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
+            var filter = new MomentumDailyFilter();
+
             Task.Run(() =>
             {
                 var cList = ContractManager.TradeableNoETFList.ToList();
                 Console.WriteLine("total number = " + cList.Count());
 
-                /*
+                
                 ResearchTool.RunScreener(cList,
-                    TestSignals.IndicatorSet,
-                    pd, 12, Cts, Progress);*/
+                    filter,
+                    pd, 12, Cts, Progress);
 
                 GC.Collect();
             }, Cts.Token);

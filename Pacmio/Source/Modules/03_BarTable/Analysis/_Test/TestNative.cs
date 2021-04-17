@@ -77,15 +77,12 @@ namespace Pacmio.Analysis
         {
             get
             {
-                TimeFramePricePosition potf = new(BarFreq.Daily);
-                DebugSeries csd_potf = new DebugColumnSeries(potf);
+                var csd_potf = new DebugColumnSeries(new TimeFramePricePosition(BarFreq.Daily));
+                var csd_tfcv = new DebugColumnSeries(new TimeFrameCumulativeVolume(BarFreq.Daily));
 
-                TimeFrameCumulativeVolume tfcv = new TimeFrameCumulativeVolume(BarFreq.Daily);
-                DebugSeries csd_tfcv = new DebugColumnSeries(tfcv);
-
-                TimeFrameRelativeVolume tfrv = new TimeFrameRelativeVolume(5, BarFreq.Daily);
-                DebugSeries csd_tfrv = new DebugColumnSeries(tfrv);
-                DebugSeries csd_tfrv_ema = new DebugColumnSeries(tfrv.Column_EMA);
+                var tfrv = new TimeFrameRelativeVolume(5, BarFreq.Daily);
+                var csd_tfrv = new DebugColumnSeries(tfrv);
+                var csd_tfrv_ema = new DebugColumnSeries(tfrv.Column_EMA);
 
                 List<BarAnalysis> sample_list = new()
                 {
@@ -93,7 +90,7 @@ namespace Pacmio.Analysis
                     csd_tfcv,
                     csd_tfrv_ema,
                     csd_tfrv,
-                   
+
                 };
 
                 BarAnalysisSet bas = new(sample_list);

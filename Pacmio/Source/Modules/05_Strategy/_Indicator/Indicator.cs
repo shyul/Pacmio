@@ -65,16 +65,18 @@ namespace Pacmio
             var (BullishBars, BearishBars) = RunScan(bts, pd);
             IndicatorScanResult result = new(bts.Contract);
 
-            BullishBars.RunEach(n => {
-                var pd = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd);
-                result.BullishPeriods.Add(pd); 
+            BullishBars.RunEach(n =>
+            {
+                var pd_1 = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd_1);
+                result.BullishPeriods.Add(pd_1); 
             });
 
-            BearishBars.RunEach(n => {
-                var pd = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd);
-                result.BearishPeriods.Add(pd);
+            BearishBars.RunEach(n =>
+            {
+                var pd_2 = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd_2);
+                result.BearishPeriods.Add(pd_2);
             });
 
             result.TotalCount = bts[BarFreq, PriceType].Count;

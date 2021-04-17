@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public class GapGoDailyFilter : Filter
     {
-        public GapGoDailyFilter(double gappercent = 4)
+        public GapGoDailyFilter(double gappercent = 4) : base(BarFreq.Daily, PriceType.Trades)
         {
             BullishPointLimit = BullishGapPercent = gappercent;
             BearishPointLimit = BearishGapPercent = -gappercent;
@@ -22,7 +22,7 @@ namespace Pacmio.Analysis
             string label = "(" + gappercent + "%)";
             GroupName = Name = GetType().Name + label;
 
-            GapPercentSignalColumn = new SignalColumn(this, "Gap Percent")
+            SignalColumn = new SignalColumn(this, "Gap Percent")
             {
                 BullishColor = Color.BlueViolet,
                 BearishColor = Color.DarkOrange
@@ -34,7 +34,7 @@ namespace Pacmio.Analysis
                 BearishColor = Color.Yellow
             };
 
-            SignalColumns = new[] { GapPercentSignalColumn, VolumeSignalColumn };
+            SignalColumns = new[] { SignalColumn, VolumeSignalColumn };
             BarAnalysisSet = new(this);
             SignalSeries = new(this);
         }
@@ -47,9 +47,9 @@ namespace Pacmio.Analysis
 
         public double BearishGapPercent { get; } = -4;
 
-        public SignalColumn GapPercentSignalColumn { get; protected set; }
+        public override SignalColumn SignalColumn { get; }
 
-        public SignalColumn VolumeSignalColumn { get; protected set; }
+        public SignalColumn VolumeSignalColumn { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
@@ -80,7 +80,7 @@ namespace Pacmio.Analysis
                 {
                     if (b.GapPercent >= BullishGapPercent || b.GapPercent <= BearishGapPercent)
                     {
-                        new SignalDatum(b, GapPercentSignalColumn, new double[] { b.GainPercent });
+                        new SignalDatum(b, SignalColumn, new double[] { b.GainPercent });
                         //Console.WriteLine("Gain = " + b.GainPercent);
                         //SignalDatum signal = new SignalDatum(b, GapPercentSignalColumn); //, new double[] { b.GainPercent });
                         //signal.SetPoints(new double[] { b.GapPercent });

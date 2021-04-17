@@ -16,14 +16,14 @@ namespace Pacmio
     public static class ResearchTool
     {
         // IndicatorEvaluationResult
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Strategy s, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Filter filter, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
             int total_num = contracts.Count();
             int i = 0;
 
-            List<(Contract c, int m)> clist = new();
+            List<(Contract c, double bull, double bear)> clist = new();
 
             ParallelOptions po = new ParallelOptions()
             {
@@ -40,19 +40,14 @@ namespace Pacmio
 
                     bts.SetPeriod(pd, cts);
 
-                    var res = s.Filter.RunScanResult(bts, pd);
+                    var res = filter.RunScanResult(bts, pd);
 
                     foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
                     foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
 
-                    //bts.SetPeriod(bullish, cts);
-
-
-                    int m = res.TotalCount;
-
-                    if (m > 0)
+                    if (res.BullishPercent > 0 || res.BearishPercent > 0)
                     {
-                        clist.Add((c, m));
+                        clist.Add((c, res.BullishPercent, res.BearishPercent));
                     }
 
                     //BarTable bt = bts[BarFreq.Minute];
@@ -87,12 +82,12 @@ namespace Pacmio
                 cts.Dispose();
             }
 
-            foreach (var item in clist.OrderBy(n => n.m))
+            foreach (var item in clist.OrderBy(n => (n.bull + n.bear)))
             {
-                Console.WriteLine(item.c + " | " + item.m);
+                Console.WriteLine(item.c + " | " + item.bull.ToString("0.##") + "%" + " | " + item.bear.ToString("0.##") + "%");
             }
 
-            return clist.OrderBy(n => n.m).Select(n => n.c);
+            return clist.Select(n => n.c);
         }
 
         /// <summary>

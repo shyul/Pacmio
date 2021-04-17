@@ -17,7 +17,10 @@ namespace Pacmio
 {
     public abstract class Filter : Indicator
     {
-        protected Filter() : base(BarFreq.Daily, PriceType.Trades) { }
+        protected Filter(BarFreq barFreq, PriceType type) : base(barFreq, type)
+        {
+
+        }
 
         /*
         public Filter(Range<double> priceRange, Range<double> volumeRange, Range<double> gapExcluded, Range<double> gainExcluded)
@@ -39,6 +42,11 @@ namespace Pacmio
 
         public virtual Range<double> VolumeRange { get; } // = new Range<double>(1e6, double.MaxValue);
 
+        public abstract SignalColumn SignalColumn { get; }
+
+
+
+        /*
         public virtual Range<double> RelativeVolumeRange { get; } //= new Range<double>(1.5, double.MaxValue);
 
         public virtual Range<double> GainPercentExcluded { get; } //= new Range<double>(-1, 1);
@@ -47,6 +55,7 @@ namespace Pacmio
 
         public virtual Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
 
+       
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
@@ -63,6 +72,6 @@ namespace Pacmio
                     }
                 }
             }
-        }
+        }*/
     }
 }

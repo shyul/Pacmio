@@ -16,28 +16,49 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class MomentumDailyFilter : Indicator
+    public class MomentumDailyFilter : Filter
     {
         public MomentumDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
-            SignalColumns = new SignalColumn[] { };
+            GroupName = Name = GetType().Name;
+
+            BullishPointLimit = 1;
+            BearishPointLimit = -1;
+
+            SignalColumn = new SignalColumn(this, Name + "_Signal")
+            {
+                BullishColor = Color.Green,
+                BearishColor = Color.DarkOrange
+            };
+
+            SignalColumns = new SignalColumn[] { SignalColumn };
+
             BarAnalysisSet = new(this);
             SignalSeries = new(this);
         }
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 10);
+        public override Range<double> PriceRange { get; } = new Range<double>(1, 10);
 
-        public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
+        public override Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
 
-        public Range<double> FloatRange { get; } = new Range<double>(0, 2e7);
 
-        public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
+        public override SignalColumn SignalColumn { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume))
+                {
+                    new SignalDatum(b, SignalColumn, new double[] { b.Volume / VolumeRange.Minimum });
+                }
+            }
         }
     }
 }

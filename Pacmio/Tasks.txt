@@ -1,7 +1,6 @@
 Current Task
 ==============
 1. Inter Bars Trendline (10 Bars H L)
-2. BarTable Screener in IndicatorSet.RunDailyScreener(BarTableSet bts, Period pd) 
 3. New Flag Analysis has glitches
 4. DPPMO needs to finalize
 5. Swing Trade Scan Revisit
@@ -10,6 +9,8 @@ Program Flow:
 
 1. IndicatorSet -> Signal Datum Groups vs BarFreq ->    Run Strategy check ->   Yield Exec Datum at from smallest Bar to largest ->     Get latest order Datum and form OrderInfo ->    Contract on Order ->    ExecData Result ->      Position
                                                         a. OrderRules           a. Can Contain Several Orders
+
+                                                        Simulation periodically to determine the optimal strategy
 
 Screener:
 1. Instead of using a Dictionary to look up the indicators, we can put the Barfreq/datatype in the indictor, so we can merge different indicators freely.
@@ -352,7 +353,7 @@ Query TimeZoneInfo.GetSystemTimeZones();
 b) Selectable different update resources (mostly volume): Market Data / RTVolume / Realtime Bars
 c) Refresh the BarTable with historical bars and override the realtime bars
 d) Redo the calculation backward based on the updated bars (Get information from LatestCalculatePonter?, Index of b.Time)
-e) Redo simulation periodically to determine the optimal strategy
+
 
 RequestHistoricalData | Initial Request: 04-10-2020 20:09:24|04-17-2020 20:09:24
 RequestHistoricalData | Already Existing: 04-09-2020 00:00:00|04-16-2020 00:00:00
