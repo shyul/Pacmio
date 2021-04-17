@@ -573,7 +573,7 @@ namespace TestClient
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            var filter = new MomentumDailyFilter();
+            var filter = new GapGoDailyFilter(); // new MomentumDailyFilter();
 
             Task.Run(() =>
             {

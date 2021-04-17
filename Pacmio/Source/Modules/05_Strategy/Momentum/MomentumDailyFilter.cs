@@ -20,10 +20,10 @@ namespace Pacmio.Analysis
     {
         public MomentumDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
-            GroupName = Name = GetType().Name;
-
             BullishPointLimit = 1;
             BearishPointLimit = -1;
+
+            GroupName = Name = GetType().Name;
 
             SignalColumn = new SignalColumn(this, Name + "_Signal")
             {
@@ -32,7 +32,6 @@ namespace Pacmio.Analysis
             };
 
             SignalColumns = new SignalColumn[] { SignalColumn };
-
             BarAnalysisSet = new(this);
             SignalSeries = new(this);
         }
@@ -41,11 +40,9 @@ namespace Pacmio.Analysis
 
         public override Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
 
-
         public override SignalColumn SignalColumn { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
-
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -56,7 +53,14 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
                 if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume))
                 {
-                    new SignalDatum(b, SignalColumn, new double[] { b.Volume / VolumeRange.Minimum });
+                    if (b.Gain > 0)
+                    {
+                        new SignalDatum(b, SignalColumn, new double[] { b.Volume / VolumeRange.Minimum });
+                    }
+                    else if (b.Gain < 0)
+                    {
+                        new SignalDatum(b, SignalColumn, new double[] { -b.Volume / VolumeRange.Minimum });
+                    }
                 }
             }
         }
