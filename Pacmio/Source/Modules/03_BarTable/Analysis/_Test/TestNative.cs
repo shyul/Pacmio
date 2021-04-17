@@ -72,5 +72,34 @@ namespace Pacmio.Analysis
                 return bas;
             }
         }
+
+        public static BarAnalysisSet BarAnalysisSetTimeFrame
+        {
+            get
+            {
+                TimeFramePricePosition potf = new(BarFreq.Daily);
+                DebugSeries csd_potf = new DebugColumnSeries(potf);
+
+                TimeFrameCumulativeVolume tfcv = new TimeFrameCumulativeVolume(BarFreq.Daily);
+                DebugSeries csd_tfcv = new DebugColumnSeries(tfcv);
+
+                TimeFrameRelativeVolume tfrv = new TimeFrameRelativeVolume(20, BarFreq.Daily);
+                DebugSeries csd_tfrv = new DebugColumnSeries(tfrv);
+                DebugSeries csd_tfrv_ema = new DebugColumnSeries(tfrv.Column_EMA);
+
+                List<BarAnalysis> sample_list = new()
+                {
+                    //csd_potf,
+                    csd_tfcv,
+                    csd_tfrv_ema,
+                    csd_tfrv,
+                   
+                };
+
+                BarAnalysisSet bas = new(sample_list);
+
+                return bas;
+            }
+        }
     }
 }

@@ -67,9 +67,11 @@ namespace Pacmio.Analysis
 
                     if (bt.GetCurrentOrFormerByTime(lastTime) is Bar b_1 && Frequency.Align(b_1.Time) == timeFrame_b.Time)
                     {
-                        double y0 = bt[i - 1][Column_EMA];
-                        double value = bt[i][TimeFrameCumulativeVolume];
-                        double ma = bt[i][Column_EMA] = (value - y0) * Multiplier + y0;
+                        Console.WriteLine("B_1 Time = " + b_1.Time+ " | B Time = " + b.Time);
+
+                        double y0 = b_1[Column_EMA];
+                        double value = b[TimeFrameCumulativeVolume];
+                        double ma = b[Column_EMA] = (value - y0) * Multiplier + y0;
                         b[Column_Result] = value / ma;
                     }
                     else // Time Frame penetration...

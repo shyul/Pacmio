@@ -434,7 +434,42 @@ namespace TestClient
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
                     var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestNative.BarAnalysisSet);
+                    BarChart bc = bt.GetChart(TestNative.BarAnalysisSet);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        private void BtnTestTimeFrame_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                DataType type = DataType;
+                Period pd = HistoricalPeriod;
+                Contract c = ContractTest.ActiveContract;
+
+                if (pd.IsCurrent) c.MarketData.Start();
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(pd, Cts);
+
+                    BarTable bt = bts[freq, type];
+
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    BarChart bc = bt.GetChart(TestNative.BarAnalysisSetTimeFrame);
 
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
