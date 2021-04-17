@@ -66,7 +66,7 @@ namespace Pacmio.IB
         {
             Contract c = bdf.Contract;
 
-            if (bdf.Type.Param() is string barTypeCode &&
+            if (bdf.PriceType.Param() is string barTypeCode &&
                 c.Exchange.Param() is string exchangeCode &&
                 DataRequestReady) // Also please check the RHD is already active?
             {

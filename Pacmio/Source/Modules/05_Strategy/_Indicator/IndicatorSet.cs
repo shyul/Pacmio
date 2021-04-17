@@ -89,12 +89,12 @@ namespace Pacmio
 
         private List<Indicator> IndicatorList { get; } = new();
 
-        public List<(BarFreq freq, DataType type)> TimeFrameList => IndicatorList.Select(n => (n.BarFreq, n.DataType)).ToList();
+        public List<(BarFreq freq, PriceType type)> TimeFrameList => IndicatorList.Select(n => (n.BarFreq, n.PriceType)).ToList();
 
         public IEnumerator<Indicator> GetEnumerator()
             => IndicatorList.
             OrderByDescending(n => n.BarFreq).
-            ThenByDescending(n => n.DataType).
+            ThenByDescending(n => n.PriceType).
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

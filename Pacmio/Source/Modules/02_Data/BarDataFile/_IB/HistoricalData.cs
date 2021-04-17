@@ -188,7 +188,7 @@ namespace Pacmio.IB
             endTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(endTime, c.TimeZone), TimeZoneInfo.Local);
 
             if (bdf.BarFreq.Param() is string barFreqCode &&
-                bdf.Type.Param() is string barTypeCode &&
+                bdf.PriceType.Param() is string barTypeCode &&
                 c.Exchange.Param() is string exchangeCode &&
                 DataRequestReady)
             {

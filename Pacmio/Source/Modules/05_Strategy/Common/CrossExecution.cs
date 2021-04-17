@@ -16,7 +16,7 @@ namespace Pacmio.Analysis
 {
     public class CrossExecution : Indicator
     {
-        public CrossExecution(int fast = 5, int slow = 20)
+        public CrossExecution(BarFreq barFreq, PriceType type, int fast = 5, int slow = 20) : base(barFreq, type)
         {
             Fast_SingleData = new SMA(fast) { Color = Color.Orange };
             Slow_SingleData = new SMA(slow) { Color = Color.YellowGreen };

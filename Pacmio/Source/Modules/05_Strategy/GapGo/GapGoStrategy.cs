@@ -54,7 +54,7 @@ namespace Pacmio.Analysis
     public class GapGoStrategy : Strategy
     {
 
-        public GapGoStrategy()
+        public GapGoStrategy(BarFreq barFreq, PriceType type) : base(barFreq, type)
         {
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);

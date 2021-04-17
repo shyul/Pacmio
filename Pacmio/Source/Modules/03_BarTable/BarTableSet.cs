@@ -19,7 +19,7 @@ namespace Pacmio
         IDataConsumer,
         IDataProvider,
         IDisposable,
-        IEnumerable<(BarFreq freq, DataType type, BarTable bt)>
+        IEnumerable<(BarFreq freq, PriceType type, BarTable bt)>
     {
         public BarTableSet(BarTable bt, bool adjustDividend)
         {
@@ -195,10 +195,10 @@ namespace Pacmio
         public void SetPeriod(Period pd, CancellationTokenSource cts = null)
             => SetPeriod(new MultiPeriod(pd), cts);
 
-        private Dictionary<(BarFreq freq, DataType type), BarTable> BarTableLUT { get; }
-            = new Dictionary<(BarFreq freq, DataType type), BarTable>();
+        private Dictionary<(BarFreq freq, PriceType type), BarTable> BarTableLUT { get; }
+            = new Dictionary<(BarFreq freq, PriceType type), BarTable>();
 
-        public IEnumerator<(BarFreq freq, DataType type, BarTable bt)> GetEnumerator()
+        public IEnumerator<(BarFreq freq, PriceType type, BarTable bt)> GetEnumerator()
             => BarTableLUT.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
@@ -206,7 +206,7 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public BarTable GetOrCreateBarTable(BarFreq freq, DataType type, CancellationTokenSource cts = null)
+        public BarTable GetOrCreateBarTable(BarFreq freq, PriceType type, CancellationTokenSource cts = null)
         {
             var key = (freq, type);
 
@@ -221,13 +221,13 @@ namespace Pacmio
             }
         }
 
-        public BarTable this[BarFreq freq, DataType type = DataType.Trades]
+        public BarTable this[BarFreq freq, PriceType type = PriceType.Trades]
             => GetOrCreateBarTable(freq, type);
 
-        public Bar this[DateTime time, BarFreq freq, DataType type = DataType.Trades]
+        public Bar this[DateTime time, BarFreq freq, PriceType type = PriceType.Trades]
             => GetOrCreateBarTable(freq, type) is BarTable bt ? bt[time] : null;
 
         public Bar this[DateTime time, Indicator ind]
-            => this[time, ind.BarFreq, ind.DataType];
+            => this[time, ind.BarFreq, ind.PriceType];
     }
 }

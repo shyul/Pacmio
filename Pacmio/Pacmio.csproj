@@ -283,7 +283,7 @@
     <Compile Include="Source\Modules\05_Strategy\_Indicator\IndicatorSet.cs" />
     <Compile Include="Source\Modules\07_Trade\TradeInfo\LiquidityType.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\BarFreqInfo.cs" />
-    <Compile Include="Source\Modules\03_BarTable\_Types\DataType.cs" />
+    <Compile Include="Source\Modules\03_BarTable\_Types\PriceType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\ADX.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\AverageGain.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\Bollinger.cs" />

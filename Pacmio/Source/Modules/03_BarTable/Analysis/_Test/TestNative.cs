@@ -83,7 +83,7 @@ namespace Pacmio.Analysis
                 TimeFrameCumulativeVolume tfcv = new TimeFrameCumulativeVolume(BarFreq.Daily);
                 DebugSeries csd_tfcv = new DebugColumnSeries(tfcv);
 
-                TimeFrameRelativeVolume tfrv = new TimeFrameRelativeVolume(20, BarFreq.Daily);
+                TimeFrameRelativeVolume tfrv = new TimeFrameRelativeVolume(5, BarFreq.Daily);
                 DebugSeries csd_tfrv = new DebugColumnSeries(tfrv);
                 DebugSeries csd_tfrv_ema = new DebugColumnSeries(tfrv.Column_EMA);
 

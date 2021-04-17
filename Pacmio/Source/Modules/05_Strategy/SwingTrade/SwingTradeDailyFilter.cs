@@ -47,7 +47,7 @@ namespace Pacmio.Analysis
 {
     public class SwingTradeDailyFilter : Indicator
     {
-        public SwingTradeDailyFilter() 
+        public SwingTradeDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
             RSI rsi = new(14);
             Bollinger bb = new Bollinger(20, 2);

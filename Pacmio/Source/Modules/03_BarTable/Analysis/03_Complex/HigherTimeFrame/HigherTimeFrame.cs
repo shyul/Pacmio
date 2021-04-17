@@ -13,7 +13,7 @@ namespace Pacmio
 {
     public class HigherTimeFrame : BarAnalysis, ISingleDatum
     {
-        public HigherTimeFrame(BarFreq freq, DataType type)
+        public HigherTimeFrame(BarFreq freq, PriceType type)
         {
             Name = GetType().Name + "_" + freq + "_" + type;
             Column_Result = new(Name, typeof(HigherTimeFrameDatum));
@@ -21,7 +21,7 @@ namespace Pacmio
 
         public BarFreq BarFreq { get; }
 
-        public DataType DataType { get; }
+        public PriceType DataType { get; }
 
         public DatumColumn Column_Result { get; }
 

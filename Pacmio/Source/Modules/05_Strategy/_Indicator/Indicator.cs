@@ -24,16 +24,14 @@ namespace Pacmio
     /// </summary>
     public abstract class Indicator : BarAnalysis, IChartSeries, IEquatable<Indicator>
     {
-        protected Indicator(BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
+        protected Indicator(BarFreq barFreq, PriceType type)
         {
-            DataType = type;
+            PriceType = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
-
-            SignalSeries = new(this);
         }
 
-        public DataType DataType { get; set; } = DataType.Trades;
+        public PriceType PriceType { get; set; } = PriceType.Trades;
 
         public BarFreq BarFreq { get; set; } = BarFreq.Daily;
 
@@ -51,7 +49,7 @@ namespace Pacmio
 
         public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars) RunScan(BarTableSet bts, Period pd)
         {
-            BarTable bt = bts[BarFreq, DataType];
+            BarTable bt = bts[BarFreq, PriceType];
 
             BarAnalysisSet bas = BarAnalysisSet;
             bt.CalculateRefresh(bas);
@@ -79,7 +77,7 @@ namespace Pacmio
                 result.BearishPeriods.Add(pd);
             });
 
-            result.TotalCount = bts[BarFreq, DataType].Count;
+            result.TotalCount = bts[BarFreq, PriceType].Count;
             result.BullishCount = BullishBars.Count();
             result.BearishCount = BearishBars.Count();
 
@@ -127,8 +125,8 @@ namespace Pacmio
 
         #region Equality
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ DataType.GetHashCode();
-        public bool Equals(Indicator other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && DataType == other.DataType;
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
+        public bool Equals(Indicator other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
         public static bool operator !=(Indicator s1, Indicator s2) => !s1.Equals(s2);
         public static bool operator ==(Indicator s1, Indicator s2) => s1.Equals(s2);
         public override bool Equals(object other) => other is Indicator ba && Equals(ba);

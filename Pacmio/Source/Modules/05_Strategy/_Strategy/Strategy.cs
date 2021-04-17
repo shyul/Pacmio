@@ -22,6 +22,8 @@ namespace Pacmio
     /// </summary>
     public abstract class Strategy : Indicator, ISingleDatum, IChartOverlay
     {
+        protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
+
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
@@ -54,10 +56,10 @@ namespace Pacmio
 
             foreach (var ind in IndicatorSet)
             {
-                bts[ind.BarFreq, ind.DataType].CalculateRefresh(ind);
+                bts[ind.BarFreq, ind.PriceType].CalculateRefresh(ind);
             }
 
-            BarTable bt = bts[BarFreq, DataType];
+            BarTable bt = bts[BarFreq, PriceType];
             bt.CalculateRefresh(this);
         }
 

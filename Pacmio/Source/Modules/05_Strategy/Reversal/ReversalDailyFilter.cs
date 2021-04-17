@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public class ReversalDailyFilter : Indicator
     {
-        public ReversalDailyFilter()
+        public ReversalDailyFilter(BarFreq barFreq, PriceType type) : base(barFreq, type)
         {
             SignalColumns = new SignalColumn[] { };
             BarAnalysisSet = new(this);

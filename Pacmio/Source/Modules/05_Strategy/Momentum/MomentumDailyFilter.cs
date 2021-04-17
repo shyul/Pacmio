@@ -18,7 +18,7 @@ namespace Pacmio.Analysis
 {
     public class MomentumDailyFilter : Indicator
     {
-        public MomentumDailyFilter() 
+        public MomentumDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
             SignalColumns = new SignalColumn[] { };
             BarAnalysisSet = new(this);

@@ -51,12 +51,12 @@ namespace Pacmio.IB
             }
         }
 
-        internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, DataType dataType = DataType.Trades,
+        internal static void SendRequest_HistoricalTick(Contract c, DateTime startTime, PriceType priceType = PriceType.Trades,
             int numberOfTicks = 1000, bool useRTH = true, bool ignoreSize = false, bool includeExpired = false,
             ICollection<(string, string)> options = null)
         {
             if (IsReady_HistoricalTick && 
-                dataType.Param() is string barTypeCode && 
+                priceType.Param() is string barTypeCode && 
                 c.Exchange.Param() is string exchangeCode)
             {
                 (int requestId, string requestType) = RegisterRequest(RequestType.RequestHistoricalTicks);

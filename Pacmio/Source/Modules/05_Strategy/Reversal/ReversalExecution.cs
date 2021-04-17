@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 {
     public class ReversalExecution : Indicator
     {
-        public ReversalExecution()
+        public ReversalExecution(BarFreq barFreq, PriceType type) : base(barFreq, type)
         {
             string label = "(" + "," + ")";
             GroupName = Name = GetType().Name + label;

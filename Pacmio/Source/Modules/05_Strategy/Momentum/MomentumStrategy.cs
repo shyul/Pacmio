@@ -27,7 +27,7 @@ namespace Pacmio.Analysis
 {
     public class MomentumStrategy : Strategy
     {
-        public MomentumStrategy()
+        public MomentumStrategy(BarFreq barFreq, PriceType type) : base(barFreq, type)
         {
 
             DailyIndicator = new();
@@ -54,7 +54,9 @@ namespace Pacmio.Analysis
 
         public MovingAverage EMA20 { get; } = new EMA(20);
 
-        public TimeFramePricePosition PricePositionOfTimeframe { get; } = new TimeFramePricePosition(BarFreq.Daily);
+        public TimeFramePricePosition TimeFramePricePosition { get; } = new TimeFramePricePosition(BarFreq.Daily);
+
+        public TimeFrameRelativeVolume TimeFrameRelativeVolume { get; } = new TimeFrameRelativeVolume(5, BarFreq.Daily);
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -69,7 +71,7 @@ namespace Pacmio.Analysis
 
                 if (daily_b.Volume > 1e6 && daily_relative_volume > 2)
                 {
-      
+
 
 
                 }

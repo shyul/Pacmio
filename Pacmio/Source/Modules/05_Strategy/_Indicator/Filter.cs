@@ -17,7 +17,7 @@ namespace Pacmio
 {
     public abstract class Filter : Indicator
     {
-        protected Filter() : base(BarFreq.Daily, DataType.Trades) { }
+        protected Filter() : base(BarFreq.Daily, PriceType.Trades) { }
 
         /*
         public Filter(Range<double> priceRange, Range<double> volumeRange, Range<double> gapExcluded, Range<double> gainExcluded)

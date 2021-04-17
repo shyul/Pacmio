@@ -16,7 +16,7 @@ namespace Pacmio.Analysis
 {
     public sealed class TimeFrameRelativeVolume : BarAnalysis, ISingleData
     {
-        public TimeFrameRelativeVolume(int interval = 20, BarFreq barFreq = BarFreq.Daily)
+        public TimeFrameRelativeVolume(int interval = 5, BarFreq barFreq = BarFreq.Daily)
         {
             TimeFrameBarFreq = barFreq;
             Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
@@ -67,7 +67,7 @@ namespace Pacmio.Analysis
 
                     if (bt.GetCurrentOrFormerByTime(lastTime) is Bar b_1 && Frequency.Align(b_1.Time) == timeFrame_b.Time)
                     {
-                        Console.WriteLine("B_1 Time = " + b_1.Time+ " | B Time = " + b.Time);
+                        Console.WriteLine("B_1 Time = " + b_1.Time + " | B Time = " + b.Time);
 
                         double y0 = b_1[Column_EMA];
                         double value = b[TimeFrameCumulativeVolume];

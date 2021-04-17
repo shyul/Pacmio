@@ -17,45 +17,45 @@ namespace Pacmio
     public static class BarDataFileManagerTest
     {
         // Obsolete, Test Only
-        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, Period pd, bool adjustDividend = false, CancellationTokenSource cts = null)
-            => c.LoadBarTable(barFreq, dataType, new MultiPeriod(pd), adjustDividend, cts);
+        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, PriceType priceType, Period pd, bool adjustDividend = false, CancellationTokenSource cts = null)
+            => c.LoadBarTable(barFreq, priceType, new MultiPeriod(pd), adjustDividend, cts);
 
         // Obsolete, Test Only
-        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, bool adjustDividend = false, CancellationTokenSource cts = null)
+        public static BarTable LoadBarTable(this Contract c, BarFreq barFreq, PriceType priceType, MultiPeriod mp = null, bool adjustDividend = false, CancellationTokenSource cts = null)
         {
             BarTableSet bts = new BarTableSet(c, adjustDividend);
             bts.SetPeriod(mp, cts);
-            return bts[barFreq, dataType];
+            return bts[barFreq, priceType];
         }
     }
 
     public static class BarDataFileManager
     {
-        public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, DataType dataType, MultiPeriod mp = null, CancellationTokenSource cts = null)
+        public static BarTable LoadBarTable(this BarTableSet bts, BarFreq barFreq, PriceType priceType, MultiPeriod mp = null, CancellationTokenSource cts = null)
         {
             BarDataFile bdf_daily_base = GetBarDataFile(bts.Contract, BarFreq.Daily);
             bdf_daily_base.Fetch(Period.Full, cts);
             RemoveDownloadingLUT(bdf_daily_base);
 
-            if (barFreq == BarFreq.Daily && dataType == DataType.Trades)
+            if (barFreq == BarFreq.Daily && priceType == PriceType.Trades)
             {
-                BarTable bt = new(bts, BarFreq.Daily, DataType.Trades);
+                BarTable bt = new(bts, BarFreq.Daily, PriceType.Trades);
                 bt.LoadBars(bdf_daily_base, bts.AdjustDividend);
                 return bt;
             }
             else if (barFreq > BarFreq.Daily)
             {
                 BarDataFile bdf_daily =
-                    dataType == DataType.Trades ?
+                    priceType == PriceType.Trades ?
                     bdf_daily_base :
-                    bts.Contract.GetBarDataFile(BarFreq.Daily, dataType);
+                    bts.Contract.GetBarDataFile(BarFreq.Daily, priceType);
 
-                if (dataType != DataType.Trades)
+                if (priceType != PriceType.Trades)
                     bdf_daily.Fetch(Period.Full, cts);
 
-                var sorted_daily_list = bdf_daily.LoadBars(new BarTable(bts.Contract, BarFreq.Daily, dataType), bts.AdjustDividend);
+                var sorted_daily_list = bdf_daily.LoadBars(new BarTable(bts.Contract, BarFreq.Daily, priceType), bts.AdjustDividend);
 
-                BarTable bt = new(bts, barFreq, dataType);
+                BarTable bt = new(bts, barFreq, priceType);
                 bt.LoadFromSmallerBar(sorted_daily_list);
 
                 RemoveDownloadingLUT(bdf_daily);
@@ -63,7 +63,7 @@ namespace Pacmio
             }
             else
             {
-                BarTable bt = new(bts, barFreq, dataType);
+                BarTable bt = new(bts, barFreq, priceType);
                 bt.LoadBars(mp);
                 return bt;
             }
@@ -97,13 +97,13 @@ namespace Pacmio
 
         #region Download
 
-        private static Dictionary<(Contract c, BarFreq barFreq, DataType dataType), BarDataFile> DownloadingLUT { get; } = new();
+        private static Dictionary<(Contract c, BarFreq barFreq, PriceType type), BarDataFile> DownloadingLUT { get; } = new();
 
         private static object DataLockObject { get; } = new();
 
         private static void RemoveDownloadingLUT(BarDataFile bdf)
         {
-            var key = (bdf.Contract, bdf.BarFreq, bdf.Type);
+            var key = (bdf.Contract, bdf.BarFreq, bdf.PriceType);
 
             lock (DataLockObject)
                 if (DownloadingLUT.ContainsKey(key))
@@ -112,7 +112,7 @@ namespace Pacmio
                 }
         }
 
-        private static BarDataFile GetBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, DataType type = DataType.Trades)
+        private static BarDataFile GetBarDataFile(this Contract c, BarFreq barFreq = BarFreq.Daily, PriceType type = PriceType.Trades)
         {
             if (barFreq > BarFreq.Daily)
                 throw new Exception("We don't support storging BarFreq greater than daily as file");

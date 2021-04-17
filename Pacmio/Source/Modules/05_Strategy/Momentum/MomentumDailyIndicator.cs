@@ -19,7 +19,7 @@ namespace Pacmio
 {
     public class MomentumDailyIndicator : Indicator
     {
-        public MomentumDailyIndicator(double minPrice = 1, double maxPrice = 12, double minimumRelativeVolume = 2, double minimumVolume = 1e6) : base(BarFreq.Daily, DataType.Trades)
+        public MomentumDailyIndicator(double minPrice = 1, double maxPrice = 12, double minimumRelativeVolume = 2, double minimumVolume = 1e6) : base(BarFreq.Daily, PriceType.Trades)
         {
             PriceRange = new Range<double>(minPrice, maxPrice);
             MinimumRelativeVolume = minimumRelativeVolume;

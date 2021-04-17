@@ -23,19 +23,19 @@ namespace Pacmio
     {
         public BarDataFile(BarTable bt) : this(bt.Contract, bt.BarFreq, bt.Type) { }
 
-        public BarDataFile(Contract c, BarFreq freq, DataType type)
+        public BarDataFile(Contract c, BarFreq freq, PriceType type)
         {
             Contract = c;
             BarFreq = freq;
-            Type = type;
+            PriceType = type;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
-        public BarDataFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
+        public BarDataFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, PriceType Type) info)
         {
             ContractKey = info.ContractKey;
             BarFreq = info.BarFreq;
-            Type = info.Type;
+            PriceType = info.Type;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
         }
 
@@ -49,13 +49,13 @@ namespace Pacmio
         public BarFreq BarFreq { get; set; }
 
         [DataMember]
-        public DataType Type { get; set; }
+        public PriceType PriceType { get; set; }
 
         [DataMember]
         public (string name, Exchange exchange, string typeName) ContractKey { get; private set; }
 
         [IgnoreDataMember]
-        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, DataType type) Key => (ContractKey, BarFreq, Type);
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, PriceType type) Key => (ContractKey, BarFreq, PriceType);
 
         [IgnoreDataMember]
         public Contract Contract
@@ -459,7 +459,7 @@ namespace Pacmio
 
         #region File Operation
 
-        private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
+        private static string GetDataFileName(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, PriceType Type) info)
         {
             string dir = Root.HistoricalDataPath(info.ContractKey) + "\\" + info.BarFreq.ToString() + "_" + info.Type.ToString() + "\\";
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
@@ -467,7 +467,7 @@ namespace Pacmio
         }
 
         [IgnoreDataMember]
-        public string DataFileName => GetDataFileName((ContractKey, BarFreq, Type));
+        public string DataFileName => GetDataFileName((ContractKey, BarFreq, PriceType));
 
         // TODO: Handle this
         [IgnoreDataMember]
@@ -482,9 +482,9 @@ namespace Pacmio
             }
         }
 
-        public static BarDataFile LoadFile((Contract Contract, BarFreq BarFreq, DataType Type) key) => LoadFile((key.Contract.Key, key.BarFreq, key.Type));
+        public static BarDataFile LoadFile((Contract Contract, BarFreq BarFreq, PriceType Type) key) => LoadFile((key.Contract.Key, key.BarFreq, key.Type));
 
-        public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, DataType Type) info)
+        public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, PriceType Type) info)
         {
             //var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
 
@@ -555,7 +555,7 @@ namespace Pacmio
 
         #region Equality
 
-        public bool Equals(BarDataFile other) => other is BarDataFile bdf && (ContractKey == bdf.ContractKey) && (BarFreq == bdf.BarFreq) && (Type == bdf.Type);
+        public bool Equals(BarDataFile other) => other is BarDataFile bdf && (ContractKey == bdf.ContractKey) && (BarFreq == bdf.BarFreq) && (PriceType == bdf.PriceType);
         public static bool operator ==(BarDataFile left, BarDataFile right) => left.Equals(right);
         public static bool operator !=(BarDataFile left, BarDataFile right) => !left.Equals(right);
 
@@ -579,7 +579,7 @@ namespace Pacmio
                 return false;
         }
 
-        public override int GetHashCode() => ContractKey.GetHashCode() ^ BarFreq.GetHashCode() ^ Type.GetHashCode();
+        public override int GetHashCode() => ContractKey.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
 
         #endregion Equality
     }

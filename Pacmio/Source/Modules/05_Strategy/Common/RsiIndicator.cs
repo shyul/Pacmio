@@ -14,6 +14,8 @@ namespace Pacmio.Analysis
 {
     public class RsiIndicator : Indicator
     {
+        public RsiIndicator(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
+
         // 2 minute RSI of Below 25 / Above 75
         public RSI RSI { get; } = new RSI(14);
 
