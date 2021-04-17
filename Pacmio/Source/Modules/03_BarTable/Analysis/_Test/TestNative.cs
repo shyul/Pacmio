@@ -38,7 +38,7 @@ namespace Pacmio.Analysis
                 DebugSeries csd_stdev = new DebugColumnSeries(stdev.Column_Percent);
                 stdev.AddChild(csd_stdev);
 
-                PositionOfTimeframe potf = new(BarFreq.Annually);
+                TimeFramePricePosition potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
                 List<BarAnalysis> sample_list = new()

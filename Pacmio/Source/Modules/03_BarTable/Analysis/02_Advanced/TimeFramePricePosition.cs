@@ -14,35 +14,39 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class PositionOfTimeframe : BarAnalysis, ISingleData
+    public sealed class TimeFramePricePosition : BarAnalysis, ISingleData
     {
-        public PositionOfTimeframe(BarFreq barFreq = BarFreq.Daily)
+        public TimeFramePricePosition(BarFreq barFreq = BarFreq.Daily)
         {
+            TimeFrameBarFreq = barFreq;
+            Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
             Column = Bar.Column_Typical;
-            Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
 
             string label = "(" + Column.Name + "," + barFreq.ToString() + ")";
             Name = GetType().Name + label;
             GroupName = GetType().Name;
-            Description = "Position Of Timeframe " + label;
+            Description = "Price Position within Time Frame " + label;
 
             Column_Result = new NumericColumn(Name, label);
         }
 
-        public PositionOfTimeframe(ISingleData isd, BarFreq barFreq = BarFreq.Daily)
+        public TimeFramePricePosition(ISingleData isd, BarFreq barFreq = BarFreq.Daily)
         {
-            Column = isd.Column_Result;
+            TimeFrameBarFreq = barFreq;
             Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
-
+            Column = isd.Column_Result;
+        
             string label = "(" + Column.Name + "," + barFreq.ToString() + ")";
             Name = GetType().Name + label;
             GroupName = GetType().Name;
-            Description = "Position Of Timeframe " + label;
+            Description = "Price Position within Time Frame " + label;
 
             Column_Result = new NumericColumn(Name, label);
         }
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Frequency.GetHashCode() ^ Column.GetHashCode();
+        public override int GetHashCode() => GetType().GetHashCode() ^ TimeFrameBarFreq.GetHashCode() ^ Column.GetHashCode();
+
+        public BarFreq TimeFrameBarFreq { get; }
 
         /// <summary>
         /// The time period for each average frame
@@ -70,6 +74,7 @@ namespace Pacmio.Analysis
                     if (time != base_time)
                     {
                         cumulative_range = new Range<double>(double.MaxValue, double.MinValue);
+                        base_time = time;
                     }
 
                     double value = b[Column];
@@ -77,7 +82,6 @@ namespace Pacmio.Analysis
                     double range = cumulative_range.Maximum - cumulative_range.Minimum;
 
                     b[Column_Result] = range > 0 ? (value - cumulative_range.Minimum) / range : 0;
-                    base_time = time;
                 }
             }
         }

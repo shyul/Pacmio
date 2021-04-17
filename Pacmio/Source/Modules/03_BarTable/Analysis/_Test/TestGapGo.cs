@@ -48,7 +48,7 @@ namespace Pacmio.Analysis
                 DebugSeries csd_pivot = new DebugColumnSeriesOsc(Bar.Column_Pivot);
                 DebugSeries csd_trend = new DebugColumnSeriesOsc(Bar.Column_TrendStrength);
 
-                PositionOfTimeframe potf = new(BarFreq.Annually);
+                TimeFramePricePosition potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
                 List<BarAnalysis> sample_list = new()

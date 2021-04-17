@@ -51,10 +51,10 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class GapGoExecution : Indicator
+    public class GapGoStrategy : Strategy
     {
 
-        public GapGoExecution()
+        public GapGoStrategy()
         {
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);
@@ -62,13 +62,7 @@ namespace Pacmio.Analysis
         }
 
 
-        // Filter
-
-        #region  
-
-        
-
-        #endregion
+        public override Filter Filter { get; } // = new MomentumDailyFilter();
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 

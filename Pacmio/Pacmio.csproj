@@ -96,6 +96,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalColumnAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverage.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\DPPMO.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\TimeFrameCumulativeVolume.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\TimeFrameRelativeVolume.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\_Type\FlagTestElement.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
+    <Compile Include="Source\Modules\04_Strategy\Momentum\MomentumDailyIndicator.cs" />
     <Compile Include="Source\Modules\04_Strategy\_Indicator\Filter.cs" />
     <Compile Include="Source\Modules\04_Strategy\Common\RsiIndicator.cs" />
     <Compile Include="Source\Modules\04_Strategy\GapGo\GapGoDailyFilter.cs" />
@@ -122,7 +125,7 @@
     <Compile Include="Source\Modules\04_Strategy\_Indicator\IndicatorScanResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\04_Strategy\SwingTrade\SwingTradeDailyFilter.cs" />
-    <Compile Include="Source\Modules\04_Strategy\Momentum\MomentumExecution.cs" />
+    <Compile Include="Source\Modules\04_Strategy\Momentum\MomentumStrategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\Level.cs" />
@@ -155,10 +158,10 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SingleData\SingleDataSignalDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SingleData\SingleDataSignalType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\VolumeByPrice\VolumeByPriceDatum.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\PositionOfTimeframe.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\TimeFramePricePosition.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\_Type\FlagType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\_Types\PatternAnalysis.cs" />
-    <Compile Include="Source\Modules\04_Strategy\GapGo\GapGoExecution.cs" />
+    <Compile Include="Source\Modules\04_Strategy\GapGo\GapGoStrategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\PriceBarAnalysis.cs" />

@@ -25,7 +25,7 @@ namespace Pacmio
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
-        public abstract Filter Filter { get; set; }
+        public abstract Filter Filter { get; }
 
         public IndicatorSet IndicatorSet { get; } = new();
 

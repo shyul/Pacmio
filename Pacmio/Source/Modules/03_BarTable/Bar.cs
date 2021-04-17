@@ -119,7 +119,7 @@ namespace Pacmio
         /// <summary>
         /// Attached to the Table's frequency.
         /// </summary>
-        public Frequency Frequency => Table.Frequency; //BarFreq.GetAttribute<BarFreqInfo>().Result.Frequency;
+        public Frequency Frequency => Table.Frequency;
 
         #endregion Ctor
 

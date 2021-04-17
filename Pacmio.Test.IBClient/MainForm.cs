@@ -488,7 +488,7 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    IndicatorSet iset = TestSignals.IndicatorSet;
+          
                     BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(pd, Cts);
 
@@ -512,7 +512,7 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    IndicatorSet iset = TestSignals.IndicatorSet;
+          
                     BarTableSet bts = BarTableGroup[c];
 
                 }, Cts.Token);
@@ -531,10 +531,10 @@ namespace TestClient
             Task.Run(() =>
             {
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
-
+                /*
                 ResearchTool.RunScreener(ContractManager.GetOrFetch(symbols, "US", Cts, null),
                     TestSignals.IndicatorSet,
-                    pd, 8, Cts, Progress);
+                    pd, 8, Cts, Progress);*/
 
             }, Cts.Token);
 
@@ -551,9 +551,10 @@ namespace TestClient
                 var cList = ContractManager.TradeableNoETFList.ToList();
                 Console.WriteLine("total number = " + cList.Count());
 
+                /*
                 ResearchTool.RunScreener(cList,
                     TestSignals.IndicatorSet,
-                    pd, 12, Cts, Progress);
+                    pd, 12, Cts, Progress);*/
 
                 GC.Collect();
             }, Cts.Token);
