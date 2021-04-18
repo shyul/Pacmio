@@ -469,11 +469,10 @@ namespace Pacmio
             set => this[pa.Column_Result] = value;
         }
 
-        public StrategyDatum this[Strategy pa]
-        {
-            get => this[pa.Column_Result] as StrategyDatum;
-            set => this[pa.Column_Result] = value;
-        }
+        public StrategyDatum this[Strategy s] 
+            => DatumColumnsLUT[s.Column_Result] is StrategyDatum sd_1 ? 
+            sd_1 :
+            (DatumColumnsLUT[s.Column_Result] = new StrategyDatum(this, s)) as StrategyDatum;
 
         #endregion Datum Column
 
@@ -489,6 +488,11 @@ namespace Pacmio
             {
                 if (value is SignalDatum dat && value.GetType() == dc.DatumType)
                 {
+                    if (DatumColumnsLUT[dc] is not null)
+                    {
+                        // We may need to dispose the old the signalDatum
+                    }
+
                     DatumColumnsLUT[dc] = dat;
                 }
                 else if (value is null && DatumColumnsLUT.ContainsKey(dc))
@@ -540,8 +544,5 @@ namespace Pacmio
         }
 
         #endregion Signal Information Tools
-
-
-
     }
 }

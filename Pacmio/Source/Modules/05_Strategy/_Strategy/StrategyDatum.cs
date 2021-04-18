@@ -21,7 +21,6 @@ namespace Pacmio
         {
             Bar = b;
             Strategy = s;
-            b[s] = this;
         }
 
         public Strategy Strategy { get; }
@@ -34,40 +33,36 @@ namespace Pacmio
 
         #region Execution
 
-        public ExecutionType Type
+        public IExecution Execution
         {
-            get => m_Type;
+            get => m_Execution;
 
             set
             {
-                ExecutionType type = value;
-
-                if (type != ExecutionType.None)
-                    if (type == m_Type)
+                if (value is IExecution exec)
+                {
+                    if (m_Execution is null || m_Execution.GetType() != exec.GetType())
+                    {
                         DecisionCount++;
+                    }
                     else
+                    {
                         DecisionCount = 1;
-                else
-                    DecisionCount = 0;
+                    }
 
-                m_Type = type;
+                    m_Execution = exec;
+                }
+                else
+                {
+                    m_Execution = null;
+                    DecisionCount = 0;
+                }
             }
         }
 
-        private ExecutionType m_Type = ExecutionType.None;
+        private IExecution m_Execution = null;
 
         public int DecisionCount { get; private set; } = 0;
-
-        /// <summary>
-        /// This is a ratio data: 1 means initial entry of the maximum riskable position, 2 means add double
-        /// 0.5 (Remove Liq) means remove half, 1 (Remove) means empty the position.
-        /// The actual "quantity" will be calculated with R/R and WinRate of the backtesting result.
-        /// </summary>
-        public double SizeRatio { get; } = 1;
-
-        public double LimitPrice { get; } = double.NaN;
-
-        public double AuxPrice { get; } = double.NaN;
 
         #endregion Execution
 
@@ -76,33 +71,56 @@ namespace Pacmio
         // A. Simulation Mode.
         // B. Actual Trade Mode. -- Keep update the last Bar's Datum Info
         // -- Run Snapshot first during the simulation
-        public void Snapshot(bool isLive = false)
+        public void SnapshotPosition(bool isLive = false)
         {
-            if (isLive)
+            if (isLive) // check if the bar is Live?
             {
+                if (PositionDatum is null) PositionDatum = new PositionDatum();
+
+
                 // Get Account Numner from Strategy
                 // Find PositionInfo
                 // Copy it from there...
+                PositionDatum.Quantity = 0;
             }
-            else if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1)
+            else if (PositionDatum is null)
             {
-                Quantity = sd_1.Quantity;
-                AveragePrice = sd_1.AveragePrice;
+                if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1 && sd_1.PositionDatum is PositionDatum psd)
+                    PositionDatum = new PositionDatum(psd);
+                else
+                    PositionDatum = new PositionDatum();
             }
         }
 
-        public double Commission { get; set; } = 0;
 
-        public double Quantity { get; set; } = 0;
+        public PositionDatum PositionDatum { get; private set; }
 
-        public double AveragePrice { get; set; } = double.NaN;
+        public double PnL => PositionDatum.Cost == 0 ? 0 : PositionDatum.Quantity * (Bar.Close - PositionDatum.AveragePrice);
 
-        public double Cost => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
-
-        public double PnL => Cost == 0 ? 0 : Quantity * (Bar.Close - AveragePrice);
-
-        public double PnL_Percent => Cost == 0 ? 0 : 100 * (Bar.Close - AveragePrice) / AveragePrice;
+        public double PnL_Percent => PositionDatum.Cost == 0 ? 0 : 100 * (Bar.Close - PositionDatum.AveragePrice) / PositionDatum.AveragePrice;
 
         #endregion Position
+    }
+
+
+    public class PositionDatum 
+    {
+        public PositionDatum() 
+        {
+            Quantity = 0;
+            AveragePrice = double.NaN;
+        }
+
+        public PositionDatum(PositionDatum psd) 
+        {
+            Quantity = psd.Quantity;
+            AveragePrice = psd.AveragePrice;
+        }
+
+        public double Quantity { get; set; }
+
+        public double AveragePrice { get; set; }
+
+        public double Cost => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
     }
 }

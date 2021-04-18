@@ -36,7 +36,7 @@ namespace Pacmio
             Type = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
-         
+
             BarTableSet = new BarTableSet(c, adjustDividend);
 
             CalculateTickCancelTs = new CancellationTokenSource();
@@ -724,13 +724,6 @@ namespace Pacmio
                     Calculate(bas);
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
-                    /*
-                    lock (DataConsumers)
-                    {
-                        DataConsumers.Where(n => n is BarChart bc && bc.BarAnalysisSet == bas).
-                            Select(n => n as BarChart).ToList().
-                            ForEach(n => { n.PointerToEnd(); });
-                    }*/
                 }
         }
 

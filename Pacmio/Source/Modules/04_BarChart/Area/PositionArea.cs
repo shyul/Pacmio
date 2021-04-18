@@ -54,14 +54,14 @@ namespace Pacmio
             //DrawPosition(g, this, BarTable, s);
         }
 
-        public static Dictionary<ExecutionType, Brush> ColorPalette { get; } = new Dictionary<ExecutionType, Brush>()
+        public static Dictionary<ActionType, Brush> ColorPalette { get; } = new Dictionary<ActionType, Brush>()
             {
-                { ExecutionType.Long, new SolidBrush(Color.LimeGreen.Opaque(50)) },
-                { ExecutionType.Sell, new SolidBrush(Color.Pink.Opaque(50)) },
-                { ExecutionType.Short, new SolidBrush(Color.SkyBlue.Opaque(60)) },
-                { ExecutionType.Cover, new SolidBrush(Color.Yellow.Opaque(50)) },
-                { ExecutionType.LongHold, new SolidBrush(Color.LimeGreen.Opaque(25)) },
-                { ExecutionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
+                { ActionType.Long, new SolidBrush(Color.LimeGreen.Opaque(50)) },
+                { ActionType.Sell, new SolidBrush(Color.Pink.Opaque(50)) },
+                { ActionType.Short, new SolidBrush(Color.SkyBlue.Opaque(60)) },
+                { ActionType.Cover, new SolidBrush(Color.Yellow.Opaque(50)) },
+                { ActionType.LongHold, new SolidBrush(Color.LimeGreen.Opaque(25)) },
+                { ActionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
             };
 
         public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, IndicatorSet s)

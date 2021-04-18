@@ -164,7 +164,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\TimeFramePricePosition.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\_Type\FlagType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\_Types\PatternAnalysis.cs" />
-    <Compile Include="Source\Modules\05_Strategy\GapGo\GapGoStrategy.cs" />
+    <Compile Include="Source\Modules\05_Strategy\GapGo\GapGoOrbStrategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugColumnSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugColumnSeriesOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\PriceBarAnalysis.cs" />
@@ -264,7 +264,7 @@
     <Compile Include="Source\Modules\04_BarChart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\PositionSeries.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\ExecutionType.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\ActionType.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\SMMA.cs" />
