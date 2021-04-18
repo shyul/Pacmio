@@ -22,9 +22,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalExecution : Indicator
+    public class ReversalStrategy : Strategy
     {
-        public ReversalExecution(BarFreq barFreq, PriceType type) : base(barFreq, type)
+        public ReversalStrategy(BarFreq barFreq, PriceType type) : base(barFreq, type)
         {
             string label = "(" + "," + ")";
             GroupName = Name = GetType().Name + label;
@@ -71,6 +71,8 @@ namespace Pacmio.Analysis
 
 
         public override int GetHashCode() => GetType().GetHashCode() ^ RSI.GetHashCode() ^ BollingerBand.GetHashCode();
+
+        public override Filter Filter { get; } = new ReversalDailyFilter();
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 

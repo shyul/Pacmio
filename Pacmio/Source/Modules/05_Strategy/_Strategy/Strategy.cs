@@ -34,7 +34,8 @@ namespace Pacmio
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM
         /// </summary>
-        public MultiTimePeriod TradeTimeOfDay { get; set; }
+        public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+
 
 
 

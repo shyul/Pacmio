@@ -32,7 +32,7 @@ namespace Pacmio
 
         public Indicator Indicator { get; }
 
-        public TimePeriod TimeInForce => Indicator.TimeInForce;
+        public TimePeriod TimeInForce => Indicator is Strategy s ? s.TimeInForce : TimePeriod.Full;
 
         public override void RefreshAxis(IIndexArea area, ITable table)
         {

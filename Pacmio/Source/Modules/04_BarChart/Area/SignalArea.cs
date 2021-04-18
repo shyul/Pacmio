@@ -48,7 +48,7 @@ namespace Pacmio
 
         public Indicator Indicator => SignalSeries.Indicator;
 
-        public TimePeriod TimeInForce => Indicator.TimeInForce;
+        public TimePeriod TimeInForce => SignalSeries.TimeInForce;
 
         public override void DrawCustomBackground(Graphics g)
         {

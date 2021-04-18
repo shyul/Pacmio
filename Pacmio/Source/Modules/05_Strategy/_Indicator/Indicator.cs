@@ -41,13 +41,11 @@ namespace Pacmio
 
         public abstract IEnumerable<SignalColumn> SignalColumns { get; }
 
-        public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
-
         public double BullishPointLimit { get; set; } = 1;
 
         public double BearishPointLimit { get; set; } = -1;
 
-        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars, int totalCount) RunScan(BarTableSet bts, Period pd)
+        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars, IEnumerable<Bar> AllBars) RunScan(BarTableSet bts, Period pd)
         {
             BarTable bt = bts[BarFreq, PriceType];
 
@@ -59,29 +57,29 @@ namespace Pacmio
             var BullishBars = bars.Where(b => b.GetSignalScore(this).Bullish >= BullishPointLimit);
             var BearishBars = bars.Where(b => b.GetSignalScore(this).Bearish <= BearishPointLimit);
 
-            return (BullishBars, BearishBars, bars.Count());
+            return (BullishBars, BearishBars, bars);
         }
 
         public IndicatorScanResult RunScanResult(BarTableSet bts, Period pd)
         {
-            var (BullishBars, BearishBars, totalCount) = RunScan(bts, pd);
+            var (BullishBars, BearishBars, allBars) = RunScan(bts, pd);
             IndicatorScanResult result = new(bts.Contract);
 
             BullishBars.RunEach(n =>
             {
-                var pd_1 = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd_1);
-                result.BullishPeriods.Add(pd_1);
+                var pd_bull = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd_bull);
+                result.BullishPeriods.Add(pd_bull);
             });
 
             BearishBars.RunEach(n =>
             {
-                var pd_2 = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd_2);
-                result.BearishPeriods.Add(pd_2);
+                var pd_bear = ToDailyPeriod(n.Period);
+                result.Periods.Add(pd_bear);
+                result.BearishPeriods.Add(pd_bear);
             });
 
-            result.TotalCount = totalCount;
+            result.TotalCount = allBars.Count();
             result.BullishCount = BullishBars.Count();
             result.BearishCount = BearishBars.Count();
 

@@ -12,18 +12,18 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalDailyFilter : Indicator
+    public class ReversalDailyFilter : Filter
     {
-        public ReversalDailyFilter(BarFreq barFreq, PriceType type) : base(barFreq, type)
+        public ReversalDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
-            SignalColumns = new SignalColumn[] { };
+            SignalColumns = new SignalColumn[] { SignalColumn };
             BarAnalysisSet = new(this);
             SignalSeries = new(this);
         }
 
-        public Range<double> PriceRange { get; } = new Range<double>(15, 250);
+        public override Range<double> PriceRange { get; } = new Range<double>(15, 250);
 
-        public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
+        public override Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
 
         /// <summary>
         /// Or we can use Relative Volume of 1 ~ 1.5
@@ -36,9 +36,7 @@ namespace Pacmio.Analysis
         // 3e5
         public MovingAverage AverageVolume => RelativeVolume.MovingAverage;
 
-        // 4 Consecutive Candles 5 minutes
-
-
+        public override SignalColumn SignalColumn { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
