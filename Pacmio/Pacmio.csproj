@@ -94,7 +94,9 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalColumnAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\OscillatorAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverage.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\SingleDataAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\DPPMO.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\TimeFrameCumulativeVolume.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\TimeFrameRelativeVolume.cs" />

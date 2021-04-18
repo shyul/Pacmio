@@ -22,44 +22,45 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class MFI : IntervalAnalysis, IOscillator
+    public sealed class MFI : OscillatorAnalysis
     {
         public MFI(int interval)
         {
             Interval = interval;
-            //Column_Typical = BarTable.TrueRangeAnalysis.Column_Typical;
 
-            string label = "(" + Interval.ToString() + ")";
-            Name = GetType().Name + label;
+            Label = "(" + Interval.ToString() + ")";
+            Name = GetType().Name + Label;
             AreaName = GroupName = GetType().Name;
-            Description = "Money Flow Index " + label;
+            Description = "Money Flow Index " + Label;
 
             PMF_Column = new NumericColumn(Name + "_PMF") { Label = "PMF" };
             NMF_Column = new NumericColumn(Name + "_NMF") { Label = "NMF" };
 
-            Column_Result = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name, Label);
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
-                Label = label,
+                Label = Label,
                 LegendName = GroupName,
                 Importance = Importance.Major,
                 IsAntialiasing = true,
                 DrawLimitShade = true,
             };
 
+            Reference = 50;
+            UpperLimit = 80;
+            LowerLimit = 20;
+
             Color = Color.FromArgb(255, 96, 96, 96);
+            UpperColor = Color.Green;
+            LowerColor = Color.OrangeRed;
         }
+
+        public override string Label { get; }
 
         #region Calculation
 
-        public double Reference { get; set; } = 50;
-
-        public double UpperLimit { get; set; } = 80;
-
-        public double LowerLimit { get; set; } = 20;
-
-        //public NumericColumn Column_Typical { get; }
+        public int Interval { get; }
 
         public NumericColumn PMF_Column { get; }
 
@@ -106,32 +107,5 @@ namespace Pacmio.Analysis
         }
 
         #endregion Calculation
-
-        #region Series
-
-        public Color UpperColor { get; set; } = Color.Green;
-
-        public Color LowerColor { get; set; } = Color.OrangeRed;
-
-        public override void ConfigChart(BarChart bc)
-        {
-            if (ChartEnabled)
-            {
-                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
-                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
-                    {
-                        Reference = Reference,
-                        UpperLimit = UpperLimit,
-                        LowerLimit = LowerLimit,
-                        UpperColor = UpperColor,
-                        LowerColor = LowerColor,
-                        FixedTickStep_Right = 10,
-                    });
-
-                a.AddSeries(LineSeries);
-            }
-        }
-
-        #endregion Series
     }
 }

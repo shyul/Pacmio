@@ -15,24 +15,44 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class DPPMO : IntervalAnalysis, IOscillator
+    public sealed class DPPMO : OscillatorAnalysis
     {
-        public DPPMO(int interval) : base(interval)
+        public DPPMO(int interval)
         {
+            Interval = interval;
             SmoothMultiplier = 2 / Interval;
+
+            Label = "(" + Interval.ToString() + ")";
+            Name = GetType().Name + Label;
+            AreaName = GroupName = GetType().Name;
+            Description = "Price Momentum Oscillator " + Label;
+
+            Column_Signal = new NumericColumn(Name + "_Signal", Label);
+            Column_Result = new NumericColumn(Name, Label);
+            LineSeries = new LineSeries(Column_Result)
+            {
+                Name = Name,
+                Label = Label,
+                LegendName = GroupName,
+                Importance = Importance.Major,
+                IsAntialiasing = true,
+                DrawLimitShade = true,
+            };
+
+            Reference = 0;
+            UpperLimit = 3;
+            LowerLimit = -3;
+
+            Color = Color.FromArgb(255, 96, 96, 96);
+            UpperColor = Color.ForestGreen;
+            LowerColor = Color.Crimson;
         }
 
+        public override string Label { get; }
+
+        public int Interval { get; }
+
         public double SmoothMultiplier { get; }
-
-        public double Reference { get; set; } = 0;
-
-        public double UpperLimit { get; set; } = 3;
-
-        public double LowerLimit { get; set; } = -3;
-
-        public Color UpperColor { get; set; } = Color.ForestGreen;
-
-        public Color LowerColor { get; set; } = Color.Crimson;
 
         public NumericColumn Column_Signal { get; }
 

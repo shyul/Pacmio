@@ -24,41 +24,41 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public class CHOP : BarAnalysis, IOscillator
+    public class CHOP : OscillatorAnalysis
     {
         public CHOP(int interval = 14)
         {
             PriceChannel = new PriceChannel(interval) { ChartEnabled = false };
             Multiplier = 100 / Math.Log10(interval);
 
-            string label = "(" + Interval.ToString()  + ")";
-            Name = GetType().Name + label;
+            Label = "(" + Interval.ToString() + ")";
+            Name = GetType().Name + Label;
             AreaName = GroupName = GetType().Name;
-            Description = "Choppiness Index " + label;
+            Description = "Choppiness Index " + Label;
 
             PriceChannel.AddChild(this);
 
-            Column_Result = new NumericColumn(Name);
+            Column_Result = new NumericColumn(Name, Label);
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
-                Label = label,
+                Label = Label,
                 LegendName = GroupName,
                 Importance = Importance.Major,
                 IsAntialiasing = true,
                 DrawLimitShade = true,
             };
 
+            Reference = 50;
+            UpperLimit = 60;
+            LowerLimit = 40;
+
             Color = Color.FromArgb(255, 96, 96, 96);
         }
 
         #region Parameters
 
-        public double Reference { get; set; } = 50;
-
-        public double UpperLimit { get; set; } = 60;
-
-        public double LowerLimit { get; set; } = 40;
+        public override string Label { get; }
 
         public int Interval => PriceChannel.Interval;
 
@@ -68,15 +68,11 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        //public NumericColumn TR => BarTable.TrueRangeAnalysis.Column_TrueRange;
-
         public PriceChannel PriceChannel { get; }
 
         public NumericColumn Column_MaxHigh => PriceChannel.Column_High;
 
         public NumericColumn Column_MinLow => PriceChannel.Column_Low;
-
-        public NumericColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -102,54 +98,5 @@ namespace Pacmio.Analysis
         }
 
         #endregion Calculation
-
-        #region Series
-
-        public Color Color { get => LineSeries.Color; set => LineSeries.Color = value; }
-
-        public float LineWidth { get => LineSeries.Width; set => LineSeries.Width = value; }
-
-        public LineType LineType { get => LineSeries.LineType; set => LineSeries.LineType = value; }
-
-        public Series MainSeries => LineSeries;
-
-        public LineSeries LineSeries { get; protected set; }
-
-        public Color UpperColor { get; set; } = Color.ForestGreen;
-
-        public Color LowerColor { get; set; } = Color.Crimson;
-
-        public virtual bool ChartEnabled { get => Enabled && LineSeries.Enabled; set => LineSeries.Enabled = value; }
-
-        public int DrawOrder { get => LineSeries.Order; set => LineSeries.Order = value; }
-
-        public virtual bool HasXAxisBar { get; set; } = false;
-
-        public string AreaName { get; protected set; }
-
-        public float AreaRatio { get; set; } = 8;
-
-        public int AreaOrder { get; set; } = 0;
-
-        public void ConfigChart(BarChart bc)
-        {
-            if (ChartEnabled)
-            {
-                BarChartOscillatorArea a = bc[AreaName] is BarChartOscillatorArea oa ? oa :
-                    bc.AddArea(new BarChartOscillatorArea(bc, AreaName, AreaRatio)
-                    {
-                        Reference = Reference,
-                        UpperLimit = UpperLimit,
-                        LowerLimit = LowerLimit,
-                        UpperColor = UpperColor,
-                        LowerColor = LowerColor,
-                        FixedTickStep_Right = 10,
-                    });
-
-                a.AddSeries(LineSeries);
-            }
-        }
-
-        #endregion Series
     }
 }

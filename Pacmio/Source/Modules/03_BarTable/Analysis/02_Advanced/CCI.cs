@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class CCI : IntervalAnalysis, IOscillator
+    public sealed class CCI : OscillatorAnalysis
     {
         public CCI(int interval, double constant = 0.015)
         {
@@ -23,10 +23,10 @@ namespace Pacmio.Analysis
             Constant = constant;
             Column_Typical = Bar.Column_Typical;
 
-            string label = "(" + Interval.ToString() + ")";
-            Name = GetType().Name + label;
+            Label = "(" + Interval.ToString() + "," + Constant + ")";
+            Name = GetType().Name + Label;
             AreaName = GroupName = GetType().Name;
-            Description = "Commodity Channel Index " + label;
+            Description = "Commodity Channel Index " + Label;
 
             SMA_TP = new SMA(Bar.Column_Typical, interval);
             MDEV_TP = new MDEV(Bar.Column_Typical, SMA_TP);
@@ -34,29 +34,33 @@ namespace Pacmio.Analysis
             SMA_TP.AddChild(MDEV_TP);
             MDEV_TP.AddChild(this);
 
-            Column_Result = new NumericColumn(Name) { Label = label };
+            Column_Result = new NumericColumn(Name, Label);
             LineSeries = new LineSeries(Column_Result)
             {
                 Name = Name,
-                Label = label,
+                Label = Label,
                 LegendName = GroupName,
                 Importance = Importance.Major,
                 IsAntialiasing = true,
                 DrawLimitShade = true,
             };
 
+            Reference = 0;
+            UpperLimit = 100;
+            LowerLimit = -100;
+
             Color = Color.FromArgb(255, 96, 96, 96);
+            UpperColor = Color.Green;
+            LowerColor = Color.OrangeRed;
         }
+
+        public override string Label { get; }
+
+        public int Interval { get; }
 
         public double Constant { get; }
 
         #region Calculation
-
-        public double Reference { get; set; } = 0;
-
-        public double UpperLimit { get; set; } = 100;
-
-        public double LowerLimit { get; set; } = -100;
 
         public NumericColumn Column_Typical { get; }
 
@@ -78,10 +82,6 @@ namespace Pacmio.Analysis
         #endregion Calculation
 
         #region Series
-
-        public Color UpperColor { get; set; } = Color.Green;
-
-        public Color LowerColor { get; set; } = Color.OrangeRed;
 
         public override void ConfigChart(BarChart bc)
         {
