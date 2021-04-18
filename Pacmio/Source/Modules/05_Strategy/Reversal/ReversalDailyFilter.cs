@@ -16,6 +16,19 @@ namespace Pacmio.Analysis
     {
         public ReversalDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {
+            BullishPointLimit = 1;
+            BearishPointLimit = -1;
+
+            GroupName = Name = GetType().Name;
+
+            SignalColumn = new SignalColumn(this, Name + "_Signal")
+            {
+                BullishColor = Color.Green,
+                BearishColor = Color.DarkOrange
+            };
+
+            RelativeVolume.AddChild(this);
+
             SignalColumns = new SignalColumn[] { SignalColumn };
             BarAnalysisSet = new(this);
             SignalSeries = new(this);
@@ -42,7 +55,23 @@ namespace Pacmio.Analysis
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
+            BarTable bt = bap.Table;
 
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                if (PriceRange.Contains(b.Typical) && VolumeRange.Contains(b.Volume) && Volume5DAverageRange.Contains(b[AverageVolume]))
+                {
+                    if (b.Gain >= 0)
+                    {
+                        new SignalDatum(b, SignalColumn, new double[] { b[RelativeVolume] });
+                    }
+                    else if (b.Gain < 0)
+                    {
+                        new SignalDatum(b, SignalColumn, new double[] { -b[RelativeVolume] });
+                    }
+                }
+            }
         }
     }
 }

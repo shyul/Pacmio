@@ -537,10 +537,15 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
                 Cts = new CancellationTokenSource();
                 Period pd = HistoricalPeriod;
-
+                var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
                 Task.Run(() =>
                 {
-                    BarTableSet bts = BarTableGroup[c];
+                    BarTableSet bts = new BarTableSet(c, false);
+                    bts.SetPeriod(pd, Cts);
+
+                    var res = filter.RunScanResult(bts, pd);
+                    foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
+                    foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
 
                 }, Cts.Token);
             }
@@ -552,7 +557,7 @@ namespace TestClient
             BarFreq freq = BarFreq;
             PriceType type = DataType;
             Period pd = HistoricalPeriod;
-
+            var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
             Task.Run(() =>
@@ -573,7 +578,7 @@ namespace TestClient
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            var filter = new GapGoDailyFilter(); // new MomentumDailyFilter();
+            var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
 
             Task.Run(() =>
             {
@@ -583,7 +588,7 @@ namespace TestClient
                 
                 ResearchTool.RunScreener(cList,
                     filter,
-                    pd, 12, Cts, Progress);
+                    pd, 16, Cts, Progress);
 
                 GC.Collect();
             }, Cts.Token);

@@ -41,21 +41,24 @@ namespace Pacmio.Analysis
                 TimeFramePricePosition potf = new(BarFreq.Annually);
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
+
+                ReversalDailyFilter reversal_daily = new();
+
                 List<BarAnalysis> sample_list = new()
                 {
-                    new NativeApexAnalysis(),
+                    //new NativeApexAnalysis(),
 
-                    new CandleStickDojiMarubozuSignal(),
-                    new CandleStickShadowStarSignal(),
+                    //new CandleStickDojiMarubozuSignal(),
+                    //new CandleStickShadowStarSignal(),
                     //csd_potf,
                     //csd_range,
                     //csd_nr,
                     //csd_gp,
                     //csd_typ,
-                    csd_relative_body,
-                    csd_relative_volume,
-                    csd_consecutive_type,
-                    csd_trend,
+                    //csd_relative_body,
+                    //csd_relative_volume,
+                    //csd_consecutive_type,
+                    //csd_trend,
                     //csd_pivot,
                     //csd_pivotstr,
                     //csd_trend,
@@ -65,6 +68,8 @@ namespace Pacmio.Analysis
 
                     //new CrossIndicator(),
                     //new CHOP(),
+
+                    reversal_daily
                 };
 
                 BarAnalysisSet bas = new(sample_list);

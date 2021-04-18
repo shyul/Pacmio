@@ -26,13 +26,13 @@ namespace Pacmio.Analysis
         {
             Column = column;
             MovingAverage = average_isd;
-            average_isd.AddChild(this);
 
             string label = "(" + Column.Name + "," + MovingAverage.GetType().Name + "," + MovingAverage.Interval + ")";
             GroupName = Name = GetType().Name + label;
             Description = "Relative " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
+            average_isd.AddChild(this);
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ MovingAverage.GetHashCode();
