@@ -22,7 +22,7 @@ namespace Pacmio.Analysis
             this(column, new SMA(column, interval) { ChartEnabled = false })
         { }
 
-        public Relative(NumericColumn column, MovingAverage average_isd)
+        public Relative(NumericColumn column, MovingAverageAnalysis average_isd)
         {
             Column = column;
             MovingAverage = average_isd;
@@ -39,7 +39,7 @@ namespace Pacmio.Analysis
 
         public NumericColumn Column { get; }
 
-        public MovingAverage MovingAverage { get; }
+        public MovingAverageAnalysis MovingAverage { get; }
 
         public NumericColumn Column_Result { get; }
 

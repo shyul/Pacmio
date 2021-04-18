@@ -12,7 +12,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class STDEV : IntervalColumnAnalysis
+    public sealed class STDEV : CustomIntervalAnalysis
     {
         public STDEV(NumericColumn column, int interval)
             : this(column, new SMA(column, interval)) { }

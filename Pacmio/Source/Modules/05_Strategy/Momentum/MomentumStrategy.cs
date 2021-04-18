@@ -50,9 +50,9 @@ namespace Pacmio.Analysis
         /// <summary>
         /// Ideally the entry point shall close to the EMA9 or EMA20 support level.
         /// </summary>
-        public MovingAverage EMA9 { get; } = new EMA(9);
+        public MovingAverageAnalysis EMA9 { get; } = new EMA(9);
 
-        public MovingAverage EMA20 { get; } = new EMA(20);
+        public MovingAverageAnalysis EMA20 { get; } = new EMA(20);
 
         public TimeFramePricePosition TimeFramePricePosition { get; } = new TimeFramePricePosition(BarFreq.Daily);
 

@@ -47,7 +47,7 @@ namespace Pacmio.Analysis
         public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
 
         // 3e5
-        public MovingAverage AverageVolume => RelativeVolume.MovingAverage;
+        public MovingAverageAnalysis AverageVolume => RelativeVolume.MovingAverage;
 
         public override SignalColumn SignalColumn { get; }
 

@@ -21,7 +21,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SMA : MovingAverage
+    public sealed class SMA : MovingAverageAnalysis
     {
         public SMA(int interval) : this(Bar.Column_Close, interval) { }
 

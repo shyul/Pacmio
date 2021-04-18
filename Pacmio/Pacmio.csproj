@@ -92,11 +92,12 @@
   <ItemGroup>
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugDualDataOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\IntervalColumnAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\OscillatorAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverage.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\SingleDataAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\CustomIntervalAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\OscillatorAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\_Types\MovingAverageAnalysis.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\SingleDataAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\DPPMO.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\TimeFrameCumulativeVolume.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\TimeFrameRelativeVolume.cs" />
@@ -259,7 +260,7 @@
     <Compile Include="Source\Modules\04_BarChart\_Types\IBarChartArea.cs" />
     <Compile Include="Source\Modules\04_BarChart\_Types\IChartSeries.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\PriceChannel.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\_Types\MovingAverageType.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\_Types\MovingAverageType.cs" />
     <Compile Include="Source\Modules\04_BarChart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\PositionSeries.cs" />

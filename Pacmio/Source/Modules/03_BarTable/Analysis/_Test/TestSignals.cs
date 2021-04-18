@@ -24,8 +24,8 @@ namespace Pacmio.Analysis
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                MovingAverage slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                MovingAverage fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                MovingAverageAnalysis slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                MovingAverageAnalysis fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
 
 
 

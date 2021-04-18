@@ -19,7 +19,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class MACD : IntervalColumnAnalysis, IOscillator
+    public sealed class MACD : CustomIntervalAnalysis, IOscillator
     {
         public MACD(int interval_fast, int interval_slow, int interval_sl,
             MovingAverageType avgType = MovingAverageType.Exponential) :
@@ -137,11 +137,11 @@ namespace Pacmio.Analysis
 
         public double LowerLimit { get; set; } = double.NaN;
 
-        public MovingAverage Fast_MA { get; }
+        public MovingAverageAnalysis Fast_MA { get; }
 
-        public MovingAverage Slow_MA { get; }
+        public MovingAverageAnalysis Slow_MA { get; }
 
-        public MovingAverage MACD_SL { get; }
+        public MovingAverageAnalysis MACD_SL { get; }
 
         public NumericColumn HIST_Column { get; }
 

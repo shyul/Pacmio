@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class WMA : MovingAverage
+    public sealed class WMA : MovingAverageAnalysis
     {
         public WMA(int interval) : this(Bar.Column_Close, interval) { }
 

@@ -13,7 +13,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class EMA : MovingAverage
+    public sealed class EMA : MovingAverageAnalysis
     {
         public EMA(int interval) : this(Bar.Column_Close, interval) { }
 

@@ -15,7 +15,7 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class SMMA : MovingAverage
+    public sealed class SMMA : MovingAverageAnalysis
     {
         public SMMA(int interval) : this(Bar.Column_Close, interval) { }
 

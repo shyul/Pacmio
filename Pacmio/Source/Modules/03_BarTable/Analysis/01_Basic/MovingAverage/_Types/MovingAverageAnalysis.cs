@@ -13,10 +13,10 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public abstract class MovingAverage : IntervalColumnAnalysis
+    public abstract class MovingAverageAnalysis : CustomIntervalAnalysis
     {
-        protected MovingAverage(NumericColumn column, int interval) : base(column, interval) { }
+        protected MovingAverageAnalysis(NumericColumn column, int interval) : base(column, interval) { }
 
-        protected MovingAverage() { }
+        protected MovingAverageAnalysis() { }
     }
 }

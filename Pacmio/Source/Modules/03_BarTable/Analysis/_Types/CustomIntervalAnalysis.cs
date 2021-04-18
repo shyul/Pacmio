@@ -13,9 +13,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public abstract class IntervalColumnAnalysis : IntervalAnalysis
+    public abstract class CustomIntervalAnalysis : IntervalAnalysis
     {
-        protected IntervalColumnAnalysis(NumericColumn column, int interval)
+        protected CustomIntervalAnalysis(NumericColumn column, int interval)
         {
             Interval = interval;
             Column = column;
@@ -36,7 +36,7 @@ namespace Pacmio
             };
         }
 
-        protected IntervalColumnAnalysis() { }
+        protected CustomIntervalAnalysis() { }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ Interval;
 

@@ -63,9 +63,9 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public MovingAverage Fast_MA { get; }
+        public MovingAverageAnalysis Fast_MA { get; }
 
-        public MovingAverage Slow_MA { get; }
+        public MovingAverageAnalysis Slow_MA { get; }
 
         public NumericColumn Column_Result { get; }
 

@@ -37,8 +37,8 @@ namespace Pacmio.Analysis
                 var aroon = new Aroon() { HasXAxisBar = true, Order = int.MaxValue };
                 //aroon.LineSeries.Enabled = false;
 
-                MovingAverage slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
-                MovingAverage fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+                MovingAverageAnalysis slow_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 2 };
+                MovingAverageAnalysis fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
                 //var ma_cross = new CrossIndicator(fast_MA, slow_MA);
 
                 DebugSeries csd_range = new DebugColumnSeries(Bar.Column_Range);
