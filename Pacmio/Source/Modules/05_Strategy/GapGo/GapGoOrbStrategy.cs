@@ -107,12 +107,10 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 StrategyDatum sd = b[this];
-                sd.SnapshotPosition(bap.IsLive);
-
 
                 // Calculate/Get the position location.
 
-                if (TimeInForce.Contains(b.Time) && sd.PositionDatum.Quantity == 0) // Entry, quantity == 0 and no pending order by the strategy
+                if (TimeInForce.Contains(b.Time) && sd.Quantity == 0) // Entry, quantity == 0 and no pending order by the strategy
                 {
                     Bar time_frame_b = bts[b.Time, Filter];
 
@@ -127,9 +125,9 @@ namespace Pacmio.Analysis
 
                         if (b.Close > bull_buy_stop)
                         {
-                            sd.Execution = new EntryExecution()
+                            sd.Decision = new EntryDecision()
                             {
-                                Type = ExecutionType.BuyStop,
+                                Type = EntryType.BuyStop,
                                 ExecutionPrice = ob.High,
                                 StopLossPrice = ob.Low,
                                 ProfitTakePrice = ob.High + 2 * (ob.High - ob.Low)
@@ -138,9 +136,9 @@ namespace Pacmio.Analysis
                         }
                         else if (b.Close < bear_short_limit)
                         {
-                            sd.Execution = new EntryExecution()
+                            sd.Decision = new EntryDecision()
                             {
-                                Type = ExecutionType.SellLimit,
+                                Type = EntryType.SellLimit,
                                 ExecutionPrice = ob.Low,
                                 StopLossPrice = ob.High,
                                 ProfitTakePrice = ob.Low - 2 * (ob.High - ob.Low)
@@ -156,7 +154,7 @@ namespace Pacmio.Analysis
 
                 if (!bap.IsLive) // Calculate the position when the table is not Alive. 
                 {
-                    switch (sd.Execution)
+                    switch (sd.Decision)
                     {
 
 

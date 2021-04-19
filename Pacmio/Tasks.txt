@@ -1,5 +1,6 @@
 Current Task
 ==============
+1. Decision -> Execution Simulation Model
 1. Inter Bars Trendline (10 Bars H L)
 3. New Flag Analysis has glitches
 4. DPPMO needs to finalize

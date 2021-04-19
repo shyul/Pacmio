@@ -188,6 +188,8 @@ namespace Pacmio
             DataSourcePeriod = b.DataSourcePeriod;
         }
 
+        public bool Contains(double price) => price >= Low && price <= High;
+
         public void ClearAllCalculationData()
         {
             Type = BarType.None;
@@ -469,10 +471,22 @@ namespace Pacmio
             set => this[pa.Column_Result] = value;
         }
 
-        public StrategyDatum this[Strategy s] 
-            => DatumColumnsLUT[s.Column_Result] is StrategyDatum sd_1 ? 
-            sd_1 :
-            (DatumColumnsLUT[s.Column_Result] = new StrategyDatum(this, s)) as StrategyDatum;
+        public StrategyDatum this[Strategy s]
+        {
+            get
+            {
+                if(DatumColumnsLUT[s.Column_Result] is StrategyDatum sd) 
+                {
+                    return sd;
+                }
+                else
+                {
+                    StrategyDatum new_sd = new(this, s);
+                    DatumColumnsLUT[s.Column_Result] = new_sd;
+                    return new_sd;
+                }
+            }
+        }
 
         #endregion Datum Column
 

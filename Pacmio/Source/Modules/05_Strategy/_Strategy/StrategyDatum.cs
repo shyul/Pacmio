@@ -17,10 +17,28 @@ namespace Pacmio
 {
     public class StrategyDatum : IDatum
     {
-        public StrategyDatum(Bar b, Strategy s)
+        public StrategyDatum(Bar b, Strategy s, bool isLive)
         {
             Bar = b;
             Strategy = s;
+
+            if (isLive && s.AccountInfo is AccountInfo ac)
+            {
+                PositionInfo pi = ac[Contract];
+                Quantity = pi.Quantity;
+                AveragePrice = pi.AverageEntryPrice;
+
+                if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1) 
+                {
+                    sd_1.Quantity = Quantity;
+                    sd_1.AveragePrice = AveragePrice;
+                }
+            }
+            else if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1)
+            {
+                Quantity = sd_1.Quantity;
+                AveragePrice = sd_1.AveragePrice;
+            }
         }
 
         public Strategy Strategy { get; }
@@ -33,15 +51,15 @@ namespace Pacmio
 
         #region Execution
 
-        public IExecution Execution
+        public IDecision Decision
         {
-            get => m_Execution;
+            get => m_Decision;
 
             set
             {
-                if (value is IExecution exec)
+                if (value is IDecision exec)
                 {
-                    if (m_Execution is null || m_Execution.GetType() != exec.GetType())
+                    if (m_Decision is null || m_Decision.GetType() != exec.GetType())
                     {
                         DecisionCount++;
                     }
@@ -50,77 +68,60 @@ namespace Pacmio
                         DecisionCount = 1;
                     }
 
-                    m_Execution = exec;
+                    m_Decision = exec;
                 }
                 else
                 {
-                    m_Execution = null;
+                    m_Decision = null;
                     DecisionCount = 0;
                 }
             }
         }
 
-        private IExecution m_Execution = null;
+        private IDecision m_Decision = null;
 
         public int DecisionCount { get; private set; } = 0;
 
+
+
+
+        //public 
+
         #endregion Execution
 
-        #region Position
+        #region Position Track
 
         // A. Simulation Mode.
         // B. Actual Trade Mode. -- Keep update the last Bar's Datum Info
         // -- Run Snapshot first during the simulation
-        public void SnapshotPosition(bool isLive = false)
+
+        public void AnalyzePosition(bool isLive)
         {
-            if (isLive) // check if the bar is Live?
-            {
-                if (PositionDatum is null) PositionDatum = new PositionDatum();
+            // Entry Exec is proactive
+            // Exit Exec is passive.
 
-
-                // Get Account Numner from Strategy
-                // Find PositionInfo
-                // Copy it from there...
-                PositionDatum.Quantity = 0;
-            }
-            else if (PositionDatum is null)
-            {
-                if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1 && sd_1.PositionDatum is PositionDatum psd)
-                    PositionDatum = new PositionDatum(psd);
-                else
-                    PositionDatum = new PositionDatum();
-            }
         }
 
 
-        public PositionDatum PositionDatum { get; private set; }
-
-        public double PnL => PositionDatum.Cost == 0 ? 0 : PositionDatum.Quantity * (Bar.Close - PositionDatum.AveragePrice);
-
-        public double PnL_Percent => PositionDatum.Cost == 0 ? 0 : 100 * (Bar.Close - PositionDatum.AveragePrice) / PositionDatum.AveragePrice;
-
-        #endregion Position
-    }
+        //
+        public List<IExecution> Executions { get; } = new();
 
 
-    public class PositionDatum 
-    {
-        public PositionDatum() 
-        {
-            Quantity = 0;
-            AveragePrice = double.NaN;
-        }
 
-        public PositionDatum(PositionDatum psd) 
-        {
-            Quantity = psd.Quantity;
-            AveragePrice = psd.AveragePrice;
-        }
 
-        public double Quantity { get; set; }
+        public double Quantity { get; private set; } = 0;
 
-        public double AveragePrice { get; set; }
+        public double AveragePrice { get; private set; } = double.NaN;
 
         public double Cost => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
+
+        public double PnL => Cost == 0 ? 0 : Quantity * (Bar.Close - AveragePrice);
+
+        public double PnL_Percent => Cost == 0 ? 0 : 100 * (Bar.Close - AveragePrice) / AveragePrice;
+
+        #endregion Position Track
     }
+
+
+
 }

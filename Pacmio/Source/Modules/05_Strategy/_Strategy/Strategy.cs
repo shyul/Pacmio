@@ -24,6 +24,12 @@ namespace Pacmio
     {
         protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
 
+        public AccountInfo AccountInfo { get; set; }
+
+
+
+
+
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
@@ -35,6 +41,9 @@ namespace Pacmio
         /// Example: Only trade 9:30 AM to 10 AM
         /// </summary>
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+
+
+
 
 
 
@@ -78,7 +87,7 @@ namespace Pacmio
                 Bar b = bt[i];
 
                 Bar time_frame_b = bts[b.Time, Filter];
-                
+
                 // Assure Tables from other time frame has the same or later ticker time...
 
                 // Get existing Position...
