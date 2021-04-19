@@ -733,7 +733,7 @@ namespace Pacmio
 
         private CancellationTokenSource CalculateTickCancelTs { get; }
 
-        private bool CalculateTickRequested { get; set; } = false;
+        public bool CalculateTickRequested { get; private set; } = false;
 
         public DateTime LastCalculatedTickTime { get; private set; } = DateTime.MinValue;
 
@@ -746,8 +746,11 @@ namespace Pacmio
                     Status = TableStatus.Ticking;
                     lock (DataLockObject)
                     {
-                        CalculateTickRequested = false;
                         Calculate(BarAnalysisPointerLUT.Keys);
+
+                        // Calculate will monitor "CalculateTickRequested" to identify if
+                        // the calculate isLive.
+                        CalculateTickRequested = false;
                         LastCalculatedTickTime = LastTickTime;
                     }
                     Status = TableStatus.TickingFinished;
@@ -760,10 +763,10 @@ namespace Pacmio
 
         public void ResetCalculateData()
         {
-            CalculateTickRequested = false;
             Status = TableStatus.Default;
             lock (DataLockObject)
             {
+                CalculateTickRequested = false;
                 ResetCalculationPointer();
                 Rows.AsParallel().ForAll(n => n.ClearAllCalculationData());
             }

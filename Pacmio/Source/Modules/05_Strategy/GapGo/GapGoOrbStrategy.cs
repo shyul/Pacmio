@@ -125,10 +125,10 @@ namespace Pacmio.Analysis
 
                         if (b.Close > bull_buy_stop)
                         {
-                            sd.Decision = new EntryDecision()
+                            sd.Decision = new EntryDecision(b)
                             {
                                 Type = EntryType.BuyStop,
-                                ExecutionPrice = ob.High,
+                                EntryPrice = ob.High,
                                 StopLossPrice = ob.Low,
                                 ProfitTakePrice = ob.High + 2 * (ob.High - ob.Low)
                             };
@@ -136,10 +136,10 @@ namespace Pacmio.Analysis
                         }
                         else if (b.Close < bear_short_limit)
                         {
-                            sd.Decision = new EntryDecision()
+                            sd.Decision = new EntryDecision(b)
                             {
                                 Type = EntryType.SellLimit,
-                                ExecutionPrice = ob.Low,
+                                EntryPrice = ob.Low,
                                 StopLossPrice = ob.High,
                                 ProfitTakePrice = ob.Low - 2 * (ob.High - ob.Low)
                             };

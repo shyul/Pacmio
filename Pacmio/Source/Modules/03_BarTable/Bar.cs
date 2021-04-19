@@ -475,7 +475,7 @@ namespace Pacmio
         {
             get
             {
-                if(DatumColumnsLUT[s.Column_Result] is StrategyDatum sd) 
+                if (DatumColumnsLUT[s.Column_Result] is StrategyDatum sd)
                 {
                     return sd;
                 }

@@ -140,6 +140,10 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
     <Compile Include="Source\Modules\05_Strategy\StrategyTool.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\EntryDecision.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\EntryType.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\HoldDecision.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\IDecision.cs" />
     <Compile Include="Source\Modules\07_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\CandleStickSeries.cs" />
@@ -264,7 +268,7 @@
     <Compile Include="Source\Modules\04_BarChart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSet.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\PositionSeries.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\ActionType.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\ActionType.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\SMMA.cs" />
