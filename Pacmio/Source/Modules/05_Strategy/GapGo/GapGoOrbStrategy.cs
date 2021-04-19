@@ -90,6 +90,8 @@ namespace Pacmio.Analysis
             BarTable bt = bap.Table;
             BarTableSet bts = bt.BarTableSet;
 
+            MultiPeriod testPeriods = bts.MultiPeriod;
+
             Bar OpenBar = null;
 
             if (bap.IsLive)
@@ -108,9 +110,11 @@ namespace Pacmio.Analysis
                 Bar b = bt[i];
                 StrategyDatum sd = b[this];
 
+                sd.ExecuteDecision();
+
                 // Calculate/Get the position location.
 
-                if (TimeInForce.Contains(b.Time) && sd.Quantity == 0) // Entry, quantity == 0 and no pending order by the strategy
+                if (testPeriods.Contains(b.Time) && TimeInForce.Contains(b.Time) && sd.Quantity == 0) // Entry, quantity == 0 and no pending order by the strategy
                 {
                     Bar time_frame_b = bts[b.Time, Filter];
 
@@ -125,9 +129,10 @@ namespace Pacmio.Analysis
 
                         if (b.Close > bull_buy_stop)
                         {
-                            sd.Decision = new EntryDecision(b)
+                            sd.Decision = new EquityDecision(b)
                             {
-                                Type = EntryType.BuyStop,
+                                Scale = 1,
+                                Type = EntryType.Stop,
                                 EntryPrice = ob.High,
                                 StopLossPrice = ob.Low,
                                 ProfitTakePrice = ob.High + 2 * (ob.High - ob.Low)
@@ -136,9 +141,10 @@ namespace Pacmio.Analysis
                         }
                         else if (b.Close < bear_short_limit)
                         {
-                            sd.Decision = new EntryDecision(b)
+                            sd.Decision = new EquityDecision(b)
                             {
-                                Type = EntryType.SellLimit,
+                                Scale = -1,
+                                Type = EntryType.Limit,
                                 EntryPrice = ob.Low,
                                 StopLossPrice = ob.High,
                                 ProfitTakePrice = ob.Low - 2 * (ob.High - ob.Low)

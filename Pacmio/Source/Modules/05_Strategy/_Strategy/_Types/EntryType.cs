@@ -13,16 +13,8 @@ namespace Pacmio
     {
         None = 0,
 
-        Buy = 1,
+        Limit = 1,
 
-        BuyLimit = 2,
-
-        BuyStop = 3,
-
-        Sell = -1,
-
-        SellStop = -2,
-
-        SellLimit = -3,
+        Stop = 2,
     }
 }
