@@ -94,16 +94,6 @@ namespace Pacmio.Analysis
 
             Bar OpenBar = null;
 
-            if (bap.IsLive)
-            {
-                // Position Source is Lookup Table Strategy to Position (under account...)
-                // Check if the quantity is acknowledged or not??
-            }
-            else
-            {
-                // Position Source is from position simulation calculator
-            }
-
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
@@ -152,24 +142,16 @@ namespace Pacmio.Analysis
                         }
 
                     }
+
+
+                    // Verify the decision again.
                 }
                 else // and Exit
                 {
 
                 }
 
-                if (!bap.IsLive) // Calculate the position when the table is not Alive. 
-                {
-                    switch (sd.Decision)
-                    {
 
-
-
-
-                        default: break;
-                    }
-
-                }
             }
         }
     }

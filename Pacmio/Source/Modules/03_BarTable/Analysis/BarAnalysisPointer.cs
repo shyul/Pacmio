@@ -35,7 +35,5 @@ namespace Pacmio
         /// Check if the this analysis is up to date
         /// </summary>
         public bool IsUpToDate => Count == 0 || StartPt >= Count;
-
-        public bool IsLive => Table.Status == TableStatus.Ticking;
     }
 }
