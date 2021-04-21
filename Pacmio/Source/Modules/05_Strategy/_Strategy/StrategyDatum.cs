@@ -9,8 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Runtime.Serialization;
 using Xu;
 
 namespace Pacmio
@@ -75,153 +73,105 @@ namespace Pacmio
         {
             if (HasDecision)
             {
-                if (IsLive) // Check the bar see how it is filled
+                if (Decision is EquityDecision entry)
                 {
-                    if (Decision is EquityDecision entry)
+                    if (entry.Scale > 0) // Buy Side 
                     {
-                        // Check current price is fillable
-                        if (entry.Scale > 0 && Bar.Close > entry.StopLossPrice && Bar.Close < entry.ProfitTakePrice) // Buy Side 
-                        {
-                            double qty = Quantity == 0 ? 1 : Math.Abs(Quantity * entry.Scale);
+                        double qty = Quantity == 0 ? 1 : Math.Abs(Quantity * entry.Scale);
 
-                            if (entry.Type == EntryType.Limit && Bar.Close < entry.EntryPrice)
-                            {
-                                // send the order and quantity registered.
-                                RegisterLiveExecution(qty);
-                            }
-                            else if (entry.Type == EntryType.Stop && Bar.Close > entry.EntryPrice)
-                            {
-                                RegisterLiveExecution(qty);
-                            }
-                            else if (Bar.Contains(entry.EntryPrice))
-                            {
-                                RegisterLiveExecution(qty);
-                            }
-                        }
-                        else if (entry.Scale < 0) // Sell Side
+                        if (entry.Type == EntryType.Limit && Bar.High < entry.EntryPrice && Bar.Open > entry.StopLossPrice)
                         {
-                            double qty = Quantity == 0 ? -1 : -Math.Abs(Quantity * entry.Scale);
-
-                            if (entry.Type == EntryType.Limit && Bar.Close > entry.EntryPrice)
-                            {
-                                RegisterLiveExecution(qty);
-                            }
-                            else if (entry.Type == EntryType.Stop && Bar.Close < entry.EntryPrice)
-                            {
-                                RegisterLiveExecution(qty);
-                            }
-                            else if (Bar.Contains(entry.EntryPrice))
-                            {
-                                RegisterLiveExecution(qty);
-                            }
+                            SendOrder(EntryType.None, Bar.Open, qty);
                         }
+                        else if (entry.Type == EntryType.Stop && Bar.Low > entry.EntryPrice && Bar.Open < entry.ProfitTakePrice)
+                        {
+                            SendOrder(EntryType.None, Bar.Open, qty);
+                        }
+                        else if (Bar.Contains(entry.EntryPrice))
+                        {
+                            SendOrder(entry.Type, entry.EntryPrice, qty);
+                        }
+
                     }
-
-                    if (Decision is IDecision dec)
+                    else if (entry.Scale < 0) // Sell Side
                     {
-                        if (Quantity > 0) // Long position
+                        double qty = Quantity == 0 ? -1 : -Math.Abs(Quantity * entry.Scale);
+
+                        if (entry.Type == EntryType.Limit && Bar.Low > entry.EntryPrice && Bar.Open < entry.StopLossPrice)
                         {
-                            if (Bar.Close < dec.StopLossPrice)
-                            {
-                                RegisterLiveExecution(-Quantity);
-                            }
-                            else if (Bar.Close > dec.ProfitTakePrice)
-                            {
-                                RegisterLiveExecution(-Quantity);
-                            }
+                            SendOrder(EntryType.None, Bar.Open, qty);
                         }
-                        else if (Quantity < 0) // Short Position
+                        else if (entry.Type == EntryType.Stop && Bar.High < entry.EntryPrice && Bar.Open > entry.ProfitTakePrice)
                         {
-                            if (Bar.Close > dec.StopLossPrice)
-                            {
-                                RegisterLiveExecution(-Quantity);
-                            }
-                            else if (Bar.Close < dec.ProfitTakePrice)
-                            {
-                                RegisterLiveExecution(-Quantity);
-                            }
+                            SendOrder(EntryType.None, Bar.Open, qty);
                         }
-
-
-
-
+                        else if (Bar.Contains(entry.EntryPrice))
+                        {
+                            SendOrder(entry.Type, entry.EntryPrice, qty);
+                        }
                     }
                 }
-                else
+
+                if (Decision is IDecision dec)
                 {
-                    if (Decision is EquityDecision entry)
+                    // Pessimistic by check stop loss first.
+                    if (Bar.Contains(dec.StopLossPrice))
                     {
-                        if (entry.Scale > 0) // Buy Side 
-                        {
-                            double qty = Quantity == 0 ? 1 : Math.Abs(Quantity * entry.Scale);
-
-                            if (entry.Type == EntryType.Limit && Bar.High < entry.EntryPrice)
-                            {
-                                AddExecution(new Execution(Bar.Open, qty));
-                            }
-                            else if (entry.Type == EntryType.Stop && Bar.Low > entry.EntryPrice)
-                            {
-                                AddExecution(new Execution(Bar.Open, qty));
-                            }
-                            else if (Bar.Contains(entry.EntryPrice))
-                            {
-                                AddExecution(new Execution(entry.EntryPrice, qty));
-                            }
-
-                        }
-                        else if (entry.Scale < 0) // Sell Side
-                        {
-                            double qty = Quantity == 0 ? -1 : -Math.Abs(Quantity * entry.Scale);
-
-                            if (entry.Type == EntryType.Limit && Bar.Low > entry.EntryPrice)
-                            {
-                                AddExecution(new Execution(Bar.Open, qty));
-                            }
-                            else if (entry.Type == EntryType.Stop && Bar.High < entry.EntryPrice)
-                            {
-                                AddExecution(new Execution(Bar.Open, qty));
-                            }
-                            else if (Bar.Contains(entry.EntryPrice))
-                            {
-                                AddExecution(new Execution(entry.EntryPrice, qty));
-                            }
-                        }
-
-                        if (Decision is IDecision dec)
-                        {
-                            // Pessimistic by check stop loss first.
-                            if (Bar.Contains(dec.StopLossPrice))
-                            {
-                                AddExecution(new Execution(dec.StopLossPrice, -Quantity));
-                            }
-                            else if (Bar.Contains(dec.ProfitTakePrice))
-                            {
-                                AddExecution(new Execution(dec.ProfitTakePrice, -Quantity));
-                            }
-                        }
+                        SendOrder(EntryType.Stop, dec.StopLossPrice, -Quantity);
                     }
-                    // Modify the decision:
-                    // 1. Null, no decsion, example the position just got exit
-                    // 2. Entry Decision, when there is an oppotunity
-                    // 3. Hold Decision, check the changes of the price target and stop loss.
+                    else if (Bar.Contains(dec.ProfitTakePrice))
+                    {
+                        SendOrder(EntryType.Limit, dec.ProfitTakePrice, -Quantity);
+                    }
+                    else if (Quantity > 0 && (Bar.High < dec.StopLossPrice || Bar.Low > dec.ProfitTakePrice)) // Long position
+                    {
+                        SendOrder(EntryType.None, Bar.Open, -Quantity);
+                    }
+                    else if (Quantity < 0 && (Bar.Low > dec.StopLossPrice || Bar.High < dec.ProfitTakePrice)) // Short Position
+                    {
+                        SendOrder(EntryType.None, Bar.Open, -Quantity);
+                    }
                 }
             }
         }
 
-        public void RegisterLiveExecution(double qty)
+        private void SendOrder(EntryType entryType, double refPrice, double qty)
         {
             if (qty != 0)
             {
-                // Send this Execution!
+                if (qty == -Quantity) // Identify if it closes the position entirely.
+                {
+                    AveragePrice = double.NaN;
+                    Decision = null;
+                }
 
-                // get actual price and quantity
+                if (IsLive) // && the same direction execution is not sent ?// Check the bar see how it is filled
+                {
+                    // Send this Execution!
 
+                    // get actual price and quantity
 
+                    // Wait until it returns 
 
+                }
+                else // If it not alive, just add the execution directly.
+                {
+                    // Add splipage and commission here??
+
+                    double commission = 0;
+                    double slippage = 0;
+
+                    AddExecutionRecord(new ExecutionRecord(refPrice + slippage, qty, commission));
+                }
+
+                // Modify the decision:
+                // 1. Null, no decsion, example the position just got exit
+                // 2. Entry Decision, when there is an oppotunity
+                // 3. Hold Decision, check the changes of the price target and stop loss.
             }
         }
 
-        public void AddExecution(Execution exec)
+        private void AddExecutionRecord(ExecutionRecord exec)
         {
             if (exec.Quantity != 0)
             {
@@ -237,23 +187,17 @@ namespace Pacmio
                     exec.LiquidityType = LiquidityType.Removed;
                     exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutePrice);
                     Quantity -= exec.Quantity;
-
-                    if (Quantity == 0)
-                    {
-                        AveragePrice = double.NaN;
-                        Decision = null;
-                    }
                 }
 
-                Executions.Add(exec);
+                ExecutionList.Add(exec);
             }
         }
 
-        private List<Execution> Executions = new();
+        private List<ExecutionRecord> ExecutionList = new();
 
-        public Execution LatestExecution => Executions.Count > 0 ? Executions.Last() : null;
+        public ExecutionRecord LatestExecution => ExecutionList.Count > 0 ? ExecutionList.Last() : null;
 
-        public double RealizedPnL => Executions.Select(n => n.RealizedPnL).Sum();
+        public double RealizedPnL => ExecutionList.Select(n => n.RealizedPnL).Sum();
 
         #endregion Execution
 

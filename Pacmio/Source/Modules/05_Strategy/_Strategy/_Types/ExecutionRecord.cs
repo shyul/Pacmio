@@ -9,13 +9,16 @@ using System.Collections.Generic;
 
 namespace Pacmio
 {
-    public class Execution
+    public class ExecutionRecord
     {
-        public Execution(double price, double qty) 
+        public ExecutionRecord(double price, double qty, double commission)
         {
             ExecutePrice = price;
             Quantity = qty;
+            Commission = commission;
         }
+
+        public double Commission { get; private set; }
 
         public double ExecutePrice { get; private set; }
 
