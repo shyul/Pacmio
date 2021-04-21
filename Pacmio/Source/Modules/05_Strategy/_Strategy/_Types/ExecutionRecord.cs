@@ -28,6 +28,8 @@ namespace Pacmio
 
         public LiquidityType LiquidityType { get; set; } = LiquidityType.None;
 
+        public ActionType Action { get; set; } = ActionType.None;
+
         public double RealizedPnL { get; set; } = 0;
     }
 }

@@ -158,8 +158,8 @@ namespace Pacmio
                 {
                     // Add splipage and commission here??
 
-                    double commission = 0;
-                    double slippage = 0;
+                    double commission = 0; // Hard to estimate, since I am using unity quantity here.
+                    double slippage = 0; // Get it from simulation setting!
 
                     AddExecutionRecord(new ExecutionRecord(refPrice + slippage, qty, commission));
                 }
@@ -179,25 +179,39 @@ namespace Pacmio
                 {
                     exec.LiquidityType = LiquidityType.Added;
                     AveragePrice = Math.Abs((exec.Proceeds + Cost) / (exec.Quantity + Quantity));
+
+                    if (exec.Quantity > 0)
+                        exec.Action = ActionType.Long;
+                    else if (exec.Quantity < 0)
+                        exec.Action = ActionType.Short;
+
                     Quantity += exec.Quantity;
                     exec.RealizedPnL = 0;
                 }
                 else // Opposite direction in this case.
                 {
                     exec.LiquidityType = LiquidityType.Removed;
+
+                    if (exec.Quantity > 0)
+                        exec.Action = ActionType.Cover;
+                    else if (exec.Quantity < 0)
+                        exec.Action = ActionType.Sell;
+
                     exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutePrice);
                     Quantity -= exec.Quantity;
                 }
 
-                ExecutionList.Add(exec);
+                ExecutionRecordList.Add(exec);
             }
         }
 
-        private List<ExecutionRecord> ExecutionList = new();
+        private List<ExecutionRecord> ExecutionRecordList = new();
 
-        public ExecutionRecord LatestExecution => ExecutionList.Count > 0 ? ExecutionList.Last() : null;
+        public ExecutionRecord LatestExecutionRecord => ExecutionRecordList.Count > 0 ? ExecutionRecordList.Last() : null;
 
-        public double RealizedPnL => ExecutionList.Select(n => n.RealizedPnL).Sum();
+        public ActionType LatestAction => LatestExecutionRecord is ExecutionRecord exr ? exr.Action : ActionType.None;
+
+        public double RealizedPnL => ExecutionRecordList.Select(n => n.RealizedPnL).Sum();
 
         #endregion Execution
 

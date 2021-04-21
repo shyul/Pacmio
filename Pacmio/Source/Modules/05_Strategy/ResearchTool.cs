@@ -85,7 +85,7 @@ namespace Pacmio
             foreach (var item in clist.OrderBy(n => (n.bull + n.bear)))
             {
                 Console.WriteLine(item.c + " | " + item.bull.ToString("0.##") + "%" + " | " + item.bear.ToString("0.##") + "%");
-                
+
             }
 
             Console.WriteLine("Total " + clist.Count + " contracts found!");
