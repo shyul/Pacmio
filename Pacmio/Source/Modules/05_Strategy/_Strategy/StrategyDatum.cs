@@ -26,7 +26,7 @@ namespace Pacmio
                 Datum_1 = sd_1;
                 ProfitTakePrice = sd_1.ProfitTakePrice;
                 StopLossPrice = sd_1.StopLossPrice;
-                EntryPrice = sd_1.EntryPrice;
+                //ExecutionPrice = sd_1.ExecutionPrice;
 
                 if (sd_1.EntryBarIndex >= 0)
                     EntryBarIndex = sd_1.EntryBarIndex + 1;
@@ -67,8 +67,6 @@ namespace Pacmio
 
         public StrategyDatum Datum_1 { get; } = null;
 
-
-
         /// <summary>
         /// Positive means adding scale amount of position
         /// Negative means removing scale amount of position
@@ -76,115 +74,62 @@ namespace Pacmio
         /// 0.5 (Remove Liq) means remove half, 1 (Remove) means empty the position.
         /// The actual "quantity" will be calculated with R/R and WinRate of the backtesting result.
         /// </summary>
-        public double QuantityScale { get; set; } = 0;
 
-        public EntryType EntryType { get; set; } = EntryType.None;
+        public double ProfitTakePrice { get; set; } = double.NaN;
 
-        public double EntryPrice { get; set; } = double.NaN;
-
+        public double StopLossPrice { get; set; } = double.NaN;
 
 
-        public double ProfitTakePrice { get; set; }
+        public double RiskPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(AveragePrice - StopLossPrice);
 
-        public double StopLossPrice { get; set; }
+        public double RewardPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(ProfitTakePrice - AveragePrice);
 
-        public double RiskPart => Math.Abs(EntryPrice - StopLossPrice);
+        public double RewardRiskRatio => double.IsNaN(AveragePrice) ? double.NaN : (RewardPart / RiskPart);
 
-        public double RewardPart => Math.Abs(ProfitTakePrice - EntryPrice);
-
-        public double RewardRiskRatio => RewardPart / RiskPart;
 
         public string Message { get; set; } = string.Empty;
 
         public int EntryBarIndex { get; set; } = -1;
 
-
-
         #endregion Decision
 
         #region Execution
 
-        // A. Simulation Mode.
-        // B. Actual Trade Mode. -- Keep update the last Bar's Datum Info
-        // -- Run Snapshot first during the simulation
-        /*
-        public void ExecuteDecision()
+        public void CheckStopLoss()
         {
-            if (HasDecision)
+            if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
-                if (Decision is EquityDecision entry)
+                if (Bar.Contains(StopLossPrice))
                 {
-                    if (entry.Scale > 0) // Buy Side 
-                    {
-                        double qty = Quantity == 0 ? 1 : Math.Abs(Quantity * entry.Scale);
-
-                        if (entry.Type == EntryType.Limit && Bar.High < entry.EntryPrice && Bar.Open > entry.StopLossPrice)
-                        {
-                            SendOrder(EntryType.None, Bar.Open, qty);
-                        }
-                        else if (entry.Type == EntryType.Stop && Bar.Low > entry.EntryPrice && Bar.Open < entry.ProfitTakePrice)
-                        {
-                            SendOrder(EntryType.None, Bar.Open, qty);
-                        }
-                        else if (Bar.Contains(entry.EntryPrice))
-                        {
-                            SendOrder(entry.Type, entry.EntryPrice, qty);
-                        }
-
-                    }
-                    else if (entry.Scale < 0) // Sell Side
-                    {
-                        double qty = Quantity == 0 ? -1 : -Math.Abs(Quantity * entry.Scale);
-
-                        if (entry.Type == EntryType.Limit && Bar.Low > entry.EntryPrice && Bar.Open < entry.StopLossPrice)
-                        {
-                            SendOrder(EntryType.None, Bar.Open, qty);
-                        }
-                        else if (entry.Type == EntryType.Stop && Bar.High < entry.EntryPrice && Bar.Open > entry.ProfitTakePrice)
-                        {
-                            SendOrder(EntryType.None, Bar.Open, qty);
-                        }
-                        else if (Bar.Contains(entry.EntryPrice))
-                        {
-                            SendOrder(entry.Type, entry.EntryPrice, qty);
-                        }
-                    }
+                    SendOrder(StopLossPrice, -1, OrderType.MidPrice);
                 }
-
-                if (Decision is IDecision dec)
+                else if (Bar.High < StopLossPrice)
                 {
-                    // Pessimistic by check stop loss first.
-                    if (Bar.Contains(dec.StopLossPrice))
-                    {
-                        SendOrder(EntryType.Stop, dec.StopLossPrice, -Quantity);
-                    }
-                    else if (Bar.Contains(dec.ProfitTakePrice))
-                    {
-                        SendOrder(EntryType.Limit, dec.ProfitTakePrice, -Quantity);
-                    }
-                    else if (Quantity > 0 && (Bar.High < dec.StopLossPrice || Bar.Low > dec.ProfitTakePrice)) // Long position
-                    {
-                        SendOrder(EntryType.None, Bar.Open, -Quantity);
-                    }
-                    else if (Quantity < 0 && (Bar.Low > dec.StopLossPrice || Bar.High < dec.ProfitTakePrice)) // Short Position
-                    {
-                        SendOrder(EntryType.None, Bar.Open, -Quantity);
-                    }
+                    SendOrder(Bar.Open, -1, OrderType.MidPrice);
                 }
             }
-        }*/
+            else if (Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
+            {
+                if (Bar.Contains(StopLossPrice))
+                {
+                    SendOrder(StopLossPrice, 1, OrderType.MidPrice);
+                }
+                else if (Bar.Low > StopLossPrice)
+                {
+                    SendOrder(Bar.Open, 1, OrderType.MidPrice);
+                }
+            }
+        }
 
-        //public object OrderLockingObject { get; } = new();
-
-        public void UpdateOrder()
+        public void SendOrder(double executionPrice, double scale, OrderType orderType)
         {
-            if (QuantityScale != 0)
+            if (scale != 0)
             {
 
-                double orderQty = Quantity == 0 ? 1 : Math.Abs(Quantity * QuantityScale);
+                double orderQty = Quantity == 0 ? 1 : Math.Abs(Quantity * scale);
 
 
-                if (QuantityScale * Quantity < 0 && QuantityScale == 1) // Identify if it closes the position entirely.
+                if (scale * Quantity < 0 && scale == 1) // Identify if it closes the position entirely.
                 {
                     AveragePrice = double.NaN;
                 }
@@ -205,7 +150,7 @@ namespace Pacmio
                     double commission = 0; // Hard to estimate, since I am using unity quantity here.
                     double slippage = 0; // Get it from simulation setting!
 
-                    AddExecutionRecord(new ExecutionRecord(EntryPrice + slippage, QuantityScale, commission));
+                    AddExecutionRecord(new ExecutionRecord(executionPrice + slippage, scale, commission, orderType));
                 }
 
                 // Modify the decision:
@@ -241,7 +186,7 @@ namespace Pacmio
                     else if (exec.Quantity < 0)
                         exec.Action = ActionType.Sell;
 
-                    exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutePrice);
+                    exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutionPrice);
                     Quantity -= exec.Quantity;
                 }
 

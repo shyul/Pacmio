@@ -123,41 +123,33 @@ namespace Pacmio.Analysis
 
                         if (string.IsNullOrEmpty(sd.Message)) 
                         {
-                            if (b.Close > ob.High && b.Contains(ob.High)) // Bullish / long side Entry
+                            if (b.Contains(ob.High)) // Bullish / long side no gap entry
                             {
-                                sd.QuantityScale = 1;
-                                sd.EntryType = EntryType.Stop;
-                                sd.EntryPrice = ob.High;
                                 sd.StopLossPrice = ob.Low;
-                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * sd.RiskPart;
+                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * (ob.High - ob.Low);
                                 sd.Message = RangeBarBullishMessage;
                                 sd.EntryBarIndex = 0;
-                                sd.UpdateOrder();
+                                sd.SendOrder(ob.High, 1, OrderType.Stop);
                             }
-                            else if (b.Close < ob.Low && b.Contains(ob.Low)) // Bearish / short side no gap entry
+                            else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
                             {
-                                sd.QuantityScale = -1;
-                                sd.EntryType = EntryType.Limit;
-                                sd.EntryPrice = ob.Low;
                                 sd.StopLossPrice = ob.High;
-                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * sd.RiskPart;
+                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * (ob.High - ob.Low);// sd.RiskPart;
                                 sd.Message = RangeBarBearishMessage;
                                 sd.EntryBarIndex = 0;
-                                sd.UpdateOrder();
+                                sd.SendOrder(ob.Low, -1, OrderType.Limit);
                             }
-                            else
-                            {
-                                sd.QuantityScale = 0;
-                                sd.EntryType = EntryType.None;
-                            }
-
                         }
                     }
                 }
 
+                sd.CheckStopLoss();
+                // Dedicated function to handle stop out here!
+
+
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
-                    if (b.Close >= sd.ProfitTakePrice)
+                    if (b.Contains(sd.ProfitTakePrice))
                     {
                         // Sell half and move the stop loss to breakeven
 
@@ -165,21 +157,30 @@ namespace Pacmio.Analysis
                         // sd.Decision.ProfitTakePrice += riskPart;
                         // sd.Decision.StopLossPrice += riskPart;
                     }
-
+                    else if(b.Low > sd.ProfitTakePrice) 
+                    {
+                    
+                    
+                    
+                    }
                 }
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
+                    if (b.Contains(sd.ProfitTakePrice))
+                    {
+                        // Sell half and move the stop loss to breakeven
+
+                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
+                        // sd.Decision.ProfitTakePrice += riskPart;
+                        // sd.Decision.StopLossPrice += riskPart;
+                    }
+                    else if (b.High < sd.ProfitTakePrice)
+                    {
 
 
+
+                    }
                 }
-
-
-
-
-
-
-
-
             }
         }
     }
