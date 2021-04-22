@@ -125,7 +125,7 @@
     <Compile Include="Source\Modules\05_Strategy\Momentum\MomentumDailyFilter.cs" />
     <Compile Include="Source\Modules\05_Strategy\Reversal\ReversalDailyFilter.cs" />
     <Compile Include="Source\Modules\05_Strategy\ResearchTool.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Indicator\IndicatorScanResult.cs" />
+    <Compile Include="Source\Modules\05_Strategy\_Indicator\FilterTestResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\05_Strategy\SwingTrade\SwingTradeDailyFilter.cs" />
     <Compile Include="Source\Modules\05_Strategy\Momentum\MomentumStrategy.cs" />
@@ -141,7 +141,6 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
     <Compile Include="Source\Modules\05_Strategy\StrategyTool.cs" />
     <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\EntryType.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\IDecision.cs" />
     <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\ExecutionRecord.cs" />
     <Compile Include="Source\Modules\07_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />

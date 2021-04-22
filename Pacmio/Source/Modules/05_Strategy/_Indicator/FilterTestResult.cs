@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorScanResult
+    public class FilterTestResult
     {
-        public IndicatorScanResult(Contract c)
+        public FilterTestResult(Contract c)
         {
             Contract = c;
         }

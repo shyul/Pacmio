@@ -27,9 +27,9 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, IndicatorScanResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, FilterTestResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
-            Dictionary<Contract, IndicatorScanResult> result = new();
+            Dictionary<Contract, FilterTestResult> result = new();
 
             double totalseconds = 0;
             float total_num = cList.Count();
@@ -63,7 +63,7 @@ namespace Pacmio
             return result;
         }
 
-        public static void PrintResult(Dictionary<Contract, IndicatorScanResult> result)
+        public static void PrintResult(Dictionary<Contract, FilterTestResult> result)
         {
             var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
 

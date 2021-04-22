@@ -21,23 +21,33 @@ namespace Pacmio
             Strategy = s;
             IsLive = b.Table.CalculateTickRequested;
 
-            if (IsLive && PositionInfo is PositionInfo pi)
+            if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1)
             {
-                Quantity = pi.Quantity;
-                AveragePrice = pi.AverageEntryPrice;
+                Datum_1 = sd_1;
+                ProfitTakePrice = sd_1.ProfitTakePrice;
+                StopLossPrice = sd_1.StopLossPrice;
+                EntryPrice = sd_1.EntryPrice;
 
-                if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1 && sd_1.IsLive)
+                if (sd_1.EntryBarIndex >= 0)
+                    EntryBarIndex = sd_1.EntryBarIndex + 1;
+                else
+                    EntryBarIndex = -1;
+
+                if (IsLive && PositionInfo is PositionInfo pi)
                 {
-                    sd_1.Quantity = Quantity;
-                    sd_1.AveragePrice = AveragePrice;
-                    Decision = sd_1.Decision;
+                    Quantity = pi.Quantity;
+                    AveragePrice = pi.AverageEntryPrice;
+                    if (sd_1.IsLive)
+                    {
+                        sd_1.Quantity = Quantity;
+                        sd_1.AveragePrice = AveragePrice;
+                    }
                 }
-            }
-            else if (Bar.Bar_1 is Bar b_1 && b_1[Strategy] is StrategyDatum sd_1 && !sd_1.IsLive)
-            {
-                Quantity = sd_1.Quantity;
-                AveragePrice = sd_1.AveragePrice;
-                Decision = sd_1.Decision; // keep the record of "current decision"
+                else if (!IsLive && !sd_1.IsLive)
+                {
+                    Quantity = sd_1.Quantity;
+                    AveragePrice = sd_1.AveragePrice;
+                }
             }
         }
 
@@ -55,11 +65,40 @@ namespace Pacmio
 
         #region Decision
 
-        public IDecision Decision { get; set; } = null;
+        public StrategyDatum Datum_1 { get; } = null;
 
-        public int DecisionBarDistance => Decision is not null ? Bar.Index - Decision.DecisionBar.Index : 0;
 
-        public bool HasDecision => DecisionBarDistance == 1;
+
+        /// <summary>
+        /// Positive means adding scale amount of position
+        /// Negative means removing scale amount of position
+        /// This is a ratio data: 1 means initial entry of the maximum riskable position, 2 means add double
+        /// 0.5 (Remove Liq) means remove half, 1 (Remove) means empty the position.
+        /// The actual "quantity" will be calculated with R/R and WinRate of the backtesting result.
+        /// </summary>
+        public double QuantityScale { get; set; } = 0;
+
+        public EntryType EntryType { get; set; } = EntryType.None;
+
+        public double EntryPrice { get; set; } = double.NaN;
+
+
+
+        public double ProfitTakePrice { get; set; }
+
+        public double StopLossPrice { get; set; }
+
+        public double RiskPart => Math.Abs(EntryPrice - StopLossPrice);
+
+        public double RewardPart => Math.Abs(ProfitTakePrice - EntryPrice);
+
+        public double RewardRiskRatio => RewardPart / RiskPart;
+
+        public string Message { get; set; } = string.Empty;
+
+        public int EntryBarIndex { get; set; } = -1;
+
+
 
         #endregion Decision
 
@@ -68,7 +107,7 @@ namespace Pacmio
         // A. Simulation Mode.
         // B. Actual Trade Mode. -- Keep update the last Bar's Datum Info
         // -- Run Snapshot first during the simulation
-
+        /*
         public void ExecuteDecision()
         {
             if (HasDecision)
@@ -133,16 +172,21 @@ namespace Pacmio
                     }
                 }
             }
-        }
+        }*/
 
-        private void SendOrder(EntryType entryType, double refPrice, double qty)
+        //public object OrderLockingObject { get; } = new();
+
+        public void UpdateOrder()
         {
-            if (qty != 0)
+            if (QuantityScale != 0)
             {
-                if (qty == -Quantity) // Identify if it closes the position entirely.
+
+                double orderQty = Quantity == 0 ? 1 : Math.Abs(Quantity * QuantityScale);
+
+
+                if (QuantityScale * Quantity < 0 && QuantityScale == 1) // Identify if it closes the position entirely.
                 {
                     AveragePrice = double.NaN;
-                    Decision = null;
                 }
 
                 if (IsLive) // && the same direction execution is not sent ?// Check the bar see how it is filled
@@ -161,7 +205,7 @@ namespace Pacmio
                     double commission = 0; // Hard to estimate, since I am using unity quantity here.
                     double slippage = 0; // Get it from simulation setting!
 
-                    AddExecutionRecord(new ExecutionRecord(refPrice + slippage, qty, commission));
+                    AddExecutionRecord(new ExecutionRecord(EntryPrice + slippage, QuantityScale, commission));
                 }
 
                 // Modify the decision:
@@ -216,6 +260,8 @@ namespace Pacmio
         #endregion Execution
 
         #region Position Track
+
+        //public double TargetQuantity { get; set; } = 0;
 
         public double Quantity { get; private set; } = 0;
 

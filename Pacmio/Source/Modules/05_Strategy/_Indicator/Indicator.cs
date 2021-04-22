@@ -60,10 +60,10 @@ namespace Pacmio
             return (BullishBars, BearishBars, bars);
         }
 
-        public IndicatorScanResult RunScanResult(BarTableSet bts, Period pd)
+        public FilterTestResult RunScanResult(BarTableSet bts, Period pd)
         {
             var (BullishBars, BearishBars, allBars) = RunScan(bts, pd);
-            IndicatorScanResult result = new(bts.Contract);
+            FilterTestResult result = new(bts.Contract);
 
             BullishBars.RunEach(n =>
             {

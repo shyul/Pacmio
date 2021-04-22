@@ -62,7 +62,7 @@ namespace Pacmio.Analysis
 
             Column_Result = new(Name, typeof(StrategyDatum));
             Time start = new Time(9, 30);
-            Time stop = start.AddSeconds(Frequency.Span.TotalSeconds.ToInt32());
+            Time stop = new Time(10, 00); // start.AddSeconds(Frequency.Span.TotalSeconds.ToInt32());
             TimeInForce = new TimePeriod(start, stop);
 
             SignalColumns = new SignalColumn[] { };
@@ -85,71 +85,99 @@ namespace Pacmio.Analysis
 
         public double MinimumRelativeVolume { get; } = 2;
 
+        public double RewardRiskRatio { get; } = 2;
+
+        public const string OpenBarMessage = "OpenBar";
+        public const string RangeBarBullishMessage = "RangeBarBullish";
+        public const string RangeBarBearishMessage = "RangeBarBearish";
+
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
+
             BarTableSet bts = bt.BarTableSet;
-
             MultiPeriod testPeriods = bts.MultiPeriod;
-
-            Bar OpenBar = null;
-
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
                 StrategyDatum sd = b[this];
 
-                sd.ExecuteDecision();
-
-                // Calculate/Get the position location.
-
-                if (testPeriods.Contains(b.Time) && TimeInForce.Contains(b.Time) && sd.Quantity == 0) // Entry, quantity == 0 and no pending order by the strategy
+                if (testPeriods.Contains(b.Time))
                 {
-                    Bar time_frame_b = bts[b.Time, Filter];
-
-                    if (TimeInForce.Start == b.Time)
+                    if (b.Time == TimeInForce.Start)
                     {
-                        OpenBar = b;
-                    }
-                    else if (OpenBar is Bar ob && ob.Volume > MinimumVolume && ob[RelativeVolume] > MinimumRelativeVolume && b.Index == ob.Index + 1)
-                    {
-                        double bull_buy_stop = ob.High;
-                        double bear_short_limit = ob.Low;
-
-                        if (b.Close > bull_buy_stop)
+                        if (b.Volume > MinimumVolume && b[RelativeVolume] > MinimumRelativeVolume)
                         {
-                            sd.Decision = new EquityDecision(b)
-                            {
-                                Scale = 1,
-                                Type = EntryType.Stop,
-                                EntryPrice = ob.High,
-                                StopLossPrice = ob.Low,
-                                ProfitTakePrice = ob.High + 2 * (ob.High - ob.Low)
-                            };
-
+                            sd.Message = OpenBarMessage;
                         }
-                        else if (b.Close < bear_short_limit)
-                        {
-                            sd.Decision = new EquityDecision(b)
-                            {
-                                Scale = -1,
-                                Type = EntryType.Limit,
-                                EntryPrice = ob.Low,
-                                StopLossPrice = ob.High,
-                                ProfitTakePrice = ob.Low - 2 * (ob.High - ob.Low)
-                            };
-                        }
-
                     }
 
+                    if (sd.Datum_1.Message == OpenBarMessage)
+                    {
+                        Bar ob = sd.Datum_1.Bar;
 
-                    // Verify the decision again.
+                        Bar time_frame_b = bts[b.Time, Filter];
+
+                        // Verify higher time frame analysis and indicators 
+
+                        if (string.IsNullOrEmpty(sd.Message)) 
+                        {
+                            if (b.Close > ob.High && b.Contains(ob.High)) // Bullish / long side Entry
+                            {
+                                sd.QuantityScale = 1;
+                                sd.EntryType = EntryType.Stop;
+                                sd.EntryPrice = ob.High;
+                                sd.StopLossPrice = ob.Low;
+                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * sd.RiskPart;
+                                sd.Message = RangeBarBullishMessage;
+                                sd.EntryBarIndex = 0;
+                                sd.UpdateOrder();
+                            }
+                            else if (b.Close < ob.Low && b.Contains(ob.Low)) // Bearish / short side no gap entry
+                            {
+                                sd.QuantityScale = -1;
+                                sd.EntryType = EntryType.Limit;
+                                sd.EntryPrice = ob.Low;
+                                sd.StopLossPrice = ob.High;
+                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * sd.RiskPart;
+                                sd.Message = RangeBarBearishMessage;
+                                sd.EntryBarIndex = 0;
+                                sd.UpdateOrder();
+                            }
+                            else
+                            {
+                                sd.QuantityScale = 0;
+                                sd.EntryType = EntryType.None;
+                            }
+
+                        }
+                    }
                 }
-                else // and Exit
+
+                if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
+                {
+                    if (b.Close >= sd.ProfitTakePrice)
+                    {
+                        // Sell half and move the stop loss to breakeven
+
+                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
+                        // sd.Decision.ProfitTakePrice += riskPart;
+                        // sd.Decision.StopLossPrice += riskPart;
+                    }
+
+                }
+                else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
 
+
                 }
+
+
+
+
+
+
 
 
             }
