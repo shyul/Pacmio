@@ -121,7 +121,7 @@ namespace Pacmio.Analysis
 
                         // Verify higher time frame analysis and indicators 
 
-                        if (string.IsNullOrEmpty(sd.Message)) 
+                        if (string.IsNullOrEmpty(sd.Message))
                         {
                             if (b.Contains(ob.High)) // Bullish / long side no gap entry
                             {
@@ -157,11 +157,15 @@ namespace Pacmio.Analysis
                         // sd.Decision.ProfitTakePrice += riskPart;
                         // sd.Decision.StopLossPrice += riskPart;
                     }
-                    else if(b.Low > sd.ProfitTakePrice) 
+                    else if (b.Low > sd.ProfitTakePrice)
                     {
-                    
-                    
-                    
+                        // Sell half and move the stop loss to breakeven
+
+                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
+                        // sd.Decision.ProfitTakePrice += riskPart;
+                        // sd.Decision.StopLossPrice += riskPart;
+
+
                     }
                 }
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
@@ -176,7 +180,11 @@ namespace Pacmio.Analysis
                     }
                     else if (b.High < sd.ProfitTakePrice)
                     {
+                        // Sell half and move the stop loss to breakeven
 
+                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
+                        // sd.Decision.ProfitTakePrice += riskPart;
+                        // sd.Decision.StopLossPrice += riskPart;
 
 
                     }

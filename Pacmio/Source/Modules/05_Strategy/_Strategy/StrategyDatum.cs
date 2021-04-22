@@ -93,7 +93,7 @@ namespace Pacmio
 
         #endregion Decision
 
-        #region Execution
+
 
         public void CheckStopLoss()
         {
@@ -160,6 +160,27 @@ namespace Pacmio
             }
         }
 
+
+        #region Position Track
+
+        public double PendingQuantity { get; set; } = 0;
+
+        public double Quantity { get; private set; } = 0;
+
+        public double AveragePrice { get; private set; } = double.NaN;
+
+        public double CurrentPrice => IsLive ? MarketData.LastPrice : Bar.Close;
+
+        public double Cost => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
+
+        public double UnrealizedPnL => Cost == 0 ? 0 : Quantity * (CurrentPrice - AveragePrice);
+
+        public double UnrealizedPnLPercent => Cost == 0 ? 0 : 100 * (CurrentPrice - AveragePrice) / AveragePrice;
+
+        #endregion Position Track
+
+        #region Execution Record
+
         private void AddExecutionRecord(ExecutionRecord exec)
         {
             if (exec.Quantity != 0)
@@ -202,24 +223,6 @@ namespace Pacmio
 
         public double RealizedPnL => ExecutionRecordList.Select(n => n.RealizedPnL).Sum();
 
-        #endregion Execution
-
-        #region Position Track
-
-        //public double TargetQuantity { get; set; } = 0;
-
-        public double Quantity { get; private set; } = 0;
-
-        public double AveragePrice { get; private set; } = double.NaN;
-
-        public double CurrentPrice => IsLive ? MarketData.LastPrice : Bar.Close;
-
-        public double Cost => double.IsNaN(AveragePrice) ? 0 : Math.Abs(Quantity * AveragePrice);
-
-        public double UnrealizedPnL => Cost == 0 ? 0 : Quantity * (CurrentPrice - AveragePrice);
-
-        public double UnrealizedPnLPercent => Cost == 0 ? 0 : 100 * (CurrentPrice - AveragePrice) / AveragePrice;
-
-        #endregion Position Track
+        #endregion Execution Record
     }
 }
