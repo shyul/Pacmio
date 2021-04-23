@@ -123,6 +123,11 @@ namespace Pacmio
             }
         }
 
+        public void ClosePosition() 
+        {
+            //SendOrder()
+        }
+
         public void SendOrder(double executionPrice, double scale, OrderType orderType)
         {
             if (scale != 0)
@@ -141,9 +146,21 @@ namespace Pacmio
 
                     double riskableAmount = ac.NetLiquidation * 0.02;
                     double qty = riskableAmount / RiskPart;
-                    double finalcost = Math.Min(ac.BuyingPower, qty * MarketData.LastPrice);
+
+                    if (qty / 100 > 1)
+                    {
+                        qty = Math.Round(qty / 100, MidpointRounding.AwayFromZero) * 100;
+                    }
+
+                    if (ac.BuyingPower > qty * MarketData.LastPrice)
+                    {
 
 
+                    }
+
+                    // f = ((P * b) - (1 - P))/b   // Pb is WinRate, b is the reward ratio, and f is the part of the whole account
+
+                    // example: if b is three times (4x), b = 3, and 30% possible, the result should be 6.7%
 
                     // Get the quantity from scale and RR ratio, win rate, and account size.
 

@@ -161,10 +161,21 @@ namespace Pacmio.Analysis
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
                     // Find exit signals
-                    Bar time_frame_b = bts[b.Time, IntermediateIndicator];
+                    if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
+                    {
+                        double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                        double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
 
-                    double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                    double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+
+
+                        // New (5 Minutes) Low
+                        if ((time_frame_b.Bar_1 is Bar b_1) && (time_frame_b.Low < b_1.Low))
+                        {
+                            sd.SendOrder(time_frame_b.Low, -1, OrderType.MidPrice);
+
+                        }
+                    }
+
 
 
 
@@ -187,13 +198,19 @@ namespace Pacmio.Analysis
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
                     // Find exit signals
-                    Bar time_frame_b = bts[b.Time, IntermediateIndicator];
+                    if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
+                    {
+                        double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                        double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
 
-                    double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                    double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+                        // if (cross above ema_1 or cross above ema_2) then exit
 
-
-
+                        // New (5 Minutes) High
+                        if ((time_frame_b.Bar_1 is Bar b_1) && (time_frame_b.High < b_1.High))
+                        {
+                            sd.SendOrder(time_frame_b.High, 1, OrderType.MidPrice);
+                        }
+                    }
 
                     if (b.Contains(sd.ProfitTakePrice))
                     {
