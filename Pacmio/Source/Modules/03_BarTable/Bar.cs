@@ -85,8 +85,6 @@ namespace Pacmio
         public Bar(BarTable bt, DateTime time, double open, double high, double low, double close, double volume, DataSourceType source = DataSourceType.Tick)
         {
             Table = bt;
-
-            //Period = Frequency.AlignPeriodUnit(time);
             Period = Frequency.AlignPeriod(time);
 
             if (Period.Start != time)
@@ -114,7 +112,7 @@ namespace Pacmio
         /// <summary>
         /// BarSize of the Bar
         /// </summary>
-        public BarFreq BarFreq => Table.BarFreq; // { get; private set; }
+        public BarFreq BarFreq => Table.BarFreq;
 
         /// <summary>
         /// Attached to the Table's frequency.
@@ -131,7 +129,7 @@ namespace Pacmio
         /// Start Time of the Bar
         /// </summary>
         // Need to get Period depending on the time and BarSize
-        public DateTime Time => Period.Start; // { get; private set; } // -- Shall we used Period to reduce the confusion???
+        public DateTime Time => Period.Start;
 
         /// <summary>
         /// The time period of this Bar (Every OHLC is from a period of time)

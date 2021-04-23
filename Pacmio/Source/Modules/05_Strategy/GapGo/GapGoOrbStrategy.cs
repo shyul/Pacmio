@@ -150,37 +150,36 @@ namespace Pacmio.Analysis
                 // Dedicated function to handle stop out here!
                 sd.GuardStopLoss();
 
-                
-
-
-
-
-
-
                 // Profit taking here.
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
                     // Find exit signals
                     if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
                     {
-                        double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                        double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+                        if (b.Bar_1 is Bar b_1)
+                        {
+                            double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                            double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
 
-
+                            if (b_1.Low >= ema_1 && b.Low < ema_1)
+                            {
+                                sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                            }
+                            else if (b_1.Low >= ema_2 && b.Low < ema_2)
+                            {
+                                sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                            }
+                        }
 
                         // New (5 Minutes) Low
-                        if ((time_frame_b.Bar_1 is Bar b_1) && (time_frame_b.Low < b_1.Low))
+                        if ((time_frame_b.Bar_1 is Bar time_frame_b_1) && (time_frame_b.Low < time_frame_b_1.Low))
                         {
                             sd.SendOrder(time_frame_b.Low, -1, OrderType.MidPrice);
 
                         }
                     }
 
-
-
-
-
-
+                    // Profit Taking
 
                     if (b.Contains(sd.ProfitTakePrice))
                     {

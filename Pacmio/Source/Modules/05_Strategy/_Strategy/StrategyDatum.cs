@@ -123,7 +123,7 @@ namespace Pacmio
             }
         }
 
-        public void ClosePosition() 
+        public void ClosePosition()
         {
             //SendOrder()
         }
@@ -259,7 +259,7 @@ namespace Pacmio
             }
         }
 
-        private List<ExecutionRecord> ExecutionRecordList = new();
+        private List<ExecutionRecord> ExecutionRecordList { get; } = new();
 
         public ExecutionRecord LatestExecutionRecord => ExecutionRecordList.Count > 0 ? ExecutionRecordList.Last() : null;
 
