@@ -75,6 +75,9 @@ namespace Pacmio.Analysis
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
+
+        public GapGoIntermediateIndicator IntermediateIndicator { get; }
+
         public SignalColumn VolumeSignal { get; }
 
         public double MinimumVolume { get; } = 1e5;
@@ -117,7 +120,6 @@ namespace Pacmio.Analysis
                     {
                         Bar ob = sd.Datum_1.Bar;
 
-                        Bar time_frame_b = bts[b.Time, Filter];
 
                         // Verify higher time frame analysis and indicators 
 
@@ -148,7 +150,7 @@ namespace Pacmio.Analysis
                 // Dedicated function to handle stop out here!
                 sd.GuardStopLoss();
 
-                // Find exit signals
+                
 
 
 
@@ -158,7 +160,16 @@ namespace Pacmio.Analysis
                 // Profit taking here.
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
-                    //if(sd)
+                    // Find exit signals
+                    Bar time_frame_b = bts[b.Time, IntermediateIndicator];
+
+                    double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                    double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+
+
+
+
+
 
                     if (b.Contains(sd.ProfitTakePrice))
                     {
@@ -175,6 +186,15 @@ namespace Pacmio.Analysis
                 }
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
+                    // Find exit signals
+                    Bar time_frame_b = bts[b.Time, IntermediateIndicator];
+
+                    double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                    double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+
+
+
+
                     if (b.Contains(sd.ProfitTakePrice))
                     {
                         sd.SendOrder(sd.ProfitTakePrice, 0.5, OrderType.Stop);
