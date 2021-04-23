@@ -64,6 +64,7 @@ namespace Pacmio.Analysis
             Time start = new Time(9, 30);
             Time stop = new Time(10, 00); // start.AddSeconds(Frequency.Span.TotalSeconds.ToInt32());
             TimeInForce = new TimePeriod(start, stop);
+            PositionHoldingPeriod = new TimePeriod(start, new Time(12, 00));
 
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);
@@ -148,9 +149,9 @@ namespace Pacmio.Analysis
                 }
 
                 // Dedicated function to handle stop out here!
-                sd.GuardStopLoss();
+                sd.GuardStop();
 
-                // Profit taking here.
+                // Profit taking or Stop Signal Trigger!
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
                     // Find exit signals
@@ -174,13 +175,11 @@ namespace Pacmio.Analysis
                         // New (5 Minutes) Low
                         if ((time_frame_b.Bar_1 is Bar time_frame_b_1) && (time_frame_b.Low < time_frame_b_1.Low))
                         {
-                            sd.SendOrder(time_frame_b.Low, -1, OrderType.MidPrice);
-
+                            sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                         }
                     }
 
                     // Profit Taking
-
                     if (b.Contains(sd.ProfitTakePrice))
                     {
                         sd.SendOrder(sd.ProfitTakePrice, -0.5, OrderType.Limit);
@@ -199,18 +198,29 @@ namespace Pacmio.Analysis
                     // Find exit signals
                     if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
                     {
-                        double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                        double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
-
-                        // if (cross above ema_1 or cross above ema_2) then exit
-
-                        // New (5 Minutes) High
-                        if ((time_frame_b.Bar_1 is Bar b_1) && (time_frame_b.High < b_1.High))
+                        if (b.Bar_1 is Bar b_1)
                         {
-                            sd.SendOrder(time_frame_b.High, 1, OrderType.MidPrice);
+                            double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
+                            double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+
+                            if (b_1.High <= ema_1 && b.High > ema_1)
+                            {
+                                sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                            }
+                            else if (b_1.High <= ema_2 && b.High > ema_2)
+                            {
+                                sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                            }
+                        }
+
+                        // New (5 Minutes) Low
+                        if ((time_frame_b.Bar_1 is Bar time_frame_b_1) && (time_frame_b.High > time_frame_b_1.High))
+                        {
+                            sd.SendOrder(b.High, 1, OrderType.MidPrice);
                         }
                     }
 
+                    // Profit Taking
                     if (b.Contains(sd.ProfitTakePrice))
                     {
                         sd.SendOrder(sd.ProfitTakePrice, 0.5, OrderType.Stop);
@@ -224,8 +234,6 @@ namespace Pacmio.Analysis
 
                     sd.StopLossPrice = Math.Min(sd.AveragePrice, sd.StopLossPrice - sd.RiskPart);
                 }
-
-                // Time stop
             }
         }
     }

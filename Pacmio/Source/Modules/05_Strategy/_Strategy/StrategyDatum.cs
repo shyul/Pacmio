@@ -97,7 +97,7 @@ namespace Pacmio
 
         #region Order
 
-        public void GuardStopLoss()
+        public void GuardStop()
         {
             if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
@@ -109,6 +109,10 @@ namespace Pacmio
                 {
                     SendOrder(Bar.Open, -1, OrderType.MidPrice);
                 }
+                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.PositionHoldingPeriod.Contains(Bar.Time))
+                {
+                    SendOrder(Bar.Open, -1, OrderType.MidPrice);
+                }
             }
             else if (Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
             {
@@ -117,6 +121,10 @@ namespace Pacmio
                     SendOrder(StopLossPrice, 1, OrderType.MidPrice);
                 }
                 else if (Bar.Low > StopLossPrice)
+                {
+                    SendOrder(Bar.Open, 1, OrderType.MidPrice);
+                }
+                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.PositionHoldingPeriod.Contains(Bar.Time))
                 {
                     SendOrder(Bar.Open, 1, OrderType.MidPrice);
                 }

@@ -42,11 +42,7 @@ namespace Pacmio
         /// </summary>
         public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
 
-
-
         public TimePeriod PositionHoldingPeriod { get; set; } = TimePeriod.Full;
-
-
 
         public void BackTest(BarTableSet bts, Period periodLimit, CancellationTokenSource cts = null)
         {
