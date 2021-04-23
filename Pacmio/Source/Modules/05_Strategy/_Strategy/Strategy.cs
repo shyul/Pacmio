@@ -44,7 +44,7 @@ namespace Pacmio
 
 
 
-
+        public TimePeriod PositionHoldingPeriod { get; set; } = TimePeriod.Full;
 
 
 

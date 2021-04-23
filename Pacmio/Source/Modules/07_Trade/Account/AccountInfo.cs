@@ -174,13 +174,7 @@ namespace Pacmio
 
         #region Order
 
-        public void EmergencyCloseAllPositions()
-        {
-            foreach (var ps in PositionPerEachContractLUT.Values.Where(n => n.Quantity != 0))
-            {
-                ps.EmergencyClose();
-            }
-        }
+        public void EmergencyClose() => PositionPerEachContractLUT.Values.Where(n => n.Quantity != 0).RunEach(n => n.EmergencyClose());
 
         #endregion Order
 

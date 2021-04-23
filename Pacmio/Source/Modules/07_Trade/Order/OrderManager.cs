@@ -72,6 +72,7 @@ namespace Pacmio
         {
             if (od.Status > OrderStatus.Inactive && od.Status < OrderStatus.Filled)
             {
+                od.Status = OrderStatus.PendingCancel;
                 IB.Client.CancelOrder(od.OrderId);
             }
         }

@@ -126,7 +126,8 @@ namespace Pacmio.Analysis
                             if (b.Contains(ob.High)) // Bullish / long side no gap entry
                             {
                                 sd.StopLossPrice = ob.Low;
-                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * (ob.High - ob.Low);
+                                sd.RiskPart = ob.High - ob.Low;
+                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * sd.RiskPart;
                                 sd.Message = RangeBarBullishMessage;
                                 sd.EntryBarIndex = 0;
                                 sd.SendOrder(ob.High, 1, OrderType.Stop);
@@ -134,7 +135,8 @@ namespace Pacmio.Analysis
                             else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
                             {
                                 sd.StopLossPrice = ob.High;
-                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * (ob.High - ob.Low);// sd.RiskPart;
+                                sd.RiskPart = ob.High - ob.Low;
+                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * sd.RiskPart;
                                 sd.Message = RangeBarBearishMessage;
                                 sd.EntryBarIndex = 0;
                                 sd.SendOrder(ob.Low, -1, OrderType.Limit);
@@ -143,52 +145,51 @@ namespace Pacmio.Analysis
                     }
                 }
 
-                sd.CheckStopLoss();
                 // Dedicated function to handle stop out here!
+                sd.GuardStopLoss();
+
+                // Find exit signals
 
 
+
+
+
+
+                // Profit taking here.
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
+                    //if(sd)
+
                     if (b.Contains(sd.ProfitTakePrice))
                     {
-                        // Sell half and move the stop loss to breakeven
-
-                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
-                        // sd.Decision.ProfitTakePrice += riskPart;
-                        // sd.Decision.StopLossPrice += riskPart;
+                        sd.SendOrder(sd.ProfitTakePrice, -0.5, OrderType.Limit);
+                        sd.ProfitTakePrice += sd.RiskPart;
                     }
                     else if (b.Low > sd.ProfitTakePrice)
                     {
-                        // Sell half and move the stop loss to breakeven
-
-                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
-                        // sd.Decision.ProfitTakePrice += riskPart;
-                        // sd.Decision.StopLossPrice += riskPart;
-
-
+                        sd.SendOrder(b.Low, -0.5, OrderType.Limit);
+                        sd.ProfitTakePrice = b.Low + sd.RiskPart;
                     }
+
+                    sd.StopLossPrice = Math.Max(sd.AveragePrice, sd.StopLossPrice + sd.RiskPart);
                 }
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
                     if (b.Contains(sd.ProfitTakePrice))
                     {
-                        // Sell half and move the stop loss to breakeven
-
-                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
-                        // sd.Decision.ProfitTakePrice += riskPart;
-                        // sd.Decision.StopLossPrice += riskPart;
+                        sd.SendOrder(sd.ProfitTakePrice, 0.5, OrderType.Stop);
+                        sd.ProfitTakePrice -= sd.RiskPart;
                     }
                     else if (b.High < sd.ProfitTakePrice)
                     {
-                        // Sell half and move the stop loss to breakeven
-
-                        // double riskPart = (sd.Decision.ProfitTakePrice - sd.Decision.StopLossPrice) / 2;
-                        // sd.Decision.ProfitTakePrice += riskPart;
-                        // sd.Decision.StopLossPrice += riskPart;
-
-
+                        sd.SendOrder(b.High, 0.5, OrderType.Limit);
+                        sd.ProfitTakePrice = b.High - sd.RiskPart;
                     }
+
+                    sd.StopLossPrice = Math.Min(sd.AveragePrice, sd.StopLossPrice - sd.RiskPart);
                 }
+
+                // Time stop
             }
         }
     }

@@ -67,7 +67,7 @@ namespace Pacmio
         {
             foreach (var ac in AccountLUT.Values)
             {
-                ac.EmergencyCloseAllPositions();
+                ac.EmergencyClose();
             }
         }
 

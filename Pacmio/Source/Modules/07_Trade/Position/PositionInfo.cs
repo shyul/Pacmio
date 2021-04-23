@@ -105,7 +105,7 @@ namespace Pacmio
                 return (Quantity * AveragePrice + commission_for_current_position) / Quantity;
             }
         }
-         */
+        */
 
         public void EmergencyClose()
         {
@@ -114,7 +114,7 @@ namespace Pacmio
             if (Quantity != 0)
                 Contract.PlaceOrder(AccountInfo, -Quantity, TradeType.StopLoss, OrderTimeInForce.GoodUntilCanceled, DateTime.Now);
         }
-
+        
         public DateTime UpdateTime { get; protected set; } = DateTime.MinValue;
 
         public List<IDataConsumer> DataConsumers { get; } = new List<IDataConsumer>();

@@ -19,6 +19,24 @@ namespace Pacmio
     [Serializable, DataContract]
     public class OrderInfo : IDataProvider, IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
+        public OrderInfo()//StrategyDatum sd) 
+        {
+        
+        
+        }
+
+        public OrderInfo(StrategyDatum sd, double absoluteQty) 
+        {
+
+            StrategyDatum = sd;
+            Contract = StrategyDatum.Contract;
+
+
+        }
+
+        [IgnoreDataMember]
+        public StrategyDatum StrategyDatum { get; }
+
         #region Data Provider
 
         [DataMember]

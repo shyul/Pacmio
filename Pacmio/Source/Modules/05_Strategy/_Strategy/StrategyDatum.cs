@@ -35,17 +35,17 @@ namespace Pacmio
 
                 if (IsLive && PositionInfo is PositionInfo pi)
                 {
-                    Quantity = pi.Quantity;
+                    FilledQuantity = pi.Quantity;
                     AveragePrice = pi.AverageEntryPrice;
                     if (sd_1.IsLive)
                     {
-                        sd_1.Quantity = Quantity;
+                        sd_1.FilledQuantity = Quantity;
                         sd_1.AveragePrice = AveragePrice;
                     }
                 }
                 else if (!IsLive && !sd_1.IsLive)
                 {
-                    Quantity = sd_1.Quantity;
+                    FilledQuantity = sd_1.Quantity;
                     AveragePrice = sd_1.AveragePrice;
                 }
             }
@@ -79,13 +79,15 @@ namespace Pacmio
 
         public double StopLossPrice { get; set; } = double.NaN;
 
+        public double RiskPart { get; set; } = double.NaN;
 
+        /*
         public double RiskPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(AveragePrice - StopLossPrice);
 
         public double RewardPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(ProfitTakePrice - AveragePrice);
 
         public double RewardRiskRatio => double.IsNaN(AveragePrice) ? double.NaN : (RewardPart / RiskPart);
-
+        */
 
         public string Message { get; set; } = string.Empty;
 
@@ -93,9 +95,9 @@ namespace Pacmio
 
         #endregion Decision
 
+        #region Order
 
-
-        public void CheckStopLoss()
+        public void GuardStopLoss()
         {
             if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
@@ -125,17 +127,27 @@ namespace Pacmio
         {
             if (scale != 0)
             {
+                //double orderQty = Quantity == 0 ? 1 : Math.Abs(Quantity * scale);
 
-                double orderQty = Quantity == 0 ? 1 : Math.Abs(Quantity * scale);
-
-
+                /*
                 if (scale * Quantity < 0 && scale == 1) // Identify if it closes the position entirely.
                 {
                     AveragePrice = double.NaN;
-                }
+                }*/
 
                 if (IsLive) // && the same direction execution is not sent ?// Check the bar see how it is filled
                 {
+                    AccountInfo ac = Strategy.AccountInfo;
+
+                    double riskableAmount = ac.NetLiquidation * 0.02;
+                    double qty = riskableAmount / RiskPart;
+                    double finalcost = Math.Min(ac.BuyingPower, qty * MarketData.LastPrice);
+
+
+
+                    // Get the quantity from scale and RR ratio, win rate, and account size.
+
+
                     // Send this Execution!
 
                     // get actual price and quantity
@@ -160,12 +172,27 @@ namespace Pacmio
             }
         }
 
+        public void CancelOrder()
+        {
+            if (ActiveOrder is OrderInfo od && od.IsEditable)
+            {
+                od.Cancel();
+            }
+        }
+
+        public OrderInfo ActiveOrder { get; set; } = null;
+
+        public bool HasActiveOrder => ActiveOrder is OrderInfo od && od.IsEditable;
+
+        #endregion Order
 
         #region Position Track
 
-        public double PendingQuantity { get; set; } = 0;
+        public double PendingQuantity => ActiveOrder is OrderInfo od && od.IsEditable ? od.RemainingQuantity : 0;
 
-        public double Quantity { get; private set; } = 0;
+        public double FilledQuantity { get; private set; } = 0;
+
+        public double Quantity => PendingQuantity + FilledQuantity;
 
         public double AveragePrice { get; private set; } = double.NaN;
 
@@ -195,7 +222,7 @@ namespace Pacmio
                     else if (exec.Quantity < 0)
                         exec.Action = ActionType.Short;
 
-                    Quantity += exec.Quantity;
+                    FilledQuantity += exec.Quantity;
                     exec.RealizedPnL = 0;
                 }
                 else // Opposite direction in this case.
@@ -208,7 +235,7 @@ namespace Pacmio
                         exec.Action = ActionType.Sell;
 
                     exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutionPrice);
-                    Quantity -= exec.Quantity;
+                    FilledQuantity -= exec.Quantity;
                 }
 
                 ExecutionRecordList.Add(exec);
