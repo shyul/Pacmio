@@ -155,12 +155,12 @@ namespace Pacmio.Analysis
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
                     // Find exit signals
-                    if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
+                    if (bts[b.Time, IntermediateIndicator] is Bar min5_b)
                     {
                         if (b.Bar_1 is Bar b_1)
                         {
-                            double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                            double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+                            double ema_1 = min5_b[IntermediateIndicator.MovingAverage_1];
+                            double ema_2 = min5_b[IntermediateIndicator.MovingAverage_2];
 
                             if (b_1.Low >= ema_1 && b.Low < ema_1)
                             {
@@ -173,7 +173,7 @@ namespace Pacmio.Analysis
                         }
 
                         // New (5 Minutes) Low
-                        if ((time_frame_b.Bar_1 is Bar time_frame_b_1) && (time_frame_b.Low < time_frame_b_1.Low))
+                        if ((min5_b.Bar_1 is Bar min5_b_1) && (min5_b.Low < min5_b_1.Low))
                         {
                             sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                         }
@@ -196,12 +196,12 @@ namespace Pacmio.Analysis
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
                     // Find exit signals
-                    if (bts[b.Time, IntermediateIndicator] is Bar time_frame_b)
+                    if (bts[b.Time, IntermediateIndicator] is Bar min5_b)
                     {
                         if (b.Bar_1 is Bar b_1)
                         {
-                            double ema_1 = time_frame_b[IntermediateIndicator.MovingAverage_1];
-                            double ema_2 = time_frame_b[IntermediateIndicator.MovingAverage_2];
+                            double ema_1 = min5_b[IntermediateIndicator.MovingAverage_1];
+                            double ema_2 = min5_b[IntermediateIndicator.MovingAverage_2];
 
                             if (b_1.High <= ema_1 && b.High > ema_1)
                             {
@@ -214,7 +214,7 @@ namespace Pacmio.Analysis
                         }
 
                         // New (5 Minutes) Low
-                        if ((time_frame_b.Bar_1 is Bar time_frame_b_1) && (time_frame_b.High > time_frame_b_1.High))
+                        if ((min5_b.Bar_1 is Bar min5_b_1) && (min5_b.High > min5_b_1.High))
                         {
                             sd.SendOrder(b.High, 1, OrderType.MidPrice);
                         }
