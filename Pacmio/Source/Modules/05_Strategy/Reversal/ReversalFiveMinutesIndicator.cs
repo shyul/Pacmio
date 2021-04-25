@@ -12,27 +12,19 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class GapGoIntermediateIndicator : Indicator
+    public class ReversalFiveMinutesIndicator : Indicator
     {
-        public GapGoIntermediateIndicator(BarFreq brafreq) : base(brafreq, PriceType.Trades)
+        public ReversalFiveMinutesIndicator() : base(BarFreq.Daily, PriceType.Trades)
         {
 
         }
-
-        public MovingAverageAnalysis MovingAverage_1 { get; }
-
-        public MovingAverageAnalysis MovingAverage_2 { get; }
 
         public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
-            BarTable bt = bap.Table;
 
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                Bar b = bt[i];
-            }
+
         }
     }
 }

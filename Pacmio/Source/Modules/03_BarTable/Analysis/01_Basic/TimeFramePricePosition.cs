@@ -35,7 +35,7 @@ namespace Pacmio.Analysis
             TimeFrameBarFreq = barFreq;
             Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
             Column = isd.Column_Result;
-        
+
             string label = "(" + Column.Name + "," + barFreq.ToString() + ")";
             Name = GetType().Name + label;
             GroupName = GetType().Name;

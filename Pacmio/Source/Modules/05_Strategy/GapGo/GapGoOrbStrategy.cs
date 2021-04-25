@@ -51,14 +51,34 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
+    public class StrategyConfig
+    {
+
+        public BarFreq BarFreq { get; } = BarFreq.Minute;
+
+        public TimePeriod TimeInForce { get; } = TimePeriod.Full;
+
+        public TimePeriod PositionHoldingPeriod { get; } = TimePeriod.Full;
+    }
+
+
+    public class GapGoOrbStrategyConfig : StrategyConfig
+    {
+
+
+    }
+
+
     public class GapGoOrbStrategy : Strategy
     {
-        public GapGoOrbStrategy(BarFreq barFreq) : base(barFreq, PriceType.Trades)
+        public GapGoOrbStrategy(double gap = 4, BarFreq barFreq = BarFreq.Minute, BarFreq fiveMinFreq = BarFreq.Minutes_5) : base(barFreq, PriceType.Trades)
         {
 
 
+            DailyIndicator = new GapGoDailyFilter(gap);
+            Filter = DailyIndicator;
 
-
+            FiveMinutesIndicator = new GapGoFiveMinutesIndicator(fiveMinFreq);
 
             Column_Result = new(Name, typeof(StrategyDatum));
             Time start = new Time(9, 30);
@@ -71,15 +91,11 @@ namespace Pacmio.Analysis
             BarAnalysisSet = new(this);
         }
 
-
         public override Filter Filter { get; } // = new MomentumDailyFilter();
 
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
-
-
-        public GapGoIntermediateIndicator IntermediateIndicator { get; }
-
         public GapGoDailyFilter DailyIndicator { get; }
+
+        public GapGoFiveMinutesIndicator FiveMinutesIndicator { get; }
 
         public SignalColumn VolumeSignal { get; }
 
@@ -100,6 +116,8 @@ namespace Pacmio.Analysis
 
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
+
+        public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -173,12 +191,12 @@ namespace Pacmio.Analysis
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
                 {
                     // Find exit signals
-                    if (bts[b.Time, IntermediateIndicator] is Bar min5_b)
+                    if (bts[b.Time, FiveMinutesIndicator] is Bar min5_b)
                     {
                         if (b.Bar_1 is Bar b_1)
                         {
-                            double ema_1 = min5_b[IntermediateIndicator.MovingAverage_1];
-                            double ema_2 = min5_b[IntermediateIndicator.MovingAverage_2];
+                            double ema_1 = min5_b[FiveMinutesIndicator.MovingAverage_1];
+                            double ema_2 = min5_b[FiveMinutesIndicator.MovingAverage_2];
 
                             if (b_1.Low >= ema_1 && b.Low < ema_1)
                             {
@@ -200,12 +218,12 @@ namespace Pacmio.Analysis
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
                     // Find exit signals
-                    if (bts[b.Time, IntermediateIndicator] is Bar min5_b)
+                    if (bts[b.Time, FiveMinutesIndicator] is Bar min5_b)
                     {
                         if (b.Bar_1 is Bar b_1)
                         {
-                            double ema_1 = min5_b[IntermediateIndicator.MovingAverage_1];
-                            double ema_2 = min5_b[IntermediateIndicator.MovingAverage_2];
+                            double ema_1 = min5_b[FiveMinutesIndicator.MovingAverage_1];
+                            double ema_2 = min5_b[FiveMinutesIndicator.MovingAverage_2];
 
                             if (b_1.High <= ema_1 && b.High > ema_1)
                             {
