@@ -79,6 +79,8 @@ namespace Pacmio.Analysis
 
         public GapGoIntermediateIndicator IntermediateIndicator { get; }
 
+        public GapGoDailyFilter DailyIndicator { get; }
+
         public SignalColumn VolumeSignal { get; }
 
         public double MinimumVolume { get; } = 1e5;
@@ -87,11 +89,15 @@ namespace Pacmio.Analysis
 
         public TimeFrameRelativeVolume RelativeVolume { get; }
 
+        public TimeFramePricePosition PricePosition { get; }
+
         public double MinimumRelativeVolume { get; } = 2;
 
         public double RewardRiskRatio { get; } = 2;
 
-        public const string OpenBarMessage = "OpenBar";
+        public const string BullishOpenBarMessage = "BullishOpenBar";
+        public const string BearishOpenBarMessage = "BearishOpenBar";
+
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
 
@@ -110,15 +116,22 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
-                    if (b.Time == TimeInForce.Start)
+                    if (b.Time == TimeInForce.Start && bts[b.Time, DailyIndicator] is Bar daily_b)
                     {
                         if (b.Volume > MinimumVolume && b[RelativeVolume] > MinimumRelativeVolume)
                         {
-                            sd.Message = OpenBarMessage;
+                            if (daily_b.GapPercent > DailyIndicator.BullishGapPercent && b[PricePosition] > 0.75)
+                            {
+                                sd.Message = BullishOpenBarMessage;
+                            }
+                            else if (daily_b.GapPercent < DailyIndicator.BearishGapPercent && b[PricePosition] < 0.25)
+                            {
+                                sd.Message = BearishOpenBarMessage;
+                            }
                         }
                     }
 
-                    if (sd.Datum_1.Message == OpenBarMessage)
+                    if (sd.Datum_1.Message == BullishOpenBarMessage)
                     {
                         Bar ob = sd.Datum_1.Bar;
 
