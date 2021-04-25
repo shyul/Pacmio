@@ -77,39 +77,44 @@ namespace Pacmio
         {
             BarTable bt = bap.Table;
             BarTableSet bts = bt.BarTableSet;
+            MultiPeriod testPeriods = bts.MultiPeriod;
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
+                StrategyDatum sd = b[this];
 
-                Bar time_frame_b = bts[b.Time, Filter];
+                #region Identify the indicators
 
-                // Assure Tables from other time frame has the same or later ticker time...
+                if (testPeriods.Contains(b.Time) && TimeInForce.Contains(b.Time))
+                {
 
-                // Get existing Position...
+                }
 
-                // Determine trade direction, add liquidity or remove  liquidity
+                #endregion Identify the indicators
 
-                // Fetch all results from other filtes.
+                #region Check profit and stop
 
-                // Construct the score...
+                sd.StopLossOrTakeProfit(0.5);
+
+                if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
+                {
+
+                }
+                else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
+                {
+
+                }
+
+                #endregion Check profit and stop
             }
         }
 
-        public void DrawOverlay(Graphics g, BarChart bc)
+        public virtual void DrawOverlay(Graphics g, BarChart bc)
         {
 
 
-
-
         }
-
-
-
-
-
-
-
 
         #region Order
 

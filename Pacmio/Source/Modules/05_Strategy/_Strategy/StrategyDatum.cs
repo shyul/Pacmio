@@ -97,8 +97,10 @@ namespace Pacmio
 
         #region Order
 
-        public void GuardStop()
+        public void StopLossOrTakeProfit(double ratio = 0.5)
         {
+            if (ratio > 1) ratio = 1; else if (ratio < 0) return;
+
             if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
                 if (Bar.Contains(StopLossPrice))
@@ -113,6 +115,20 @@ namespace Pacmio
                 {
                     SendOrder(Bar.Open, -1, OrderType.MidPrice);
                 }
+
+                if (Bar.Contains(ProfitTakePrice))
+                {
+                    SendOrder(ProfitTakePrice, -ratio, OrderType.Limit);
+                    ProfitTakePrice += RiskPart;
+                }
+                else if (Bar.Low > ProfitTakePrice)
+                {
+                    SendOrder(Bar.Low, -0.5, OrderType.Limit);
+                    ProfitTakePrice = Bar.Low + RiskPart;
+                }
+
+                if (ratio < 1)
+                    StopLossPrice = Math.Max(AveragePrice, StopLossPrice + RiskPart);
             }
             else if (Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
             {
@@ -128,6 +144,21 @@ namespace Pacmio
                 {
                     SendOrder(Bar.Open, 1, OrderType.MidPrice);
                 }
+
+                // Profit Taking
+                if (Bar.Contains(ProfitTakePrice))
+                {
+                    SendOrder(ProfitTakePrice, ratio, OrderType.Stop);
+                    ProfitTakePrice -= RiskPart;
+                }
+                else if (Bar.High < ProfitTakePrice)
+                {
+                    SendOrder(Bar.High, 0.5, OrderType.Limit);
+                    ProfitTakePrice = Bar.High - RiskPart;
+                }
+
+                if (ratio < 1)
+                    StopLossPrice = Math.Min(AveragePrice, StopLossPrice - RiskPart);
             }
         }
 

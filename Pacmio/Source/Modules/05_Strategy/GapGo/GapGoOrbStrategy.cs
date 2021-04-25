@@ -98,7 +98,6 @@ namespace Pacmio.Analysis
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-
             BarTableSet bts = bt.BarTableSet;
             MultiPeriod testPeriods = bts.MultiPeriod;
 
@@ -106,6 +105,8 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 StrategyDatum sd = b[this];
+
+                #region Identify the indicators
 
                 if (testPeriods.Contains(b.Time))
                 {
@@ -121,7 +122,7 @@ namespace Pacmio.Analysis
                     {
                         Bar ob = sd.Datum_1.Bar;
 
-
+                        // TODO: here
                         // Verify higher time frame analysis and indicators 
 
                         if (string.IsNullOrEmpty(sd.Message))
@@ -148,8 +149,12 @@ namespace Pacmio.Analysis
                     }
                 }
 
+                #endregion Identify the indicators
+
+                #region Check profit and stop
+
                 // Dedicated function to handle stop out here!
-                sd.GuardStop();
+                sd.StopLossOrTakeProfit(0.5);
 
                 // Profit taking or Stop Signal Trigger!
                 if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
@@ -178,20 +183,6 @@ namespace Pacmio.Analysis
                             sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                         }
                     }
-
-                    // Profit Taking
-                    if (b.Contains(sd.ProfitTakePrice))
-                    {
-                        sd.SendOrder(sd.ProfitTakePrice, -0.5, OrderType.Limit);
-                        sd.ProfitTakePrice += sd.RiskPart;
-                    }
-                    else if (b.Low > sd.ProfitTakePrice)
-                    {
-                        sd.SendOrder(b.Low, -0.5, OrderType.Limit);
-                        sd.ProfitTakePrice = b.Low + sd.RiskPart;
-                    }
-
-                    sd.StopLossPrice = Math.Max(sd.AveragePrice, sd.StopLossPrice + sd.RiskPart);
                 }
                 else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
                 {
@@ -219,21 +210,9 @@ namespace Pacmio.Analysis
                             sd.SendOrder(b.High, 1, OrderType.MidPrice);
                         }
                     }
-
-                    // Profit Taking
-                    if (b.Contains(sd.ProfitTakePrice))
-                    {
-                        sd.SendOrder(sd.ProfitTakePrice, 0.5, OrderType.Stop);
-                        sd.ProfitTakePrice -= sd.RiskPart;
-                    }
-                    else if (b.High < sd.ProfitTakePrice)
-                    {
-                        sd.SendOrder(b.High, 0.5, OrderType.Limit);
-                        sd.ProfitTakePrice = b.High - sd.RiskPart;
-                    }
-
-                    sd.StopLossPrice = Math.Min(sd.AveragePrice, sd.StopLossPrice - sd.RiskPart);
                 }
+
+                #endregion Check profit and stop
             }
         }
     }
