@@ -24,7 +24,7 @@ namespace Pacmio
     {
         protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
 
-        public abstract AccountInfo AccountInfo { get; set; }
+        //public abstract AccountInfo AccountInfo { get; set; }
 
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.

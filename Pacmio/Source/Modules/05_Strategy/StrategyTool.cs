@@ -17,6 +17,14 @@ namespace Pacmio
     {
         // Generate and Tune Strategies from here. 
 
+        private static Dictionary<Strategy, AccountInfo> StrategyToAccountLUT { get; } = new();
+
+        public static void Assign(Strategy s, AccountInfo ac) => StrategyToAccountLUT[s] = ac;
+
+        public static AccountInfo GetAccount(Strategy s) => StrategyToAccountLUT.ContainsKey(s) ? StrategyToAccountLUT[s] : null;
+
+
+
 
     }
 }

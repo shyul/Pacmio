@@ -15,6 +15,62 @@ namespace Pacmio
 {
     public static class ResearchTool
     {
+        /// <summary>
+        /// This function is for narrowing down the group of contracts for actually simulation.
+        /// </summary>
+        /// <param name="cList"></param>
+        /// <param name="inds"></param>
+        /// <param name="evaluateTimeRange"></param>
+        /// <param name="cts"></param>
+        /// <param name="Progress"></param>
+        /// <returns></returns>
+        public static Dictionary<Contract, FilterTestResult> Evaluate(IEnumerable<Contract> cList, SignalAnalysisSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        {
+            Dictionary<Contract, FilterTestResult> result = new();
+
+            double totalseconds = 0;
+            float total_num = cList.Count();
+            float i = 0;
+
+            //BarTableSet bts =
+            Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
+            {
+                DateTime startTime = DateTime.Now;
+                BarTableSet bts = new BarTableSet(c, false);
+                bts.SetPeriod(evaluateTimeRange, cts);
+
+                //Dictionary<>
+
+                // So far we are only getting results from one time frame!
+
+                foreach (var ind in inds.Where(n => n.BarFreq >= BarFreq.Daily).OrderByDescending(n => n.BarFreq))
+                {
+
+                }
+
+
+                DateTime endTime = DateTime.Now;
+                double seconds = (endTime - startTime).TotalSeconds;
+                totalseconds += seconds;
+                i++;
+                Progress.Report(i * 100.0f / total_num);
+            });
+
+
+            return result;
+        }
+
+        public static void PrintResult(Dictionary<Contract, FilterTestResult> result)
+        {
+            var r = result.OrderByDescending(n => n.Value.BullishPercent).Select(n => n.Value).Take(100);
+
+            foreach (var ier in r)
+            {
+                Console.WriteLine(ier.Contract + ": " + ier.BullishPercent);
+            }
+        }
+
+
         // IndicatorEvaluationResult
         public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Filter filter, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {

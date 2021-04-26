@@ -126,7 +126,7 @@
     <Compile Include="Source\Modules\05_Strategy\GapGo\GapGoDailyFilter.cs" />
     <Compile Include="Source\Modules\05_Strategy\Momentum\MomentumDailyFilter.cs" />
     <Compile Include="Source\Modules\05_Strategy\Reversal\ReversalDailyFilter.cs" />
-    <Compile Include="Source\Modules\05_Strategy\ResearchTool.cs" />
+    <Compile Include="Source\Modules\06_Simulation\ResearchTool.cs" />
     <Compile Include="Source\Modules\05_Strategy\_Indicator\FilterTestResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSetPointer.cs" />
     <Compile Include="Source\Modules\05_Strategy\SwingTrade\SwingTradeDailyFilter.cs" />
