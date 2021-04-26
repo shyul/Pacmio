@@ -84,6 +84,7 @@ namespace Pacmio
         public SignalAnalysisSet(IEnumerable<SignalAnalysis> list)
         {
             Dictionary<(BarFreq freq, PriceType type), List<SignalAnalysis>> filteredList = new();
+            List<SignalAnalysis> signalAnalysisList = new();
 
             foreach (var sa in list)
             {
@@ -95,6 +96,7 @@ namespace Pacmio
                 if (!freqList.Contains(sa))
                 {
                     freqList.Add(sa);
+                    signalAnalysisList.Add(sa);
                 }
             }
 
@@ -102,7 +104,11 @@ namespace Pacmio
             {
                 BarAnalysisSetList[saList.Key] = new BarAnalysisSet(saList.Value);
             }
+
+            SignalAnalysisList = signalAnalysisList;
         }
+
+        public IEnumerable<SignalAnalysis> SignalAnalysisList { get; }
 
         private Dictionary<(BarFreq freq, PriceType type), BarAnalysisSet> BarAnalysisSetList { get; } = new();
 
@@ -115,12 +121,18 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public List<(BarFreq freq, PriceType type)> TimeFrameList => BarAnalysisSetList.Select(n => (n.Key.freq, n.Key.type)).ToList();
+        public List<(BarFreq freq, PriceType type)> TimeFrameList 
+            => BarAnalysisSetList.
+            OrderByDescending(n => n.Key.freq).
+            ThenByDescending(n => n.Key.type).
+            Select(n => (n.Key.freq, n.Key.type)).ToList();
 
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
-            var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.Type))).Where(bt => bt.LastCalculatedTickTime < tickTime);
+            var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.PriceType))).Where(bt => bt.LastCalculatedTickTime < tickTime);
             return btList.Count() == 0;
         }
+
+
     }
 }

@@ -25,7 +25,7 @@ namespace Pacmio
         {
             Contract = bt.Contract;
             AdjustDividend = adjustDividend;
-            BarTableLUT[(bt.BarFreq, bt.Type)] = bt;
+            BarTableLUT[(bt.BarFreq, bt.PriceType)] = bt;
         }
 
         public BarTableSet(Contract c, bool adjustDividend = false)
@@ -221,6 +221,9 @@ namespace Pacmio
             }
         }
 
+        public BarTable this[(BarFreq freq, PriceType type) key]
+            => GetOrCreateBarTable(key.freq, key.type);
+
         public BarTable this[BarFreq freq, PriceType type = PriceType.Trades]
             => GetOrCreateBarTable(freq, type);
 
@@ -230,11 +233,12 @@ namespace Pacmio
         public Bar this[DateTime time, Indicator ind]
             => this[time, ind.BarFreq, ind.PriceType];
 
+        public Bar this[DateTime time, SignalAnalysis sa]
+            => this[time, sa.BarFreq, sa.PriceType];
 
-
-        public void CalculateRefresh(SignalAnalysisSet inds)
+        public void CalculateRefresh(SignalAnalysisSet sas)
         {
-            foreach (var item in inds)
+            foreach (var item in sas)
             {
                 this[item.freq, item.type].CalculateRefresh(item.bas);
             }

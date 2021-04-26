@@ -64,7 +64,8 @@ namespace Pacmio
                 else if (rsi <= LowerLimit)
                     d.Type = OscillatorSignalType.OverSold;
 
-                d.SetPoints(LevelToTrailPoints.Where(n => n.Key.Contains(rsi)).Select(n => n.Value).FirstOrDefault());
+                if (TypeToTrailPoints.ContainsKey(type))
+                    d.SetPoints(LevelToTrailPoints.Where(n => n.Key.Contains(rsi)).Select(n => n.Value).FirstOrDefault());
             }
         }
     }

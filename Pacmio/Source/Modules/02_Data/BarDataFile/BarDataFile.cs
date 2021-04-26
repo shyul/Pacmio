@@ -21,7 +21,7 @@ namespace Pacmio
         IEquatable<BarTable>,
         IDisposable
     {
-        public BarDataFile(BarTable bt) : this(bt.Contract, bt.BarFreq, bt.Type) { }
+        public BarDataFile(BarTable bt) : this(bt.Contract, bt.BarFreq, bt.PriceType) { }
 
         public BarDataFile(Contract c, BarFreq freq, PriceType type)
         {

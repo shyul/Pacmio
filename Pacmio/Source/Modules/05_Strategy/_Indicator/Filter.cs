@@ -15,14 +15,40 @@ using Pacmio.Analysis;
 
 namespace Pacmio
 {
-    public abstract class Filter : Indicator
+    public sealed class Filter
     {
-        protected Filter(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
+        // Filter 1) Signal Set; 2) Signal Threshold Range<double>(), within? / outside?; 3) Ranking Column?
+        public Filter(IEnumerable<SignalAnalysis> SignalList, Range<double> signalRange, bool isPointWithin, NumericColumn rankColumn)
+        {
+            SignalAnalysisSet = new(SignalList);
+            SignalPointRange = signalRange;
+            IsPointWithin = isPointWithin;
+            Column_Rank = rankColumn;
+        }
 
-        public virtual Range<double> PriceRange { get; }
+        public SignalAnalysisSet SignalAnalysisSet { get; }
 
-        public virtual Range<double> VolumeRange { get; }
+        public Range<double> SignalPointRange { get; }
 
-        public abstract SignalColumn SignalColumn { get; }
+        public bool IsPointWithin { get; }
+
+        public NumericColumn Column_Rank { get; }
+
+        public (bool pass, double rank) Calculate(Bar b)
+        {
+            bool isPass = IsPointWithin ?
+            SignalPointRange.Contains(b.GetSignalScore(SignalAnalysisSet).Bullish) || SignalPointRange.Contains(-b.GetSignalScore(SignalAnalysisSet).Bearish) :
+            (!SignalPointRange.Contains(b.GetSignalScore(SignalAnalysisSet).Bullish)) || (!SignalPointRange.Contains(-b.GetSignalScore(SignalAnalysisSet).Bearish));
+
+            return (isPass, b[Column_Rank]);
+        }
+
+        public IEnumerable<Bar> RunScan(BarTableSet bts, Period pd)
+        {
+            bts.CalculateRefresh(SignalAnalysisSet);
+            BarTable bt = bts[SignalAnalysisSet.TimeFrameList.Last()];
+            var bars = bt.Bars.Where(b => pd.Contains(b.Time)).Where(n => Calculate(n).pass);
+            return bars;
+        }
     }
 }

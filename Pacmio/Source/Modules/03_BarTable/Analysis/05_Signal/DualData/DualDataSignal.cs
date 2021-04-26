@@ -45,6 +45,27 @@ namespace Pacmio
             slow_analysis.AddChild(this);
         }
 
+        public DualDataSignal(BarFreq barFreq, ISingleData slow_analysis, PriceType priceType = PriceType.Trades)
+            : this(barFreq, Bar.Column_Close, slow_analysis, priceType) { }
+
+        public DualDataSignal(BarFreq barFreq, NumericColumn fast_column, ISingleData slow_analysis, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        {
+            Fast_Column = fast_column;
+            Slow_Column = slow_analysis.Column_Result;
+
+            string label = "(" + fast_column.Name + "," + slow_analysis.Name + ")";
+            GroupName = Name = GetType().Name + label;
+            Column_Result = new(this, typeof(DualDataSignalDatum));
+
+            if (slow_analysis is IChartSeries slow_ics)
+            {
+                BullishColor = slow_ics.Color;
+                BearishColor = slow_ics.Color;
+            }
+
+            slow_analysis.AddChild(this);
+        }
+
         public DualDataSignal(BarFreq barFreq, NumericColumn fast_column, NumericColumn slow_column, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Fast_Column = fast_column;
@@ -86,7 +107,9 @@ namespace Pacmio
             if (!d.List.Contains(type))
             {
                 d.List.Add(type);
-                d.SetPoints(TypeToTrailPoints[type]);
+
+                if (TypeToTrailPoints.ContainsKey(type))
+                    d.SetPoints(TypeToTrailPoints[type]);
             }
         }
 

@@ -12,11 +12,12 @@ namespace Pacmio
 {
     public class SignalColumn : DatumColumn
     {
+        /*
         public SignalColumn(BarAnalysis source, string name)
             : base(source.Name + "_Signal_" + name, typeof(SignalDatum))
         {
             Source = source;
-        }
+        }*/
 
         public SignalColumn(SignalAnalysis source, Type datumType)
             : base(source.Name + "_Signal", datumType)
@@ -24,7 +25,7 @@ namespace Pacmio
             Source = source;
         }
 
-        public BarAnalysis Source { get; }
+        public SignalAnalysis Source { get; }
 
         public Color BullishColor
         {

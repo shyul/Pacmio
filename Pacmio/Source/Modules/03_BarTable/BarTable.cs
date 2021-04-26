@@ -33,7 +33,7 @@ namespace Pacmio
         {
             Contract = c;
 
-            Type = type;
+            PriceType = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
@@ -49,7 +49,7 @@ namespace Pacmio
             BarTableSet = bts;
             Contract = bts.Contract;
 
-            Type = type;
+            PriceType = type;
             BarFreq = barFreq;
             Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
 
@@ -94,13 +94,13 @@ namespace Pacmio
 
         public Contract Contract { get; }
 
-        public PriceType Type { get; }
+        public PriceType PriceType { get; }
 
         public BarFreq BarFreq { get; }
 
         public Frequency Frequency { get; }
 
-        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, PriceType type) Key => (Contract.Key, BarFreq, Type);
+        public ((string name, Exchange exchange, string typeName) ContractKey, BarFreq barFreq, PriceType type) Key => (Contract.Key, BarFreq, PriceType);
 
         #endregion Ctor
 
@@ -404,7 +404,7 @@ namespace Pacmio
             if (sorted_bars.Count > 0)
             {
                 BarTable bt = sorted_bars.FirstOrDefault().Table;
-                if (Contract != bt.Contract || Type != bt.Type)
+                if (Contract != bt.Contract || PriceType != bt.PriceType)
                     throw new("bar's table has to match with this table!");
 
                 Status = TableStatus.Loading;
@@ -825,7 +825,7 @@ namespace Pacmio
 
         public bool Equals(BarTable other) => Key == other.Key;
         public bool Equals(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, PriceType Type) other) => Key == other;
-        public bool Equals((Contract, BarFreq, PriceType) other) => (Contract, BarFreq, Type) == other;
+        public bool Equals((Contract, BarFreq, PriceType) other) => (Contract, BarFreq, PriceType) == other;
         public bool Equals(BarDataFile other) => Key == other.Key;
 
         public static bool operator ==(BarTable s1, BarTable s2) => s1.Equals(s2);

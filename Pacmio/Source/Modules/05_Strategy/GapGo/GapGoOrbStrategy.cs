@@ -73,15 +73,7 @@ namespace Pacmio.Analysis
         public double MinimumRelativeVolume { get; } = 2;
     }
 
-    // TODO: Or shall merge Indicator and Signal???
-    // Signal is permissive across all timeFrames and will only show with limitation on Strategy Timeframe...
-    public class MiniIndicator 
-    {
-        public BarFreq BarFreq { get; set; }
 
-
-        public SignalAnalysis BarAnalysis { get; set; }
-    }
 
     public class GapGoOrbStrategy : Strategy
     {
@@ -92,6 +84,64 @@ namespace Pacmio.Analysis
             MinimumMinuteVolume = 1e5;
             MinimumMinuteRelativeVolume = 2;
             RewardRiskRatio = 2;
+
+            DailyPriceFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(1, 300)) 
+            {
+                TypeToTrailPoints = new()
+                {
+                    { SingleDataSignalType.Within, new double[] { 1 } },
+                }
+            };
+
+            DailyVolumeFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(5e5, double.MaxValue)) 
+            {
+                TypeToTrailPoints = new()
+                {
+                    { SingleDataSignalType.Within, new double[] { 1 } },
+                }
+            };
+
+            DailyGapPercentFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
+            {
+                TypeToTrailPoints = new()
+                {
+                    { SingleDataSignalType.Above, new double[] { 1 } },
+                    { SingleDataSignalType.Below, new double[] { 1 } },
+                }
+            };
+
+            Filter = new(new SignalAnalysis[] {
+                DailyPriceFilterSignal,
+                DailyVolumeFilterSignal,
+                DailyGapPercentFilterSignal }, 
+                new Range<double>(3, double.MaxValue),
+                true,
+                Bar.Column_GainPercent);
+
+
+            FiveMinutesCrossData_1 = new EMA(9);
+            FiveMinutesCrossSignal_1 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_1) 
+            {
+            
+            
+            };
+
+            FiveMinutesCrossData_2 = new EMA(20);
+            FiveMinutesCrossSignal_2 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_2) 
+            {
+            
+            
+            };
+
+            SignalAnalysisSet = new SignalAnalysisSet(new SignalAnalysis[] {
+
+
+                FiveMinutesCrossSignal_1,
+                FiveMinutesCrossSignal_2,
+            });
+
+
+
 
             DailyIndicator = new GapGoDailyFilter(gap);
             Filter = DailyIndicator;
@@ -111,14 +161,26 @@ namespace Pacmio.Analysis
 
         public override Filter Filter { get; } // = new MomentumDailyFilter();
 
+        public override SignalAnalysisSet SignalAnalysisSet { get; }
+
         public GapGoDailyFilter DailyIndicator { get; }
 
         public GapGoFiveMinutesIndicator FiveMinutesIndicator { get; }
 
+        public SingleDataSignal DailyPriceFilterSignal { get; }
+        public SingleDataSignal DailyVolumeFilterSignal { get; }
+        public SingleDataSignal DailyGapPercentFilterSignal { get; }
+
+        public DualDataSignal FiveMinutesCrossSignal_1 { get; }
+        public ISingleData FiveMinutesCrossData_1 { get; }
+        public DualDataSignal FiveMinutesCrossSignal_2 { get; }
+        public ISingleData FiveMinutesCrossData_2 { get; }
+
+
+
+
+
         public SignalColumn VolumeSignal { get; }
-
-    
-
         public SignalColumn RelativeVolumeSignal { get; }
 
         public TimeFrameRelativeVolume RelativeVolume { get; }

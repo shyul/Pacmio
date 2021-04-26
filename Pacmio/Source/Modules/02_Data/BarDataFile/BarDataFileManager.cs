@@ -75,7 +75,7 @@ namespace Pacmio
             {
                 bool adjustDividend = bt.AdjustDividend;
 
-                BarDataFile bdf = bt.Contract.GetBarDataFile(bt.BarFreq, bt.Type);
+                BarDataFile bdf = bt.Contract.GetBarDataFile(bt.BarFreq, bt.PriceType);
 
                 MultiPeriod new_mp = new MultiPeriod();
 

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugDualDataOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\IDifferentialDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\CustomIntervalAnalysis.cs" />

@@ -93,7 +93,9 @@ namespace Pacmio
             if (!d.List.Contains(type))
             {
                 d.List.Add(type);
-                d.SetPoints(TypeToTrailPoints[type]);
+
+                if (TypeToTrailPoints.ContainsKey(type))
+                    d.SetPoints(TypeToTrailPoints[type]);
             }
         }
 

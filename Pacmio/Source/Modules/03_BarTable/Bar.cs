@@ -114,6 +114,8 @@ namespace Pacmio
         /// </summary>
         public BarFreq BarFreq => Table.BarFreq;
 
+        public PriceType PriceType => Table.PriceType;
+
         /// <summary>
         /// Attached to the Table's frequency.
         /// </summary>
@@ -520,8 +522,37 @@ namespace Pacmio
 
         public SignalDatum this[SignalAnalysis sa]
         {
-            get => this[sa.Column_Result];
-            set => this[sa.Column_Result] = value;
+            get
+            {
+                if (sa.BarFreq == BarFreq && sa.PriceType == PriceType)
+                    return this[sa.Column_Result];
+                else if (Table.BarTableSet[Time, sa] is Bar b_sa)
+                    return b_sa[sa.Column_Result];
+                else
+                    return null;
+            }
+
+            set
+            {
+                if (sa.BarFreq == BarFreq && sa.PriceType == PriceType)
+                    this[sa.Column_Result] = value;
+            }
+        }
+
+        public (double Bullish, double Bearish) GetSignalScore(SignalAnalysisSet sas)
+        {
+            BarTableSet bts = Table.BarTableSet;
+            double bull = 0, bear = 0;
+            foreach (SignalAnalysis sa in sas.SignalAnalysisList.Where(n => n.BarFreq >= BarFreq))
+            {
+                if (this[sa] is SignalDatum sd)
+                {
+                    double points = sd.Points;
+                    if (points > 0) bull += points;
+                    else if (points < 0) bear += points;
+                }
+            }
+            return (bull, bear);
         }
 
         public (double Bullish, double Bearish) GetSignalScore(IEnumerable<SignalColumn> scs)
