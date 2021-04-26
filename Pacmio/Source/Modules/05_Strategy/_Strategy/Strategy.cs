@@ -24,18 +24,14 @@ namespace Pacmio
     {
         protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
 
-        public AccountInfo AccountInfo { get; set; }
-
-
-
-
+        public abstract AccountInfo AccountInfo { get; set; }
 
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
         public abstract Filter Filter { get; }
 
-        public IndicatorSet IndicatorSet { get; } = new();
+        public abstract SignalAnalysisSet SignalAnalysisSet { get; }
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM
@@ -59,14 +55,10 @@ namespace Pacmio
             }
 
             bts.SetPeriod(mps, cts);
-
-            foreach (var ind in IndicatorSet)
-            {
-                bts[ind.BarFreq, ind.PriceType].CalculateRefresh(ind);
-            }
+            bts.CalculateRefresh(SignalAnalysisSet);
 
             BarTable bt = bts[BarFreq, PriceType];
-            bt.CalculateRefresh(this);
+            bt.CalculateRefresh(BarAnalysisSet);
         }
 
 

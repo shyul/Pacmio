@@ -31,7 +31,7 @@ namespace Pacmio
         public static IEnumerable<BarChart> GetCharts(this BarTableSet bts, Strategy s, Period periodLimit, CancellationTokenSource cts = null)
         {
             s.BackTest(bts, periodLimit, cts);
-            return s.IndicatorSet.Concat(new Indicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.PriceType].GetChart(ind.BarAnalysisSet));
+            return s.SignalAnalysisSet.Concat(new Indicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.PriceType].GetChart(ind.BarAnalysisSet));
         }
 
         public static void Add(BarChart bc)

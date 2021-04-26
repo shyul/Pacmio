@@ -53,6 +53,7 @@ namespace Pacmio.Analysis
 {
     public class StrategyConfig
     {
+        public Filter Filter { get; }
 
         public BarFreq BarFreq { get; } = BarFreq.Minute;
 
@@ -62,18 +63,35 @@ namespace Pacmio.Analysis
     }
 
 
+
     public class GapGoOrbStrategyConfig : StrategyConfig
     {
+        
 
+        public double MinimumMinuteVolume { get; } = 1e5;
 
+        public double MinimumRelativeVolume { get; } = 2;
     }
 
+    // TODO: Or shall merge Indicator and Signal???
+    // Signal is permissive across all timeFrames and will only show with limitation on Strategy Timeframe...
+    public class MiniIndicator 
+    {
+        public BarFreq BarFreq { get; set; }
+
+
+        public SignalAnalysis BarAnalysis { get; set; }
+    }
 
     public class GapGoOrbStrategy : Strategy
     {
         public GapGoOrbStrategy(double gap = 4, BarFreq barFreq = BarFreq.Minute, BarFreq fiveMinFreq = BarFreq.Minutes_5) : base(barFreq, PriceType.Trades)
         {
 
+
+            MinimumMinuteVolume = 1e5;
+            MinimumMinuteRelativeVolume = 2;
+            RewardRiskRatio = 2;
 
             DailyIndicator = new GapGoDailyFilter(gap);
             Filter = DailyIndicator;
@@ -99,7 +117,7 @@ namespace Pacmio.Analysis
 
         public SignalColumn VolumeSignal { get; }
 
-        public double MinimumVolume { get; } = 1e5;
+    
 
         public SignalColumn RelativeVolumeSignal { get; }
 
@@ -107,9 +125,14 @@ namespace Pacmio.Analysis
 
         public TimeFramePricePosition PricePosition { get; }
 
-        public double MinimumRelativeVolume { get; } = 2;
 
-        public double RewardRiskRatio { get; } = 2;
+        public double MinimumMinuteVolume { get; }
+
+        public double MinimumMinuteRelativeVolume { get; }
+
+        public double RewardRiskRatio { get; }
+
+
 
         public const string BullishOpenBarMessage = "BullishOpenBar";
         public const string BearishOpenBarMessage = "BearishOpenBar";
@@ -136,7 +159,7 @@ namespace Pacmio.Analysis
                 {
                     if (b.Time == TimeInForce.Start && bts[b.Time, DailyIndicator] is Bar daily_b)
                     {
-                        if (b.Volume > MinimumVolume && b[RelativeVolume] > MinimumRelativeVolume)
+                        if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
                         {
                             if (daily_b.GapPercent > DailyIndicator.BullishGapPercent && b[PricePosition] > 0.75)
                             {

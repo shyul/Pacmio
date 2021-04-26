@@ -27,7 +27,7 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, FilterTestResult> Evaluate(IEnumerable<Contract> cList, IndicatorSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, FilterTestResult> Evaluate(IEnumerable<Contract> cList, SignalAnalysisSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
             Dictionary<Contract, FilterTestResult> result = new();
 

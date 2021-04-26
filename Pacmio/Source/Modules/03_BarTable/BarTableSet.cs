@@ -229,5 +229,15 @@ namespace Pacmio
 
         public Bar this[DateTime time, Indicator ind]
             => this[time, ind.BarFreq, ind.PriceType];
+
+
+
+        public void CalculateRefresh(SignalAnalysisSet inds)
+        {
+            foreach (var item in inds)
+            {
+                this[item.freq, item.type].CalculateRefresh(item.bas);
+            }
+        }
     }
 }

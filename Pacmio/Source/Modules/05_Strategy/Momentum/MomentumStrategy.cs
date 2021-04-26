@@ -32,7 +32,7 @@ namespace Pacmio.Analysis
 
             DailyIndicator = new();
 
-            IndicatorSet.Add(DailyIndicator);
+            SignalAnalysisSet.Add(DailyIndicator);
 
             SignalColumns = new SignalColumn[] { };
             SignalSeries = new(this);

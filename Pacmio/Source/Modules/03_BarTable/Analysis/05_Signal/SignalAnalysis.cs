@@ -13,22 +13,33 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class SignalAnalysis : BarAnalysis
+    public abstract class SignalAnalysis : BarAnalysis, IEquatable<SignalAnalysis>
     {
-        public SignalColumn Column_Result { get; protected set; }
+        protected SignalAnalysis(BarFreq barFreq, PriceType priceType = PriceType.Trades)
+        {
+            BarFreq = barFreq;
+            PriceType = priceType;
+        }
+
+        public BarFreq BarFreq { get; }
+
+        public PriceType PriceType { get; }
+
+        public abstract SignalColumn Column_Result { get; }
 
         public Color BullishColor
         {
             get => Column_Result.BullishColor;
-            set => Column_Result.BullishColor = value;
+            protected set => Column_Result.BullishColor = value;
         }
 
         public Color BearishColor
         {
             get => Column_Result.BearishColor;
-            set => Column_Result.BearishColor = value;
+            protected set => Column_Result.BearishColor = value;
         }
 
+        /*
         public ColorTheme BullishTheme
         {
             get => Column_Result.BullishTheme;
@@ -39,6 +50,16 @@ namespace Pacmio
         {
             get => Column_Result.BearishTheme;
             set => Column_Result.BearishTheme = value;
-        }
+        }*/
+
+        #region Equality
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
+        public bool Equals(SignalAnalysis other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
+        public static bool operator !=(SignalAnalysis s1, SignalAnalysis s2) => !s1.Equals(s2);
+        public static bool operator ==(SignalAnalysis s1, SignalAnalysis s2) => s1.Equals(s2);
+        public override bool Equals(object other) => other is SignalAnalysis ba && Equals(ba);
+
+        #endregion Equality
     }
 }

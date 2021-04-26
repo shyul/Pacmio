@@ -118,7 +118,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\OscillatorData\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
-    <Compile Include="Source\Modules\05_Strategy\GapGo\GapGoIntermediateIndicator.cs" />
+    <Compile Include="Source\Modules\05_Strategy\Reversal\ReversalFiveMinutesIndicator.cs" />
+    <Compile Include="Source\Modules\05_Strategy\GapGo\GapGoFiveMinutesIndicator.cs" />
     <Compile Include="Source\Modules\05_Strategy\Momentum\MomentumDailyIndicator.cs" />
     <Compile Include="Source\Modules\05_Strategy\_Indicator\Filter.cs" />
     <Compile Include="Source\Modules\05_Strategy\Common\RsiIndicator.cs" />

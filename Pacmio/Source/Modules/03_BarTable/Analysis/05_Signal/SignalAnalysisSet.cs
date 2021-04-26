@@ -79,35 +79,48 @@ using Xu;
 
 namespace Pacmio
 {
-    public class IndicatorSet : IEnumerable<Indicator>
+    public class SignalAnalysisSet : IEnumerable<(BarFreq freq, PriceType type, BarAnalysisSet bas)>
     {
-        public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
+        public SignalAnalysisSet(IEnumerable<SignalAnalysis> list)
         {
-            var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.Type))).Where(bt => bt.LastCalculatedTickTime < tickTime);
-            return btList.Count() == 0;
+            Dictionary<(BarFreq freq, PriceType type), List<SignalAnalysis>> filteredList = new();
+
+            foreach (var sa in list)
+            {
+                if (!filteredList.ContainsKey((sa.BarFreq, sa.PriceType)))
+                    filteredList[(sa.BarFreq, sa.PriceType)] = new();
+
+                var freqList = filteredList[(sa.BarFreq, sa.PriceType)];
+
+                if (!freqList.Contains(sa))
+                {
+                    freqList.Add(sa);
+                }
+            }
+
+            foreach (var saList in filteredList)
+            {
+                BarAnalysisSetList[saList.Key] = new BarAnalysisSet(saList.Value);
+            }
         }
 
-        private List<Indicator> IndicatorList { get; } = new();
+        private Dictionary<(BarFreq freq, PriceType type), BarAnalysisSet> BarAnalysisSetList { get; } = new();
 
-        public List<(BarFreq freq, PriceType type)> TimeFrameList => IndicatorList.Select(n => (n.BarFreq, n.PriceType)).ToList();
-
-        public IEnumerator<Indicator> GetEnumerator()
-            => IndicatorList.
-            OrderByDescending(n => n.BarFreq).
-            ThenByDescending(n => n.PriceType).
+        public IEnumerator<(BarFreq freq, PriceType type, BarAnalysisSet bas)> GetEnumerator()
+            => BarAnalysisSetList.
+            OrderByDescending(n => n.Key.freq).
+            ThenByDescending(n => n.Key.type).
+            Select(n => (n.Key.freq, n.Key.type, n.Value)).
             GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public void Add(Indicator ind)
+        public List<(BarFreq freq, PriceType type)> TimeFrameList => BarAnalysisSetList.Select(n => (n.Key.freq, n.Key.type)).ToList();
+
+        public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {
-            if (ind is not Strategy)
-            {
-                if (!IndicatorList.Contains(ind))
-                    IndicatorList.Add(ind);
-            }
-            else
-                throw new Exception("Can not add Strategy in IndicatorSet.");
+            var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.Type))).Where(bt => bt.LastCalculatedTickTime < tickTime);
+            return btList.Count() == 0;
         }
     }
 }

@@ -269,7 +269,7 @@ namespace Pacmio
 
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set => m_ReadyToShow = value; }
 
-        public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
+        //public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
 
         public override void CoordinateOverlay() { }
 
