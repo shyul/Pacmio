@@ -13,7 +13,7 @@ namespace Pacmio
 {
     public class BandSignal : SignalAnalysis
     {
-        public BandSignal(NumericColumn column, IDualData band)
+        public BandSignal(BarFreq barFreq, NumericColumn column, IDualData band, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Column = column;
             Band = band;
@@ -31,6 +31,8 @@ namespace Pacmio
         public NumericColumn Column { get; }
 
         public IDualData Band { get; }
+
+        public override SignalColumn Column_Result { get; }
 
 
         public Dictionary<Range<double>, (BandSignalType Type, double[] Points)> PercentToTrailPoints = new()

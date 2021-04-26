@@ -14,7 +14,7 @@ namespace Pacmio
 {
     public class OscillatorSignal : SignalAnalysis
     {
-        public OscillatorSignal(IOscillator iosc)
+        public OscillatorSignal(BarFreq barFreq, IOscillator iosc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             OscillatorAnalysis = iosc;
 
@@ -44,6 +44,8 @@ namespace Pacmio
             { new Range<double>(90, 95), new double[] { 3 } },
             { new Range<double>(95, double.MaxValue), new double[] { 7, 5 } }
         };
+
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

@@ -39,19 +39,6 @@ namespace Pacmio
             protected set => Column_Result.BearishColor = value;
         }
 
-        /*
-        public ColorTheme BullishTheme
-        {
-            get => Column_Result.BullishTheme;
-            set => Column_Result.BullishTheme = value;
-        }
-
-        public ColorTheme BearishTheme
-        {
-            get => Column_Result.BearishTheme;
-            set => Column_Result.BearishTheme = value;
-        }*/
-
         #region Equality
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();

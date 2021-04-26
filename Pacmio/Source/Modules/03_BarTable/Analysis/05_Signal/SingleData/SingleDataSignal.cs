@@ -16,7 +16,7 @@ namespace Pacmio
     public sealed class SingleDataSignal : SignalAnalysis
     {
         // new SingleColumnAnalysis(rsi),
-        public SingleDataSignal(IOscillator analysis, double range_percent = 0.05)
+        public SingleDataSignal(BarFreq barFreq, IOscillator analysis, double range_percent = 0.05, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -25,16 +25,13 @@ namespace Pacmio
             Range = new Range<double>(analysis.Reference - range, analysis.Reference + range);
             string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
             GroupName = Name = GetType().Name + label;
-            //SignalColumn = new SignalColumn(Name, label) { BullishColor = iosc.UpperColor, BearishColor = iosc.LowerColor };
-            //SignalColumns = new SignalColumn[] { SignalColumn };
             Column_Result = new(this, typeof(SingleDataSignalDatum));
-            //Order = iosc.Order + 1;
 
             BullishColor = analysis.UpperColor;
             BearishColor = analysis.LowerColor;
         }
 
-        public SingleDataSignal(ISingleData analysis, Range<double> range)
+        public SingleDataSignal(BarFreq barFreq, ISingleData analysis, Range<double> range, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -51,7 +48,7 @@ namespace Pacmio
             }
         }
 
-        public SingleDataSignal(NumericColumn column, Range<double> range)
+        public SingleDataSignal(BarFreq barFreq, NumericColumn column, Range<double> range, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Column = column;
 
@@ -100,6 +97,7 @@ namespace Pacmio
             }
         }
 
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

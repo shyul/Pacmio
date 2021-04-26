@@ -13,12 +13,12 @@ namespace Pacmio
 {
     public class DivergenceSignal : SignalAnalysis
     {
-        public DivergenceSignal(ISingleData osc)
+        public DivergenceSignal(BarFreq barFreq, ISingleData osc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
 
         }
 
-        public DivergenceSignal(ISingleData source, ISingleData osc)
+        public DivergenceSignal(BarFreq barFreq, ISingleData source, ISingleData osc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
 
 
@@ -40,6 +40,8 @@ namespace Pacmio
         /// Add peak detection
         /// </summary>
         public ISingleData IndicatorColumn { get; }
+
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

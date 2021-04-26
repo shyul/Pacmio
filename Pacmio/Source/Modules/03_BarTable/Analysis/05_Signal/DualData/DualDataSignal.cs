@@ -14,7 +14,7 @@ namespace Pacmio
 {
     public sealed class DualDataSignal : SignalAnalysis
     {
-        public DualDataSignal(BarFreq barFreq, IDualData analysis) : base(barFreq)
+        public DualDataSignal(BarFreq barFreq, IDualData analysis, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Fast_Column = analysis.Column_High;
             Slow_Column = analysis.Column_Low;
@@ -29,7 +29,7 @@ namespace Pacmio
             analysis.AddChild(this);
         }
 
-        public DualDataSignal(BarFreq barFreq, ISingleData fast_analysis, ISingleData slow_analysis) : base(barFreq)
+        public DualDataSignal(BarFreq barFreq, ISingleData fast_analysis, ISingleData slow_analysis, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Fast_Column = fast_analysis.Column_Result;
             Slow_Column = slow_analysis.Column_Result;
@@ -45,7 +45,7 @@ namespace Pacmio
             slow_analysis.AddChild(this);
         }
 
-        public DualDataSignal(BarFreq barFreq, NumericColumn fast_column, NumericColumn slow_column) : base(barFreq)
+        public DualDataSignal(BarFreq barFreq, NumericColumn fast_column, NumericColumn slow_column, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Fast_Column = fast_column;
             Slow_Column = slow_column;

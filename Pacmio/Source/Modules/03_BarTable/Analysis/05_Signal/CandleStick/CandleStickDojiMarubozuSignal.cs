@@ -13,7 +13,7 @@ namespace Pacmio.Analysis
 {
     public class CandleStickDojiMarubozuSignal : SignalAnalysis
     {
-        public CandleStickDojiMarubozuSignal(double doji_ratio = 0.12, double marubozu_ratio = 0.92)
+        public CandleStickDojiMarubozuSignal(BarFreq barFreq, double doji_ratio = 0.12, double marubozu_ratio = 0.92, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Doji_Ratio = doji_ratio;
             Marubozu_Ratio = marubozu_ratio;
@@ -45,6 +45,8 @@ namespace Pacmio.Analysis
                 d.SetPoints(TypeToTrailPoints[type]);
             }
         }
+
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

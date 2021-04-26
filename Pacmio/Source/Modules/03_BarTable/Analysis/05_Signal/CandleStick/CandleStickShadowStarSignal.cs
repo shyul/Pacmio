@@ -13,7 +13,7 @@ namespace Pacmio.Analysis
 {
     public class CandleStickShadowStarSignal : SignalAnalysis
     {
-        public CandleStickShadowStarSignal()
+        public CandleStickShadowStarSignal(BarFreq barFreq, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
         {
             Name = GetType().Name;
 
@@ -39,6 +39,8 @@ namespace Pacmio.Analysis
                 d.SetPoints(TypeToTrailPoints[type]);
             }
         }
+
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
