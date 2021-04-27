@@ -42,7 +42,7 @@ namespace Pacmio
 
         public void BackTest(BarTableSet bts, Period periodLimit, CancellationTokenSource cts = null)
         {
-            var result = Filter.RunScanResult(bts, periodLimit);
+            var result = Filter.RunScan(bts, periodLimit);
 
             MultiPeriod mps = bts.MultiPeriod is not null ? new MultiPeriod(bts.MultiPeriod) : new MultiPeriod();
 

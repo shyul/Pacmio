@@ -45,51 +45,6 @@ namespace Pacmio
 
         public double BearishPointLimit { get; set; } = -1;
 
-        public (IEnumerable<Bar> BullishBars, IEnumerable<Bar> BearishBars, IEnumerable<Bar> AllBars) RunScan(BarTableSet bts, Period pd)
-        {
-            BarTable bt = bts[BarFreq, PriceType];
-
-            BarAnalysisSet bas = BarAnalysisSet;
-            bt.CalculateRefresh(bas);
-
-            var bars = bt.Bars.Where(b => pd.Contains(b.Time));
-
-            var BullishBars = bars.Where(b => b.GetSignalScore(this).Bullish >= BullishPointLimit);
-            var BearishBars = bars.Where(b => b.GetSignalScore(this).Bearish <= BearishPointLimit);
-
-            return (BullishBars, BearishBars, bars);
-        }
-
-        public FilterTestResult RunScanResult(BarTableSet bts, Period pd)
-        {
-            var (BullishBars, BearishBars, allBars) = RunScan(bts, pd);
-            FilterTestResult result = new(bts.Contract);
-
-            BullishBars.RunEach(n =>
-            {
-                var pd_bull = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd_bull);
-                result.BullishPeriods.Add(pd_bull);
-            });
-
-            BearishBars.RunEach(n =>
-            {
-                var pd_bear = ToDailyPeriod(n.Period);
-                result.Periods.Add(pd_bear);
-                result.BearishPeriods.Add(pd_bear);
-            });
-
-            result.TotalCount = allBars.Count();
-            result.BullishCount = BullishBars.Count();
-            result.BearishCount = BearishBars.Count();
-
-            return result;
-        }
-
-        public Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
-
-        //public Period ToDailyPeriod(Period pd) => Frequency.AlignPeriod(pd);
-
         #region Series
 
         public Color Color { get => SignalSeries.Color; set => SignalSeries.Color = value; }

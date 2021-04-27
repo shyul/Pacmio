@@ -51,30 +51,6 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class StrategyConfig
-    {
-        public Filter Filter { get; }
-
-        public BarFreq BarFreq { get; } = BarFreq.Minute;
-
-        public TimePeriod TimeInForce { get; } = TimePeriod.Full;
-
-        public TimePeriod PositionHoldingPeriod { get; } = TimePeriod.Full;
-    }
-
-
-
-    public class GapGoOrbStrategyConfig : StrategyConfig
-    {
-        
-
-        public double MinimumMinuteVolume { get; } = 1e5;
-
-        public double MinimumRelativeVolume { get; } = 2;
-    }
-
-
-
     public class GapGoOrbStrategy : Strategy
     {
         public GapGoOrbStrategy(double gap = 4, BarFreq barFreq = BarFreq.Minute, BarFreq fiveMinFreq = BarFreq.Minutes_5) : base(barFreq, PriceType.Trades)
@@ -85,7 +61,7 @@ namespace Pacmio.Analysis
             MinimumMinuteRelativeVolume = 2;
             RewardRiskRatio = 2;
 
-            DailyPriceFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(1, 300)) 
+            DailyPriceFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(1, 300))
             {
                 TypeToTrailPoints = new()
                 {
@@ -93,7 +69,7 @@ namespace Pacmio.Analysis
                 }
             };
 
-            DailyVolumeFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(5e5, double.MaxValue)) 
+            DailyVolumeFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(5e5, double.MaxValue))
             {
                 TypeToTrailPoints = new()
                 {
@@ -113,27 +89,34 @@ namespace Pacmio.Analysis
             Filter = new(new SignalAnalysis[] {
                 DailyPriceFilterSignal,
                 DailyVolumeFilterSignal,
-                DailyGapPercentFilterSignal }, 
+                DailyGapPercentFilterSignal },
                 new Range<double>(3, double.MaxValue),
                 true,
                 Bar.Column_GainPercent);
 
 
             FiveMinutesCrossData_1 = new EMA(9);
-            FiveMinutesCrossSignal_1 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_1) 
+            FiveMinutesCrossSignal_1 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_1)
             {
-            
-            
+                TypeToTrailPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                }
             };
 
             FiveMinutesCrossData_2 = new EMA(20);
-            FiveMinutesCrossSignal_2 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_2) 
+            FiveMinutesCrossSignal_2 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_2)
             {
-            
-            
+                TypeToTrailPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                }
             };
 
-            SignalAnalysisSet = new SignalAnalysisSet(new SignalAnalysis[] {
+            SignalAnalysisSet = new SignalAnalysisSet(new SignalAnalysis[]
+            {
 
 
                 FiveMinutesCrossSignal_1,
@@ -143,14 +126,10 @@ namespace Pacmio.Analysis
 
 
 
-            DailyIndicator = new GapGoDailyFilter(gap);
-            Filter = DailyIndicator;
-
-            FiveMinutesIndicator = new GapGoFiveMinutesIndicator(fiveMinFreq);
 
             Column_Result = new(Name, typeof(StrategyDatum));
             Time start = new Time(9, 30);
-            Time stop = new Time(10, 00); // start.AddSeconds(Frequency.Span.TotalSeconds.ToInt32());
+            Time stop = new Time(10, 00);
             TimeInForce = new TimePeriod(start, stop);
             PositionHoldingPeriod = new TimePeriod(start, new Time(12, 00));
 
@@ -159,13 +138,11 @@ namespace Pacmio.Analysis
             BarAnalysisSet = new(this);
         }
 
-        public override Filter Filter { get; } // = new MomentumDailyFilter();
+        public override Filter Filter { get; }
 
         public override SignalAnalysisSet SignalAnalysisSet { get; }
 
-        public GapGoDailyFilter DailyIndicator { get; }
 
-        public GapGoFiveMinutesIndicator FiveMinutesIndicator { get; }
 
         public SingleDataSignal DailyPriceFilterSignal { get; }
         public SingleDataSignal DailyVolumeFilterSignal { get; }
@@ -219,15 +196,15 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
-                    if (b.Time == TimeInForce.Start && bts[b.Time, DailyIndicator] is Bar daily_b)
+                    if (b.Time == TimeInForce.Start && Filter.Calculate(b).pass)
                     {
                         if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
                         {
-                            if (daily_b.GapPercent > DailyIndicator.BullishGapPercent && b[PricePosition] > 0.75)
+                            if (b[PricePosition] > 0.75)
                             {
                                 sd.Message = BullishOpenBarMessage;
                             }
-                            else if (daily_b.GapPercent < DailyIndicator.BearishGapPercent && b[PricePosition] < 0.25)
+                            else if (b[PricePosition] < 0.25)
                             {
                                 sd.Message = BearishOpenBarMessage;
                             }
@@ -273,58 +250,36 @@ namespace Pacmio.Analysis
                 sd.StopLossOrTakeProfit(0.5);
 
                 // Profit taking or Stop Signal Trigger!
-                if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
+                if (sd.Quantity > 0)
                 {
                     // Find exit signals
-                    if (bts[b.Time, FiveMinutesIndicator] is Bar min5_b)
+                    if (bts[b.Time, FiveMinutesCrossSignal_1] is DualDataSignalDatum sd_1 && sd_1.List.Contains(DualDataSignalType.CrossDown))
                     {
-                        if (b.Bar_1 is Bar b_1)
-                        {
-                            double ema_1 = min5_b[FiveMinutesIndicator.MovingAverage_1];
-                            double ema_2 = min5_b[FiveMinutesIndicator.MovingAverage_2];
-
-                            if (b_1.Low >= ema_1 && b.Low < ema_1)
-                            {
-                                sd.SendOrder(b.Low, -1, OrderType.MidPrice);
-                            }
-                            else if (b_1.Low >= ema_2 && b.Low < ema_2)
-                            {
-                                sd.SendOrder(b.Low, -1, OrderType.MidPrice);
-                            }
-                        }
-
-                        // New (5 Minutes) Low
-                        if ((min5_b.Bar_1 is Bar min5_b_1) && (min5_b.Low < min5_b_1.Low))
-                        {
-                            sd.SendOrder(b.Low, -1, OrderType.MidPrice);
-                        }
+                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                    }
+                    else if (bts[b.Time, FiveMinutesCrossSignal_2] is DualDataSignalDatum sd_2 && sd_2.List.Contains(DualDataSignalType.CrossDown))
+                    {
+                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                    }
+                    else if (bts[b.Time, BarFreq.Minutes_5] is Bar min5_b && (min5_b.Bar_1 is Bar min5_b_1) && (min5_b.Low < min5_b_1.Low))
+                    {
+                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                     }
                 }
-                else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
+                else if (sd.Quantity < 0)
                 {
                     // Find exit signals
-                    if (bts[b.Time, FiveMinutesIndicator] is Bar min5_b)
+                    if (bts[b.Time, FiveMinutesCrossSignal_1] is DualDataSignalDatum sd_1 && sd_1.List.Contains(DualDataSignalType.CrossUp))
                     {
-                        if (b.Bar_1 is Bar b_1)
-                        {
-                            double ema_1 = min5_b[FiveMinutesIndicator.MovingAverage_1];
-                            double ema_2 = min5_b[FiveMinutesIndicator.MovingAverage_2];
-
-                            if (b_1.High <= ema_1 && b.High > ema_1)
-                            {
-                                sd.SendOrder(b.High, 1, OrderType.MidPrice);
-                            }
-                            else if (b_1.High <= ema_2 && b.High > ema_2)
-                            {
-                                sd.SendOrder(b.High, 1, OrderType.MidPrice);
-                            }
-                        }
-
-                        // New (5 Minutes) Low
-                        if ((min5_b.Bar_1 is Bar min5_b_1) && (min5_b.High > min5_b_1.High))
-                        {
-                            sd.SendOrder(b.High, 1, OrderType.MidPrice);
-                        }
+                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                    }
+                    else if (bts[b.Time, FiveMinutesCrossSignal_2] is DualDataSignalDatum sd_2 && sd_2.List.Contains(DualDataSignalType.CrossUp))
+                    {
+                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                    }
+                    else if (bts[b.Time, BarFreq.Minutes_5] is Bar min5_b && (min5_b.Bar_1 is Bar min5_b_1) && (min5_b.High > min5_b_1.High))
+                    {
+                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
                     }
                 }
 

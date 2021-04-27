@@ -2,22 +2,20 @@
 /// Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
+/// Filter 1) Signal Set; 2) Signal Threshold Range<double>(), within? / outside?; 3) Ranking Column?
+/// 
 /// ***************************************************************************
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Xu;
-using Pacmio.Analysis;
 
 namespace Pacmio
 {
     public sealed class Filter
     {
-        // Filter 1) Signal Set; 2) Signal Threshold Range<double>(), within? / outside?; 3) Ranking Column?
         public Filter(IEnumerable<SignalAnalysis> SignalList, Range<double> signalRange, bool isPointWithin, NumericColumn rankColumn)
         {
             SignalAnalysisSet = new(SignalList);
@@ -43,12 +41,42 @@ namespace Pacmio
             return (isPass, b[Column_Rank]);
         }
 
-        public IEnumerable<Bar> RunScan(BarTableSet bts, Period pd)
+        public FilterScanResult RunScan(BarTableSet bts, Period pd)
         {
             bts.CalculateRefresh(SignalAnalysisSet);
             BarTable bt = bts[SignalAnalysisSet.TimeFrameList.Last()];
-            var bars = bt.Bars.Where(b => pd.Contains(b.Time)).Where(n => Calculate(n).pass);
-            return bars;
+            var allbars = bt.Bars.Where(b => pd.Contains(b.Time));
+            var bars = allbars.Where(n => Calculate(n).pass);
+            return new(bts.Contract, bars, allbars.Count());
         }
+    }
+
+    public class FilterScanResult
+    {
+        public FilterScanResult(Contract c, IEnumerable<Bar> bars, int totalCount)
+        {
+            Contract = c;
+            Count = bars.Count();
+            TotalCount = totalCount;
+            Percent = TotalCount > 0 ? (Count * 100 / TotalCount) : 0;
+
+            bars.RunEach(n =>
+            {
+                var pd_bull = ToDailyPeriod(n.Period);
+                Periods.Add(pd_bull);
+            });
+        }
+
+        public Contract Contract { get; }
+
+        public MultiPeriod Periods { get; } = new MultiPeriod();
+
+        public int TotalCount { get; }
+
+        public int Count { get; }
+
+        public double Percent { get; }
+
+        public static Period ToDailyPeriod(Period pd) => new Period(pd.Start.Date, pd.Stop.AddDays(1).Date);
     }
 }

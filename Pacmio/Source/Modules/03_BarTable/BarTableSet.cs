@@ -230,11 +230,13 @@ namespace Pacmio
         public Bar this[DateTime time, BarFreq freq, PriceType type = PriceType.Trades]
             => GetOrCreateBarTable(freq, type) is BarTable bt ? bt[time] : null;
 
+        /*
         public Bar this[DateTime time, Indicator ind]
             => this[time, ind.BarFreq, ind.PriceType];
+        */
 
-        public Bar this[DateTime time, SignalAnalysis sa]
-            => this[time, sa.BarFreq, sa.PriceType];
+        public SignalDatum this[DateTime time, SignalAnalysis sa]
+            => this[time, sa.BarFreq, sa.PriceType][sa];
 
         public void CalculateRefresh(SignalAnalysisSet sas)
         {

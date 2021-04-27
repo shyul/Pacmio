@@ -121,7 +121,7 @@ namespace Pacmio
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public List<(BarFreq freq, PriceType type)> TimeFrameList 
+        public List<(BarFreq freq, PriceType type)> TimeFrameList
             => BarAnalysisSetList.
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
@@ -132,7 +132,5 @@ namespace Pacmio
             var btList = bts.Where(bt => TimeFrameList.Contains((bt.BarFreq, bt.PriceType))).Where(bt => bt.LastCalculatedTickTime < tickTime);
             return btList.Count() == 0;
         }
-
-
     }
 }

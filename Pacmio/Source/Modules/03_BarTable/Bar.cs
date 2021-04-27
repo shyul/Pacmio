@@ -526,10 +526,8 @@ namespace Pacmio
             {
                 if (sa.BarFreq == BarFreq && sa.PriceType == PriceType)
                     return this[sa.Column_Result];
-                else if (Table.BarTableSet[Time, sa] is Bar b_sa)
-                    return b_sa[sa.Column_Result];
-                else
-                    return null;
+                else 
+                    return Table.BarTableSet[Time, sa];
             }
 
             set
