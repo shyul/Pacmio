@@ -586,7 +586,7 @@ namespace TestClient
                 Console.WriteLine("total number = " + cList.Count());
 
                 
-                ResearchTool.RunScreener(cList,
+                SimulationManager.RunScreener(cList,
                     filter,
                     pd, 16, Cts, Progress);
 

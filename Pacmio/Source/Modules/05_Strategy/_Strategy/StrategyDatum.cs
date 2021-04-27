@@ -93,6 +93,8 @@ namespace Pacmio
 
         public int EntryBarIndex { get; set; } = -1;
 
+        public DateTime LastEntryTime { get; set; }
+
         #endregion Decision
 
         #region Order

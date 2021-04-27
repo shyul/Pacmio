@@ -53,7 +53,17 @@ namespace Pacmio.Analysis
 {
     public class GapGoOrbStrategy : Strategy
     {
-        public GapGoOrbStrategy(double gap = 4, BarFreq barFreq = BarFreq.Minute, BarFreq fiveMinFreq = BarFreq.Minutes_5) : base(barFreq, PriceType.Trades)
+        public GapGoOrbStrategy(
+            ISingleData crossData_1, // new EMA(9);
+            ISingleData crossData_2, // new EMA(20);
+            double gap = 4,
+            double aboveVolume = 5e5,
+            double belowVolume = double.MaxValue,
+            double abovePrice = 1,
+            double belowPrice = 300,
+            BarFreq barFreq = BarFreq.Minute,
+            BarFreq fiveMinFreq = BarFreq.Minutes_5)
+            : base(barFreq, PriceType.Trades)
         {
 
 
@@ -61,21 +71,15 @@ namespace Pacmio.Analysis
             MinimumMinuteRelativeVolume = 2;
             RewardRiskRatio = 2;
 
-            DailyPriceFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(1, 300))
-            {
-                TypeToTrailPoints = new()
-                {
-                    { SingleDataSignalType.Within, new double[] { 1 } },
-                }
-            };
+            #region Define Filter
 
-            DailyVolumeFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(5e5, double.MaxValue))
-            {
-                TypeToTrailPoints = new()
-                {
-                    { SingleDataSignalType.Within, new double[] { 1 } },
-                }
-            };
+            DailyPriceFilterSignal =
+                new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
+                { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
+
+            DailyVolumeFilterSignal =
+                new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
+                { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
 
             DailyGapPercentFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
             {
@@ -90,13 +94,16 @@ namespace Pacmio.Analysis
                 DailyPriceFilterSignal,
                 DailyVolumeFilterSignal,
                 DailyGapPercentFilterSignal },
-                new Range<double>(3, double.MaxValue),
-                true,
+                3,
+                3,
                 Bar.Column_GainPercent);
 
+            #endregion Define Filter
 
-            FiveMinutesCrossData_1 = new EMA(9);
-            FiveMinutesCrossSignal_1 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_1)
+            #region Define Signals
+
+            FiveMinutesCrossData_1 = crossData_1; 
+            FiveMinutesCrossSignal_1 = new DualDataSignal(fiveMinFreq, FiveMinutesCrossData_1)
             {
                 TypeToTrailPoints = new()
                 {
@@ -105,8 +112,8 @@ namespace Pacmio.Analysis
                 }
             };
 
-            FiveMinutesCrossData_2 = new EMA(20);
-            FiveMinutesCrossSignal_2 = new DualDataSignal(BarFreq.Minutes_5, FiveMinutesCrossData_2)
+            FiveMinutesCrossData_2 = crossData_2; 
+            FiveMinutesCrossSignal_2 = new DualDataSignal(fiveMinFreq, FiveMinutesCrossData_2)
             {
                 TypeToTrailPoints = new()
                 {
@@ -123,7 +130,7 @@ namespace Pacmio.Analysis
                 FiveMinutesCrossSignal_2,
             });
 
-
+            #endregion Define Signals
 
 
 
@@ -132,21 +139,16 @@ namespace Pacmio.Analysis
             Time stop = new Time(10, 00);
             TimeInForce = new TimePeriod(start, stop);
             PositionHoldingPeriod = new TimePeriod(start, new Time(12, 00));
-
-            SignalColumns = new SignalColumn[] { };
-            SignalSeries = new(this);
-            BarAnalysisSet = new(this);
         }
 
         public override Filter Filter { get; }
-
         public override SignalAnalysisSet SignalAnalysisSet { get; }
-
 
 
         public SingleDataSignal DailyPriceFilterSignal { get; }
         public SingleDataSignal DailyVolumeFilterSignal { get; }
         public SingleDataSignal DailyGapPercentFilterSignal { get; }
+
 
         public DualDataSignal FiveMinutesCrossSignal_1 { get; }
         public ISingleData FiveMinutesCrossData_1 { get; }
@@ -155,20 +157,13 @@ namespace Pacmio.Analysis
 
 
 
-
-
-        public SignalColumn VolumeSignal { get; }
-        public SignalColumn RelativeVolumeSignal { get; }
-
         public TimeFrameRelativeVolume RelativeVolume { get; }
-
         public TimeFramePricePosition PricePosition { get; }
 
 
+
         public double MinimumMinuteVolume { get; }
-
         public double MinimumMinuteRelativeVolume { get; }
-
         public double RewardRiskRatio { get; }
 
 
@@ -178,8 +173,6 @@ namespace Pacmio.Analysis
 
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
-
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -196,15 +189,16 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
-                    if (b.Time == TimeInForce.Start && Filter.Calculate(b).pass)
+                    if (b.Time == TimeInForce.Start)
                     {
                         if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
                         {
-                            if (b[PricePosition] > 0.75)
+                            var (bullish, bearish, _) = Filter.Calculate(b);
+                            if (bullish && b[PricePosition] > 0.75)
                             {
                                 sd.Message = BullishOpenBarMessage;
                             }
-                            else if (b[PricePosition] < 0.25)
+                            else if (bearish && b[PricePosition] < 0.25)
                             {
                                 sd.Message = BearishOpenBarMessage;
                             }

@@ -20,7 +20,7 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Strategy : Indicator, ISingleDatum, IChartOverlay
+    public abstract class Strategy : BarAnalysis, ISingleDatum, IChartOverlay
     {
         protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
 
@@ -40,28 +40,7 @@ namespace Pacmio
 
         public TimePeriod PositionHoldingPeriod { get; set; } = TimePeriod.Full;
 
-        public void BackTest(BarTableSet bts, Period periodLimit, CancellationTokenSource cts = null)
-        {
-            var result = Filter.RunScan(bts, periodLimit);
-
-            MultiPeriod mps = bts.MultiPeriod is not null ? new MultiPeriod(bts.MultiPeriod) : new MultiPeriod();
-
-            foreach (var pd in result.Periods)
-            {
-                if (periodLimit.Contains(pd))
-                {
-                    mps.Add(pd);
-                }
-            }
-
-            bts.SetPeriod(mps, cts);
-            bts.CalculateRefresh(SignalAnalysisSet);
-
-            BarTable bt = bts[BarFreq, PriceType];
-            bt.CalculateRefresh(BarAnalysisSet);
-        }
-
-
+        public TimeSpan HoldingTime { get; } = new TimeSpan(1000, 1, 1, 1, 1);
 
         public DatumColumn Column_Result { get; protected set; }
 

@@ -46,7 +46,7 @@ namespace Pacmio
 
         public SignalSeries SignalSeries { get; }
 
-        public Indicator Indicator => SignalSeries.Indicator;
+        public SignalIndicator Indicator => SignalSeries.Indicator;
 
         public TimePeriod TimeInForce => SignalSeries.TimeInForce;
 
@@ -59,7 +59,7 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (Indicator is Indicator filter)
+                if (Indicator is SignalIndicator filter)
                 {
                     FilterType lastType = FilterType.None;
 

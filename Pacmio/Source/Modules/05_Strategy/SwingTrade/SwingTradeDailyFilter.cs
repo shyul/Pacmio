@@ -45,7 +45,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class SwingTradeDailyFilter : Indicator
+    public class SwingTradeDailyFilter : SignalIndicator
     {
         public SwingTradeDailyFilter() : base(BarFreq.Daily, PriceType.Trades)
         {

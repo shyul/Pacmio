@@ -105,10 +105,10 @@ namespace Pacmio
                 BarAnalysisSetList[saList.Key] = new BarAnalysisSet(saList.Value);
             }
 
-            SignalAnalysisList = signalAnalysisList;
+            List = signalAnalysisList;
         }
 
-        public IEnumerable<SignalAnalysis> SignalAnalysisList { get; }
+        public IEnumerable<SignalAnalysis> List { get; }
 
         private Dictionary<(BarFreq freq, PriceType type), BarAnalysisSet> BarAnalysisSetList { get; } = new();
 

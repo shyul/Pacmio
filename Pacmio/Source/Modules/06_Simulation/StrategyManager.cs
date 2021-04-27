@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class StrategyTool
+    public static class StrategyManager
     {
-        // Generate and Tune Strategies from here. 
+        
 
         private static Dictionary<Strategy, AccountInfo> StrategyToAccountLUT { get; } = new();
 
@@ -24,7 +24,7 @@ namespace Pacmio
         public static AccountInfo GetAccount(Strategy s) => StrategyToAccountLUT.ContainsKey(s) ? StrategyToAccountLUT[s] : null;
 
 
-
-
+        // Generate and Tune Strategies from here. 
+        // Generate a list of Strategies with different parameter...
     }
 }

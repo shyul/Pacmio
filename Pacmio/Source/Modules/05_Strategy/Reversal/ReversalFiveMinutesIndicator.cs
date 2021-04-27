@@ -12,7 +12,7 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalFiveMinutesIndicator : Indicator
+    public class ReversalFiveMinutesIndicator : SignalIndicator
     {
         public ReversalFiveMinutesIndicator() : base(BarFreq.Daily, PriceType.Trades)
         {

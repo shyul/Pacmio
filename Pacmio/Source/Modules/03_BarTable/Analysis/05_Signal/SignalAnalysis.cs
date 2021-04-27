@@ -29,15 +29,35 @@ namespace Pacmio
 
         public Color BullishColor
         {
-            get => Column_Result.BullishColor;
-            protected set => Column_Result.BullishColor = value;
+            get
+            {
+                return BullishTheme.ForeColor;
+            }
+            protected set
+            {
+                BullishTheme.ForeColor = value;
+                BullishTheme.FillColor = value.Opaque(64);
+                BullishTheme.EdgeColor = value.Opaque(255);
+            }
         }
 
         public Color BearishColor
         {
-            get => Column_Result.BearishColor;
-            protected set => Column_Result.BearishColor = value;
+            get
+            {
+                return BearishTheme.ForeColor;
+            }
+            protected set
+            {
+                BearishTheme.ForeColor = value;
+                BearishTheme.FillColor = value.Opaque(64);
+                BearishTheme.EdgeColor = value.Opaque(255);
+            }
         }
+
+        public ColorTheme BullishTheme { get; set; } = new();
+
+        public ColorTheme BearishTheme { get; set; } = new();
 
         #region Equality
 

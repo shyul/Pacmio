@@ -22,28 +22,22 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Passive: Only yield signal score
     /// </summary>
-    public abstract class Indicator : BarAnalysis, IChartSeries, IEquatable<Indicator>
+    public class SignalIndicator : BarAnalysis, IChartSeries
     {
-        protected Indicator(BarFreq barFreq, PriceType type)
+        protected SignalIndicator(SignalAnalysisSet sas)
         {
-            PriceType = type;
-            BarFreq = barFreq;
-            Frequency = BarFreq.GetAttribute<BarFreqInfo>().Frequency;
+
         }
 
-        public PriceType PriceType { get; set; } = PriceType.Trades;
 
-        public BarFreq BarFreq { get; set; } = BarFreq.Daily;
 
-        public Frequency Frequency { get; }
 
-        public BarAnalysisSet BarAnalysisSet { get; protected set; }
 
-        public abstract IEnumerable<SignalColumn> SignalColumns { get; }
+        //public IEnumerable<SignalColumn> SignalColumns { get; }
 
-        public double BullishPointLimit { get; set; } = 1;
 
-        public double BearishPointLimit { get; set; } = -1;
+
+        protected override void Calculate(BarAnalysisPointer bap) { }
 
         #region Series
 
@@ -79,15 +73,5 @@ namespace Pacmio
         }
 
         #endregion Series
-
-        #region Equality
-
-        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
-        public bool Equals(Indicator other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
-        public static bool operator !=(Indicator s1, Indicator s2) => !s1.Equals(s2);
-        public static bool operator ==(Indicator s1, Indicator s2) => s1.Equals(s2);
-        public override bool Equals(object other) => other is Indicator ba && Equals(ba);
-
-        #endregion Equality
     }
 }

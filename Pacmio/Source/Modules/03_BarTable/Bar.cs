@@ -494,7 +494,7 @@ namespace Pacmio
 
         public IEnumerable<CandleStickType> CandleStickList => DatumColumnsLUT.Values.Where(n => n is CandleStickSignalDatum).Select(n => n as CandleStickSignalDatum).SelectMany(n => n.List);
 
-        public SignalDatum this[SignalColumn dc]
+        private SignalDatum this[SignalColumn dc]
         {
             get => DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] as SignalDatum : null;
 
@@ -526,7 +526,7 @@ namespace Pacmio
             {
                 if (sa.BarFreq == BarFreq && sa.PriceType == PriceType)
                     return this[sa.Column_Result];
-                else 
+                else
                     return Table.BarTableSet[Time, sa];
             }
 
@@ -537,11 +537,11 @@ namespace Pacmio
             }
         }
 
-        public (double Bullish, double Bearish) GetSignalScore(SignalAnalysisSet sas)
+        public (double Bullish, double Bearish) GetSignalScore(IEnumerable<SignalAnalysis> sas)
         {
             BarTableSet bts = Table.BarTableSet;
             double bull = 0, bear = 0;
-            foreach (SignalAnalysis sa in sas.SignalAnalysisList.Where(n => n.BarFreq >= BarFreq))
+            foreach (SignalAnalysis sa in sas.Where(n => n.BarFreq >= BarFreq))
             {
                 if (this[sa] is SignalDatum sd)
                 {
@@ -553,32 +553,15 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public (double Bullish, double Bearish) GetSignalScore(IEnumerable<SignalColumn> scs)
+        public FilterType this[Filter filter] => GetSignalFilterType(filter);
+
+        private FilterType GetSignalFilterType(Filter filter)
         {
-            double bull = 0, bear = 0;
-            foreach (SignalColumn sc in scs)
-            {
-                if (this[sc] is SignalDatum sd)
-                {
-                    double points = sd.Points;
-                    if (points > 0) bull += points;
-                    else if (points < 0) bear += points;
-                }
-            }
-            return (bull, bear);
-        }
+            var (bullish, bearish, _) = filter.Calculate(this);
 
-        public (double Bullish, double Bearish) GetSignalScore(Indicator ind) => GetSignalScore(ind.SignalColumns);
-
-        public FilterType this[Indicator filter] => GetSignalFilterType(filter);
-
-        public FilterType GetSignalFilterType(Indicator filter)
-        {
-            var (bullish, bearish) = GetSignalScore(filter.SignalColumns);
-
-            if (bullish > filter.BullishPointLimit && bullish > bearish)
+            if (bullish)
                 return FilterType.Bullish;
-            else if (bearish < filter.BearishPointLimit && Math.Abs(bearish) > bullish)
+            else if (bearish)
                 return FilterType.Bearish;
             else
                 return FilterType.None;

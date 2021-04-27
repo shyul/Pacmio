@@ -16,7 +16,7 @@ namespace Pacmio
 {
     public sealed class SignalSeries : Series
     {
-        public SignalSeries(Indicator ind)
+        public SignalSeries(SignalIndicator ind)
         {
             Indicator = ind;
 
@@ -30,7 +30,7 @@ namespace Pacmio
             Width = 40;
         }
 
-        public Indicator Indicator { get; }
+        public IEnumerable<SignalAnalysis> SignalAnalysisList { get; }
 
         public TimePeriod TimeInForce => Indicator is Strategy s ? s.TimeInForce : TimePeriod.Full;
 
@@ -46,7 +46,7 @@ namespace Pacmio
                         break;
                     else if (i > 0)
                     {
-                        var (bullish, bearish) = bt[i].GetSignalScore(Indicator);
+                        var (bullish, bearish) = bt[i].GetSignalScore(SignalAnalysisList);
                         axisY.Range.Insert(bullish);
                         axisY.Range.Insert(bearish);
                     }
@@ -62,7 +62,7 @@ namespace Pacmio
 
             if (table is BarTable bt && bt[pt] is Bar b && TimeInForce.Contains(b.Time))
             {
-                var (bullish, bearish) = b.GetSignalScore(Indicator);
+                var (bullish, bearish) = b.GetSignalScore(SignalAnalysisList);
                 double score = bullish + bearish;
 
                 if (score > 0)
@@ -78,14 +78,14 @@ namespace Pacmio
                     labels.Add((score.ToString(), Main.Theme.FontBold, Main.Theme.DimTextBrush));
                 }
 
-                foreach (SignalColumn sc in Indicator.SignalColumns)
+                foreach (SignalAnalysis sa in SignalAnalysisList)
                 {
-                    if (b[sc] is SignalDatum sd)
+                    if (b[sa] is SignalDatum sd)
                     {
                         if (sd.Points > 0)
-                            labels.Add((sc.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sc.BullishTheme.ForeBrush));
+                            labels.Add((sa.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sa.BullishTheme.ForeBrush));
                         else if (sd.Points < 0)
-                            labels.Add((sc.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sc.BearishTheme.ForeBrush));
+                            labels.Add((sa.Name + ": " + sd.Points + " / " + sd.Description, Main.Theme.Font, sa.BearishTheme.ForeBrush));
                     }
                 }
             }
@@ -113,9 +113,9 @@ namespace Pacmio
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        foreach (SignalColumn sc in Indicator.SignalColumns)
+                        foreach (SignalAnalysis sa in SignalAnalysisList)
                         {
-                            if (b[sc] is SignalDatum sd)
+                            if (b[sa] is SignalDatum sd)
                             {
                                 string desc = sd.Description;
                                 double score = sd.Points;
@@ -128,16 +128,16 @@ namespace Pacmio
                                     height = ref_pix - axisY.ValueToPixel(score);
                                     pos_base_pix -= height;
                                     rect = new Rectangle(x, pos_base_pix, tickWidth, height);
-                                    g.FillRectangleE(sc.BullishTheme.FillBrush, rect);
-                                    g.DrawRectangle(sc.BullishTheme.EdgePen, rect);
+                                    g.FillRectangleE(sa.BullishTheme.FillBrush, rect);
+                                    g.DrawRectangle(sa.BullishTheme.EdgePen, rect);
                                 }
                                 else if (score < 0)
                                 {
                                     height = axisY.ValueToPixel(score) - ref_pix;
                                     rect = new Rectangle(x, neg_base_pix, tickWidth, height);
                                     neg_base_pix += height;
-                                    g.FillRectangleE(sc.BearishTheme.FillBrush, rect);
-                                    g.DrawRectangle(sc.BearishTheme.EdgePen, rect);
+                                    g.FillRectangleE(sa.BearishTheme.FillBrush, rect);
+                                    g.DrawRectangle(sa.BearishTheme.EdgePen, rect);
                                 }
                             }
                         }
