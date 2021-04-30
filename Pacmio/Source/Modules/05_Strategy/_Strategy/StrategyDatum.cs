@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class StrategyDatum : IDatum
+    public class StrategyDatum : SignalDatum
     {
-        public StrategyDatum(Bar b, Strategy s)
+        public StrategyDatum(Bar b, Strategy s) : base(b, s.Column_Result)
         {
             Bar = b;
             Strategy = s;
@@ -53,13 +53,15 @@ namespace Pacmio
 
         public Strategy Strategy { get; }
 
-        public Bar Bar { get; }
+        //public Bar Bar { get; }
 
         public Contract Contract => Bar.Table.Contract;
 
         public MarketData MarketData => Contract.MarketData;
 
-        public PositionInfo PositionInfo => Strategy.AccountInfo is AccountInfo ac ? ac[Contract] : null;
+        public AccountInfo Account => StrategyManager.GetAccount(Strategy);
+
+        public PositionInfo PositionInfo => Account is AccountInfo ac ? ac[Contract] : null;
 
         public bool IsLive { get; private set; } = false;
 
@@ -183,7 +185,7 @@ namespace Pacmio
 
                 if (IsLive) // && the same direction execution is not sent ?// Check the bar see how it is filled
                 {
-                    AccountInfo ac = Strategy.AccountInfo;
+                    AccountInfo ac = Account;
 
                     double riskableAmount = ac.NetLiquidation * 0.02;
                     double qty = riskableAmount / RiskPart;

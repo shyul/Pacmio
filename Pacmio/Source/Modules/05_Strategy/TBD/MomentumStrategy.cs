@@ -25,27 +25,13 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class MomentumStrategy : Strategy
+    public class MomentumStrategy 
     {
-        public MomentumStrategy(BarFreq barFreq, PriceType type) : base(barFreq, type)
-        {
 
-            DailyIndicator = new();
 
-            SignalAnalysisSet.Add(DailyIndicator);
+        public Range<double> PriceRange { get; } = new Range<double>(1, 10);
 
-            SignalColumns = new SignalColumn[] { };
-            SignalSeries = new(this);
-            BarAnalysisSet = new(this);
-        }
-
-        public override IEnumerable<SignalColumn> SignalColumns { get; }
-
-        public override Filter Filter { get; } // = new MomentumDailyFilter();
-
-        public double MinimumVolume { get; } = 1e6;
-
-        public MomentumDailyIndicator DailyIndicator { get; }
+        public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
 
         /// <summary>
         /// Ideally the entry point shall close to the EMA9 or EMA20 support level.
@@ -58,24 +44,5 @@ namespace Pacmio.Analysis
 
         public TimeFrameRelativeVolume TimeFrameRelativeVolume { get; } = new TimeFrameRelativeVolume(5, BarFreq.Daily);
 
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-            BarTable bt = bap.Table;
-            BarTableSet bts = bt.BarTableSet;
-
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                Bar b = bt[i];
-                Bar daily_b = bts[b.Time, DailyIndicator];
-                double daily_relative_volume = daily_b[DailyIndicator.RelativeVolume];
-
-                if (daily_b.Volume > 1e6 && daily_relative_volume > 2)
-                {
-
-
-
-                }
-            }
-        }
     }
 }

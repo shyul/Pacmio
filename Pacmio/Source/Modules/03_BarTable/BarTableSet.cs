@@ -240,5 +240,11 @@ namespace Pacmio
                 this[item.freq, item.type].CalculateRefresh(item.bas);
             }
         }
+
+        public void CalculateRefresh(Strategy s)
+        {
+            CalculateRefresh(s.SignalAnalysisSet);
+            //this[s.BarFreq, s.PriceType].CalculateRefresh(s);
+        }
     }
 }

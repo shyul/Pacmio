@@ -24,7 +24,7 @@ namespace Pacmio
             SetPoints(points);
         }
 
-        public Bar Bar { get; }
+        public Bar Bar { get; protected set; }
 
         public SignalColumn SignalColumn { get; }
 

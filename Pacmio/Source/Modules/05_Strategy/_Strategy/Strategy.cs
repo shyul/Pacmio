@@ -20,11 +20,9 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Strategy : BarAnalysis, ISingleDatum, IChartOverlay
+    public abstract class Strategy : SignalAnalysis, IChartOverlay
     {
-        protected Strategy(BarFreq barFreq, PriceType type) : base(barFreq, type) { }
-
-        //public abstract AccountInfo AccountInfo { get; set; }
+        protected Strategy(BarFreq barFreq, PriceType priceType) : base(barFreq, priceType) { }
 
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
@@ -42,7 +40,37 @@ namespace Pacmio
 
         public TimeSpan HoldingTime { get; } = new TimeSpan(1000, 1, 1, 1, 1);
 
-        public DatumColumn Column_Result { get; protected set; }
+
+        #region Order
+
+        public double MinimumRiskRewardRatio { get; set; }
+
+        public double MinimumTradeSize { get; set; }
+
+
+
+        /// <summary>
+        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
+        /// </summary>
+        public double WaitMsForOutstandingOrder { get; }
+
+        /// <summary>
+        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
+        /// Can use wait Ms and set limit price.
+        /// </summary>
+        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
+
+        /// <summary>
+        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
+        /// </summary>
+        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
+
+        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
+
+        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
+
+        // Step 2: Define Signal Group
+        #endregion Order
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -81,44 +109,28 @@ namespace Pacmio
             }
         }
 
+
+
+
+
         public virtual void DrawOverlay(Graphics g, BarChart bc)
         {
 
 
         }
 
-        #region Order
+        public int DrawOrder { get; set; } = 0;
 
-        public double MinimumRiskRewardRatio { get; set; }
+        public bool ChartEnabled { get; set; } = true;
 
-        public double MinimumTradeSize { get; set; }
-
-        #endregion Order
-
-        /// <summary>
-        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
-        /// </summary>
-        public double WaitMsForOutstandingOrder { get; }
-
-        /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
-        /// Can use wait Ms and set limit price.
-        /// </summary>
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
-
-        /// <summary>
-        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
-        /// </summary>
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
-
-        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
-
-        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
-
-        // Step 2: Define Signal Group
+        public string AreaName { get; }
+    }
 
 
 
+
+    public class StrategyBacktestSetting 
+    {
         #region Training Settings
 
         //   public double SlippageRatio { get; set; } = 0.0001;
@@ -127,14 +139,15 @@ namespace Pacmio
         /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
         /// The commission model shall be defined by Simulate Engine.
         /// </summary>
-        public virtual int TrainingLength { get; set; } = 5;
+        //public virtual int TrainingLength { get; set; } = 5;
 
         /// <summary>
         /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
         /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
         /// </summary>
-        public virtual int TradingLength { get; set; } = 1;
+        //public virtual int TradingLength { get; set; } = 1;
 
         #endregion Training Settings
+
     }
 }

@@ -13,17 +13,14 @@ using Xu;
 
 namespace Pacmio
 {
-    public sealed class Filter
+    public sealed class Filter : SignalAnalysisSet
     {
-        public Filter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn)
+        public Filter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn) : base(SignalList)
         {
-            SignalAnalysisSet = new(SignalList);
             BullishLimit = bullishLimit;
             BearishLimit = bearishLimit;
             Column_Rank = rankColumn;
         }
-
-        public SignalAnalysisSet SignalAnalysisSet { get; }
 
         public NumericColumn Column_Rank { get; }
 
@@ -33,15 +30,15 @@ namespace Pacmio
 
         public (bool bullish, bool bearish, double rank) Calculate(Bar b)
         {
-            bool bullish = b.GetSignalScore(SignalAnalysisSet.List).Bullish >= BullishLimit;
-            bool bearish = b.GetSignalScore(SignalAnalysisSet.List).Bullish <= BearishLimit;
+            bool bullish = b.GetSignalScore(List).Bullish >= BullishLimit;
+            bool bearish = b.GetSignalScore(List).Bullish <= BearishLimit;
             return (bullish, bearish, b[Column_Rank]);
         }
 
         public FilterScanResult RunScan(BarTableSet bts, Period pd)
         {
-            bts.CalculateRefresh(SignalAnalysisSet);
-            BarTable bt = bts[SignalAnalysisSet.TimeFrameList.Last()];
+            bts.CalculateRefresh(this);
+            BarTable bt = bts[TimeFrameList.Last()];
             var allbars = bt.Bars.Where(b => pd.Contains(b.Time));
 
             List<Bar> bullishBars = new();

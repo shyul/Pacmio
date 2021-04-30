@@ -105,10 +105,15 @@ namespace Pacmio
                 BarAnalysisSetList[saList.Key] = new BarAnalysisSet(saList.Value);
             }
 
+            //BarAnalysisSetList[(s.BarFreq, s.PriceType)] = new BarAnalysisSet(s);
+            //signalAnalysisList.Add(s);
             List = signalAnalysisList;
+
         }
 
-        public IEnumerable<SignalAnalysis> List { get; }
+        public List<SignalAnalysis> List { get; }
+
+        //private Strategy Strategy { get; }
 
         private Dictionary<(BarFreq freq, PriceType type), BarAnalysisSet> BarAnalysisSetList { get; } = new();
 
@@ -126,6 +131,7 @@ namespace Pacmio
             OrderByDescending(n => n.Key.freq).
             ThenByDescending(n => n.Key.type).
             Select(n => (n.Key.freq, n.Key.type)).ToList();
+            //Append((Strategy.BarFreq, Strategy.PriceType)).ToList();
 
         public bool IsUptoTick(IEnumerable<BarTable> bts, DateTime tickTime)
         {

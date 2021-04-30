@@ -134,7 +134,7 @@ namespace Pacmio.Analysis
 
 
 
-            Column_Result = new(Name, typeof(StrategyDatum));
+            Column_Result = new(this, typeof(StrategyDatum));
             Time start = new Time(9, 30);
             Time stop = new Time(10, 00);
             TimeInForce = new TimePeriod(start, stop);
@@ -173,6 +173,8 @@ namespace Pacmio.Analysis
 
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
+
+        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
