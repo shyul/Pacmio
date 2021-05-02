@@ -29,10 +29,6 @@ namespace Pacmio.Analysis
 
         }
 
-
-
-
-
         // Filter: 500000 Volume
 
         // Long short --> supported by market strength, supported by sector strength
@@ -73,10 +69,6 @@ namespace Pacmio.Analysis
 
         // Exit: boundce back to 9 EMA or VWAP
 
-
-
-
-
         public Range<double> PriceRange { get; } = new Range<double>(15, 250);
 
         public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
@@ -88,11 +80,6 @@ namespace Pacmio.Analysis
 
         // 1 ~ 1.5
         public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
-
-
-
-
-
 
         public NarrowRange NarrowRange { get; }
 

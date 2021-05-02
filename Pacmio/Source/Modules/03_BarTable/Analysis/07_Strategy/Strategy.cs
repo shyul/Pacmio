@@ -45,44 +45,7 @@ namespace Pacmio
 
         public TimeSpan HoldingMaxSpan { get; } = new TimeSpan(1000, 1, 1, 1, 1);
 
-
         public double MinimumRiskRewardRatio { get; set; } = 2;
-
-
-
-
-        public double MinimumTradeSize { get; set; }
-
-
-
-        #region Order
-
-
-
-
-
-        /// <summary>
-        /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
-        /// </summary>
-        public double MaximumWaitMsForOutstandingOrder { get; }
-
-        /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the unfiled order.
-        /// Can use wait Ms and set limit price.
-        /// </summary>
-        public double MaximumPriceDeviationFromDecisionPercent { get; } = double.NaN;
-
-        /// <summary>
-        /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.
-        /// </summary>
-        public double MaximumPriceGoinNegativeFromDecisionPointPrecent { get; }
-
-        // Step 1: Define WatchList (Filters) Group sort by time frame -> Filter has B.A.S 
-
-        // Step 1a: optionally manually defined [[[[ Daily ]]]] Scanner for faster live trading
-
-        // Step 2: Define Signal Group
-        #endregion Order
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
@@ -121,9 +84,13 @@ namespace Pacmio
             }
         }
 
+        #region Draw Chart Overlay
 
+        public int DrawOrder { get; set; } = 0;
 
+        public bool ChartEnabled { get; set; } = true;
 
+        public string AreaName { get; }
 
         public virtual void DrawOverlay(Graphics g, BarChart bc)
         {
@@ -131,35 +98,6 @@ namespace Pacmio
 
         }
 
-        public int DrawOrder { get; set; } = 0;
-
-        public bool ChartEnabled { get; set; } = true;
-
-        public string AreaName { get; }
-    }
-
-
-
-
-    public class StrategyBacktestSetting
-    {
-        #region Training Settings
-
-        //   public double SlippageRatio { get; set; } = 0.0001;
-
-        /// <summary>
-        /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
-        /// The commission model shall be defined by Simulate Engine.
-        /// </summary>
-        //public virtual int TrainingLength { get; set; } = 5;
-
-        /// <summary>
-        /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
-        /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
-        /// </summary>
-        //public virtual int TradingLength { get; set; } = 1;
-
-        #endregion Training Settings
-
+        #endregion Draw Chart Overlay
     }
 }
