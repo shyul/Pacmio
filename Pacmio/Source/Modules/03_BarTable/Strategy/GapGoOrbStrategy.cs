@@ -61,6 +61,7 @@ namespace Pacmio.Analysis
             double belowVolume = double.MaxValue,
             double abovePrice = 1,
             double belowPrice = 300,
+            double minRiskRewardRatio = 2,
             BarFreq barFreq = BarFreq.Minute,
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
             : this(
@@ -71,6 +72,7 @@ namespace Pacmio.Analysis
             belowVolume,
             abovePrice,
             belowPrice,
+            minRiskRewardRatio,
             new TimeSpan(1000, 1, 1, 1, 1),
             new TimePeriod(new Time(9, 30), new Time(12, 00)),
             new TimePeriod(new Time(9, 30), new Time(10, 00)),
@@ -79,23 +81,23 @@ namespace Pacmio.Analysis
         { }
 
         public GapGoOrbStrategy(
-            ISingleData crossData_1, // new EMA(9);
-            ISingleData crossData_2, // new EMA(20);
+            ISingleData crossData_1,
+            ISingleData crossData_2,
             double gap,
             double aboveVolume,
             double belowVolume,
             double abovePrice,
             double belowPrice,
+            double minRiskRewardRatio,
             TimeSpan holdingMaxSpan,
             TimePeriod holdingPeriod,
             TimePeriod tif,
             BarFreq barFreq = BarFreq.Minute,
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
-            : base(holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
+            : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
             MinimumMinuteVolume = 1e5;
             MinimumMinuteRelativeVolume = 2;
-            RewardRiskRatio = 2;
 
             #region Define Filter
 
@@ -148,7 +150,7 @@ namespace Pacmio.Analysis
                 }
             };
 
-            BarAnalysisSet = new BarAnalysisSet(new SignalAnalysis[]
+            AnalysisSet = new BarAnalysisSet(new SignalAnalysis[]
             {
 
 
@@ -163,10 +165,10 @@ namespace Pacmio.Analysis
 
 
 
-
         public SingleDataSignal DailyPriceFilterSignal { get; }
         public SingleDataSignal DailyVolumeFilterSignal { get; }
         public SingleDataSignal DailyGapPercentFilterSignal { get; }
+
 
 
         public DualDataSignal FiveMinutesCrossSignal_1 { get; }
@@ -183,7 +185,6 @@ namespace Pacmio.Analysis
 
         public double MinimumMinuteVolume { get; }
         public double MinimumMinuteRelativeVolume { get; }
-        public double RewardRiskRatio { get; }
 
 
 
@@ -238,7 +239,7 @@ namespace Pacmio.Analysis
                             {
                                 sd.StopLossPrice = ob.Low;
                                 sd.RiskPart = ob.High - ob.Low;
-                                sd.ProfitTakePrice = ob.High + RewardRiskRatio * sd.RiskPart;
+                                sd.ProfitTakePrice = ob.High + MinimumRiskRewardRatio * sd.RiskPart;
                                 sd.Message = RangeBarBullishMessage;
                                 sd.EntryBarIndex = 0;
                                 sd.SendOrder(ob.High, 1, OrderType.Stop);
@@ -247,7 +248,7 @@ namespace Pacmio.Analysis
                             {
                                 sd.StopLossPrice = ob.High;
                                 sd.RiskPart = ob.High - ob.Low;
-                                sd.ProfitTakePrice = ob.Low - RewardRiskRatio * sd.RiskPart;
+                                sd.ProfitTakePrice = ob.Low - MinimumRiskRewardRatio * sd.RiskPart;
                                 sd.Message = RangeBarBearishMessage;
                                 sd.EntryBarIndex = 0;
                                 sd.SendOrder(ob.Low, -1, OrderType.Limit);

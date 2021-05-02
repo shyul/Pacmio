@@ -243,7 +243,7 @@ namespace Pacmio
 
         public void CalculateRefresh(Strategy s)
         {
-            CalculateRefresh(s.BarAnalysisSet);
+            CalculateRefresh(s.AnalysisSet);
             //this[s.BarFreq, s.PriceType].CalculateRefresh(s);
         }
     }

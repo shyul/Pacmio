@@ -23,6 +23,7 @@ namespace Pacmio
     public abstract class Strategy : SignalAnalysis, IChartOverlay
     {
         protected Strategy(
+            double minRiskRewardRatio,
             TimeSpan holdingMaxSpan,
             TimePeriod holdingPeriod,
             TimePeriod tif,
@@ -30,6 +31,7 @@ namespace Pacmio
             PriceType priceType)
             : base(tif, barFreq, priceType)
         {
+            MinimumRiskRewardRatio = minRiskRewardRatio;
             HoldingPeriod = holdingPeriod;
             HoldingMaxSpan = holdingMaxSpan;
         }
@@ -39,50 +41,13 @@ namespace Pacmio
         /// </summary>
         public BarAnalysisFilter Filter { get; protected set; }
 
-        public BarAnalysisSet BarAnalysisSet { get; protected set; }
+        public BarAnalysisSet AnalysisSet { get; protected set; }
 
-        public TimePeriod HoldingPeriod { get; } = TimePeriod.Full;
+        public TimePeriod HoldingPeriod { get; }
 
-        public TimeSpan HoldingMaxSpan { get; } = new TimeSpan(1000, 1, 1, 1, 1);
+        public TimeSpan HoldingMaxSpan { get; }
 
-        public double MinimumRiskRewardRatio { get; set; } = 2;
-
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
-            BarTable bt = bap.Table;
-            BarTableSet bts = bt.BarTableSet;
-            MultiPeriod testPeriods = bts.MultiPeriod;
-
-            for (int i = bap.StartPt; i < bap.StopPt; i++)
-            {
-                Bar b = bt[i];
-                StrategyDatum sd = b[this];
-
-                #region Identify the indicators
-
-                if (testPeriods.Contains(b.Time) && TimeInForce.Contains(b.Time))
-                {
-
-                }
-
-                #endregion Identify the indicators
-
-                #region Check profit and stop
-
-                sd.StopLossOrTakeProfit(0.5);
-
-                if (sd.Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
-                {
-
-                }
-                else if (sd.Quantity < 0) // || sd.Datum_1.Message == RangeBarBearishMessage)
-                {
-
-                }
-
-                #endregion Check profit and stop
-            }
-        }
+        public double MinimumRiskRewardRatio { get; }
 
         #region Draw Chart Overlay
 
@@ -90,7 +55,7 @@ namespace Pacmio
 
         public bool ChartEnabled { get; set; } = true;
 
-        public string AreaName { get; }
+        public string AreaName { get; protected set; } = MainBarChartArea.DefaultName;
 
         public virtual void DrawOverlay(Graphics g, BarChart bc)
         {

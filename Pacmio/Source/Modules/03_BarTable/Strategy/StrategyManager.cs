@@ -15,7 +15,7 @@ namespace Pacmio
 {
     public static class StrategyManager
     {
-        
+
 
         private static Dictionary<Strategy, AccountInfo> StrategyToAccountLUT { get; } = new();
 

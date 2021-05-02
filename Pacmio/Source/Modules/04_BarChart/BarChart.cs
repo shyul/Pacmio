@@ -89,7 +89,7 @@ namespace Pacmio
             {
                 ReadyToShow = false;
                 BarTable = bts[s.BarFreq, s.PriceType];
-                BarAnalysisList = s.BarAnalysisSet[s.BarFreq, s.PriceType];
+                BarAnalysisList = s.AnalysisSet[s.BarFreq, s.PriceType];
                 Strategy = s;
                 ReadyToShow = m_BarTable is BarTable;
 
@@ -105,7 +105,7 @@ namespace Pacmio
             {
                 ReadyToShow = false;
                 BarTable = bt;
-                BarAnalysisList = s.BarAnalysisSet[bt.BarFreq, bt.PriceType];
+                BarAnalysisList = s.AnalysisSet[bt.BarFreq, bt.PriceType];
                 Strategy = s;
                 ReadyToShow = m_BarTable is BarTable;
 

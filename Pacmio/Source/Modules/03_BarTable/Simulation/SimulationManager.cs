@@ -73,7 +73,7 @@ namespace Pacmio
             }
 
             bts.SetPeriod(mps, cts);
-            bts.CalculateRefresh(s.BarAnalysisSet);
+            bts.CalculateRefresh(s.AnalysisSet);
 
             //BarTable bt = bts[s.BarFreq, s.PriceType];
             //bt.CalculateRefresh(BarAnalysisSet);
