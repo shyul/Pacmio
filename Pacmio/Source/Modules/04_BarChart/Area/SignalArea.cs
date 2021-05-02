@@ -50,7 +50,7 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (SignalSeries.Source is BarAnalysisFilter filter)
+                if (BarChart.Strategy is Strategy s && s.Filter is BarAnalysisFilter filter)
                 {
                     FilterResult lastType = FilterResult.None;
 

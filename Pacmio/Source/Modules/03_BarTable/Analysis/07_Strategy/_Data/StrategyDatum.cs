@@ -26,7 +26,6 @@ namespace Pacmio
                 Datum_1 = sd_1;
                 ProfitTakePrice = sd_1.ProfitTakePrice;
                 StopLossPrice = sd_1.StopLossPrice;
-                //ExecutionPrice = sd_1.ExecutionPrice;
 
                 if (sd_1.EntryBarIndex >= 0)
                     EntryBarIndex = sd_1.EntryBarIndex + 1;
@@ -52,8 +51,6 @@ namespace Pacmio
         }
 
         public Strategy Strategy { get; }
-
-        //public Bar Bar { get; }
 
         public Contract Contract => Bar.Table.Contract;
 
@@ -115,7 +112,7 @@ namespace Pacmio
                 {
                     SendOrder(Bar.Open, -1, OrderType.MidPrice);
                 }
-                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.PositionHoldingPeriod.Contains(Bar.Time))
+                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.HoldingPeriod.Contains(Bar.Time))
                 {
                     SendOrder(Bar.Open, -1, OrderType.MidPrice);
                 }
@@ -144,7 +141,7 @@ namespace Pacmio
                 {
                     SendOrder(Bar.Open, 1, OrderType.MidPrice);
                 }
-                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.PositionHoldingPeriod.Contains(Bar.Time))
+                else if (Bar.BarFreq < BarFreq.Daily && !Strategy.HoldingPeriod.Contains(Bar.Time))
                 {
                     SendOrder(Bar.Open, 1, OrderType.MidPrice);
                 }

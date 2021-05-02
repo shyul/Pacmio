@@ -81,24 +81,16 @@ namespace Pacmio
 
         public MainBarChartArea MainArea { get; }
 
-        public override void RemoveDataSource()
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-                m_BarTable = null;
-            }
-        }
+        public Strategy Strategy { get; private set; }
 
         public void Config(BarTableSet bts, Strategy s)
         {
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
-
                 BarTable = bts[s.BarFreq, s.PriceType];
                 BarAnalysisList = s.BarAnalysisSet[s.BarFreq, s.PriceType];
-
+                Strategy = s;
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)
@@ -112,10 +104,9 @@ namespace Pacmio
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
-
                 BarTable = bt;
                 BarAnalysisList = s.BarAnalysisSet[bt.BarFreq, bt.PriceType];
-
+                Strategy = s;
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)
@@ -129,10 +120,8 @@ namespace Pacmio
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
-
                 BarTable = bt;
                 BarAnalysisList = bat;
-
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)
@@ -141,11 +130,24 @@ namespace Pacmio
             m_AsyncUpdateUI = true;
         }
 
+        public override void RemoveDataSource()
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+                m_BarTable = null;
+            }
+        }
+
         private void RemoveAllChartSeries()
         {
-            List<Area> areaToRemove = Areas.Where(n => n != MainArea).ToList();
-            areaToRemove.ForEach(n => Areas.Remove(n));
-            MainArea.RemoveSeries();
+            lock (GraphicsLockObject)
+            {
+                Strategy = null;
+                List<Area> areaToRemove = Areas.Where(n => n != MainArea).ToList();
+                areaToRemove.ForEach(n => Areas.Remove(n));
+                MainArea.RemoveSeries();
+            }
         }
 
         public BarAnalysisList BarAnalysisList

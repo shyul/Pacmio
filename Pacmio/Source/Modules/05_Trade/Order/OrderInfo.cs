@@ -21,11 +21,11 @@ namespace Pacmio
     {
         public OrderInfo()//StrategyDatum sd) 
         {
-        
-        
+
+
         }
 
-        public OrderInfo(StrategyDatum sd, double absoluteQty) 
+        public OrderInfo(StrategyDatum sd, double absoluteQty)
         {
 
             StrategyDatum = sd;

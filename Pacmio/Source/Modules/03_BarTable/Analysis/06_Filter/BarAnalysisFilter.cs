@@ -13,13 +13,6 @@ using Xu;
 
 namespace Pacmio
 {
-    public enum FilterResult : int
-    {
-        Bearish = -1,
-        None = 0,
-        Bullish = 1,
-    }
-
     public sealed class BarAnalysisFilter : BarAnalysisSet
     {
         public BarAnalysisFilter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn) : base(SignalList)

@@ -35,7 +35,7 @@ namespace Pacmio
 
         public double LowerLimit => OscillatorAnalysis.LowerLimit;
 
-        public Dictionary<Range<double>, double[]> LevelToTrailPoints = new()
+        public Dictionary<Range<double>, double[]> LevelToTrailPoints { get; set; } = new()
         {
             { new Range<double>(double.MinValue, 5), new double[] { -7, -5 } },
             { new Range<double>(5, 10), new double[] { -3 } },
@@ -45,8 +45,6 @@ namespace Pacmio
             { new Range<double>(90, 95), new double[] { 3 } },
             { new Range<double>(95, double.MaxValue), new double[] { 7, 5 } }
         };
-
-        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

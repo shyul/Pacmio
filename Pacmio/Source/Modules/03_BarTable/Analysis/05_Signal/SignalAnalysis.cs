@@ -15,20 +15,23 @@ namespace Pacmio
 {
     public abstract class SignalAnalysis : BarAnalysis, IEquatable<SignalAnalysis>
     {
-        protected SignalAnalysis(TimePeriod tif, BarFreq barFreq, PriceType priceType = PriceType.Trades)
+        protected SignalAnalysis(TimePeriod tif, BarFreq barFreq, PriceType priceType)
         {
             TimeInForce = tif;
             BarFreq = barFreq;
             PriceType = priceType;
         }
 
+        /// <summary>
+        /// Example: Only trade 9:30 AM to 10 AM
+        /// </summary>
         public TimePeriod TimeInForce { get; }
 
         public BarFreq BarFreq { get; }
 
         public PriceType PriceType { get; }
 
-        public abstract SignalColumn Column_Result { get; }
+        public SignalColumn Column_Result { get; protected set; }
 
         public Color BullishColor
         {

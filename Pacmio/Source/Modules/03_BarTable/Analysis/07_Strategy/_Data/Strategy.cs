@@ -22,43 +22,55 @@ namespace Pacmio
     /// </summary>
     public abstract class Strategy : SignalAnalysis, IChartOverlay
     {
-        protected Strategy(TimePeriod tif, BarFreq barFreq, PriceType priceType) : base(tif, barFreq, priceType) { }
+        protected Strategy(
+            TimeSpan holdingMaxSpan,
+            TimePeriod holdingPeriod,
+            TimePeriod tif,
+            BarFreq barFreq,
+            PriceType priceType)
+            : base(tif, barFreq, priceType)
+        {
+            HoldingPeriod = holdingPeriod;
+            HoldingMaxSpan = holdingMaxSpan;
+        }
 
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
-        public abstract BarAnalysisFilter Filter { get; }
+        public BarAnalysisFilter Filter { get; protected set; }
 
-        public abstract BarAnalysisSet BarAnalysisSet { get; }
+        public BarAnalysisSet BarAnalysisSet { get; protected set; }
 
-        /// <summary>
-        /// Example: Only trade 9:30 AM to 10 AM
-        /// </summary>
-        //public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+        public TimePeriod HoldingPeriod { get; } = TimePeriod.Full;
 
-        public TimePeriod PositionHoldingPeriod { get; set; } = TimePeriod.Full;
+        public TimeSpan HoldingMaxSpan { get; } = new TimeSpan(1000, 1, 1, 1, 1);
 
-        public TimeSpan HoldingTime { get; } = new TimeSpan(1000, 1, 1, 1, 1);
+
+        public double MinimumRiskRewardRatio { get; set; } = 2;
+
+
+
+
+        public double MinimumTradeSize { get; set; }
+
 
 
         #region Order
 
-        public double MinimumRiskRewardRatio { get; set; }
 
-        public double MinimumTradeSize { get; set; }
 
 
 
         /// <summary>
         /// Wait 1000 ms, and cancel the rest of the unfiled order if there is any.
         /// </summary>
-        public double WaitMsForOutstandingOrder { get; }
+        public double MaximumWaitMsForOutstandingOrder { get; }
 
         /// <summary>
-        /// If the price goes 1% to the upper side of the triggering level, then cancel the rest of the order.
+        /// If the price goes 1% to the upper side of the triggering level, then cancel the unfiled order.
         /// Can use wait Ms and set limit price.
         /// </summary>
-        public double MaximumPriceGoingPositionFromDecisionPointPrecent { get; } = double.NaN;
+        public double MaximumPriceDeviationFromDecisionPercent { get; } = double.NaN;
 
         /// <summary>
         /// If the price goes ?? % to the down side of the triggering price, then cancel the unfiled order.

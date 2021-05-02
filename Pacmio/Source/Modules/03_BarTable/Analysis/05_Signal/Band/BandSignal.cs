@@ -33,10 +33,7 @@ namespace Pacmio
 
         public IDualData Band { get; }
 
-        public override SignalColumn Column_Result { get; }
-
-
-        public Dictionary<Range<double>, (BandSignalType Type, double[] Points)> PercentToTrailPoints = new()
+        public Dictionary<Range<double>, (BandSignalType Type, double[] Points)> PercentToTrailPoints { get; set; } = new()
         {
             { new Range<double>(double.MinValue, 0), (BandSignalType.LowerPenetrate, new double[] { -7, -5 }) },
             { new Range<double>(0, 10), (BandSignalType.LowerBound, new double[] { -3 }) },

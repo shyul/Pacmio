@@ -61,14 +61,15 @@ namespace Pacmio.IB
                 //if (od.TimeInForce == OrderTimeInForce.GoodAfterDate) goodAfterDate = od.GoodAfterDate.ToString("yyyyMMdd HH:mm:ss EST");
                 //if (od.TimeInForce == OrderTimeInForce.GoodUntilDate) goodAfterDate = od.EffectiveDateTime.ToString("yyyyMMdd HH:mm:ss EST");
 
-                List<string> paramsList = new() {
+                List<string> paramsList = new()
+                {
                     ((int)RequestType.PlaceOrder).ToString(), // 0
                     od.OrderId.ParamPos(), // 1
 
                     c.ConId.Param(), // 2
                     c.Name, // 3
                     c.TypeCode(), // 4
-                    
+
                     lastTradeDateOrContractMonth, // 5
                     (strike == 0) ? "0" : strike.ToString("0.0###"), // 6
                     right, // 7
@@ -87,7 +88,7 @@ namespace Pacmio.IB
                     orderTypeCode, // 18
                     od.LimitPrice.Param(), // 19
                     od.AuxPrice.Param(), // 20
-                    
+
                     TifCode, // 21
                     string.Empty, // 22
                     od.AccountId, // 23

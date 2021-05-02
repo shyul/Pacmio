@@ -54,7 +54,6 @@ namespace Pacmio.Analysis
     public class GapGoOrbStrategy : Strategy
     {
         public GapGoOrbStrategy(
-            TimePeriod tif,
             ISingleData crossData_1, // new EMA(9);
             ISingleData crossData_2, // new EMA(20);
             double gap = 4,
@@ -64,10 +63,36 @@ namespace Pacmio.Analysis
             double belowPrice = 300,
             BarFreq barFreq = BarFreq.Minute,
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
-            : base(tif, barFreq, PriceType.Trades)
+            : this(
+            crossData_1,
+            crossData_2,
+            gap,
+            aboveVolume,
+            belowVolume,
+            abovePrice,
+            belowPrice,
+            new TimeSpan(1000, 1, 1, 1, 1),
+            new TimePeriod(new Time(9, 30), new Time(12, 00)),
+            new TimePeriod(new Time(9, 30), new Time(10, 00)),
+            barFreq,
+            fiveMinFreq)
+        { }
+
+        public GapGoOrbStrategy(
+            ISingleData crossData_1, // new EMA(9);
+            ISingleData crossData_2, // new EMA(20);
+            double gap,
+            double aboveVolume,
+            double belowVolume,
+            double abovePrice,
+            double belowPrice,
+            TimeSpan holdingMaxSpan,
+            TimePeriod holdingPeriod,
+            TimePeriod tif,
+            BarFreq barFreq = BarFreq.Minute,
+            BarFreq fiveMinFreq = BarFreq.Minutes_5)
+            : base(holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
-
-
             MinimumMinuteVolume = 1e5;
             MinimumMinuteRelativeVolume = 2;
             RewardRiskRatio = 2;
@@ -133,17 +158,10 @@ namespace Pacmio.Analysis
 
             #endregion Define Signals
 
-
-
             Column_Result = new(this, typeof(StrategyDatum));
-            Time start = new Time(9, 30);
-            Time stop = new Time(10, 00);
-            //TimeInForce = new TimePeriod(start, stop);
-            PositionHoldingPeriod = new TimePeriod(start, new Time(12, 00));
         }
 
-        public override BarAnalysisFilter Filter { get; }
-        public override BarAnalysisSet BarAnalysisSet { get; }
+
 
 
         public SingleDataSignal DailyPriceFilterSignal { get; }
@@ -175,7 +193,6 @@ namespace Pacmio.Analysis
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
 
-        public override SignalColumn Column_Result { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

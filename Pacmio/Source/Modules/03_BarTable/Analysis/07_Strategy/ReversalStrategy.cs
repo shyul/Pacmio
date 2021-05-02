@@ -22,9 +22,9 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalStrategy : Strategy
+    public class ReversalStrategy //: Strategy
     {
-        public ReversalStrategy(TimePeriod tif, BarFreq barFreq, PriceType type) : base(tif, barFreq, type)
+        public ReversalStrategy(TimePeriod tif, BarFreq barFreq, PriceType type) //: base(tif, barFreq, type)
         {
 
         }
@@ -110,11 +110,7 @@ namespace Pacmio.Analysis
 
         public BandSignal BollingerBandSignal { get; }
 
-        public override BarAnalysisFilter Filter => throw new NotImplementedException();
 
-        public override BarAnalysisSet BarAnalysisSet => throw new NotImplementedException();
-
-        public override SignalColumn Column_Result => throw new NotImplementedException();
 
         // fully of outside of the BB -> H is lower than BBL, or L is higher than BBL
 
@@ -131,9 +127,6 @@ namespace Pacmio.Analysis
         #endregion
 
 
-        protected override void Calculate(BarAnalysisPointer bap)
-        {
 
-        }
     }
 }

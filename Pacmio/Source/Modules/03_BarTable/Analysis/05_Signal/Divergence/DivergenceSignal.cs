@@ -43,7 +43,7 @@ namespace Pacmio
         /// </summary>
         public ISingleData IndicatorColumn { get; }
 
-        public override SignalColumn Column_Result { get; }
+
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

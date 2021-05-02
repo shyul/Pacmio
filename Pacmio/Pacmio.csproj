@@ -94,6 +94,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\IDifferentialDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\ISignalSource.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\CustomIntervalAnalysis.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\_Data\Strategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\_Data\StrategyManager.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Manager\StrategyManager.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\_Types\ExecutionRecord.cs" />
     <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />

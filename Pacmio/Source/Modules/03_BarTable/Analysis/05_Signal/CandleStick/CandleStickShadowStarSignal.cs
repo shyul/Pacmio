@@ -43,8 +43,6 @@ namespace Pacmio.Analysis
             }
         }
 
-        public override SignalColumn Column_Result { get; }
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
