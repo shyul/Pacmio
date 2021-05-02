@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestFlag
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisSet
         {
             get
             {
@@ -30,9 +30,9 @@ namespace Pacmio.Analysis
                     FlagAnalysis
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

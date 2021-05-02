@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestNative
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisList
         {
             get
             {
@@ -42,7 +42,6 @@ namespace Pacmio.Analysis
                 DebugSeries csd_potf = new DebugLineSeries(potf);
 
 
-                ReversalDailyFilter reversal_daily = new();
 
                 List<BarAnalysis> sample_list = new()
                 {
@@ -69,16 +68,16 @@ namespace Pacmio.Analysis
                     //new CrossIndicator(),
                     //new CHOP(),
 
-                    reversal_daily
+        
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
 
-        public static BarAnalysisSet BarAnalysisSetTimeFrame
+        public static BarAnalysisList BarAnalysisListTimeFrame
         {
             get
             {
@@ -98,9 +97,9 @@ namespace Pacmio.Analysis
 
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

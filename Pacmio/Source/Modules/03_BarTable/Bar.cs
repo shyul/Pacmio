@@ -418,17 +418,48 @@ namespace Pacmio
 
         public double this[ISingleData isd]
         {
-            get => this[isd.Column_Result];
-            set => this[isd.Column_Result] = value;
+            get
+            {
+                if (isd is BarAnalysis) // ba)
+                {
+                    // if (ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                    return this[isd.Column_Result];
+                    // else
+                    //    return Table.BarTableSet[Time, ba.BarFreq, ba.PriceType][isd.Column_Result];
+                }
+                else
+                    return double.NaN;
+            }
+
+            set
+            {
+                if (isd is BarAnalysis) // ba && ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                    this[isd.Column_Result] = value;
+            }
         }
 
         public (double high, double low) this[IDualData idd]
         {
-            get => (this[idd.Column_High], this[idd.Column_Low]);
+            get
+            {
+                if (idd is BarAnalysis) // ba)
+                {
+                    // if (ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                    return (this[idd.Column_High], this[idd.Column_Low]);
+                    // else
+                    //     return Table.BarTableSet[Time, ba.BarFreq, ba.PriceType][idd];
+                }
+                else
+                    return (double.NaN, double.NaN);
+            }
+
             set
             {
-                this[idd.Column_High] = value.high;
-                this[idd.Column_Low] = value.low;
+                if (idd is BarAnalysis) // && ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                {
+                    this[idd.Column_High] = value.high;
+                    this[idd.Column_Low] = value.low;
+                }
             }
         }
 
@@ -461,14 +492,41 @@ namespace Pacmio
 
         public IDatum this[ISingleDatum isd]
         {
-            get => this[isd.Column_Result];
-            set => this[isd.Column_Result] = value;
+            get
+            {
+                if (isd is BarAnalysis)// ba)
+                {
+                    // if (ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                    return this[isd.Column_Result];
+                    // else
+                    //     return Table.BarTableSet[Time, ba.BarFreq, ba.PriceType][isd.Column_Result];
+                }
+                else
+                    return null;
+            }
+
+            set
+            {
+                if (isd is BarAnalysis)// ba && ba.BarFreq == BarFreq && ba.PriceType == PriceType)
+                    this[isd.Column_Result] = value;
+            }
         }
 
         public PatternDatum this[PatternAnalysis pa]
         {
-            get => this[pa.Column_Result] as PatternDatum;
-            set => this[pa.Column_Result] = value;
+            get
+            {
+                //if (pa.BarFreq == BarFreq && pa.PriceType == PriceType)
+                return this[pa.Column_Result] as PatternDatum;
+                //else
+                //   return Table.BarTableSet[Time, pa.BarFreq, pa.PriceType][pa.Column_Result] as PatternDatum;
+            }
+
+            set
+            {
+                //if (pa.BarFreq == BarFreq && pa.PriceType == PriceType)
+                this[pa.Column_Result] = value;
+            }
         }
 
         public StrategyDatum this[Strategy s]
@@ -553,9 +611,9 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public FilterType this[Filter filter] => GetSignalFilterType(filter);
+        public FilterType this[BarAnalysisFilter filter] => GetSignalFilterType(filter);
 
-        private FilterType GetSignalFilterType(Filter filter)
+        private FilterType GetSignalFilterType(BarAnalysisFilter filter)
         {
             var (bullish, bearish, _) = filter.Calculate(this);
 

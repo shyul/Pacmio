@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestReversal
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisList
         {
             get
             {
@@ -43,8 +43,8 @@ namespace Pacmio.Analysis
                     rvol,
                     csd_rvol,
 
-                    new CandleStickDojiMarubozuSignal(),
-                    new CandleStickShadowStarSignal(),
+                    // new CandleStickDojiMarubozuSignal(),
+                    // new CandleStickShadowStarSignal(),
 
                     new Bollinger(20, 2),
                     rsi,
@@ -52,9 +52,9 @@ namespace Pacmio.Analysis
                     new VWAP(BarFreq.Daily) { Color = Color.Plum, LineWidth = 2  },
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

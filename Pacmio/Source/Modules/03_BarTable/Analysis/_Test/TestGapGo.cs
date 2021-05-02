@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestGapGo
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisSet
         {
             get
             {
@@ -57,8 +57,8 @@ namespace Pacmio.Analysis
                     //new RelativeAnalysis(),
                     //new NarrowRange(),
 
-                    new CandleStickDojiMarubozuSignal(),
-                    new CandleStickShadowStarSignal(),
+                    //new CandleStickDojiMarubozuSignal(),
+                    //new CandleStickShadowStarSignal(),
 
                     //new GainAnalysis(),
                     //new TrueRange(),
@@ -103,9 +103,9 @@ namespace Pacmio.Analysis
                     new TrendLineAnalysis(260),
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

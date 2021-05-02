@@ -64,7 +64,7 @@ namespace Pacmio
                 { ActionType.ShortHold, new SolidBrush(Color.SkyBlue.Opaque(40)) },
             };
 
-        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, SignalAnalysisSet s)
+        public static void DrawPosition(Graphics g, OscillatorArea area, BarTable bt, BarAnalysisSet s)
         {/*
             if (s is Strategy && bt.Count > 0)
             {

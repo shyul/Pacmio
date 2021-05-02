@@ -46,10 +46,6 @@ namespace Pacmio
 
         public SignalSeries SignalSeries { get; }
 
-        public SignalIndicator Indicator => SignalSeries.Indicator;
-
-        public TimePeriod TimeInForce => SignalSeries.TimeInForce;
-
         public override void DrawCustomBackground(Graphics g)
         {
             //if (BarChart.Strategy is Strategy s)
@@ -59,7 +55,7 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (Indicator is SignalIndicator filter)
+                if (SignalSeries.Source is BarAnalysisFilter filter)
                 {
                     FilterType lastType = FilterType.None;
 
@@ -67,7 +63,7 @@ namespace Pacmio
                     {
                         if (i >= BarTable.Count)
                             break;
-                        else if (i >= 0 && bt[i] is Bar b && TimeInForce.Contains(b.Time))
+                        else if (i >= 0 && bt[i] is Bar b)
                         {
 
                             FilterType thisType = b[filter];

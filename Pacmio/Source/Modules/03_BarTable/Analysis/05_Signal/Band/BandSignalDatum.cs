@@ -12,17 +12,21 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class BandSignalDatum : SignalDatum
+    public class BandSignalDatum : SignalDatum, IDifferentialDatum
     {
-        public BandSignalDatum(Bar b, SignalColumn column, double position) : base(b, column)
+        public BandSignalDatum(Bar b, SignalColumn column, double ratio) : base(b, column)
         {
-            Position = position;
+            Ratio = ratio;
         }
 
         public BandSignalType Type { get; set; }
 
-        public double Position { get; } = 50;
+        public double Ratio { get; } = 50;
 
-        public override string Description => Type.ToString() + " " + Position.ToString("0.##") + "%";
+        public double Difference { get; set; }
+
+        public double DifferenceRatio { get; set; }
+
+        public override string Description => Type.ToString() + " " + Ratio.ToString("0.##") + "%";
     }
 }

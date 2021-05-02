@@ -10,7 +10,7 @@ namespace TestClient
     {
         //public static BarTableSet BarTableSet { get; } = new BarTableSet();
 
-        public static BarAnalysisSet TestBarAnalysisSet
+        public static BarAnalysisList TestBarAnalysisSet
         {
             get
             {
@@ -50,8 +50,7 @@ namespace TestClient
                     //new RelativeAnalysis(),
                     //new NarrowRange(),
 
-                    new CandleStickDojiMarubozuSignal(),
-                    new CandleStickShadowStarSignal(),
+
 
                     //new GainAnalysis(),
                     //new TrueRange(),
@@ -96,13 +95,13 @@ namespace TestClient
                     new TrendLineAnalysis(260),
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
 
-        public static BarAnalysisSet TestBarAnalysisSet2
+        public static BarAnalysisList TestBarAnalysisSet2
         {
             get
             {
@@ -179,9 +178,9 @@ namespace TestClient
                     new TrendLineAnalysis(260),
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

@@ -569,33 +569,33 @@ namespace Pacmio
 
         public void ResetCalculationPointer(BarAnalysis ba) => Remove(ba);
 
-        private Dictionary<BarAnalysisSet, BarAnalysisSetPointer> BarAnalysisSetPointerLUT { get; } = new();
+        private Dictionary<BarAnalysisList, BarAnalysisListPointer> BarAnalysisSetPointerLUT { get; } = new();
 
-        private BarAnalysisSetPointer GetBarAnalysisSetPointer(BarAnalysisSet bas)
+        private BarAnalysisListPointer GetBarAnalysisSetPointer(BarAnalysisList bat)
         {
             lock (BarAnalysisSetPointerLUT)
             {
-                if (!BarAnalysisSetPointerLUT.ContainsKey(bas))
-                    BarAnalysisSetPointerLUT.Add(bas, new BarAnalysisSetPointer(this, bas));
+                if (!BarAnalysisSetPointerLUT.ContainsKey(bat))
+                    BarAnalysisSetPointerLUT.Add(bat, new BarAnalysisListPointer(this, bat));
 
-                return BarAnalysisSetPointerLUT[bas];
+                return BarAnalysisSetPointerLUT[bat];
             }
         }
 
-        public void ResetCalculationPointer(BarAnalysisSet bas)
+        public void ResetCalculationPointer(BarAnalysisList bat)
         {
             lock (BarAnalysisPointerLUT)
                 lock (BarAnalysisSetPointerLUT)
                 {
-                    if (BarAnalysisSetPointerLUT.ContainsKey(bas))
+                    if (BarAnalysisSetPointerLUT.ContainsKey(bat))
                     {
-                        BarAnalysisSetPointerLUT.Remove(bas);
-                        bas.RunEach(ba => ResetCalculationPointer(ba));
+                        BarAnalysisSetPointerLUT.Remove(bat);
+                        bat.RunEach(ba => ResetCalculationPointer(ba));
                     }
                 }
         }
 
-        public BarAnalysisSetPointer this[BarAnalysisSet bas] => GetBarAnalysisSetPointer(bas);
+        public BarAnalysisListPointer this[BarAnalysisList bat] => GetBarAnalysisSetPointer(bat);
 
         private void ResetCalculationPointer()
         {
@@ -619,7 +619,7 @@ namespace Pacmio
                 {
                     // We don't set the BAS point back here, because so far the BAS pointer is only bound to use with BarChart
 
-                    foreach (BarAnalysisSetPointer basp in BarAnalysisSetPointerLUT.Values)
+                    foreach (BarAnalysisListPointer basp in BarAnalysisSetPointerLUT.Values)
                         basp.LastCalculateIndex = Math.Min(LastCalculateIndex, pt);
 
                     //foreach (BarAnalysisPointer bap in BarAnalysisPointerLUT.Where(n => !(n.Key is PatternAnalysis)).Select(n => n.Value))
@@ -661,7 +661,7 @@ namespace Pacmio
         /// <summary>
         /// The mighty calculate for all technicial analysis
         /// </summary>
-        private void Calculate(IEnumerable<BarAnalysis> bas, bool debugInfo = true)
+        private void Calculate(IEnumerable<BarAnalysis> bat, bool debugInfo = true)
         {
             Status = TableStatus.Calculating;
 
@@ -678,7 +678,7 @@ namespace Pacmio
             if (Count > 0)
             {
                 startPt = Math.Min(startPt, Calculate(PriceBarAnalysis).StartPt);
-                foreach (BarAnalysis ba in bas) //.Where(n => n is not Strategy))
+                foreach (BarAnalysis ba in bat) //.Where(n => n is not Strategy))
                 {
                     DateTime single_start_time = DateTime.Now;
 
@@ -702,8 +702,8 @@ namespace Pacmio
 
             // Console.WriteLine("Finally lastIndex = " + lastIndex);
 
-            if (bas is BarAnalysisSet bas0)
-                GetBarAnalysisSetPointer(bas0).LastCalculateIndex = lastIndex;
+            if (bat is BarAnalysisList bat0)
+                GetBarAnalysisSetPointer(bat0).LastCalculateIndex = lastIndex;
             else
                 LastCalculateIndex = lastIndex;
 
@@ -716,12 +716,12 @@ namespace Pacmio
             }
         }
 
-        public void CalculateRefresh(BarAnalysisSet bas)
+        public void CalculateRefresh(BarAnalysisList bat)
         {
-            if (Count > 0 && bas is BarAnalysisSet)
+            if (Count > 0 && bat is BarAnalysisList)
                 lock (DataLockObject)
                 {
-                    Calculate(bas);
+                    Calculate(bat);
                     Status = TableStatus.CalculateFinished;
                     Status = TableStatus.Ready;
                 }

@@ -13,7 +13,8 @@ namespace Pacmio
 {
     public class BandSignal : SignalAnalysis
     {
-        public BandSignal(BarFreq barFreq, NumericColumn column, IDualData band, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public BandSignal(TimePeriod tif, BarFreq barFreq, NumericColumn column, IDualData band, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             Column = column;
             Band = band;
@@ -53,29 +54,34 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                double bbh = b[Band.Column_High];
-                double bbl = b[Band.Column_Low];
-                double reference = b[Column];
-
-                double span = bbh - bbl;
-
-                double position = 50;
-
-                if (span != 0)
-                    position = (reference - bbl) * 100.0 / span;
-                else if (reference > bbh)
-                    position = 101;
-                else if (reference < bbl)
-                    position = -1;
-
-                var datum = PercentToTrailPoints.Where(n => n.Key.Contains(position)).Select(n => n.Value).FirstOrDefault();
-
-                BandSignalDatum d = new(b, Column_Result, position)
+                if (BarFreq >= BarFreq.Daily || TimeInForce.Contains(b.Time))
                 {
-                    Type = datum.Type,
-                };
+                    double bbh = b[Band.Column_High];
+                    double bbl = b[Band.Column_Low];
+                    double reference = b[Column];
 
-                d.SetPoints(datum.Points);
+                    double span = bbh - bbl;
+
+                    double ratio = 50;
+
+                    if (span != 0)
+                        ratio = (reference - bbl) * 100.0 / span;
+                    else if (reference > bbh)
+                        ratio = 101;
+                    else if (reference < bbl)
+                        ratio = -1;
+
+                    var datum = PercentToTrailPoints.Where(n => n.Key.Contains(ratio)).Select(n => n.Value).FirstOrDefault();
+
+                    BandSignalDatum d = new(b, Column_Result, ratio)
+                    {
+                        Type = datum.Type,
+                        Difference = span,
+                        DifferenceRatio = bbl != 0 ? span / bbl : 0
+                    };
+
+                    d.SetPoints(datum.Points);
+                }
             }
         }
     }

@@ -13,7 +13,8 @@ namespace Pacmio.Analysis
 {
     public class CandleStickDojiMarubozuSignal : SignalAnalysis
     {
-        public CandleStickDojiMarubozuSignal(BarFreq barFreq, double doji_ratio = 0.12, double marubozu_ratio = 0.92, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public CandleStickDojiMarubozuSignal(TimePeriod tif, BarFreq barFreq, double doji_ratio = 0.12, double marubozu_ratio = 0.92, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             Doji_Ratio = doji_ratio;
             Marubozu_Ratio = marubozu_ratio;
@@ -57,41 +58,43 @@ namespace Pacmio.Analysis
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
-                CandleStickSignalDatum d = new(b, Column_Result);
-
-                double high = b.High;
-                double hl_Range = b.Range;
-
-                if (hl_Range > 0)
+                if (BarFreq >= BarFreq.Daily || TimeInForce.Contains(b.Time))
                 {
-                    double open = b.Open;
-                    double close = b.Close;
-                    double body_shadow_ratio = b.BodyRatio;
+                    CandleStickSignalDatum d = new(b, Column_Result);
 
-                    if (body_shadow_ratio > Marubozu_Ratio) // Marubozu
+                    double high = b.High;
+                    double hl_Range = b.Range;
+
+                    if (hl_Range > 0)
                     {
-                        AddType(d, CandleStickType.Marubozu);
+                        double open = b.Open;
+                        double close = b.Close;
+                        double body_shadow_ratio = b.BodyRatio;
+
+                        if (body_shadow_ratio > Marubozu_Ratio) // Marubozu
+                        {
+                            AddType(d, CandleStickType.Marubozu);
+                        }
+                        else if (body_shadow_ratio < Doji_Ratio)
+                        {
+                            AddType(d, CandleStickType.Doji);
+
+                            double avg_oc = (open + close) / 2;
+                            double oc_position_ratio = (high - avg_oc) / hl_Range;
+
+                            if (oc_position_ratio > 0.88)
+                                AddType(d, CandleStickType.GravestoneDoji);
+                            else if (oc_position_ratio < 0.12)
+                                AddType(d, CandleStickType.DragonflyDoji);
+                            else if (oc_position_ratio > 0.45 && oc_position_ratio < 0.55)
+                                AddType(d, CandleStickType.LongLeggedDoji);
+                        }
                     }
-                    else if (body_shadow_ratio < Doji_Ratio)
+                    else
                     {
                         AddType(d, CandleStickType.Doji);
-
-                        double avg_oc = (open + close) / 2;
-                        double oc_position_ratio = (high - avg_oc) / hl_Range;
-
-                        if (oc_position_ratio > 0.88)
-                            AddType(d, CandleStickType.GravestoneDoji);
-                        else if (oc_position_ratio < 0.12)
-                            AddType(d, CandleStickType.DragonflyDoji);
-                        else if (oc_position_ratio > 0.45 && oc_position_ratio < 0.55)
-                            AddType(d, CandleStickType.LongLeggedDoji);
                     }
                 }
-                else
-                {
-                    AddType(d, CandleStickType.Doji);
-                }
-
             }
         }
     }

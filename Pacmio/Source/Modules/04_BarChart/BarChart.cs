@@ -90,19 +90,19 @@ namespace Pacmio
             }
         }
 
-        public void Config(BarTable bt, BarAnalysisSet bas)
+        public void Config(BarTable bt, BarAnalysisList bat)
         {
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
 
                 BarTable = bt;
-                BarAnalysisSet = bas;
+                BarAnalysisList = bat;
 
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)
-                    StopPt = m_BarTable[bas].LastCalculateIndex;
+                    StopPt = m_BarTable[bat].LastCalculateIndex;
             }
             m_AsyncUpdateUI = true;
         }
@@ -114,36 +114,36 @@ namespace Pacmio
             MainArea.RemoveSeries();
         }
 
-        public BarAnalysisSet BarAnalysisSet
+        public BarAnalysisList BarAnalysisList
         {
-            get => m_BarAnalysisSet;
+            get => m_BarAnalysisList;
 
             private set
             {
                 RemoveAllChartSeries();
-                m_BarAnalysisSet = value;
+                m_BarAnalysisList = value;
 
-                if (m_BarAnalysisSet is BarAnalysisSet bas)
+                if (m_BarAnalysisList is BarAnalysisList bat)
                 {
-                    foreach (var ic in bas.ChartSeries)
+                    foreach (var ic in bat.ChartSeries)
                     {
                         ic.ConfigChart(this);
                     }
 
-                    foreach (var tg in bas.TagSeries)
+                    foreach (var tg in bat.TagSeries)
                     {
                         tg.ConfigChart(this);
                     }
 
                     if (m_BarTable is BarTable bt)
                     {
-                        bt.CalculateRefresh(bas);
+                        bt.CalculateRefresh(bat);
                     }
                 }
             }
         }
 
-        private BarAnalysisSet m_BarAnalysisSet = null;
+        private BarAnalysisList m_BarAnalysisList = null;
 
         public BarTable BarTable
         {
@@ -169,9 +169,9 @@ namespace Pacmio
                     TabName = "No BarTable";
                 }
 
-                if (m_BarAnalysisSet is BarAnalysisSet bas)
+                if (m_BarAnalysisList is BarAnalysisList bat)
                 {
-                    m_BarTable.CalculateRefresh(bas);
+                    m_BarTable.CalculateRefresh(bat);
                 }
             }
         }
@@ -210,9 +210,9 @@ namespace Pacmio
         {
             lock (GraphicsLockObject)
             {
-                if (m_BarTable is BarTable bt && m_BarAnalysisSet is BarAnalysisSet bas)
+                if (m_BarTable is BarTable bt && m_BarAnalysisList is BarAnalysisList bat)
                 {
-                    LastIndexMax = bt[bas].LastCalculateIndex;
+                    LastIndexMax = bt[bat].LastCalculateIndex;
                     StopPt = LastIndexMax + 1;
                 }
                 else
@@ -544,7 +544,7 @@ namespace Pacmio
                                 g.DrawString("Pacmio Chart | " + m_BarTable.Contract.Name + " | " + m_BarTable.Contract.FullName + " | From " + m_BarTable.FirstTime + " to " + m_BarTable.LastTime,
                                     Main.Theme.TinyFont, Main.Theme.GrayTextBrush, new Point(ChartBounds.Left - 2, ChartBounds.Top - 5), AppTheme.TextAlignLeft);
 
-                                foreach (var ic in BarAnalysisSet.ChartBackgrounds.Where(n => n.ChartEnabled))
+                                foreach (var ic in BarAnalysisList.ChartBackgrounds.Where(n => n.ChartEnabled))
                                 {
                                     ic.DrawBackground(g, this);
                                 }
@@ -573,7 +573,7 @@ namespace Pacmio
                                     }
                                 }
 
-                                foreach (var ic in BarAnalysisSet.ChartOverlays)
+                                foreach (var ic in BarAnalysisList.ChartOverlays)
                                 {
                                     ic.DrawOverlay(g, this);
                                 }

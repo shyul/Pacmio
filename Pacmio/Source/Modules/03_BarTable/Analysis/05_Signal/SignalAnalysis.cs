@@ -15,11 +15,14 @@ namespace Pacmio
 {
     public abstract class SignalAnalysis : BarAnalysis, IEquatable<SignalAnalysis>
     {
-        protected SignalAnalysis(BarFreq barFreq, PriceType priceType = PriceType.Trades)
+        protected SignalAnalysis(TimePeriod tif, BarFreq barFreq, PriceType priceType = PriceType.Trades)
         {
+            TimeInForce = tif;
             BarFreq = barFreq;
             PriceType = priceType;
         }
+
+        public TimePeriod TimeInForce { get; }
 
         public BarFreq BarFreq { get; }
 

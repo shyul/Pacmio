@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
 {
     public class ReversalStrategy : Strategy
     {
-        public ReversalStrategy(BarFreq barFreq, PriceType type) : base(barFreq, type)
+        public ReversalStrategy(TimePeriod tif, BarFreq barFreq, PriceType type) : base(tif, barFreq, type)
         {
 
         }
@@ -110,9 +110,9 @@ namespace Pacmio.Analysis
 
         public BandSignal BollingerBandSignal { get; }
 
-        public override Filter Filter => throw new NotImplementedException();
+        public override BarAnalysisFilter Filter => throw new NotImplementedException();
 
-        public override SignalAnalysisSet SignalAnalysisSet => throw new NotImplementedException();
+        public override BarAnalysisSet BarAnalysisSet => throw new NotImplementedException();
 
         public override SignalColumn Column_Result => throw new NotImplementedException();
 

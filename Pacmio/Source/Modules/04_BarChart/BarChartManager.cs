@@ -18,21 +18,20 @@ namespace Pacmio
     {
         private static List<BarChart> List { get; } = new();
 
-        public static BarChart GetChart(this BarTable bt, BarAnalysisSet bas)
+        public static BarChart GetChart(this BarTable bt, BarAnalysisList bat)
         {
             BarChart bc = new("BarChart", OhlcType.Candlestick);
-            bc.Config(bt, bas);
+            bc.Config(bt, bat);
             Root.Form.AddForm(DockStyle.Fill, 0, bc);
             return bc;
         }
 
-        public static BarChart GetChart(this BarTable bt, SignalIndicator ind) => bt.GetChart(ind.BarAnalysisSet);
-
+        /*
         public static IEnumerable<BarChart> GetCharts(this BarTableSet bts, Strategy s, Period periodLimit, CancellationTokenSource cts = null)
         {
             s.BackTest(bts, periodLimit, cts);
-            return s.SignalAnalysisSet.Concat(new SignalIndicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.PriceType].GetChart(ind.BarAnalysisSet));
-        }
+            return s.BarAnalysisSet.Concat(new SignalIndicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.PriceType].GetChart(ind.BarAnalysisSet));
+        }*/
 
         public static void Add(BarChart bc)
         {

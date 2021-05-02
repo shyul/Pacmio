@@ -15,8 +15,8 @@ namespace Pacmio
 {
     public sealed class SingleDataSignal : SignalAnalysis
     {
-        // new SingleColumnAnalysis(rsi),
-        public SingleDataSignal(BarFreq barFreq, IOscillator analysis, double range_percent = 0.05, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public SingleDataSignal(TimePeriod tif, BarFreq barFreq, IOscillator analysis, double range_percent = 0.05, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -31,7 +31,8 @@ namespace Pacmio
             BearishColor = analysis.LowerColor;
         }
 
-        public SingleDataSignal(BarFreq barFreq, ISingleData analysis, Range<double> range, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public SingleDataSignal(TimePeriod tif, BarFreq barFreq, ISingleData analysis, Range<double> range, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             Column = analysis.Column_Result;
             analysis.AddChild(this);
@@ -48,7 +49,8 @@ namespace Pacmio
             }
         }
 
-        public SingleDataSignal(BarFreq barFreq, NumericColumn column, Range<double> range, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public SingleDataSignal(TimePeriod tif, BarFreq barFreq, NumericColumn column, Range<double> range, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             Column = column;
 
@@ -120,7 +122,7 @@ namespace Pacmio
                 Bar b = bars.Last();
                 double value = b[Column];
 
-                if (!double.IsNaN(value))
+                if ((BarFreq >= BarFreq.Daily || TimeInForce.Contains(b.Time)) && !double.IsNaN(value))
                 {
                     SingleDataSignalDatum d = new(b, Column_Result);
 

@@ -14,7 +14,8 @@ namespace Pacmio
 {
     public class OscillatorSignal : SignalAnalysis
     {
-        public OscillatorSignal(BarFreq barFreq, IOscillator iosc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public OscillatorSignal(TimePeriod tif, BarFreq barFreq, IOscillator iosc, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
             OscillatorAnalysis = iosc;
 
@@ -54,18 +55,19 @@ namespace Pacmio
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
+                if (BarFreq >= BarFreq.Daily || TimeInForce.Contains(b.Time))
+                {
+                    OscillatorSignalDatum d = new(b, Column_Result);
 
-                OscillatorSignalDatum d = new(b, Column_Result);
+                    double rsi = b[OscillatorAnalysis];
 
-                double rsi = b[OscillatorAnalysis];
+                    if (rsi >= UpperLimit)
+                        d.Type = OscillatorSignalType.OverBought;
+                    else if (rsi <= LowerLimit)
+                        d.Type = OscillatorSignalType.OverSold;
 
-                if (rsi >= UpperLimit)
-                    d.Type = OscillatorSignalType.OverBought;
-                else if (rsi <= LowerLimit)
-                    d.Type = OscillatorSignalType.OverSold;
-
-                if (TypeToTrailPoints.ContainsKey(type))
                     d.SetPoints(LevelToTrailPoints.Where(n => n.Key.Contains(rsi)).Select(n => n.Value).FirstOrDefault());
+                }
             }
         }
     }

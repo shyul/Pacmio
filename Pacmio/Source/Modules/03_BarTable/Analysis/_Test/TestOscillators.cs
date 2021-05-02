@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestOscillators
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisList
         {
             get
             {
@@ -63,9 +63,9 @@ namespace Pacmio.Analysis
                     volumeEma,
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

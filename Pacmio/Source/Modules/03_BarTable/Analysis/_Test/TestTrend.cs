@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestTrend
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisSet
         {
             get
             {
@@ -76,9 +76,9 @@ namespace Pacmio.Analysis
                     //new VolumeByPriceAnalysis(),
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
             }
         }
     }

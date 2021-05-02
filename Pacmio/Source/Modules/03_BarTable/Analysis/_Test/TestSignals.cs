@@ -14,7 +14,7 @@ namespace Pacmio.Analysis
 {
     public static class TestSignals
     {
-        public static BarAnalysisSet BarAnalysisSet
+        public static BarAnalysisList BarAnalysisSet
         {
             get
             {
@@ -32,22 +32,20 @@ namespace Pacmio.Analysis
 
                 var twrc = new SwingTradeDailyFilter();
 
-                //var chop = new CHOP(20);
+                var chop = new CHOP(20);
 
                 List<BarAnalysis> sample_list = new()
                 {
-                    twrc,
-                    //chop
+
+                    chop
                 };
 
-                BarAnalysisSet bas = new(sample_list);
+                BarAnalysisList bat = new(sample_list);
 
-                return bas;
+                return bat;
+
+
             }
-
-
-
-
         }
 
 

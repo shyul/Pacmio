@@ -7,6 +7,7 @@
 /// ***************************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
@@ -16,9 +17,9 @@ namespace Pacmio
 {
     public sealed class SignalSeries : Series
     {
-        public SignalSeries(SignalIndicator ind)
+        public SignalSeries(ISignalSource isa)
         {
-            Indicator = ind;
+            Source = isa;
 
             Name = "Signal";
             LegendName = "SIGNAL: ";
@@ -30,9 +31,8 @@ namespace Pacmio
             Width = 40;
         }
 
-        public IEnumerable<SignalAnalysis> SignalAnalysisList { get; }
 
-        public TimePeriod TimeInForce => Indicator is Strategy s ? s.TimeInForce : TimePeriod.Full;
+        public ISignalSource Source { get; }
 
         public override void RefreshAxis(IIndexArea area, ITable table)
         {
@@ -46,7 +46,7 @@ namespace Pacmio
                         break;
                     else if (i > 0)
                     {
-                        var (bullish, bearish) = bt[i].GetSignalScore(SignalAnalysisList);
+                        var (bullish, bearish) = bt[i].GetSignalScore(Source.SignalList);
                         axisY.Range.Insert(bullish);
                         axisY.Range.Insert(bearish);
                     }
@@ -60,9 +60,9 @@ namespace Pacmio
         {
             List<(string text, Font font, Brush brush)> labels = new();
 
-            if (table is BarTable bt && bt[pt] is Bar b && TimeInForce.Contains(b.Time))
+            if (table is BarTable bt && bt[pt] is Bar b)
             {
-                var (bullish, bearish) = b.GetSignalScore(SignalAnalysisList);
+                var (bullish, bearish) = b.GetSignalScore(Source.SignalList);
                 double score = bullish + bearish;
 
                 if (score > 0)
@@ -78,7 +78,7 @@ namespace Pacmio
                     labels.Add((score.ToString(), Main.Theme.FontBold, Main.Theme.DimTextBrush));
                 }
 
-                foreach (SignalAnalysis sa in SignalAnalysisList)
+                foreach (SignalAnalysis sa in Source.SignalList.Where(sa => sa.BarFreq >= BarFreq.Daily || sa.TimeInForce.Contains(b.Time)))
                 {
                     if (b[sa] is SignalDatum sd)
                     {
@@ -108,12 +108,12 @@ namespace Pacmio
                 {
                     if (i >= table.Count)
                         break;
-                    else if (i >= 0 && bt[i] is Bar b && TimeInForce.Contains(b.Time))
+                    else if (i >= 0 && bt[i] is Bar b)
                     {
                         int x = area.IndexToPixel(pt) - (tickWidth / 2);
                         int pos_base_pix = ref_pix, neg_base_pix = ref_pix;
 
-                        foreach (SignalAnalysis sa in SignalAnalysisList)
+                        foreach (SignalAnalysis sa in Source.SignalList.Where(sa => sa.BarFreq >= BarFreq.Daily || sa.TimeInForce.Contains(b.Time)))
                         {
                             if (b[sa] is SignalDatum sd)
                             {

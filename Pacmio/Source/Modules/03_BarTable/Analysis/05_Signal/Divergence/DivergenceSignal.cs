@@ -13,12 +13,14 @@ namespace Pacmio
 {
     public class DivergenceSignal : SignalAnalysis
     {
-        public DivergenceSignal(BarFreq barFreq, ISingleData osc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public DivergenceSignal(TimePeriod tif, BarFreq barFreq, ISingleData osc, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
 
         }
 
-        public DivergenceSignal(BarFreq barFreq, ISingleData source, ISingleData osc, PriceType priceType = PriceType.Trades) : base(barFreq, priceType)
+        public DivergenceSignal(TimePeriod tif, BarFreq barFreq, ISingleData source, ISingleData osc, PriceType priceType = PriceType.Trades)
+            : base(tif, barFreq, priceType)
         {
 
 

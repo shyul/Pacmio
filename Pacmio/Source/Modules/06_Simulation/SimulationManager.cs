@@ -24,7 +24,7 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, FilterScanResult> Evaluate(IEnumerable<Contract> cList, SignalAnalysisSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, FilterScanResult> Evaluate(IEnumerable<Contract> cList, BarAnalysisSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
             Dictionary<Contract, FilterScanResult> result = new();
 
@@ -73,7 +73,7 @@ namespace Pacmio
             }
 
             bts.SetPeriod(mps, cts);
-            bts.CalculateRefresh(s.SignalAnalysisSet);
+            bts.CalculateRefresh(s.BarAnalysisSet);
 
             //BarTable bt = bts[s.BarFreq, s.PriceType];
             //bt.CalculateRefresh(BarAnalysisSet);
@@ -92,7 +92,7 @@ namespace Pacmio
 
 
         // IndicatorEvaluationResult
-        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, Filter filter, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static IEnumerable<Contract> RunScreener(IEnumerable<Contract> contracts, BarAnalysisFilter filter, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;

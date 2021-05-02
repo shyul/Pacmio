@@ -7,17 +7,17 @@
 
 namespace Pacmio
 {
-    public sealed class BarAnalysisSetPointer
+    public sealed class BarAnalysisListPointer
     {
-        public BarAnalysisSetPointer(BarTable bt, BarAnalysisSet bas)
+        public BarAnalysisListPointer(BarTable bt, BarAnalysisList bat)
         {
             Table = bt;
-            AnalysisSet = bas;
+            AnalysisList = bat;
         }
 
         public BarTable Table { get; private set; }
 
-        public BarAnalysisSet AnalysisSet { get; private set; }
+        public BarAnalysisList AnalysisList { get; private set; }
 
         public int LastCalculateIndex { get; set; } = -1;
 

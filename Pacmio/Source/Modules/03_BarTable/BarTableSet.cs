@@ -233,17 +233,17 @@ namespace Pacmio
         public SignalDatum this[DateTime time, SignalAnalysis sa]
             => this[time, sa.BarFreq, sa.PriceType][sa];
 
-        public void CalculateRefresh(SignalAnalysisSet sas)
+        public void CalculateRefresh(BarAnalysisSet sas)
         {
             foreach (var item in sas)
             {
-                this[item.freq, item.type].CalculateRefresh(item.bas);
+                this[item.freq, item.type].CalculateRefresh(item.bat);
             }
         }
 
         public void CalculateRefresh(Strategy s)
         {
-            CalculateRefresh(s.SignalAnalysisSet);
+            CalculateRefresh(s.BarAnalysisSet);
             //this[s.BarFreq, s.PriceType].CalculateRefresh(s);
         }
     }

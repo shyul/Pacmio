@@ -54,6 +54,7 @@ namespace Pacmio.Analysis
     public class GapGoOrbStrategy : Strategy
     {
         public GapGoOrbStrategy(
+            TimePeriod tif,
             ISingleData crossData_1, // new EMA(9);
             ISingleData crossData_2, // new EMA(20);
             double gap = 4,
@@ -63,7 +64,7 @@ namespace Pacmio.Analysis
             double belowPrice = 300,
             BarFreq barFreq = BarFreq.Minute,
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
-            : base(barFreq, PriceType.Trades)
+            : base(tif, barFreq, PriceType.Trades)
         {
 
 
@@ -74,14 +75,14 @@ namespace Pacmio.Analysis
             #region Define Filter
 
             DailyPriceFilterSignal =
-                new SingleDataSignal(BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
+                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
                 { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
 
             DailyVolumeFilterSignal =
-                new SingleDataSignal(BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
+                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
                 { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
 
-            DailyGapPercentFilterSignal = new SingleDataSignal(BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
+            DailyGapPercentFilterSignal = new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
             {
                 TypeToTrailPoints = new()
                 {
@@ -103,7 +104,7 @@ namespace Pacmio.Analysis
             #region Define Signals
 
             FiveMinutesCrossData_1 = crossData_1; 
-            FiveMinutesCrossSignal_1 = new DualDataSignal(fiveMinFreq, FiveMinutesCrossData_1)
+            FiveMinutesCrossSignal_1 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_1)
             {
                 TypeToTrailPoints = new()
                 {
@@ -113,7 +114,7 @@ namespace Pacmio.Analysis
             };
 
             FiveMinutesCrossData_2 = crossData_2; 
-            FiveMinutesCrossSignal_2 = new DualDataSignal(fiveMinFreq, FiveMinutesCrossData_2)
+            FiveMinutesCrossSignal_2 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_2)
             {
                 TypeToTrailPoints = new()
                 {
@@ -122,7 +123,7 @@ namespace Pacmio.Analysis
                 }
             };
 
-            SignalAnalysisSet = new SignalAnalysisSet(new SignalAnalysis[]
+            BarAnalysisSet = new BarAnalysisSet(new SignalAnalysis[]
             {
 
 
@@ -137,12 +138,12 @@ namespace Pacmio.Analysis
             Column_Result = new(this, typeof(StrategyDatum));
             Time start = new Time(9, 30);
             Time stop = new Time(10, 00);
-            TimeInForce = new TimePeriod(start, stop);
+            //TimeInForce = new TimePeriod(start, stop);
             PositionHoldingPeriod = new TimePeriod(start, new Time(12, 00));
         }
 
-        public override Filter Filter { get; }
-        public override SignalAnalysisSet SignalAnalysisSet { get; }
+        public override BarAnalysisFilter Filter { get; }
+        public override BarAnalysisSet BarAnalysisSet { get; }
 
 
         public SingleDataSignal DailyPriceFilterSignal { get; }

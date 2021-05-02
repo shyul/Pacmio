@@ -22,19 +22,19 @@ namespace Pacmio
     /// </summary>
     public abstract class Strategy : SignalAnalysis, IChartOverlay
     {
-        protected Strategy(BarFreq barFreq, PriceType priceType) : base(barFreq, priceType) { }
+        protected Strategy(TimePeriod tif, BarFreq barFreq, PriceType priceType) : base(tif, barFreq, priceType) { }
 
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
-        public abstract Filter Filter { get; }
+        public abstract BarAnalysisFilter Filter { get; }
 
-        public abstract SignalAnalysisSet SignalAnalysisSet { get; }
+        public abstract BarAnalysisSet BarAnalysisSet { get; }
 
         /// <summary>
         /// Example: Only trade 9:30 AM to 10 AM
         /// </summary>
-        public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
+        //public TimePeriod TimeInForce { get; set; } = TimePeriod.Full;
 
         public TimePeriod PositionHoldingPeriod { get; set; } = TimePeriod.Full;
 
@@ -129,7 +129,7 @@ namespace Pacmio
 
 
 
-    public class StrategyBacktestSetting 
+    public class StrategyBacktestSetting
     {
         #region Training Settings
 

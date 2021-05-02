@@ -28,7 +28,7 @@ namespace Pacmio
 
         public BarTable Table => BarChart.BarTable;
 
-        public BarAnalysisSet BarAnalysisSet => BarChart.BarAnalysisSet;
+        public BarAnalysisList BarAnalysisSet => BarChart.BarAnalysisList;
 
         public override List<(string text, Font font, Brush brush)> ValueLabels(ITable table, int pt)
         {

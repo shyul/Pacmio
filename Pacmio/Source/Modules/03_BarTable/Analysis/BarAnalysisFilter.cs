@@ -13,9 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public sealed class Filter : SignalAnalysisSet
+    public sealed class BarAnalysisFilter : BarAnalysisSet
     {
-        public Filter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn) : base(SignalList)
+        public BarAnalysisFilter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn) : base(SignalList)
         {
             BullishLimit = bullishLimit;
             BearishLimit = bearishLimit;
@@ -30,8 +30,8 @@ namespace Pacmio
 
         public (bool bullish, bool bearish, double rank) Calculate(Bar b)
         {
-            bool bullish = b.GetSignalScore(List).Bullish >= BullishLimit;
-            bool bearish = b.GetSignalScore(List).Bullish <= BearishLimit;
+            bool bullish = b.GetSignalScore(SignalList).Bullish >= BullishLimit;
+            bool bearish = b.GetSignalScore(SignalList).Bullish <= BearishLimit;
             return (bullish, bearish, b[Column_Rank]);
         }
 
