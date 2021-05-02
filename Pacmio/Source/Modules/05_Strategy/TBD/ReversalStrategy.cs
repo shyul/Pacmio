@@ -133,7 +133,7 @@ namespace Pacmio.Analysis
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
-            
+
         }
     }
 }

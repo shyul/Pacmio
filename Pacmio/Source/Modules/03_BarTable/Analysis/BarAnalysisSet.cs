@@ -112,6 +112,8 @@ namespace Pacmio
 
         private Dictionary<(BarFreq freq, PriceType type), BarAnalysisList> BarAnalysisTable { get; } = new();
 
+        public BarAnalysisList this[BarFreq freq, PriceType type] => BarAnalysisTable[(freq, type)];
+
         public IEnumerator<(BarFreq freq, PriceType type, BarAnalysisList bat)> GetEnumerator()
             => BarAnalysisTable.
             OrderByDescending(n => n.Key.freq).

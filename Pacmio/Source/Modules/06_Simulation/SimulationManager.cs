@@ -126,21 +126,8 @@ namespace Pacmio
                         clist.Add((c, res.Percent));
                     }
 
-                    // BarTable bt = bts[BarFreq.Minute];
-
-                    // Then run order / trade / position analysis, using Typical price of the next bar as entry or matching limit / stop...
-                    // This analysis shall not be BarAnalysis  
-
-                    // Effectiveness Result -> 
-
-                    //Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
-
-                    // Overlapping Backtest N days => trade 1 days Result ->
-
-
                     bts.Dispose();
 
-                    //BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
                     DateTime endTime = DateTime.Now;
                     double seconds = (endTime - startTime).TotalSeconds;
                     totalseconds += seconds;
@@ -168,6 +155,17 @@ namespace Pacmio
 
             return clist.Select(n => n.c);
         }
+
+        // BarTable bt = bts[BarFreq.Minute];
+
+        // Then run order / trade / position analysis, using Typical price of the next bar as entry or matching limit / stop...
+        // This analysis shall not be BarAnalysis  
+
+        // Effectiveness Result -> 
+
+        //Dictionary<IndicatorSet, TrainingResultDatum> TrainingResults = new Dictionary<IndicatorSet, TrainingResultDatum>();
+
+        // Overlapping Backtest N days => trade 1 days Result ->
 
         /// <summary>
         /// Commission Calculator based on IB Tiered Fee Structure.

@@ -529,23 +529,6 @@ namespace Pacmio
             }
         }
 
-        public StrategyDatum this[Strategy s]
-        {
-            get
-            {
-                if (DatumColumnsLUT[s.Column_Result] is StrategyDatum sd)
-                {
-                    return sd;
-                }
-                else
-                {
-                    StrategyDatum new_sd = new(this, s);
-                    DatumColumnsLUT[s.Column_Result] = new_sd;
-                    return new_sd;
-                }
-            }
-        }
-
         #endregion Datum Column
 
         #region Signal Information Tools
@@ -611,20 +594,37 @@ namespace Pacmio
             return (bull, bear);
         }
 
-        public FilterType this[BarAnalysisFilter filter] => GetSignalFilterType(filter);
+        #endregion Signal Information Tools
 
-        private FilterType GetSignalFilterType(BarAnalysisFilter filter)
+        public FilterResult this[BarAnalysisFilter filter] => GetSignalFilterType(filter);
+
+        private FilterResult GetSignalFilterType(BarAnalysisFilter filter)
         {
             var (bullish, bearish, _) = filter.Calculate(this);
 
             if (bullish)
-                return FilterType.Bullish;
+                return FilterResult.Bullish;
             else if (bearish)
-                return FilterType.Bearish;
+                return FilterResult.Bearish;
             else
-                return FilterType.None;
+                return FilterResult.None;
         }
 
-        #endregion Signal Information Tools
+        public StrategyDatum this[Strategy s]
+        {
+            get
+            {
+                if (DatumColumnsLUT[s.Column_Result] is StrategyDatum sd)
+                {
+                    return sd;
+                }
+                else
+                {
+                    StrategyDatum new_sd = new(this, s);
+                    DatumColumnsLUT[s.Column_Result] = new_sd;
+                    return new_sd;
+                }
+            }
+        }
     }
 }

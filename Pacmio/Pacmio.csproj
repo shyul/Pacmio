@@ -120,9 +120,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\Oscillator\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\DecisionAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisFilter.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\FilterScanResult.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\BarAnalysisFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterScanResult.cs" />
     <Compile Include="Source\Modules\06_Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisListPointer.cs" />
     <Compile Include="Source\Modules\05_Strategy\TBD\SwingTradeDailyFilter.cs" />
@@ -130,16 +129,15 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\ILevelDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Level\_Types\Level.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\StrategyDatum.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\HorizontalLine\HorizontalLineDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\04_Pattern\Trend\TrendLineDatum.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\Strategy.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
     <Compile Include="Source\Modules\06_Simulation\StrategyManager.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\EntryType.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\ExecutionRecord.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\ExecutionRecord.cs" />
     <Compile Include="Source\Modules\07_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\CandleStickSeries.cs" />
@@ -262,7 +260,7 @@
     <Compile Include="Source\Modules\04_BarChart\Area\PositionArea.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisList.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\PositionSeries.cs" />
-    <Compile Include="Source\Modules\05_Strategy\_Strategy\_Types\ActionType.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\ActionType.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\MutualFund.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\Option.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\SMMA.cs" />
@@ -432,8 +430,6 @@
   <ItemGroup>
     <Content Include="Tasks.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Modules\03_BarTable\Analysis\06_Decision\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

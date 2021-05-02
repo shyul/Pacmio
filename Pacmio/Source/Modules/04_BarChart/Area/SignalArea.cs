@@ -14,12 +14,7 @@ using Pacmio.Analysis;
 
 namespace Pacmio
 {
-    public enum FilterType : int
-    {
-        Bearish = -1,
-        None = 0,
-        Bullish = 1,
-    }
+
 
     public sealed class SignalArea : OscillatorArea, IBarChartArea
     {
@@ -57,7 +52,7 @@ namespace Pacmio
 
                 if (SignalSeries.Source is BarAnalysisFilter filter)
                 {
-                    FilterType lastType = FilterType.None;
+                    FilterResult lastType = FilterResult.None;
 
                     for (int i = StartPt; i < StopPt; i++)
                     {
@@ -66,15 +61,15 @@ namespace Pacmio
                         else if (i >= 0 && bt[i] is Bar b)
                         {
 
-                            FilterType thisType = b[filter];
+                            FilterResult thisType = b[filter];
                             int tickWidth = AxisX.TickWidth;
                             int half_tickWidth = (tickWidth / 2.0f).ToInt32();
-                            if (thisType == FilterType.Bullish)
+                            if (thisType == FilterResult.Bullish)
                             {
                                 //g.FillRectangle(fillBrush, IndexToPixel(i) - half_tickWidth, upper_pix, tickWidth, height);
 
                             }
-                            else if (thisType == FilterType.Bearish)
+                            else if (thisType == FilterResult.Bearish)
                             {
 
 

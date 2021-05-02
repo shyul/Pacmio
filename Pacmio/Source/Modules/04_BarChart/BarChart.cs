@@ -90,6 +90,40 @@ namespace Pacmio
             }
         }
 
+        public void Config(BarTableSet bts, Strategy s)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+
+                BarTable = bts[s.BarFreq, s.PriceType];
+                BarAnalysisList = s.BarAnalysisSet[s.BarFreq, s.PriceType];
+
+                ReadyToShow = m_BarTable is BarTable;
+
+                if (ReadyToShow)
+                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
+            }
+            m_AsyncUpdateUI = true;
+        }
+
+        public void Config(BarTable bt, Strategy s)
+        {
+            lock (GraphicsLockObject)
+            {
+                ReadyToShow = false;
+
+                BarTable = bt;
+                BarAnalysisList = s.BarAnalysisSet[bt.BarFreq, bt.PriceType];
+
+                ReadyToShow = m_BarTable is BarTable;
+
+                if (ReadyToShow)
+                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
+            }
+            m_AsyncUpdateUI = true;
+        }
+
         public void Config(BarTable bt, BarAnalysisList bat)
         {
             lock (GraphicsLockObject)
@@ -102,7 +136,7 @@ namespace Pacmio
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)
-                    StopPt = m_BarTable[bat].LastCalculateIndex;
+                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
             }
             m_AsyncUpdateUI = true;
         }
@@ -133,6 +167,16 @@ namespace Pacmio
                     foreach (var tg in bat.TagSeries)
                     {
                         tg.ConfigChart(this);
+                    }
+
+                    if (bat.SignalList.Count() > 0)
+                    {
+                        SignalSeries sgs = new SignalSeries(BarAnalysisList);
+                        AddArea(new SignalArea(this, sgs)
+                        {
+                            Order = int.MinValue,
+                            HasXAxisBar = false,
+                        });
                     }
 
                     if (m_BarTable is BarTable bt)
@@ -268,8 +312,6 @@ namespace Pacmio
         public double ChartRangePercent => ChartRange.Minimum != 0 ? (100 * (ChartRange.Maximum - ChartRange.Minimum) / ChartRange.Minimum) : 100;
 
         public override bool ReadyToShow { get => IsActive && m_ReadyToShow && m_BarTable is BarTable bt && bt.ReadyToShow; set => m_ReadyToShow = value; }
-
-        //public bool HasSignalColumn => BarAnalysisSet is BarAnalysisSet bas && bas.SignalColumns.Count() > 0;
 
         public override void CoordinateOverlay() { }
 

@@ -103,7 +103,7 @@ namespace Pacmio.Analysis
 
             #region Define Signals
 
-            FiveMinutesCrossData_1 = crossData_1; 
+            FiveMinutesCrossData_1 = crossData_1;
             FiveMinutesCrossSignal_1 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_1)
             {
                 TypeToTrailPoints = new()
@@ -113,7 +113,7 @@ namespace Pacmio.Analysis
                 }
             };
 
-            FiveMinutesCrossData_2 = crossData_2; 
+            FiveMinutesCrossData_2 = crossData_2;
             FiveMinutesCrossSignal_2 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_2)
             {
                 TypeToTrailPoints = new()
