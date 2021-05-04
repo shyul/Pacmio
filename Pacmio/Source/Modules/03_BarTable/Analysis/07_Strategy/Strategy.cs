@@ -36,18 +36,30 @@ namespace Pacmio
             HoldingMaxSpan = holdingMaxSpan;
         }
 
+        #region Filter Signals
+
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
         public BarAnalysisFilter Filter { get; protected set; }
 
+        #endregion Filter Signals
+
+        #region Entry Signals
+
         public BarAnalysisSet AnalysisSet { get; protected set; }
+
+        #endregion Entry Signals
+
+        #region Exit Signals
 
         public TimePeriod HoldingPeriod { get; }
 
         public TimeSpan HoldingMaxSpan { get; }
 
         public double MinimumRiskRewardRatio { get; }
+
+        #endregion Exit Signals
 
         #region Draw Chart Overlay
 

@@ -581,17 +581,17 @@ namespace Pacmio
         public (double Bullish, double Bearish) GetSignalScore(IEnumerable<SignalAnalysis> sas)
         {
             BarTableSet bts = Table.BarTableSet;
-            double bull = 0, bear = 0;
+            double bullish = 0, bearish = 0;
             foreach (SignalAnalysis sa in sas.Where(n => n.BarFreq >= BarFreq))
             {
                 if (this[sa] is SignalDatum sd)
                 {
                     double points = sd.Points;
-                    if (points > 0) bull += points;
-                    else if (points < 0) bear += points;
+                    if (points > 0) bullish += points;
+                    else if (points < 0) bearish += points;
                 }
             }
-            return (bull, bear);
+            return (bullish, bearish);
         }
 
         #endregion Signal Information Tools

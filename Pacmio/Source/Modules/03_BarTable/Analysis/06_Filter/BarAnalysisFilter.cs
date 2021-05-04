@@ -13,6 +13,9 @@ using Xu;
 
 namespace Pacmio
 {
+    /// <summary>
+    /// Flawed, direction -> no score, but ranking!!!
+    /// </summary>
     public sealed class BarAnalysisFilter : BarAnalysisSet
     {
         public BarAnalysisFilter(IEnumerable<SignalAnalysis> SignalList, double bullishLimit, double bearishLimit, NumericColumn rankColumn) : base(SignalList)
@@ -31,7 +34,7 @@ namespace Pacmio
         public (bool bullish, bool bearish, double rank) Calculate(Bar b)
         {
             bool bullish = b.GetSignalScore(SignalList).Bullish >= BullishLimit;
-            bool bearish = b.GetSignalScore(SignalList).Bullish <= BearishLimit;
+            bool bearish = b.GetSignalScore(SignalList).Bearish <= BearishLimit;
             return (bullish, bearish, b[Column_Rank]);
         }
 

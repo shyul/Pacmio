@@ -22,12 +22,66 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class ReversalStrategy //: Strategy
+    public class ReversalStrategy : Strategy
     {
-        public ReversalStrategy(TimePeriod tif, BarFreq barFreq, PriceType type) //: base(tif, barFreq, type)
+        public ReversalStrategy(
+            double aboveVolume,
+            double belowVolume,
+            double abovePrice,
+            double belowPrice,
+            double minRiskRewardRatio,
+            TimeSpan holdingMaxSpan,
+            TimePeriod holdingPeriod,
+            TimePeriod tif,
+            BarFreq barFreq = BarFreq.Minute)
+            : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
 
+
+            DailyPriceFilterSignal =
+                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
+                {
+                    TypeToTrailPoints = new()
+                    {
+                        { SingleDataSignalType.Within, new double[] { 1 } }
+                    }
+                };
+
+            DailyVolumeFilterSignal =
+                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
+                {
+                    TypeToTrailPoints = new()
+                    {
+                        { SingleDataSignalType.Within, new double[] { 1 } }
+                    }
+                };
+
+
+
+
+
+
+            var filterSignals = new SignalAnalysis[] {
+                DailyPriceFilterSignal,
+                DailyVolumeFilterSignal };
+
+            Filter = new(filterSignals, 2, 2, Bar.Column_GainPercent);
         }
+
+
+        public Range<double> PriceRange { get; } = new Range<double>(15, 250);
+
+        public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
+
+        #region Filter Signals
+
+        public SingleDataSignal DailyPriceFilterSignal { get; }
+        public SingleDataSignal DailyVolumeFilterSignal { get; }
+
+
+
+        #endregion Filter Signals
+
 
         // Filter: 500000 Volume
 
@@ -69,9 +123,6 @@ namespace Pacmio.Analysis
 
         // Exit: boundce back to 9 EMA or VWAP
 
-        public Range<double> PriceRange { get; } = new Range<double>(15, 250);
-
-        public Range<double> VolumeRange { get; } = new Range<double>(5e5, double.MaxValue);
 
         /// <summary>
         /// Or we can use Relative Volume of 1 ~ 1.5
@@ -110,6 +161,19 @@ namespace Pacmio.Analysis
         // STOP: high or low of the triggering candle
 
         // adjust the size with the stop distance.
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+            BarTable bt = bap.Table;
+            BarTableSet bts = bt.BarTableSet;
+            MultiPeriod testPeriods = bts.MultiPeriod;
+
+            for (int i = bap.StartPt; i < bap.StopPt; i++)
+            {
+                Bar b = bt[i];
+                StrategyDatum sd = b[this];
+            }
+        }
 
         #endregion
 

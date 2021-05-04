@@ -57,19 +57,20 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume = 1e5,
             double minimumMinuteRelativeVolume = 2,
             double gap = 4,
+            BarFreq fiveMinFreq = BarFreq.Minutes_5,
             double aboveVolume = 5e5,
             double belowVolume = double.MaxValue,
             double abovePrice = 1,
             double belowPrice = 300,
             double minRiskRewardRatio = 2,
-            BarFreq barFreq = BarFreq.Minute,
-            BarFreq fiveMinFreq = BarFreq.Minutes_5)
+            BarFreq barFreq = BarFreq.Minute)
             : this(
             new EMA(9),
             new EMA(20),
             minimumMinuteVolume,
             minimumMinuteRelativeVolume,
             gap,
+            fiveMinFreq,
             aboveVolume,
             belowVolume,
             abovePrice,
@@ -78,8 +79,7 @@ namespace Pacmio.Analysis
             new TimeSpan(1000, 1, 1, 1, 1),
             new TimePeriod(new Time(9, 30), new Time(12, 00)),
             new TimePeriod(new Time(9, 30), new Time(10, 00)),
-            barFreq,
-            fiveMinFreq)
+            barFreq)
         { }
 
         public GapGoOrbStrategy(
@@ -88,6 +88,7 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume,
             double minimumMinuteRelativeVolume,
             double gap,
+            BarFreq fiveMinFreq,
             double aboveVolume,
             double belowVolume,
             double abovePrice,
@@ -96,8 +97,7 @@ namespace Pacmio.Analysis
             TimeSpan holdingMaxSpan,
             TimePeriod holdingPeriod,
             TimePeriod tif,
-            BarFreq barFreq = BarFreq.Minute,
-            BarFreq fiveMinFreq = BarFreq.Minutes_5)
+            BarFreq barFreq = BarFreq.Minute)
             : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
             MinimumMinuteVolume = minimumMinuteVolume;
@@ -129,7 +129,7 @@ namespace Pacmio.Analysis
                     TypeToTrailPoints = new()
                     {
                         { SingleDataSignalType.Above, new double[] { 1 } },
-                        { SingleDataSignalType.Below, new double[] { 1 } },
+                        { SingleDataSignalType.Below, new double[] { -1 } },
                     }
                 };
 
@@ -177,30 +177,21 @@ namespace Pacmio.Analysis
             Column_Result = new(this, typeof(StrategyDatum));
         }
 
-
+        #region Filter Signals
 
         public SingleDataSignal DailyPriceFilterSignal { get; }
         public SingleDataSignal DailyVolumeFilterSignal { get; }
         public SingleDataSignal DailyGapPercentFilterSignal { get; }
 
+        #endregion Filter Signals
 
-
-        public DualDataSignal FiveMinutesCrossSignal_1 { get; }
-        public ISingleData FiveMinutesCrossData_1 { get; }
-        public DualDataSignal FiveMinutesCrossSignal_2 { get; }
-        public ISingleData FiveMinutesCrossData_2 { get; }
-
-
+        #region Entry Signals
 
         public TimeFrameRelativeVolume RelativeVolume { get; }
         public TimeFramePricePosition PricePosition { get; }
 
-
-
         public double MinimumMinuteVolume { get; }
         public double MinimumMinuteRelativeVolume { get; }
-
-
 
         public const string BullishOpenBarMessage = "BullishOpenBar";
         public const string BearishOpenBarMessage = "BearishOpenBar";
@@ -208,6 +199,16 @@ namespace Pacmio.Analysis
         public const string RangeBarBullishMessage = "RangeBarBullish";
         public const string RangeBarBearishMessage = "RangeBarBearish";
 
+        #endregion Entry Signals
+
+        #region Exit Signals
+
+        public DualDataSignal FiveMinutesCrossSignal_1 { get; }
+        public ISingleData FiveMinutesCrossData_1 { get; }
+        public DualDataSignal FiveMinutesCrossSignal_2 { get; }
+        public ISingleData FiveMinutesCrossData_2 { get; }
+
+        #endregion Exit Signals
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
