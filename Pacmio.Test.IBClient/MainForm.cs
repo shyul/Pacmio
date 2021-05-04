@@ -537,7 +537,7 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
                 Cts = new CancellationTokenSource();
                 Period pd = HistoricalPeriod;
-                //var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
+                var filter = new GapFilter();
                 Task.Run(() =>
                 {
                     BarTableSet bts = new BarTableSet(c, false);
@@ -578,18 +578,13 @@ namespace TestClient
 
             if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            //var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
+            var filter = new GapFilter();
 
             Task.Run(() =>
             {
                 var cList = ContractManager.TradeableNoETFList.ToList();
                 Console.WriteLine("total number = " + cList.Count());
-
-                /*
-                SimulationManager.RunScreener(cList,
-                    filter,
-                    pd, 16, Cts, Progress);*/
-
+                cList.Screen(filter, pd, 16, Cts, Progress);
                 GC.Collect();
             }, Cts.Token);
         }

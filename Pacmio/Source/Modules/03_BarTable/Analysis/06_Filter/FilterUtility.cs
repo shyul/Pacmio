@@ -81,5 +81,15 @@ namespace Pacmio
             return clist.Select(n => n.c);
         }
 
+        public static void PrintResult(Dictionary<Contract, FilterScanResult> result)
+        {
+            var r = result.OrderByDescending(n => n.Value.Percent).Select(n => n.Value).Take(100);
+
+            foreach (var ier in r)
+            {
+                Console.WriteLine(ier.Contract + ": " + (ier.BullishPercent * 100).ToString("0.###") + "% | " + (ier.BearishPercent * 100).ToString("0.###") + "%");
+            }
+        }
+
     }
 }

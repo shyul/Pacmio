@@ -96,6 +96,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\ISignalSource.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\GapFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\PriceVolumeFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\TradeCapFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterUtility.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />

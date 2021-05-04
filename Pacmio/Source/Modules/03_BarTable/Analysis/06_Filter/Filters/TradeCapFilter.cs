@@ -12,9 +12,9 @@ using Xu.Chart;
 
 namespace Pacmio
 {
-    public class PriceVolumeFilter : FilterAnalysis
+    public class TradeCapFilter : FilterAnalysis
     {
-        public PriceVolumeFilter(
+        public TradeCapFilter(
             double minPrice = 1,
             double maxPrice = 300,
             double minVolume = 5e5,
@@ -23,8 +23,7 @@ namespace Pacmio
             PriceType priceType = PriceType.Trades)
             : base(barFreq, priceType)
         {
-            VolumeRange = new Range<double>(minVolume, maxVolume);
-            PriceRange = new Range<double>(minPrice, maxPrice);
+            CapRange = new Range<double>(minVolume * minPrice, maxVolume * maxPrice);
 
             Label = "(" + minPrice + "," + maxPrice + "," + minVolume + "," + maxVolume + "," + barFreq + "," + priceType + ")";
             Name = GetType().Name + Label;
@@ -45,29 +44,21 @@ namespace Pacmio
             BarAnalysisList = new BarAnalysisList(new BarAnalysis[] { this });
         }
 
-        protected PriceVolumeFilter(
-            BarFreq barFreq = BarFreq.Daily,
-            PriceType priceType = PriceType.Trades)
-            : base(barFreq, priceType)
-        { }
-
-        public Range<double> VolumeRange { get; protected set; }
-
-        public Range<double> PriceRange { get; protected set; }
+        public Range<double> CapRange { get; protected set; }
 
         public override string Label { get; }
 
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;
-
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 if (bt[i] is Bar b)
                     if (b.Bar_1 is Bar b_1)
                     {
-                        if (PriceRange.Contains(b_1.Typical) && VolumeRange.Contains(b_1.Volume))
-                            b[Column_Result] = b_1.Typical * b_1.Volume;
+                        var cap = b_1.Typical * b_1.Volume;
+                        if (CapRange.Contains(cap))
+                            b[Column_Result] = cap;
                         else
                             b[Column_Result] = 0;
                     }
