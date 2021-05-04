@@ -54,8 +54,8 @@ namespace Pacmio.Analysis
     public class GapGoOrbStrategy : Strategy
     {
         public GapGoOrbStrategy(
-            ISingleData crossData_1, // new EMA(9);
-            ISingleData crossData_2, // new EMA(20);
+            double minimumMinuteVolume = 1e5,
+            double minimumMinuteRelativeVolume = 2,
             double gap = 4,
             double aboveVolume = 5e5,
             double belowVolume = double.MaxValue,
@@ -65,8 +65,10 @@ namespace Pacmio.Analysis
             BarFreq barFreq = BarFreq.Minute,
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
             : this(
-            crossData_1,
-            crossData_2,
+            new EMA(9),
+            new EMA(20),
+            minimumMinuteVolume,
+            minimumMinuteRelativeVolume,
             gap,
             aboveVolume,
             belowVolume,
@@ -83,6 +85,8 @@ namespace Pacmio.Analysis
         public GapGoOrbStrategy(
             ISingleData crossData_1,
             ISingleData crossData_2,
+            double minimumMinuteVolume,
+            double minimumMinuteRelativeVolume,
             double gap,
             double aboveVolume,
             double belowVolume,
@@ -96,35 +100,45 @@ namespace Pacmio.Analysis
             BarFreq fiveMinFreq = BarFreq.Minutes_5)
             : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
-            MinimumMinuteVolume = 1e5;
-            MinimumMinuteRelativeVolume = 2;
+            MinimumMinuteVolume = minimumMinuteVolume;
+            MinimumMinuteRelativeVolume = minimumMinuteRelativeVolume;
 
             #region Define Filter
 
             DailyPriceFilterSignal =
                 new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
-                { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
+                {
+                    TypeToTrailPoints = new()
+                    {
+                        { SingleDataSignalType.Within, new double[] { 1 } }
+                    }
+                };
 
             DailyVolumeFilterSignal =
                 new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
-                { TypeToTrailPoints = new() { { SingleDataSignalType.Within, new double[] { 1 } } } };
-
-            DailyGapPercentFilterSignal = new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
-            {
-                TypeToTrailPoints = new()
                 {
-                    { SingleDataSignalType.Above, new double[] { 1 } },
-                    { SingleDataSignalType.Below, new double[] { 1 } },
-                }
-            };
+                    TypeToTrailPoints = new()
+                    {
+                        { SingleDataSignalType.Within, new double[] { 1 } }
+                    }
+                };
 
-            Filter = new(new SignalAnalysis[] {
+            DailyGapPercentFilterSignal =
+                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
+                {
+                    TypeToTrailPoints = new()
+                    {
+                        { SingleDataSignalType.Above, new double[] { 1 } },
+                        { SingleDataSignalType.Below, new double[] { 1 } },
+                    }
+                };
+
+            var filterSignals = new SignalAnalysis[] {
                 DailyPriceFilterSignal,
                 DailyVolumeFilterSignal,
-                DailyGapPercentFilterSignal },
-                3,
-                3,
-                Bar.Column_GainPercent);
+                DailyGapPercentFilterSignal };
+
+            Filter = new(filterSignals, 3, 3, Bar.Column_GainPercent);
 
             #endregion Define Filter
 
