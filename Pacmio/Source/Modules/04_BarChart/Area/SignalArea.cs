@@ -50,8 +50,11 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (BarChart.Strategy is Strategy s && s.Filter is BarAnalysisFilter filter)
+                if (BarChart.Strategy is Strategy s && s.Filter is FilterAnalysis filter)
                 {
+                    /* 
+                    
+                    Position...
                     FilterResult lastType = FilterResult.None;
 
                     for (int i = StartPt; i < StopPt; i++)
@@ -77,7 +80,7 @@ namespace Pacmio
 
                             lastType = thisType;
                         }
-                    }
+                    }*/
                 }
 
                 g.SetClip(Bounds);

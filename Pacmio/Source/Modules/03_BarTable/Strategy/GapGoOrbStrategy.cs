@@ -56,12 +56,12 @@ namespace Pacmio.Analysis
         public GapGoOrbStrategy(
             double minimumMinuteVolume = 1e5,
             double minimumMinuteRelativeVolume = 2,
-            double gap = 4,
+            double gapPercent = 4,
             BarFreq fiveMinFreq = BarFreq.Minutes_5,
-            double aboveVolume = 5e5,
-            double belowVolume = double.MaxValue,
-            double abovePrice = 1,
-            double belowPrice = 300,
+            double minPrice = 1,
+            double maxPrice = 300,
+            double minVolume = 5e5,
+            double maxVolume = double.MaxValue,
             double minRiskRewardRatio = 2,
             BarFreq barFreq = BarFreq.Minute)
             : this(
@@ -69,12 +69,12 @@ namespace Pacmio.Analysis
             new EMA(20),
             minimumMinuteVolume,
             minimumMinuteRelativeVolume,
-            gap,
+            gapPercent,
             fiveMinFreq,
-            aboveVolume,
-            belowVolume,
-            abovePrice,
-            belowPrice,
+            minPrice,
+            maxPrice,
+            minVolume,
+            maxVolume,
             minRiskRewardRatio,
             new TimeSpan(1000, 1, 1, 1, 1),
             new TimePeriod(new Time(9, 30), new Time(12, 00)),
@@ -87,12 +87,12 @@ namespace Pacmio.Analysis
             ISingleData crossData_2,
             double minimumMinuteVolume,
             double minimumMinuteRelativeVolume,
-            double gap,
+            double gapPercent,
             BarFreq fiveMinFreq,
-            double aboveVolume,
-            double belowVolume,
-            double abovePrice,
-            double belowPrice,
+            double minPrice,
+            double maxPrice,
+            double minVolume,
+            double maxVolume,
             double minRiskRewardRatio,
             TimeSpan holdingMaxSpan,
             TimePeriod holdingPeriod,
@@ -105,40 +105,7 @@ namespace Pacmio.Analysis
 
             #region Define Filter
 
-            DailyPriceFilterSignal =
-                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Typical, new Range<double>(abovePrice, belowPrice))
-                {
-                    TypeToTrailPoints = new()
-                    {
-                        { SingleDataSignalType.Within, new double[] { 1 } }
-                    }
-                };
-
-            DailyVolumeFilterSignal =
-                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_Volume, new Range<double>(aboveVolume, belowVolume))
-                {
-                    TypeToTrailPoints = new()
-                    {
-                        { SingleDataSignalType.Within, new double[] { 1 } }
-                    }
-                };
-
-            DailyGapPercentFilterSignal =
-                new SingleDataSignal(TimePeriod.Full, BarFreq.Daily, Bar.Column_GapPercent, new Range<double>(-gap, gap))
-                {
-                    TypeToTrailPoints = new()
-                    {
-                        { SingleDataSignalType.Above, new double[] { 1 } },
-                        { SingleDataSignalType.Below, new double[] { -1 } },
-                    }
-                };
-
-            var filterSignals = new SignalAnalysis[] {
-                DailyPriceFilterSignal,
-                DailyVolumeFilterSignal,
-                DailyGapPercentFilterSignal };
-
-            Filter = new(filterSignals, 3, 3, Bar.Column_GainPercent);
+            Filter = new GapFilter(gapPercent, minPrice, maxPrice, minVolume, maxVolume,BarFreq.Daily, PriceType.Trades);
 
             #endregion Define Filter
 
@@ -176,7 +143,7 @@ namespace Pacmio.Analysis
 
             Column_Result = new(this, typeof(StrategyDatum));
         }
-
+        /*
         #region Filter Signals
 
         public SingleDataSignal DailyPriceFilterSignal { get; }
@@ -184,7 +151,7 @@ namespace Pacmio.Analysis
         public SingleDataSignal DailyGapPercentFilterSignal { get; }
 
         #endregion Filter Signals
-
+        */
         #region Entry Signals
 
         public TimeFrameRelativeVolume RelativeVolume { get; }
@@ -229,12 +196,12 @@ namespace Pacmio.Analysis
                     {
                         if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
                         {
-                            var (bullish, bearish, _) = Filter.Calculate(b);
-                            if (bullish && b[PricePosition] > 0.75)
+                            double flt = b[Filter];
+                            if (flt > 0 && b[PricePosition] > 0.75)
                             {
                                 sd.Message = BullishOpenBarMessage;
                             }
-                            else if (bearish && b[PricePosition] < 0.25)
+                            else if (flt < 0 && b[PricePosition] < 0.25)
                             {
                                 sd.Message = BearishOpenBarMessage;
                             }

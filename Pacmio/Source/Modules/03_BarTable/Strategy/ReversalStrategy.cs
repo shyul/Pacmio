@@ -65,7 +65,7 @@ namespace Pacmio.Analysis
                 DailyPriceFilterSignal,
                 DailyVolumeFilterSignal };
 
-            Filter = new(filterSignals, 2, 2, Bar.Column_GainPercent);
+            //Filter = new(filterSignals, 2, 2, Bar.Column_GainPercent);
         }
 
 

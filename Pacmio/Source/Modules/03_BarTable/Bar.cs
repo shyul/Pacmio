@@ -596,18 +596,15 @@ namespace Pacmio
 
         #endregion Signal Information Tools
 
-        public FilterResult this[BarAnalysisFilter filter] => GetSignalFilterType(filter);
-
-        private FilterResult GetSignalFilterType(BarAnalysisFilter filter)
+        public double this[FilterAnalysis filter]
         {
-            var (bullish, bearish, _) = filter.Calculate(this);
-
-            if (bullish)
-                return FilterResult.Bullish;
-            else if (bearish)
-                return FilterResult.Bearish;
-            else
-                return FilterResult.None;
+            get
+            {
+                if (filter.BarFreq == BarFreq && filter.PriceType == PriceType)
+                    return this[filter.Column_Result];
+                else
+                    return Table.BarTableSet[Time, filter.BarFreq, filter.PriceType][filter];
+            }
         }
 
         public StrategyDatum this[Strategy s]

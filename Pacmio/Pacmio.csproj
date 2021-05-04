@@ -94,7 +94,9 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\IDifferentialDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\ISignalSource.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterResult.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\GapFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\PriceVolumeFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterUtility.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\CustomIntervalAnalysis.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\Oscillator\OscillatorSignalType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\BarAnalysisFilter.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterScanResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Simulation\BacktestSetting.cs" />
     <Compile Include="Source\Modules\03_BarTable\Simulation\SimulationManager.cs" />

@@ -41,7 +41,7 @@ namespace Pacmio
         /// <summary>
         /// The first simple filter to narrow down the list before any complex BarAnalysis.
         /// </summary>
-        public BarAnalysisFilter Filter { get; protected set; }
+        public FilterAnalysis Filter { get; protected set; }
 
         #endregion Filter Signals
 
