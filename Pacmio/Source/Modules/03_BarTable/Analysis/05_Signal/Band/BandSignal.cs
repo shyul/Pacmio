@@ -19,8 +19,8 @@ namespace Pacmio
             Column = column;
             Band = band;
 
-            string label = "(" + Column.Name + "," + band.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + Column.Name + "," + band.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(BandSignalDatum));
 
             BullishColor = Band.UpperColor;

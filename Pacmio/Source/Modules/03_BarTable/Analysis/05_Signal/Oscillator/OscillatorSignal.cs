@@ -19,8 +19,8 @@ namespace Pacmio
         {
             OscillatorAnalysis = iosc;
 
-            string label = "(" + iosc.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + iosc.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(OscillatorSignalDatum));
 
             BullishColor = OscillatorAnalysis.UpperColor;

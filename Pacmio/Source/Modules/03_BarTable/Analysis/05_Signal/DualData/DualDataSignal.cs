@@ -20,8 +20,8 @@ namespace Pacmio
             Fast_Column = analysis.Column_High;
             Slow_Column = analysis.Column_Low;
 
-            string label = "(" + analysis.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + analysis.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
             BullishColor = analysis.UpperColor;
@@ -36,8 +36,8 @@ namespace Pacmio
             Fast_Column = fast_analysis.Column_Result;
             Slow_Column = slow_analysis.Column_Result;
 
-            string label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
             if (fast_analysis is IChartSeries fast_ics) BullishColor = fast_ics.Color;
@@ -56,8 +56,8 @@ namespace Pacmio
             Fast_Column = fast_column;
             Slow_Column = slow_analysis.Column_Result;
 
-            string label = "(" + fast_column.Name + "," + slow_analysis.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + fast_column.Name + "," + slow_analysis.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
             if (slow_analysis is IChartSeries slow_ics)
@@ -75,8 +75,8 @@ namespace Pacmio
             Fast_Column = fast_column;
             Slow_Column = slow_column;
 
-            string label = "(" + Fast_Column.Name + "," + Slow_Column.Name + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + Fast_Column.Name + "," + Slow_Column.Name + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
         }
 

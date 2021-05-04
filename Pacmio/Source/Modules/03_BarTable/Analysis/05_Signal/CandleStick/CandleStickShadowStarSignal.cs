@@ -16,7 +16,9 @@ namespace Pacmio.Analysis
         public CandleStickShadowStarSignal(TimePeriod tif, BarFreq barFreq, PriceType priceType = PriceType.Trades)
             : base(tif, barFreq, priceType)
         {
-            Name = GetType().Name;
+
+            Label = "(" + "," + ")";
+            Name = GetType().Name + Label;
 
             Column_Result = new(this, typeof(CandleStickSignalDatum));
         }

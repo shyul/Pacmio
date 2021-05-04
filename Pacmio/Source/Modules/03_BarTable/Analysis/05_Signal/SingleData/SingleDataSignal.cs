@@ -23,8 +23,8 @@ namespace Pacmio
 
             double range = analysis.Reference * range_percent;
             Range = new Range<double>(analysis.Reference - range, analysis.Reference + range);
-            string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + Column.Name + "," + Range.ToStringShort() + "," + tif + "," + barFreq + "," + priceType + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(SingleDataSignalDatum));
 
             BullishColor = analysis.UpperColor;
@@ -38,8 +38,8 @@ namespace Pacmio
             analysis.AddChild(this);
 
             Range = range;
-            string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + Column.Name + "," + Range.ToStringShort() + "," + tif + "," + barFreq + "," + priceType + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(SingleDataSignalDatum));
 
             if (analysis is IChartSeries ics)
@@ -55,8 +55,8 @@ namespace Pacmio
             Column = column;
 
             Range = range;
-            string label = "(" + Column.Name + "," + Range.ToStringShort() + ")";
-            GroupName = Name = GetType().Name + label;
+            Label = "(" + Column.Name + "," + Range.ToStringShort() + "," + tif + "," + barFreq + "," + priceType + ")";
+            GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(SingleDataSignalDatum));
         }
 
