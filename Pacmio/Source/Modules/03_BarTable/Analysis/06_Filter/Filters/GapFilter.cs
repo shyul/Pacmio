@@ -32,7 +32,7 @@ namespace Pacmio
             Label = "(" + gapPercent + "," + minPrice + "," + maxPrice + "," + minVolume + "," + maxVolume + "," + barFreq + "," + priceType + ")";
             Name = GetType().Name + Label;
             AreaName = GroupName = GetType().Name;
-            Description = "Price Volume Filter " + Label;
+            Description = "Gap Filter " + Label;
 
             Column_Result = new NumericColumn(Name, Label);
             LineSeries = new LineSeries(Column_Result)

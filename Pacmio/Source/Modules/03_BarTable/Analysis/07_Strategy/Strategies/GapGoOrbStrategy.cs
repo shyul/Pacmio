@@ -105,7 +105,7 @@ namespace Pacmio.Analysis
 
             #region Define Filter
 
-            Filter = new GapFilter(gapPercent, minPrice, maxPrice, minVolume, maxVolume,BarFreq.Daily, PriceType.Trades);
+            Filter = GapFilter = new GapFilter(gapPercent, minPrice, maxPrice, minVolume, maxVolume, BarFreq.Daily, PriceType.Trades);
 
             #endregion Define Filter
 
@@ -141,18 +141,17 @@ namespace Pacmio.Analysis
 
             #endregion Define Signals
 
+            Label = "(" + gapPercent + minimumMinuteVolume + minimumMinuteRelativeVolume + fiveMinFreq + "," + crossData_1.Name + "," + crossData_2.Name + "," + minRiskRewardRatio + GapFilter.Name + "," + barFreq + ")";
+            Name = GetType().Name + Label;
+            AreaName = GroupName = GetType().Name;
+            Description = "Gap and Go ORB Strategy " + Label;
+
             Column_Result = new(this, typeof(StrategyDatum));
         }
-        /*
-        #region Filter Signals
 
-        public SingleDataSignal DailyPriceFilterSignal { get; }
-        public SingleDataSignal DailyVolumeFilterSignal { get; }
-        public SingleDataSignal DailyGapPercentFilterSignal { get; }
-
-        #endregion Filter Signals
-        */
         #region Entry Signals
+
+        public GapFilter GapFilter { get; }
 
         public TimeFrameRelativeVolume RelativeVolume { get; }
         public TimeFramePricePosition PricePosition { get; }

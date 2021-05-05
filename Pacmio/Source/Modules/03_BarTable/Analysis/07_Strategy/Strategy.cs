@@ -20,7 +20,7 @@ namespace Pacmio
     /// Indication: Move into Either Enter or Exit
     /// Active Indicator, yield score, and check other time frame's scores
     /// </summary>
-    public abstract class Strategy : SignalAnalysis, IChartOverlay
+    public abstract class Strategy : SignalAnalysis, IEquatable<Strategy>, IChartOverlay
     {
         protected Strategy(
             double minRiskRewardRatio,
@@ -76,5 +76,15 @@ namespace Pacmio
         }
 
         #endregion Draw Chart Overlay
+
+        #region Equality
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
+        public bool Equals(Strategy other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
+        public static bool operator !=(Strategy s1, Strategy s2) => !s1.Equals(s2);
+        public static bool operator ==(Strategy s1, Strategy s2) => s1.Equals(s2);
+        public override bool Equals(object other) => other is Strategy s && Equals(s);
+
+        #endregion Equality
     }
 }

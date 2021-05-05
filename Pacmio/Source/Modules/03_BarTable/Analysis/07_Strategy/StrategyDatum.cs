@@ -56,7 +56,7 @@ namespace Pacmio
 
         public MarketData MarketData => Contract.MarketData;
 
-        public AccountInfo Account => StrategyManager.GetAccount(Strategy);
+        public AccountInfo Account => StrategyUtility.GetAccount(Strategy);
 
         public PositionInfo PositionInfo => Account is AccountInfo ac ? ac[Contract] : null;
 

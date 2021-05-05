@@ -13,8 +13,21 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class SimulationManager
+    public static class StrategyUtility
     {
+
+
+        private static Dictionary<Strategy, AccountInfo> StrategyToAccountLUT { get; } = new();
+
+        public static void Assign(Strategy s, AccountInfo ac) => StrategyToAccountLUT[s] = ac;
+
+        public static AccountInfo GetAccount(Strategy s) => StrategyToAccountLUT.ContainsKey(s) ? StrategyToAccountLUT[s] : null;
+
+
+        // Generate and Tune Strategies from here. 
+        // Generate a list of Strategies with different parameter...
+
+
         /// <summary>
         /// This function is for narrowing down the group of contracts for actually simulation.
         /// </summary>
@@ -24,7 +37,7 @@ namespace Pacmio
         /// <param name="cts"></param>
         /// <param name="Progress"></param>
         /// <returns></returns>
-        public static Dictionary<Contract, FilterScanResult> Evaluate(IEnumerable<Contract> cList, BarAnalysisSet inds, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+        public static Dictionary<Contract, FilterScanResult> Evaluate(IEnumerable<Contract> cList, Strategy s, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
         {
             Dictionary<Contract, FilterScanResult> result = new();
 
@@ -42,7 +55,6 @@ namespace Pacmio
                 //Dictionary<>
 
                 // So far we are only getting results from one time frame!
-
 
 
 
@@ -116,6 +128,5 @@ namespace Pacmio
 
             return comms + exchange_fee + transaction_fee + finra_fee + nyse_pass_fee;
         }
-
     }
 }

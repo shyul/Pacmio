@@ -127,7 +127,6 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterScanResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Simulation\BacktestSetting.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Simulation\SimulationManager.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisListPointer.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\SwingTradeDailyFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\MomentumStrategy.cs" />
@@ -141,7 +140,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\StrategyManager.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyUtility.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\ExecutionRecord.cs" />
     <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />
