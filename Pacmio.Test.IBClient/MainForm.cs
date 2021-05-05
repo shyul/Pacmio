@@ -535,18 +535,18 @@ namespace TestClient
             if (ValidateSymbol())
             {
                 Contract c = ContractTest.ActiveContract;
-                Cts = new CancellationTokenSource();
                 Period pd = HistoricalPeriod;
                 var filter = new GapFilter();
+
+                //  if (Cts is null || Cts.Cancelled())
+                Cts = new CancellationTokenSource();
+
                 Task.Run(() =>
                 {
-                    BarTableSet bts = new BarTableSet(c, false);
-                    bts.SetPeriod(pd, Cts);
-
-                    //var res = filter.RunScanResult(bts, pd);
-                    //foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
-                    //foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
-
+                    var cList = new Contract[] { c };
+                    Console.WriteLine("total number = " + cList.Count());
+                    cList.Screen(filter, pd, 16, Cts, Progress);
+                    GC.Collect();
                 }, Cts.Token);
             }
         }
@@ -554,20 +554,19 @@ namespace TestClient
         private void BtnLoadMultiBarTable_Click(object sender, EventArgs e)
         {
             string symbolText = TextBoxMultiContracts.Text;
-            BarFreq freq = BarFreq;
-            PriceType type = DataType;
             Period pd = HistoricalPeriod;
-            //var filter = new ReversalDailyFilter();// GapGoDailyFilter(); // new MomentumDailyFilter();
-            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+            var filter = new GapFilter();
+
+            //if (Cts is null || Cts.Token.Di || Cts.Cancelled())
+            Cts = new CancellationTokenSource();
 
             Task.Run(() =>
             {
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
-                /*
-                ResearchTool.RunScreener(ContractManager.GetOrFetch(symbols, "US", Cts, null),
-                    TestSignals.IndicatorSet,
-                    pd, 8, Cts, Progress);*/
-
+                var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
+                Console.WriteLine("total number = " + cList.Count());
+                cList.Screen(filter, pd, 16, Cts, Progress);
+                GC.Collect();
             }, Cts.Token);
 
         }
@@ -575,10 +574,10 @@ namespace TestClient
         private void BtnLoadAllBarTable_Click(object sender, EventArgs e)
         {
             Period pd = HistoricalPeriod;
-
-            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
-
             var filter = new GapFilter();
+
+            //if (Cts is null || Cts.Cancelled()) 
+            Cts = new CancellationTokenSource();
 
             Task.Run(() =>
             {

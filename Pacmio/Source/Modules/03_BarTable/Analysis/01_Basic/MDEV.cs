@@ -38,8 +38,6 @@ namespace Pacmio.Analysis
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ SMA.GetHashCode() ^ Interval;
 
-        public override string Label { get; }
-
         #region Calculation
 
         public SMA SMA { get; }

@@ -23,7 +23,7 @@ namespace Pacmio
             Label = (Column is null) ? "(error)" : ((Column == Bar.Column_Close) ? "(" + Interval.ToString() + ")" : "(" + Column.Name + "," + Interval.ToString() + ")");
             Name = GetType().Name + Label;
             GroupName = (Column == Bar.Column_Close) ? GetType().Name : GetType().Name + " (" + Column.Name + ")";
-            Description = "Simple Moving Average " + Label;
+            Description = "Custom Interval Analysis " + Label;
 
             Column_Result = new NumericColumn(Name, Label);
             LineSeries = new LineSeries(Column_Result)
@@ -39,8 +39,6 @@ namespace Pacmio
         protected CustomIntervalAnalysis() { }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Column.GetHashCode() ^ Interval;
-
-        public override string Label { get; }
 
         public NumericColumn Column { get; protected set; }
     }

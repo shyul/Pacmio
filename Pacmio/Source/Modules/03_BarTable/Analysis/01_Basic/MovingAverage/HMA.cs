@@ -58,8 +58,6 @@ namespace Pacmio.Analysis
 
         #region Calculation
 
-        public override string Label { get; }
-
         public int Interval_Fast { get; }
 
         public int Interval_Sqrt { get; }
