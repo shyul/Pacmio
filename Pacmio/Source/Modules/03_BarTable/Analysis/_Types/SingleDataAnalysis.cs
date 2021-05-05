@@ -15,11 +15,11 @@ namespace Pacmio
 {
     public abstract class SingleDataAnalysis : BarAnalysis, ISingleData, IChartSeries
     {
-        public abstract string Label { get; }
-
         #region Parameters
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Label.GetHashCode();
+
+        public string Label { get; protected set; }
 
         public virtual NumericColumn Column_Result { get; protected set; }
 

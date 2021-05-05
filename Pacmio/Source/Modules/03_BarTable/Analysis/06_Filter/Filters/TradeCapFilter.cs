@@ -46,8 +46,6 @@ namespace Pacmio
 
         public Range<double> CapRange { get; protected set; }
 
-        public override string Label { get; }
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;

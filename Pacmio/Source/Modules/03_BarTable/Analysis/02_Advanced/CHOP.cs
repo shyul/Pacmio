@@ -58,8 +58,6 @@ namespace Pacmio.Analysis
 
         #region Parameters
 
-        public override string Label { get; }
-
         public int Interval => PriceChannel.Interval;
 
         public double Multiplier { get; }

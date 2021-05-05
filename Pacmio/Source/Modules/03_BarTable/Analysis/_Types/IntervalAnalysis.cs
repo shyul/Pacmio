@@ -37,8 +37,6 @@ namespace Pacmio
 
         protected IntervalAnalysis() { }
 
-        public override string Label { get; }
-
         #region Parameters
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Interval;

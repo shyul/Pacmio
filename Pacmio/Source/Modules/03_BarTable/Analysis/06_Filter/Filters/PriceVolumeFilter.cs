@@ -55,8 +55,6 @@ namespace Pacmio
 
         public Range<double> PriceRange { get; protected set; }
 
-        public override string Label { get; }
-
         protected override void Calculate(BarAnalysisPointer bap)
         {
             BarTable bt = bap.Table;

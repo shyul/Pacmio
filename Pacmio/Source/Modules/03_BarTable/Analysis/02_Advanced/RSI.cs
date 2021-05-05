@@ -63,8 +63,6 @@ namespace Pacmio.Analysis
             LowerColor = Color.Crimson;
         }
 
-        public override string Label { get; }
-
         #region Calculation
 
         public int Interval { get; }

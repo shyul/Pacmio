@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public abstract class FilterAnalysis : SingleDataAnalysis
+    public abstract class FilterAnalysis : SingleDataAnalysis, IEquatable<FilterAnalysis>
     {
         protected FilterAnalysis(BarFreq barFreq, PriceType priceType)
         {
@@ -46,5 +46,15 @@ namespace Pacmio
 
             return new(bts.Contract, allbars, bullishBars, bearishBars);
         }
+
+        #region Equality
+
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
+        public bool Equals(FilterAnalysis other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
+        public static bool operator !=(FilterAnalysis s1, FilterAnalysis s2) => !s1.Equals(s2);
+        public static bool operator ==(FilterAnalysis s1, FilterAnalysis s2) => s1.Equals(s2);
+        public override bool Equals(object other) => other is FilterAnalysis ba && Equals(ba);
+
+        #endregion Equality
     }
 }

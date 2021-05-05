@@ -54,8 +54,6 @@ namespace Pacmio.Analysis
             LowerColor = Color.OrangeRed;
         }
 
-        public override string Label { get; }
-
         public int Interval { get; }
 
         public double Constant { get; }

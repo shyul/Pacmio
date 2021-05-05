@@ -54,8 +54,6 @@ namespace Pacmio.Analysis
             LowerColor = Color.Crimson;
         }
 
-        public override string Label { get; }
-
         #region Parameters
 
         public int Interval_Fast { get; }

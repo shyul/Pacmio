@@ -69,8 +69,8 @@ namespace Pacmio
 
         #region Equality
 
-        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
-        public bool Equals(SignalAnalysis other) => GetType() == other.GetType() && Name == other.Name && BarFreq == other.BarFreq && PriceType == other.PriceType;
+        public override int GetHashCode() => GetType().GetHashCode() ^ Name.GetHashCode() ^ TimeInForce.GetHashCode() ^ BarFreq.GetHashCode() ^ PriceType.GetHashCode();
+        public bool Equals(SignalAnalysis other) => GetType() == other.GetType() && Name == other.Name && TimeInForce == other.TimeInForce && BarFreq == other.BarFreq && PriceType == other.PriceType;
         public static bool operator !=(SignalAnalysis s1, SignalAnalysis s2) => !s1.Equals(s2);
         public static bool operator ==(SignalAnalysis s1, SignalAnalysis s2) => s1.Equals(s2);
         public override bool Equals(object other) => other is SignalAnalysis ba && Equals(ba);
