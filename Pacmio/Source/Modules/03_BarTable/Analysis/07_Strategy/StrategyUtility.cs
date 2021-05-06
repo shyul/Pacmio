@@ -61,15 +61,17 @@ namespace Pacmio
                 CancellationToken = cts.Token
             };
 
-            List<(Contract c, FilterAnalysis f)> pallet = filterResult.Values.SelectMany(n => n.Values).OrderByDescending(n => n.Percent).Select(n => (n.Contract, n.FilterAnalysis)).Take(5).ToList();
+            //List<(Contract c, FilterAnalysis f)> pallet = filterResult.Values.SelectMany(n => n.Values).OrderByDescending(n => n.Percent).Select(n => (n.Contract, n.FilterAnalysis)).Take(5).ToList();
+
+            var pallet = filterResult.Values.SelectMany(n => n.Values).Where(n => n.Percent > 5);
 
             try
             {
-                Parallel.ForEach(pallet.Select(n => n.c), po, item =>
+                Parallel.ForEach(pallet, po, item =>
                 {
                     DateTime startTime = DateTime.Now;
-                    BarTableSet bts = new BarTableSet(item, false);
-                    bts.SetPeriod(evaluateTimeRange, cts);
+                    BarTableSet bts = new BarTableSet(item.Contract, false);
+                    bts.SetPeriod(item.Periods, cts);
 
                     Dictionary<Strategy, StrategyEvaluationResult> results = new();
 

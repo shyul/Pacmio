@@ -186,7 +186,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestGapGo.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestReversal.cs" />
     <Compile Include="Source\Modules\03_BarTable\BarTableSet.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\BarDataFileManager.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\BarDataFileManager.cs" />
     <Compile Include="Source\Modules\02_Data\FinancialData\FinancialDataTools.cs" />
     <Compile Include="Source\Modules\02_Data\FundamentalData\Datums\DividendDatum.cs" />
     <Compile Include="Source\Modules\02_Data\FundamentalData\Datums\RevenueDatum.cs" />
@@ -272,7 +272,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\MovingAverage\SMMA.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\VWAP.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysis.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\BarDataFile.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\BarDataFile.cs" />
     <Compile Include="Source\Modules\04_BarChart\Area\SignalArea.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\SignalSeries.cs" />
     <Compile Include="Source\Modules\01_Contract\ContractTypes\Forex.cs" />
@@ -341,9 +341,9 @@
     <Compile Include="Source\IBApi\Client\Error.cs" />
     <Compile Include="Source\Modules\05_Trade\Execution\IB\ExecutionData.cs" />
     <Compile Include="Source\Modules\02_Data\FinancialData\_IB\FinancialData_Request.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistogramData.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistoricalDataHeadTimestamp.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistoricalTick.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\_IB\HistogramData.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\_IB\HistoricalDataHeadTimestamp.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\_IB\HistoricalTick.cs" />
     <Compile Include="Source\Modules\02_Data\MarketDepth\_IB\MarketDepth_Request.cs" />
     <Compile Include="Source\Modules\02_Data\MarketDepth\_IB\MarketDepthExchanges.cs" />
     <Compile Include="Source\Modules\02_Data\MarketData\_IB\MarketData_Parse.cs" />
@@ -355,7 +355,7 @@
     <Compile Include="Source\Modules\05_Trade\Position\_IB\Position.cs" />
     <Compile Include="Source\Modules\05_Trade\Position\_IB\PostionMulti.cs" />
     <Compile Include="Source\Modules\05_Trade\Position\_IB\PnL.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\RealTimeBars.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\_IB\RealTimeBars.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\IB\ScannerParameters.cs" />
     <Compile Include="Source\Modules\01_Contract\_IB\ContractData.cs" />
     <Compile Include="Source\Modules\01_Contract\_IB\ContractSamples.cs" />
@@ -370,7 +370,7 @@
     <Compile Include="Source\Modules\02_Data\MarketData\_IB\MarketData_Request.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\IBOrder\Order.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\IB\ScannerSubscription.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistoricalData.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\_IB\HistoricalData.cs" />
     <Compile Include="Source\IBApi\_Types\ApiCode.cs" />
     <Compile Include="Source\IBApi\_Types\IncomingMessage.cs" />
     <Compile Include="Source\IBApi\_Types\RequestType.cs" />
@@ -380,11 +380,11 @@
     <Compile Include="Source\Modules\02_Data\WatchList\IB\IbXmlScannerParameter.cs" />
     <Compile Include="Source\Settings.cs" />
     <Compile Include="Source\Modules\02_Data\BusinessInfo\BusinessInfoManager.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\DataSourceType.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\DataSourceType.cs" />
     <Compile Include="Source\Modules\01_Contract\Exchange\Exchange.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\BarFreq.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\RSI.cs" />
-    <Compile Include="Source\Modules\02_Data\BarDataFile\Quandl.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarDataFile\Quandl.cs" />
     <Compile Include="Source\Modules\02_Data\BusinessInfo\Types\Types.cs" />
     <Compile Include="Source\Modules\01_Contract\Contract.cs" />
     <Compile Include="Source\Modules\01_Contract\_Types\SymbolHistory.cs" />

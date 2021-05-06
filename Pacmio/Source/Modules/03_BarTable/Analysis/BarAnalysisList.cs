@@ -93,6 +93,8 @@ namespace Pacmio
 
         public IEnumerable<SignalAnalysis> SignalList => m_List.Where<SignalAnalysis>();
 
+        public IEnumerable<Strategy> StrategyList => m_List.Where<Strategy>();
+
         public IEnumerable<IChartBackground> ChartBackgrounds => m_List.Where<IChartBackground>().OrderBy(n => n.DrawOrder);
 
         public IEnumerable<IChartSeries> ChartSeries => m_List.Where<IChartSeries>().OrderBy(n => n.DrawOrder);

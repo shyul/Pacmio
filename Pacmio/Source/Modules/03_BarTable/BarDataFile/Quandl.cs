@@ -142,8 +142,12 @@ namespace Pacmio
                     data_pd.Insert(data_pd.Stop + bdf.Frequency.Span);
                     bdf.AddRows(rows, DataSourceType.Quandl, data_pd);
 
-                    if (getAll && rows.Count > 0)
+                    if (getAll && rows.Count > 0) 
+                    {
                         bdf.HistoricalHeadTime = data_pd.Start;
+                        bdf.Contract.HistoricalHeadTime = data_pd.Start;
+                    }
+                  
 
                     bdf.SaveFile();
                     fd.SaveFile();

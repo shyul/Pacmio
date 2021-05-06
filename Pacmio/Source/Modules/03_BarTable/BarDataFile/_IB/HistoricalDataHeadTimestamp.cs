@@ -17,7 +17,7 @@ namespace Pacmio.IB
     {
         private static BarDataFile ActiveBarDataFile_HistoricalDataHeadTimestamp;
 
-        public static DateTime Fetch_HistoricalDataHeadTimestamp(BarDataFile bdf, CancellationTokenSource cts = null, bool includeExpired = false, int formatDate = 1)
+        public static void Fetch_HistoricalDataHeadTimestamp(BarDataFile bdf, CancellationTokenSource cts = null, bool includeExpired = false, int formatDate = 1)
         {
             lock (DataRequestLockObject)
             {
@@ -51,7 +51,7 @@ namespace Pacmio.IB
             }
 
         End:
-            return bdf.HistoricalHeadTime;
+            return;
         }
 
 

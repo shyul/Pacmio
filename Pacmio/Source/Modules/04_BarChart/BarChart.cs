@@ -99,14 +99,13 @@ namespace Pacmio
             m_AsyncUpdateUI = true;
         }
 
-        public void Config(BarTable bt, Strategy s)
+        public void Config(BarTableSet bts, BarAnalysisSet bas, BarFreq freq, PriceType type)
         {
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
-                BarTable = bt;
-                BarAnalysisList = s.AnalysisSet[bt.BarFreq, bt.PriceType];
-                Strategy = s;
+                BarTable = bts[freq, type];
+                BarAnalysisList = bas[freq, type];
                 ReadyToShow = m_BarTable is BarTable;
 
                 if (ReadyToShow)

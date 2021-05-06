@@ -25,13 +25,55 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class MomentumStrategy 
+    public class MomentumStrategy : Strategy
     {
+        public MomentumStrategy(
+            
+            double minRiskRewardRatio,
+            TimeSpan holdingMaxSpan,
+            TimePeriod holdingPeriod,
+            TimePeriod tif,
+            BarFreq fiveMinFreq,
+            BarFreq barFreq = BarFreq.Minute) 
+            : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
+        {
 
+            Filter = new PriceVolumeFilter(1, 10, 1e6, double.MaxValue, BarFreq.Daily, PriceType.Trades);
 
-        public Range<double> PriceRange { get; } = new Range<double>(1, 10);
+            EMA9 = new EMA(9);
+            FiveMinutesCrossSignal_1 = new DualDataSignal(TimeInForce, fiveMinFreq, EMA9)
+            {
+                TypeToTrailPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                }
+            };
 
-        public Range<double> VolumeRange { get; } = new Range<double>(1e6, double.MaxValue);
+            EMA20 = new EMA(20);
+            FiveMinutesCrossSignal_2 = new DualDataSignal(TimeInForce, fiveMinFreq, EMA20)
+            {
+                TypeToTrailPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                }
+            };
+
+            Label = "(" + fiveMinFreq + "," + EMA9.Name + "," + EMA20.Name + "," + minRiskRewardRatio + "," + Filter.Name + "," + barFreq + ")";
+            Name = GetType().Name + Label;
+            AreaName = GroupName = GetType().Name;
+            Description = "Gap and Go ORB Strategy " + Label;
+
+            Column_Result = new(this, typeof(StrategyDatum));
+
+            AnalysisSet =
+                new BarAnalysisSet(new SignalAnalysis[] {
+                    FiveMinutesCrossSignal_1,
+                    FiveMinutesCrossSignal_2,
+                    this
+                });
+        }
 
         /// <summary>
         /// Ideally the entry point shall close to the EMA9 or EMA20 support level.
@@ -40,9 +82,17 @@ namespace Pacmio.Analysis
 
         public MovingAverageAnalysis EMA20 { get; } = new EMA(20);
 
+        public DualDataSignal FiveMinutesCrossSignal_1 { get; }
+
+        public DualDataSignal FiveMinutesCrossSignal_2 { get; }
+
         public TimeFramePricePosition TimeFramePricePosition { get; } = new TimeFramePricePosition(BarFreq.Daily);
 
         public TimeFrameRelativeVolume TimeFrameRelativeVolume { get; } = new TimeFrameRelativeVolume(5, BarFreq.Daily);
 
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+           
+        }
     }
 }

@@ -486,13 +486,12 @@ namespace Pacmio
 
         public static BarDataFile LoadFile(((string name, Exchange exchange, string typeName) ContractKey, BarFreq BarFreq, PriceType Type) info)
         {
-            //var bdf = Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info));
-
             if (Serialization.DeserializeJsonFile<BarDataFile>(GetDataFileName(info)) is BarDataFile bdf)
             {
                 bdf.DataLockObject = new object();
                 bdf.Frequency = bdf.BarFreq.GetAttribute<BarFreqInfo>().Frequency;
                 bdf.IsModified = false;
+     
                 return bdf;
             }
             else

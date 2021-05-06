@@ -57,12 +57,12 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume = 1e5,
             double minimumMinuteRelativeVolume = 2,
             double gapPercent = 4,
-            BarFreq fiveMinFreq = BarFreq.Minutes_5,
             double minPrice = 1,
             double maxPrice = 300,
             double minVolume = 5e5,
             double maxVolume = double.MaxValue,
             double minRiskRewardRatio = 2,
+            BarFreq fiveMinFreq = BarFreq.Minutes_5,
             BarFreq barFreq = BarFreq.Minute)
             : this(
             new EMA(9),
@@ -70,7 +70,6 @@ namespace Pacmio.Analysis
             minimumMinuteVolume,
             minimumMinuteRelativeVolume,
             gapPercent,
-            fiveMinFreq,
             minPrice,
             maxPrice,
             minVolume,
@@ -79,6 +78,7 @@ namespace Pacmio.Analysis
             new TimeSpan(1000, 1, 1, 1, 1),
             new TimePeriod(new Time(9, 30), new Time(12, 00)),
             new TimePeriod(new Time(9, 30), new Time(10, 00)),
+            fiveMinFreq,
             barFreq)
         { }
 
@@ -88,7 +88,7 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume,
             double minimumMinuteRelativeVolume,
             double gapPercent,
-            BarFreq fiveMinFreq,
+            
             double minPrice,
             double maxPrice,
             double minVolume,
@@ -97,6 +97,7 @@ namespace Pacmio.Analysis
             TimeSpan holdingMaxSpan,
             TimePeriod holdingPeriod,
             TimePeriod tif,
+            BarFreq fiveMinFreq,
             BarFreq barFreq = BarFreq.Minute)
             : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
@@ -131,11 +132,9 @@ namespace Pacmio.Analysis
                 }
             };
 
-
-
             #endregion Define Signals
 
-            Label = "(" + gapPercent + minimumMinuteVolume + minimumMinuteRelativeVolume + fiveMinFreq + "," + crossData_1.Name + "," + crossData_2.Name + "," + minRiskRewardRatio + GapFilter.Name + "," + barFreq + ")";
+            Label = "(" + gapPercent + "," + minimumMinuteVolume + "," + minimumMinuteRelativeVolume + "," + fiveMinFreq + "," + crossData_1.Name + "," + crossData_2.Name + "," + minRiskRewardRatio + "," + GapFilter.Name + "," + barFreq + ")";
             Name = GetType().Name + Label;
             AreaName = GroupName = GetType().Name;
             Description = "Gap and Go ORB Strategy " + Label;
@@ -143,8 +142,7 @@ namespace Pacmio.Analysis
             Column_Result = new(this, typeof(StrategyDatum));
 
             AnalysisSet = 
-                new BarAnalysisSet(new SignalAnalysis[]
-                {
+                new BarAnalysisSet(new SignalAnalysis[] {
                     FiveMinutesCrossSignal_1,
                     FiveMinutesCrossSignal_2,
                     this
@@ -193,6 +191,8 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
+                    Console.Write(".");
+
                     if (b.Time == TimeInForce.Start)
                     {
                         if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
@@ -208,35 +208,50 @@ namespace Pacmio.Analysis
                                 sd.Message = BearishOpenBarMessage;
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bearish ORB");
                             }
+                            else
+                                Console.Write("@");
                         }
                     }
 
-                    if (sd.Datum_1 is StrategyDatum sd_1 && sd_1.Message == BullishOpenBarMessage)
+                    if (sd.Datum_1 is StrategyDatum sd_1 )
                     {
                         Bar ob = sd_1.Bar;
-
-                        // TODO: here
-                        // Verify higher time frame analysis and indicators 
-
                         if (string.IsNullOrEmpty(sd.Message))
                         {
-                            if (b.Contains(ob.High)) // Bullish / long side no gap entry
+                            // TODO: here
+                            // Verify higher time frame analysis and indicators 
+
+                            if (sd_1.Message == BullishOpenBarMessage)
                             {
-                                sd.StopLossPrice = ob.Low;
-                                sd.RiskPart = ob.High - ob.Low;
-                                sd.ProfitTakePrice = ob.High + MinimumRiskRewardRatio * sd.RiskPart;
-                                sd.Message = RangeBarBullishMessage;
-                                sd.EntryBarIndex = 0;
-                                sd.SendOrder(ob.High, 1, OrderType.Stop);
+                                if (b.Contains(ob.High)) // Bullish / long side no gap entry
+                                {
+                                    sd.StopLossPrice = ob.Low;
+                                    sd.RiskPart = ob.High - ob.Low;
+                                    sd.ProfitTakePrice = ob.High + MinimumRiskRewardRatio * sd.RiskPart;
+                                    sd.Message = RangeBarBullishMessage;
+                                    sd.EntryBarIndex = 0;
+                                    sd.SendOrder(ob.High, 1, OrderType.Stop);
+                                }
+                                else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
+                                {
+                                    sd.StopLossPrice = ob.High;
+                                    sd.RiskPart = ob.High - ob.Low;
+                                    sd.ProfitTakePrice = ob.Low - MinimumRiskRewardRatio * sd.RiskPart;
+                                    sd.Message = RangeBarBearishMessage;
+                                    sd.EntryBarIndex = 0;
+                                    sd.SendOrder(ob.Low, -1, OrderType.Limit);
+                                }
                             }
-                            else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
+                            else if (sd_1.Message == BearishOpenBarMessage)
                             {
-                                sd.StopLossPrice = ob.High;
-                                sd.RiskPart = ob.High - ob.Low;
-                                sd.ProfitTakePrice = ob.Low - MinimumRiskRewardRatio * sd.RiskPart;
-                                sd.Message = RangeBarBearishMessage;
-                                sd.EntryBarIndex = 0;
-                                sd.SendOrder(ob.Low, -1, OrderType.Limit);
+                                if (b.Contains(ob.High)) // Bullish / long side no gap entry
+                                {
+
+                                }
+                                else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
+                                {
+
+                                }
                             }
                         }
                     }

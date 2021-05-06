@@ -41,6 +41,7 @@ namespace Pacmio
             {
                 BarTable bt = new(bts, BarFreq.Daily, PriceType.Trades);
                 bt.LoadBars(bdf_daily_base, bts.AdjustDividend);
+                bt.Contract.HistoricalHeadTime = bt.FirstTime;
                 return bt;
             }
             else if (barFreq > BarFreq.Daily)

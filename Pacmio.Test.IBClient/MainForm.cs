@@ -367,6 +367,8 @@ namespace TestClient
                 if (pd.IsCurrent) c.MarketData.Start();
 
                 Cts = new CancellationTokenSource();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
 
                 Task.Run(() =>
                 {
@@ -374,7 +376,11 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = new BarTableSet(c, false);
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisList);
                     //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
@@ -397,6 +403,8 @@ namespace TestClient
                 if (pd.IsCurrent) c.MarketData.Start();
 
                 Cts = new CancellationTokenSource();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
 
                 Task.Run(() =>
                 {
@@ -404,7 +412,12 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
+
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisList);
 
                     HistoricalPeriod = bt.Period;
@@ -425,6 +438,10 @@ namespace TestClient
 
                 if (pd.IsCurrent) c.MarketData.Start();
 
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+                mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
+
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
@@ -433,7 +450,12 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
+
                     BarChart bc = bt.GetChart(TestNative.BarAnalysisList);
 
                     HistoricalPeriod = bt.Period;
@@ -455,12 +477,13 @@ namespace TestClient
                 if (pd.IsCurrent) c.MarketData.Start();
 
                 Cts = new CancellationTokenSource();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
 
                 Task.Run(() =>
                 {
                     BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(pd, Cts);
-
+                    bts.SetPeriod(mp, Cts);
                     BarTable bt = bts[freq, type];
                     BarChart bc = bt.GetChart(TestNative.BarAnalysisListTimeFrame);
 
@@ -483,6 +506,8 @@ namespace TestClient
                 if (pd.IsCurrent) c.MarketData.Start();
 
                 Cts = new CancellationTokenSource();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
 
                 Task.Run(() =>
                 {
@@ -491,7 +516,10 @@ namespace TestClient
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    BarTable bt = bts[freq, type];
                     BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
 
                     HistoricalPeriod = bt.Period;
