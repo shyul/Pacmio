@@ -23,14 +23,14 @@ namespace TestClient
     {
         public TradeDataAdapter() 
         {
-            TradeInfoManager.DataProvider.AddDataConsumer(this);
+            ExecutionManager.DataProvider.AddDataConsumer(this);
         }
 
         public void DataIsUpdated(IDataProvider provider)
         {
             Task.Run(() =>
             {
-                Console.WriteLine("Trade History is updated. " + TradeInfoManager.Count);
+                Console.WriteLine("Trade History is updated. " + ExecutionManager.Count);
 
 
 
@@ -46,7 +46,7 @@ namespace TestClient
 
         public void RemoveDataSource()
         {
-            TradeInfoManager.DataProvider.RemoveDataConsumer(this);
+            ExecutionManager.DataProvider.RemoveDataConsumer(this);
         }
     }
 }

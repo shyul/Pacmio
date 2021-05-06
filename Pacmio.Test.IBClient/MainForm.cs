@@ -545,7 +545,7 @@ namespace TestClient
                 {
                     var cList = new Contract[] { c };
                     Console.WriteLine("total number = " + cList.Count());
-                    cList.Screen(filter, pd, 16, Cts, Progress);
+                    cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
                     GC.Collect();
                 }, Cts.Token);
             }
@@ -565,7 +565,7 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
                 Console.WriteLine("total number = " + cList.Count());
-                cList.Screen(filter, pd, 16, Cts, Progress);
+                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
                 GC.Collect();
             }, Cts.Token);
 
@@ -583,7 +583,7 @@ namespace TestClient
             {
                 var cList = ContractManager.TradeableNoETFList.ToList();
                 Console.WriteLine("total number = " + cList.Count());
-                cList.Screen(filter, pd, 16, Cts, Progress);
+                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
                 GC.Collect();
             }, Cts.Token);
         }
@@ -786,7 +786,7 @@ namespace TestClient
         private void BtnRequestExecData_Click(object sender, EventArgs e)
         {
             if (!Root.NetConnected) return;
-            TradeInfoManager.RequestExecutionData();
+            ExecutionManager.RequestExecutionData();
         }
 
         private void BtnCloseAllPosition_Click(object sender, EventArgs e)
@@ -806,7 +806,7 @@ namespace TestClient
 
             if (Root.SaveFile.ShowDialog() == DialogResult.OK)
             {
-                TradeInfoManager.ExportTradeLog(Root.SaveFile.FileName);
+                ExecutionManager.ExportTradeLog(Root.SaveFile.FileName);
             }
         }
 

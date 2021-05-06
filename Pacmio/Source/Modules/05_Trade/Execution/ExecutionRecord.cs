@@ -11,15 +11,15 @@ namespace Pacmio
 {
     public class ExecutionRecord
     {
-        public ExecutionRecord(double price, double qty, double commission, OrderType orderType)
+        public ExecutionRecord(double price, double qty, double commissions, OrderType orderType)
         {
             ExecutionPrice = price;
             Quantity = qty;
-            Commission = commission;
+            Commissions = commissions;
             OrderType = orderType;
         }
 
-        public double Commission { get; private set; }
+        public double Commissions { get; private set; }
 
         public double ExecutionPrice { get; }
 

@@ -17,14 +17,14 @@ namespace Pacmio
 {
     public static class FilterUtility
     {
-        public static IEnumerable<Contract> Screen(this IEnumerable<Contract> contracts, FilterAnalysis filter, Period pd, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
+        public static Dictionary<Contract, Dictionary<FilterAnalysis, FilterScreenResult>> Screen(this IEnumerable<Contract> contracts, IEnumerable<FilterAnalysis> filters, Period evaluateTimeRange, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
             if (cts is null) cts = new CancellationTokenSource();
             double totalseconds = 0;
             int total_num = contracts.Count();
             int i = 0;
 
-            List<(Contract c, double percent)> clist = new();
+            Dictionary<Contract, Dictionary<FilterAnalysis, FilterScreenResult>> clist = new();
 
             ParallelOptions po = new ParallelOptions()
             {
@@ -38,18 +38,23 @@ namespace Pacmio
                 {
                     DateTime startTime = DateTime.Now;
                     BarTableSet bts = new BarTableSet(c, false);
+                    bts.SetPeriod(evaluateTimeRange, cts);
 
-                    bts.SetPeriod(pd, cts);
+                    Dictionary<FilterAnalysis, FilterScreenResult> results = new();
 
-                    var res = filter.RunScan(bts, pd);
-
-                    foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
-                    foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
-
-                    if (res.Percent > 0)
+                    foreach (var filter in filters)
                     {
-                        clist.Add((c, res.Percent));
+                        var res = filter.RunScan(bts, evaluateTimeRange);
+                        foreach (var pd in res.BullishPeriods) { Console.WriteLine("Bull: " + pd); }
+                        foreach (var pd in res.BearishPeriods) { Console.WriteLine("Bear: " + pd); }
+                        if (res.Percent > 0)
+                        {
+                            results[filter] = res;
+                        }
                     }
+
+                    if (results.Count > 0) clist[c] = results;
+
 
                     bts.Dispose();
 
@@ -70,18 +75,21 @@ namespace Pacmio
                 cts.Dispose();
             }
 
-            foreach (var item in clist.OrderBy(n => n.percent))
+            foreach (var filter in filters)
             {
-                Console.WriteLine(item.c + " | " + item.percent.ToString("0.##") + "%");
+                foreach (var item in clist.Select(n => n.Value[filter]).OrderBy(n => n.Percent))
+                {
+                    Console.WriteLine(item.Contract + " | " + item.FilterAnalysis + " | " + item.Percent.ToString("0.##") + "%");
 
+                }
             }
 
             Console.WriteLine("Total " + clist.Count + " contracts found!");
 
-            return clist.Select(n => n.c);
+            return clist;
         }
 
-        public static void PrintResult(Dictionary<Contract, FilterScanResult> result)
+        public static void PrintResult(Dictionary<Contract, FilterScreenResult> result)
         {
             var r = result.OrderByDescending(n => n.Value.Percent).Select(n => n.Value).Take(100);
 

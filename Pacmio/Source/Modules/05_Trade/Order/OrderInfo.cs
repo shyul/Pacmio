@@ -17,7 +17,7 @@ using Xu.GridView;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class OrderInfo : IDataProvider, IEquatable<OrderInfo>, IEquatable<TradeInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public class OrderInfo : IDataProvider, IEquatable<OrderInfo>, IEquatable<ExecutionInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
         public OrderInfo()//StrategyDatum sd) 
         {
@@ -310,7 +310,7 @@ namespace Pacmio
         {
             if (other is OrderInfo od)
                 return Equals(od);
-            else if (other is TradeInfo tld)
+            else if (other is ExecutionInfo tld)
                 return Equals(tld);
             else if (other is Contract c)
                 return Equals(c);
@@ -330,7 +330,7 @@ namespace Pacmio
                 return Contract == other.Contract;
         }
 
-        public bool Equals(TradeInfo other) => PermId == other.PermId;
+        public bool Equals(ExecutionInfo other) => PermId == other.PermId;
 
         public bool Equals(Contract other) => (ConId > 0 && ConId == other.ConId);
 
@@ -339,8 +339,8 @@ namespace Pacmio
         public static bool operator ==(OrderInfo left, OrderInfo right) => left.PermId == right.PermId;
         public static bool operator !=(OrderInfo left, OrderInfo right) => !(left == right);
 
-        public static bool operator ==(OrderInfo left, TradeInfo right) => left.PermId == right.PermId;
-        public static bool operator !=(OrderInfo left, TradeInfo right) => !(left == right);
+        public static bool operator ==(OrderInfo left, ExecutionInfo right) => left.PermId == right.PermId;
+        public static bool operator !=(OrderInfo left, ExecutionInfo right) => !(left == right);
 
         #endregion Equality
     }

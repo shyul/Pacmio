@@ -11,9 +11,9 @@ using System.Runtime.Serialization;
 namespace Pacmio
 {
     [Serializable, DataContract]
-    public class TradeInfo : IEquatable<TradeInfo>, IEquatable<OrderInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
+    public class ExecutionInfo : IEquatable<ExecutionInfo>, IEquatable<OrderInfo>, IEquatable<Contract>, IEquatable<(string name, Exchange exchange, string typeName)>
     {
-        public TradeInfo(string execId) => ExecId = execId;
+        public ExecutionInfo(string execId) => ExecId = execId;
 
         [DataMember, Browsable(true)]
         public string ExecId { get; set; }
@@ -175,7 +175,7 @@ namespace Pacmio
 
         public override bool Equals(object other)
         {
-            if (other is TradeInfo tld)
+            if (other is ExecutionInfo tld)
                 return Equals(tld);
             else if (other is OrderInfo od)
                 return Equals(od);
@@ -187,7 +187,7 @@ namespace Pacmio
                 return false;
         }
 
-        public bool Equals(TradeInfo other) => ExecId == other.ExecId;
+        public bool Equals(ExecutionInfo other) => ExecId == other.ExecId;
 
         public bool Equals(OrderInfo other) => PermId == other.PermId;
 
@@ -195,11 +195,11 @@ namespace Pacmio
 
         public bool Equals((string name, Exchange exchange, string typeName) other) => Contract.Key == other;
 
-        public static bool operator ==(TradeInfo left, TradeInfo right) => left.ExecId == right.ExecId;
-        public static bool operator !=(TradeInfo left, TradeInfo right) => !(left == right);
+        public static bool operator ==(ExecutionInfo left, ExecutionInfo right) => left.ExecId == right.ExecId;
+        public static bool operator !=(ExecutionInfo left, ExecutionInfo right) => !(left == right);
 
-        public static bool operator ==(TradeInfo left, OrderInfo right) => left.PermId == right.PermId;
-        public static bool operator !=(TradeInfo left, OrderInfo right) => !(left == right);
+        public static bool operator ==(ExecutionInfo left, OrderInfo right) => left.PermId == right.PermId;
+        public static bool operator !=(ExecutionInfo left, OrderInfo right) => !(left == right);
 
         #endregion Equality
     }

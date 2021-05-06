@@ -11,11 +11,12 @@ using Xu;
 
 namespace Pacmio
 {
-    public class FilterScanResult
+    public class FilterScreenResult
     {
-        public FilterScanResult(Contract c, IEnumerable<Bar> bars, IEnumerable<Bar> bullishBars, IEnumerable<Bar> bearishBars)
+        public FilterScreenResult(Contract c, FilterAnalysis fa, IEnumerable<Bar> bars, IEnumerable<Bar> bullishBars, IEnumerable<Bar> bearishBars)
         {
             Contract = c;
+            FilterAnalysis = fa;
 
             TotalCount = bars.Count();
             BullishCount = bullishBars.Count();
@@ -41,6 +42,8 @@ namespace Pacmio
         }
 
         public Contract Contract { get; }
+
+        public FilterAnalysis FilterAnalysis { get; }
 
         public MultiPeriod Periods { get; } = new MultiPeriod();
 

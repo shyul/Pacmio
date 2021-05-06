@@ -13,7 +13,7 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class TradeInfoManager
+    public static class ExecutionManager
     {
         public static void RequestExecutionData() => IB.Client.SendRequest_ExecutionData();
 
@@ -21,7 +21,7 @@ namespace Pacmio
 
         public static double TotalPnL => GetTotalPnL(ExecIdToTradeLUT.Values);
 
-        public static double GetTotalPnL(this IEnumerable<TradeInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
+        public static double GetTotalPnL(this IEnumerable<ExecutionInfo> log) => (log.Count() < 1) ? 0 : log.Select(n => n.RealizedPnL).Sum();
 
         //public static double TotalCommissions => 
 
@@ -31,7 +31,7 @@ namespace Pacmio
 
         #region Data Operation
 
-        public static IEnumerable<TradeInfo> QueryForTrades(this OrderInfo od)
+        public static IEnumerable<ExecutionInfo> QueryForTrades(this OrderInfo od)
         {
             lock (ExecIdToTradeLUT)
                 return ExecIdToTradeLUT.Values
@@ -39,7 +39,7 @@ namespace Pacmio
                     .OrderBy(n => n.ExecuteTime);
         }
 
-        public static IEnumerable<TradeInfo> QueryForTrades(this Contract c)
+        public static IEnumerable<ExecutionInfo> QueryForTrades(this Contract c)
         {
             lock (ExecIdToTradeLUT)
                 return ExecIdToTradeLUT.Values
@@ -47,17 +47,17 @@ namespace Pacmio
                     .OrderBy(n => n.ExecuteTime);
         }
 
-        public static TradeInfo GetOrCreateTradeByExecId(string execId)
+        public static ExecutionInfo GetOrCreateTradeByExecId(string execId)
         {
             if (string.IsNullOrWhiteSpace(execId))
                 throw new Exception("The execId has to be valid.");
 
-            TradeInfo res = null;
+            ExecutionInfo res = null;
             bool dataChanged = false;
             lock (ExecIdToTradeLUT)
                 if (!ExecIdToTradeLUT.ContainsKey(execId))
                 {
-                    res = new TradeInfo(execId) { ExecId = execId };
+                    res = new ExecutionInfo(execId) { ExecId = execId };
                     ExecIdToTradeLUT[execId] = res;
                     dataChanged = true;
                 }
@@ -69,7 +69,7 @@ namespace Pacmio
 
         }
 
-        public static TradeInfo GetTradeByExecId(string execId)
+        public static ExecutionInfo GetTradeByExecId(string execId)
         {
             if (string.IsNullOrWhiteSpace(execId))
                 throw new Exception("The execId has to be valid.");
@@ -81,9 +81,9 @@ namespace Pacmio
                     return null;
         }
 
-        private static Dictionary<string, TradeInfo> ExecIdToTradeLUT { get; } = new Dictionary<string, TradeInfo>();
+        private static Dictionary<string, ExecutionInfo> ExecIdToTradeLUT { get; } = new Dictionary<string, ExecutionInfo>();
 
-        public static IEnumerable<TradeInfo> List => ExecIdToTradeLUT.Values;
+        public static IEnumerable<ExecutionInfo> List => ExecIdToTradeLUT.Values;
 
         #endregion Data Operation
 
@@ -126,13 +126,13 @@ namespace Pacmio
 
         public static void ExportTradeLog(string fileName) => ExecIdToTradeLUT.Values.ExportTradeLog(fileName);
 
-        public static void ExportTradeLog(this IEnumerable<TradeInfo> log, string fileName)
+        public static void ExportTradeLog(this IEnumerable<ExecutionInfo> log, string fileName)
         {
             StringBuilder sb = new("ACCOUNT_INFORMATION\n");
             sb.AppendLine("ACT_INF|DU332281|Xu Li|Individual|3581 Greenlee Dr. Apt 133 San Jose CA 95117 United States");
             sb.AppendLine("\n\nSTOCK_TRANSACTIONS");
 
-            foreach (TradeInfo ti in log)
+            foreach (ExecutionInfo ti in log)
             {
                 string action = (ti.Quantity > 0) ? "BUYTO" : "SELLTO";
                 if (ti.LastLiquidity == LiquidityType.Added)

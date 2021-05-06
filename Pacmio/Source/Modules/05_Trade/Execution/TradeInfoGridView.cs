@@ -13,18 +13,18 @@ using Xu.GridView;
 
 namespace Pacmio
 {
-    public class TradeInfoGridView : GridWidget<TradeInfo>
+    public class TradeInfoGridView : GridWidget<ExecutionInfo>
     {
         public TradeInfoGridView() : base("Order History")
         {
-            SourceRows = TradeInfoManager.List;
-            TradeInfoManager.DataProvider.AddDataConsumer(this);
+            SourceRows = ExecutionManager.List;
+            ExecutionManager.DataProvider.AddDataConsumer(this);
             DataIsUpdated(null);
         }
 
         ~TradeInfoGridView()
         {
-            TradeInfoManager.DataProvider.RemoveDataConsumer(this);
+            ExecutionManager.DataProvider.RemoveDataConsumer(this);
             Dispose();
         }
 

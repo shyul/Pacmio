@@ -98,6 +98,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\PriceVolumeFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\TradeCapFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterUtility.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyEvaluationResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\CustomIntervalAnalysis.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\MomentumReversal\MomentumReversalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\SignalAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterScanResult.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterScreenResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Simulation\BacktestSetting.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisListPointer.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\SwingTradeDailyFilter.cs" />
@@ -141,7 +142,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\TrailingApex\TrailingApexPtDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestFlag.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyUtility.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\ExecutionRecord.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\ExecutionRecord.cs" />
+    <Compile Include="Source\Modules\05_Trade\TradeManager.cs" />
     <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\CandleStickSeries.cs" />
@@ -231,8 +233,8 @@
     <Compile Include="Source\Modules\02_Data\BusinessInfo\Types\News.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\OrderManager.cs" />
     <Compile Include="Source\Modules\05_Trade\Position\PositionInfo.cs" />
-    <Compile Include="Source\Modules\05_Trade\TradeInfo\TradeInfoGridView.cs" />
-    <Compile Include="Source\Modules\05_Trade\TradeInfo\TradeInfoManager.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\TradeInfoGridView.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\ExecutionManager.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\Types\DynamicWatchList.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\Types\InteractiveBrokerWatchList.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\Types\StaticWatchList.cs" />
@@ -280,10 +282,9 @@
     <Compile Include="Source\Modules\02_Data\MarketData\MarketDataStatus.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\WatchListGridView.cs" />
     <Compile Include="Source\Modules\02_Data\WatchList\WatchListGridViewManager.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Simulation\SimulationResult.cs" />
     <Compile Include="Source\Modules\05_Trade\Account\AccountInfo.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\BarAnalysisSet.cs" />
-    <Compile Include="Source\Modules\05_Trade\TradeInfo\LiquidityType.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\LiquidityType.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\BarFreqInfo.cs" />
     <Compile Include="Source\Modules\03_BarTable\_Types\PriceType.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\02_Advanced\ADX.cs" />
@@ -316,7 +317,7 @@
     <Compile Include="Source\Modules\05_Trade\Order\OrderInfo.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\OrderStatus.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\OrderTimeInForce.cs" />
-    <Compile Include="Source\Modules\05_Trade\TradeInfo\TradeInfo.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\ExecutionInfo.cs" />
     <Compile Include="Source\IBApi\DataRequest.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\_IB\CompletedOrders.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\_IB\DeltaNeutralValidation.cs" />
@@ -338,7 +339,7 @@
     <Compile Include="Source\Modules\05_Trade\Account\AccountPositionManager.cs" />
     <Compile Include="Source\Modules\05_Trade\Order\OrderType.cs" />
     <Compile Include="Source\IBApi\Client\Error.cs" />
-    <Compile Include="Source\Modules\05_Trade\TradeInfo\IB\ExecutionData.cs" />
+    <Compile Include="Source\Modules\05_Trade\Execution\IB\ExecutionData.cs" />
     <Compile Include="Source\Modules\02_Data\FinancialData\_IB\FinancialData_Request.cs" />
     <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistogramData.cs" />
     <Compile Include="Source\Modules\02_Data\BarDataFile\_IB\HistoricalDataHeadTimestamp.cs" />

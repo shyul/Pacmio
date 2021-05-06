@@ -12,9 +12,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class SimulationResult
+    public class StrategyEvaluationResult
     {
-        public void AddTrade(TradeInfo tld)
+        public void AddTrade(ExecutionInfo tld)
         {
             // if (!TradeLog.ContainsKey(tld.ExecuteTime)) 
             TradeLog.Add(tld.ExecuteTime, tld);
@@ -57,7 +57,7 @@ namespace Pacmio
 
         }
 
-        private readonly SortedDictionary<DateTime, TradeInfo> TradeLog = new();
+        private readonly SortedDictionary<DateTime, ExecutionInfo> TradeLog = new();
 
         public double MaxTradeValue { get; set; } = 0;
 
@@ -105,6 +105,5 @@ namespace Pacmio
         public double RiskRewardRatio { get; }
 
         public double MaximumDrawBack { get; }
-
     }
 }

@@ -13,60 +13,75 @@ using Xu;
 
 namespace Pacmio
 {
-    public static class StrategyUtility
+    public class TaskSetting 
     {
+        public IProgress<float> Progress { get; }
 
+        public CancellationTokenSource Cts { get; }
 
-        private static Dictionary<Strategy, AccountInfo> StrategyToAccountLUT { get; } = new();
+        public ParallelOptions ParallelOptions { get; } = new ParallelOptions();
+    }
 
-        public static void Assign(Strategy s, AccountInfo ac) => StrategyToAccountLUT[s] = ac;
-
-        public static AccountInfo GetAccount(Strategy s) => StrategyToAccountLUT.ContainsKey(s) ? StrategyToAccountLUT[s] : null;
-
-
-        // Generate and Tune Strategies from here. 
-        // Generate a list of Strategies with different parameter...
-
-
-        /// <summary>
-        /// This function is for narrowing down the group of contracts for actually simulation.
-        /// </summary>
-        /// <param name="cList"></param>
-        /// <param name="inds"></param>
-        /// <param name="evaluateTimeRange"></param>
-        /// <param name="cts"></param>
-        /// <param name="Progress"></param>
-        /// <returns></returns>
-        public static Dictionary<Contract, FilterScanResult> Evaluate(IEnumerable<Contract> cList, Strategy s, Period evaluateTimeRange, CancellationTokenSource cts, IProgress<float> Progress)
+    public static class StrategyUtility
+    { 
+        public static Dictionary<Contract, Dictionary<Strategy, StrategyEvaluationResult>> Evaluate(this IEnumerable<Contract> contracts, IEnumerable<Strategy> strategies, Period evaluateTimeRange, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
         {
-            Dictionary<Contract, FilterScanResult> result = new();
-
             double totalseconds = 0;
-            float total_num = cList.Count();
+            float total_num = contracts.Count();
             float i = 0;
 
-            //BarTableSet bts =
-            Parallel.ForEach(cList, new ParallelOptions { MaxDegreeOfParallelism = 8 }, c =>
+            var filterResult = contracts.Screen(strategies.Select(n => n.Filter), evaluateTimeRange, maxDegreeOfParallelism, cts, progress);
+
+
+            // Only choose the top number of the contracts
+
+            ParallelOptions po = new ParallelOptions()
             {
-                DateTime startTime = DateTime.Now;
-                BarTableSet bts = new BarTableSet(c, false);
-                bts.SetPeriod(evaluateTimeRange, cts);
+                MaxDegreeOfParallelism = maxDegreeOfParallelism,
+                CancellationToken = cts.Token
+            };
 
-                //Dictionary<>
+            try
+            {
+                Parallel.ForEach(filterResult, po, item =>
+                {
+                    DateTime startTime = DateTime.Now;
+                    BarTableSet bts = new BarTableSet(item.Key, false);
+                    bts.SetPeriod(evaluateTimeRange, cts);
 
-                // So far we are only getting results from one time frame!
+                    Dictionary<Strategy, StrategyEvaluationResult> results = new();
+
+                    foreach (var s in strategies)
+                    {
 
 
 
-                DateTime endTime = DateTime.Now;
-                double seconds = (endTime - startTime).TotalSeconds;
-                totalseconds += seconds;
-                i++;
-                Progress.Report(i * 100.0f / total_num);
-            });
+                    }
 
 
-            return result;
+                    // So far we are only getting results from one time frame!
+
+
+
+                    bts.Dispose();
+                    DateTime endTime = DateTime.Now;
+                    double seconds = (endTime - startTime).TotalSeconds;
+                    totalseconds += seconds;
+                    i++;
+                    progress.Report(i * 100.0f / total_num);
+                    po.CancellationToken.ThrowIfCancellationRequested();
+                });
+            }
+            catch (OperationCanceledException e)
+            {
+                Console.WriteLine("Parallel task is cancelled: " + e.Message);
+            }
+            finally
+            {
+                cts.Dispose();
+            }
+
+            return null; // filterResult;
         }
 
 

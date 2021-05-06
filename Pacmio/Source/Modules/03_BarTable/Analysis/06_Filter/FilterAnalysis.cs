@@ -29,7 +29,7 @@ namespace Pacmio
 
         public Dictionary<string, string> TradeIdeaFilterTokens { get; } = new Dictionary<string, string>();
 
-        public FilterScanResult RunScan(BarTableSet bts, Period pd)
+        public FilterScreenResult RunScan(BarTableSet bts, Period pd)
         {
             BarTable bt = bts[BarFreq, PriceType];
             bt.CalculateRefresh(BarAnalysisList);
@@ -44,7 +44,7 @@ namespace Pacmio
                 else if (b[Column_Result] < 0) bearishBars.Add(b);
             }
 
-            return new(bts.Contract, allbars, bullishBars, bearishBars);
+            return new(bts.Contract, this, allbars, bullishBars, bearishBars);
         }
 
         #region Equality
