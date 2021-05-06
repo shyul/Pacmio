@@ -36,5 +36,13 @@ namespace Pacmio
                 }
             }
         }
+
+        public void SetPeriod(MultiPeriod mp, CancellationTokenSource cts = null)
+        {
+            lock (DataLockObject)
+            {
+                ContractBarTableSetLUT.Values.RunEach(bts => bts.SetPeriod(mp, cts));
+            }
+        }
     }
 }

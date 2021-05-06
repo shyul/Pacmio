@@ -359,19 +359,7 @@ namespace TestClient
 
         private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartManager.PointerToEndAll();
 
-        private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
-        {
-            BarFreq freq = BarFreq;
-            PriceType type = DataType;
-            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
 
-            Task.Run(() =>
-            {
-                //BarTableTest.BarTableSet.UpdatePeriod(freq, type, HistoricalPeriod, Cts, Progress);
-                //BarTableTest.BarTableSet.Calculate(BarTableTest.TestBarAnalysisSet, Cts, Progress);
-                BarChartManager.PointerToEndAll();
-            }, Cts.Token);
-        }
 
         private void BtnDownloadBarTable_Click(object sender, EventArgs e)
         {
@@ -1195,6 +1183,19 @@ namespace TestClient
 
         #region Test Analysis Only
 
+        private void BtnChartsUpdateAll_Click(object sender, EventArgs e)
+        {
+            BarFreq freq = BarFreq;
+            PriceType type = DataType;
+            if (Cts is null || Cts.IsCancellationRequested) Cts = new CancellationTokenSource();
+
+            Task.Run(() =>
+            {
+                BarTableGroup.SetPeriod(new MultiPeriod(HistoricalPeriod));
+                BarChartManager.PointerToEndAll();
+            }, Cts.Token);
+        }
+
         public BarTableGroup BarTableGroup { get; } = new BarTableGroup();
 
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
@@ -1389,8 +1390,6 @@ namespace TestClient
             var strategy = new GapGoOrbStrategy();
             GetChart(strategy.AnalysisSet);
         }
-
-
 
         #endregion Test Strategy
     }

@@ -65,3 +65,48 @@ namespace Pacmio
         }
     }
 }
+
+/*
+[BOIL] STOCK USD @ ARCA | Pacmio.GapFilter | 9%
+[METX] STOCK USD @ NASDAQ | Pacmio.GapFilter | 9%
+[XELA] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[NGA] STOCK USD @ NYSE | Pacmio.GapFilter | 10%
+[JAGX] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[AMTX] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[BLDP] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[TRCH] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[CLNE] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[AZRX] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[SNDL] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[PHUN] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[SUNW] STOCK USD @ NASDAQ | Pacmio.GapFilter | 10%
+[TIGR] STOCK USD @ NASDAQ | Pacmio.GapFilter | 11%
+[TLRY] STOCK USD @ NASDAQ | Pacmio.GapFilter | 11%
+[SENS] STOCK USD @ AMEX | Pacmio.GapFilter | 11%
+[GEVO] STOCK USD @ NASDAQ | Pacmio.GapFilter | 11%
+[FRSX] STOCK USD @ NASDAQ | Pacmio.GapFilter | 11%
+[STPK] STOCK USD @ NYSE | Pacmio.GapFilter | 11%
+[UAVS] STOCK USD @ AMEX | Pacmio.GapFilter | 11%
+[AMC] STOCK USD @ NYSE | Pacmio.GapFilter | 11%
+[BTBT] STOCK USD @ NASDAQ | Pacmio.GapFilter | 11%
+[GME] STOCK USD @ NYSE | Pacmio.GapFilter | 12%
+[SNCA] STOCK USD @ NASDAQ | Pacmio.GapFilter | 12%
+[YANG] STOCK USD @ ARCA | Pacmio.GapFilter | 12%
+[EEIQ] STOCK USD @ NASDAQ | Pacmio.GapFilter | 13%
+[BNGO] STOCK USD @ NASDAQ | Pacmio.GapFilter | 14%
+[PLUG] STOCK USD @ NASDAQ | Pacmio.GapFilter | 14%
+[OCGN] STOCK USD @ NASDAQ | Pacmio.GapFilter | 15%
+[FCEL] STOCK USD @ NASDAQ | Pacmio.GapFilter | 15%
+[EBON] STOCK USD @ NASDAQ | Pacmio.GapFilter | 15%
+[ZOM] STOCK USD @ AMEX | Pacmio.GapFilter | 15%
+[ASXC] STOCK USD @ AMEX | Pacmio.GapFilter | 16%
+[FTFT] STOCK USD @ NASDAQ | Pacmio.GapFilter | 17%
+[NSPR] STOCK USD @ AMEX | Pacmio.GapFilter | 17%
+[SOS] STOCK USD @ NYSE | Pacmio.GapFilter | 17%
+[YINN] STOCK USD @ ARCA | Pacmio.GapFilter | 17%
+[RIOT] STOCK USD @ NASDAQ | Pacmio.GapFilter | 20%
+[MARA] STOCK USD @ NASDAQ | Pacmio.GapFilter | 21%
+
+
+[SOS] STOCK USD @ NYSE | Pacmio.GapFilter | 17%
+*/
