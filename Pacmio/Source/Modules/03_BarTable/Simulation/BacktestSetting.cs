@@ -40,24 +40,5 @@ namespace Pacmio
         #endregion Order
     }
 
-    public class StrategyBacktestSetting
-    {
-        #region Training Settings
 
-        //   public double SlippageRatio { get; set; } = 0.0001;
-
-        /// <summary>
-        /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
-        /// The commission model shall be defined by Simulate Engine.
-        /// </summary>
-        //public virtual int TrainingLength { get; set; } = 5;
-
-        /// <summary>
-        /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
-        /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
-        /// </summary>
-        //public virtual int TradingLength { get; set; } = 1;
-
-        #endregion Training Settings
-    }
 }

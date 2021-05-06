@@ -22,6 +22,27 @@ namespace Pacmio
         public ParallelOptions ParallelOptions { get; } = new ParallelOptions();
     }
 
+    public class StrategyBacktestSetting
+    {
+        #region Training Settings
+
+        //   public double SlippageRatio { get; set; } = 0.0001;
+
+        /// <summary>
+        /// The number of days for getting the bench mark: RR ratio, win rate, volatility, max win, max loss, and so on.
+        /// The commission model shall be defined by Simulate Engine.
+        /// </summary>
+        //public virtual int TrainingLength { get; set; } = 5;
+
+        /// <summary>
+        /// The number of days enters the actual trade or tradelog for simulation | final bench mark.
+        /// Only when the SimulationResult is positive (or above a threshold), does the trading start log, and this time, it logs the trades.
+        /// </summary>
+        //public virtual int TradingLength { get; set; } = 1;
+
+        #endregion Training Settings
+    }
+
     public static class StrategyUtility
     { 
         public static Dictionary<Contract, Dictionary<Strategy, StrategyEvaluationResult>> Evaluate(this IEnumerable<Contract> contracts, IEnumerable<Strategy> strategies, Period evaluateTimeRange, int maxDegreeOfParallelism = 8, CancellationTokenSource cts = null, IProgress<float> progress = null)
@@ -40,12 +61,14 @@ namespace Pacmio
                 CancellationToken = cts.Token
             };
 
+            List<(Contract c, FilterAnalysis f)> pallet = filterResult.Values.SelectMany(n => n.Values).OrderByDescending(n => n.Percent).Select(n => (n.Contract, n.FilterAnalysis)).Take(5).ToList();
+
             try
             {
-                Parallel.ForEach(filterResult, po, item =>
+                Parallel.ForEach(pallet.Select(n => n.c), po, item =>
                 {
                     DateTime startTime = DateTime.Now;
-                    BarTableSet bts = new BarTableSet(item.Key, false);
+                    BarTableSet bts = new BarTableSet(item, false);
                     bts.SetPeriod(evaluateTimeRange, cts);
 
                     Dictionary<Strategy, StrategyEvaluationResult> results = new();
