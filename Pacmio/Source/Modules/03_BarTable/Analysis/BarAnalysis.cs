@@ -12,6 +12,8 @@ namespace Pacmio
 {
     public abstract class BarAnalysis : IDependable, IEquatable<BarAnalysis>, IDisposable
     {
+        public string Label { get; protected set; }
+
         #region Ctor
 
         public void Cancel() { Dispose(false); }

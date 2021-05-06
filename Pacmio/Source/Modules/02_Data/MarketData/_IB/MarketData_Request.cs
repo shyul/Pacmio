@@ -107,10 +107,10 @@ namespace Pacmio.IB
 
             lock (ActiveTickerIdMarketDataLUT)
             {
-                if (ActiveTickerIdMarketDataLUT.Values.Contains(md))
-                    md.SendCancel_MarketData();
+                //if (ActiveTickerIdMarketDataLUT.Values.Contains(md))
+                    //md.SendCancel_MarketData();
 
-                if (Connected && !SubscriptionOverflow && md.TickerId < 0 && md.Contract.Exchange.Param() is string exchangeCode)
+                if (Connected && !ActiveTickerIdMarketDataLUT.Values.Contains(md) && !SubscriptionOverflow && md.TickerId < 0 && md.Contract.Exchange.Param() is string exchangeCode)
                 {
                     var (tickerId, requestType) = RegisterRequest(RequestType.RequestMarketData);
                     md.TickerId = tickerId;

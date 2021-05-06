@@ -36,20 +36,5 @@ namespace Pacmio
                 }
             }
         }
-
-        public BarTable this[Contract c, BarFreq freq, PriceType type = PriceType.Trades]
-        {
-            get
-            {
-                lock (DataLockObject)
-                {
-                    if (!ContractBarTableSetLUT.ContainsKey(c))
-                        ContractBarTableSetLUT[c] = new BarTableSet(c, AdjustDividend);
-
-                    BarTableSet bts = ContractBarTableSetLUT[c];
-                    return bts.GetOrCreateBarTable(freq, type);
-                }
-            }
-        }
     }
 }

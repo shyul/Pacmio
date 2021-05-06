@@ -11,9 +11,9 @@ using Xu;
 
 namespace Pacmio
 {
-    public class HigherTimeFrameDatum : IDatum
+    public class HigherTimeBarDatum : IDatum
     {
-        public HigherTimeFrameDatum(Bar b_ht) => BarHT = b_ht;
+        public HigherTimeBarDatum(Bar b_ht) => BarHT = b_ht;
 
         public Bar BarHT { get; }
     }

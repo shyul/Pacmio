@@ -37,8 +37,9 @@ namespace Pacmio
                 Parallel.ForEach(contracts, po, c =>
                 {
                     DateTime startTime = DateTime.Now;
-                    BarTableSet bts = new BarTableSet(c, false);
-                    bts.SetPeriod(evaluateTimeRange, cts);
+                    MultiPeriod mp = new MultiPeriod();
+                    mp.Add(evaluateTimeRange);
+                    BarTableSet bts = new BarTableSet(c, mp, false);
 
                     Dictionary<FilterAnalysis, FilterScreenResult> results = new();
 

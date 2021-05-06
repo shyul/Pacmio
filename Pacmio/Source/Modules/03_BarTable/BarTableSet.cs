@@ -21,11 +21,24 @@ namespace Pacmio
         IDisposable,
         IEnumerable<(BarFreq freq, PriceType type, BarTable bt)>
     {
-        public BarTableSet(BarTable bt, bool adjustDividend)
+        public BarTableSet(Contract c, MultiPeriod mp, bool adjustDividend = false)
         {
-            Contract = bt.Contract;
+            Contract = c;
             AdjustDividend = adjustDividend;
-            BarTableLUT[(bt.BarFreq, bt.PriceType)] = bt;
+
+            bool isLive = false;
+            foreach (var pd in mp)
+            {
+                if (pd.IsCurrent || pd.Stop.Date > DateTime.Now.Date)
+                {
+                    isLive = true;
+                    break;
+                }
+            }
+            IsLive = isLive;
+
+
+            m_MultiPeriod = mp;
         }
 
         public BarTableSet(Contract c, bool adjustDividend = false)
@@ -65,6 +78,7 @@ namespace Pacmio
 
                 if (m_IsLive)
                 {
+                    Contract.MarketData.Start();
                     Contract.MarketData.AddDataConsumer(this);
                 }
                 else
@@ -183,7 +197,7 @@ namespace Pacmio
                 }
                 IsLive = isLive;
 
-                foreach (BarTable bt in BarTableLUT.Values.Where(bt => bt.BarFreq < BarFreq.Daily))
+                foreach (BarTable bt in BarTableLUT.Values.Where(bt => bt.BarFreq < BarFreq.Daily).OrderBy(n => n.BarFreq))
                 {
                     bt.LoadBars(mp, cts);
                 }
@@ -191,9 +205,6 @@ namespace Pacmio
                 m_MultiPeriod = mp;
             }
         }
-
-        public void SetPeriod(Period pd, CancellationTokenSource cts = null)
-            => SetPeriod(new MultiPeriod(pd), cts);
 
         private Dictionary<(BarFreq freq, PriceType type), BarTable> BarTableLUT { get; }
             = new Dictionary<(BarFreq freq, PriceType type), BarTable>();
@@ -239,12 +250,6 @@ namespace Pacmio
             {
                 this[item.freq, item.type].CalculateRefresh(item.bat);
             }
-        }
-
-        public void CalculateRefresh(Strategy s)
-        {
-            CalculateRefresh(s.AnalysisSet);
-            //this[s.BarFreq, s.PriceType].CalculateRefresh(s);
         }
     }
 }

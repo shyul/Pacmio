@@ -11,17 +11,20 @@ using Xu;
 
 namespace Pacmio
 {
-    public class HigherTimeFrame : BarAnalysis, ISingleDatum
+    public class HigherTimeBar : BarAnalysis, ISingleDatum
     {
-        public HigherTimeFrame(BarFreq freq, PriceType type)
+        public HigherTimeBar(BarFreq freq, PriceType type = PriceType.Trades)
         {
-            Name = GetType().Name + "_" + freq + "_" + type;
-            Column_Result = new(Name, typeof(HigherTimeFrameDatum));
+            BarFreq = freq;
+            PriceType = type;
+            Label = "(" + freq + "," + type + ")";
+            Name = GetType().Name + Label;
+            Column_Result = new(Name, typeof(HigherTimeBarDatum));
         }
 
         public BarFreq BarFreq { get; }
 
-        public PriceType DataType { get; }
+        public PriceType PriceType { get; }
 
         public DatumColumn Column_Result { get; }
 
@@ -29,14 +32,14 @@ namespace Pacmio
         {
             BarTable bt = bap.Table;
 
-            BarTable bt_ht = bt.BarTableSet[BarFreq, DataType];
+            BarTable bt_ht = bt.BarTableSet[BarFreq, PriceType];
 
             for (int i = bap.StartPt; i < bap.StopPt; i++)
             {
                 Bar b = bt[i];
                 Bar b_ht = bt_ht[b.Time];
 
-                b[Column_Result] = new HigherTimeFrameDatum(b_ht);
+                b[Column_Result] = new HigherTimeBarDatum(b_ht);
             }
         }
     }

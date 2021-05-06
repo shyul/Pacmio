@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Source\Modules\03_BarTable\Analysis\00_Debug\DebugDualDataOsc.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\HighLowBoundary.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\HigherTimeSingleData\HigherTimeSingleData.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\IDifferentialDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\ISignalSource.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\GapFilter.cs" />
@@ -111,8 +112,8 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\FlagDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\_Type\FlagTestElement.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrame.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\HigherTimeFrame\HigherTimeFrameDatum.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\HigherTimeBar\HigherTimeBar.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\HigherTimeBar\HigherTimeBarDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\NumericColumnLevels\NumericColumnLevelDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\TrailingTrendStrength\TrailingTrendStrengthAnalysis.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyUtility.cs" />
     <Compile Include="Source\Modules\05_Trade\Execution\ExecutionRecord.cs" />
     <Compile Include="Source\Modules\05_Trade\TradeManager.cs" />
-    <Compile Include="Source\Modules\05_Trade\_Data\BarTableGroup.cs" />
+    <Compile Include="Source\Modules\03_BarTable\BarTableGroup.cs" />
     <Compile Include="Source\Modules\04_BarChart\BarChartManager.cs" />
     <Compile Include="Source\Modules\04_BarChart\Series\CandleStickSeries.cs" />
     <Compile Include="Source\Modules\04_BarChart\_Types\IChartBackground.cs" />
@@ -435,6 +436,8 @@
   <ItemGroup>
     <Content Include="Tasks.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Modules\05_Trade\_Data\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

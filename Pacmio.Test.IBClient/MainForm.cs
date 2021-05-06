@@ -1206,11 +1206,10 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
@@ -1242,7 +1241,6 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
 
@@ -1278,7 +1276,6 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
                 mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
@@ -1306,35 +1303,6 @@ namespace TestClient
             }
         }
 
-        private void BtnTestTimeFrame_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-
-                Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(TestNative.BarAnalysisListTimeFrame);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
         #endregion Test Analysis Only
 
         #region Test Pattern
@@ -1346,9 +1314,9 @@ namespace TestClient
                 BarFreq freq = BarFreq;
                 PriceType type = DataType;
                 Contract c = ContractTest.ActiveContract;
+                BarTableSet bts = BarTableGroup[c];
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
 
@@ -1356,17 +1324,9 @@ namespace TestClient
 
                 Task.Run(() =>
                 {
-                    /*
-                    BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-                    BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(mp, Cts);
                     BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
-
+                    BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
 
@@ -1383,7 +1343,6 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
 
@@ -1410,6 +1369,67 @@ namespace TestClient
 
         #region Test Signal
 
+        private void BtnTestTimeFrame_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                Contract c = ContractTest.ActiveContract;
+
+                var sma50 = new SMA(50) { Color = Color.Orange };
+
+                var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
+                var ema20 = new EMA(20) { Color = Color.YellowGreen };
+
+                Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                };
+
+                DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, sma50)
+                {
+                    BearishColor = Color.Red,
+                    TypeToTrailPoints = dualDataPoints
+                };
+
+                DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9, ema20)
+                {
+                    //BearishColor = Color.Orange,
+                    TypeToTrailPoints = dualDataPoints
+                };
+
+                HigherTimeSingleData htsd = new(sma50, BarFreq.Minutes_5, PriceType.Trades);
+
+                DualDataSignal dds_3 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, htsd)
+                {
+
+                    TypeToTrailPoints = dualDataPoints
+                };
+
+                BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
+                    dds_1,
+                    dds_2,
+                    dds_3,
+                });
+
+                Period pd = HistoricalPeriod;
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    bts.GetChart(bas);
+                    //GC.Collect();
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
         private void BtnTestSignal_Click(object sender, EventArgs e)
         {
             if (ValidateSymbol())
@@ -1421,26 +1441,22 @@ namespace TestClient
                 var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
                 var ema20 = new EMA(20) { Color = Color.YellowGreen };
 
+                Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
+                {
+                    { DualDataSignalType.CrossUp, new double[] { 10 } },
+                    { DualDataSignalType.CrossDown, new double[] { -10 } },
+                };
+
                 DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema9)
                 {
-                    //BullishColor = Color.Green,
                     BearishColor = Color.Red,
-
-                    TypeToTrailPoints = new()
-                    {
-                        { DualDataSignalType.CrossUp, new double[] { 10 } },
-                        { DualDataSignalType.CrossDown, new double[] { -10 } },
-                    }
+                    TypeToTrailPoints = dualDataPoints
                 };
 
                 DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema20)
                 {
                     BearishColor = Color.Orange,
-                    TypeToTrailPoints = new()
-                    {
-                        { DualDataSignalType.CrossUp, new double[] { 10 } },
-                        { DualDataSignalType.CrossDown, new double[] { -10 } },
-                    }
+                    TypeToTrailPoints = dualDataPoints
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
@@ -1449,7 +1465,6 @@ namespace TestClient
                 });
 
                 Period pd = HistoricalPeriod;
-                if (pd.IsCurrent) c.MarketData.Start();
                 MultiPeriod mp = new MultiPeriod();
                 mp.Add(pd);
 
@@ -1544,17 +1559,22 @@ namespace TestClient
             {
                 BarFreq freq = BarFreq;
                 PriceType type = DataType;
-                Period pd = HistoricalPeriod;
+
                 Contract c = ContractTest.ActiveContract;
                 //var cList = new Contract[] { c };
                 var strategy = new GapGoOrbStrategy();
+
+                Period pd = HistoricalPeriod;
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
                     //cList.Evaluate(new Strategy[] { strategy }, pd, 16, Cts, Progress);
                     BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(pd, Cts);
+                    bts.SetPeriod(mp, Cts);
                     bts.GetChart(strategy.AnalysisSet);
                     GC.Collect();
                 }, Cts.Token);

@@ -19,7 +19,7 @@ namespace Pacmio
 
         public override int GetHashCode() => GetType().GetHashCode() ^ Label.GetHashCode();
 
-        public string Label { get; protected set; }
+
 
         public virtual NumericColumn Column_Result { get; protected set; }
 

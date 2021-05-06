@@ -112,24 +112,22 @@ namespace Pacmio.Analysis
 
             #region Define Signals
 
+            Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
+            {
+                { DualDataSignalType.CrossUp, new double[] { 10 } },
+                { DualDataSignalType.CrossDown, new double[] { -10 } },
+            };
+
             FiveMinutesCrossData_1 = crossData_1;
             FiveMinutesCrossSignal_1 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_1)
             {
-                TypeToTrailPoints = new()
-                {
-                    { DualDataSignalType.CrossUp, new double[] { 10 } },
-                    { DualDataSignalType.CrossDown, new double[] { -10 } },
-                }
+                TypeToTrailPoints = dualDataPoints
             };
 
             FiveMinutesCrossData_2 = crossData_2;
             FiveMinutesCrossSignal_2 = new DualDataSignal(TimeInForce, fiveMinFreq, FiveMinutesCrossData_2)
             {
-                TypeToTrailPoints = new()
-                {
-                    { DualDataSignalType.CrossUp, new double[] { 10 } },
-                    { DualDataSignalType.CrossDown, new double[] { -10 } },
-                }
+                TypeToTrailPoints = dualDataPoints
             };
 
             #endregion Define Signals

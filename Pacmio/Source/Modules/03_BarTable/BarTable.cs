@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
-using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -389,6 +388,11 @@ namespace Pacmio
                     }
                 }
 
+                foreach (BarChart bc in DataConsumers.Where<BarChart>())
+                {
+                    CalculateRefresh(bc.BarAnalysisList);
+                }
+
                 Status = TableStatus.DataReady;
             }
         }
@@ -435,6 +439,11 @@ namespace Pacmio
                     }
 
                     Rows[Count - 1].Source = DataSourceType.Tick;
+                }
+
+                foreach (BarChart bc in DataConsumers.Where<BarChart>())
+                {
+                    CalculateRefresh(bc.BarAnalysisList);
                 }
 
                 Status = TableStatus.DataReady;

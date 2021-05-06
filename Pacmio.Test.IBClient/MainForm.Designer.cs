@@ -322,8 +322,8 @@ namespace TestClient
             // 
             // BtnTestTimeFrame
             // 
-            this.BtnTestTimeFrame.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 116);
+            this.BtnTestTimeFrame.BackColor = System.Drawing.Color.Yellow;
+            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 227);
             this.BtnTestTimeFrame.Name = "BtnTestTimeFrame";
             this.BtnTestTimeFrame.Size = new System.Drawing.Size(180, 23);
             this.BtnTestTimeFrame.TabIndex = 58;
@@ -346,7 +346,7 @@ namespace TestClient
             // BtnTestFlag
             // 
             this.BtnTestFlag.BackColor = System.Drawing.Color.DarkSalmon;
-            this.BtnTestFlag.Location = new System.Drawing.Point(7, 245);
+            this.BtnTestFlag.Location = new System.Drawing.Point(7, 163);
             this.BtnTestFlag.Name = "BtnTestFlag";
             this.BtnTestFlag.Size = new System.Drawing.Size(180, 23);
             this.BtnTestFlag.TabIndex = 56;
@@ -368,8 +368,8 @@ namespace TestClient
             // 
             // BtnTestSignal
             // 
-            this.BtnTestSignal.BackColor = System.Drawing.Color.Khaki;
-            this.BtnTestSignal.Location = new System.Drawing.Point(7, 305);
+            this.BtnTestSignal.BackColor = System.Drawing.Color.Yellow;
+            this.BtnTestSignal.Location = new System.Drawing.Point(7, 256);
             this.BtnTestSignal.Name = "BtnTestSignal";
             this.BtnTestSignal.Size = new System.Drawing.Size(180, 23);
             this.BtnTestSignal.TabIndex = 54;
@@ -380,7 +380,7 @@ namespace TestClient
             // BtnTestPatternAnalysis
             // 
             this.BtnTestPatternAnalysis.BackColor = System.Drawing.Color.DarkSalmon;
-            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 216);
+            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 134);
             this.BtnTestPatternAnalysis.Name = "BtnTestPatternAnalysis";
             this.BtnTestPatternAnalysis.Size = new System.Drawing.Size(180, 23);
             this.BtnTestPatternAnalysis.TabIndex = 53;
