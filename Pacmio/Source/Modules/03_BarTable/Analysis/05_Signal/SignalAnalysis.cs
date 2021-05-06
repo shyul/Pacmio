@@ -41,7 +41,7 @@ namespace Pacmio
             {
                 return BullishTheme.ForeColor;
             }
-            protected set
+            set
             {
                 BullishTheme.ForeColor = value;
                 BullishTheme.FillColor = value.Opaque(64);
@@ -55,7 +55,7 @@ namespace Pacmio
             {
                 return BearishTheme.ForeColor;
             }
-            protected set
+            set
             {
                 BearishTheme.ForeColor = value;
                 BearishTheme.FillColor = value.Opaque(64);

@@ -38,9 +38,11 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
-            this.BtnRunScreener = new System.Windows.Forms.Button();
+            this.BtnRunStrategy = new System.Windows.Forms.Button();
+            this.BtnTestTimeFrame = new System.Windows.Forms.Button();
+            this.BtnRunFilter = new System.Windows.Forms.Button();
             this.BtnTestFlag = new System.Windows.Forms.Button();
-            this.BtnLoadAllBarTable = new System.Windows.Forms.Button();
+            this.BtnRunFilterAll = new System.Windows.Forms.Button();
             this.BtnTestSignal = new System.Windows.Forms.Button();
             this.BtnTestPatternAnalysis = new System.Windows.Forms.Button();
             this.BtnTestNativeAnalysis = new System.Windows.Forms.Button();
@@ -50,7 +52,7 @@ namespace TestClient
             this.BtnRequestFundamentalData = new System.Windows.Forms.Button();
             this.BtnExportBarTableData = new System.Windows.Forms.Button();
             this.BtnExportFundamental = new System.Windows.Forms.Button();
-            this.BtnLoadMultiBarTable = new System.Windows.Forms.Button();
+            this.BtnRunFilterMulti = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.BtnApplyTradeLogToChart = new System.Windows.Forms.Button();
             this.BtnCloseChart = new System.Windows.Forms.Button();
@@ -214,7 +216,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.BtnTestTimeFrame = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -275,10 +276,11 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnRunStrategy);
             this.tabHistoricalData.Controls.Add(this.BtnTestTimeFrame);
-            this.tabHistoricalData.Controls.Add(this.BtnRunScreener);
+            this.tabHistoricalData.Controls.Add(this.BtnRunFilter);
             this.tabHistoricalData.Controls.Add(this.BtnTestFlag);
-            this.tabHistoricalData.Controls.Add(this.BtnLoadAllBarTable);
+            this.tabHistoricalData.Controls.Add(this.BtnRunFilterAll);
             this.tabHistoricalData.Controls.Add(this.BtnTestSignal);
             this.tabHistoricalData.Controls.Add(this.BtnTestPatternAnalysis);
             this.tabHistoricalData.Controls.Add(this.BtnTestNativeAnalysis);
@@ -288,7 +290,7 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnRequestFundamentalData);
             this.tabHistoricalData.Controls.Add(this.BtnExportBarTableData);
             this.tabHistoricalData.Controls.Add(this.BtnExportFundamental);
-            this.tabHistoricalData.Controls.Add(this.BtnLoadMultiBarTable);
+            this.tabHistoricalData.Controls.Add(this.BtnRunFilterMulti);
             this.tabHistoricalData.Controls.Add(this.label12);
             this.tabHistoricalData.Controls.Add(this.BtnApplyTradeLogToChart);
             this.tabHistoricalData.Controls.Add(this.BtnCloseChart);
@@ -306,45 +308,70 @@ namespace TestClient
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
             // 
-            // BtnRunScreener
+            // BtnRunStrategy
             // 
-            this.BtnRunScreener.Location = new System.Drawing.Point(12, 271);
-            this.BtnRunScreener.Name = "BtnRunScreener";
-            this.BtnRunScreener.Size = new System.Drawing.Size(230, 23);
-            this.BtnRunScreener.TabIndex = 57;
-            this.BtnRunScreener.Text = "Run Simulation Scanner";
-            this.BtnRunScreener.UseVisualStyleBackColor = true;
-            this.BtnRunScreener.Click += new System.EventHandler(this.BtnRunScreener_Click);
+            this.BtnRunStrategy.BackColor = System.Drawing.Color.SteelBlue;
+            this.BtnRunStrategy.ForeColor = System.Drawing.Color.White;
+            this.BtnRunStrategy.Location = new System.Drawing.Point(199, 151);
+            this.BtnRunStrategy.Name = "BtnRunStrategy";
+            this.BtnRunStrategy.Size = new System.Drawing.Size(180, 23);
+            this.BtnRunStrategy.TabIndex = 59;
+            this.BtnRunStrategy.Text = "Run Strategy";
+            this.BtnRunStrategy.UseVisualStyleBackColor = false;
+            this.BtnRunStrategy.Click += new System.EventHandler(this.BtnRunStrategy_Click);
+            // 
+            // BtnTestTimeFrame
+            // 
+            this.BtnTestTimeFrame.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 116);
+            this.BtnTestTimeFrame.Name = "BtnTestTimeFrame";
+            this.BtnTestTimeFrame.Size = new System.Drawing.Size(180, 23);
+            this.BtnTestTimeFrame.TabIndex = 58;
+            this.BtnTestTimeFrame.Text = "Test Time Frame";
+            this.BtnTestTimeFrame.UseVisualStyleBackColor = false;
+            this.BtnTestTimeFrame.Click += new System.EventHandler(this.BtnTestTimeFrame_Click);
+            // 
+            // BtnRunFilter
+            // 
+            this.BtnRunFilter.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BtnRunFilter.ForeColor = System.Drawing.Color.White;
+            this.BtnRunFilter.Location = new System.Drawing.Point(199, 29);
+            this.BtnRunFilter.Name = "BtnRunFilter";
+            this.BtnRunFilter.Size = new System.Drawing.Size(180, 23);
+            this.BtnRunFilter.TabIndex = 57;
+            this.BtnRunFilter.Text = "Run Filter";
+            this.BtnRunFilter.UseVisualStyleBackColor = false;
+            this.BtnRunFilter.Click += new System.EventHandler(this.BtnRunFilter_Click);
             // 
             // BtnTestFlag
             // 
-            this.BtnTestFlag.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestFlag.Location = new System.Drawing.Point(7, 165);
+            this.BtnTestFlag.BackColor = System.Drawing.Color.DarkSalmon;
+            this.BtnTestFlag.Location = new System.Drawing.Point(7, 245);
             this.BtnTestFlag.Name = "BtnTestFlag";
-            this.BtnTestFlag.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestFlag.Size = new System.Drawing.Size(180, 23);
             this.BtnTestFlag.TabIndex = 56;
             this.BtnTestFlag.Text = "Test Flag";
             this.BtnTestFlag.UseVisualStyleBackColor = false;
             this.BtnTestFlag.Click += new System.EventHandler(this.BtnTestFlag_Click);
             // 
-            // BtnLoadAllBarTable
+            // BtnRunFilterAll
             // 
-            this.BtnLoadAllBarTable.BackColor = System.Drawing.Color.Red;
-            this.BtnLoadAllBarTable.ForeColor = System.Drawing.Color.White;
-            this.BtnLoadAllBarTable.Location = new System.Drawing.Point(12, 329);
-            this.BtnLoadAllBarTable.Name = "BtnLoadAllBarTable";
-            this.BtnLoadAllBarTable.Size = new System.Drawing.Size(230, 23);
-            this.BtnLoadAllBarTable.TabIndex = 55;
-            this.BtnLoadAllBarTable.Text = "Test Load All BarTable";
-            this.BtnLoadAllBarTable.UseVisualStyleBackColor = false;
-            this.BtnLoadAllBarTable.Click += new System.EventHandler(this.BtnLoadAllBarTable_Click);
+            this.BtnRunFilterAll.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BtnRunFilterAll.ForeColor = System.Drawing.Color.White;
+            this.BtnRunFilterAll.Location = new System.Drawing.Point(199, 87);
+            this.BtnRunFilterAll.Name = "BtnRunFilterAll";
+            this.BtnRunFilterAll.Size = new System.Drawing.Size(180, 23);
+            this.BtnRunFilterAll.TabIndex = 55;
+            this.BtnRunFilterAll.Text = "Run Filter All";
+            this.BtnRunFilterAll.UseVisualStyleBackColor = false;
+            this.BtnRunFilterAll.Click += new System.EventHandler(this.BtnRunFilterAll_Click);
             // 
             // BtnTestSignal
             // 
-            this.BtnTestSignal.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestSignal.Location = new System.Drawing.Point(7, 208);
+            this.BtnTestSignal.BackColor = System.Drawing.Color.Khaki;
+            this.BtnTestSignal.Location = new System.Drawing.Point(7, 305);
             this.BtnTestSignal.Name = "BtnTestSignal";
-            this.BtnTestSignal.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestSignal.Size = new System.Drawing.Size(180, 23);
             this.BtnTestSignal.TabIndex = 54;
             this.BtnTestSignal.Text = "Test Signal";
             this.BtnTestSignal.UseVisualStyleBackColor = false;
@@ -352,10 +379,10 @@ namespace TestClient
             // 
             // BtnTestPatternAnalysis
             // 
-            this.BtnTestPatternAnalysis.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 136);
+            this.BtnTestPatternAnalysis.BackColor = System.Drawing.Color.DarkSalmon;
+            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 216);
             this.BtnTestPatternAnalysis.Name = "BtnTestPatternAnalysis";
-            this.BtnTestPatternAnalysis.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestPatternAnalysis.Size = new System.Drawing.Size(180, 23);
             this.BtnTestPatternAnalysis.TabIndex = 53;
             this.BtnTestPatternAnalysis.Text = "Test Pattern Analysis";
             this.BtnTestPatternAnalysis.UseVisualStyleBackColor = false;
@@ -364,9 +391,9 @@ namespace TestClient
             // BtnTestNativeAnalysis
             // 
             this.BtnTestNativeAnalysis.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestNativeAnalysis.Location = new System.Drawing.Point(7, 64);
+            this.BtnTestNativeAnalysis.Location = new System.Drawing.Point(7, 87);
             this.BtnTestNativeAnalysis.Name = "BtnTestNativeAnalysis";
-            this.BtnTestNativeAnalysis.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestNativeAnalysis.Size = new System.Drawing.Size(180, 23);
             this.BtnTestNativeAnalysis.TabIndex = 52;
             this.BtnTestNativeAnalysis.Text = "Test Native Analysis";
             this.BtnTestNativeAnalysis.UseVisualStyleBackColor = false;
@@ -375,9 +402,9 @@ namespace TestClient
             // BtnTestOscillators
             // 
             this.BtnTestOscillators.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestOscillators.Location = new System.Drawing.Point(7, 35);
+            this.BtnTestOscillators.Location = new System.Drawing.Point(7, 58);
             this.BtnTestOscillators.Name = "BtnTestOscillators";
-            this.BtnTestOscillators.Size = new System.Drawing.Size(230, 23);
+            this.BtnTestOscillators.Size = new System.Drawing.Size(180, 23);
             this.BtnTestOscillators.TabIndex = 51;
             this.BtnTestOscillators.Text = "Test Oscillators";
             this.BtnTestOscillators.UseVisualStyleBackColor = false;
@@ -415,7 +442,7 @@ namespace TestClient
             // 
             // BtnExportBarTableData
             // 
-            this.BtnExportBarTableData.Location = new System.Drawing.Point(12, 524);
+            this.BtnExportBarTableData.Location = new System.Drawing.Point(695, 412);
             this.BtnExportBarTableData.Name = "BtnExportBarTableData";
             this.BtnExportBarTableData.Size = new System.Drawing.Size(230, 23);
             this.BtnExportBarTableData.TabIndex = 47;
@@ -425,7 +452,7 @@ namespace TestClient
             // 
             // BtnExportFundamental
             // 
-            this.BtnExportFundamental.Location = new System.Drawing.Point(12, 553);
+            this.BtnExportFundamental.Location = new System.Drawing.Point(695, 441);
             this.BtnExportFundamental.Name = "BtnExportFundamental";
             this.BtnExportFundamental.Size = new System.Drawing.Size(230, 23);
             this.BtnExportFundamental.TabIndex = 46;
@@ -433,20 +460,22 @@ namespace TestClient
             this.BtnExportFundamental.UseVisualStyleBackColor = true;
             this.BtnExportFundamental.Click += new System.EventHandler(this.BtnExportFundamental_Click);
             // 
-            // BtnLoadMultiBarTable
+            // BtnRunFilterMulti
             // 
-            this.BtnLoadMultiBarTable.Location = new System.Drawing.Point(12, 300);
-            this.BtnLoadMultiBarTable.Name = "BtnLoadMultiBarTable";
-            this.BtnLoadMultiBarTable.Size = new System.Drawing.Size(230, 23);
-            this.BtnLoadMultiBarTable.TabIndex = 45;
-            this.BtnLoadMultiBarTable.Text = "Download Multi BarTable";
-            this.BtnLoadMultiBarTable.UseVisualStyleBackColor = true;
-            this.BtnLoadMultiBarTable.Click += new System.EventHandler(this.BtnLoadMultiBarTable_Click);
+            this.BtnRunFilterMulti.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BtnRunFilterMulti.ForeColor = System.Drawing.Color.White;
+            this.BtnRunFilterMulti.Location = new System.Drawing.Point(199, 58);
+            this.BtnRunFilterMulti.Name = "BtnRunFilterMulti";
+            this.BtnRunFilterMulti.Size = new System.Drawing.Size(180, 23);
+            this.BtnRunFilterMulti.TabIndex = 45;
+            this.BtnRunFilterMulti.Text = "Run Filter Multi";
+            this.BtnRunFilterMulti.UseVisualStyleBackColor = false;
+            this.BtnRunFilterMulti.Click += new System.EventHandler(this.BtnRunFilterMulti_Click);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(261, 11);
+            this.label12.Location = new System.Drawing.Point(392, 16);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(55, 13);
             this.label12.TabIndex = 44;
@@ -464,7 +493,7 @@ namespace TestClient
             // 
             // BtnCloseChart
             // 
-            this.BtnCloseChart.Location = new System.Drawing.Point(313, 271);
+            this.BtnCloseChart.Location = new System.Drawing.Point(411, 282);
             this.BtnCloseChart.Name = "BtnCloseChart";
             this.BtnCloseChart.Size = new System.Drawing.Size(230, 23);
             this.BtnCloseChart.TabIndex = 37;
@@ -474,7 +503,7 @@ namespace TestClient
             // ListViewAllCharts
             // 
             this.ListViewAllCharts.HideSelection = false;
-            this.ListViewAllCharts.Location = new System.Drawing.Point(264, 27);
+            this.ListViewAllCharts.Location = new System.Drawing.Point(395, 29);
             this.ListViewAllCharts.Name = "ListViewAllCharts";
             this.ListViewAllCharts.Size = new System.Drawing.Size(279, 238);
             this.ListViewAllCharts.TabIndex = 36;
@@ -482,7 +511,7 @@ namespace TestClient
             // 
             // BtnAlignCharts
             // 
-            this.BtnAlignCharts.Location = new System.Drawing.Point(313, 329);
+            this.BtnAlignCharts.Location = new System.Drawing.Point(411, 340);
             this.BtnAlignCharts.Name = "BtnAlignCharts";
             this.BtnAlignCharts.Size = new System.Drawing.Size(230, 26);
             this.BtnAlignCharts.TabIndex = 34;
@@ -512,7 +541,7 @@ namespace TestClient
             // 
             // BtnChartsUpdateAll
             // 
-            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(313, 300);
+            this.BtnChartsUpdateAll.Location = new System.Drawing.Point(411, 311);
             this.BtnChartsUpdateAll.Name = "BtnChartsUpdateAll";
             this.BtnChartsUpdateAll.Size = new System.Drawing.Size(230, 23);
             this.BtnChartsUpdateAll.TabIndex = 2;
@@ -523,9 +552,9 @@ namespace TestClient
             // BtnLoadHistoricalChart
             // 
             this.BtnLoadHistoricalChart.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 6);
+            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 29);
             this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
-            this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(230, 23);
+            this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(180, 23);
             this.BtnLoadHistoricalChart.TabIndex = 0;
             this.BtnLoadHistoricalChart.Text = "Show Historical Chart";
             this.BtnLoadHistoricalChart.UseVisualStyleBackColor = false;
@@ -2191,17 +2220,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // BtnTestTimeFrame
-            // 
-            this.BtnTestTimeFrame.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 93);
-            this.BtnTestTimeFrame.Name = "BtnTestTimeFrame";
-            this.BtnTestTimeFrame.Size = new System.Drawing.Size(230, 23);
-            this.BtnTestTimeFrame.TabIndex = 58;
-            this.BtnTestTimeFrame.Text = "Test Time Frame";
-            this.BtnTestTimeFrame.UseVisualStyleBackColor = false;
-            this.BtnTestTimeFrame.Click += new System.EventHandler(this.BtnTestTimeFrame_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2396,7 +2414,7 @@ namespace TestClient
         private System.Windows.Forms.GroupBox GroupBoxOrderSetting;
         private System.Windows.Forms.Button BtnOrderSettingApplyCurrentPrice;
         private System.Windows.Forms.TabPage tabSimulation;
-        private System.Windows.Forms.Button BtnLoadMultiBarTable;
+        private System.Windows.Forms.Button BtnRunFilterMulti;
         private System.Windows.Forms.Button BtnImportSymbols;
         private System.Windows.Forms.Button BtnUpdateContracts;
         private System.Windows.Forms.Button BtnImportNasdaq;
@@ -2436,9 +2454,10 @@ namespace TestClient
         private System.Windows.Forms.Button BtnTestSignal;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet10;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet9;
-        private System.Windows.Forms.Button BtnLoadAllBarTable;
+        private System.Windows.Forms.Button BtnRunFilterAll;
         private System.Windows.Forms.Button BtnTestFlag;
-        private System.Windows.Forms.Button BtnRunScreener;
+        private System.Windows.Forms.Button BtnRunFilter;
         private System.Windows.Forms.Button BtnTestTimeFrame;
+        private System.Windows.Forms.Button BtnRunStrategy;
     }
 }

@@ -65,8 +65,8 @@ namespace Pacmio.Analysis
             BarFreq fiveMinFreq = BarFreq.Minutes_5,
             BarFreq barFreq = BarFreq.Minute)
             : this(
-            new EMA(9),
-            new EMA(20),
+            new EMA(9) { Color = Color.DeepSkyBlue },
+            new EMA(20) { Color = Color.Pink },
             minimumMinuteVolume,
             minimumMinuteRelativeVolume,
             gapPercent,
@@ -191,7 +191,7 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
-                    Console.Write(".");
+                    //Console.Write(".");
 
                     if (b.Time == TimeInForce.Start)
                     {
@@ -201,11 +201,13 @@ namespace Pacmio.Analysis
                             if (flt > 0 && b[PricePosition] > 0.75)
                             {
                                 sd.Message = BullishOpenBarMessage;
+                                //sd.SetPoints(new double[] { 1 });
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bullish ORB");
                             }
                             else if (flt < 0 && b[PricePosition] < 0.25)
                             {
                                 sd.Message = BearishOpenBarMessage;
+                                //sd.SetPoints(new double[] { -1 });
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bearish ORB");
                             }
                             else
@@ -231,6 +233,7 @@ namespace Pacmio.Analysis
                                     sd.Message = RangeBarBullishMessage;
                                     sd.EntryBarIndex = 0;
                                     sd.SendOrder(ob.High, 1, OrderType.Stop);
+                                    sd.SetPoints(new double[] { 3 });
                                 }
                                 else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
                                 {
@@ -240,17 +243,18 @@ namespace Pacmio.Analysis
                                     sd.Message = RangeBarBearishMessage;
                                     sd.EntryBarIndex = 0;
                                     sd.SendOrder(ob.Low, -1, OrderType.Limit);
+                                    sd.SetPoints(new double[] { -3 });
                                 }
                             }
                             else if (sd_1.Message == BearishOpenBarMessage)
                             {
-                                if (b.Contains(ob.High)) // Bullish / long side no gap entry
+                                if (b.Contains(ob.High))
                                 {
-
+                                    sd.SetPoints(new double[] { 3 });
                                 }
-                                else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
+                                else if (b.Contains(ob.Low))
                                 {
-
+                                    sd.SetPoints(new double[] { -3 });
                                 }
                             }
                         }

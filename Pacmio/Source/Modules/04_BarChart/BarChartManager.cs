@@ -16,7 +16,6 @@ namespace Pacmio
 {
     public static class BarChartManager
     {
-        private static List<BarChart> List { get; } = new();
 
         public static BarChart GetChart(this BarTable bt, BarAnalysisList bat)
         {
@@ -26,12 +25,21 @@ namespace Pacmio
             return bc;
         }
 
-        /*
-        public static IEnumerable<BarChart> GetCharts(this BarTableSet bts, Strategy s, Period periodLimit, CancellationTokenSource cts = null)
+        public static void GetChart(this BarTableSet bts, BarAnalysisSet bas)
         {
-            s.BackTest(bts, periodLimit, cts);
-            return s.BarAnalysisSet.Concat(new SignalIndicator[] { s.Filter, s }).Select(ind => bts[ind.BarFreq, ind.PriceType].GetChart(ind.BarAnalysisSet));
-        }*/
+            bts.CalculateRefresh(bas);
+
+            foreach ((BarFreq freq, PriceType type, BarAnalysisList bat) in bas)
+            {
+                BarChart bc = new("BarChart", OhlcType.Candlestick);
+                BarTable bt = bts[freq, type];
+                bc.Config(bt, bat);
+                Root.Form.AddForm(DockStyle.Fill, 0, bc);
+            }
+        }
+
+        
+        private static List<BarChart> List { get; } = new();
 
         public static void Add(BarChart bc)
         {
@@ -55,5 +63,6 @@ namespace Pacmio
         {
             lock (List) List.ForEach(bc => { bc.PointerSnapToEnd(); });
         }
+        
     }
 }

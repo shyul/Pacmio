@@ -18,8 +18,9 @@ namespace Pacmio
 
     public sealed class SignalArea : OscillatorArea, IBarChartArea
     {
-        public SignalArea(BarChart chart, SignalSeries sgs) : base(chart, "Signal", 10)
+        public SignalArea(BarChart chart, ISignalSource iss) : base(chart, "Signal", 10)
         {
+
             BarChart = chart;
             Importance = Importance.Major;
             //Order = int.MinValue + 1;
@@ -31,8 +32,8 @@ namespace Pacmio
             Reference = 0;
             //FixedTickStep_Right = 2;
 
-            SignalSeries = sgs;
-            //AddSeries(SignalSeries = new SignalSeries(chart));
+            Source = iss;
+            AddSeries(SignalSeries = new SignalSeries(iss));
         }
 
         public BarChart BarChart { get; }
@@ -40,6 +41,8 @@ namespace Pacmio
         public BarTable BarTable => BarChart.BarTable;
 
         public SignalSeries SignalSeries { get; }
+
+        public ISignalSource Source { get; }
 
         public override void DrawCustomBackground(Graphics g)
         {

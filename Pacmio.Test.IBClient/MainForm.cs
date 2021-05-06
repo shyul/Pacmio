@@ -353,274 +353,9 @@ namespace TestClient
             }
         }
 
-        public BarTableGroup BarTableGroup { get; } = new BarTableGroup();
-
-        private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = new BarTableSet(c, false);
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisList);
-                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestIndicators_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisList);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestNativeAnalysis_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-                mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-
-                    BarChart bc = bt.GetChart(TestNative.BarAnalysisList);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestTimeFrame_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Task.Run(() =>
-                {
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(TestNative.BarAnalysisListTimeFrame);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestPatternAnalysis_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Task.Run(() =>
-                {
-                    /*
-                    BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestSignal_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Period pd = HistoricalPeriod;
-                Contract c = ContractTest.ActiveContract;
-
-                if (pd.IsCurrent) c.MarketData.Start();
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-          
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(pd, Cts);
-
-                    BarTable bt = bts[freq, type];
-                    //BarChart bc = bt.GetCharts(iset);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnRunScreener_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                Contract c = ContractTest.ActiveContract;
-                Period pd = HistoricalPeriod;
-                var filter = new GapFilter();
-
-                //  if (Cts is null || Cts.Cancelled())
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    var cList = new Contract[] { c };
-                    Console.WriteLine("total number = " + cList.Count());
-                    cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
-                    GC.Collect();
-                }, Cts.Token);
-            }
-        }
-
-        private void BtnLoadMultiBarTable_Click(object sender, EventArgs e)
-        {
-            string symbolText = TextBoxMultiContracts.Text;
-            Period pd = HistoricalPeriod;
-            var filter = new GapFilter();
-            var strategy = new GapGoOrbStrategy();
-
-            //if (Cts is null || Cts.Token.Di || Cts.Cancelled())
-            Cts = new CancellationTokenSource();
-
-            Task.Run(() =>
-            {
-                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
-                var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
-                Console.WriteLine("total number = " + cList.Count());
 
 
-                //cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
-                cList.Evaluate(new Strategy[] { strategy }, pd, 16, Cts, Progress);
 
-
-                GC.Collect();
-            }, Cts.Token);
-
-        }
-
-        private void BtnLoadAllBarTable_Click(object sender, EventArgs e)
-        {
-            Period pd = HistoricalPeriod;
-            var filter = new GapFilter();
-
-            //if (Cts is null || Cts.Cancelled()) 
-            Cts = new CancellationTokenSource();
-
-            Task.Run(() =>
-            {
-                var cList = ContractManager.TradeableNoETFList.ToList();
-                Console.WriteLine("total number = " + cList.Count());
-                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
-                GC.Collect();
-            }, Cts.Token);
-        }
 
         private void BtnAlignCharts_Click(object sender, EventArgs e) => BarChartManager.PointerToEndAll();
 
@@ -1458,16 +1193,199 @@ namespace TestClient
             ContractManager.Fetch(ContractTest.ActiveContract);
         }
 
+        #region Test Analysis Only
+
+        public BarTableGroup BarTableGroup { get; } = new BarTableGroup();
+
+        private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+
+                Cts = new CancellationTokenSource();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Task.Run(() =>
+                {
+                    /*BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = new BarTableSet(c, false);
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisList);
+                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        private void BtnTestIndicators_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
+
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisList);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        private void BtnTestNativeAnalysis_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+                mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    var bt = bts[freq, type];
+
+                    BarChart bc = bt.GetChart(TestNative.BarAnalysisList);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        private void BtnTestTimeFrame_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    BarTable bt = bts[freq, type];
+                    BarChart bc = bt.GetChart(TestNative.BarAnalysisListTimeFrame);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        #endregion Test Analysis Only
+
+        #region Test Pattern
+
+        private void BtnTestPatternAnalysis_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*
+                    BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    BarTable bt = bts[freq, type];
+                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
+
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
         private void BtnTestFlag_Click(object sender, EventArgs e)
         {
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
                 PriceType type = DataType;
-                Period pd = HistoricalPeriod;
                 Contract c = ContractTest.ActiveContract;
 
+                Period pd = HistoricalPeriod;
                 if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
 
                 Cts = new CancellationTokenSource();
 
@@ -1488,8 +1406,166 @@ namespace TestClient
             }
         }
 
+        #endregion Test Pattern
 
+        #region Test Signal
+
+        private void BtnTestSignal_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+
+                var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
+                var ema20 = new EMA(20) { Color = Color.YellowGreen };
+
+                DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema9)
+                {
+                    //BullishColor = Color.Green,
+                    BearishColor = Color.Red,
+
+                    TypeToTrailPoints = new()
+                    {
+                        { DualDataSignalType.CrossUp, new double[] { 10 } },
+                        { DualDataSignalType.CrossDown, new double[] { -10 } },
+                    }
+                };
+
+                DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema20)
+                {
+                    BearishColor = Color.Orange,
+                    TypeToTrailPoints = new()
+                    {
+                        { DualDataSignalType.CrossUp, new double[] { 10 } },
+                        { DualDataSignalType.CrossDown, new double[] { -10 } },
+                    }
+                };
+
+                BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
+                    dds_1,
+                    dds_2,
+                });
+
+                Period pd = HistoricalPeriod;
+                if (pd.IsCurrent) c.MarketData.Start();
+                MultiPeriod mp = new MultiPeriod();
+                mp.Add(pd);
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(mp, Cts);
+                    bts.GetChart(bas);
+                    //GC.Collect();
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        #endregion Test Signal
+
+        #region Test Filter
+
+        private void BtnRunFilter_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                Contract c = ContractTest.ActiveContract;
+                Period pd = HistoricalPeriod;
+                var filter = new GapFilter();
+
+                //  if (Cts is null || Cts.Cancelled())
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    var cList = new Contract[] { c };
+                    Console.WriteLine("total number = " + cList.Count());
+                    cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
+                    GC.Collect();
+                }, Cts.Token);
+            }
+        }
+
+        private void BtnRunFilterMulti_Click(object sender, EventArgs e)
+        {
+            string symbolText = TextBoxMultiContracts.Text;
+            Period pd = HistoricalPeriod;
+            var filter = new GapFilter();
+
+            //if (Cts is null || Cts.Token.Di || Cts.Cancelled())
+            Cts = new CancellationTokenSource();
+
+            Task.Run(() =>
+            {
+                var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
+                var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
+                Console.WriteLine("total number = " + cList.Count());
+
+
+                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
+
+
+
+                GC.Collect();
+            }, Cts.Token);
+
+        }
+
+        private void BtnRunFilterAll_Click(object sender, EventArgs e)
+        {
+            Period pd = HistoricalPeriod;
+            var filter = new GapFilter();
+
+            //if (Cts is null || Cts.Cancelled()) 
+            Cts = new CancellationTokenSource();
+
+            Task.Run(() =>
+            {
+                var cList = ContractManager.TradeableNoETFList.ToList();
+                Console.WriteLine("total number = " + cList.Count());
+                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
+                GC.Collect();
+            }, Cts.Token);
+        }
+
+        #endregion Test Filter
+
+        #region Test Strategy
+
+        private void BtnRunStrategy_Click(object sender, EventArgs e)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Period pd = HistoricalPeriod;
+                Contract c = ContractTest.ActiveContract;
+                //var cList = new Contract[] { c };
+                var strategy = new GapGoOrbStrategy();
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    //cList.Evaluate(new Strategy[] { strategy }, pd, 16, Cts, Progress);
+                    BarTableSet bts = BarTableGroup[c];
+                    bts.SetPeriod(pd, Cts);
+                    bts.GetChart(strategy.AnalysisSet);
+                    GC.Collect();
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+        }
+
+        #endregion Test Strategy
     }
+
     public static class DataGridHelper
     {
         public static object GetCellValueFromColumnHeader(this DataGridViewCellCollection CellCollection, string HeaderText)

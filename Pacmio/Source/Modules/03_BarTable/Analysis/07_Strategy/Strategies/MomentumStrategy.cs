@@ -37,7 +37,6 @@ namespace Pacmio.Analysis
             BarFreq barFreq = BarFreq.Minute) 
             : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
         {
-
             Filter = new PriceVolumeFilter(1, 10, 1e6, double.MaxValue, BarFreq.Daily, PriceType.Trades);
 
             EMA9 = new EMA(9);

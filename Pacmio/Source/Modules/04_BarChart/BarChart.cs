@@ -169,11 +169,10 @@ namespace Pacmio
                     {
                         tg.ConfigChart(this);
                     }
-
+                    
                     if (bat.SignalList.Count() > 0)
                     {
-                        SignalSeries sgs = new SignalSeries(BarAnalysisList);
-                        AddArea(new SignalArea(this, sgs)
+                        AddArea(new SignalArea(this, BarAnalysisList)
                         {
                             Order = int.MinValue,
                             HasXAxisBar = false,
