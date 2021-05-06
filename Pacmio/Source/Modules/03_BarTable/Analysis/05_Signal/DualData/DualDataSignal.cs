@@ -20,7 +20,7 @@ namespace Pacmio
             Fast_Column = analysis.Column_High;
             Slow_Column = analysis.Column_Low;
 
-            Label = "(" + analysis.Name + ")";
+            Label = "(" + analysis.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
@@ -36,7 +36,7 @@ namespace Pacmio
             Fast_Column = fast_analysis.Column_Result;
             Slow_Column = slow_analysis.Column_Result;
 
-            Label = "(" + fast_analysis.Name + "," + slow_analysis.Name + ")";
+            Label = "(" + fast_analysis.Name + "," + slow_analysis.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
@@ -56,7 +56,7 @@ namespace Pacmio
             Fast_Column = fast_column;
             Slow_Column = slow_analysis.Column_Result;
 
-            Label = "(" + fast_column.Name + "," + slow_analysis.Name + ")";
+            Label = "(" + fast_column.Name + "," + slow_analysis.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
 
@@ -75,7 +75,7 @@ namespace Pacmio
             Fast_Column = fast_column;
             Slow_Column = slow_column;
 
-            Label = "(" + Fast_Column.Name + "," + Slow_Column.Name + ")";
+            Label = "(" + Fast_Column.Name + "," + Slow_Column.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(DualDataSignalDatum));
         }

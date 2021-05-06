@@ -16,14 +16,14 @@ namespace Pacmio
         public DivergenceSignal(TimePeriod tif, BarFreq barFreq, ISingleData osc, PriceType priceType = PriceType.Trades)
             : base(tif, barFreq, priceType)
         {
-            Label = "("  + "," +  ")";
+            Label = "("  + "," + "," + barFreq + "," + priceType + ")";
         }
 
         public DivergenceSignal(TimePeriod tif, BarFreq barFreq, ISingleData source, ISingleData osc, PriceType priceType = PriceType.Trades)
             : base(tif, barFreq, priceType)
         {
 
-            Label = "(" + "," + ")";
+            Label = "(" + "," +"," + barFreq + "," + priceType + ")";
         }
 
         public override int GetHashCode() => GetType().GetHashCode() ^ MaximumPivotDistance ^ MinimumPivotDistance;

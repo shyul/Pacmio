@@ -18,7 +18,7 @@ namespace Pacmio.Analysis
         {
             Doji_Ratio = doji_ratio;
             Marubozu_Ratio = marubozu_ratio;
-            Label = "(" + Doji_Ratio + "," + Marubozu_Ratio + ")";
+            Label = "(" + Doji_Ratio + "," + Marubozu_Ratio + "," + barFreq + "," + priceType + ")";
             Name = GetType().Name + Label;
 
             Column_Result = new(this, typeof(CandleStickSignalDatum));

@@ -1228,87 +1228,50 @@ namespace TestClient
             GetChart(TestFlag.BarAnalysisSet);
         }
 
-        public void GetChart(BarAnalysisList bat, MultiPeriod mp)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-                BarTableSet bts = BarTableGroup[c];
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {                    
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    bts.SetPeriod(mp, Cts);
-                    BarTable bt = bts[freq, type];
-                    bt.CalculateRefresh(bat);
-                    BarChart bc = bt.GetChart(bat);
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-
-        }
-
-        public void GetChart(BarAnalysisList bat) => GetChart(bat, new MultiPeriod(HistoricalPeriod));
-
         #endregion Test Pattern
 
         #region Test Signal
 
         private void BtnTestTimeFrame_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
+            var sma50 = new SMA(50) { Color = Color.Orange };
+            var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
+            var ema20 = new EMA(20) { Color = Color.YellowGreen };
+
+            Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
             {
-                Contract c = ContractTest.ActiveContract;
+                { DualDataSignalType.CrossUp, new double[] { 10 } },
+                { DualDataSignalType.CrossDown, new double[] { -10 } },
+            };
 
-                var sma50 = new SMA(50) { Color = Color.Orange };
-                var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
-                var ema20 = new EMA(20) { Color = Color.YellowGreen };
+            DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, sma50)
+            {
+                BearishColor = Color.Red,
+                TypeToTrailPoints = dualDataPoints
+            };
 
-                Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
-                {
-                    { DualDataSignalType.CrossUp, new double[] { 10 } },
-                    { DualDataSignalType.CrossDown, new double[] { -10 } },
-                };
+            DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9, ema20)
+            {
+                TypeToTrailPoints = dualDataPoints
+            };
+            DualDataSignal dds_2a = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9)
+            {
+                BearishColor = Color.Red,
+                TypeToTrailPoints = dualDataPoints
+            };
+            DualDataSignal dds_2b = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema20)
+            {
+                BearishColor = Color.Orange,
+                TypeToTrailPoints = dualDataPoints
+            };
 
-                DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, sma50)
-                {
-                    BearishColor = Color.Red,
-                    TypeToTrailPoints = dualDataPoints
-                };
+            HigherTimeSingleData htsd = new(sma50, BarFreq.Minutes_5, PriceType.Trades);
+            DualDataSignal dds_3 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, htsd)
+            {
+                TypeToTrailPoints = dualDataPoints
+            };
 
-                DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9, ema20)
-                {
-                    TypeToTrailPoints = dualDataPoints
-                }; 
-                DualDataSignal dds_2a = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9)
-                {
-                    BearishColor = Color.Red,
-                    TypeToTrailPoints = dualDataPoints
-                };
-                DualDataSignal dds_2b = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema20)
-                {
-                    BearishColor = Color.Orange,
-                    TypeToTrailPoints = dualDataPoints
-                };
-                HigherTimeSingleData htsd = new(sma50, BarFreq.Minutes_5, PriceType.Trades);
-
-                DualDataSignal dds_3 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, htsd)
-                {
-                    TypeToTrailPoints = dualDataPoints
-                };
-
-                BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
+            BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
                     dds_1,
                     dds_2,
                     dds_2a,
@@ -1316,70 +1279,38 @@ namespace TestClient
                     dds_3,
                 });
 
-                BarTableSet bts = BarTableGroup[c];
-                MultiPeriod mp = new MultiPeriod(HistoricalPeriod);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    bts.SetPeriod(mp, Cts);
-                    bts.CalculateRefresh(bas);
-                    bts.GetChart(bas);
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            GetChart(bas);
         }
 
         private void BtnTestSignal_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
+            var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
+            var ema20 = new EMA(20) { Color = Color.YellowGreen };
+
+            Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
             {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
+                { DualDataSignalType.CrossUp, new double[] { 10 } },
+                { DualDataSignalType.CrossDown, new double[] { -10 } },
+            };
 
-                var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
-                var ema20 = new EMA(20) { Color = Color.YellowGreen };
+            DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema9)
+            {
+                BearishColor = Color.Red,
+                TypeToTrailPoints = dualDataPoints
+            };
 
-                Dictionary<DualDataSignalType, double[]> dualDataPoints = new()
-                {
-                    { DualDataSignalType.CrossUp, new double[] { 10 } },
-                    { DualDataSignalType.CrossDown, new double[] { -10 } },
-                };
+            DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema20)
+            {
+                BearishColor = Color.Orange,
+                TypeToTrailPoints = dualDataPoints
+            };
 
-                DualDataSignal dds_1 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema9)
-                {
-                    BearishColor = Color.Red,
-                    TypeToTrailPoints = dualDataPoints
-                };
-
-                DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minutes_5, ema20)
-                {
-                    BearishColor = Color.Orange,
-                    TypeToTrailPoints = dualDataPoints
-                };
-
-                BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
+            BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
                     dds_1,
                     dds_2,
                 });
 
-                BarTableSet bts = BarTableGroup[c];
-                MultiPeriod mp = new MultiPeriod(HistoricalPeriod);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    bts.SetPeriod(mp, Cts);
-                    bts.CalculateRefresh(bas);
-                    bts.GetChart(bas);
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            GetChart(bas);
         }
 
         #endregion Test Signal
@@ -1455,33 +1386,11 @@ namespace TestClient
 
         private void BtnRunStrategy_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-
-                Contract c = ContractTest.ActiveContract;
-                //var cList = new Contract[] { c };
-                var strategy = new GapGoOrbStrategy();
-
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    //cList.Evaluate(new Strategy[] { strategy }, pd, 16, Cts, Progress);
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    bts.GetChart(strategy.AnalysisSet);
-                    GC.Collect();
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            var strategy = new GapGoOrbStrategy();
+            GetChart(strategy.AnalysisSet);
         }
+
+
 
         #endregion Test Strategy
     }

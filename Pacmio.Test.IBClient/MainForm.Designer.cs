@@ -312,7 +312,7 @@ namespace TestClient
             // 
             this.BtnRunStrategy.BackColor = System.Drawing.Color.SteelBlue;
             this.BtnRunStrategy.ForeColor = System.Drawing.Color.White;
-            this.BtnRunStrategy.Location = new System.Drawing.Point(199, 151);
+            this.BtnRunStrategy.Location = new System.Drawing.Point(199, 134);
             this.BtnRunStrategy.Name = "BtnRunStrategy";
             this.BtnRunStrategy.Size = new System.Drawing.Size(180, 23);
             this.BtnRunStrategy.TabIndex = 59;

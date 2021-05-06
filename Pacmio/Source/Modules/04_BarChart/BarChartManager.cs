@@ -27,7 +27,6 @@ namespace Pacmio
 
         public static void GetChart(this BarTableSet bts, BarAnalysisSet bas)
         {
-            //bts.CalculateRefresh(bas);
             foreach ((BarFreq freq, PriceType type, BarAnalysisList bat) in bas)
             {
                 BarChart bc = new("BarChart", OhlcType.Candlestick);
@@ -37,7 +36,23 @@ namespace Pacmio
             }
         }
 
-        
+
+        /*
+        public static void GetChart(this BarTableSet bts, Strategy s)
+        {
+
+            foreach ((BarFreq freq, PriceType type, BarAnalysisList original_bat) in s.AnalysisSet)
+            {
+                IEnumerable<BarAnalysis> bal = s.AnalysisSet.Where(n => n.freq >= freq && n.bat != original_bat).SelectMany(n => n.bat.SignalList) ;
+
+
+                BarChart bc = new("BarChart", OhlcType.Candlestick);
+                BarTable bt = bts[freq, type];
+                bc.Config(bt, bat);
+                Root.Form.AddForm(DockStyle.Fill, 0, bc);
+            }
+        }*/
+
         private static List<BarChart> List { get; } = new();
 
         public static void Add(BarChart bc)

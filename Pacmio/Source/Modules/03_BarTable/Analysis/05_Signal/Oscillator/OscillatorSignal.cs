@@ -19,7 +19,7 @@ namespace Pacmio
         {
             OscillatorAnalysis = iosc;
 
-            Label = "(" + iosc.Name + ")";
+            Label = "(" + iosc.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(OscillatorSignalDatum));
 

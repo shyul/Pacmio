@@ -17,7 +17,7 @@ namespace Pacmio.Analysis
             : base(tif, barFreq, priceType)
         {
 
-            Label = "(" + "," + ")";
+            Label = "(" + "," + "," + barFreq + "," + priceType + ")";
             Name = GetType().Name + Label;
 
             Column_Result = new(this, typeof(CandleStickSignalDatum));

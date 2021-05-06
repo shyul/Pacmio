@@ -44,6 +44,65 @@ namespace TestClient
             }
         }
 
+        public void GetChart(BarAnalysisList bat, MultiPeriod mp)
+        {
+            if (ValidateSymbol())
+            {
+                BarFreq freq = BarFreq;
+                PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+                BarTableSet bts = BarTableGroup[c];
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    /*BarTable bt = freq < BarFreq.Daily ?
+                    c.LoadBarTable(pd, freq, type, false) :
+                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
+
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
+
+                    bts.SetPeriod(mp, Cts);
+                    BarTable bt = bts[freq, type];
+                    bt.CalculateRefresh(bat);
+                    BarChart bc = bt.GetChart(bat);
+                    HistoricalPeriod = bt.Period;
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+
+        }
+
+        public void GetChart(BarAnalysisList bat) => GetChart(bat, new MultiPeriod(HistoricalPeriod));
+
+        public void GetChart(BarAnalysisSet bas) => GetChart(bas, new MultiPeriod(HistoricalPeriod));
+
+        public void GetChart(BarAnalysisSet bas, MultiPeriod mp)
+        {
+            if (ValidateSymbol())
+            {
+                //BarFreq freq = BarFreq;
+                //PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+                BarTableSet bts = BarTableGroup[c];
+                //MultiPeriod mp = ;
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    bts.SetPeriod(mp, Cts);
+                    bts.CalculateRefresh(bas);
+                    bts.GetChart(bas);
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+
+        }
+
         public void NetClientOnConnectHandler(ConnectionStatus status, DateTime time, string msg)
         {
             Task.Run(() =>

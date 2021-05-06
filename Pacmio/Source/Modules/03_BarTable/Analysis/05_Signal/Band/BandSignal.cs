@@ -19,7 +19,7 @@ namespace Pacmio
             Column = column;
             Band = band;
 
-            Label = "(" + Column.Name + "," + band.Name + ")";
+            Label = "(" + Column.Name + "," + band.Name + "," + barFreq + "," + priceType + ")";
             GroupName = Name = GetType().Name + Label;
             Column_Result = new(this, typeof(BandSignalDatum));
 

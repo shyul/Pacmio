@@ -102,7 +102,7 @@ namespace Pacmio
 
             foreach (var saList in filteredList)
             {
-                BarAnalysisTable[saList.Key] = new BarAnalysisList(saList.Value);
+                BarAnalysisTable[saList.Key] = new BarAnalysisList(this, saList.Value);
             }
 
             SignalList = signalAnalyses;

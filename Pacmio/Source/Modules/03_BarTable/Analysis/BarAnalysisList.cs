@@ -16,7 +16,15 @@ namespace Pacmio
 {
     public class BarAnalysisList : IEnumerable<BarAnalysis>, ISignalSource
     {
+        public BarAnalysisList(BarAnalysisSet bas, IEnumerable<BarAnalysis> list) 
+        {
+            BarAnalysisSet = bas;
+            List = list;
+        }
+
         public BarAnalysisList(IEnumerable<BarAnalysis> list) => List = list;
+
+        public BarAnalysisSet BarAnalysisSet { get; } = null;
 
         public IEnumerable<BarAnalysis> List
         {
@@ -91,7 +99,7 @@ namespace Pacmio
 
         public IEnumerable<PatternAnalysis> PatternAnalyses => m_List.Where<PatternAnalysis>();
 
-        public IEnumerable<SignalAnalysis> SignalList => m_List.Where<SignalAnalysis>();
+        public IEnumerable<SignalAnalysis> SignalList => BarAnalysisSet is BarAnalysisSet bas ? bas.SignalList : m_List.Where<SignalAnalysis>();
 
         public IEnumerable<Strategy> StrategyList => m_List.Where<Strategy>();
 

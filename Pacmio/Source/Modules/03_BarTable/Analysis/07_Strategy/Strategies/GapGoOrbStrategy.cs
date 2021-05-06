@@ -76,8 +76,8 @@ namespace Pacmio.Analysis
             maxVolume,
             minRiskRewardRatio,
             new TimeSpan(1000, 1, 1, 1, 1),
-            new TimePeriod(new Time(9, 30), new Time(12, 00)),
-            new TimePeriod(new Time(9, 30), new Time(10, 00)),
+            TimePeriod.Full, //new TimePeriod(new Time(9, 30), new Time(12, 00)),
+            TimePeriod.Full, //new TimePeriod(new Time(9, 30), new Time(10, 00)),
             fiveMinFreq,
             barFreq)
         { }

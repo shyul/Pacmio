@@ -98,7 +98,7 @@ namespace Pacmio
                     LastIndexMax = bt[bat].LastCalculateIndex;
                     StopPt = LastIndexMax + 1;
                     // Add this line or the Pattern won't show.
-                    PointerSnapToEnd();
+                    //PointerSnapToEnd();
                     ReadyToShow = true;
                     m_AsyncUpdateUI = true;
                     //DataIsUpdated(m_BarTable);
