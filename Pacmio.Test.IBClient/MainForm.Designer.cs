@@ -216,6 +216,8 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
+            this.DateTimePickerHistoricalDataGoto = new System.Windows.Forms.DateTimePicker();
+            this.BtnGoToTime = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -276,6 +278,8 @@ namespace TestClient
             // 
             // tabHistoricalData
             // 
+            this.tabHistoricalData.Controls.Add(this.BtnGoToTime);
+            this.tabHistoricalData.Controls.Add(this.DateTimePickerHistoricalDataGoto);
             this.tabHistoricalData.Controls.Add(this.BtnRunStrategy);
             this.tabHistoricalData.Controls.Add(this.BtnTestTimeFrame);
             this.tabHistoricalData.Controls.Add(this.BtnRunFilter);
@@ -1986,7 +1990,7 @@ namespace TestClient
             this.TextBoxSingleContractName.Name = "TextBoxSingleContractName";
             this.TextBoxSingleContractName.Size = new System.Drawing.Size(132, 22);
             this.TextBoxSingleContractName.TabIndex = 18;
-            this.TextBoxSingleContractName.Text = "ARKK";
+            this.TextBoxSingleContractName.Text = "SOS";
             this.TextBoxSingleContractName.TextChanged += new System.EventHandler(this.TbSymbolName_TextChanged);
             // 
             // MainProgBar
@@ -2219,6 +2223,27 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabIndex = 69;
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
+            // 
+            // DateTimePickerHistoricalDataGoto
+            // 
+            this.DateTimePickerHistoricalDataGoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.DateTimePickerHistoricalDataGoto.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            this.DateTimePickerHistoricalDataGoto.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateTimePickerHistoricalDataGoto.Location = new System.Drawing.Point(482, 390);
+            this.DateTimePickerHistoricalDataGoto.Name = "DateTimePickerHistoricalDataGoto";
+            this.DateTimePickerHistoricalDataGoto.Size = new System.Drawing.Size(140, 22);
+            this.DateTimePickerHistoricalDataGoto.TabIndex = 60;
+            this.DateTimePickerHistoricalDataGoto.Value = new System.DateTime(2021, 1, 1, 12, 0, 0, 0);
+            // 
+            // BtnGoToTime
+            // 
+            this.BtnGoToTime.Location = new System.Drawing.Point(419, 388);
+            this.BtnGoToTime.Name = "BtnGoToTime";
+            this.BtnGoToTime.Size = new System.Drawing.Size(57, 26);
+            this.BtnGoToTime.TabIndex = 61;
+            this.BtnGoToTime.Text = "Go to";
+            this.BtnGoToTime.UseVisualStyleBackColor = true;
+            this.BtnGoToTime.Click += new System.EventHandler(this.BtnGoToTime_Click);
             // 
             // MainForm
             // 
@@ -2459,5 +2484,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnRunFilter;
         private System.Windows.Forms.Button BtnTestTimeFrame;
         private System.Windows.Forms.Button BtnRunStrategy;
+        private System.Windows.Forms.Button BtnGoToTime;
+        private System.Windows.Forms.DateTimePicker DateTimePickerHistoricalDataGoto;
     }
 }

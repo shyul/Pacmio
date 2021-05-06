@@ -1388,10 +1388,22 @@ namespace TestClient
         private void BtnRunStrategy_Click(object sender, EventArgs e)
         {
             var strategy = new GapGoOrbStrategy();
-            GetChart(strategy.AnalysisSet);
+            GetChart(strategy, new MultiPeriod(HistoricalPeriod));
         }
 
         #endregion Test Strategy
+
+        private void BtnGoToTime_Click(object sender, EventArgs e)
+        {
+            DateTime time = DateTimePickerHistoricalDataGoto.Value;
+            if (DockCanvas.ActiveDockForm is BarChart bc)
+            {
+                int index = bc.BarTable.Fetch(time);
+                bc.StopPt = index;
+
+                bc.DataIsUpdated(null);
+            }
+        }
     }
 
     public static class DataGridHelper

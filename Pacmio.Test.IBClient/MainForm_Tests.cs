@@ -103,6 +103,32 @@ namespace TestClient
 
         }
 
+        public void GetChart(Strategy s, MultiPeriod mp)
+        {
+            if (ValidateSymbol())
+            {
+                //BarFreq freq = BarFreq;
+                //PriceType type = DataType;
+                Contract c = ContractTest.ActiveContract;
+                BarTableSet bts = BarTableGroup[c];
+                //MultiPeriod mp = ;
+
+                Cts = new CancellationTokenSource();
+
+                Task.Run(() =>
+                {
+                    bts[s.Filter.BarFreq, s.Filter.PriceType].CalculateRefresh(s.Filter.BarAnalysisList);
+                    bts.SetPeriod(mp, Cts);
+   
+                    bts.CalculateRefresh(s.AnalysisSet);
+                    bts.GetChart(s.AnalysisSet);
+                }, Cts.Token);
+
+                Root.Form.Show();
+            }
+
+        }
+
         public void NetClientOnConnectHandler(ConnectionStatus status, DateTime time, string msg)
         {
             Task.Run(() =>

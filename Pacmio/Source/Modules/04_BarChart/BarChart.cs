@@ -27,7 +27,7 @@ namespace Pacmio
     {
         public BarChart(string name, OhlcType type) : base(name)
         {
-            Icon = Pacmio.Properties.Resources.Icon_Chart;
+            Icon = Properties.Resources.Icon_Chart;
             Margin = new Padding(5, 15, 5, 5);
             Theme.FillColor = BackColor = Color.FromArgb(255, 255, 253, 245);
             Theme.EdgeColor = Theme.ForeColor = Color.FromArgb(192, 192, 192);
@@ -101,7 +101,6 @@ namespace Pacmio
                     //PointerSnapToEnd();
                     ReadyToShow = true;
                     m_AsyncUpdateUI = true;
-                    //DataIsUpdated(m_BarTable);
                 }
 
                 //Console.WriteLine("IsActive = " + IsActive + " | m_ReadyToShow = " + m_ReadyToShow + " | IsBarTable = " + (m_BarTable is BarTable) + " | bt.ReadyToShow = " + m_BarTable.ReadyToShow);

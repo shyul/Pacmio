@@ -84,7 +84,7 @@ namespace Pacmio.Analysis
                 var csd_potf = new DebugColumnSeries(new TimeFramePricePosition(BarFreq.Daily));
                 var csd_tfcv = new DebugColumnSeries(new TimeFrameCumulativeVolume(BarFreq.Daily));
 
-                var tfrv = new TimeFrameRelativeVolume(5, BarFreq.Daily);
+                var tfrv = new TimeFrameRelativeVolume(new TimePeriod(new Time(9, 30), new Time(10, 00)), 5, BarFreq.Daily);
                 var csd_tfrv = new DebugColumnSeries(tfrv);
                 var csd_tfrv_ema = new DebugColumnSeries(tfrv.Column_EMA);
 

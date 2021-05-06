@@ -85,9 +85,7 @@ namespace Pacmio.Analysis
 
         public DualDataSignal FiveMinutesCrossSignal_2 { get; }
 
-        public TimeFramePricePosition TimeFramePricePosition { get; } = new TimeFramePricePosition(BarFreq.Daily);
 
-        public TimeFrameRelativeVolume TimeFrameRelativeVolume { get; } = new TimeFrameRelativeVolume(5, BarFreq.Daily);
 
         protected override void Calculate(BarAnalysisPointer bap)
         {

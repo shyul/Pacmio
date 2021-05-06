@@ -55,7 +55,7 @@ namespace Pacmio.Analysis
     {
         public GapGoOrbStrategy(
             double minimumMinuteVolume = 1e5,
-            double minimumMinuteRelativeVolume = 2,
+            double minimumMinuteRelativeVolume = 1.1,
             double gapPercent = 4,
             double minPrice = 1,
             double maxPrice = 300,
@@ -76,8 +76,8 @@ namespace Pacmio.Analysis
             maxVolume,
             minRiskRewardRatio,
             new TimeSpan(1000, 1, 1, 1, 1),
-            TimePeriod.Full, //new TimePeriod(new Time(9, 30), new Time(12, 00)),
-            TimePeriod.Full, //new TimePeriod(new Time(9, 30), new Time(10, 00)),
+            new TimePeriod(new Time(9, 30), new Time(12, 00)),
+            new TimePeriod(new Time(9, 30), new Time(10, 00)),
             fiveMinFreq,
             barFreq)
         { }
@@ -88,7 +88,7 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume,
             double minimumMinuteRelativeVolume,
             double gapPercent,
-            
+
             double minPrice,
             double maxPrice,
             double minVolume,
@@ -139,7 +139,13 @@ namespace Pacmio.Analysis
 
             Column_Result = new(this, typeof(StrategyDatum));
 
-            AnalysisSet = 
+            RelativeVolume = new TimeFrameRelativeVolume(tif);
+            PricePosition = new TimeFramePricePosition();
+
+            RelativeVolume.AddChild(this);
+            PricePosition.AddChild(this);
+
+            AnalysisSet =
                 new BarAnalysisSet(new SignalAnalysis[] {
                     FiveMinutesCrossSignal_1,
                     FiveMinutesCrossSignal_2,
@@ -189,31 +195,31 @@ namespace Pacmio.Analysis
 
                 if (testPeriods.Contains(b.Time))
                 {
-                    //Console.Write(".");
-
                     if (b.Time == TimeInForce.Start)
                     {
-                        if (b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
+                        double flt = b[Filter];
+                        if (flt != 0 && b.Volume > MinimumMinuteVolume && b[RelativeVolume] > MinimumMinuteRelativeVolume)
                         {
-                            double flt = b[Filter];
-                            if (flt > 0 && b[PricePosition] > 0.75)
+                            Console.WriteLine("flt = " + flt + " | b[PricePosition] = " + b[PricePosition] + " | b.Volume = " + b.Volume + " | b[RelativeVolume] = " + b[RelativeVolume]);
+
+                            if (flt > 0 && b[PricePosition] > 0.6)
                             {
                                 sd.Message = BullishOpenBarMessage;
                                 //sd.SetPoints(new double[] { 1 });
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bullish ORB");
                             }
-                            else if (flt < 0 && b[PricePosition] < 0.25)
+                            else if (flt < 0 && b[PricePosition] < 0.4)
                             {
                                 sd.Message = BearishOpenBarMessage;
                                 //sd.SetPoints(new double[] { -1 });
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bearish ORB");
                             }
-                            else
-                                Console.Write("@");
+                            //else
+                               // Console.Write("@");
                         }
                     }
 
-                    if (sd.Datum_1 is StrategyDatum sd_1 )
+                    if (sd.Datum_1 is StrategyDatum sd_1)
                     {
                         Bar ob = sd_1.Bar;
                         if (string.IsNullOrEmpty(sd.Message))
@@ -305,3 +311,97 @@ namespace Pacmio.Analysis
         }
     }
 }
+
+/*
+flt = 50 | b[PricePosition] = 0.338523489932886 | b.Volume = 867000 | b[RelativeVolume] = 2.97018979355943
+flt = 4.28070175438596 | b[PricePosition] = 0.527068965517241 | b.Volume = 1184500 | b[RelativeVolume] = 2.07935930230895
+flt = 25.9179265658747 | b[PricePosition] = 0.0813008130081278 | b.Volume = 5192200 | b[RelativeVolume] = 2.59448583363598
+
+ 
+ * 
+flt = 0 | b[PricePosition] = 0.363333333333333 | b.Volume = 17000 | b[RelativeVolume] = 2.43978349120433
+flt = 50 | b[PricePosition] = 0.338523489932886 | b.Volume = 867000 | b[RelativeVolume] = 2.97065286455576
+flt = -32.1428571428571 | b[PricePosition] = 0.0174262734584451 | b.Volume = 672400 | b[RelativeVolume] = 1.37175033677593
+flt = 0 | b[PricePosition] = 0.677966101694915 | b.Volume = 155800 | b[RelativeVolume] = 0.26585200160423
+flt = 0 | b[PricePosition] = 0 | b.Volume = 157900 | b[RelativeVolume] = 0.432411677440811
+flt = 0 | b[PricePosition] = 0.709219858156029 | b.Volume = 421500 | b[RelativeVolume] = 0.897196185965426
+flt = 0 | b[PricePosition] = 0.560624999999997 | b.Volume = 279100 | b[RelativeVolume] = 0.57408785412396
+flt = 0 | b[PricePosition] = 0.184210526315789 | b.Volume = 766400 | b[RelativeVolume] = 1.47100837834769
+flt = 0 | b[PricePosition] = 0.674157303370786 | b.Volume = 361000 | b[RelativeVolume] = 1.17204167202466
+flt = 0 | b[PricePosition] = 0.2598 | b.Volume = 167100 | b[RelativeVolume] = 0.624498487307333
+flt = 0 | b[PricePosition] = 0.754803921568628 | b.Volume = 171300 | b[RelativeVolume] = 1.01744814969792
+flt = 0 | b[PricePosition] = 0.909166666666668 | b.Volume = 63300 | b[RelativeVolume] = 0.344541264011892
+flt = 6.54205607476634 | b[PricePosition] = 0.726027397260275 | b.Volume = 197700 | b[RelativeVolume] = 0.728953749202267
+flt = 0 | b[PricePosition] = 0.863181818181821 | b.Volume = 112800 | b[RelativeVolume] = 0.477343103644483
+flt = 0 | b[PricePosition] = 0.25662162162162 | b.Volume = 244100 | b[RelativeVolume] = 1.36924455990646
+flt = 0 | b[PricePosition] = 0.612676056338028 | b.Volume = 4800 | b[RelativeVolume] = 1.44493490195471
+flt = 11.4624505928854 | b[PricePosition] = 0.635220125786164 | b.Volume = 6700 | b[RelativeVolume] = 1.58911195509684
+flt = 0 | b[PricePosition] = 0.178938053097345 | b.Volume = 543800 | b[RelativeVolume] = 0.976196633296514
+flt = 0 | b[PricePosition] = 0.773584905660379 | b.Volume = 476300 | b[RelativeVolume] = 1.33895091037413
+flt = 0 | b[PricePosition] = 0.400000000000001 | b.Volume = 158000 | b[RelativeVolume] = 0.478609810673021
+flt = 0 | b[PricePosition] = 0.586034482758622 | b.Volume = 162000 | b[RelativeVolume] = 0.464158597108738
+flt = 6.70241286863271 | b[PricePosition] = 0.821666036001945 | b.Volume = 48600 | b[RelativeVolume] = 1.61431075534915
+flt = 0 | b[PricePosition] = 0.661290322580646 | b.Volume = 10000 | b[RelativeVolume] = 1.34770414935195
+flt = 0 | b[PricePosition] = 0.312774869109947 | b.Volume = 1389300 | b[RelativeVolume] = 1.84278014060005
+flt = 0 | b[PricePosition] = 0.219081632653061 | b.Volume = 439500 | b[RelativeVolume] = 0.416468946175368
+flt = 0 | b[PricePosition] = 0.707446808510638 | b.Volume = 373300 | b[RelativeVolume] = 0.670691744878929
+flt = 0 | b[PricePosition] = 0.189161554192229 | b.Volume = 1876000 | b[RelativeVolume] = 2.12046380476107
+flt = 24.8711340206186 | b[PricePosition] = 0.682445759368836 | b.Volume = 75300 | b[RelativeVolume] = 1.38266801327763
+flt = 9.64207450693937 | b[PricePosition] = 0.454735135135135 | b.Volume = 1810600 | b[RelativeVolume] = 1.37921172140104
+flt = 0 | b[PricePosition] = 0.373184357541899 | b.Volume = 141000 | b[RelativeVolume] = 0.697500416327948
+flt = 0 | b[PricePosition] = 0.847908745247147 | b.Volume = 435200 | b[RelativeVolume] = 0.335013562270828
+flt = 0 | b[PricePosition] = 0.406790832564358 | b.Volume = 933900 | b[RelativeVolume] = 0.841669621560834
+flt = -11.2704918032787 | b[PricePosition] = 0.797235023041475 | b.Volume = 30800 | b[RelativeVolume] = 0.94965629213435
+flt = 0 | b[PricePosition] = 0.305810397553516 | b.Volume = 766000 | b[RelativeVolume] = 0.835635984520676
+flt = -4.93827160493828 | b[PricePosition] = 0.961832061068702 | b.Volume = 0 | b[RelativeVolume] = 0.285330747466388
+flt = 0 | b[PricePosition] = 1 | b.Volume = 726000 | b[RelativeVolume] = 0.795716993474523
+flt = 0 | b[PricePosition] = 0.655256723716382 | b.Volume = 219000 | b[RelativeVolume] = 1.58712785881621
+flt = 8.46994535519126 | b[PricePosition] = 0.843076923076922 | b.Volume = 1033600 | b[RelativeVolume] = 1.22458316463869
+flt = 0 | b[PricePosition] = 0.0218508997429312 | b.Volume = 1013900 | b[RelativeVolume] = 1.19730175977013
+flt = 0 | b[PricePosition] = 0.0561797752808986 | b.Volume = 1421400 | b[RelativeVolume] = 0.807284342887022
+flt = 0 | b[PricePosition] = 0.913462414578588 | b.Volume = 594500 | b[RelativeVolume] = 0.672785005838557
+flt = 0 | b[PricePosition] = 0.678722627737226 | b.Volume = 426000 | b[RelativeVolume] = 0.647357050369625
+flt = 0 | b[PricePosition] = 0.289855072463767 | b.Volume = 98300 | b[RelativeVolume] = 0.928869265091888
+flt = 0 | b[PricePosition] = 0.625033783783785 | b.Volume = 849700 | b[RelativeVolume] = 1.23196836973812
+flt = 0 | b[PricePosition] = 0.577181208053694 | b.Volume = 297700 | b[RelativeVolume] = 0.621304875759382
+flt = 0 | b[PricePosition] = 0 | b.Volume = 806400 | b[RelativeVolume] = 0.661599807195545
+flt = 0 | b[PricePosition] = 1 | b.Volume = 1659800 | b[RelativeVolume] = 1.50406862376604
+flt = 0 | b[PricePosition] = 0.273743016759777 | b.Volume = 699900 | b[RelativeVolume] = 0.586037134561341
+flt = 0 | b[PricePosition] = 0.161016949152542 | b.Volume = 464900 | b[RelativeVolume] = 0.716984406114945
+flt = 0 | b[PricePosition] = 0.225563909774435 | b.Volume = 13000 | b[RelativeVolume] = 0.58172045745945
+flt = 0 | b[PricePosition] = 0.195652173913042 | b.Volume = 400300 | b[RelativeVolume] = 1.01304539941346
+flt = 0 | b[PricePosition] = 0.0931395348837206 | b.Volume = 235100 | b[RelativeVolume] = 0.500037955879186
+flt = 0 | b[PricePosition] = 0.516842105263161 | b.Volume = 149100 | b[RelativeVolume] = 0.527772303288534
+flt = 4.28070175438596 | b[PricePosition] = 0.527068965517241 | b.Volume = 1184500 | b[RelativeVolume] = 2.0793593023091
+flt = -12.7946127946128 | b[PricePosition] = 0.0975244299674266 | b.Volume = 16600 | b[RelativeVolume] = 0.708475809982871
+flt = 0 | b[PricePosition] = 0.0930232558139536 | b.Volume = 316800 | b[RelativeVolume] = 0.316081585974624
+flt = 0 | b[PricePosition] = 0.337748344370862 | b.Volume = 546000 | b[RelativeVolume] = 0.945805406841266
+flt = -14.4316730523627 | b[PricePosition] = 0.183132530120482 | b.Volume = 141700 | b[RelativeVolume] = 1.88326017542683
+flt = 0 | b[PricePosition] = 0.482758620689656 | b.Volume = 498300 | b[RelativeVolume] = 0.435068009214798
+flt = 0 | b[PricePosition] = 0.0677966101694929 | b.Volume = 15900 | b[RelativeVolume] = 0.467171938068537
+flt = 0 | b[PricePosition] = 0.311499999999998 | b.Volume = 454500 | b[RelativeVolume] = 0.592349082134739
+flt = 0 | b[PricePosition] = 0 | b.Volume = 687700 | b[RelativeVolume] = 0.812812324049853
+flt = 25.9179265658747 | b[PricePosition] = 0.0813008130081278 | b.Volume = 5192200 | b[RelativeVolume] = 2.59448583363598
+flt = 0 | b[PricePosition] = 0 | b.Volume = 2100400 | b[RelativeVolume] = 0.593316217117696
+flt = 0 | b[PricePosition] = 0.260563380281694 | b.Volume = 3900 | b[RelativeVolume] = 0.146419083131891
+flt = 0 | b[PricePosition] = 0.82051282051282 | b.Volume = 21600 | b[RelativeVolume] = 0.759985516244062
+flt = 0 | b[PricePosition] = 0.209743589743587 | b.Volume = 655600 | b[RelativeVolume] = 0.465178124544975
+flt = 0 | b[PricePosition] = 0.784457831325301 | b.Volume = 743300 | b[RelativeVolume] = 0.872097194212652
+flt = 0 | b[PricePosition] = 0.0526315789473762 | b.Volume = 229700 | b[RelativeVolume] = 0.240060123019714
+flt = 0 | b[PricePosition] = 0 | b.Volume = 621400 | b[RelativeVolume] = 0.682795147805114
+flt = 0 | b[PricePosition] = 0.556818181818175 | b.Volume = 636400 | b[RelativeVolume] = 0.671421185408098
+flt = 0 | b[PricePosition] = 0.765833333333334 | b.Volume = 486800 | b[RelativeVolume] = 0.648774989117412
+flt = 0 | b[PricePosition] = 0.0675280898876399 | b.Volume = 403900 | b[RelativeVolume] = 0.740255710506631
+flt = 0 | b[PricePosition] = 1 | b.Volume = 432300 | b[RelativeVolume] = 0.653982025551379
+flt = 0 | b[PricePosition] = 0.723274336283187 | b.Volume = 294800 | b[RelativeVolume] = 0.851017190790155
+flt = 0 | b[PricePosition] = 0.460317460317465 | b.Volume = 259100 | b[RelativeVolume] = 0.89072082901813
+flt = 0 | b[PricePosition] = 0.662222222222224 | b.Volume = 189600 | b[RelativeVolume] = 0.648157080940856
+flt = 0 | b[PricePosition] = 0.0138888888888836 | b.Volume = 256900 | b[RelativeVolume] = 0.53841765271577
+flt = 0 | b[PricePosition] = 0.210526315789471 | b.Volume = 261200 | b[RelativeVolume] = 0.68342511906012
+flt = 0 | b[PricePosition] = 0.447999999999997 | b.Volume = 186700 | b[RelativeVolume] = 0.650103231809241
+flt = 0 | b[PricePosition] = 0.180327868852457 | b.Volume = 201300 | b[RelativeVolume] = 1.08592417524625
+flt = 0 | b[PricePosition] = 0.161944444444446 | b.Volume = 419800 | b[RelativeVolume] = 1.11352267529641
+flt = 6.65024630541873 | b[PricePosition] = 0.926829268292684 | b.Volume = 635400 | b[RelativeVolume] = 1.34097201776693
+flt = 0 | b[PricePosition] = 0.313432835820896 | b.Volume = 534100 | b[RelativeVolume] = 1.47071870687825
+ 
+ */

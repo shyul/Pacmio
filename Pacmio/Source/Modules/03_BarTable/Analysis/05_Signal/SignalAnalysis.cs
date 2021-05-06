@@ -31,8 +31,6 @@ namespace Pacmio
 
         public PriceType PriceType { get; }
 
-        public string Label { get; protected set; }
-
         public SignalColumn Column_Result { get; protected set; }
 
         public Color BullishColor

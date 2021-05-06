@@ -165,6 +165,26 @@ namespace Pacmio
             }
         }
 
+        public int Fetch(DateTime time) 
+        {
+            time = Frequency.Align(time);
+            lock (DataLockObject)
+            {
+                if (TimeToRows.ContainsKey(time))
+                    return TimeToRows[time];
+                else
+                {
+                    var r = Rows.Where(n => n.Period.Start > time);
+                    if (r.Count() > 0)
+                        return r.First().Index;
+                    else if (Rows.Count > 0)
+                        return LastIndex;
+                    else
+                        return 0;
+                }
+            }
+        }
+
         public Bar GetCurrentOrFormerByTime(DateTime time)
         {
             time = Frequency.Align(time);

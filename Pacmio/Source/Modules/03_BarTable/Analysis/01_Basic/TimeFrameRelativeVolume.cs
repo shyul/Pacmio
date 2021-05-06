@@ -16,8 +16,9 @@ namespace Pacmio.Analysis
 {
     public sealed class TimeFrameRelativeVolume : BarAnalysis, ISingleData
     {
-        public TimeFrameRelativeVolume(int interval = 5, BarFreq barFreq = BarFreq.Daily)
+        public TimeFrameRelativeVolume(TimePeriod tif, int interval = 5, BarFreq barFreq = BarFreq.Daily)
         {
+            TimeInForce = tif;
             TimeFrameBarFreq = barFreq;
             Frequency = barFreq.GetAttribute<BarFreqInfo>().Frequency;
             Interval = interval;
@@ -25,13 +26,13 @@ namespace Pacmio.Analysis
 
             TimeFrameCumulativeVolume = new TimeFrameCumulativeVolume(barFreq);
 
-            string label = "(" + Interval + "," + barFreq.ToString() + ")";
-            Name = GetType().Name + label;
+            Label = "(" + Interval + "," + TimeInForce + "," + barFreq.ToString() + ")";
+            Name = GetType().Name + Label;
             GroupName = GetType().Name;
-            Description = "Relative Volume within Time Frame " + label;
+            Description = "Relative Volume within Time Frame " + Label;
 
-            Column_EMA = new NumericColumn(Name + "_EMA", label);
-            Column_Result = new NumericColumn(Name, label);
+            Column_EMA = new NumericColumn(Name + "_EMA", Label);
+            Column_Result = new NumericColumn(Name, Label);
 
             TimeFrameCumulativeVolume.AddChild(this);
         }
@@ -39,6 +40,8 @@ namespace Pacmio.Analysis
         public override int GetHashCode() => GetType().GetHashCode() ^ Interval ^ TimeFrameBarFreq.GetHashCode();
 
         public BarFreq TimeFrameBarFreq { get; }
+
+        public TimePeriod TimeInForce { get; }
 
         public Frequency Frequency { get; }
 
@@ -61,29 +64,32 @@ namespace Pacmio.Analysis
             {
                 Bar b = bt[i];
                 DateTime time = b.Time;
-                if (bts[TimeFrameBarFreq][time].Bar_1 is Bar timeFrame_b)
+                if (TimeInForce.Contains(time)) 
                 {
-                    DateTime lastTime = time - (Frequency.Align(time) - timeFrame_b.Time);
-
-                    if (bt.GetCurrentOrFormerByTime(lastTime) is Bar b_1 && Frequency.Align(b_1.Time) == timeFrame_b.Time)
+                    if (bts[TimeFrameBarFreq][time].Bar_1 is Bar timeFrame_b)
                     {
-                        Console.WriteLine("B_1 Time = " + b_1.Time + " | B Time = " + b.Time);
+                        DateTime lastTime = time - (Frequency.Align(time) - timeFrame_b.Time);
 
-                        double y0 = b_1[Column_EMA];
-                        double value = b[TimeFrameCumulativeVolume];
-                        double ma = b[Column_EMA] = (value - y0) * Multiplier + y0;
-                        b[Column_Result] = value / ma;
+                        if (bt.GetCurrentOrFormerByTime(lastTime) is Bar b_1 && Frequency.Align(b_1.Time) == timeFrame_b.Time)
+                        {
+                            //Console.WriteLine("B_1 Time = " + b_1.Time + " | B Time = " + b.Time);
+
+                            double y0 = b_1[Column_EMA];
+                            double value = b[TimeFrameCumulativeVolume];
+                            double ma = b[Column_EMA] = (value - y0) * Multiplier + y0;
+                            b[Column_Result] = value / ma;
+                        }
+                        else // Time Frame penetration...
+                        {
+                            b[Column_Result] = 0;
+                            b[Column_EMA] = b[TimeFrameCumulativeVolume];
+                        }
                     }
-                    else // Time Frame penetration...
+                    else // Beginning of the table
                     {
                         b[Column_Result] = 0;
                         b[Column_EMA] = b[TimeFrameCumulativeVolume];
                     }
-                }
-                else // Beginning of the table
-                {
-                    b[Column_Result] = 0;
-                    b[Column_EMA] = b[TimeFrameCumulativeVolume];
                 }
             }
         }
