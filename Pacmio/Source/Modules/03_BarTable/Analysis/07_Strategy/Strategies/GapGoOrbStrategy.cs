@@ -131,13 +131,7 @@ namespace Pacmio.Analysis
                 }
             };
 
-            AnalysisSet = new BarAnalysisSet(new SignalAnalysis[]
-            {
 
-
-                FiveMinutesCrossSignal_1,
-                FiveMinutesCrossSignal_2,
-            });
 
             #endregion Define Signals
 
@@ -147,6 +141,14 @@ namespace Pacmio.Analysis
             Description = "Gap and Go ORB Strategy " + Label;
 
             Column_Result = new(this, typeof(StrategyDatum));
+
+            AnalysisSet = 
+                new BarAnalysisSet(new SignalAnalysis[]
+                {
+                    FiveMinutesCrossSignal_1,
+                    FiveMinutesCrossSignal_2,
+                    this
+                });
         }
 
         #region Entry Signals
@@ -199,17 +201,19 @@ namespace Pacmio.Analysis
                             if (flt > 0 && b[PricePosition] > 0.75)
                             {
                                 sd.Message = BullishOpenBarMessage;
+                                Console.WriteLine(bt.Contract + " | " + b.Time + " | Bullish ORB");
                             }
                             else if (flt < 0 && b[PricePosition] < 0.25)
                             {
                                 sd.Message = BearishOpenBarMessage;
+                                Console.WriteLine(bt.Contract + " | " + b.Time + " | Bearish ORB");
                             }
                         }
                     }
 
-                    if (sd.Datum_1.Message == BullishOpenBarMessage)
+                    if (sd.Datum_1 is StrategyDatum sd_1 && sd_1.Message == BullishOpenBarMessage)
                     {
-                        Bar ob = sd.Datum_1.Bar;
+                        Bar ob = sd_1.Bar;
 
                         // TODO: here
                         // Verify higher time frame analysis and indicators 

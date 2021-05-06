@@ -32,9 +32,8 @@ namespace Pacmio
 
             var filterResult = contracts.Screen(strategies.Select(n => n.Filter), evaluateTimeRange, maxDegreeOfParallelism, cts, progress);
 
-
-            // Only choose the top number of the contracts
-
+            Console.WriteLine("Start Strategy Analysis ");
+            cts = new CancellationTokenSource();
             ParallelOptions po = new ParallelOptions()
             {
                 MaxDegreeOfParallelism = maxDegreeOfParallelism,
@@ -53,6 +52,7 @@ namespace Pacmio
 
                     foreach (var s in strategies)
                     {
+                        bts.CalculateRefresh(s.AnalysisSet);
 
 
 
@@ -80,6 +80,8 @@ namespace Pacmio
             {
                 cts.Dispose();
             }
+
+            Console.WriteLine("Strategy Analysis Finished!");
 
             return null; // filterResult;
         }

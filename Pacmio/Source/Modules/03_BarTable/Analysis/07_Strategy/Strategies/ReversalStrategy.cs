@@ -61,11 +61,11 @@ namespace Pacmio.Analysis
 
 
 
-            var filterSignals = new SignalAnalysis[] {
-                DailyPriceFilterSignal,
-                DailyVolumeFilterSignal };
-
-            //Filter = new(filterSignals, 2, 2, Bar.Column_GainPercent);
+            AnalysisSet =
+                new BarAnalysisSet(new SignalAnalysis[]
+                {
+                    this
+                });
         }
 
 

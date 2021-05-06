@@ -556,6 +556,7 @@ namespace TestClient
             string symbolText = TextBoxMultiContracts.Text;
             Period pd = HistoricalPeriod;
             var filter = new GapFilter();
+            var strategy = new GapGoOrbStrategy();
 
             //if (Cts is null || Cts.Token.Di || Cts.Cancelled())
             Cts = new CancellationTokenSource();
@@ -565,7 +566,12 @@ namespace TestClient
                 var symbols = StaticWatchList.GetSymbolListFromCsv(ref symbolText);
                 var cList = ContractManager.GetOrFetch(symbols, "US", Cts, null);
                 Console.WriteLine("total number = " + cList.Count());
-                cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
+
+
+                //cList.Screen(new FilterAnalysis[] { filter }, pd, 16, Cts, Progress);
+                cList.Evaluate(new Strategy[] { strategy }, pd, 16, Cts, Progress);
+
+
                 GC.Collect();
             }, Cts.Token);
 
