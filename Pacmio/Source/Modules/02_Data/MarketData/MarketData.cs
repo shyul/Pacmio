@@ -307,6 +307,7 @@ namespace Pacmio
             {
                 if (!DataConsumers.Contains(idk))
                 {
+                    MarketDataManager.Start(this);
                     DataConsumers.Add(idk);
                     return true;
                 }
@@ -323,6 +324,7 @@ namespace Pacmio
                     DataConsumers.RemoveAll(n => n == idk);
                     return true;
                 }
+                if (DataConsumers.Count < 1) { MarketDataManager.Stop(this); }
                 return false;
             }
         }

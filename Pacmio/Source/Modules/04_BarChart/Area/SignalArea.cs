@@ -7,10 +7,10 @@
 /// ***************************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using Xu;
 using Xu.Chart;
-using Pacmio.Analysis;
 
 namespace Pacmio
 {
@@ -53,8 +53,14 @@ namespace Pacmio
             {
                 List<(Brush br, Rectangle rect)> rectangles = new();
 
-                if (BarChart.Strategy is Strategy s && s.Filter is FilterAnalysis filter)
+                foreach(Strategy s in Source.SignalList.Where(n => n is Strategy)) 
                 {
+                
+                
+                }
+
+                //if (BarChart.Strategy is Strategy s && s.Filter is FilterAnalysis filter)
+                //{
                     /* 
                     
                     Position...
@@ -84,7 +90,7 @@ namespace Pacmio
                             lastType = thisType;
                         }
                     }*/
-                }
+                //}
 
                 g.SetClip(Bounds);
                 foreach (var (br, rect) in rectangles)

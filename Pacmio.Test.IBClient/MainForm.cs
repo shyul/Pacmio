@@ -1199,108 +1199,19 @@ namespace TestClient
 
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = new BarTableSet(c, false);
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestReversal.BarAnalysisList);
-                    //BarChart bc = bt.GetChart(Pacmio.Analysis.TestTrend.BarAnalysisSet);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            GetChart(TestReversal.BarAnalysisList);
         }
 
         private void BtnTestIndicators_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-
-                    BarChart bc = bt.GetChart(Pacmio.Analysis.TestOscillators.BarAnalysisList);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            GetChart(TestOscillators.BarAnalysisList);
         }
 
         private void BtnTestNativeAnalysis_Click(object sender, EventArgs e)
         {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-                mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    /*BarTable bt = freq < BarFreq.Daily ?
-                    c.LoadBarTable(pd, freq, type, false) :
-                    BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
-
-                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-
-                    BarTableSet bts = BarTableGroup[c];
-                    bts.SetPeriod(mp, Cts);
-                    var bt = bts[freq, type];
-
-                    BarChart bc = bt.GetChart(TestNative.BarAnalysisList);
-
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
+            MultiPeriod mp = new MultiPeriod(HistoricalPeriod);
+            mp.Add(new Period(new DateTime(2020, 9, 1), new DateTime(2020, 9, 10)));
+            GetChart(TestNative.BarAnalysisList, mp);
         }
 
         #endregion Test Analysis Only
@@ -1309,6 +1220,16 @@ namespace TestClient
 
         private void BtnTestPatternAnalysis_Click(object sender, EventArgs e)
         {
+            GetChart(TestTrend.BarAnalysisSet);
+        }
+
+        private void BtnTestFlag_Click(object sender, EventArgs e)
+        {
+            GetChart(TestFlag.BarAnalysisSet);
+        }
+
+        public void GetChart(BarAnalysisList bat, MultiPeriod mp)
+        {
             if (ValidateSymbol())
             {
                 BarFreq freq = BarFreq;
@@ -1316,54 +1237,29 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
                 BarTableSet bts = BarTableGroup[c];
 
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
-                {
-                    bts.SetPeriod(mp, Cts);
-                    BarTable bt = bts[freq, type];
-                    BarChart bc = bt.GetChart(TestTrend.BarAnalysisSet);
-                    HistoricalPeriod = bt.Period;
-                }, Cts.Token);
-
-                Root.Form.Show();
-            }
-        }
-
-        private void BtnTestFlag_Click(object sender, EventArgs e)
-        {
-            if (ValidateSymbol())
-            {
-                BarFreq freq = BarFreq;
-                PriceType type = DataType;
-                Contract c = ContractTest.ActiveContract;
-
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
-
-                Cts = new CancellationTokenSource();
-
-                Task.Run(() =>
-                {
-                    /*
-                    BarTable bt = freq < BarFreq.Daily ?
+                {                    
+                    /*BarTable bt = freq < BarFreq.Daily ?
                     c.LoadBarTable(pd, freq, type, false) :
                     BarTableManager.GetOrCreateDailyBarTable(c, freq);*/
 
-                    var bt = c.LoadBarTable(freq, type, pd, false, Cts);
-                    BarChart bc = bt.GetChart(TestFlag.BarAnalysisSet);
+                    //var bt = c.LoadBarTable(freq, type, pd, false, Cts);
 
+                    bts.SetPeriod(mp, Cts);
+                    BarTable bt = bts[freq, type];
+                    bt.CalculateRefresh(bat);
+                    BarChart bc = bt.GetChart(bat);
                     HistoricalPeriod = bt.Period;
                 }, Cts.Token);
 
                 Root.Form.Show();
             }
+
         }
+
+        public void GetChart(BarAnalysisList bat) => GetChart(bat, new MultiPeriod(HistoricalPeriod));
 
         #endregion Test Pattern
 
@@ -1376,7 +1272,6 @@ namespace TestClient
                 Contract c = ContractTest.ActiveContract;
 
                 var sma50 = new SMA(50) { Color = Color.Orange };
-
                 var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
                 var ema20 = new EMA(20) { Color = Color.YellowGreen };
 
@@ -1394,36 +1289,43 @@ namespace TestClient
 
                 DualDataSignal dds_2 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9, ema20)
                 {
-                    //BearishColor = Color.Orange,
+                    TypeToTrailPoints = dualDataPoints
+                }; 
+                DualDataSignal dds_2a = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema9)
+                {
+                    BearishColor = Color.Red,
                     TypeToTrailPoints = dualDataPoints
                 };
-
+                DualDataSignal dds_2b = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, ema20)
+                {
+                    BearishColor = Color.Orange,
+                    TypeToTrailPoints = dualDataPoints
+                };
                 HigherTimeSingleData htsd = new(sma50, BarFreq.Minutes_5, PriceType.Trades);
 
                 DualDataSignal dds_3 = new DualDataSignal(TimePeriod.Full, BarFreq.Minute, htsd)
                 {
-
                     TypeToTrailPoints = dualDataPoints
                 };
 
                 BarAnalysisSet bas = new BarAnalysisSet(new SignalAnalysis[] {
                     dds_1,
                     dds_2,
+                    dds_2a,
+                    dds_2b,
                     dds_3,
                 });
 
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
+                BarTableSet bts = BarTableGroup[c];
+                MultiPeriod mp = new MultiPeriod(HistoricalPeriod);
 
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
-                    BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(mp, Cts);
+                    bts.CalculateRefresh(bas);
                     bts.GetChart(bas);
-                    //GC.Collect();
                 }, Cts.Token);
 
                 Root.Form.Show();
@@ -1464,18 +1366,16 @@ namespace TestClient
                     dds_2,
                 });
 
-                Period pd = HistoricalPeriod;
-                MultiPeriod mp = new MultiPeriod();
-                mp.Add(pd);
+                BarTableSet bts = BarTableGroup[c];
+                MultiPeriod mp = new MultiPeriod(HistoricalPeriod);
 
                 Cts = new CancellationTokenSource();
 
                 Task.Run(() =>
                 {
-                    BarTableSet bts = BarTableGroup[c];
                     bts.SetPeriod(mp, Cts);
+                    bts.CalculateRefresh(bas);
                     bts.GetChart(bas);
-                    //GC.Collect();
                 }, Cts.Token);
 
                 Root.Form.Show();

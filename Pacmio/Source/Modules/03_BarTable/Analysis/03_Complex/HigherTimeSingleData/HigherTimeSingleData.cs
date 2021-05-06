@@ -20,8 +20,6 @@ namespace Pacmio
             PriceType = type;
             SingleData = isd;
 
-            if (isd is SingleDataAnalysis sda) Color = sda.Color;
-
             Label = "(" + SingleData.Name + "," + BarFreq + "," + PriceType + ")";
             Name = GetType().Name + Label;
             Description = "Higher Time Single Data " + Label;
@@ -35,6 +33,8 @@ namespace Pacmio
                 IsAntialiasing = true,
                 DrawLimitShade = false
             };
+
+            if (isd is SingleDataAnalysis sda) Color = sda.Color;
         }
 
         public ISingleData SingleData { get; }

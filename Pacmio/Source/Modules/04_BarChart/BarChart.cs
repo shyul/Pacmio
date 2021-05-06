@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Xu;
 using Xu.Chart;
@@ -81,39 +82,6 @@ namespace Pacmio
 
         public MainBarChartArea MainArea { get; }
 
-        public Strategy Strategy { get; private set; }
-
-        public void Config(BarTableSet bts, Strategy s)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-                BarTable = bts[s.BarFreq, s.PriceType];
-                BarAnalysisList = s.AnalysisSet[s.BarFreq, s.PriceType];
-                Strategy = s;
-                ReadyToShow = m_BarTable is BarTable;
-
-                if (ReadyToShow)
-                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
-        public void Config(BarTableSet bts, BarAnalysisSet bas, BarFreq freq, PriceType type)
-        {
-            lock (GraphicsLockObject)
-            {
-                ReadyToShow = false;
-                BarTable = bts[freq, type];
-                BarAnalysisList = bas[freq, type];
-                ReadyToShow = m_BarTable is BarTable;
-
-                if (ReadyToShow)
-                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
-            }
-            m_AsyncUpdateUI = true;
-        }
-
         public void Config(BarTable bt, BarAnalysisList bat)
         {
             lock (GraphicsLockObject)
@@ -121,10 +89,23 @@ namespace Pacmio
                 ReadyToShow = false;
                 BarTable = bt;
                 BarAnalysisList = bat;
-                ReadyToShow = m_BarTable is BarTable;
 
-                if (ReadyToShow)
-                    StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
+                if (m_BarTable is BarTable)
+                {
+                    while (bt.Status == TableStatus.Calculating || bt.Status == TableStatus.Ticking) { Thread.Sleep(1); }
+                    // Add this line, or nothing will show
+                    //StopPt = m_BarTable[BarAnalysisList].LastCalculateIndex;
+                    LastIndexMax = bt[bat].LastCalculateIndex;
+                    StopPt = LastIndexMax + 1;
+                    // Add this line or the Pattern won't show.
+                    PointerSnapToEnd();
+                    ReadyToShow = true;
+                    m_AsyncUpdateUI = true;
+                    //DataIsUpdated(m_BarTable);
+                }
+
+                //Console.WriteLine("IsActive = " + IsActive + " | m_ReadyToShow = " + m_ReadyToShow + " | IsBarTable = " + (m_BarTable is BarTable) + " | bt.ReadyToShow = " + m_BarTable.ReadyToShow);
+                //Console.WriteLine("BarChart: StopPt = " + StopPt);
             }
             m_AsyncUpdateUI = true;
         }
@@ -142,7 +123,6 @@ namespace Pacmio
         {
             lock (GraphicsLockObject)
             {
-                Strategy = null;
                 List<Area> areaToRemove = Areas.Where(n => n != MainArea).ToList();
                 areaToRemove.ForEach(n => Areas.Remove(n));
                 MainArea.RemoveSeries();
@@ -178,11 +158,6 @@ namespace Pacmio
                             HasXAxisBar = false,
                         });
                     }
-
-                    if (m_BarTable is BarTable bt)
-                    {
-                        bt.CalculateRefresh(bat);
-                    }
                 }
             }
         }
@@ -212,11 +187,11 @@ namespace Pacmio
                     StopPt = 0;
                     TabName = "No BarTable";
                 }
-
+                /*
                 if (m_BarAnalysisList is BarAnalysisList bat)
                 {
                     m_BarTable.CalculateRefresh(bat);
-                }
+                }*/
             }
         }
 
@@ -274,7 +249,7 @@ namespace Pacmio
             lock (GraphicsLockObject)
             {
                 if (m_BarTable is BarTable bt &&
-                StopPt > bt.LastCalculateIndex - 2 && StopPt < bt.LastCalculateIndex + 2)
+                ((StopPt > bt.LastCalculateIndex - 2 && StopPt < bt.LastCalculateIndex + 2) || StopPt == 0))
                 {
                     LastIndexMax = bt.LastCalculateIndex;
                     StopPt = LastIndexMax + 1;

@@ -78,7 +78,7 @@ namespace Pacmio
 
                 if (m_IsLive)
                 {
-                    Contract.MarketData.Start();
+                    //Contract.MarketData.Start();
                     Contract.MarketData.AddDataConsumer(this);
                 }
                 else

@@ -27,8 +27,7 @@ namespace Pacmio
 
         public static void GetChart(this BarTableSet bts, BarAnalysisSet bas)
         {
-            bts.CalculateRefresh(bas);
-
+            //bts.CalculateRefresh(bas);
             foreach ((BarFreq freq, PriceType type, BarAnalysisList bat) in bas)
             {
                 BarChart bc = new("BarChart", OhlcType.Candlestick);
