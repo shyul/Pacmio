@@ -88,7 +88,6 @@ namespace Pacmio.Analysis
             double minimumMinuteVolume,
             double minimumMinuteRelativeVolume,
             double gapPercent,
-
             double minPrice,
             double maxPrice,
             double minVolume,
@@ -214,8 +213,6 @@ namespace Pacmio.Analysis
                                 //sd.SetPoints(new double[] { -1 });
                                 Console.WriteLine(bt.Contract + " | " + b.Time + " | Bearish ORB");
                             }
-                            //else
-                               // Console.Write("@");
                         }
                     }
 
@@ -270,7 +267,8 @@ namespace Pacmio.Analysis
                 #region Check profit and stop
 
                 // Dedicated function to handle stop out here!
-                sd.StopLossOrTakeProfit(0.5);
+
+                ///sd.StopLossOrTakeProfit(0.5);
 
                 // Profit taking or Stop Signal Trigger!
                 if (sd.Quantity > 0)
@@ -278,15 +276,15 @@ namespace Pacmio.Analysis
                     // Find exit signals
                     if (bts[b.Time, FiveMinutesCrossSignal_1] is DualDataSignalDatum sd_1 && sd_1.List.Contains(DualDataSignalType.CrossDown))
                     {
-                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                       // sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                     }
                     else if (bts[b.Time, FiveMinutesCrossSignal_2] is DualDataSignalDatum sd_2 && sd_2.List.Contains(DualDataSignalType.CrossDown))
                     {
-                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                       // sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                     }
                     else if (bts[b.Time, BarFreq.Minutes_5] is Bar min5_b && (min5_b.Bar_1 is Bar min5_b_1) && (min5_b.Low < min5_b_1.Low))
                     {
-                        sd.SendOrder(b.Low, -1, OrderType.MidPrice);
+                       // sd.SendOrder(b.Low, -1, OrderType.MidPrice);
                     }
                 }
                 else if (sd.Quantity < 0)
@@ -294,15 +292,15 @@ namespace Pacmio.Analysis
                     // Find exit signals
                     if (bts[b.Time, FiveMinutesCrossSignal_1] is DualDataSignalDatum sd_1 && sd_1.List.Contains(DualDataSignalType.CrossUp))
                     {
-                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                       // sd.SendOrder(b.High, 1, OrderType.MidPrice);
                     }
                     else if (bts[b.Time, FiveMinutesCrossSignal_2] is DualDataSignalDatum sd_2 && sd_2.List.Contains(DualDataSignalType.CrossUp))
                     {
-                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                       // sd.SendOrder(b.High, 1, OrderType.MidPrice);
                     }
                     else if (bts[b.Time, BarFreq.Minutes_5] is Bar min5_b && (min5_b.Bar_1 is Bar min5_b_1) && (min5_b.High > min5_b_1.High))
                     {
-                        sd.SendOrder(b.High, 1, OrderType.MidPrice);
+                       // sd.SendOrder(b.High, 1, OrderType.MidPrice);
                     }
                 }
 

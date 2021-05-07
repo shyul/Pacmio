@@ -218,7 +218,7 @@ namespace Pacmio
 
                     double commission = 0; // Hard to estimate, since I am using unity quantity here.
                     double slippage = 0; // Get it from simulation setting!
-
+                    Console.WriteLine("Added Order: price = " + executionPrice + " | scale = " + scale + " | orderType = " + orderType);
                     AddExecutionRecord(new ExecutionRecord(executionPrice + slippage, scale, commission, orderType));
                 }
 

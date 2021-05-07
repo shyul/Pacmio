@@ -316,7 +316,7 @@ namespace TestClient
             // 
             this.BtnRunStrategy.BackColor = System.Drawing.Color.SteelBlue;
             this.BtnRunStrategy.ForeColor = System.Drawing.Color.White;
-            this.BtnRunStrategy.Location = new System.Drawing.Point(199, 134);
+            this.BtnRunStrategy.Location = new System.Drawing.Point(199, 165);
             this.BtnRunStrategy.Name = "BtnRunStrategy";
             this.BtnRunStrategy.Size = new System.Drawing.Size(180, 23);
             this.BtnRunStrategy.TabIndex = 59;
@@ -327,7 +327,7 @@ namespace TestClient
             // BtnTestTimeFrame
             // 
             this.BtnTestTimeFrame.BackColor = System.Drawing.Color.Yellow;
-            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 227);
+            this.BtnTestTimeFrame.Location = new System.Drawing.Point(7, 282);
             this.BtnTestTimeFrame.Name = "BtnTestTimeFrame";
             this.BtnTestTimeFrame.Size = new System.Drawing.Size(180, 23);
             this.BtnTestTimeFrame.TabIndex = 58;
@@ -339,7 +339,7 @@ namespace TestClient
             // 
             this.BtnRunFilter.BackColor = System.Drawing.Color.LightSeaGreen;
             this.BtnRunFilter.ForeColor = System.Drawing.Color.White;
-            this.BtnRunFilter.Location = new System.Drawing.Point(199, 29);
+            this.BtnRunFilter.Location = new System.Drawing.Point(199, 16);
             this.BtnRunFilter.Name = "BtnRunFilter";
             this.BtnRunFilter.Size = new System.Drawing.Size(180, 23);
             this.BtnRunFilter.TabIndex = 57;
@@ -350,7 +350,7 @@ namespace TestClient
             // BtnTestFlag
             // 
             this.BtnTestFlag.BackColor = System.Drawing.Color.DarkSalmon;
-            this.BtnTestFlag.Location = new System.Drawing.Point(7, 163);
+            this.BtnTestFlag.Location = new System.Drawing.Point(7, 194);
             this.BtnTestFlag.Name = "BtnTestFlag";
             this.BtnTestFlag.Size = new System.Drawing.Size(180, 23);
             this.BtnTestFlag.TabIndex = 56;
@@ -362,7 +362,7 @@ namespace TestClient
             // 
             this.BtnRunFilterAll.BackColor = System.Drawing.Color.LightSeaGreen;
             this.BtnRunFilterAll.ForeColor = System.Drawing.Color.White;
-            this.BtnRunFilterAll.Location = new System.Drawing.Point(199, 87);
+            this.BtnRunFilterAll.Location = new System.Drawing.Point(199, 74);
             this.BtnRunFilterAll.Name = "BtnRunFilterAll";
             this.BtnRunFilterAll.Size = new System.Drawing.Size(180, 23);
             this.BtnRunFilterAll.TabIndex = 55;
@@ -373,7 +373,7 @@ namespace TestClient
             // BtnTestSignal
             // 
             this.BtnTestSignal.BackColor = System.Drawing.Color.Yellow;
-            this.BtnTestSignal.Location = new System.Drawing.Point(7, 256);
+            this.BtnTestSignal.Location = new System.Drawing.Point(7, 311);
             this.BtnTestSignal.Name = "BtnTestSignal";
             this.BtnTestSignal.Size = new System.Drawing.Size(180, 23);
             this.BtnTestSignal.TabIndex = 54;
@@ -384,7 +384,7 @@ namespace TestClient
             // BtnTestPatternAnalysis
             // 
             this.BtnTestPatternAnalysis.BackColor = System.Drawing.Color.DarkSalmon;
-            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 134);
+            this.BtnTestPatternAnalysis.Location = new System.Drawing.Point(7, 165);
             this.BtnTestPatternAnalysis.Name = "BtnTestPatternAnalysis";
             this.BtnTestPatternAnalysis.Size = new System.Drawing.Size(180, 23);
             this.BtnTestPatternAnalysis.TabIndex = 53;
@@ -395,7 +395,7 @@ namespace TestClient
             // BtnTestNativeAnalysis
             // 
             this.BtnTestNativeAnalysis.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestNativeAnalysis.Location = new System.Drawing.Point(7, 87);
+            this.BtnTestNativeAnalysis.Location = new System.Drawing.Point(7, 74);
             this.BtnTestNativeAnalysis.Name = "BtnTestNativeAnalysis";
             this.BtnTestNativeAnalysis.Size = new System.Drawing.Size(180, 23);
             this.BtnTestNativeAnalysis.TabIndex = 52;
@@ -406,7 +406,7 @@ namespace TestClient
             // BtnTestOscillators
             // 
             this.BtnTestOscillators.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnTestOscillators.Location = new System.Drawing.Point(7, 58);
+            this.BtnTestOscillators.Location = new System.Drawing.Point(7, 45);
             this.BtnTestOscillators.Name = "BtnTestOscillators";
             this.BtnTestOscillators.Size = new System.Drawing.Size(180, 23);
             this.BtnTestOscillators.TabIndex = 51;
@@ -468,7 +468,7 @@ namespace TestClient
             // 
             this.BtnRunFilterMulti.BackColor = System.Drawing.Color.LightSeaGreen;
             this.BtnRunFilterMulti.ForeColor = System.Drawing.Color.White;
-            this.BtnRunFilterMulti.Location = new System.Drawing.Point(199, 58);
+            this.BtnRunFilterMulti.Location = new System.Drawing.Point(199, 45);
             this.BtnRunFilterMulti.Name = "BtnRunFilterMulti";
             this.BtnRunFilterMulti.Size = new System.Drawing.Size(180, 23);
             this.BtnRunFilterMulti.TabIndex = 45;
@@ -556,7 +556,7 @@ namespace TestClient
             // BtnLoadHistoricalChart
             // 
             this.BtnLoadHistoricalChart.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 29);
+            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 16);
             this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
             this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(180, 23);
             this.BtnLoadHistoricalChart.TabIndex = 0;
