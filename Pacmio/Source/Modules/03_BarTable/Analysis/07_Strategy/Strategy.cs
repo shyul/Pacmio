@@ -65,7 +65,7 @@ namespace Pacmio
 
         public virtual void DrawOverlay(Graphics g, BarChart bc)
         {
-            Console.WriteLine("Start drawing Strategy Overlay, AreaName = " + AreaName);
+            //Console.WriteLine("Start drawing Strategy Overlay, AreaName = " + AreaName);
             if (bc[AreaName] is Area a) 
             {
                 g.SetClip(a.Bounds);
@@ -77,13 +77,43 @@ namespace Pacmio
 
                     if (i >= 0 && i < bc.BarTable.Count)
                     {
+                        Bar b = bc.BarTable[i];
+                        StrategyDatum sd = b[this];
+
                         int x = a.IndexToPixel(pix_index);
-                        int y = a.AxisY(AlignType.Right).ValueToPixel(bc.BarTable[i].Close);
+                        int y = a.AxisY(AlignType.Right).ValueToPixel(b.Close);
 
                         Point pt1 = new(x - a.AxisX.HalfTickWidth, y);
                         Point pt3 = new(x + a.AxisX.HalfTickWidth, y);
 
-                        g.DrawLine(new Pen(Color.Green, 3), pt1, pt3);
+                        //g.DrawLine(new Pen(Color.Blue, 3), pt1, pt3);
+                        if (!double.IsNaN(sd.AveragePrice))
+                        {
+                            y = a.AxisY(AlignType.Right).ValueToPixel(sd.AveragePrice);
+                            pt1 = new(x - a.AxisX.HalfTickWidth, y);
+                            pt3 = new(x + a.AxisX.HalfTickWidth, y);
+
+                            g.DrawLine(new Pen(Color.DeepSkyBlue, 3), pt1, pt3);
+                        }
+
+                        if (!double.IsNaN(sd.ProfitTakePrice))
+                        {
+                            y = a.AxisY(AlignType.Right).ValueToPixel(sd.ProfitTakePrice);
+                            pt1 = new(x - a.AxisX.HalfTickWidth, y);
+                            pt3 = new(x + a.AxisX.HalfTickWidth, y);
+
+                            g.DrawLine(new Pen(Color.LightGreen, 3), pt1, pt3);
+                        }
+
+                        if (!double.IsNaN(sd.StopLossPrice))
+                        {
+                            y = a.AxisY(AlignType.Right).ValueToPixel(sd.StopLossPrice);
+                            pt1 = new(x - a.AxisX.HalfTickWidth, y);
+                            pt3 = new(x + a.AxisX.HalfTickWidth, y);
+
+                            g.DrawLine(new Pen(Color.DeepPink, 3), pt1, pt3);
+
+                        }
                     }
                     //Console.WriteLine("index = " + i);
 

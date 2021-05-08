@@ -34,17 +34,17 @@ namespace Pacmio
 
                 if (IsLive && PositionInfo is PositionInfo pi)
                 {
-                    FilledQuantity = pi.Quantity;
+                    Quantity = pi.Quantity;
                     AveragePrice = pi.AverageEntryPrice;
                     if (sd_1.IsLive)
                     {
-                        sd_1.FilledQuantity = Quantity;
+                        sd_1.Quantity = Quantity;
                         sd_1.AveragePrice = AveragePrice;
                     }
                 }
                 else if (!IsLive && !sd_1.IsLive)
                 {
-                    FilledQuantity = sd_1.Quantity;
+                    Quantity = sd_1.Quantity;
                     AveragePrice = sd_1.AveragePrice;
                 }
             }
@@ -80,14 +80,6 @@ namespace Pacmio
 
         public double RiskPart { get; set; } = double.NaN;
 
-        /*
-        public double RiskPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(AveragePrice - StopLossPrice);
-
-        public double RewardPart => double.IsNaN(AveragePrice) ? double.NaN : Math.Abs(ProfitTakePrice - AveragePrice);
-
-        public double RewardRiskRatio => double.IsNaN(AveragePrice) ? double.NaN : (RewardPart / RiskPart);
-        */
-
         public string Message { get; set; } = string.Empty;
 
         public int EntryBarIndex { get; set; } = -1;
@@ -102,29 +94,31 @@ namespace Pacmio
         {
             if (ratio > 1) ratio = 1; else if (ratio < 0) return;
 
+            Console.WriteLine(Bar.Time + " | Current Quantity = " + Quantity);
+
             if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
                 if (Bar.Contains(StopLossPrice))
                 {
-                    SendOrder(StopLossPrice, -1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, StopLossPrice, 1, OrderType.MidPrice);
                 }
                 else if (Bar.High < StopLossPrice)
                 {
-                    SendOrder(Bar.Open, -1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, Bar.Open, 1, OrderType.MidPrice);
                 }
                 else if (Bar.BarFreq < BarFreq.Daily && !Strategy.HoldingPeriod.Contains(Bar.Time))
                 {
-                    SendOrder(Bar.Open, -1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, Bar.Open, 1, OrderType.MidPrice);
                 }
 
                 if (Bar.Contains(ProfitTakePrice))
                 {
-                    SendOrder(ProfitTakePrice, -ratio, OrderType.Limit);
+                    SendOrder(ActionDirection.Remove, ProfitTakePrice, -ratio, OrderType.Limit);
                     ProfitTakePrice += RiskPart;
                 }
                 else if (Bar.Low > ProfitTakePrice)
                 {
-                    SendOrder(Bar.Low, -0.5, OrderType.Limit);
+                    SendOrder(ActionDirection.Remove, Bar.Low, 0.5, OrderType.Limit);
                     ProfitTakePrice = Bar.Low + RiskPart;
                 }
 
@@ -135,26 +129,26 @@ namespace Pacmio
             {
                 if (Bar.Contains(StopLossPrice))
                 {
-                    SendOrder(StopLossPrice, 1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, StopLossPrice, 1, OrderType.MidPrice);
                 }
                 else if (Bar.Low > StopLossPrice)
                 {
-                    SendOrder(Bar.Open, 1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, Bar.Open, 1, OrderType.MidPrice);
                 }
                 else if (Bar.BarFreq < BarFreq.Daily && !Strategy.HoldingPeriod.Contains(Bar.Time))
                 {
-                    SendOrder(Bar.Open, 1, OrderType.MidPrice);
+                    SendOrder(ActionDirection.Remove, Bar.Open, 1, OrderType.MidPrice);
                 }
 
                 // Profit Taking
                 if (Bar.Contains(ProfitTakePrice))
                 {
-                    SendOrder(ProfitTakePrice, ratio, OrderType.Stop);
+                    SendOrder(ActionDirection.Remove, ProfitTakePrice, ratio, OrderType.Stop);
                     ProfitTakePrice -= RiskPart;
                 }
                 else if (Bar.High < ProfitTakePrice)
                 {
-                    SendOrder(Bar.High, 0.5, OrderType.Limit);
+                    SendOrder(ActionDirection.Remove, Bar.High, 0.5, OrderType.Limit);
                     ProfitTakePrice = Bar.High - RiskPart;
                 }
 
@@ -168,7 +162,7 @@ namespace Pacmio
             //SendOrder()
         }
 
-        public void SendOrder(double executionPrice, double scale, OrderType orderType)
+        public void SendOrder(ActionDirection direction, double executionPrice, double scale, OrderType orderType)
         {
             if (scale != 0)
             {
@@ -218,8 +212,31 @@ namespace Pacmio
 
                     double commission = 0; // Hard to estimate, since I am using unity quantity here.
                     double slippage = 0; // Get it from simulation setting!
-                    Console.WriteLine("Added Order: price = " + executionPrice + " | scale = " + scale + " | orderType = " + orderType);
-                    AddExecutionRecord(new ExecutionRecord(executionPrice + slippage, scale, commission, orderType));
+                    Console.WriteLine(Bar.Time + " | Order: " + direction + " | price = " + executionPrice + " | scale = " + scale + " | orderType = " + orderType);
+
+                    double quantity = 0;
+
+                    if (direction == ActionDirection.Add)
+                    {
+                        if (FullQuantity == 0)
+                            quantity = scale;
+                        else
+                            quantity = scale * Math.Abs(FullQuantity);
+                    }
+                    else if(direction == ActionDirection.Remove) 
+                    {
+                        scale = Math.Abs(scale);
+
+                        if (scale == 1 ||  Math.Abs(scale * 1.01) > Math.Abs(QuantityRatio))
+                            quantity = -Quantity;
+                        else
+                            quantity = scale * FullQuantity;
+
+                    }
+
+
+
+                    AddExecutionRecord(new ExecutionRecord(executionPrice + slippage, quantity, commission, orderType));
                 }
 
                 // Modify the decision:
@@ -247,11 +264,14 @@ namespace Pacmio
 
         public double PendingQuantity => ActiveOrder is OrderInfo od && od.IsEditable ? od.RemainingQuantity : 0;
 
-        public double FilledQuantity { get; private set; } = 0;
+        public double FullQuantity { get; private set; } = 0;
 
-        public double Quantity => PendingQuantity + FilledQuantity;
+        public double Quantity { get; private set; } = 0; //=> PendingQuantity + FilledQuantity;
+
+        public double QuantityRatio => FullQuantity == 0 ? 0 : (Quantity / FullQuantity);
 
         public double AveragePrice { get; private set; } = double.NaN;
+        //public double AveragePrice { get; set; } = double.NaN;
 
         public double CurrentPrice => IsLive ? MarketData.LastPrice : Bar.Close;
 
@@ -269,17 +289,20 @@ namespace Pacmio
         {
             if (exec.Quantity != 0)
             {
+                Console.WriteLine(Bar.Time + " | exec.Quantity = " + exec.Quantity + " | exec.Proceeds = " + exec.Proceeds + " | Quantity = " + Quantity);
                 if (exec.Quantity * Quantity >= 0) // Same direction or initial entry (when Qty == 0)
                 {
                     exec.LiquidityType = LiquidityType.Added;
                     AveragePrice = Math.Abs((exec.Proceeds + Cost) / (exec.Quantity + Quantity));
-
+                    //AveragePrice = Math.Abs((exec.Proceeds ) / (exec.Quantity));
+                    //Console.WriteLine("Added LiquidityType | AveragePrice =" + AveragePrice);
                     if (exec.Quantity > 0)
                         exec.Action = ActionType.Long;
                     else if (exec.Quantity < 0)
                         exec.Action = ActionType.Short;
 
-                    FilledQuantity += exec.Quantity;
+                    Quantity += exec.Quantity;
+                    FullQuantity = Quantity;
                     exec.RealizedPnL = 0;
                 }
                 else // Opposite direction in this case.
@@ -291,8 +314,26 @@ namespace Pacmio
                     else if (exec.Quantity < 0)
                         exec.Action = ActionType.Sell;
 
-                    exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutionPrice);
-                    FilledQuantity -= exec.Quantity;
+                    double old_qty = Quantity;
+                    Quantity += exec.Quantity;
+
+                    if (old_qty * Quantity >= 0)
+                    {
+                        exec.RealizedPnL = exec.Quantity * (AveragePrice - exec.ExecutionPrice);
+                        if (Quantity == 0)
+                        {
+                            FullQuantity = 0;
+                            ProfitTakePrice = double.NaN;
+                            StopLossPrice = double.NaN;
+                            AveragePrice = double.NaN;
+                        }
+                    }
+                    else if (old_qty * Quantity < 0) // The position is flippe
+                    {
+                        FullQuantity = Quantity;
+                        exec.RealizedPnL = -old_qty * (AveragePrice - exec.ExecutionPrice);
+                        AveragePrice = exec.ExecutionPrice;
+                    }
                 }
 
                 ExecutionRecordList.Add(exec);
@@ -303,7 +344,7 @@ namespace Pacmio
 
         public ExecutionRecord LatestExecutionRecord => ExecutionRecordList.Count > 0 ? ExecutionRecordList.Last() : null;
 
-        public ActionType LatestAction => LatestExecutionRecord is ExecutionRecord exr ? exr.Action : ActionType.None;
+        public ActionType LatestAction => LatestExecutionRecord is ExecutionRecord exec ? exec.Action : ActionType.None;
 
         public double RealizedPnL => ExecutionRecordList.Select(n => n.RealizedPnL).Sum();
 

@@ -233,17 +233,23 @@ namespace Pacmio.Analysis
                                     sd.ProfitTakePrice = ob.High + MinimumRiskRewardRatio * sd.RiskPart;
                                     sd.Message = RangeBarBullishMessage;
                                     sd.EntryBarIndex = 0;
-                                    sd.SendOrder(ob.High, 1, OrderType.Stop);
+
+                                    //sd.AveragePrice = ob.High;
+
+                                    sd.SendOrder(ActionDirection.Add, ob.High, 1, OrderType.Stop);
                                     sd.SetPoints(new double[] { 3 });
                                 }
                                 else if (b.Contains(ob.Low)) // Bearish / short side no gap entry
                                 {
                                     sd.StopLossPrice = ob.High;
                                     sd.RiskPart = ob.High - ob.Low;
-                                    sd.ProfitTakePrice = ob.Low - MinimumRiskRewardRatio * sd.RiskPart;
+                                    sd.ProfitTakePrice = ob.Low - (MinimumRiskRewardRatio * sd.RiskPart);
                                     sd.Message = RangeBarBearishMessage;
                                     sd.EntryBarIndex = 0;
-                                    sd.SendOrder(ob.Low, -1, OrderType.Limit);
+
+                                    //sd.AveragePrice = ob.Low;
+
+                                    sd.SendOrder(ActionDirection.Add, ob.Low, -1, OrderType.Limit);
                                     sd.SetPoints(new double[] { -3 });
                                 }
                             }
@@ -268,7 +274,7 @@ namespace Pacmio.Analysis
 
                 // Dedicated function to handle stop out here!
 
-                ///sd.StopLossOrTakeProfit(0.5);
+                sd.StopLossOrTakeProfit(0.5);
 
                 // Profit taking or Stop Signal Trigger!
                 if (sd.Quantity > 0)

@@ -42,4 +42,13 @@ namespace Pacmio
         [EnumMember]
         Cover = 2,
     }
+
+    public enum ActionDirection : int 
+    {
+        None = 0,
+
+        Add = 1,
+
+        Remove = -1
+    }
 }
