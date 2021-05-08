@@ -1283,7 +1283,7 @@ namespace TestClient
             GetChart(bas);
         }
 
-        private void BtnTestSignal_Click(object sender, EventArgs e)
+        private void BtnTestStrategy_Click(object sender, EventArgs e)
         {
             var ema9 = new EMA(9) { Color = Color.DeepSkyBlue };
             var ema20 = new EMA(20) { Color = Color.YellowGreen };

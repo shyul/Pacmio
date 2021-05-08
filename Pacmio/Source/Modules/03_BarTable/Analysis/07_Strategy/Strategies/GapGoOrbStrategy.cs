@@ -133,7 +133,7 @@ namespace Pacmio.Analysis
 
             Label = "(" + gapPercent + "," + minimumMinuteVolume + "," + minimumMinuteRelativeVolume + "," + fiveMinFreq + "," + crossData_1.Name + "," + crossData_2.Name + "," + minRiskRewardRatio + "," + GapFilter.Name + "," + barFreq + ")";
             Name = GetType().Name + Label;
-            AreaName = GroupName = GetType().Name;
+            GroupName = GetType().Name;
             Description = "Gap and Go ORB Strategy " + Label;
 
             Column_Result = new(this, typeof(StrategyDatum));

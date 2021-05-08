@@ -10,9 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Runtime.Serialization;
-using Xu;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
@@ -64,8 +65,34 @@ namespace Pacmio
 
         public virtual void DrawOverlay(Graphics g, BarChart bc)
         {
+            Console.WriteLine("Start drawing Strategy Overlay, AreaName = " + AreaName);
+            if (bc[AreaName] is Area a) 
+            {
+                g.SetClip(a.Bounds);
+                g.SmoothingMode = SmoothingMode.HighQuality;
 
+                int pix_index = 0;
+                for (int i = bc.StartPt; i <= bc.StopPt; i++)
+                {
 
+                    if (i >= 0 && i < bc.BarTable.Count)
+                    {
+                        int x = a.IndexToPixel(pix_index);
+                        int y = a.AxisY(AlignType.Right).ValueToPixel(bc.BarTable[i].Close);
+
+                        Point pt1 = new(x - a.AxisX.HalfTickWidth, y);
+                        Point pt3 = new(x + a.AxisX.HalfTickWidth, y);
+
+                        g.DrawLine(new Pen(Color.Green, 3), pt1, pt3);
+                    }
+                    //Console.WriteLine("index = " + i);
+
+                    pix_index++;
+                }
+
+                g.SmoothingMode = SmoothingMode.Default;
+                g.ResetClip();
+            }
         }
 
         #endregion Draw Chart Overlay

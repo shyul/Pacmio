@@ -38,12 +38,14 @@ namespace TestClient
             this.btnAccountSummary = new System.Windows.Forms.Button();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabHistoricalData = new System.Windows.Forms.TabPage();
+            this.BtnGoToTime = new System.Windows.Forms.Button();
+            this.DateTimePickerHistoricalDataGoto = new System.Windows.Forms.DateTimePicker();
             this.BtnRunStrategy = new System.Windows.Forms.Button();
             this.BtnTestTimeFrame = new System.Windows.Forms.Button();
             this.BtnRunFilter = new System.Windows.Forms.Button();
             this.BtnTestFlag = new System.Windows.Forms.Button();
             this.BtnRunFilterAll = new System.Windows.Forms.Button();
-            this.BtnTestSignal = new System.Windows.Forms.Button();
+            this.BtnTestStrategy = new System.Windows.Forms.Button();
             this.BtnTestPatternAnalysis = new System.Windows.Forms.Button();
             this.BtnTestNativeAnalysis = new System.Windows.Forms.Button();
             this.BtnTestOscillators = new System.Windows.Forms.Button();
@@ -216,8 +218,6 @@ namespace TestClient
             this.LabelBarType = new System.Windows.Forms.Label();
             this.GroupBoxBarTableSetting = new System.Windows.Forms.GroupBox();
             this.GroupBoxMultiContracts = new System.Windows.Forms.GroupBox();
-            this.DateTimePickerHistoricalDataGoto = new System.Windows.Forms.DateTimePicker();
-            this.BtnGoToTime = new System.Windows.Forms.Button();
             this.MainTab.SuspendLayout();
             this.tabHistoricalData.SuspendLayout();
             this.tabContract.SuspendLayout();
@@ -285,7 +285,7 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnRunFilter);
             this.tabHistoricalData.Controls.Add(this.BtnTestFlag);
             this.tabHistoricalData.Controls.Add(this.BtnRunFilterAll);
-            this.tabHistoricalData.Controls.Add(this.BtnTestSignal);
+            this.tabHistoricalData.Controls.Add(this.BtnTestStrategy);
             this.tabHistoricalData.Controls.Add(this.BtnTestPatternAnalysis);
             this.tabHistoricalData.Controls.Add(this.BtnTestNativeAnalysis);
             this.tabHistoricalData.Controls.Add(this.BtnTestOscillators);
@@ -311,6 +311,27 @@ namespace TestClient
             this.tabHistoricalData.TabIndex = 1;
             this.tabHistoricalData.Text = "Historical Data";
             this.tabHistoricalData.UseVisualStyleBackColor = true;
+            // 
+            // BtnGoToTime
+            // 
+            this.BtnGoToTime.Location = new System.Drawing.Point(419, 388);
+            this.BtnGoToTime.Name = "BtnGoToTime";
+            this.BtnGoToTime.Size = new System.Drawing.Size(57, 26);
+            this.BtnGoToTime.TabIndex = 61;
+            this.BtnGoToTime.Text = "Go to";
+            this.BtnGoToTime.UseVisualStyleBackColor = true;
+            this.BtnGoToTime.Click += new System.EventHandler(this.BtnGoToTime_Click);
+            // 
+            // DateTimePickerHistoricalDataGoto
+            // 
+            this.DateTimePickerHistoricalDataGoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.DateTimePickerHistoricalDataGoto.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            this.DateTimePickerHistoricalDataGoto.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateTimePickerHistoricalDataGoto.Location = new System.Drawing.Point(482, 390);
+            this.DateTimePickerHistoricalDataGoto.Name = "DateTimePickerHistoricalDataGoto";
+            this.DateTimePickerHistoricalDataGoto.Size = new System.Drawing.Size(140, 22);
+            this.DateTimePickerHistoricalDataGoto.TabIndex = 60;
+            this.DateTimePickerHistoricalDataGoto.Value = new System.DateTime(2021, 1, 1, 12, 0, 0, 0);
             // 
             // BtnRunStrategy
             // 
@@ -370,16 +391,16 @@ namespace TestClient
             this.BtnRunFilterAll.UseVisualStyleBackColor = false;
             this.BtnRunFilterAll.Click += new System.EventHandler(this.BtnRunFilterAll_Click);
             // 
-            // BtnTestSignal
+            // BtnTestStrategy
             // 
-            this.BtnTestSignal.BackColor = System.Drawing.Color.Yellow;
-            this.BtnTestSignal.Location = new System.Drawing.Point(7, 311);
-            this.BtnTestSignal.Name = "BtnTestSignal";
-            this.BtnTestSignal.Size = new System.Drawing.Size(180, 23);
-            this.BtnTestSignal.TabIndex = 54;
-            this.BtnTestSignal.Text = "Test Signal";
-            this.BtnTestSignal.UseVisualStyleBackColor = false;
-            this.BtnTestSignal.Click += new System.EventHandler(this.BtnTestSignal_Click);
+            this.BtnTestStrategy.BackColor = System.Drawing.Color.Yellow;
+            this.BtnTestStrategy.Location = new System.Drawing.Point(7, 311);
+            this.BtnTestStrategy.Name = "BtnTestStrategy";
+            this.BtnTestStrategy.Size = new System.Drawing.Size(180, 23);
+            this.BtnTestStrategy.TabIndex = 54;
+            this.BtnTestStrategy.Text = "Test Strategy";
+            this.BtnTestStrategy.UseVisualStyleBackColor = false;
+            this.BtnTestStrategy.Click += new System.EventHandler(this.BtnTestStrategy_Click);
             // 
             // BtnTestPatternAnalysis
             // 
@@ -2224,27 +2245,6 @@ namespace TestClient
             this.GroupBoxMultiContracts.TabStop = false;
             this.GroupBoxMultiContracts.Text = "Multi Contracts";
             // 
-            // DateTimePickerHistoricalDataGoto
-            // 
-            this.DateTimePickerHistoricalDataGoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.DateTimePickerHistoricalDataGoto.CustomFormat = "MM/dd/yyyy HH:mm:ss";
-            this.DateTimePickerHistoricalDataGoto.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePickerHistoricalDataGoto.Location = new System.Drawing.Point(482, 390);
-            this.DateTimePickerHistoricalDataGoto.Name = "DateTimePickerHistoricalDataGoto";
-            this.DateTimePickerHistoricalDataGoto.Size = new System.Drawing.Size(140, 22);
-            this.DateTimePickerHistoricalDataGoto.TabIndex = 60;
-            this.DateTimePickerHistoricalDataGoto.Value = new System.DateTime(2021, 1, 1, 12, 0, 0, 0);
-            // 
-            // BtnGoToTime
-            // 
-            this.BtnGoToTime.Location = new System.Drawing.Point(419, 388);
-            this.BtnGoToTime.Name = "BtnGoToTime";
-            this.BtnGoToTime.Size = new System.Drawing.Size(57, 26);
-            this.BtnGoToTime.TabIndex = 61;
-            this.BtnGoToTime.Text = "Go to";
-            this.BtnGoToTime.UseVisualStyleBackColor = true;
-            this.BtnGoToTime.Click += new System.EventHandler(this.BtnGoToTime_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2476,7 +2476,7 @@ namespace TestClient
         private System.Windows.Forms.Button BtnTestNativeAnalysis;
         private System.Windows.Forms.Button BtnTestOscillators;
         private System.Windows.Forms.Button BtnTestPatternAnalysis;
-        private System.Windows.Forms.Button BtnTestSignal;
+        private System.Windows.Forms.Button BtnTestStrategy;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet10;
         private System.Windows.Forms.Button BtnHistoricalDataContractSet9;
         private System.Windows.Forms.Button BtnRunFilterAll;
