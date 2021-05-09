@@ -47,7 +47,6 @@ namespace Pacmio.Analysis
                 DebugSeries mma_reversal = new DebugColumnSeries(mma.Column_Reversal);
 
                 TrailingTrendStrengthAnalysis ttsa = new TrailingTrendStrengthAnalysis(tla);
-
                 DebugDualDataOsc tla_c = new DebugDualDataOsc(ttsa);
 
                 //DebugSeries tla_bullish = new DebugColumnSeries(ttsa.Column_High);

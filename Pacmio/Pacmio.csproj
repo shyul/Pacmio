@@ -99,6 +99,7 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\PriceVolumeFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\Filters\TradeCapFilter.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\06_Filter\FilterUtility.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\ScalpingStrategy.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\StrategyEvaluationResult.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\ConvergeDivergeAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Types\IntervalAnalysis.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Source\Modules\04_BarChart\_Types\ITagAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\NarrowRange.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\DualColumnApexAnalysis.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\Relative.cs" />
+    <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\RelativeToAverage.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\SingleColumnApexAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\01_Basic\PriceDirection.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\05_Signal\CandleStick\CandleStickShadowStarSignal.cs" />
@@ -177,7 +178,6 @@
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\Old\OldFlagAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Flag\Old\OldFlagDatum.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestOscillators.cs" />
-    <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestSignals.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\_Test\TestTrend.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\03_Complex\Apex\_Types\ApexAnalysis.cs" />
     <Compile Include="Source\Modules\03_BarTable\Analysis\07_Strategy\Strategies\ReversalStrategy.cs" />

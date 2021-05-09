@@ -16,20 +16,20 @@ using Xu.Chart;
 
 namespace Pacmio.Analysis
 {
-    public sealed class Relative : BarAnalysis, ISingleData
+    public sealed class RelativeToAverage : BarAnalysis, ISingleData
     {
-        public Relative(NumericColumn column, int interval = 20) :
+        public RelativeToAverage(NumericColumn column, int interval = 20) :
             this(column, new SMA(column, interval) { ChartEnabled = false })
         { }
 
-        public Relative(NumericColumn column, MovingAverageAnalysis average_isd)
+        public RelativeToAverage(NumericColumn column, MovingAverageAnalysis average_isd)
         {
             Column = column;
             MovingAverage = average_isd;
 
             string label = "(" + Column.Name + "," + MovingAverage.GetType().Name + "," + MovingAverage.Interval + ")";
             GroupName = Name = GetType().Name + label;
-            Description = "Relative " + label;
+            Description = "Relative To Average " + label;
 
             Column_Result = new NumericColumn(Name) { Label = label };
             average_isd.AddChild(this);

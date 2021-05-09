@@ -1200,7 +1200,58 @@ namespace TestClient
 
         private void BtnLoadHistoricalChart_Click(object sender, EventArgs e)
         {
-            GetChart(TestReversal.BarAnalysisList);
+            var volumeEma = new EMA(Bar.Column_Volume, 20) { Color = Color.DeepSkyBlue, LineWidth = 2 };
+            volumeEma.LineSeries.Side = AlignType.Left;
+            volumeEma.LineSeries.Label = volumeEma.GetType().Name + "(" + volumeEma.Interval.ToString() + ")";
+            volumeEma.LineSeries.LegendName = "VOLUME";
+            volumeEma.LineSeries.LegendLabelFormat = "0.##";
+
+            var rvol = new RelativeToAverage(Bar.Column_Volume, volumeEma);
+            DebugSeries csd_rvol = new DebugColumnSeries(rvol);
+            MovingAverageAnalysis middle_MA = new SMMA(5) { Color = Color.Orange, LineWidth = 1 };
+            MovingAverageAnalysis fast_MA = new EMA(5) { Color = Color.DodgerBlue, LineWidth = 1 };
+            MovingAverageAnalysis slow_MA = new EMA(20) { Color = Color.Green, LineWidth = 2 };
+            NativeApexAnalysis npa = new(250);
+            /*
+            TrailingApexPtAnalysis tpa = new(npa);
+            TrendLineAnalysis tla = new TrendLineAnalysis(tpa);
+            MomentumReversalAnalysis mma = new MomentumReversalAnalysis(tla);
+            DebugSeries mma_momo = new DebugColumnSeries(mma.Column_Momentum);
+            DebugSeries mma_reversal = new DebugColumnSeries(mma.Column_Reversal);
+
+            TrailingTrendStrengthAnalysis ttsa = new TrailingTrendStrengthAnalysis(tla);
+            DebugDualDataOsc tla_c = new DebugDualDataOsc(ttsa);*/
+
+            var rsi = new RSI(14)
+            {
+                AreaRatio = 8,
+                HasXAxisBar = true,
+                Order = int.MaxValue - 1,
+                AreaOrder = int.MaxValue - 10
+            };
+
+            BarAnalysisList bat = new(new BarAnalysis[] {
+                csd_rvol,
+                rsi,
+                middle_MA,
+                fast_MA,
+
+                slow_MA,
+
+                npa,
+                /*
+                tla,
+                mma_momo,
+                mma_reversal,
+                tla_c,*/
+
+                new CHOP(14),
+                new Bollinger(20, 2),
+                new VWAP(BarFreq.Daily) { Color = Color.Plum, LineWidth = 2  },
+
+            });
+
+            GetChart(bat);
         }
 
         private void BtnTestIndicators_Click(object sender, EventArgs e)

@@ -130,7 +130,7 @@ namespace Pacmio.Analysis
         public Range<double> Volume5DAverageRange { get; } = new Range<double>(3e5, double.MaxValue);
 
         // 1 ~ 1.5
-        public Relative RelativeVolume { get; } = new Relative(Bar.Column_Volume, 5);
+        public RelativeToAverage RelativeVolume { get; } = new RelativeToAverage(Bar.Column_Volume, 5);
 
         public NarrowRange NarrowRange { get; }
 

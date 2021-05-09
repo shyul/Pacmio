@@ -18,8 +18,8 @@ namespace Pacmio.Analysis
         {
             get
             {
-                Relative relative_body = new Relative(Bar.Column_Body, 20);
-                Relative relative_volume = new Relative(Bar.Column_Volume, 20);
+                RelativeToAverage relative_body = new RelativeToAverage(Bar.Column_Body, 20);
+                RelativeToAverage relative_volume = new RelativeToAverage(Bar.Column_Volume, 20);
 
                 DebugSeries csd_relative_body = new DebugColumnSeries(relative_body);
                 DebugSeries csd_relative_volume = new DebugColumnSeries(relative_volume);

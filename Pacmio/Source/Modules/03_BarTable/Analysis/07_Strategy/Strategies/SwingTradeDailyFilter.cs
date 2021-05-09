@@ -45,9 +45,26 @@ using Xu;
 
 namespace Pacmio.Analysis
 {
-    public class SwingTradeDailyFilter
+    public class SwingTradeDailyFilter : Strategy
     {
+        public SwingTradeDailyFilter(
 
+            double minRiskRewardRatio,
+            TimeSpan holdingMaxSpan,
+            TimePeriod holdingPeriod,
+            TimePeriod tif,
+            BarFreq fiveMinFreq,
+            BarFreq barFreq = BarFreq.Minute)
+            : base(minRiskRewardRatio, holdingMaxSpan, holdingPeriod, tif, barFreq, PriceType.Trades)
+        {
+
+
+        }
+
+        protected override void Calculate(BarAnalysisPointer bap)
+        {
+
+        }
 
         /*
         Long-Term Indicators(weighting)

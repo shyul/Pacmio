@@ -63,7 +63,7 @@ namespace TestClient
             this.BtnTestRealTimeBars = new System.Windows.Forms.Button();
             this.BtnRequestHistoricalTicks = new System.Windows.Forms.Button();
             this.BtnChartsUpdateAll = new System.Windows.Forms.Button();
-            this.BtnLoadHistoricalChart = new System.Windows.Forms.Button();
+            this.BtnShowScalpingChart = new System.Windows.Forms.Button();
             this.tabContract = new System.Windows.Forms.TabPage();
             this.GroupBoxContractInfo = new System.Windows.Forms.GroupBox();
             this.TextBoxSymbolFullName = new System.Windows.Forms.TextBox();
@@ -303,7 +303,7 @@ namespace TestClient
             this.tabHistoricalData.Controls.Add(this.BtnTestRealTimeBars);
             this.tabHistoricalData.Controls.Add(this.BtnRequestHistoricalTicks);
             this.tabHistoricalData.Controls.Add(this.BtnChartsUpdateAll);
-            this.tabHistoricalData.Controls.Add(this.BtnLoadHistoricalChart);
+            this.tabHistoricalData.Controls.Add(this.BtnShowScalpingChart);
             this.tabHistoricalData.Location = new System.Drawing.Point(4, 22);
             this.tabHistoricalData.Name = "tabHistoricalData";
             this.tabHistoricalData.Padding = new System.Windows.Forms.Padding(3);
@@ -574,16 +574,16 @@ namespace TestClient
             this.BtnChartsUpdateAll.UseVisualStyleBackColor = true;
             this.BtnChartsUpdateAll.Click += new System.EventHandler(this.BtnChartsUpdateAll_Click);
             // 
-            // BtnLoadHistoricalChart
+            // BtnShowScalpingChart
             // 
-            this.BtnLoadHistoricalChart.BackColor = System.Drawing.Color.YellowGreen;
-            this.BtnLoadHistoricalChart.Location = new System.Drawing.Point(7, 16);
-            this.BtnLoadHistoricalChart.Name = "BtnLoadHistoricalChart";
-            this.BtnLoadHistoricalChart.Size = new System.Drawing.Size(180, 23);
-            this.BtnLoadHistoricalChart.TabIndex = 0;
-            this.BtnLoadHistoricalChart.Text = "Show Historical Chart";
-            this.BtnLoadHistoricalChart.UseVisualStyleBackColor = false;
-            this.BtnLoadHistoricalChart.Click += new System.EventHandler(this.BtnLoadHistoricalChart_Click);
+            this.BtnShowScalpingChart.BackColor = System.Drawing.Color.YellowGreen;
+            this.BtnShowScalpingChart.Location = new System.Drawing.Point(7, 16);
+            this.BtnShowScalpingChart.Name = "BtnShowScalpingChart";
+            this.BtnShowScalpingChart.Size = new System.Drawing.Size(180, 23);
+            this.BtnShowScalpingChart.TabIndex = 0;
+            this.BtnShowScalpingChart.Text = "Show Scalping Chart";
+            this.BtnShowScalpingChart.UseVisualStyleBackColor = false;
+            this.BtnShowScalpingChart.Click += new System.EventHandler(this.BtnLoadHistoricalChart_Click);
             // 
             // tabContract
             // 
@@ -2319,7 +2319,7 @@ namespace TestClient
         private System.Windows.Forms.TextBox TextBoxSingleContractName;
         private System.Windows.Forms.ListBox ListBoxAccount;
         private System.Windows.Forms.TreeView TreeViewAccount;
-        private System.Windows.Forms.Button BtnLoadHistoricalChart;
+        private System.Windows.Forms.Button BtnShowScalpingChart;
         private System.Windows.Forms.Button BtnRequestHistoricalTicks;
         private System.Windows.Forms.Button BtnChartsUpdateAll;
         private System.Windows.Forms.DateTimePicker DateTimePickerHistoricalDataStart;

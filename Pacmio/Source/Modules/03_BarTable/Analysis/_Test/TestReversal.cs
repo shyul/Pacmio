@@ -24,7 +24,7 @@ namespace Pacmio.Analysis
                 volumeEma.LineSeries.LegendName = "VOLUME";
                 volumeEma.LineSeries.LegendLabelFormat = "0.##";
 
-                var rvol = new Relative(Bar.Column_Volume, volumeEma);
+                var rvol = new RelativeToAverage(Bar.Column_Volume, volumeEma);
 
                 DebugSeries csd_rvol = new DebugColumnSeries(rvol.Column_Result);
 
