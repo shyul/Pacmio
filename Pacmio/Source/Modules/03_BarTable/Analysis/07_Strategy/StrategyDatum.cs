@@ -94,7 +94,7 @@ namespace Pacmio
         {
             if (ratio > 1) ratio = 1; else if (ratio < 0) return;
 
-            Console.WriteLine(Bar.Time + " | Current Quantity = " + Quantity);
+            //Console.WriteLine(Bar.Time + " | Current Quantity = " + Quantity);
 
             if (Quantity > 0) // || sd.Datum_1.Message == RangeBarBullishMessage)
             {
