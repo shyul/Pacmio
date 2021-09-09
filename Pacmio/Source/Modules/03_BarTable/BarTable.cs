@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu;
+using Xu.Chart;
 
 namespace Pacmio
 {
@@ -66,7 +67,7 @@ namespace Pacmio
                 foreach (IDataRenderer idr in DataConsumers)
                 {
                     RemoveDataConsumer(idr);
-                    if (idr is BarChart bc)
+                    if (idr is ChartWidget bc)
                         bc.Close();
                     else
                         RemoveDataConsumer(idr);
